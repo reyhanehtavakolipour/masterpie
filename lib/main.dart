@@ -21,6 +21,7 @@ void init() async{
 
 Future<void> initStripe() async{
   Stripe.publishableKey = STRIPE_PUBLISHABLE_KEY;
+  Stripe.merchantIdentifier = 'merchant.com.masterpieapp';
   await Stripe.instance.applySettings();
 }
 

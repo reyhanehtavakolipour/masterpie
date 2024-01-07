@@ -145,11 +145,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<void> initPaymentSheet() async {
     try {
-      // 1. create payment intent on the server
-      //10 dollars
-      final data = await _createPaymentIntent('', 10);
 
-      // create some billingdetails
+      final data = await _createPaymentIntent('e4fbc1dd-6c45-478b-927d-fb740b5843e1', 10);
+
       final billingDetails = BillingDetails(
         name: 'Flutter Stripe',
         email: 'email@stripe.com',
@@ -162,59 +160,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
           state: 'Texas',
           postalCode: '77063',
         ),
-      ); // mocked data for tests
+      );
 
-      // 2. initialize the payment sheet
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          // Main params
-          paymentIntentClientSecret: data.data['paymentIntent'],
+          paymentIntentClientSecret: data.data.toString(),
           merchantDisplayName: 'Flutter Stripe Store Demo',
-          // Customer params
-          customerId: data.data['customer'],
-          customerEphemeralKeySecret: data.data['ephemeralKey'],
-          returnURL: 'flutterstripe://redirect',
-
-          // Extra params
           primaryButtonLabel: 'Pay now',
-          applePay: PaymentSheetApplePay(
-            merchantCountryCode: 'DE',
+          applePay: const PaymentSheetApplePay(
+            buttonType: PlatformButtonType.buy,
+
+            merchantCountryCode: 'US',
           ),
-          googlePay: PaymentSheetGooglePay(
-            merchantCountryCode: 'DE',
-            testEnv: true,
-          ),
+          // googlePay: const PaymentSheetGooglePay(
+          //   merchantCountryCode: 'US',
+          //   testEnv: true,
+          // ),
           style: ThemeMode.dark,
-          appearance: PaymentSheetAppearance(
-            colors: PaymentSheetAppearanceColors(
-              background: Colors.lightBlue,
-              primary: Colors.blue,
-              componentBorder: Colors.red,
-            ),
-            shapes: PaymentSheetShape(
-              borderWidth: 4,
-              shadow: PaymentSheetShadowParams(color: Colors.red),
-            ),
-            primaryButton: PaymentSheetPrimaryButtonAppearance(
-              shapes: PaymentSheetPrimaryButtonShape(blurRadius: 8),
-              colors: PaymentSheetPrimaryButtonTheme(
-                light: PaymentSheetPrimaryButtonThemeColors(
-                  background: Color.fromARGB(255, 231, 235, 30),
-                  text: Color.fromARGB(255, 235, 92, 30),
-                  border: Color.fromARGB(255, 235, 92, 30),
-                ),
-              ),
-            ),
-          ),
-          billingDetails: billingDetails,
+          // billingDetails: billingDetails,
         ),
       );
       setState(() {
         step = 1;
       });
     } catch (e) {
-
-      showErrorToast(context, 'error: $e');
+      print('error_stripe: $e');
       rethrow;
     }
   }
@@ -261,6 +231,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
     return response;
   }
+
 
 
 }
