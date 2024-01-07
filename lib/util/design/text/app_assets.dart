@@ -1,0 +1,12 @@
+const String PRODUCT_PATH = 'assets/product.png';
+const String FAVORITE_FOOD_PATH = 'assets/favorite.png';
+const String INTERNATIONAL_FOOD_PATH = 'assets/international.png';
+const String SUGGEST_FOOD_PATH = 'assets/cooking.png';
+const String HOW_MUCH_EAT_PATH= 'assets/portion.png';
+const String SEARCH_FOOD_PATH = 'assets/searchfood.png';
+const String LANDING_IMAGE_PATH = 'assets/landing.png';
+const String MASTERPIE_LOGO_PATH = 'assets/masterpie_logo.png';
+const String MONTSERRAT_FONT = 'Montserrat';
+const String GOOGLE_PATH = 'assets/google.png';
+const String WELCOME_PATH = 'assets/welcome.png';
+const String MAIN_DISH_PATH = 'assets/main_page_dish.png';

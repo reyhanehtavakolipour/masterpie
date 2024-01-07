@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+
+
+const Color DARK_PRIMARY_COLOR = Color(0xFF0d1b2a);
+
+const Color PRIMARY_COLOR = Color(0XFF1b263b);
+
+const Color MASTERPIE_YELLOW_COLOR = Color(0xFFFFC400);
+const Color MASTERPIE_ORANGE_COLOR = Color(0XFFff8800);
+
+
+const Color LIGHT_GREY_COLOR = Color(0XFFEEEEEE);
+const Color RED_ERROR_COLOR = Color(0XFFD50000);
+const Color BACKGROUND_CATEGORY_COLOR = Colors.white;
+const Color CATEGORY_COLOR = Color(0XFFF5F5DC);
+const Color TOP_PART_MAIN_SCREE_COLOR = Color(0XFF1b263b);
+const Color TAB_BAR_COLOR = Color(0XFFff8800);
+const Color TAB_BAR_ICON_COLOR = DARK_PRIMARY_COLOR;
+const Color MACRO_COLOR = Color(0xFF0d1b2a);
+const Color MACRO_LABEL_COLOR = CATEGORY_COLOR;
+const Color MACRO_PERCENTAGE_COLOR = Color(0XFF778da9);
+const Color TODAY_WEIGHT_CONTAINER_COLOR = Color(0XFFF5F5DC);
+const Color PROGRESS_MACRO_COLOR = Color(0XFFba0c0c);
+const Color DEFAULT_FOOD_BACKGROUND_COLOR = Color(0XFFf8f9fa);
+const Color MY_FAVORITE_FOOD_BACKGROUND_COLOR = Color(0XFFfff0f3);
+const Color TOTAL_MACRO_PORTION_BACKGROUND_COLOR = Color(0XFFfff0f3);
+
+
+const Color MACRO_PORTION_RECOM_COLOR = Color(0XFF778da9);
+const Color BG_COMBINATION_BOTTOM_COLOR = Color(0XFFF8F0E5);
+
+
+const Color BASIC_PLAN_COLOR = Color(0XFF0081a7);
+const Color PREMIUM_PLAN_COLOR = Color(0xFFFFC400);
+
+const Color SELECTED_PLAN_COLOR = Color(0XFFF1F8E9);

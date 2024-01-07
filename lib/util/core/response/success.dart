@@ -1,0 +1,6 @@
+
+class Success {
+
+  const Success();
+}
+

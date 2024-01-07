@@ -1,0 +1,129 @@
+
+
+import 'package:dartz/dartz.dart';
+import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import '../../../../util/core/di/service_locator.dart';
+import '../../../../util/core/helper/error_handling.dart';
+import '../../../../util/core/response/failure.dart';
+import '../../../../util/core/response/success.dart';
+import '../model/profile_model.dart';
+import '../repository/user_repository.dart';
+
+class UpdateProfileUseCase{
+
+  final repo = serviceLocator<UserRepository>();
+
+  Future<Either<Failure, Success>> updateProfileAfterRegister(String email, String firstName, String lastName, String gender,
+      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age, String activityLevel, String weightChangeWeekly) async{
+
+    Profile profile = Profile(
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      weight: weight,
+      height: height,
+      weightUnit: weightUnit,
+      heightUnit: heightUnit,
+      goalWeight: goalWeight,
+      age: age,
+      activityLevel: activityLevel,
+      weightChangeWeekly: weightChangeWeekly
+    );
+
+    final upsertProfileResponse = await repo.upsertProfileAfterRegisterInRemote(profile);
+    if(upsertProfileResponse.isRight()){
+      await repo.upsertProfileInLocal(profile);
+      return const Right(Success());
+    }
+    return Left(getFailure(upsertProfileResponse.asLeft()));
+  }
+
+
+
+  Future<Either<Failure, Success>> updateMacroGoalsAndInputs(String gender,
+      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age,
+      String activityLevel, String weightChangeWeekly, String calorie, String protein, String carb, String fat) async{
+
+    Profile profile = Profile(
+        gender: gender,
+        weight: weight,
+        height: height,
+        weightUnit: weightUnit,
+        heightUnit: heightUnit,
+        goalWeight: goalWeight,
+        age: age,
+        activityLevel: activityLevel,
+        weightChangeWeekly: weightChangeWeekly,
+        dailyMacroGoal: [calorie, protein, carb, fat]
+    );
+
+    final upsertProfileResponse = await repo.updateDailyMacroAndInputsInRemote(profile);
+    if(upsertProfileResponse.isRight()){
+      await repo.updateDailyMacroAndInputsInLocal(profile);
+      return const Right(Success());
+    }
+    return Left(getFailure(upsertProfileResponse.asLeft()));
+  }
+
+
+  Future<Either<Failure, Success>> updateUserInfo(String firstName, String lastName) async{
+
+    Profile profile = Profile(
+      firstName: firstName,
+      lastName: lastName,
+    );
+
+    final upsertProfileResponse = await repo.updateUserInfoInRemote(profile);
+    if(upsertProfileResponse.isRight()){
+      await repo.updateUserInfoInLocal(profile);
+      return const Right(Success());
+    }
+    return Left(getFailure(upsertProfileResponse.asLeft()));
+  }
+
+
+  Future<Either<Failure, List<String>>> calculateDailyMacroGoal(String gender,
+      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age, String activityLevel, String weightChangeWeekly) async{
+
+    Profile profile = Profile(
+        gender: gender,
+        weight: weight,
+        height: height,
+        weightUnit: weightUnit,
+        heightUnit: heightUnit,
+        goalWeight: goalWeight,
+        age: age,
+        activityLevel: activityLevel,
+        weightChangeWeekly: weightChangeWeekly
+    );
+
+    final upsertProfileResponse = await repo.calculateDailyMacroGoalInRemote(profile);
+    if(upsertProfileResponse.isRight()){
+      return Right(upsertProfileResponse.asRight());
+    }
+    return Left(getFailure(upsertProfileResponse.asLeft()));
+  }
+
+
+
+  Future<Either<Failure, Success>> updateDailyMacroGoal(String calorie, String protein, String carb, String fat) async{
+
+    List<String> dailyMacroGoal = [calorie, protein, carb, fat];
+
+    Profile profile = Profile(
+        dailyMacroGoal: dailyMacroGoal
+    );
+
+    final upsertProfileResponse = await repo.updateDailyMacroGoalInRemote(profile);
+    if(upsertProfileResponse.isRight()){
+      await repo.updateDailyMacroGoalInLocal(profile);
+      return const Right(Success());
+    }
+    return Left(getFailure(upsertProfileResponse.asLeft()));
+  }
+
+
+
+
+}

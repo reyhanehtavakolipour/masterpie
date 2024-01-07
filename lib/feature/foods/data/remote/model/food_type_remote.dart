@@ -1,0 +1,7 @@
+
+
+
+enum FoodTypeRemote{
+  groceryProduct,
+  meal
+}

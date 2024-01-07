@@ -1,0 +1,126 @@
+
+
+import 'package:dartz/dartz.dart';
+
+import '../../../../../util/core/constant/api_constant.dart';
+import '../../../../../util/core/helper/request_api.dart';
+import '../../../../../util/core/response/failure.dart';
+import '../model/food_remote_model.dart';
+import 'fooddatacentral_grocery_product_remote_datasource.dart';
+
+
+class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
+
+  @override
+  Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromOpenFoodFacts(String query) {
+    // TODO: implement getGroceryProductsFromOpenFoodFacts
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromFoodDataCentral(String query) async{
+
+    try{
+      final NetworkRequest request = await NetworkRequest.createFoodDataCentral();
+      final Map<String, dynamic> queryParams = {
+        'api_key': FOOD_DATA_CENTRAL_KEY,
+        'query': query,
+        'pageNumber': 1,
+        'pageSize': 3
+      };
+      final response = await request.getWithQueries(FOOD_DATA_CENTRAL_API, queryParams);
+      if(response.statusCode == SUCCESS_API_CODE){
+        final foods = response.data['foods'] as List<dynamic>;
+        int maxProductsSize = foods.length;
+        if(foods.length > 1){
+          maxProductsSize = 1;
+        }
+        final productsRemote = <FoodRemote>[];
+        for (int i = 0; i < maxProductsSize; i++){
+          String foodId = foods[i]['fdcId'].toString();
+          final nutrients = foods[i]['foodNutrients'] as List<dynamic>;
+          int calorie= nutrients[3]['value']?.toInt() ?? 0;
+          int protein= nutrients[0]['value']?.toInt() ?? 0;
+          int carb= nutrients[2]['value']?.toInt() ?? 0;
+          int fat= nutrients[1]['value']?.toInt() ?? 0;
+
+          productsRemote.add(
+              FoodRemote(
+                id: foodId,
+                name: foods[i]['description']?.toLowerCase() ?? '',
+                brandName: foods[i]['brandName']?.toLowerCase() ?? '',
+                servingAmount: DEFAULT_SERVING_SIZE,
+                barcode: foods[i]['gtinUpc'] ?? '',
+                servingAmounts: [DEFAULT_SERVING_SIZE.toString()],
+                ingredients: [],
+                units: [DEFAULT_UNIT],
+                calorie: [calorie.toString()],
+                protein: [protein.toString()],
+                carb: [carb.toString()],
+                fat: [fat.toString()],
+              )
+          );
+        }
+        return Right(productsRemote);
+      }
+      return  Left(RemoteFailure(response.statusCode, response.data['message']));
+    }catch(e){
+      return Left(ExceptionFailure(e));
+    }
+  }
+
+  // @override
+  // Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromOpenFoodFacts(String query) async{
+  //
+  //   //todo handle pagination
+  //   final parameters = <Parameter>[
+  //     const PageNumber(page: 1),
+  //     const PageSize(size: PAGE_SIZE),
+  //     SearchTerms(terms: <String>[query])
+  //   ];
+  //
+  //   //todo put user country and language here
+  //   final ProductSearchQueryConfiguration configuration =
+  //   ProductSearchQueryConfiguration(
+  //     parametersList: parameters,
+  //     fields: [ProductField.ALL],
+  //     language: OpenFoodFactsLanguage.ENGLISH,
+  //     version: ProductQueryVersion.v3,
+  //     country: CountryHelper.fromJson('CA')
+  //   );
+  //
+  //
+  //   // todo put user information here
+  //   const User user = User(
+  //     userId: '',
+  //     password: '',
+  //     comment: '',
+  //   );
+  //
+  //   final SearchResult result = await OpenFoodAPIClient.searchProducts(
+  //     user,
+  //     configuration,
+  //   );
+  //
+  //   final productsRemote = <FoodRemote>[];
+  //   result.products?.forEach((element) {
+  //
+  //     final calorie = element.nutriments?.getValue(Nutrient.energyKCal, PerSize.oneHundredGrams)?.toInt() ?? 0;
+  //
+  //     final productRemote = FoodRemote(
+  //       genericName: element.genericName.toString().toLowerCase(),
+  //       productName: element.productName.toString().toLowerCase(),
+  //       brand: element.brands.toString().toLowerCase(),
+  //       barcode: element.barcode.toString(),
+  //       image: element.imageFrontUrl.toString(),
+  //       servingQuantity: DEFAULT_SERVING_SIZE,
+  //       foodUnitRemote: FoodUnitRemote.gram,
+  //       calorie: calorie
+  //     );
+  //     productsRemote.add(productRemote);
+  //   });
+  //
+  //   return Right(productsRemote);
+  // }
+
+}
