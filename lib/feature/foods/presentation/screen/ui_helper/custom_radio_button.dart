@@ -40,6 +40,10 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
       }
     }
 
+    if(widget.options.isEmpty){
+      return Container();
+    }
+
     if(widget.orientation == HORIZONTAL_ORIENTATION){
       return Row(
           children: widget.options

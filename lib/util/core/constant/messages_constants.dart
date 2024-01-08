@@ -116,9 +116,6 @@ const TSP_LABEL= 'tsp';
 const TBS_LABEL= 'tbs';
 const TBSP_LABEL= 'tbsp';
 const CLOVES_LABEL= 'cloves';
-
-
-
 const INGREDIENTS_LABEL = 'Ingredients';
 const LOGGED_SUCCESSFULLY = 'Foods logged successfully';
 const ACCURACY_LABEL = 'Accuracy';
@@ -238,7 +235,16 @@ const CANCEL_SUBSCRIPTION_LABEL= 'Cancel Subscription';
 const FAVORITE_FOOD_INFO_FREE_PLAN= '$FREE_FAVORITE_LIMIT favorites for lifetime';
 const PAYMENT_LABEL= 'Payment';
 const PAY_LABEL= 'Pay';
-const CARD_INFORMATION_LABEL= 'Card Information';
+const PAYMENT_SUCCEED_MSG= 'Payment successfully completed';
+const PAYMENT_CENCELLED_MSG= 'Payment cancelled';
+const TOTAL_PRICE_LABEL= 'Total Price';
+const PLAN_LABEL= 'Plan';
+const FREE_PLAN_SWITCH_MSG= 'Are you sure you want to switch to free plan?';
+
+
+
+
+
 
 
 

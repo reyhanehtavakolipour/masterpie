@@ -31,7 +31,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   UserSubscriptionPlan _userSubscriptionPlan= UserSubscriptionPlan();
 
-
   String _selectedPlan= '';
 
 
@@ -263,7 +262,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PaymentScreen(userSubscriptionPlan: _userSubscriptionPlan,),
+                  builder: (context) => PaymentScreen(userSubscriptionPlan: UserSubscriptionPlan(userId: _userSubscriptionPlan.userId, plan: _selectedPlan),),
                 ),
               );
             },
