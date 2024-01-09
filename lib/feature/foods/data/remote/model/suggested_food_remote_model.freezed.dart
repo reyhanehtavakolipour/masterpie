@@ -79,11 +79,11 @@ class _$SuggestedFoodRemoteCopyWithImpl<$Res, $Val extends SuggestedFoodRemote>
 }
 
 /// @nodoc
-abstract class _$$_SuggestedFoodRemoteCopyWith<$Res>
+abstract class _$$SuggestedFoodRemoteImplCopyWith<$Res>
     implements $SuggestedFoodRemoteCopyWith<$Res> {
-  factory _$$_SuggestedFoodRemoteCopyWith(_$_SuggestedFoodRemote value,
-          $Res Function(_$_SuggestedFoodRemote) then) =
-      __$$_SuggestedFoodRemoteCopyWithImpl<$Res>;
+  factory _$$SuggestedFoodRemoteImplCopyWith(_$SuggestedFoodRemoteImpl value,
+          $Res Function(_$SuggestedFoodRemoteImpl) then) =
+      __$$SuggestedFoodRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +94,11 @@ abstract class _$$_SuggestedFoodRemoteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SuggestedFoodRemoteCopyWithImpl<$Res>
-    extends _$SuggestedFoodRemoteCopyWithImpl<$Res, _$_SuggestedFoodRemote>
-    implements _$$_SuggestedFoodRemoteCopyWith<$Res> {
-  __$$_SuggestedFoodRemoteCopyWithImpl(_$_SuggestedFoodRemote _value,
-      $Res Function(_$_SuggestedFoodRemote) _then)
+class __$$SuggestedFoodRemoteImplCopyWithImpl<$Res>
+    extends _$SuggestedFoodRemoteCopyWithImpl<$Res, _$SuggestedFoodRemoteImpl>
+    implements _$$SuggestedFoodRemoteImplCopyWith<$Res> {
+  __$$SuggestedFoodRemoteImplCopyWithImpl(_$SuggestedFoodRemoteImpl _value,
+      $Res Function(_$SuggestedFoodRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +109,7 @@ class __$$_SuggestedFoodRemoteCopyWithImpl<$Res>
     Object? ingredients = null,
     Object? diets = null,
   }) {
-    return _then(_$_SuggestedFoodRemote(
+    return _then(_$SuggestedFoodRemoteImpl(
       names: null == names
           ? _value._names
           : names // ignore: cast_nullable_to_non_nullable
@@ -132,8 +132,8 @@ class __$$_SuggestedFoodRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SuggestedFoodRemote implements _SuggestedFoodRemote {
-  _$_SuggestedFoodRemote(
+class _$SuggestedFoodRemoteImpl implements _SuggestedFoodRemote {
+  _$SuggestedFoodRemoteImpl(
       {final List<String> names = const [],
       final List<String> nationalities = const [],
       final List<String> ingredients = const [],
@@ -185,10 +185,10 @@ class _$_SuggestedFoodRemote implements _SuggestedFoodRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SuggestedFoodRemote &&
+            other is _$SuggestedFoodRemoteImpl &&
             const DeepCollectionEquality().equals(other._names, _names) &&
             const DeepCollectionEquality()
                 .equals(other._nationalities, _nationalities) &&
@@ -208,8 +208,8 @@ class _$_SuggestedFoodRemote implements _SuggestedFoodRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SuggestedFoodRemoteCopyWith<_$_SuggestedFoodRemote> get copyWith =>
-      __$$_SuggestedFoodRemoteCopyWithImpl<_$_SuggestedFoodRemote>(
+  _$$SuggestedFoodRemoteImplCopyWith<_$SuggestedFoodRemoteImpl> get copyWith =>
+      __$$SuggestedFoodRemoteImplCopyWithImpl<_$SuggestedFoodRemoteImpl>(
           this, _$identity);
 }
 
@@ -218,7 +218,7 @@ abstract class _SuggestedFoodRemote implements SuggestedFoodRemote {
       {final List<String> names,
       final List<String> nationalities,
       final List<String> ingredients,
-      final List<String> diets}) = _$_SuggestedFoodRemote;
+      final List<String> diets}) = _$SuggestedFoodRemoteImpl;
 
   @override
   List<String> get names;
@@ -230,6 +230,6 @@ abstract class _SuggestedFoodRemote implements SuggestedFoodRemote {
   List<String> get diets;
   @override
   @JsonKey(ignore: true)
-  _$$_SuggestedFoodRemoteCopyWith<_$_SuggestedFoodRemote> get copyWith =>
+  _$$SuggestedFoodRemoteImplCopyWith<_$SuggestedFoodRemoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

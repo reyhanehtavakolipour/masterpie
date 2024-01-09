@@ -11,6 +11,7 @@ class UserSubscriptionPlan with _$UserSubscriptionPlan{
     @Default('') String plan,
     @Default('') String upgradeDate,
     @Default('') String planType,
+    @Default(true) bool isAutoPaymentOn,
     @Default(0) int favoriteFoodRequestsLeft,
     @Default(0) int suggestFoodRequestsLeft,
     @Default(0) int foodPortionRequestsLeft,

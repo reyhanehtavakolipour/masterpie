@@ -85,23 +85,25 @@ class _$SuggestFoodsPortionEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$SuggestFoodsPortionEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$SuggestFoodsPortionEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -109,9 +111,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -190,14 +192,14 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements SuggestFoodsPortionEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
-abstract class _$$SuggestPortionsEventCopyWith<$Res> {
-  factory _$$SuggestPortionsEventCopyWith(_$SuggestPortionsEvent value,
-          $Res Function(_$SuggestPortionsEvent) then) =
-      __$$SuggestPortionsEventCopyWithImpl<$Res>;
+abstract class _$$SuggestPortionsEventImplCopyWith<$Res> {
+  factory _$$SuggestPortionsEventImplCopyWith(_$SuggestPortionsEventImpl value,
+          $Res Function(_$SuggestPortionsEventImpl) then) =
+      __$$SuggestPortionsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<Food> foods,
@@ -207,11 +209,12 @@ abstract class _$$SuggestPortionsEventCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$SuggestPortionsEventCopyWithImpl<$Res>
-    extends _$SuggestFoodsPortionEventCopyWithImpl<$Res, _$SuggestPortionsEvent>
-    implements _$$SuggestPortionsEventCopyWith<$Res> {
-  __$$SuggestPortionsEventCopyWithImpl(_$SuggestPortionsEvent _value,
-      $Res Function(_$SuggestPortionsEvent) _then)
+class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
+    extends _$SuggestFoodsPortionEventCopyWithImpl<$Res,
+        _$SuggestPortionsEventImpl>
+    implements _$$SuggestPortionsEventImplCopyWith<$Res> {
+  __$$SuggestPortionsEventImplCopyWithImpl(_$SuggestPortionsEventImpl _value,
+      $Res Function(_$SuggestPortionsEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -222,7 +225,7 @@ class __$$SuggestPortionsEventCopyWithImpl<$Res>
     Object? macroGoalsRange = null,
     Object? restriction = null,
   }) {
-    return _then(_$SuggestPortionsEvent(
+    return _then(_$SuggestPortionsEventImpl(
       null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -245,8 +248,8 @@ class __$$SuggestPortionsEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SuggestPortionsEvent implements SuggestPortionsEvent {
-  const _$SuggestPortionsEvent(
+class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
+  const _$SuggestPortionsEventImpl(
       final List<Food> foods,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
@@ -294,10 +297,10 @@ class _$SuggestPortionsEvent implements SuggestPortionsEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuggestPortionsEvent &&
+            other is _$SuggestPortionsEventImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
             const DeepCollectionEquality()
                 .equals(other._servingsRange, _servingsRange) &&
@@ -318,9 +321,10 @@ class _$SuggestPortionsEvent implements SuggestPortionsEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuggestPortionsEventCopyWith<_$SuggestPortionsEvent> get copyWith =>
-      __$$SuggestPortionsEventCopyWithImpl<_$SuggestPortionsEvent>(
-          this, _$identity);
+  _$$SuggestPortionsEventImplCopyWith<_$SuggestPortionsEventImpl>
+      get copyWith =>
+          __$$SuggestPortionsEventImplCopyWithImpl<_$SuggestPortionsEventImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -402,15 +406,15 @@ abstract class SuggestPortionsEvent implements SuggestFoodsPortionEvent {
       final List<Food> foods,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
-      final List<String> restriction) = _$SuggestPortionsEvent;
+      final List<String> restriction) = _$SuggestPortionsEventImpl;
 
   List<Food> get foods;
   List<List<double>> get servingsRange;
   List<List<double>> get macroGoalsRange;
   List<String> get restriction;
   @JsonKey(ignore: true)
-  _$$SuggestPortionsEventCopyWith<_$SuggestPortionsEvent> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SuggestPortionsEventImplCopyWith<_$SuggestPortionsEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -491,29 +495,29 @@ class _$SuggestFoodsPortionStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$SuggestFoodsPortionInitialStateCopyWith<$Res> {
-  factory _$$SuggestFoodsPortionInitialStateCopyWith(
-          _$SuggestFoodsPortionInitialState value,
-          $Res Function(_$SuggestFoodsPortionInitialState) then) =
-      __$$SuggestFoodsPortionInitialStateCopyWithImpl<$Res>;
+abstract class _$$SuggestFoodsPortionInitialStateImplCopyWith<$Res> {
+  factory _$$SuggestFoodsPortionInitialStateImplCopyWith(
+          _$SuggestFoodsPortionInitialStateImpl value,
+          $Res Function(_$SuggestFoodsPortionInitialStateImpl) then) =
+      __$$SuggestFoodsPortionInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$SuggestFoodsPortionInitialStateCopyWithImpl<$Res>
+class __$$SuggestFoodsPortionInitialStateImplCopyWithImpl<$Res>
     extends _$SuggestFoodsPortionStateCopyWithImpl<$Res,
-        _$SuggestFoodsPortionInitialState>
-    implements _$$SuggestFoodsPortionInitialStateCopyWith<$Res> {
-  __$$SuggestFoodsPortionInitialStateCopyWithImpl(
-      _$SuggestFoodsPortionInitialState _value,
-      $Res Function(_$SuggestFoodsPortionInitialState) _then)
+        _$SuggestFoodsPortionInitialStateImpl>
+    implements _$$SuggestFoodsPortionInitialStateImplCopyWith<$Res> {
+  __$$SuggestFoodsPortionInitialStateImplCopyWithImpl(
+      _$SuggestFoodsPortionInitialStateImpl _value,
+      $Res Function(_$SuggestFoodsPortionInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$SuggestFoodsPortionInitialState
+class _$SuggestFoodsPortionInitialStateImpl
     implements SuggestFoodsPortionInitialState {
-  const _$SuggestFoodsPortionInitialState();
+  const _$SuggestFoodsPortionInitialStateImpl();
 
   @override
   String toString() {
@@ -521,10 +525,10 @@ class _$SuggestFoodsPortionInitialState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuggestFoodsPortionInitialState);
+            other is _$SuggestFoodsPortionInitialStateImpl);
   }
 
   @override
@@ -612,33 +616,33 @@ class _$SuggestFoodsPortionInitialState
 abstract class SuggestFoodsPortionInitialState
     implements SuggestFoodsPortionState {
   const factory SuggestFoodsPortionInitialState() =
-      _$SuggestFoodsPortionInitialState;
+      _$SuggestFoodsPortionInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$SuggestFoodsPortionLoadingStateCopyWith<$Res> {
-  factory _$$SuggestFoodsPortionLoadingStateCopyWith(
-          _$SuggestFoodsPortionLoadingState value,
-          $Res Function(_$SuggestFoodsPortionLoadingState) then) =
-      __$$SuggestFoodsPortionLoadingStateCopyWithImpl<$Res>;
+abstract class _$$SuggestFoodsPortionLoadingStateImplCopyWith<$Res> {
+  factory _$$SuggestFoodsPortionLoadingStateImplCopyWith(
+          _$SuggestFoodsPortionLoadingStateImpl value,
+          $Res Function(_$SuggestFoodsPortionLoadingStateImpl) then) =
+      __$$SuggestFoodsPortionLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$SuggestFoodsPortionLoadingStateCopyWithImpl<$Res>
+class __$$SuggestFoodsPortionLoadingStateImplCopyWithImpl<$Res>
     extends _$SuggestFoodsPortionStateCopyWithImpl<$Res,
-        _$SuggestFoodsPortionLoadingState>
-    implements _$$SuggestFoodsPortionLoadingStateCopyWith<$Res> {
-  __$$SuggestFoodsPortionLoadingStateCopyWithImpl(
-      _$SuggestFoodsPortionLoadingState _value,
-      $Res Function(_$SuggestFoodsPortionLoadingState) _then)
+        _$SuggestFoodsPortionLoadingStateImpl>
+    implements _$$SuggestFoodsPortionLoadingStateImplCopyWith<$Res> {
+  __$$SuggestFoodsPortionLoadingStateImplCopyWithImpl(
+      _$SuggestFoodsPortionLoadingStateImpl _value,
+      $Res Function(_$SuggestFoodsPortionLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$SuggestFoodsPortionLoadingState
+class _$SuggestFoodsPortionLoadingStateImpl
     implements SuggestFoodsPortionLoadingState {
-  const _$SuggestFoodsPortionLoadingState();
+  const _$SuggestFoodsPortionLoadingStateImpl();
 
   @override
   String toString() {
@@ -646,10 +650,10 @@ class _$SuggestFoodsPortionLoadingState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuggestFoodsPortionLoadingState);
+            other is _$SuggestFoodsPortionLoadingStateImpl);
   }
 
   @override
@@ -737,27 +741,27 @@ class _$SuggestFoodsPortionLoadingState
 abstract class SuggestFoodsPortionLoadingState
     implements SuggestFoodsPortionState {
   const factory SuggestFoodsPortionLoadingState() =
-      _$SuggestFoodsPortionLoadingState;
+      _$SuggestFoodsPortionLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$SuggestFoodsPortionErrorStateCopyWith<$Res> {
-  factory _$$SuggestFoodsPortionErrorStateCopyWith(
-          _$SuggestFoodsPortionErrorState value,
-          $Res Function(_$SuggestFoodsPortionErrorState) then) =
-      __$$SuggestFoodsPortionErrorStateCopyWithImpl<$Res>;
+abstract class _$$SuggestFoodsPortionErrorStateImplCopyWith<$Res> {
+  factory _$$SuggestFoodsPortionErrorStateImplCopyWith(
+          _$SuggestFoodsPortionErrorStateImpl value,
+          $Res Function(_$SuggestFoodsPortionErrorStateImpl) then) =
+      __$$SuggestFoodsPortionErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$SuggestFoodsPortionErrorStateCopyWithImpl<$Res>
+class __$$SuggestFoodsPortionErrorStateImplCopyWithImpl<$Res>
     extends _$SuggestFoodsPortionStateCopyWithImpl<$Res,
-        _$SuggestFoodsPortionErrorState>
-    implements _$$SuggestFoodsPortionErrorStateCopyWith<$Res> {
-  __$$SuggestFoodsPortionErrorStateCopyWithImpl(
-      _$SuggestFoodsPortionErrorState _value,
-      $Res Function(_$SuggestFoodsPortionErrorState) _then)
+        _$SuggestFoodsPortionErrorStateImpl>
+    implements _$$SuggestFoodsPortionErrorStateImplCopyWith<$Res> {
+  __$$SuggestFoodsPortionErrorStateImplCopyWithImpl(
+      _$SuggestFoodsPortionErrorStateImpl _value,
+      $Res Function(_$SuggestFoodsPortionErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -765,7 +769,7 @@ class __$$SuggestFoodsPortionErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$SuggestFoodsPortionErrorState(
+    return _then(_$SuggestFoodsPortionErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -776,8 +780,9 @@ class __$$SuggestFoodsPortionErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SuggestFoodsPortionErrorState implements SuggestFoodsPortionErrorState {
-  const _$SuggestFoodsPortionErrorState(this.message);
+class _$SuggestFoodsPortionErrorStateImpl
+    implements SuggestFoodsPortionErrorState {
+  const _$SuggestFoodsPortionErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -788,10 +793,10 @@ class _$SuggestFoodsPortionErrorState implements SuggestFoodsPortionErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuggestFoodsPortionErrorState &&
+            other is _$SuggestFoodsPortionErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -801,9 +806,10 @@ class _$SuggestFoodsPortionErrorState implements SuggestFoodsPortionErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuggestFoodsPortionErrorStateCopyWith<_$SuggestFoodsPortionErrorState>
-      get copyWith => __$$SuggestFoodsPortionErrorStateCopyWithImpl<
-          _$SuggestFoodsPortionErrorState>(this, _$identity);
+  _$$SuggestFoodsPortionErrorStateImplCopyWith<
+          _$SuggestFoodsPortionErrorStateImpl>
+      get copyWith => __$$SuggestFoodsPortionErrorStateImplCopyWithImpl<
+          _$SuggestFoodsPortionErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -887,32 +893,33 @@ class _$SuggestFoodsPortionErrorState implements SuggestFoodsPortionErrorState {
 abstract class SuggestFoodsPortionErrorState
     implements SuggestFoodsPortionState {
   const factory SuggestFoodsPortionErrorState(final String message) =
-      _$SuggestFoodsPortionErrorState;
+      _$SuggestFoodsPortionErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$SuggestFoodsPortionErrorStateCopyWith<_$SuggestFoodsPortionErrorState>
+  _$$SuggestFoodsPortionErrorStateImplCopyWith<
+          _$SuggestFoodsPortionErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$SuggestFoodsPortionLoadedStateCopyWith<$Res> {
-  factory _$$SuggestFoodsPortionLoadedStateCopyWith(
-          _$SuggestFoodsPortionLoadedState value,
-          $Res Function(_$SuggestFoodsPortionLoadedState) then) =
-      __$$SuggestFoodsPortionLoadedStateCopyWithImpl<$Res>;
+abstract class _$$SuggestFoodsPortionLoadedStateImplCopyWith<$Res> {
+  factory _$$SuggestFoodsPortionLoadedStateImplCopyWith(
+          _$SuggestFoodsPortionLoadedStateImpl value,
+          $Res Function(_$SuggestFoodsPortionLoadedStateImpl) then) =
+      __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<SuggestedFoodsPortion> suggestedFoodsPortions});
 }
 
 /// @nodoc
-class __$$SuggestFoodsPortionLoadedStateCopyWithImpl<$Res>
+class __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<$Res>
     extends _$SuggestFoodsPortionStateCopyWithImpl<$Res,
-        _$SuggestFoodsPortionLoadedState>
-    implements _$$SuggestFoodsPortionLoadedStateCopyWith<$Res> {
-  __$$SuggestFoodsPortionLoadedStateCopyWithImpl(
-      _$SuggestFoodsPortionLoadedState _value,
-      $Res Function(_$SuggestFoodsPortionLoadedState) _then)
+        _$SuggestFoodsPortionLoadedStateImpl>
+    implements _$$SuggestFoodsPortionLoadedStateImplCopyWith<$Res> {
+  __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl(
+      _$SuggestFoodsPortionLoadedStateImpl _value,
+      $Res Function(_$SuggestFoodsPortionLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -920,7 +927,7 @@ class __$$SuggestFoodsPortionLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? suggestedFoodsPortions = null,
   }) {
-    return _then(_$SuggestFoodsPortionLoadedState(
+    return _then(_$SuggestFoodsPortionLoadedStateImpl(
       suggestedFoodsPortions: null == suggestedFoodsPortions
           ? _value._suggestedFoodsPortions
           : suggestedFoodsPortions // ignore: cast_nullable_to_non_nullable
@@ -931,9 +938,9 @@ class __$$SuggestFoodsPortionLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SuggestFoodsPortionLoadedState
+class _$SuggestFoodsPortionLoadedStateImpl
     implements SuggestFoodsPortionLoadedState {
-  const _$SuggestFoodsPortionLoadedState(
+  const _$SuggestFoodsPortionLoadedStateImpl(
       {required final List<SuggestedFoodsPortion> suggestedFoodsPortions})
       : _suggestedFoodsPortions = suggestedFoodsPortions;
 
@@ -952,10 +959,10 @@ class _$SuggestFoodsPortionLoadedState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuggestFoodsPortionLoadedState &&
+            other is _$SuggestFoodsPortionLoadedStateImpl &&
             const DeepCollectionEquality().equals(
                 other._suggestedFoodsPortions, _suggestedFoodsPortions));
   }
@@ -967,9 +974,10 @@ class _$SuggestFoodsPortionLoadedState
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuggestFoodsPortionLoadedStateCopyWith<_$SuggestFoodsPortionLoadedState>
-      get copyWith => __$$SuggestFoodsPortionLoadedStateCopyWithImpl<
-          _$SuggestFoodsPortionLoadedState>(this, _$identity);
+  _$$SuggestFoodsPortionLoadedStateImplCopyWith<
+          _$SuggestFoodsPortionLoadedStateImpl>
+      get copyWith => __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<
+          _$SuggestFoodsPortionLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1054,10 +1062,11 @@ abstract class SuggestFoodsPortionLoadedState
     implements SuggestFoodsPortionState {
   const factory SuggestFoodsPortionLoadedState(
           {required final List<SuggestedFoodsPortion> suggestedFoodsPortions}) =
-      _$SuggestFoodsPortionLoadedState;
+      _$SuggestFoodsPortionLoadedStateImpl;
 
   List<SuggestedFoodsPortion> get suggestedFoodsPortions;
   @JsonKey(ignore: true)
-  _$$SuggestFoodsPortionLoadedStateCopyWith<_$SuggestFoodsPortionLoadedState>
+  _$$SuggestFoodsPortionLoadedStateImplCopyWith<
+          _$SuggestFoodsPortionLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

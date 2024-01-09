@@ -70,22 +70,24 @@ class _$SuggestedFoodsPortionCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SuggestedFoodsPortionCopyWith<$Res>
+abstract class _$$SuggestedFoodsPortionImplCopyWith<$Res>
     implements $SuggestedFoodsPortionCopyWith<$Res> {
-  factory _$$_SuggestedFoodsPortionCopyWith(_$_SuggestedFoodsPortion value,
-          $Res Function(_$_SuggestedFoodsPortion) then) =
-      __$$_SuggestedFoodsPortionCopyWithImpl<$Res>;
+  factory _$$SuggestedFoodsPortionImplCopyWith(
+          _$SuggestedFoodsPortionImpl value,
+          $Res Function(_$SuggestedFoodsPortionImpl) then) =
+      __$$SuggestedFoodsPortionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Food> foods, List<double> totalMacro, int accuracy});
 }
 
 /// @nodoc
-class __$$_SuggestedFoodsPortionCopyWithImpl<$Res>
-    extends _$SuggestedFoodsPortionCopyWithImpl<$Res, _$_SuggestedFoodsPortion>
-    implements _$$_SuggestedFoodsPortionCopyWith<$Res> {
-  __$$_SuggestedFoodsPortionCopyWithImpl(_$_SuggestedFoodsPortion _value,
-      $Res Function(_$_SuggestedFoodsPortion) _then)
+class __$$SuggestedFoodsPortionImplCopyWithImpl<$Res>
+    extends _$SuggestedFoodsPortionCopyWithImpl<$Res,
+        _$SuggestedFoodsPortionImpl>
+    implements _$$SuggestedFoodsPortionImplCopyWith<$Res> {
+  __$$SuggestedFoodsPortionImplCopyWithImpl(_$SuggestedFoodsPortionImpl _value,
+      $Res Function(_$SuggestedFoodsPortionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -95,7 +97,7 @@ class __$$_SuggestedFoodsPortionCopyWithImpl<$Res>
     Object? totalMacro = null,
     Object? accuracy = null,
   }) {
-    return _then(_$_SuggestedFoodsPortion(
+    return _then(_$SuggestedFoodsPortionImpl(
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -114,8 +116,8 @@ class __$$_SuggestedFoodsPortionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SuggestedFoodsPortion implements _SuggestedFoodsPortion {
-  _$_SuggestedFoodsPortion(
+class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
+  _$SuggestedFoodsPortionImpl(
       {final List<Food> foods = const [],
       final List<double> totalMacro = const [],
       this.accuracy = 0})
@@ -150,10 +152,10 @@ class _$_SuggestedFoodsPortion implements _SuggestedFoodsPortion {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SuggestedFoodsPortion &&
+            other is _$SuggestedFoodsPortionImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
             const DeepCollectionEquality()
                 .equals(other._totalMacro, _totalMacro) &&
@@ -171,16 +173,16 @@ class _$_SuggestedFoodsPortion implements _SuggestedFoodsPortion {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SuggestedFoodsPortionCopyWith<_$_SuggestedFoodsPortion> get copyWith =>
-      __$$_SuggestedFoodsPortionCopyWithImpl<_$_SuggestedFoodsPortion>(
-          this, _$identity);
+  _$$SuggestedFoodsPortionImplCopyWith<_$SuggestedFoodsPortionImpl>
+      get copyWith => __$$SuggestedFoodsPortionImplCopyWithImpl<
+          _$SuggestedFoodsPortionImpl>(this, _$identity);
 }
 
 abstract class _SuggestedFoodsPortion implements SuggestedFoodsPortion {
   factory _SuggestedFoodsPortion(
       {final List<Food> foods,
       final List<double> totalMacro,
-      final int accuracy}) = _$_SuggestedFoodsPortion;
+      final int accuracy}) = _$SuggestedFoodsPortionImpl;
 
   @override
   List<Food> get foods;
@@ -190,6 +192,6 @@ abstract class _SuggestedFoodsPortion implements SuggestedFoodsPortion {
   int get accuracy;
   @override
   @JsonKey(ignore: true)
-  _$$_SuggestedFoodsPortionCopyWith<_$_SuggestedFoodsPortion> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SuggestedFoodsPortionImplCopyWith<_$SuggestedFoodsPortionImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

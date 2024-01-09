@@ -102,12 +102,12 @@ class _$UserSubscriptionPlanRemoteCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_UserSubscriptionPlanRemoteCopyWith<$Res>
+abstract class _$$UserSubscriptionPlanRemoteImplCopyWith<$Res>
     implements $UserSubscriptionPlanRemoteCopyWith<$Res> {
-  factory _$$_UserSubscriptionPlanRemoteCopyWith(
-          _$_UserSubscriptionPlanRemote value,
-          $Res Function(_$_UserSubscriptionPlanRemote) then) =
-      __$$_UserSubscriptionPlanRemoteCopyWithImpl<$Res>;
+  factory _$$UserSubscriptionPlanRemoteImplCopyWith(
+          _$UserSubscriptionPlanRemoteImpl value,
+          $Res Function(_$UserSubscriptionPlanRemoteImpl) then) =
+      __$$UserSubscriptionPlanRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -121,13 +121,13 @@ abstract class _$$_UserSubscriptionPlanRemoteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserSubscriptionPlanRemoteCopyWithImpl<$Res>
+class __$$UserSubscriptionPlanRemoteImplCopyWithImpl<$Res>
     extends _$UserSubscriptionPlanRemoteCopyWithImpl<$Res,
-        _$_UserSubscriptionPlanRemote>
-    implements _$$_UserSubscriptionPlanRemoteCopyWith<$Res> {
-  __$$_UserSubscriptionPlanRemoteCopyWithImpl(
-      _$_UserSubscriptionPlanRemote _value,
-      $Res Function(_$_UserSubscriptionPlanRemote) _then)
+        _$UserSubscriptionPlanRemoteImpl>
+    implements _$$UserSubscriptionPlanRemoteImplCopyWith<$Res> {
+  __$$UserSubscriptionPlanRemoteImplCopyWithImpl(
+      _$UserSubscriptionPlanRemoteImpl _value,
+      $Res Function(_$UserSubscriptionPlanRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -141,7 +141,7 @@ class __$$_UserSubscriptionPlanRemoteCopyWithImpl<$Res>
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
   }) {
-    return _then(_$_UserSubscriptionPlanRemote(
+    return _then(_$UserSubscriptionPlanRemoteImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -176,8 +176,8 @@ class __$$_UserSubscriptionPlanRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserSubscriptionPlanRemote implements _UserSubscriptionPlanRemote {
-  _$_UserSubscriptionPlanRemote(
+class _$UserSubscriptionPlanRemoteImpl implements _UserSubscriptionPlanRemote {
+  _$UserSubscriptionPlanRemoteImpl(
       {this.userId = '',
       this.plan = '',
       this.upgradeDate = '',
@@ -214,10 +214,10 @@ class _$_UserSubscriptionPlanRemote implements _UserSubscriptionPlanRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserSubscriptionPlanRemote &&
+            other is _$UserSubscriptionPlanRemoteImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.plan, plan) || other.plan == plan) &&
             (identical(other.upgradeDate, upgradeDate) ||
@@ -249,9 +249,9 @@ class _$_UserSubscriptionPlanRemote implements _UserSubscriptionPlanRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserSubscriptionPlanRemoteCopyWith<_$_UserSubscriptionPlanRemote>
-      get copyWith => __$$_UserSubscriptionPlanRemoteCopyWithImpl<
-          _$_UserSubscriptionPlanRemote>(this, _$identity);
+  _$$UserSubscriptionPlanRemoteImplCopyWith<_$UserSubscriptionPlanRemoteImpl>
+      get copyWith => __$$UserSubscriptionPlanRemoteImplCopyWithImpl<
+          _$UserSubscriptionPlanRemoteImpl>(this, _$identity);
 }
 
 abstract class _UserSubscriptionPlanRemote
@@ -263,7 +263,7 @@ abstract class _UserSubscriptionPlanRemote
       final String planType,
       final int favoriteFoodRequestsLeft,
       final int suggestFoodRequestsLeft,
-      final int foodPortionRequestsLeft}) = _$_UserSubscriptionPlanRemote;
+      final int foodPortionRequestsLeft}) = _$UserSubscriptionPlanRemoteImpl;
 
   @override
   String get userId;
@@ -281,6 +281,6 @@ abstract class _UserSubscriptionPlanRemote
   int get foodPortionRequestsLeft;
   @override
   @JsonKey(ignore: true)
-  _$$_UserSubscriptionPlanRemoteCopyWith<_$_UserSubscriptionPlanRemote>
+  _$$UserSubscriptionPlanRemoteImplCopyWith<_$UserSubscriptionPlanRemoteImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

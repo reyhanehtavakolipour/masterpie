@@ -64,22 +64,22 @@ class _$GoogleSignInResponseCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_GoogleSignInResponseCopyWith<$Res>
+abstract class _$$GoogleSignInResponseImplCopyWith<$Res>
     implements $GoogleSignInResponseCopyWith<$Res> {
-  factory _$$_GoogleSignInResponseCopyWith(_$_GoogleSignInResponse value,
-          $Res Function(_$_GoogleSignInResponse) then) =
-      __$$_GoogleSignInResponseCopyWithImpl<$Res>;
+  factory _$$GoogleSignInResponseImplCopyWith(_$GoogleSignInResponseImpl value,
+          $Res Function(_$GoogleSignInResponseImpl) then) =
+      __$$GoogleSignInResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String email, String id});
 }
 
 /// @nodoc
-class __$$_GoogleSignInResponseCopyWithImpl<$Res>
-    extends _$GoogleSignInResponseCopyWithImpl<$Res, _$_GoogleSignInResponse>
-    implements _$$_GoogleSignInResponseCopyWith<$Res> {
-  __$$_GoogleSignInResponseCopyWithImpl(_$_GoogleSignInResponse _value,
-      $Res Function(_$_GoogleSignInResponse) _then)
+class __$$GoogleSignInResponseImplCopyWithImpl<$Res>
+    extends _$GoogleSignInResponseCopyWithImpl<$Res, _$GoogleSignInResponseImpl>
+    implements _$$GoogleSignInResponseImplCopyWith<$Res> {
+  __$$GoogleSignInResponseImplCopyWithImpl(_$GoogleSignInResponseImpl _value,
+      $Res Function(_$GoogleSignInResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -88,7 +88,7 @@ class __$$_GoogleSignInResponseCopyWithImpl<$Res>
     Object? email = null,
     Object? id = null,
   }) {
-    return _then(_$_GoogleSignInResponse(
+    return _then(_$GoogleSignInResponseImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -103,8 +103,8 @@ class __$$_GoogleSignInResponseCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GoogleSignInResponse implements _GoogleSignInResponse {
-  _$_GoogleSignInResponse({this.email = '', this.id = ''});
+class _$GoogleSignInResponseImpl implements _GoogleSignInResponse {
+  _$GoogleSignInResponseImpl({this.email = '', this.id = ''});
 
   @override
   @JsonKey()
@@ -119,10 +119,10 @@ class _$_GoogleSignInResponse implements _GoogleSignInResponse {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_GoogleSignInResponse &&
+            other is _$GoogleSignInResponseImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.id, id) || other.id == id));
   }
@@ -133,14 +133,15 @@ class _$_GoogleSignInResponse implements _GoogleSignInResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_GoogleSignInResponseCopyWith<_$_GoogleSignInResponse> get copyWith =>
-      __$$_GoogleSignInResponseCopyWithImpl<_$_GoogleSignInResponse>(
-          this, _$identity);
+  _$$GoogleSignInResponseImplCopyWith<_$GoogleSignInResponseImpl>
+      get copyWith =>
+          __$$GoogleSignInResponseImplCopyWithImpl<_$GoogleSignInResponseImpl>(
+              this, _$identity);
 }
 
 abstract class _GoogleSignInResponse implements GoogleSignInResponse {
   factory _GoogleSignInResponse({final String email, final String id}) =
-      _$_GoogleSignInResponse;
+      _$GoogleSignInResponseImpl;
 
   @override
   String get email;
@@ -148,6 +149,6 @@ abstract class _GoogleSignInResponse implements GoogleSignInResponse {
   String get id;
   @override
   @JsonKey(ignore: true)
-  _$$_GoogleSignInResponseCopyWith<_$_GoogleSignInResponse> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GoogleSignInResponseImplCopyWith<_$GoogleSignInResponseImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

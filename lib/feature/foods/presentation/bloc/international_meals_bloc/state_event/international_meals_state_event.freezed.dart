@@ -78,23 +78,23 @@ class _$InternationalMealsEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$GetInternationalMealsEventCopyWith<$Res> {
-  factory _$$GetInternationalMealsEventCopyWith(
-          _$GetInternationalMealsEvent value,
-          $Res Function(_$GetInternationalMealsEvent) then) =
-      __$$GetInternationalMealsEventCopyWithImpl<$Res>;
+abstract class _$$GetInternationalMealsEventImplCopyWith<$Res> {
+  factory _$$GetInternationalMealsEventImplCopyWith(
+          _$GetInternationalMealsEventImpl value,
+          $Res Function(_$GetInternationalMealsEventImpl) then) =
+      __$$GetInternationalMealsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String query});
 }
 
 /// @nodoc
-class __$$GetInternationalMealsEventCopyWithImpl<$Res>
+class __$$GetInternationalMealsEventImplCopyWithImpl<$Res>
     extends _$InternationalMealsEventCopyWithImpl<$Res,
-        _$GetInternationalMealsEvent>
-    implements _$$GetInternationalMealsEventCopyWith<$Res> {
-  __$$GetInternationalMealsEventCopyWithImpl(
-      _$GetInternationalMealsEvent _value,
-      $Res Function(_$GetInternationalMealsEvent) _then)
+        _$GetInternationalMealsEventImpl>
+    implements _$$GetInternationalMealsEventImplCopyWith<$Res> {
+  __$$GetInternationalMealsEventImplCopyWithImpl(
+      _$GetInternationalMealsEventImpl _value,
+      $Res Function(_$GetInternationalMealsEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -102,7 +102,7 @@ class __$$GetInternationalMealsEventCopyWithImpl<$Res>
   $Res call({
     Object? query = null,
   }) {
-    return _then(_$GetInternationalMealsEvent(
+    return _then(_$GetInternationalMealsEventImpl(
       null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
@@ -113,8 +113,8 @@ class __$$GetInternationalMealsEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetInternationalMealsEvent implements GetInternationalMealsEvent {
-  const _$GetInternationalMealsEvent(this.query);
+class _$GetInternationalMealsEventImpl implements GetInternationalMealsEvent {
+  const _$GetInternationalMealsEventImpl(this.query);
 
   @override
   final String query;
@@ -125,10 +125,10 @@ class _$GetInternationalMealsEvent implements GetInternationalMealsEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetInternationalMealsEvent &&
+            other is _$GetInternationalMealsEventImpl &&
             (identical(other.query, query) || other.query == query));
   }
 
@@ -138,9 +138,9 @@ class _$GetInternationalMealsEvent implements GetInternationalMealsEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetInternationalMealsEventCopyWith<_$GetInternationalMealsEvent>
-      get copyWith => __$$GetInternationalMealsEventCopyWithImpl<
-          _$GetInternationalMealsEvent>(this, _$identity);
+  _$$GetInternationalMealsEventImplCopyWith<_$GetInternationalMealsEventImpl>
+      get copyWith => __$$GetInternationalMealsEventImplCopyWithImpl<
+          _$GetInternationalMealsEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -209,32 +209,34 @@ class _$GetInternationalMealsEvent implements GetInternationalMealsEvent {
 
 abstract class GetInternationalMealsEvent implements InternationalMealsEvent {
   const factory GetInternationalMealsEvent(final String query) =
-      _$GetInternationalMealsEvent;
+      _$GetInternationalMealsEventImpl;
 
   String get query;
   @JsonKey(ignore: true)
-  _$$GetInternationalMealsEventCopyWith<_$GetInternationalMealsEvent>
+  _$$GetInternationalMealsEventImplCopyWith<_$GetInternationalMealsEventImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$InternationalMealsEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$InternationalMealsEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -242,9 +244,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -316,7 +318,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements InternationalMealsEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -393,29 +395,29 @@ class _$InternationalMealsStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$InternationalMealsInitialStateCopyWith<$Res> {
-  factory _$$InternationalMealsInitialStateCopyWith(
-          _$InternationalMealsInitialState value,
-          $Res Function(_$InternationalMealsInitialState) then) =
-      __$$InternationalMealsInitialStateCopyWithImpl<$Res>;
+abstract class _$$InternationalMealsInitialStateImplCopyWith<$Res> {
+  factory _$$InternationalMealsInitialStateImplCopyWith(
+          _$InternationalMealsInitialStateImpl value,
+          $Res Function(_$InternationalMealsInitialStateImpl) then) =
+      __$$InternationalMealsInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$InternationalMealsInitialStateCopyWithImpl<$Res>
+class __$$InternationalMealsInitialStateImplCopyWithImpl<$Res>
     extends _$InternationalMealsStateCopyWithImpl<$Res,
-        _$InternationalMealsInitialState>
-    implements _$$InternationalMealsInitialStateCopyWith<$Res> {
-  __$$InternationalMealsInitialStateCopyWithImpl(
-      _$InternationalMealsInitialState _value,
-      $Res Function(_$InternationalMealsInitialState) _then)
+        _$InternationalMealsInitialStateImpl>
+    implements _$$InternationalMealsInitialStateImplCopyWith<$Res> {
+  __$$InternationalMealsInitialStateImplCopyWithImpl(
+      _$InternationalMealsInitialStateImpl _value,
+      $Res Function(_$InternationalMealsInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$InternationalMealsInitialState
+class _$InternationalMealsInitialStateImpl
     implements InternationalMealsInitialState {
-  const _$InternationalMealsInitialState();
+  const _$InternationalMealsInitialStateImpl();
 
   @override
   String toString() {
@@ -423,10 +425,10 @@ class _$InternationalMealsInitialState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InternationalMealsInitialState);
+            other is _$InternationalMealsInitialStateImpl);
   }
 
   @override
@@ -510,33 +512,33 @@ class _$InternationalMealsInitialState
 abstract class InternationalMealsInitialState
     implements InternationalMealsState {
   const factory InternationalMealsInitialState() =
-      _$InternationalMealsInitialState;
+      _$InternationalMealsInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$InternationalMealsLoadingStateCopyWith<$Res> {
-  factory _$$InternationalMealsLoadingStateCopyWith(
-          _$InternationalMealsLoadingState value,
-          $Res Function(_$InternationalMealsLoadingState) then) =
-      __$$InternationalMealsLoadingStateCopyWithImpl<$Res>;
+abstract class _$$InternationalMealsLoadingStateImplCopyWith<$Res> {
+  factory _$$InternationalMealsLoadingStateImplCopyWith(
+          _$InternationalMealsLoadingStateImpl value,
+          $Res Function(_$InternationalMealsLoadingStateImpl) then) =
+      __$$InternationalMealsLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$InternationalMealsLoadingStateCopyWithImpl<$Res>
+class __$$InternationalMealsLoadingStateImplCopyWithImpl<$Res>
     extends _$InternationalMealsStateCopyWithImpl<$Res,
-        _$InternationalMealsLoadingState>
-    implements _$$InternationalMealsLoadingStateCopyWith<$Res> {
-  __$$InternationalMealsLoadingStateCopyWithImpl(
-      _$InternationalMealsLoadingState _value,
-      $Res Function(_$InternationalMealsLoadingState) _then)
+        _$InternationalMealsLoadingStateImpl>
+    implements _$$InternationalMealsLoadingStateImplCopyWith<$Res> {
+  __$$InternationalMealsLoadingStateImplCopyWithImpl(
+      _$InternationalMealsLoadingStateImpl _value,
+      $Res Function(_$InternationalMealsLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$InternationalMealsLoadingState
+class _$InternationalMealsLoadingStateImpl
     implements InternationalMealsLoadingState {
-  const _$InternationalMealsLoadingState();
+  const _$InternationalMealsLoadingStateImpl();
 
   @override
   String toString() {
@@ -544,10 +546,10 @@ class _$InternationalMealsLoadingState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InternationalMealsLoadingState);
+            other is _$InternationalMealsLoadingStateImpl);
   }
 
   @override
@@ -631,27 +633,27 @@ class _$InternationalMealsLoadingState
 abstract class InternationalMealsLoadingState
     implements InternationalMealsState {
   const factory InternationalMealsLoadingState() =
-      _$InternationalMealsLoadingState;
+      _$InternationalMealsLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$InternationalMealsErrorStateCopyWith<$Res> {
-  factory _$$InternationalMealsErrorStateCopyWith(
-          _$InternationalMealsErrorState value,
-          $Res Function(_$InternationalMealsErrorState) then) =
-      __$$InternationalMealsErrorStateCopyWithImpl<$Res>;
+abstract class _$$InternationalMealsErrorStateImplCopyWith<$Res> {
+  factory _$$InternationalMealsErrorStateImplCopyWith(
+          _$InternationalMealsErrorStateImpl value,
+          $Res Function(_$InternationalMealsErrorStateImpl) then) =
+      __$$InternationalMealsErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$InternationalMealsErrorStateCopyWithImpl<$Res>
+class __$$InternationalMealsErrorStateImplCopyWithImpl<$Res>
     extends _$InternationalMealsStateCopyWithImpl<$Res,
-        _$InternationalMealsErrorState>
-    implements _$$InternationalMealsErrorStateCopyWith<$Res> {
-  __$$InternationalMealsErrorStateCopyWithImpl(
-      _$InternationalMealsErrorState _value,
-      $Res Function(_$InternationalMealsErrorState) _then)
+        _$InternationalMealsErrorStateImpl>
+    implements _$$InternationalMealsErrorStateImplCopyWith<$Res> {
+  __$$InternationalMealsErrorStateImplCopyWithImpl(
+      _$InternationalMealsErrorStateImpl _value,
+      $Res Function(_$InternationalMealsErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -659,7 +661,7 @@ class __$$InternationalMealsErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$InternationalMealsErrorState(
+    return _then(_$InternationalMealsErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -670,8 +672,9 @@ class __$$InternationalMealsErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InternationalMealsErrorState implements InternationalMealsErrorState {
-  const _$InternationalMealsErrorState(this.message);
+class _$InternationalMealsErrorStateImpl
+    implements InternationalMealsErrorState {
+  const _$InternationalMealsErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -682,10 +685,10 @@ class _$InternationalMealsErrorState implements InternationalMealsErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InternationalMealsErrorState &&
+            other is _$InternationalMealsErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -695,9 +698,10 @@ class _$InternationalMealsErrorState implements InternationalMealsErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$InternationalMealsErrorStateCopyWith<_$InternationalMealsErrorState>
-      get copyWith => __$$InternationalMealsErrorStateCopyWithImpl<
-          _$InternationalMealsErrorState>(this, _$identity);
+  _$$InternationalMealsErrorStateImplCopyWith<
+          _$InternationalMealsErrorStateImpl>
+      get copyWith => __$$InternationalMealsErrorStateImplCopyWithImpl<
+          _$InternationalMealsErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -776,32 +780,33 @@ class _$InternationalMealsErrorState implements InternationalMealsErrorState {
 
 abstract class InternationalMealsErrorState implements InternationalMealsState {
   const factory InternationalMealsErrorState(final String message) =
-      _$InternationalMealsErrorState;
+      _$InternationalMealsErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$InternationalMealsErrorStateCopyWith<_$InternationalMealsErrorState>
+  _$$InternationalMealsErrorStateImplCopyWith<
+          _$InternationalMealsErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$InternationalMealsLoadedStateCopyWith<$Res> {
-  factory _$$InternationalMealsLoadedStateCopyWith(
-          _$InternationalMealsLoadedState value,
-          $Res Function(_$InternationalMealsLoadedState) then) =
-      __$$InternationalMealsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$InternationalMealsLoadedStateImplCopyWith<$Res> {
+  factory _$$InternationalMealsLoadedStateImplCopyWith(
+          _$InternationalMealsLoadedStateImpl value,
+          $Res Function(_$InternationalMealsLoadedStateImpl) then) =
+      __$$InternationalMealsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Food> foods});
 }
 
 /// @nodoc
-class __$$InternationalMealsLoadedStateCopyWithImpl<$Res>
+class __$$InternationalMealsLoadedStateImplCopyWithImpl<$Res>
     extends _$InternationalMealsStateCopyWithImpl<$Res,
-        _$InternationalMealsLoadedState>
-    implements _$$InternationalMealsLoadedStateCopyWith<$Res> {
-  __$$InternationalMealsLoadedStateCopyWithImpl(
-      _$InternationalMealsLoadedState _value,
-      $Res Function(_$InternationalMealsLoadedState) _then)
+        _$InternationalMealsLoadedStateImpl>
+    implements _$$InternationalMealsLoadedStateImplCopyWith<$Res> {
+  __$$InternationalMealsLoadedStateImplCopyWithImpl(
+      _$InternationalMealsLoadedStateImpl _value,
+      $Res Function(_$InternationalMealsLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -809,7 +814,7 @@ class __$$InternationalMealsLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? foods = null,
   }) {
-    return _then(_$InternationalMealsLoadedState(
+    return _then(_$InternationalMealsLoadedStateImpl(
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -820,8 +825,9 @@ class __$$InternationalMealsLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InternationalMealsLoadedState implements InternationalMealsLoadedState {
-  const _$InternationalMealsLoadedState({required final List<Food> foods})
+class _$InternationalMealsLoadedStateImpl
+    implements InternationalMealsLoadedState {
+  const _$InternationalMealsLoadedStateImpl({required final List<Food> foods})
       : _foods = foods;
 
   final List<Food> _foods;
@@ -838,10 +844,10 @@ class _$InternationalMealsLoadedState implements InternationalMealsLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$InternationalMealsLoadedState &&
+            other is _$InternationalMealsLoadedStateImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods));
   }
 
@@ -852,9 +858,10 @@ class _$InternationalMealsLoadedState implements InternationalMealsLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$InternationalMealsLoadedStateCopyWith<_$InternationalMealsLoadedState>
-      get copyWith => __$$InternationalMealsLoadedStateCopyWithImpl<
-          _$InternationalMealsLoadedState>(this, _$identity);
+  _$$InternationalMealsLoadedStateImplCopyWith<
+          _$InternationalMealsLoadedStateImpl>
+      get copyWith => __$$InternationalMealsLoadedStateImplCopyWithImpl<
+          _$InternationalMealsLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -934,10 +941,11 @@ class _$InternationalMealsLoadedState implements InternationalMealsLoadedState {
 abstract class InternationalMealsLoadedState
     implements InternationalMealsState {
   const factory InternationalMealsLoadedState(
-      {required final List<Food> foods}) = _$InternationalMealsLoadedState;
+      {required final List<Food> foods}) = _$InternationalMealsLoadedStateImpl;
 
   List<Food> get foods;
   @JsonKey(ignore: true)
-  _$$InternationalMealsLoadedStateCopyWith<_$InternationalMealsLoadedState>
+  _$$InternationalMealsLoadedStateImplCopyWith<
+          _$InternationalMealsLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

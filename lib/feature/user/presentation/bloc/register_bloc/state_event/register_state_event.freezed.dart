@@ -86,22 +86,22 @@ class _$RegisterEventCopyWithImpl<$Res, $Val extends RegisterEvent>
 }
 
 /// @nodoc
-abstract class _$$RegisterWithCredentialEventCopyWith<$Res> {
-  factory _$$RegisterWithCredentialEventCopyWith(
-          _$RegisterWithCredentialEvent value,
-          $Res Function(_$RegisterWithCredentialEvent) then) =
-      __$$RegisterWithCredentialEventCopyWithImpl<$Res>;
+abstract class _$$RegisterWithCredentialEventImplCopyWith<$Res> {
+  factory _$$RegisterWithCredentialEventImplCopyWith(
+          _$RegisterWithCredentialEventImpl value,
+          $Res Function(_$RegisterWithCredentialEventImpl) then) =
+      __$$RegisterWithCredentialEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String email, String password});
 }
 
 /// @nodoc
-class __$$RegisterWithCredentialEventCopyWithImpl<$Res>
-    extends _$RegisterEventCopyWithImpl<$Res, _$RegisterWithCredentialEvent>
-    implements _$$RegisterWithCredentialEventCopyWith<$Res> {
-  __$$RegisterWithCredentialEventCopyWithImpl(
-      _$RegisterWithCredentialEvent _value,
-      $Res Function(_$RegisterWithCredentialEvent) _then)
+class __$$RegisterWithCredentialEventImplCopyWithImpl<$Res>
+    extends _$RegisterEventCopyWithImpl<$Res, _$RegisterWithCredentialEventImpl>
+    implements _$$RegisterWithCredentialEventImplCopyWith<$Res> {
+  __$$RegisterWithCredentialEventImplCopyWithImpl(
+      _$RegisterWithCredentialEventImpl _value,
+      $Res Function(_$RegisterWithCredentialEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -110,7 +110,7 @@ class __$$RegisterWithCredentialEventCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
   }) {
-    return _then(_$RegisterWithCredentialEvent(
+    return _then(_$RegisterWithCredentialEventImpl(
       null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -125,8 +125,8 @@ class __$$RegisterWithCredentialEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RegisterWithCredentialEvent implements RegisterWithCredentialEvent {
-  const _$RegisterWithCredentialEvent(this.email, this.password);
+class _$RegisterWithCredentialEventImpl implements RegisterWithCredentialEvent {
+  const _$RegisterWithCredentialEventImpl(this.email, this.password);
 
   @override
   final String email;
@@ -139,10 +139,10 @@ class _$RegisterWithCredentialEvent implements RegisterWithCredentialEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegisterWithCredentialEvent &&
+            other is _$RegisterWithCredentialEventImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password));
@@ -154,9 +154,9 @@ class _$RegisterWithCredentialEvent implements RegisterWithCredentialEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegisterWithCredentialEventCopyWith<_$RegisterWithCredentialEvent>
-      get copyWith => __$$RegisterWithCredentialEventCopyWithImpl<
-          _$RegisterWithCredentialEvent>(this, _$identity);
+  _$$RegisterWithCredentialEventImplCopyWith<_$RegisterWithCredentialEventImpl>
+      get copyWith => __$$RegisterWithCredentialEventImplCopyWithImpl<
+          _$RegisterWithCredentialEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -235,35 +235,37 @@ class _$RegisterWithCredentialEvent implements RegisterWithCredentialEvent {
 abstract class RegisterWithCredentialEvent implements RegisterEvent {
   const factory RegisterWithCredentialEvent(
           final String email, final String password) =
-      _$RegisterWithCredentialEvent;
+      _$RegisterWithCredentialEventImpl;
 
   String get email;
   String get password;
   @JsonKey(ignore: true)
-  _$$RegisterWithCredentialEventCopyWith<_$RegisterWithCredentialEvent>
+  _$$RegisterWithCredentialEventImplCopyWith<_$RegisterWithCredentialEventImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RegisterWithGoogleEventCopyWith<$Res> {
-  factory _$$RegisterWithGoogleEventCopyWith(_$RegisterWithGoogleEvent value,
-          $Res Function(_$RegisterWithGoogleEvent) then) =
-      __$$RegisterWithGoogleEventCopyWithImpl<$Res>;
+abstract class _$$RegisterWithGoogleEventImplCopyWith<$Res> {
+  factory _$$RegisterWithGoogleEventImplCopyWith(
+          _$RegisterWithGoogleEventImpl value,
+          $Res Function(_$RegisterWithGoogleEventImpl) then) =
+      __$$RegisterWithGoogleEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RegisterWithGoogleEventCopyWithImpl<$Res>
-    extends _$RegisterEventCopyWithImpl<$Res, _$RegisterWithGoogleEvent>
-    implements _$$RegisterWithGoogleEventCopyWith<$Res> {
-  __$$RegisterWithGoogleEventCopyWithImpl(_$RegisterWithGoogleEvent _value,
-      $Res Function(_$RegisterWithGoogleEvent) _then)
+class __$$RegisterWithGoogleEventImplCopyWithImpl<$Res>
+    extends _$RegisterEventCopyWithImpl<$Res, _$RegisterWithGoogleEventImpl>
+    implements _$$RegisterWithGoogleEventImplCopyWith<$Res> {
+  __$$RegisterWithGoogleEventImplCopyWithImpl(
+      _$RegisterWithGoogleEventImpl _value,
+      $Res Function(_$RegisterWithGoogleEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RegisterWithGoogleEvent implements RegisterWithGoogleEvent {
-  const _$RegisterWithGoogleEvent();
+class _$RegisterWithGoogleEventImpl implements RegisterWithGoogleEvent {
+  const _$RegisterWithGoogleEventImpl();
 
   @override
   String toString() {
@@ -271,10 +273,10 @@ class _$RegisterWithGoogleEvent implements RegisterWithGoogleEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegisterWithGoogleEvent);
+            other is _$RegisterWithGoogleEventImpl);
   }
 
   @override
@@ -355,27 +357,29 @@ class _$RegisterWithGoogleEvent implements RegisterWithGoogleEvent {
 }
 
 abstract class RegisterWithGoogleEvent implements RegisterEvent {
-  const factory RegisterWithGoogleEvent() = _$RegisterWithGoogleEvent;
+  const factory RegisterWithGoogleEvent() = _$RegisterWithGoogleEventImpl;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$RegisterEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$RegisterEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -383,9 +387,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -466,7 +470,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements RegisterEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -542,25 +546,25 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
 }
 
 /// @nodoc
-abstract class _$$RegisterInitialStateCopyWith<$Res> {
-  factory _$$RegisterInitialStateCopyWith(_$RegisterInitialState value,
-          $Res Function(_$RegisterInitialState) then) =
-      __$$RegisterInitialStateCopyWithImpl<$Res>;
+abstract class _$$RegisterInitialStateImplCopyWith<$Res> {
+  factory _$$RegisterInitialStateImplCopyWith(_$RegisterInitialStateImpl value,
+          $Res Function(_$RegisterInitialStateImpl) then) =
+      __$$RegisterInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RegisterInitialStateCopyWithImpl<$Res>
-    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterInitialState>
-    implements _$$RegisterInitialStateCopyWith<$Res> {
-  __$$RegisterInitialStateCopyWithImpl(_$RegisterInitialState _value,
-      $Res Function(_$RegisterInitialState) _then)
+class __$$RegisterInitialStateImplCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterInitialStateImpl>
+    implements _$$RegisterInitialStateImplCopyWith<$Res> {
+  __$$RegisterInitialStateImplCopyWithImpl(_$RegisterInitialStateImpl _value,
+      $Res Function(_$RegisterInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RegisterInitialState implements RegisterInitialState {
-  const _$RegisterInitialState();
+class _$RegisterInitialStateImpl implements RegisterInitialState {
+  const _$RegisterInitialStateImpl();
 
   @override
   String toString() {
@@ -568,9 +572,10 @@ class _$RegisterInitialState implements RegisterInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RegisterInitialState);
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterInitialStateImpl);
   }
 
   @override
@@ -652,29 +657,29 @@ class _$RegisterInitialState implements RegisterInitialState {
 }
 
 abstract class RegisterInitialState implements RegisterState {
-  const factory RegisterInitialState() = _$RegisterInitialState;
+  const factory RegisterInitialState() = _$RegisterInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$RegisterLoadingStateCopyWith<$Res> {
-  factory _$$RegisterLoadingStateCopyWith(_$RegisterLoadingState value,
-          $Res Function(_$RegisterLoadingState) then) =
-      __$$RegisterLoadingStateCopyWithImpl<$Res>;
+abstract class _$$RegisterLoadingStateImplCopyWith<$Res> {
+  factory _$$RegisterLoadingStateImplCopyWith(_$RegisterLoadingStateImpl value,
+          $Res Function(_$RegisterLoadingStateImpl) then) =
+      __$$RegisterLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RegisterLoadingStateCopyWithImpl<$Res>
-    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterLoadingState>
-    implements _$$RegisterLoadingStateCopyWith<$Res> {
-  __$$RegisterLoadingStateCopyWithImpl(_$RegisterLoadingState _value,
-      $Res Function(_$RegisterLoadingState) _then)
+class __$$RegisterLoadingStateImplCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterLoadingStateImpl>
+    implements _$$RegisterLoadingStateImplCopyWith<$Res> {
+  __$$RegisterLoadingStateImplCopyWithImpl(_$RegisterLoadingStateImpl _value,
+      $Res Function(_$RegisterLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RegisterLoadingState implements RegisterLoadingState {
-  const _$RegisterLoadingState();
+class _$RegisterLoadingStateImpl implements RegisterLoadingState {
+  const _$RegisterLoadingStateImpl();
 
   @override
   String toString() {
@@ -682,9 +687,10 @@ class _$RegisterLoadingState implements RegisterLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RegisterLoadingState);
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterLoadingStateImpl);
   }
 
   @override
@@ -766,24 +772,24 @@ class _$RegisterLoadingState implements RegisterLoadingState {
 }
 
 abstract class RegisterLoadingState implements RegisterState {
-  const factory RegisterLoadingState() = _$RegisterLoadingState;
+  const factory RegisterLoadingState() = _$RegisterLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$RegisterErrorStateCopyWith<$Res> {
-  factory _$$RegisterErrorStateCopyWith(_$RegisterErrorState value,
-          $Res Function(_$RegisterErrorState) then) =
-      __$$RegisterErrorStateCopyWithImpl<$Res>;
+abstract class _$$RegisterErrorStateImplCopyWith<$Res> {
+  factory _$$RegisterErrorStateImplCopyWith(_$RegisterErrorStateImpl value,
+          $Res Function(_$RegisterErrorStateImpl) then) =
+      __$$RegisterErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$RegisterErrorStateCopyWithImpl<$Res>
-    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterErrorState>
-    implements _$$RegisterErrorStateCopyWith<$Res> {
-  __$$RegisterErrorStateCopyWithImpl(
-      _$RegisterErrorState _value, $Res Function(_$RegisterErrorState) _then)
+class __$$RegisterErrorStateImplCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterErrorStateImpl>
+    implements _$$RegisterErrorStateImplCopyWith<$Res> {
+  __$$RegisterErrorStateImplCopyWithImpl(_$RegisterErrorStateImpl _value,
+      $Res Function(_$RegisterErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -791,7 +797,7 @@ class __$$RegisterErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$RegisterErrorState(
+    return _then(_$RegisterErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -802,8 +808,8 @@ class __$$RegisterErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RegisterErrorState implements RegisterErrorState {
-  const _$RegisterErrorState(this.message);
+class _$RegisterErrorStateImpl implements RegisterErrorState {
+  const _$RegisterErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -814,10 +820,10 @@ class _$RegisterErrorState implements RegisterErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegisterErrorState &&
+            other is _$RegisterErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -827,8 +833,8 @@ class _$RegisterErrorState implements RegisterErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegisterErrorStateCopyWith<_$RegisterErrorState> get copyWith =>
-      __$$RegisterErrorStateCopyWithImpl<_$RegisterErrorState>(
+  _$$RegisterErrorStateImplCopyWith<_$RegisterErrorStateImpl> get copyWith =>
+      __$$RegisterErrorStateImplCopyWithImpl<_$RegisterErrorStateImpl>(
           this, _$identity);
 
   @override
@@ -907,29 +913,30 @@ class _$RegisterErrorState implements RegisterErrorState {
 }
 
 abstract class RegisterErrorState implements RegisterState {
-  const factory RegisterErrorState(final String message) = _$RegisterErrorState;
+  const factory RegisterErrorState(final String message) =
+      _$RegisterErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$RegisterErrorStateCopyWith<_$RegisterErrorState> get copyWith =>
+  _$$RegisterErrorStateImplCopyWith<_$RegisterErrorStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RegisterLoadedStateCopyWith<$Res> {
-  factory _$$RegisterLoadedStateCopyWith(_$RegisterLoadedState value,
-          $Res Function(_$RegisterLoadedState) then) =
-      __$$RegisterLoadedStateCopyWithImpl<$Res>;
+abstract class _$$RegisterLoadedStateImplCopyWith<$Res> {
+  factory _$$RegisterLoadedStateImplCopyWith(_$RegisterLoadedStateImpl value,
+          $Res Function(_$RegisterLoadedStateImpl) then) =
+      __$$RegisterLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String email});
 }
 
 /// @nodoc
-class __$$RegisterLoadedStateCopyWithImpl<$Res>
-    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterLoadedState>
-    implements _$$RegisterLoadedStateCopyWith<$Res> {
-  __$$RegisterLoadedStateCopyWithImpl(
-      _$RegisterLoadedState _value, $Res Function(_$RegisterLoadedState) _then)
+class __$$RegisterLoadedStateImplCopyWithImpl<$Res>
+    extends _$RegisterStateCopyWithImpl<$Res, _$RegisterLoadedStateImpl>
+    implements _$$RegisterLoadedStateImplCopyWith<$Res> {
+  __$$RegisterLoadedStateImplCopyWithImpl(_$RegisterLoadedStateImpl _value,
+      $Res Function(_$RegisterLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -937,7 +944,7 @@ class __$$RegisterLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
   }) {
-    return _then(_$RegisterLoadedState(
+    return _then(_$RegisterLoadedStateImpl(
       null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -948,8 +955,8 @@ class __$$RegisterLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RegisterLoadedState implements RegisterLoadedState {
-  const _$RegisterLoadedState(this.email);
+class _$RegisterLoadedStateImpl implements RegisterLoadedState {
+  const _$RegisterLoadedStateImpl(this.email);
 
   @override
   final String email;
@@ -960,10 +967,10 @@ class _$RegisterLoadedState implements RegisterLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegisterLoadedState &&
+            other is _$RegisterLoadedStateImpl &&
             (identical(other.email, email) || other.email == email));
   }
 
@@ -973,8 +980,8 @@ class _$RegisterLoadedState implements RegisterLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegisterLoadedStateCopyWith<_$RegisterLoadedState> get copyWith =>
-      __$$RegisterLoadedStateCopyWithImpl<_$RegisterLoadedState>(
+  _$$RegisterLoadedStateImplCopyWith<_$RegisterLoadedStateImpl> get copyWith =>
+      __$$RegisterLoadedStateImplCopyWithImpl<_$RegisterLoadedStateImpl>(
           this, _$identity);
 
   @override
@@ -1053,10 +1060,11 @@ class _$RegisterLoadedState implements RegisterLoadedState {
 }
 
 abstract class RegisterLoadedState implements RegisterState {
-  const factory RegisterLoadedState(final String email) = _$RegisterLoadedState;
+  const factory RegisterLoadedState(final String email) =
+      _$RegisterLoadedStateImpl;
 
   String get email;
   @JsonKey(ignore: true)
-  _$$RegisterLoadedStateCopyWith<_$RegisterLoadedState> get copyWith =>
+  _$$RegisterLoadedStateImplCopyWith<_$RegisterLoadedStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

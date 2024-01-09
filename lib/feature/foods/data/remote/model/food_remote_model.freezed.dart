@@ -209,11 +209,11 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
 }
 
 /// @nodoc
-abstract class _$$_FoodRemoteCopyWith<$Res>
+abstract class _$$FoodRemoteImplCopyWith<$Res>
     implements $FoodRemoteCopyWith<$Res> {
-  factory _$$_FoodRemoteCopyWith(
-          _$_FoodRemote value, $Res Function(_$_FoodRemote) then) =
-      __$$_FoodRemoteCopyWithImpl<$Res>;
+  factory _$$FoodRemoteImplCopyWith(
+          _$FoodRemoteImpl value, $Res Function(_$FoodRemoteImpl) then) =
+      __$$FoodRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -242,11 +242,11 @@ abstract class _$$_FoodRemoteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_FoodRemoteCopyWithImpl<$Res>
-    extends _$FoodRemoteCopyWithImpl<$Res, _$_FoodRemote>
-    implements _$$_FoodRemoteCopyWith<$Res> {
-  __$$_FoodRemoteCopyWithImpl(
-      _$_FoodRemote _value, $Res Function(_$_FoodRemote) _then)
+class __$$FoodRemoteImplCopyWithImpl<$Res>
+    extends _$FoodRemoteCopyWithImpl<$Res, _$FoodRemoteImpl>
+    implements _$$FoodRemoteImplCopyWith<$Res> {
+  __$$FoodRemoteImplCopyWithImpl(
+      _$FoodRemoteImpl _value, $Res Function(_$FoodRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -275,7 +275,7 @@ class __$$_FoodRemoteCopyWithImpl<$Res>
     Object? allergies = null,
     Object? count = null,
   }) {
-    return _then(_$_FoodRemote(
+    return _then(_$FoodRemoteImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -370,8 +370,8 @@ class __$$_FoodRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FoodRemote implements _FoodRemote {
-  _$_FoodRemote(
+class _$FoodRemoteImpl implements _FoodRemote {
+  _$FoodRemoteImpl(
       {this.id = '',
       this.foodTypeRemote = FoodTypeRemote.meal,
       this.name = '',
@@ -541,10 +541,10 @@ class _$_FoodRemote implements _FoodRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FoodRemote &&
+            other is _$FoodRemoteImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.foodTypeRemote, foodTypeRemote) ||
                 other.foodTypeRemote == foodTypeRemote) &&
@@ -608,8 +608,8 @@ class _$_FoodRemote implements _FoodRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FoodRemoteCopyWith<_$_FoodRemote> get copyWith =>
-      __$$_FoodRemoteCopyWithImpl<_$_FoodRemote>(this, _$identity);
+  _$$FoodRemoteImplCopyWith<_$FoodRemoteImpl> get copyWith =>
+      __$$FoodRemoteImplCopyWithImpl<_$FoodRemoteImpl>(this, _$identity);
 }
 
 abstract class _FoodRemote implements FoodRemote {
@@ -635,7 +635,7 @@ abstract class _FoodRemote implements FoodRemote {
       final List<String> fat,
       final List<String> diets,
       final List<String> allergies,
-      final double count}) = _$_FoodRemote;
+      final double count}) = _$FoodRemoteImpl;
 
   @override // food id
   String get id;
@@ -685,6 +685,6 @@ abstract class _FoodRemote implements FoodRemote {
   double get count;
   @override
   @JsonKey(ignore: true)
-  _$$_FoodRemoteCopyWith<_$_FoodRemote> get copyWith =>
+  _$$FoodRemoteImplCopyWith<_$FoodRemoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

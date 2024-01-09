@@ -72,25 +72,25 @@ class _$SuggestedFoodsPortionRemoteCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_SuggestedFoodsPortionRemoteCopyWith<$Res>
+abstract class _$$SuggestedFoodsPortionRemoteImplCopyWith<$Res>
     implements $SuggestedFoodsPortionRemoteCopyWith<$Res> {
-  factory _$$_SuggestedFoodsPortionRemoteCopyWith(
-          _$_SuggestedFoodsPortionRemote value,
-          $Res Function(_$_SuggestedFoodsPortionRemote) then) =
-      __$$_SuggestedFoodsPortionRemoteCopyWithImpl<$Res>;
+  factory _$$SuggestedFoodsPortionRemoteImplCopyWith(
+          _$SuggestedFoodsPortionRemoteImpl value,
+          $Res Function(_$SuggestedFoodsPortionRemoteImpl) then) =
+      __$$SuggestedFoodsPortionRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<FoodRemote> foods, List<double> totalMacro, int accuracy});
 }
 
 /// @nodoc
-class __$$_SuggestedFoodsPortionRemoteCopyWithImpl<$Res>
+class __$$SuggestedFoodsPortionRemoteImplCopyWithImpl<$Res>
     extends _$SuggestedFoodsPortionRemoteCopyWithImpl<$Res,
-        _$_SuggestedFoodsPortionRemote>
-    implements _$$_SuggestedFoodsPortionRemoteCopyWith<$Res> {
-  __$$_SuggestedFoodsPortionRemoteCopyWithImpl(
-      _$_SuggestedFoodsPortionRemote _value,
-      $Res Function(_$_SuggestedFoodsPortionRemote) _then)
+        _$SuggestedFoodsPortionRemoteImpl>
+    implements _$$SuggestedFoodsPortionRemoteImplCopyWith<$Res> {
+  __$$SuggestedFoodsPortionRemoteImplCopyWithImpl(
+      _$SuggestedFoodsPortionRemoteImpl _value,
+      $Res Function(_$SuggestedFoodsPortionRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -100,7 +100,7 @@ class __$$_SuggestedFoodsPortionRemoteCopyWithImpl<$Res>
     Object? totalMacro = null,
     Object? accuracy = null,
   }) {
-    return _then(_$_SuggestedFoodsPortionRemote(
+    return _then(_$SuggestedFoodsPortionRemoteImpl(
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,9 @@ class __$$_SuggestedFoodsPortionRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SuggestedFoodsPortionRemote implements _SuggestedFoodsPortionRemote {
-  _$_SuggestedFoodsPortionRemote(
+class _$SuggestedFoodsPortionRemoteImpl
+    implements _SuggestedFoodsPortionRemote {
+  _$SuggestedFoodsPortionRemoteImpl(
       {final List<FoodRemote> foods = const [],
       final List<double> totalMacro = const [],
       this.accuracy = 0})
@@ -155,10 +156,10 @@ class _$_SuggestedFoodsPortionRemote implements _SuggestedFoodsPortionRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SuggestedFoodsPortionRemote &&
+            other is _$SuggestedFoodsPortionRemoteImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
             const DeepCollectionEquality()
                 .equals(other._totalMacro, _totalMacro) &&
@@ -176,9 +177,9 @@ class _$_SuggestedFoodsPortionRemote implements _SuggestedFoodsPortionRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SuggestedFoodsPortionRemoteCopyWith<_$_SuggestedFoodsPortionRemote>
-      get copyWith => __$$_SuggestedFoodsPortionRemoteCopyWithImpl<
-          _$_SuggestedFoodsPortionRemote>(this, _$identity);
+  _$$SuggestedFoodsPortionRemoteImplCopyWith<_$SuggestedFoodsPortionRemoteImpl>
+      get copyWith => __$$SuggestedFoodsPortionRemoteImplCopyWithImpl<
+          _$SuggestedFoodsPortionRemoteImpl>(this, _$identity);
 }
 
 abstract class _SuggestedFoodsPortionRemote
@@ -186,7 +187,7 @@ abstract class _SuggestedFoodsPortionRemote
   factory _SuggestedFoodsPortionRemote(
       {final List<FoodRemote> foods,
       final List<double> totalMacro,
-      final int accuracy}) = _$_SuggestedFoodsPortionRemote;
+      final int accuracy}) = _$SuggestedFoodsPortionRemoteImpl;
 
   @override
   List<FoodRemote> get foods;
@@ -196,6 +197,6 @@ abstract class _SuggestedFoodsPortionRemote
   int get accuracy;
   @override
   @JsonKey(ignore: true)
-  _$$_SuggestedFoodsPortionRemoteCopyWith<_$_SuggestedFoodsPortionRemote>
+  _$$SuggestedFoodsPortionRemoteImplCopyWith<_$SuggestedFoodsPortionRemoteImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -210,9 +210,10 @@ class _$FoodCopyWithImpl<$Res, $Val extends Food>
 }
 
 /// @nodoc
-abstract class _$$_FoodCopyWith<$Res> implements $FoodCopyWith<$Res> {
-  factory _$$_FoodCopyWith(_$_Food value, $Res Function(_$_Food) then) =
-      __$$_FoodCopyWithImpl<$Res>;
+abstract class _$$FoodImplCopyWith<$Res> implements $FoodCopyWith<$Res> {
+  factory _$$FoodImplCopyWith(
+          _$FoodImpl value, $Res Function(_$FoodImpl) then) =
+      __$$FoodImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -241,9 +242,10 @@ abstract class _$$_FoodCopyWith<$Res> implements $FoodCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_FoodCopyWithImpl<$Res> extends _$FoodCopyWithImpl<$Res, _$_Food>
-    implements _$$_FoodCopyWith<$Res> {
-  __$$_FoodCopyWithImpl(_$_Food _value, $Res Function(_$_Food) _then)
+class __$$FoodImplCopyWithImpl<$Res>
+    extends _$FoodCopyWithImpl<$Res, _$FoodImpl>
+    implements _$$FoodImplCopyWith<$Res> {
+  __$$FoodImplCopyWithImpl(_$FoodImpl _value, $Res Function(_$FoodImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -272,7 +274,7 @@ class __$$_FoodCopyWithImpl<$Res> extends _$FoodCopyWithImpl<$Res, _$_Food>
     Object? servingIngredientsCount = null,
     Object? count = null,
   }) {
-    return _then(_$_Food(
+    return _then(_$FoodImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -367,8 +369,8 @@ class __$$_FoodCopyWithImpl<$Res> extends _$FoodCopyWithImpl<$Res, _$_Food>
 
 /// @nodoc
 
-class _$_Food implements _Food {
-  _$_Food(
+class _$FoodImpl implements _Food {
+  _$FoodImpl(
       {this.id = '',
       this.foodType = FoodType.groceryProduct,
       this.name = '',
@@ -544,10 +546,10 @@ class _$_Food implements _Food {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Food &&
+            other is _$FoodImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.foodType, foodType) ||
                 other.foodType == foodType) &&
@@ -611,8 +613,8 @@ class _$_Food implements _Food {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FoodCopyWith<_$_Food> get copyWith =>
-      __$$_FoodCopyWithImpl<_$_Food>(this, _$identity);
+  _$$FoodImplCopyWith<_$FoodImpl> get copyWith =>
+      __$$FoodImplCopyWithImpl<_$FoodImpl>(this, _$identity);
 }
 
 abstract class _Food implements Food {
@@ -638,7 +640,7 @@ abstract class _Food implements Food {
       final List<String> diets,
       final List<String> allergies,
       final List<String> servingIngredientsCount,
-      final double count}) = _$_Food;
+      final double count}) = _$FoodImpl;
 
   @override
   String get id;
@@ -692,5 +694,6 @@ abstract class _Food implements Food {
   double get count;
   @override
   @JsonKey(ignore: true)
-  _$$_FoodCopyWith<_$_Food> get copyWith => throw _privateConstructorUsedError;
+  _$$FoodImplCopyWith<_$FoodImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

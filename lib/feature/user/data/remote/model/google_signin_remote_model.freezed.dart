@@ -63,22 +63,22 @@ class _$GoogleSignInRemoteCopyWithImpl<$Res, $Val extends GoogleSignInRemote>
 }
 
 /// @nodoc
-abstract class _$$_GoogleSignInRemoteCopyWith<$Res>
+abstract class _$$GoogleSignInRemoteImplCopyWith<$Res>
     implements $GoogleSignInRemoteCopyWith<$Res> {
-  factory _$$_GoogleSignInRemoteCopyWith(_$_GoogleSignInRemote value,
-          $Res Function(_$_GoogleSignInRemote) then) =
-      __$$_GoogleSignInRemoteCopyWithImpl<$Res>;
+  factory _$$GoogleSignInRemoteImplCopyWith(_$GoogleSignInRemoteImpl value,
+          $Res Function(_$GoogleSignInRemoteImpl) then) =
+      __$$GoogleSignInRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String email, String id});
 }
 
 /// @nodoc
-class __$$_GoogleSignInRemoteCopyWithImpl<$Res>
-    extends _$GoogleSignInRemoteCopyWithImpl<$Res, _$_GoogleSignInRemote>
-    implements _$$_GoogleSignInRemoteCopyWith<$Res> {
-  __$$_GoogleSignInRemoteCopyWithImpl(
-      _$_GoogleSignInRemote _value, $Res Function(_$_GoogleSignInRemote) _then)
+class __$$GoogleSignInRemoteImplCopyWithImpl<$Res>
+    extends _$GoogleSignInRemoteCopyWithImpl<$Res, _$GoogleSignInRemoteImpl>
+    implements _$$GoogleSignInRemoteImplCopyWith<$Res> {
+  __$$GoogleSignInRemoteImplCopyWithImpl(_$GoogleSignInRemoteImpl _value,
+      $Res Function(_$GoogleSignInRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$_GoogleSignInRemoteCopyWithImpl<$Res>
     Object? email = null,
     Object? id = null,
   }) {
-    return _then(_$_GoogleSignInRemote(
+    return _then(_$GoogleSignInRemoteImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$_GoogleSignInRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GoogleSignInRemote implements _GoogleSignInRemote {
-  _$_GoogleSignInRemote({this.email = '', this.id = ''});
+class _$GoogleSignInRemoteImpl implements _GoogleSignInRemote {
+  _$GoogleSignInRemoteImpl({this.email = '', this.id = ''});
 
   @override
   @JsonKey()
@@ -118,10 +118,10 @@ class _$_GoogleSignInRemote implements _GoogleSignInRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_GoogleSignInRemote &&
+            other is _$GoogleSignInRemoteImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.id, id) || other.id == id));
   }
@@ -132,14 +132,14 @@ class _$_GoogleSignInRemote implements _GoogleSignInRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_GoogleSignInRemoteCopyWith<_$_GoogleSignInRemote> get copyWith =>
-      __$$_GoogleSignInRemoteCopyWithImpl<_$_GoogleSignInRemote>(
+  _$$GoogleSignInRemoteImplCopyWith<_$GoogleSignInRemoteImpl> get copyWith =>
+      __$$GoogleSignInRemoteImplCopyWithImpl<_$GoogleSignInRemoteImpl>(
           this, _$identity);
 }
 
 abstract class _GoogleSignInRemote implements GoogleSignInRemote {
   factory _GoogleSignInRemote({final String email, final String id}) =
-      _$_GoogleSignInRemote;
+      _$GoogleSignInRemoteImpl;
 
   @override
   String get email;
@@ -147,6 +147,6 @@ abstract class _GoogleSignInRemote implements GoogleSignInRemote {
   String get id;
   @override
   @JsonKey(ignore: true)
-  _$$_GoogleSignInRemoteCopyWith<_$_GoogleSignInRemote> get copyWith =>
+  _$$GoogleSignInRemoteImplCopyWith<_$GoogleSignInRemoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

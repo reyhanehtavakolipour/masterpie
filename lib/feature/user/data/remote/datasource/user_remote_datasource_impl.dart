@@ -318,7 +318,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         'suggest_food_left_request': FREE_SUGGEST_FOOD_LIMIT,
         'food_portion_left_request': FREE_FOODS_PORTION_REQUEST_LIMIT,
         'favorite_food_left': FREE_FAVORITE_LIMIT,
-        'upgrade_date': formattedDate,
+        'modified_at': formattedDate,
         'plan_type': MONTHLY_PLAN,
       };
 
@@ -353,7 +353,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
         favoriteFoodRequestsLeft: data[0]['favorite_food_left'] ?? 0,
-        upgradeDate: data[0]['upgrade_date'] ?? '',
+        upgradeDate: data[0]['modified_at'] ?? '',
       );
 
       return Right(userSubscriptionPlanRemote);
@@ -385,7 +385,9 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, Success>> updateSubscriptionPlan(String userId, String plan) async{
-    //todo handle
+    if(plan == FREE_PLAN){
+      return setUserSubscriptionPlanAfterRegister(userId);
+    }
     return const Right(Success());
   }
 

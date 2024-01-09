@@ -77,11 +77,11 @@ class _$RemoveFromMyFavoriteEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$RemoveFoodFromMyFavoritesCopyWith<$Res> {
-  factory _$$RemoveFoodFromMyFavoritesCopyWith(
-          _$RemoveFoodFromMyFavorites value,
-          $Res Function(_$RemoveFoodFromMyFavorites) then) =
-      __$$RemoveFoodFromMyFavoritesCopyWithImpl<$Res>;
+abstract class _$$RemoveFoodFromMyFavoritesImplCopyWith<$Res> {
+  factory _$$RemoveFoodFromMyFavoritesImplCopyWith(
+          _$RemoveFoodFromMyFavoritesImpl value,
+          $Res Function(_$RemoveFoodFromMyFavoritesImpl) then) =
+      __$$RemoveFoodFromMyFavoritesImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Food food});
 
@@ -89,12 +89,13 @@ abstract class _$$RemoveFoodFromMyFavoritesCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$RemoveFoodFromMyFavoritesCopyWithImpl<$Res>
+class __$$RemoveFoodFromMyFavoritesImplCopyWithImpl<$Res>
     extends _$RemoveFromMyFavoriteEventCopyWithImpl<$Res,
-        _$RemoveFoodFromMyFavorites>
-    implements _$$RemoveFoodFromMyFavoritesCopyWith<$Res> {
-  __$$RemoveFoodFromMyFavoritesCopyWithImpl(_$RemoveFoodFromMyFavorites _value,
-      $Res Function(_$RemoveFoodFromMyFavorites) _then)
+        _$RemoveFoodFromMyFavoritesImpl>
+    implements _$$RemoveFoodFromMyFavoritesImplCopyWith<$Res> {
+  __$$RemoveFoodFromMyFavoritesImplCopyWithImpl(
+      _$RemoveFoodFromMyFavoritesImpl _value,
+      $Res Function(_$RemoveFoodFromMyFavoritesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -102,7 +103,7 @@ class __$$RemoveFoodFromMyFavoritesCopyWithImpl<$Res>
   $Res call({
     Object? food = null,
   }) {
-    return _then(_$RemoveFoodFromMyFavorites(
+    return _then(_$RemoveFoodFromMyFavoritesImpl(
       null == food
           ? _value.food
           : food // ignore: cast_nullable_to_non_nullable
@@ -121,8 +122,8 @@ class __$$RemoveFoodFromMyFavoritesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RemoveFoodFromMyFavorites implements RemoveFoodFromMyFavorites {
-  const _$RemoveFoodFromMyFavorites(this.food);
+class _$RemoveFoodFromMyFavoritesImpl implements RemoveFoodFromMyFavorites {
+  const _$RemoveFoodFromMyFavoritesImpl(this.food);
 
   @override
   final Food food;
@@ -133,10 +134,10 @@ class _$RemoveFoodFromMyFavorites implements RemoveFoodFromMyFavorites {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RemoveFoodFromMyFavorites &&
+            other is _$RemoveFoodFromMyFavoritesImpl &&
             (identical(other.food, food) || other.food == food));
   }
 
@@ -146,9 +147,9 @@ class _$RemoveFoodFromMyFavorites implements RemoveFoodFromMyFavorites {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RemoveFoodFromMyFavoritesCopyWith<_$RemoveFoodFromMyFavorites>
-      get copyWith => __$$RemoveFoodFromMyFavoritesCopyWithImpl<
-          _$RemoveFoodFromMyFavorites>(this, _$identity);
+  _$$RemoveFoodFromMyFavoritesImplCopyWith<_$RemoveFoodFromMyFavoritesImpl>
+      get copyWith => __$$RemoveFoodFromMyFavoritesImplCopyWithImpl<
+          _$RemoveFoodFromMyFavoritesImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -216,32 +217,34 @@ class _$RemoveFoodFromMyFavorites implements RemoveFoodFromMyFavorites {
 
 abstract class RemoveFoodFromMyFavorites implements RemoveFromMyFavoriteEvent {
   const factory RemoveFoodFromMyFavorites(final Food food) =
-      _$RemoveFoodFromMyFavorites;
+      _$RemoveFoodFromMyFavoritesImpl;
 
   Food get food;
   @JsonKey(ignore: true)
-  _$$RemoveFoodFromMyFavoritesCopyWith<_$RemoveFoodFromMyFavorites>
+  _$$RemoveFoodFromMyFavoritesImplCopyWith<_$RemoveFoodFromMyFavoritesImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$RemoveFromMyFavoriteEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$RemoveFromMyFavoriteEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -249,9 +252,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -322,7 +325,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements RemoveFromMyFavoriteEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -399,29 +402,29 @@ class _$RemoveFromMyFavoriteStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$RemoveFromMyFavoriteInitialStateCopyWith<$Res> {
-  factory _$$RemoveFromMyFavoriteInitialStateCopyWith(
-          _$RemoveFromMyFavoriteInitialState value,
-          $Res Function(_$RemoveFromMyFavoriteInitialState) then) =
-      __$$RemoveFromMyFavoriteInitialStateCopyWithImpl<$Res>;
+abstract class _$$RemoveFromMyFavoriteInitialStateImplCopyWith<$Res> {
+  factory _$$RemoveFromMyFavoriteInitialStateImplCopyWith(
+          _$RemoveFromMyFavoriteInitialStateImpl value,
+          $Res Function(_$RemoveFromMyFavoriteInitialStateImpl) then) =
+      __$$RemoveFromMyFavoriteInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RemoveFromMyFavoriteInitialStateCopyWithImpl<$Res>
+class __$$RemoveFromMyFavoriteInitialStateImplCopyWithImpl<$Res>
     extends _$RemoveFromMyFavoriteStateCopyWithImpl<$Res,
-        _$RemoveFromMyFavoriteInitialState>
-    implements _$$RemoveFromMyFavoriteInitialStateCopyWith<$Res> {
-  __$$RemoveFromMyFavoriteInitialStateCopyWithImpl(
-      _$RemoveFromMyFavoriteInitialState _value,
-      $Res Function(_$RemoveFromMyFavoriteInitialState) _then)
+        _$RemoveFromMyFavoriteInitialStateImpl>
+    implements _$$RemoveFromMyFavoriteInitialStateImplCopyWith<$Res> {
+  __$$RemoveFromMyFavoriteInitialStateImplCopyWithImpl(
+      _$RemoveFromMyFavoriteInitialStateImpl _value,
+      $Res Function(_$RemoveFromMyFavoriteInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RemoveFromMyFavoriteInitialState
+class _$RemoveFromMyFavoriteInitialStateImpl
     implements RemoveFromMyFavoriteInitialState {
-  const _$RemoveFromMyFavoriteInitialState();
+  const _$RemoveFromMyFavoriteInitialStateImpl();
 
   @override
   String toString() {
@@ -429,10 +432,10 @@ class _$RemoveFromMyFavoriteInitialState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RemoveFromMyFavoriteInitialState);
+            other is _$RemoveFromMyFavoriteInitialStateImpl);
   }
 
   @override
@@ -516,33 +519,33 @@ class _$RemoveFromMyFavoriteInitialState
 abstract class RemoveFromMyFavoriteInitialState
     implements RemoveFromMyFavoriteState {
   const factory RemoveFromMyFavoriteInitialState() =
-      _$RemoveFromMyFavoriteInitialState;
+      _$RemoveFromMyFavoriteInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$RemoveFromMyFavoriteLoadingStateCopyWith<$Res> {
-  factory _$$RemoveFromMyFavoriteLoadingStateCopyWith(
-          _$RemoveFromMyFavoriteLoadingState value,
-          $Res Function(_$RemoveFromMyFavoriteLoadingState) then) =
-      __$$RemoveFromMyFavoriteLoadingStateCopyWithImpl<$Res>;
+abstract class _$$RemoveFromMyFavoriteLoadingStateImplCopyWith<$Res> {
+  factory _$$RemoveFromMyFavoriteLoadingStateImplCopyWith(
+          _$RemoveFromMyFavoriteLoadingStateImpl value,
+          $Res Function(_$RemoveFromMyFavoriteLoadingStateImpl) then) =
+      __$$RemoveFromMyFavoriteLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RemoveFromMyFavoriteLoadingStateCopyWithImpl<$Res>
+class __$$RemoveFromMyFavoriteLoadingStateImplCopyWithImpl<$Res>
     extends _$RemoveFromMyFavoriteStateCopyWithImpl<$Res,
-        _$RemoveFromMyFavoriteLoadingState>
-    implements _$$RemoveFromMyFavoriteLoadingStateCopyWith<$Res> {
-  __$$RemoveFromMyFavoriteLoadingStateCopyWithImpl(
-      _$RemoveFromMyFavoriteLoadingState _value,
-      $Res Function(_$RemoveFromMyFavoriteLoadingState) _then)
+        _$RemoveFromMyFavoriteLoadingStateImpl>
+    implements _$$RemoveFromMyFavoriteLoadingStateImplCopyWith<$Res> {
+  __$$RemoveFromMyFavoriteLoadingStateImplCopyWithImpl(
+      _$RemoveFromMyFavoriteLoadingStateImpl _value,
+      $Res Function(_$RemoveFromMyFavoriteLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RemoveFromMyFavoriteLoadingState
+class _$RemoveFromMyFavoriteLoadingStateImpl
     implements RemoveFromMyFavoriteLoadingState {
-  const _$RemoveFromMyFavoriteLoadingState();
+  const _$RemoveFromMyFavoriteLoadingStateImpl();
 
   @override
   String toString() {
@@ -550,10 +553,10 @@ class _$RemoveFromMyFavoriteLoadingState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RemoveFromMyFavoriteLoadingState);
+            other is _$RemoveFromMyFavoriteLoadingStateImpl);
   }
 
   @override
@@ -637,27 +640,27 @@ class _$RemoveFromMyFavoriteLoadingState
 abstract class RemoveFromMyFavoriteLoadingState
     implements RemoveFromMyFavoriteState {
   const factory RemoveFromMyFavoriteLoadingState() =
-      _$RemoveFromMyFavoriteLoadingState;
+      _$RemoveFromMyFavoriteLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$RemoveFromMyFavoriteErrorStateCopyWith<$Res> {
-  factory _$$RemoveFromMyFavoriteErrorStateCopyWith(
-          _$RemoveFromMyFavoriteErrorState value,
-          $Res Function(_$RemoveFromMyFavoriteErrorState) then) =
-      __$$RemoveFromMyFavoriteErrorStateCopyWithImpl<$Res>;
+abstract class _$$RemoveFromMyFavoriteErrorStateImplCopyWith<$Res> {
+  factory _$$RemoveFromMyFavoriteErrorStateImplCopyWith(
+          _$RemoveFromMyFavoriteErrorStateImpl value,
+          $Res Function(_$RemoveFromMyFavoriteErrorStateImpl) then) =
+      __$$RemoveFromMyFavoriteErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$RemoveFromMyFavoriteErrorStateCopyWithImpl<$Res>
+class __$$RemoveFromMyFavoriteErrorStateImplCopyWithImpl<$Res>
     extends _$RemoveFromMyFavoriteStateCopyWithImpl<$Res,
-        _$RemoveFromMyFavoriteErrorState>
-    implements _$$RemoveFromMyFavoriteErrorStateCopyWith<$Res> {
-  __$$RemoveFromMyFavoriteErrorStateCopyWithImpl(
-      _$RemoveFromMyFavoriteErrorState _value,
-      $Res Function(_$RemoveFromMyFavoriteErrorState) _then)
+        _$RemoveFromMyFavoriteErrorStateImpl>
+    implements _$$RemoveFromMyFavoriteErrorStateImplCopyWith<$Res> {
+  __$$RemoveFromMyFavoriteErrorStateImplCopyWithImpl(
+      _$RemoveFromMyFavoriteErrorStateImpl _value,
+      $Res Function(_$RemoveFromMyFavoriteErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -665,7 +668,7 @@ class __$$RemoveFromMyFavoriteErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$RemoveFromMyFavoriteErrorState(
+    return _then(_$RemoveFromMyFavoriteErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -676,9 +679,9 @@ class __$$RemoveFromMyFavoriteErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RemoveFromMyFavoriteErrorState
+class _$RemoveFromMyFavoriteErrorStateImpl
     implements RemoveFromMyFavoriteErrorState {
-  const _$RemoveFromMyFavoriteErrorState(this.message);
+  const _$RemoveFromMyFavoriteErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -689,10 +692,10 @@ class _$RemoveFromMyFavoriteErrorState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RemoveFromMyFavoriteErrorState &&
+            other is _$RemoveFromMyFavoriteErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -702,9 +705,10 @@ class _$RemoveFromMyFavoriteErrorState
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RemoveFromMyFavoriteErrorStateCopyWith<_$RemoveFromMyFavoriteErrorState>
-      get copyWith => __$$RemoveFromMyFavoriteErrorStateCopyWithImpl<
-          _$RemoveFromMyFavoriteErrorState>(this, _$identity);
+  _$$RemoveFromMyFavoriteErrorStateImplCopyWith<
+          _$RemoveFromMyFavoriteErrorStateImpl>
+      get copyWith => __$$RemoveFromMyFavoriteErrorStateImplCopyWithImpl<
+          _$RemoveFromMyFavoriteErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -784,20 +788,21 @@ class _$RemoveFromMyFavoriteErrorState
 abstract class RemoveFromMyFavoriteErrorState
     implements RemoveFromMyFavoriteState {
   const factory RemoveFromMyFavoriteErrorState(final String message) =
-      _$RemoveFromMyFavoriteErrorState;
+      _$RemoveFromMyFavoriteErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$RemoveFromMyFavoriteErrorStateCopyWith<_$RemoveFromMyFavoriteErrorState>
+  _$$RemoveFromMyFavoriteErrorStateImplCopyWith<
+          _$RemoveFromMyFavoriteErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RemoveFromMyFavoriteLoadedStateCopyWith<$Res> {
-  factory _$$RemoveFromMyFavoriteLoadedStateCopyWith(
-          _$RemoveFromMyFavoriteLoadedState value,
-          $Res Function(_$RemoveFromMyFavoriteLoadedState) then) =
-      __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl<$Res>;
+abstract class _$$RemoveFromMyFavoriteLoadedStateImplCopyWith<$Res> {
+  factory _$$RemoveFromMyFavoriteLoadedStateImplCopyWith(
+          _$RemoveFromMyFavoriteLoadedStateImpl value,
+          $Res Function(_$RemoveFromMyFavoriteLoadedStateImpl) then) =
+      __$$RemoveFromMyFavoriteLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Food food});
 
@@ -805,13 +810,13 @@ abstract class _$$RemoveFromMyFavoriteLoadedStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl<$Res>
+class __$$RemoveFromMyFavoriteLoadedStateImplCopyWithImpl<$Res>
     extends _$RemoveFromMyFavoriteStateCopyWithImpl<$Res,
-        _$RemoveFromMyFavoriteLoadedState>
-    implements _$$RemoveFromMyFavoriteLoadedStateCopyWith<$Res> {
-  __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl(
-      _$RemoveFromMyFavoriteLoadedState _value,
-      $Res Function(_$RemoveFromMyFavoriteLoadedState) _then)
+        _$RemoveFromMyFavoriteLoadedStateImpl>
+    implements _$$RemoveFromMyFavoriteLoadedStateImplCopyWith<$Res> {
+  __$$RemoveFromMyFavoriteLoadedStateImplCopyWithImpl(
+      _$RemoveFromMyFavoriteLoadedStateImpl _value,
+      $Res Function(_$RemoveFromMyFavoriteLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -819,7 +824,7 @@ class __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? food = null,
   }) {
-    return _then(_$RemoveFromMyFavoriteLoadedState(
+    return _then(_$RemoveFromMyFavoriteLoadedStateImpl(
       null == food
           ? _value.food
           : food // ignore: cast_nullable_to_non_nullable
@@ -838,9 +843,9 @@ class __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RemoveFromMyFavoriteLoadedState
+class _$RemoveFromMyFavoriteLoadedStateImpl
     implements RemoveFromMyFavoriteLoadedState {
-  const _$RemoveFromMyFavoriteLoadedState(this.food);
+  const _$RemoveFromMyFavoriteLoadedStateImpl(this.food);
 
   @override
   final Food food;
@@ -851,10 +856,10 @@ class _$RemoveFromMyFavoriteLoadedState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RemoveFromMyFavoriteLoadedState &&
+            other is _$RemoveFromMyFavoriteLoadedStateImpl &&
             (identical(other.food, food) || other.food == food));
   }
 
@@ -864,9 +869,10 @@ class _$RemoveFromMyFavoriteLoadedState
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RemoveFromMyFavoriteLoadedStateCopyWith<_$RemoveFromMyFavoriteLoadedState>
-      get copyWith => __$$RemoveFromMyFavoriteLoadedStateCopyWithImpl<
-          _$RemoveFromMyFavoriteLoadedState>(this, _$identity);
+  _$$RemoveFromMyFavoriteLoadedStateImplCopyWith<
+          _$RemoveFromMyFavoriteLoadedStateImpl>
+      get copyWith => __$$RemoveFromMyFavoriteLoadedStateImplCopyWithImpl<
+          _$RemoveFromMyFavoriteLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -946,10 +952,11 @@ class _$RemoveFromMyFavoriteLoadedState
 abstract class RemoveFromMyFavoriteLoadedState
     implements RemoveFromMyFavoriteState {
   const factory RemoveFromMyFavoriteLoadedState(final Food food) =
-      _$RemoveFromMyFavoriteLoadedState;
+      _$RemoveFromMyFavoriteLoadedStateImpl;
 
   Food get food;
   @JsonKey(ignore: true)
-  _$$RemoveFromMyFavoriteLoadedStateCopyWith<_$RemoveFromMyFavoriteLoadedState>
+  _$$RemoveFromMyFavoriteLoadedStateImplCopyWith<
+          _$RemoveFromMyFavoriteLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

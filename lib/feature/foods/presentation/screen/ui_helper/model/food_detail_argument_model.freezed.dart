@@ -88,11 +88,12 @@ class _$FoodDetailArgumentModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_FoodDetailArgumentModelCopyWith<$Res>
+abstract class _$$FoodDetailArgumentModelImplCopyWith<$Res>
     implements $FoodDetailArgumentModelCopyWith<$Res> {
-  factory _$$_FoodDetailArgumentModelCopyWith(_$_FoodDetailArgumentModel value,
-          $Res Function(_$_FoodDetailArgumentModel) then) =
-      __$$_FoodDetailArgumentModelCopyWithImpl<$Res>;
+  factory _$$FoodDetailArgumentModelImplCopyWith(
+          _$FoodDetailArgumentModelImpl value,
+          $Res Function(_$FoodDetailArgumentModelImpl) then) =
+      __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -105,12 +106,13 @@ abstract class _$$_FoodDetailArgumentModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_FoodDetailArgumentModelCopyWithImpl<$Res>
+class __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>
     extends _$FoodDetailArgumentModelCopyWithImpl<$Res,
-        _$_FoodDetailArgumentModel>
-    implements _$$_FoodDetailArgumentModelCopyWith<$Res> {
-  __$$_FoodDetailArgumentModelCopyWithImpl(_$_FoodDetailArgumentModel _value,
-      $Res Function(_$_FoodDetailArgumentModel) _then)
+        _$FoodDetailArgumentModelImpl>
+    implements _$$FoodDetailArgumentModelImplCopyWith<$Res> {
+  __$$FoodDetailArgumentModelImplCopyWithImpl(
+      _$FoodDetailArgumentModelImpl _value,
+      $Res Function(_$FoodDetailArgumentModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -120,7 +122,7 @@ class __$$_FoodDetailArgumentModelCopyWithImpl<$Res>
     Object? food = freezed,
     Object? foodsListScreen = freezed,
   }) {
-    return _then(_$_FoodDetailArgumentModel(
+    return _then(_$FoodDetailArgumentModelImpl(
       foodDetailScreenType: null == foodDetailScreenType
           ? _value.foodDetailScreenType
           : foodDetailScreenType // ignore: cast_nullable_to_non_nullable
@@ -139,8 +141,8 @@ class __$$_FoodDetailArgumentModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FoodDetailArgumentModel implements _FoodDetailArgumentModel {
-  _$_FoodDetailArgumentModel(
+class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
+  _$FoodDetailArgumentModelImpl(
       {this.foodDetailScreenType = FoodDetailScreenType.ADD_NEW_FAVORITE,
       this.food = null,
       this.foodsListScreen = null});
@@ -161,10 +163,10 @@ class _$_FoodDetailArgumentModel implements _FoodDetailArgumentModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FoodDetailArgumentModel &&
+            other is _$FoodDetailArgumentModelImpl &&
             (identical(other.foodDetailScreenType, foodDetailScreenType) ||
                 other.foodDetailScreenType == foodDetailScreenType) &&
             (identical(other.food, food) || other.food == food) &&
@@ -179,17 +181,16 @@ class _$_FoodDetailArgumentModel implements _FoodDetailArgumentModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FoodDetailArgumentModelCopyWith<_$_FoodDetailArgumentModel>
-      get copyWith =>
-          __$$_FoodDetailArgumentModelCopyWithImpl<_$_FoodDetailArgumentModel>(
-              this, _$identity);
+  _$$FoodDetailArgumentModelImplCopyWith<_$FoodDetailArgumentModelImpl>
+      get copyWith => __$$FoodDetailArgumentModelImplCopyWithImpl<
+          _$FoodDetailArgumentModelImpl>(this, _$identity);
 }
 
 abstract class _FoodDetailArgumentModel implements FoodDetailArgumentModel {
   factory _FoodDetailArgumentModel(
       {final FoodDetailScreenType foodDetailScreenType,
       final Food? food,
-      final FoodsListScreen? foodsListScreen}) = _$_FoodDetailArgumentModel;
+      final FoodsListScreen? foodsListScreen}) = _$FoodDetailArgumentModelImpl;
 
   @override
   FoodDetailScreenType get foodDetailScreenType;
@@ -199,6 +200,6 @@ abstract class _FoodDetailArgumentModel implements FoodDetailArgumentModel {
   FoodsListScreen? get foodsListScreen;
   @override
   @JsonKey(ignore: true)
-  _$$_FoodDetailArgumentModelCopyWith<_$_FoodDetailArgumentModel>
+  _$$FoodDetailArgumentModelImplCopyWith<_$FoodDetailArgumentModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

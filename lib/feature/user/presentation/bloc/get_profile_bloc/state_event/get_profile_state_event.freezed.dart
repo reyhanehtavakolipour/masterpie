@@ -75,25 +75,25 @@ class _$GetProfileEventCopyWithImpl<$Res, $Val extends GetProfileEvent>
 }
 
 /// @nodoc
-abstract class _$$GetProfileCopyWith<$Res> {
-  factory _$$GetProfileCopyWith(
-          _$GetProfile value, $Res Function(_$GetProfile) then) =
-      __$$GetProfileCopyWithImpl<$Res>;
+abstract class _$$GetProfileImplCopyWith<$Res> {
+  factory _$$GetProfileImplCopyWith(
+          _$GetProfileImpl value, $Res Function(_$GetProfileImpl) then) =
+      __$$GetProfileImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetProfileCopyWithImpl<$Res>
-    extends _$GetProfileEventCopyWithImpl<$Res, _$GetProfile>
-    implements _$$GetProfileCopyWith<$Res> {
-  __$$GetProfileCopyWithImpl(
-      _$GetProfile _value, $Res Function(_$GetProfile) _then)
+class __$$GetProfileImplCopyWithImpl<$Res>
+    extends _$GetProfileEventCopyWithImpl<$Res, _$GetProfileImpl>
+    implements _$$GetProfileImplCopyWith<$Res> {
+  __$$GetProfileImplCopyWithImpl(
+      _$GetProfileImpl _value, $Res Function(_$GetProfileImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetProfile implements GetProfile {
-  const _$GetProfile();
+class _$GetProfileImpl implements GetProfile {
+  const _$GetProfileImpl();
 
   @override
   String toString() {
@@ -101,9 +101,9 @@ class _$GetProfile implements GetProfile {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetProfile);
+        (other.runtimeType == runtimeType && other is _$GetProfileImpl);
   }
 
   @override
@@ -173,27 +173,29 @@ class _$GetProfile implements GetProfile {
 }
 
 abstract class GetProfile implements GetProfileEvent {
-  const factory GetProfile() = _$GetProfile;
+  const factory GetProfile() = _$GetProfileImpl;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$GetProfileEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$GetProfileEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -201,9 +203,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -273,7 +275,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements GetProfileEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -349,25 +351,27 @@ class _$GetProfileStateCopyWithImpl<$Res, $Val extends GetProfileState>
 }
 
 /// @nodoc
-abstract class _$$GetProfileInitialStateCopyWith<$Res> {
-  factory _$$GetProfileInitialStateCopyWith(_$GetProfileInitialState value,
-          $Res Function(_$GetProfileInitialState) then) =
-      __$$GetProfileInitialStateCopyWithImpl<$Res>;
+abstract class _$$GetProfileInitialStateImplCopyWith<$Res> {
+  factory _$$GetProfileInitialStateImplCopyWith(
+          _$GetProfileInitialStateImpl value,
+          $Res Function(_$GetProfileInitialStateImpl) then) =
+      __$$GetProfileInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetProfileInitialStateCopyWithImpl<$Res>
-    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileInitialState>
-    implements _$$GetProfileInitialStateCopyWith<$Res> {
-  __$$GetProfileInitialStateCopyWithImpl(_$GetProfileInitialState _value,
-      $Res Function(_$GetProfileInitialState) _then)
+class __$$GetProfileInitialStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileInitialStateImpl>
+    implements _$$GetProfileInitialStateImplCopyWith<$Res> {
+  __$$GetProfileInitialStateImplCopyWithImpl(
+      _$GetProfileInitialStateImpl _value,
+      $Res Function(_$GetProfileInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetProfileInitialState implements GetProfileInitialState {
-  const _$GetProfileInitialState();
+class _$GetProfileInitialStateImpl implements GetProfileInitialState {
+  const _$GetProfileInitialStateImpl();
 
   @override
   String toString() {
@@ -375,9 +379,10 @@ class _$GetProfileInitialState implements GetProfileInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetProfileInitialState);
+        (other.runtimeType == runtimeType &&
+            other is _$GetProfileInitialStateImpl);
   }
 
   @override
@@ -459,29 +464,31 @@ class _$GetProfileInitialState implements GetProfileInitialState {
 }
 
 abstract class GetProfileInitialState implements GetProfileState {
-  const factory GetProfileInitialState() = _$GetProfileInitialState;
+  const factory GetProfileInitialState() = _$GetProfileInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetProfileLoadingStateCopyWith<$Res> {
-  factory _$$GetProfileLoadingStateCopyWith(_$GetProfileLoadingState value,
-          $Res Function(_$GetProfileLoadingState) then) =
-      __$$GetProfileLoadingStateCopyWithImpl<$Res>;
+abstract class _$$GetProfileLoadingStateImplCopyWith<$Res> {
+  factory _$$GetProfileLoadingStateImplCopyWith(
+          _$GetProfileLoadingStateImpl value,
+          $Res Function(_$GetProfileLoadingStateImpl) then) =
+      __$$GetProfileLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetProfileLoadingStateCopyWithImpl<$Res>
-    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileLoadingState>
-    implements _$$GetProfileLoadingStateCopyWith<$Res> {
-  __$$GetProfileLoadingStateCopyWithImpl(_$GetProfileLoadingState _value,
-      $Res Function(_$GetProfileLoadingState) _then)
+class __$$GetProfileLoadingStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileLoadingStateImpl>
+    implements _$$GetProfileLoadingStateImplCopyWith<$Res> {
+  __$$GetProfileLoadingStateImplCopyWithImpl(
+      _$GetProfileLoadingStateImpl _value,
+      $Res Function(_$GetProfileLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetProfileLoadingState implements GetProfileLoadingState {
-  const _$GetProfileLoadingState();
+class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
+  const _$GetProfileLoadingStateImpl();
 
   @override
   String toString() {
@@ -489,9 +496,10 @@ class _$GetProfileLoadingState implements GetProfileLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetProfileLoadingState);
+        (other.runtimeType == runtimeType &&
+            other is _$GetProfileLoadingStateImpl);
   }
 
   @override
@@ -573,24 +581,24 @@ class _$GetProfileLoadingState implements GetProfileLoadingState {
 }
 
 abstract class GetProfileLoadingState implements GetProfileState {
-  const factory GetProfileLoadingState() = _$GetProfileLoadingState;
+  const factory GetProfileLoadingState() = _$GetProfileLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetProfileErrorStateCopyWith<$Res> {
-  factory _$$GetProfileErrorStateCopyWith(_$GetProfileErrorState value,
-          $Res Function(_$GetProfileErrorState) then) =
-      __$$GetProfileErrorStateCopyWithImpl<$Res>;
+abstract class _$$GetProfileErrorStateImplCopyWith<$Res> {
+  factory _$$GetProfileErrorStateImplCopyWith(_$GetProfileErrorStateImpl value,
+          $Res Function(_$GetProfileErrorStateImpl) then) =
+      __$$GetProfileErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$GetProfileErrorStateCopyWithImpl<$Res>
-    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileErrorState>
-    implements _$$GetProfileErrorStateCopyWith<$Res> {
-  __$$GetProfileErrorStateCopyWithImpl(_$GetProfileErrorState _value,
-      $Res Function(_$GetProfileErrorState) _then)
+class __$$GetProfileErrorStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileErrorStateImpl>
+    implements _$$GetProfileErrorStateImplCopyWith<$Res> {
+  __$$GetProfileErrorStateImplCopyWithImpl(_$GetProfileErrorStateImpl _value,
+      $Res Function(_$GetProfileErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -598,7 +606,7 @@ class __$$GetProfileErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$GetProfileErrorState(
+    return _then(_$GetProfileErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -609,8 +617,8 @@ class __$$GetProfileErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetProfileErrorState implements GetProfileErrorState {
-  const _$GetProfileErrorState(this.message);
+class _$GetProfileErrorStateImpl implements GetProfileErrorState {
+  const _$GetProfileErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -621,10 +629,10 @@ class _$GetProfileErrorState implements GetProfileErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetProfileErrorState &&
+            other is _$GetProfileErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -634,9 +642,10 @@ class _$GetProfileErrorState implements GetProfileErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetProfileErrorStateCopyWith<_$GetProfileErrorState> get copyWith =>
-      __$$GetProfileErrorStateCopyWithImpl<_$GetProfileErrorState>(
-          this, _$identity);
+  _$$GetProfileErrorStateImplCopyWith<_$GetProfileErrorStateImpl>
+      get copyWith =>
+          __$$GetProfileErrorStateImplCopyWithImpl<_$GetProfileErrorStateImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -715,19 +724,20 @@ class _$GetProfileErrorState implements GetProfileErrorState {
 
 abstract class GetProfileErrorState implements GetProfileState {
   const factory GetProfileErrorState(final String message) =
-      _$GetProfileErrorState;
+      _$GetProfileErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$GetProfileErrorStateCopyWith<_$GetProfileErrorState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GetProfileErrorStateImplCopyWith<_$GetProfileErrorStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetProfileLoadedStateCopyWith<$Res> {
-  factory _$$GetProfileLoadedStateCopyWith(_$GetProfileLoadedState value,
-          $Res Function(_$GetProfileLoadedState) then) =
-      __$$GetProfileLoadedStateCopyWithImpl<$Res>;
+abstract class _$$GetProfileLoadedStateImplCopyWith<$Res> {
+  factory _$$GetProfileLoadedStateImplCopyWith(
+          _$GetProfileLoadedStateImpl value,
+          $Res Function(_$GetProfileLoadedStateImpl) then) =
+      __$$GetProfileLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Profile profile});
 
@@ -735,11 +745,11 @@ abstract class _$$GetProfileLoadedStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GetProfileLoadedStateCopyWithImpl<$Res>
-    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileLoadedState>
-    implements _$$GetProfileLoadedStateCopyWith<$Res> {
-  __$$GetProfileLoadedStateCopyWithImpl(_$GetProfileLoadedState _value,
-      $Res Function(_$GetProfileLoadedState) _then)
+class __$$GetProfileLoadedStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$GetProfileLoadedStateImpl>
+    implements _$$GetProfileLoadedStateImplCopyWith<$Res> {
+  __$$GetProfileLoadedStateImplCopyWithImpl(_$GetProfileLoadedStateImpl _value,
+      $Res Function(_$GetProfileLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -747,7 +757,7 @@ class __$$GetProfileLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? profile = null,
   }) {
-    return _then(_$GetProfileLoadedState(
+    return _then(_$GetProfileLoadedStateImpl(
       null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -766,8 +776,8 @@ class __$$GetProfileLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetProfileLoadedState implements GetProfileLoadedState {
-  const _$GetProfileLoadedState(this.profile);
+class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
+  const _$GetProfileLoadedStateImpl(this.profile);
 
   @override
   final Profile profile;
@@ -778,10 +788,10 @@ class _$GetProfileLoadedState implements GetProfileLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetProfileLoadedState &&
+            other is _$GetProfileLoadedStateImpl &&
             (identical(other.profile, profile) || other.profile == profile));
   }
 
@@ -791,9 +801,9 @@ class _$GetProfileLoadedState implements GetProfileLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetProfileLoadedStateCopyWith<_$GetProfileLoadedState> get copyWith =>
-      __$$GetProfileLoadedStateCopyWithImpl<_$GetProfileLoadedState>(
-          this, _$identity);
+  _$$GetProfileLoadedStateImplCopyWith<_$GetProfileLoadedStateImpl>
+      get copyWith => __$$GetProfileLoadedStateImplCopyWithImpl<
+          _$GetProfileLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -872,10 +882,10 @@ class _$GetProfileLoadedState implements GetProfileLoadedState {
 
 abstract class GetProfileLoadedState implements GetProfileState {
   const factory GetProfileLoadedState(final Profile profile) =
-      _$GetProfileLoadedState;
+      _$GetProfileLoadedStateImpl;
 
   Profile get profile;
   @JsonKey(ignore: true)
-  _$$GetProfileLoadedStateCopyWith<_$GetProfileLoadedState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GetProfileLoadedStateImplCopyWith<_$GetProfileLoadedStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

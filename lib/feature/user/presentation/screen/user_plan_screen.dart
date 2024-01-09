@@ -33,6 +33,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   String _selectedPlan= '';
 
+  bool _isAutoPaymentOn= false;
 
   @override
   void initState() {
@@ -120,6 +121,12 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
+
+                          const SizedBox(height: 6,),
+
+
+                          autPaymentWidget(),
+
                           const SizedBox(height: 20,),
 
                           cancelSubscriptionButton(),
@@ -198,6 +205,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                       Future.delayed(Duration.zero,(){
                         setState(() {
                           _userSubscriptionPlan= state.userSubscriptionPlan;
+                          _isAutoPaymentOn= _userSubscriptionPlan.isAutoPaymentOn;
                         });
                       });
                     }else if(state is PlanErrorState){
@@ -219,6 +227,73 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     );
   }
 
+  Future<void> _showCancelPlanConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // User must tap a button to close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(CANCEL_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(FREE_PLAN_SWITCH_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                //todo cancel subscription in Stripe
+              },
+            ),
+            TextButton(
+              child: const Text(NO_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
+  Widget autPaymentWidget(){
+    return  Visibility(
+      // visible: _userSubscriptionPlan.plan != FREE_PLAN,
+      visible: true,
+      child: SizedBox(
+        width: double.infinity,
+        child: Row(
+          children: [
+            const Text(AUTO_PAYMENT_LABEL, style: TextStyle( color: Colors.white, fontSize: 14),),
+            const SizedBox(width: 8,),
+            Switch(
+              value: _isAutoPaymentOn,
+              activeTrackColor: Colors.green, // Color when switch is ON
+              activeColor: DARK_PRIMARY_COLOR, // Thumb color when switch is ON
+              inactiveTrackColor: LIGHT_GREY_COLOR, // Color when switch is OFF
+              inactiveThumbColor: DARK_PRIMARY_COLOR,
+
+              onChanged: (value) {
+                setState(() {
+                  _isAutoPaymentOn = value;
+                  // todo update auto payment
+                });
+              },
+            ),
+          ],
+        )
+      ),
+    );
+  }
+
   Widget cancelSubscriptionButton(){
     return  Visibility(
       // visible: _userSubscriptionPlan.plan != FREE_PLAN,
@@ -233,6 +308,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               backgroundColor: MASTERPIE_YELLOW_COLOR
           ),
           onPressed: () {
+            _showCancelPlanConfirmation(context);
           },
           child: const Text(CANCEL_SUBSCRIPTION_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
         ),
@@ -242,7 +318,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget continueButton(){
     return  Visibility(
-      visible: _selectedPlan.isNotEmpty && _selectedPlan != DIETITIAN_PLAN,
+      visible: _selectedPlan== BASIC_PLAN || _selectedPlan == PREMIUM_PLAN || _selectedPlan == FREE_PLAN,
       child: Positioned(
         bottom: 0,
         left: 0,
@@ -259,12 +335,20 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PaymentScreen(userSubscriptionPlan: UserSubscriptionPlan(userId: _userSubscriptionPlan.userId, plan: _selectedPlan),),
-                ),
-              );
+              if(_selectedPlan == FREE_PLAN){
+                if(_userSubscriptionPlan.plan == FREE_PLAN){
+                  showSuccessToast(context, ALREADY_FREE_PLAN);
+                }else{
+                  _showCancelPlanConfirmation(context);
+                }
+              }else{
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(userSubscriptionPlan: UserSubscriptionPlan(userId: _userSubscriptionPlan.userId, plan: _selectedPlan),),
+                  ),
+                );
+              }
             },
             child: const Text(CONTINUE_LABEL, style: TextStyle( color: Colors.white),),
           ),

@@ -84,20 +84,23 @@ class _$GetLoggedFoodsEventCopyWithImpl<$Res, $Val extends GetLoggedFoodsEvent>
 }
 
 /// @nodoc
-abstract class _$$GetAllLoggedFoodsEventCopyWith<$Res> {
-  factory _$$GetAllLoggedFoodsEventCopyWith(_$GetAllLoggedFoodsEvent value,
-          $Res Function(_$GetAllLoggedFoodsEvent) then) =
-      __$$GetAllLoggedFoodsEventCopyWithImpl<$Res>;
+abstract class _$$GetAllLoggedFoodsEventImplCopyWith<$Res> {
+  factory _$$GetAllLoggedFoodsEventImplCopyWith(
+          _$GetAllLoggedFoodsEventImpl value,
+          $Res Function(_$GetAllLoggedFoodsEventImpl) then) =
+      __$$GetAllLoggedFoodsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String date});
 }
 
 /// @nodoc
-class __$$GetAllLoggedFoodsEventCopyWithImpl<$Res>
-    extends _$GetLoggedFoodsEventCopyWithImpl<$Res, _$GetAllLoggedFoodsEvent>
-    implements _$$GetAllLoggedFoodsEventCopyWith<$Res> {
-  __$$GetAllLoggedFoodsEventCopyWithImpl(_$GetAllLoggedFoodsEvent _value,
-      $Res Function(_$GetAllLoggedFoodsEvent) _then)
+class __$$GetAllLoggedFoodsEventImplCopyWithImpl<$Res>
+    extends _$GetLoggedFoodsEventCopyWithImpl<$Res,
+        _$GetAllLoggedFoodsEventImpl>
+    implements _$$GetAllLoggedFoodsEventImplCopyWith<$Res> {
+  __$$GetAllLoggedFoodsEventImplCopyWithImpl(
+      _$GetAllLoggedFoodsEventImpl _value,
+      $Res Function(_$GetAllLoggedFoodsEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -105,7 +108,7 @@ class __$$GetAllLoggedFoodsEventCopyWithImpl<$Res>
   $Res call({
     Object? date = null,
   }) {
-    return _then(_$GetAllLoggedFoodsEvent(
+    return _then(_$GetAllLoggedFoodsEventImpl(
       null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -116,8 +119,8 @@ class __$$GetAllLoggedFoodsEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetAllLoggedFoodsEvent implements GetAllLoggedFoodsEvent {
-  const _$GetAllLoggedFoodsEvent(this.date);
+class _$GetAllLoggedFoodsEventImpl implements GetAllLoggedFoodsEvent {
+  const _$GetAllLoggedFoodsEventImpl(this.date);
 
   @override
   final String date;
@@ -128,10 +131,10 @@ class _$GetAllLoggedFoodsEvent implements GetAllLoggedFoodsEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetAllLoggedFoodsEvent &&
+            other is _$GetAllLoggedFoodsEventImpl &&
             (identical(other.date, date) || other.date == date));
   }
 
@@ -141,9 +144,9 @@ class _$GetAllLoggedFoodsEvent implements GetAllLoggedFoodsEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetAllLoggedFoodsEventCopyWith<_$GetAllLoggedFoodsEvent> get copyWith =>
-      __$$GetAllLoggedFoodsEventCopyWithImpl<_$GetAllLoggedFoodsEvent>(
-          this, _$identity);
+  _$$GetAllLoggedFoodsEventImplCopyWith<_$GetAllLoggedFoodsEventImpl>
+      get copyWith => __$$GetAllLoggedFoodsEventImplCopyWithImpl<
+          _$GetAllLoggedFoodsEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -219,32 +222,32 @@ class _$GetAllLoggedFoodsEvent implements GetAllLoggedFoodsEvent {
 
 abstract class GetAllLoggedFoodsEvent implements GetLoggedFoodsEvent {
   const factory GetAllLoggedFoodsEvent(final String date) =
-      _$GetAllLoggedFoodsEvent;
+      _$GetAllLoggedFoodsEventImpl;
 
   String get date;
   @JsonKey(ignore: true)
-  _$$GetAllLoggedFoodsEventCopyWith<_$GetAllLoggedFoodsEvent> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GetAllLoggedFoodsEventImplCopyWith<_$GetAllLoggedFoodsEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetImmediateLoggedFoodsEventCopyWith<$Res> {
-  factory _$$GetImmediateLoggedFoodsEventCopyWith(
-          _$GetImmediateLoggedFoodsEvent value,
-          $Res Function(_$GetImmediateLoggedFoodsEvent) then) =
-      __$$GetImmediateLoggedFoodsEventCopyWithImpl<$Res>;
+abstract class _$$GetImmediateLoggedFoodsEventImplCopyWith<$Res> {
+  factory _$$GetImmediateLoggedFoodsEventImplCopyWith(
+          _$GetImmediateLoggedFoodsEventImpl value,
+          $Res Function(_$GetImmediateLoggedFoodsEventImpl) then) =
+      __$$GetImmediateLoggedFoodsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String date});
 }
 
 /// @nodoc
-class __$$GetImmediateLoggedFoodsEventCopyWithImpl<$Res>
+class __$$GetImmediateLoggedFoodsEventImplCopyWithImpl<$Res>
     extends _$GetLoggedFoodsEventCopyWithImpl<$Res,
-        _$GetImmediateLoggedFoodsEvent>
-    implements _$$GetImmediateLoggedFoodsEventCopyWith<$Res> {
-  __$$GetImmediateLoggedFoodsEventCopyWithImpl(
-      _$GetImmediateLoggedFoodsEvent _value,
-      $Res Function(_$GetImmediateLoggedFoodsEvent) _then)
+        _$GetImmediateLoggedFoodsEventImpl>
+    implements _$$GetImmediateLoggedFoodsEventImplCopyWith<$Res> {
+  __$$GetImmediateLoggedFoodsEventImplCopyWithImpl(
+      _$GetImmediateLoggedFoodsEventImpl _value,
+      $Res Function(_$GetImmediateLoggedFoodsEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -252,7 +255,7 @@ class __$$GetImmediateLoggedFoodsEventCopyWithImpl<$Res>
   $Res call({
     Object? date = null,
   }) {
-    return _then(_$GetImmediateLoggedFoodsEvent(
+    return _then(_$GetImmediateLoggedFoodsEventImpl(
       null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -263,8 +266,9 @@ class __$$GetImmediateLoggedFoodsEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetImmediateLoggedFoodsEvent implements GetImmediateLoggedFoodsEvent {
-  const _$GetImmediateLoggedFoodsEvent(this.date);
+class _$GetImmediateLoggedFoodsEventImpl
+    implements GetImmediateLoggedFoodsEvent {
+  const _$GetImmediateLoggedFoodsEventImpl(this.date);
 
   @override
   final String date;
@@ -275,10 +279,10 @@ class _$GetImmediateLoggedFoodsEvent implements GetImmediateLoggedFoodsEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetImmediateLoggedFoodsEvent &&
+            other is _$GetImmediateLoggedFoodsEventImpl &&
             (identical(other.date, date) || other.date == date));
   }
 
@@ -288,9 +292,10 @@ class _$GetImmediateLoggedFoodsEvent implements GetImmediateLoggedFoodsEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetImmediateLoggedFoodsEventCopyWith<_$GetImmediateLoggedFoodsEvent>
-      get copyWith => __$$GetImmediateLoggedFoodsEventCopyWithImpl<
-          _$GetImmediateLoggedFoodsEvent>(this, _$identity);
+  _$$GetImmediateLoggedFoodsEventImplCopyWith<
+          _$GetImmediateLoggedFoodsEventImpl>
+      get copyWith => __$$GetImmediateLoggedFoodsEventImplCopyWithImpl<
+          _$GetImmediateLoggedFoodsEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -366,32 +371,35 @@ class _$GetImmediateLoggedFoodsEvent implements GetImmediateLoggedFoodsEvent {
 
 abstract class GetImmediateLoggedFoodsEvent implements GetLoggedFoodsEvent {
   const factory GetImmediateLoggedFoodsEvent(final String date) =
-      _$GetImmediateLoggedFoodsEvent;
+      _$GetImmediateLoggedFoodsEventImpl;
 
   String get date;
   @JsonKey(ignore: true)
-  _$$GetImmediateLoggedFoodsEventCopyWith<_$GetImmediateLoggedFoodsEvent>
+  _$$GetImmediateLoggedFoodsEventImplCopyWith<
+          _$GetImmediateLoggedFoodsEventImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$GetLoggedFoodsEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$GetLoggedFoodsEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -399,9 +407,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -480,7 +488,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements GetLoggedFoodsEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -565,28 +573,28 @@ class _$GetLoggedFoodsStateCopyWithImpl<$Res, $Val extends GetLoggedFoodsState>
 }
 
 /// @nodoc
-abstract class _$$GetLoggedFoodsInitialStateCopyWith<$Res> {
-  factory _$$GetLoggedFoodsInitialStateCopyWith(
-          _$GetLoggedFoodsInitialState value,
-          $Res Function(_$GetLoggedFoodsInitialState) then) =
-      __$$GetLoggedFoodsInitialStateCopyWithImpl<$Res>;
+abstract class _$$GetLoggedFoodsInitialStateImplCopyWith<$Res> {
+  factory _$$GetLoggedFoodsInitialStateImplCopyWith(
+          _$GetLoggedFoodsInitialStateImpl value,
+          $Res Function(_$GetLoggedFoodsInitialStateImpl) then) =
+      __$$GetLoggedFoodsInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetLoggedFoodsInitialStateCopyWithImpl<$Res>
+class __$$GetLoggedFoodsInitialStateImplCopyWithImpl<$Res>
     extends _$GetLoggedFoodsStateCopyWithImpl<$Res,
-        _$GetLoggedFoodsInitialState>
-    implements _$$GetLoggedFoodsInitialStateCopyWith<$Res> {
-  __$$GetLoggedFoodsInitialStateCopyWithImpl(
-      _$GetLoggedFoodsInitialState _value,
-      $Res Function(_$GetLoggedFoodsInitialState) _then)
+        _$GetLoggedFoodsInitialStateImpl>
+    implements _$$GetLoggedFoodsInitialStateImplCopyWith<$Res> {
+  __$$GetLoggedFoodsInitialStateImplCopyWithImpl(
+      _$GetLoggedFoodsInitialStateImpl _value,
+      $Res Function(_$GetLoggedFoodsInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetLoggedFoodsInitialState implements GetLoggedFoodsInitialState {
-  const _$GetLoggedFoodsInitialState();
+class _$GetLoggedFoodsInitialStateImpl implements GetLoggedFoodsInitialState {
+  const _$GetLoggedFoodsInitialStateImpl();
 
   @override
   String toString() {
@@ -594,10 +602,10 @@ class _$GetLoggedFoodsInitialState implements GetLoggedFoodsInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetLoggedFoodsInitialState);
+            other is _$GetLoggedFoodsInitialStateImpl);
   }
 
   @override
@@ -688,32 +696,32 @@ class _$GetLoggedFoodsInitialState implements GetLoggedFoodsInitialState {
 }
 
 abstract class GetLoggedFoodsInitialState implements GetLoggedFoodsState {
-  const factory GetLoggedFoodsInitialState() = _$GetLoggedFoodsInitialState;
+  const factory GetLoggedFoodsInitialState() = _$GetLoggedFoodsInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetLoggedFoodsLoadingStateCopyWith<$Res> {
-  factory _$$GetLoggedFoodsLoadingStateCopyWith(
-          _$GetLoggedFoodsLoadingState value,
-          $Res Function(_$GetLoggedFoodsLoadingState) then) =
-      __$$GetLoggedFoodsLoadingStateCopyWithImpl<$Res>;
+abstract class _$$GetLoggedFoodsLoadingStateImplCopyWith<$Res> {
+  factory _$$GetLoggedFoodsLoadingStateImplCopyWith(
+          _$GetLoggedFoodsLoadingStateImpl value,
+          $Res Function(_$GetLoggedFoodsLoadingStateImpl) then) =
+      __$$GetLoggedFoodsLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetLoggedFoodsLoadingStateCopyWithImpl<$Res>
+class __$$GetLoggedFoodsLoadingStateImplCopyWithImpl<$Res>
     extends _$GetLoggedFoodsStateCopyWithImpl<$Res,
-        _$GetLoggedFoodsLoadingState>
-    implements _$$GetLoggedFoodsLoadingStateCopyWith<$Res> {
-  __$$GetLoggedFoodsLoadingStateCopyWithImpl(
-      _$GetLoggedFoodsLoadingState _value,
-      $Res Function(_$GetLoggedFoodsLoadingState) _then)
+        _$GetLoggedFoodsLoadingStateImpl>
+    implements _$$GetLoggedFoodsLoadingStateImplCopyWith<$Res> {
+  __$$GetLoggedFoodsLoadingStateImplCopyWithImpl(
+      _$GetLoggedFoodsLoadingStateImpl _value,
+      $Res Function(_$GetLoggedFoodsLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetLoggedFoodsLoadingState implements GetLoggedFoodsLoadingState {
-  const _$GetLoggedFoodsLoadingState();
+class _$GetLoggedFoodsLoadingStateImpl implements GetLoggedFoodsLoadingState {
+  const _$GetLoggedFoodsLoadingStateImpl();
 
   @override
   String toString() {
@@ -721,10 +729,10 @@ class _$GetLoggedFoodsLoadingState implements GetLoggedFoodsLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetLoggedFoodsLoadingState);
+            other is _$GetLoggedFoodsLoadingStateImpl);
   }
 
   @override
@@ -815,24 +823,27 @@ class _$GetLoggedFoodsLoadingState implements GetLoggedFoodsLoadingState {
 }
 
 abstract class GetLoggedFoodsLoadingState implements GetLoggedFoodsState {
-  const factory GetLoggedFoodsLoadingState() = _$GetLoggedFoodsLoadingState;
+  const factory GetLoggedFoodsLoadingState() = _$GetLoggedFoodsLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetLoggedFoodsErrorStateCopyWith<$Res> {
-  factory _$$GetLoggedFoodsErrorStateCopyWith(_$GetLoggedFoodsErrorState value,
-          $Res Function(_$GetLoggedFoodsErrorState) then) =
-      __$$GetLoggedFoodsErrorStateCopyWithImpl<$Res>;
+abstract class _$$GetLoggedFoodsErrorStateImplCopyWith<$Res> {
+  factory _$$GetLoggedFoodsErrorStateImplCopyWith(
+          _$GetLoggedFoodsErrorStateImpl value,
+          $Res Function(_$GetLoggedFoodsErrorStateImpl) then) =
+      __$$GetLoggedFoodsErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$GetLoggedFoodsErrorStateCopyWithImpl<$Res>
-    extends _$GetLoggedFoodsStateCopyWithImpl<$Res, _$GetLoggedFoodsErrorState>
-    implements _$$GetLoggedFoodsErrorStateCopyWith<$Res> {
-  __$$GetLoggedFoodsErrorStateCopyWithImpl(_$GetLoggedFoodsErrorState _value,
-      $Res Function(_$GetLoggedFoodsErrorState) _then)
+class __$$GetLoggedFoodsErrorStateImplCopyWithImpl<$Res>
+    extends _$GetLoggedFoodsStateCopyWithImpl<$Res,
+        _$GetLoggedFoodsErrorStateImpl>
+    implements _$$GetLoggedFoodsErrorStateImplCopyWith<$Res> {
+  __$$GetLoggedFoodsErrorStateImplCopyWithImpl(
+      _$GetLoggedFoodsErrorStateImpl _value,
+      $Res Function(_$GetLoggedFoodsErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -840,7 +851,7 @@ class __$$GetLoggedFoodsErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$GetLoggedFoodsErrorState(
+    return _then(_$GetLoggedFoodsErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -851,8 +862,8 @@ class __$$GetLoggedFoodsErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetLoggedFoodsErrorState implements GetLoggedFoodsErrorState {
-  const _$GetLoggedFoodsErrorState(this.message);
+class _$GetLoggedFoodsErrorStateImpl implements GetLoggedFoodsErrorState {
+  const _$GetLoggedFoodsErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -863,10 +874,10 @@ class _$GetLoggedFoodsErrorState implements GetLoggedFoodsErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetLoggedFoodsErrorState &&
+            other is _$GetLoggedFoodsErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -876,10 +887,9 @@ class _$GetLoggedFoodsErrorState implements GetLoggedFoodsErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetLoggedFoodsErrorStateCopyWith<_$GetLoggedFoodsErrorState>
-      get copyWith =>
-          __$$GetLoggedFoodsErrorStateCopyWithImpl<_$GetLoggedFoodsErrorState>(
-              this, _$identity);
+  _$$GetLoggedFoodsErrorStateImplCopyWith<_$GetLoggedFoodsErrorStateImpl>
+      get copyWith => __$$GetLoggedFoodsErrorStateImplCopyWithImpl<
+          _$GetLoggedFoodsErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -967,20 +977,20 @@ class _$GetLoggedFoodsErrorState implements GetLoggedFoodsErrorState {
 
 abstract class GetLoggedFoodsErrorState implements GetLoggedFoodsState {
   const factory GetLoggedFoodsErrorState(final String message) =
-      _$GetLoggedFoodsErrorState;
+      _$GetLoggedFoodsErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$GetLoggedFoodsErrorStateCopyWith<_$GetLoggedFoodsErrorState>
+  _$$GetLoggedFoodsErrorStateImplCopyWith<_$GetLoggedFoodsErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetLoggedFoodsLoadedStateCopyWith<$Res> {
-  factory _$$GetLoggedFoodsLoadedStateCopyWith(
-          _$GetLoggedFoodsLoadedState value,
-          $Res Function(_$GetLoggedFoodsLoadedState) then) =
-      __$$GetLoggedFoodsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$GetLoggedFoodsLoadedStateImplCopyWith<$Res> {
+  factory _$$GetLoggedFoodsLoadedStateImplCopyWith(
+          _$GetLoggedFoodsLoadedStateImpl value,
+          $Res Function(_$GetLoggedFoodsLoadedStateImpl) then) =
+      __$$GetLoggedFoodsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LoggedFoods loggedFoods});
 
@@ -988,11 +998,13 @@ abstract class _$$GetLoggedFoodsLoadedStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GetLoggedFoodsLoadedStateCopyWithImpl<$Res>
-    extends _$GetLoggedFoodsStateCopyWithImpl<$Res, _$GetLoggedFoodsLoadedState>
-    implements _$$GetLoggedFoodsLoadedStateCopyWith<$Res> {
-  __$$GetLoggedFoodsLoadedStateCopyWithImpl(_$GetLoggedFoodsLoadedState _value,
-      $Res Function(_$GetLoggedFoodsLoadedState) _then)
+class __$$GetLoggedFoodsLoadedStateImplCopyWithImpl<$Res>
+    extends _$GetLoggedFoodsStateCopyWithImpl<$Res,
+        _$GetLoggedFoodsLoadedStateImpl>
+    implements _$$GetLoggedFoodsLoadedStateImplCopyWith<$Res> {
+  __$$GetLoggedFoodsLoadedStateImplCopyWithImpl(
+      _$GetLoggedFoodsLoadedStateImpl _value,
+      $Res Function(_$GetLoggedFoodsLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1000,7 +1012,7 @@ class __$$GetLoggedFoodsLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? loggedFoods = null,
   }) {
-    return _then(_$GetLoggedFoodsLoadedState(
+    return _then(_$GetLoggedFoodsLoadedStateImpl(
       loggedFoods: null == loggedFoods
           ? _value.loggedFoods
           : loggedFoods // ignore: cast_nullable_to_non_nullable
@@ -1019,8 +1031,8 @@ class __$$GetLoggedFoodsLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetLoggedFoodsLoadedState implements GetLoggedFoodsLoadedState {
-  const _$GetLoggedFoodsLoadedState({required this.loggedFoods});
+class _$GetLoggedFoodsLoadedStateImpl implements GetLoggedFoodsLoadedState {
+  const _$GetLoggedFoodsLoadedStateImpl({required this.loggedFoods});
 
   @override
   final LoggedFoods loggedFoods;
@@ -1031,10 +1043,10 @@ class _$GetLoggedFoodsLoadedState implements GetLoggedFoodsLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetLoggedFoodsLoadedState &&
+            other is _$GetLoggedFoodsLoadedStateImpl &&
             (identical(other.loggedFoods, loggedFoods) ||
                 other.loggedFoods == loggedFoods));
   }
@@ -1045,9 +1057,9 @@ class _$GetLoggedFoodsLoadedState implements GetLoggedFoodsLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetLoggedFoodsLoadedStateCopyWith<_$GetLoggedFoodsLoadedState>
-      get copyWith => __$$GetLoggedFoodsLoadedStateCopyWithImpl<
-          _$GetLoggedFoodsLoadedState>(this, _$identity);
+  _$$GetLoggedFoodsLoadedStateImplCopyWith<_$GetLoggedFoodsLoadedStateImpl>
+      get copyWith => __$$GetLoggedFoodsLoadedStateImplCopyWithImpl<
+          _$GetLoggedFoodsLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1135,20 +1147,21 @@ class _$GetLoggedFoodsLoadedState implements GetLoggedFoodsLoadedState {
 
 abstract class GetLoggedFoodsLoadedState implements GetLoggedFoodsState {
   const factory GetLoggedFoodsLoadedState(
-      {required final LoggedFoods loggedFoods}) = _$GetLoggedFoodsLoadedState;
+          {required final LoggedFoods loggedFoods}) =
+      _$GetLoggedFoodsLoadedStateImpl;
 
   LoggedFoods get loggedFoods;
   @JsonKey(ignore: true)
-  _$$GetLoggedFoodsLoadedStateCopyWith<_$GetLoggedFoodsLoadedState>
+  _$$GetLoggedFoodsLoadedStateImplCopyWith<_$GetLoggedFoodsLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetImmediateLoggedFoodsStateCopyWith<$Res> {
-  factory _$$GetImmediateLoggedFoodsStateCopyWith(
-          _$GetImmediateLoggedFoodsState value,
-          $Res Function(_$GetImmediateLoggedFoodsState) then) =
-      __$$GetImmediateLoggedFoodsStateCopyWithImpl<$Res>;
+abstract class _$$GetImmediateLoggedFoodsStateImplCopyWith<$Res> {
+  factory _$$GetImmediateLoggedFoodsStateImplCopyWith(
+          _$GetImmediateLoggedFoodsStateImpl value,
+          $Res Function(_$GetImmediateLoggedFoodsStateImpl) then) =
+      __$$GetImmediateLoggedFoodsStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LoggedFoods loggedFoods});
 
@@ -1156,13 +1169,13 @@ abstract class _$$GetImmediateLoggedFoodsStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GetImmediateLoggedFoodsStateCopyWithImpl<$Res>
+class __$$GetImmediateLoggedFoodsStateImplCopyWithImpl<$Res>
     extends _$GetLoggedFoodsStateCopyWithImpl<$Res,
-        _$GetImmediateLoggedFoodsState>
-    implements _$$GetImmediateLoggedFoodsStateCopyWith<$Res> {
-  __$$GetImmediateLoggedFoodsStateCopyWithImpl(
-      _$GetImmediateLoggedFoodsState _value,
-      $Res Function(_$GetImmediateLoggedFoodsState) _then)
+        _$GetImmediateLoggedFoodsStateImpl>
+    implements _$$GetImmediateLoggedFoodsStateImplCopyWith<$Res> {
+  __$$GetImmediateLoggedFoodsStateImplCopyWithImpl(
+      _$GetImmediateLoggedFoodsStateImpl _value,
+      $Res Function(_$GetImmediateLoggedFoodsStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1170,7 +1183,7 @@ class __$$GetImmediateLoggedFoodsStateCopyWithImpl<$Res>
   $Res call({
     Object? loggedFoods = null,
   }) {
-    return _then(_$GetImmediateLoggedFoodsState(
+    return _then(_$GetImmediateLoggedFoodsStateImpl(
       loggedFoods: null == loggedFoods
           ? _value.loggedFoods
           : loggedFoods // ignore: cast_nullable_to_non_nullable
@@ -1189,8 +1202,9 @@ class __$$GetImmediateLoggedFoodsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetImmediateLoggedFoodsState implements GetImmediateLoggedFoodsState {
-  const _$GetImmediateLoggedFoodsState({required this.loggedFoods});
+class _$GetImmediateLoggedFoodsStateImpl
+    implements GetImmediateLoggedFoodsState {
+  const _$GetImmediateLoggedFoodsStateImpl({required this.loggedFoods});
 
   @override
   final LoggedFoods loggedFoods;
@@ -1201,10 +1215,10 @@ class _$GetImmediateLoggedFoodsState implements GetImmediateLoggedFoodsState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetImmediateLoggedFoodsState &&
+            other is _$GetImmediateLoggedFoodsStateImpl &&
             (identical(other.loggedFoods, loggedFoods) ||
                 other.loggedFoods == loggedFoods));
   }
@@ -1215,9 +1229,10 @@ class _$GetImmediateLoggedFoodsState implements GetImmediateLoggedFoodsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetImmediateLoggedFoodsStateCopyWith<_$GetImmediateLoggedFoodsState>
-      get copyWith => __$$GetImmediateLoggedFoodsStateCopyWithImpl<
-          _$GetImmediateLoggedFoodsState>(this, _$identity);
+  _$$GetImmediateLoggedFoodsStateImplCopyWith<
+          _$GetImmediateLoggedFoodsStateImpl>
+      get copyWith => __$$GetImmediateLoggedFoodsStateImplCopyWithImpl<
+          _$GetImmediateLoggedFoodsStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1306,10 +1321,11 @@ class _$GetImmediateLoggedFoodsState implements GetImmediateLoggedFoodsState {
 abstract class GetImmediateLoggedFoodsState implements GetLoggedFoodsState {
   const factory GetImmediateLoggedFoodsState(
           {required final LoggedFoods loggedFoods}) =
-      _$GetImmediateLoggedFoodsState;
+      _$GetImmediateLoggedFoodsStateImpl;
 
   LoggedFoods get loggedFoods;
   @JsonKey(ignore: true)
-  _$$GetImmediateLoggedFoodsStateCopyWith<_$GetImmediateLoggedFoodsState>
+  _$$GetImmediateLoggedFoodsStateImplCopyWith<
+          _$GetImmediateLoggedFoodsStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -63,22 +63,22 @@ class _$UserCredentialsCopyWithImpl<$Res, $Val extends UserCredentials>
 }
 
 /// @nodoc
-abstract class _$$_UserCredentialsCopyWith<$Res>
+abstract class _$$UserCredentialsImplCopyWith<$Res>
     implements $UserCredentialsCopyWith<$Res> {
-  factory _$$_UserCredentialsCopyWith(
-          _$_UserCredentials value, $Res Function(_$_UserCredentials) then) =
-      __$$_UserCredentialsCopyWithImpl<$Res>;
+  factory _$$UserCredentialsImplCopyWith(_$UserCredentialsImpl value,
+          $Res Function(_$UserCredentialsImpl) then) =
+      __$$UserCredentialsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String email, String password});
 }
 
 /// @nodoc
-class __$$_UserCredentialsCopyWithImpl<$Res>
-    extends _$UserCredentialsCopyWithImpl<$Res, _$_UserCredentials>
-    implements _$$_UserCredentialsCopyWith<$Res> {
-  __$$_UserCredentialsCopyWithImpl(
-      _$_UserCredentials _value, $Res Function(_$_UserCredentials) _then)
+class __$$UserCredentialsImplCopyWithImpl<$Res>
+    extends _$UserCredentialsCopyWithImpl<$Res, _$UserCredentialsImpl>
+    implements _$$UserCredentialsImplCopyWith<$Res> {
+  __$$UserCredentialsImplCopyWithImpl(
+      _$UserCredentialsImpl _value, $Res Function(_$UserCredentialsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$_UserCredentialsCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
   }) {
-    return _then(_$_UserCredentials(
+    return _then(_$UserCredentialsImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$_UserCredentialsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserCredentials implements _UserCredentials {
-  _$_UserCredentials({this.email = '', this.password = ''});
+class _$UserCredentialsImpl implements _UserCredentials {
+  _$UserCredentialsImpl({this.email = '', this.password = ''});
 
   @override
   @JsonKey()
@@ -118,10 +118,10 @@ class _$_UserCredentials implements _UserCredentials {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserCredentials &&
+            other is _$UserCredentialsImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password));
@@ -133,13 +133,14 @@ class _$_UserCredentials implements _UserCredentials {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserCredentialsCopyWith<_$_UserCredentials> get copyWith =>
-      __$$_UserCredentialsCopyWithImpl<_$_UserCredentials>(this, _$identity);
+  _$$UserCredentialsImplCopyWith<_$UserCredentialsImpl> get copyWith =>
+      __$$UserCredentialsImplCopyWithImpl<_$UserCredentialsImpl>(
+          this, _$identity);
 }
 
 abstract class _UserCredentials implements UserCredentials {
   factory _UserCredentials({final String email, final String password}) =
-      _$_UserCredentials;
+      _$UserCredentialsImpl;
 
   @override
   String get email;
@@ -147,6 +148,6 @@ abstract class _UserCredentials implements UserCredentials {
   String get password;
   @override
   @JsonKey(ignore: true)
-  _$$_UserCredentialsCopyWith<_$_UserCredentials> get copyWith =>
+  _$$UserCredentialsImplCopyWith<_$UserCredentialsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

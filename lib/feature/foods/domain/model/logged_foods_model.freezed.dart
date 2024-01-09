@@ -69,22 +69,22 @@ class _$LoggedFoodsCopyWithImpl<$Res, $Val extends LoggedFoods>
 }
 
 /// @nodoc
-abstract class _$$_LoggedFoodsCopyWith<$Res>
+abstract class _$$LoggedFoodsImplCopyWith<$Res>
     implements $LoggedFoodsCopyWith<$Res> {
-  factory _$$_LoggedFoodsCopyWith(
-          _$_LoggedFoods value, $Res Function(_$_LoggedFoods) then) =
-      __$$_LoggedFoodsCopyWithImpl<$Res>;
+  factory _$$LoggedFoodsImplCopyWith(
+          _$LoggedFoodsImpl value, $Res Function(_$LoggedFoodsImpl) then) =
+      __$$LoggedFoodsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Food> foods, String date, List<double> goals});
 }
 
 /// @nodoc
-class __$$_LoggedFoodsCopyWithImpl<$Res>
-    extends _$LoggedFoodsCopyWithImpl<$Res, _$_LoggedFoods>
-    implements _$$_LoggedFoodsCopyWith<$Res> {
-  __$$_LoggedFoodsCopyWithImpl(
-      _$_LoggedFoods _value, $Res Function(_$_LoggedFoods) _then)
+class __$$LoggedFoodsImplCopyWithImpl<$Res>
+    extends _$LoggedFoodsCopyWithImpl<$Res, _$LoggedFoodsImpl>
+    implements _$$LoggedFoodsImplCopyWith<$Res> {
+  __$$LoggedFoodsImplCopyWithImpl(
+      _$LoggedFoodsImpl _value, $Res Function(_$LoggedFoodsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +94,7 @@ class __$$_LoggedFoodsCopyWithImpl<$Res>
     Object? date = null,
     Object? goals = null,
   }) {
-    return _then(_$_LoggedFoods(
+    return _then(_$LoggedFoodsImpl(
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -113,8 +113,8 @@ class __$$_LoggedFoodsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LoggedFoods implements _LoggedFoods {
-  _$_LoggedFoods(
+class _$LoggedFoodsImpl implements _LoggedFoods {
+  _$LoggedFoodsImpl(
       {final List<Food> foods = const [],
       this.date = '',
       final List<double> goals = const []})
@@ -148,10 +148,10 @@ class _$_LoggedFoods implements _LoggedFoods {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LoggedFoods &&
+            other is _$LoggedFoodsImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
             (identical(other.date, date) || other.date == date) &&
             const DeepCollectionEquality().equals(other._goals, _goals));
@@ -167,15 +167,15 @@ class _$_LoggedFoods implements _LoggedFoods {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LoggedFoodsCopyWith<_$_LoggedFoods> get copyWith =>
-      __$$_LoggedFoodsCopyWithImpl<_$_LoggedFoods>(this, _$identity);
+  _$$LoggedFoodsImplCopyWith<_$LoggedFoodsImpl> get copyWith =>
+      __$$LoggedFoodsImplCopyWithImpl<_$LoggedFoodsImpl>(this, _$identity);
 }
 
 abstract class _LoggedFoods implements LoggedFoods {
   factory _LoggedFoods(
       {final List<Food> foods,
       final String date,
-      final List<double> goals}) = _$_LoggedFoods;
+      final List<double> goals}) = _$LoggedFoodsImpl;
 
   @override
   List<Food> get foods;
@@ -185,6 +185,6 @@ abstract class _LoggedFoods implements LoggedFoods {
   List<double> get goals;
   @override
   @JsonKey(ignore: true)
-  _$$_LoggedFoodsCopyWith<_$_LoggedFoods> get copyWith =>
+  _$$LoggedFoodsImplCopyWith<_$LoggedFoodsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

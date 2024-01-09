@@ -75,20 +75,20 @@ class _$LogFoodsEventCopyWithImpl<$Res, $Val extends LogFoodsEvent>
 }
 
 /// @nodoc
-abstract class _$$LogAllFoodsEventCopyWith<$Res> {
-  factory _$$LogAllFoodsEventCopyWith(
-          _$LogAllFoodsEvent value, $Res Function(_$LogAllFoodsEvent) then) =
-      __$$LogAllFoodsEventCopyWithImpl<$Res>;
+abstract class _$$LogAllFoodsEventImplCopyWith<$Res> {
+  factory _$$LogAllFoodsEventImplCopyWith(_$LogAllFoodsEventImpl value,
+          $Res Function(_$LogAllFoodsEventImpl) then) =
+      __$$LogAllFoodsEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Food> foods});
 }
 
 /// @nodoc
-class __$$LogAllFoodsEventCopyWithImpl<$Res>
-    extends _$LogFoodsEventCopyWithImpl<$Res, _$LogAllFoodsEvent>
-    implements _$$LogAllFoodsEventCopyWith<$Res> {
-  __$$LogAllFoodsEventCopyWithImpl(
-      _$LogAllFoodsEvent _value, $Res Function(_$LogAllFoodsEvent) _then)
+class __$$LogAllFoodsEventImplCopyWithImpl<$Res>
+    extends _$LogFoodsEventCopyWithImpl<$Res, _$LogAllFoodsEventImpl>
+    implements _$$LogAllFoodsEventImplCopyWith<$Res> {
+  __$$LogAllFoodsEventImplCopyWithImpl(_$LogAllFoodsEventImpl _value,
+      $Res Function(_$LogAllFoodsEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -96,7 +96,7 @@ class __$$LogAllFoodsEventCopyWithImpl<$Res>
   $Res call({
     Object? foods = null,
   }) {
-    return _then(_$LogAllFoodsEvent(
+    return _then(_$LogAllFoodsEventImpl(
       null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -107,8 +107,8 @@ class __$$LogAllFoodsEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LogAllFoodsEvent implements LogAllFoodsEvent {
-  const _$LogAllFoodsEvent(final List<Food> foods) : _foods = foods;
+class _$LogAllFoodsEventImpl implements LogAllFoodsEvent {
+  const _$LogAllFoodsEventImpl(final List<Food> foods) : _foods = foods;
 
   final List<Food> _foods;
   @override
@@ -124,10 +124,10 @@ class _$LogAllFoodsEvent implements LogAllFoodsEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LogAllFoodsEvent &&
+            other is _$LogAllFoodsEventImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods));
   }
 
@@ -138,8 +138,9 @@ class _$LogAllFoodsEvent implements LogAllFoodsEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LogAllFoodsEventCopyWith<_$LogAllFoodsEvent> get copyWith =>
-      __$$LogAllFoodsEventCopyWithImpl<_$LogAllFoodsEvent>(this, _$identity);
+  _$$LogAllFoodsEventImplCopyWith<_$LogAllFoodsEventImpl> get copyWith =>
+      __$$LogAllFoodsEventImplCopyWithImpl<_$LogAllFoodsEventImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -205,32 +206,35 @@ class _$LogAllFoodsEvent implements LogAllFoodsEvent {
 }
 
 abstract class LogAllFoodsEvent implements LogFoodsEvent {
-  const factory LogAllFoodsEvent(final List<Food> foods) = _$LogAllFoodsEvent;
+  const factory LogAllFoodsEvent(final List<Food> foods) =
+      _$LogAllFoodsEventImpl;
 
   List<Food> get foods;
   @JsonKey(ignore: true)
-  _$$LogAllFoodsEventCopyWith<_$LogAllFoodsEvent> get copyWith =>
+  _$$LogAllFoodsEventImplCopyWith<_$LogAllFoodsEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$LogFoodsEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$LogFoodsEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -238,9 +242,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -310,7 +314,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements LogFoodsEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -386,25 +390,25 @@ class _$LogFoodsStateCopyWithImpl<$Res, $Val extends LogFoodsState>
 }
 
 /// @nodoc
-abstract class _$$LogFoodsInitialStateCopyWith<$Res> {
-  factory _$$LogFoodsInitialStateCopyWith(_$LogFoodsInitialState value,
-          $Res Function(_$LogFoodsInitialState) then) =
-      __$$LogFoodsInitialStateCopyWithImpl<$Res>;
+abstract class _$$LogFoodsInitialStateImplCopyWith<$Res> {
+  factory _$$LogFoodsInitialStateImplCopyWith(_$LogFoodsInitialStateImpl value,
+          $Res Function(_$LogFoodsInitialStateImpl) then) =
+      __$$LogFoodsInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogFoodsInitialStateCopyWithImpl<$Res>
-    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsInitialState>
-    implements _$$LogFoodsInitialStateCopyWith<$Res> {
-  __$$LogFoodsInitialStateCopyWithImpl(_$LogFoodsInitialState _value,
-      $Res Function(_$LogFoodsInitialState) _then)
+class __$$LogFoodsInitialStateImplCopyWithImpl<$Res>
+    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsInitialStateImpl>
+    implements _$$LogFoodsInitialStateImplCopyWith<$Res> {
+  __$$LogFoodsInitialStateImplCopyWithImpl(_$LogFoodsInitialStateImpl _value,
+      $Res Function(_$LogFoodsInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogFoodsInitialState implements LogFoodsInitialState {
-  const _$LogFoodsInitialState();
+class _$LogFoodsInitialStateImpl implements LogFoodsInitialState {
+  const _$LogFoodsInitialStateImpl();
 
   @override
   String toString() {
@@ -412,9 +416,10 @@ class _$LogFoodsInitialState implements LogFoodsInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogFoodsInitialState);
+        (other.runtimeType == runtimeType &&
+            other is _$LogFoodsInitialStateImpl);
   }
 
   @override
@@ -496,29 +501,29 @@ class _$LogFoodsInitialState implements LogFoodsInitialState {
 }
 
 abstract class LogFoodsInitialState implements LogFoodsState {
-  const factory LogFoodsInitialState() = _$LogFoodsInitialState;
+  const factory LogFoodsInitialState() = _$LogFoodsInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$LogFoodsLoadingStateCopyWith<$Res> {
-  factory _$$LogFoodsLoadingStateCopyWith(_$LogFoodsLoadingState value,
-          $Res Function(_$LogFoodsLoadingState) then) =
-      __$$LogFoodsLoadingStateCopyWithImpl<$Res>;
+abstract class _$$LogFoodsLoadingStateImplCopyWith<$Res> {
+  factory _$$LogFoodsLoadingStateImplCopyWith(_$LogFoodsLoadingStateImpl value,
+          $Res Function(_$LogFoodsLoadingStateImpl) then) =
+      __$$LogFoodsLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogFoodsLoadingStateCopyWithImpl<$Res>
-    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsLoadingState>
-    implements _$$LogFoodsLoadingStateCopyWith<$Res> {
-  __$$LogFoodsLoadingStateCopyWithImpl(_$LogFoodsLoadingState _value,
-      $Res Function(_$LogFoodsLoadingState) _then)
+class __$$LogFoodsLoadingStateImplCopyWithImpl<$Res>
+    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsLoadingStateImpl>
+    implements _$$LogFoodsLoadingStateImplCopyWith<$Res> {
+  __$$LogFoodsLoadingStateImplCopyWithImpl(_$LogFoodsLoadingStateImpl _value,
+      $Res Function(_$LogFoodsLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogFoodsLoadingState implements LogFoodsLoadingState {
-  const _$LogFoodsLoadingState();
+class _$LogFoodsLoadingStateImpl implements LogFoodsLoadingState {
+  const _$LogFoodsLoadingStateImpl();
 
   @override
   String toString() {
@@ -526,9 +531,10 @@ class _$LogFoodsLoadingState implements LogFoodsLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogFoodsLoadingState);
+        (other.runtimeType == runtimeType &&
+            other is _$LogFoodsLoadingStateImpl);
   }
 
   @override
@@ -610,24 +616,24 @@ class _$LogFoodsLoadingState implements LogFoodsLoadingState {
 }
 
 abstract class LogFoodsLoadingState implements LogFoodsState {
-  const factory LogFoodsLoadingState() = _$LogFoodsLoadingState;
+  const factory LogFoodsLoadingState() = _$LogFoodsLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$LogFoodsErrorStateCopyWith<$Res> {
-  factory _$$LogFoodsErrorStateCopyWith(_$LogFoodsErrorState value,
-          $Res Function(_$LogFoodsErrorState) then) =
-      __$$LogFoodsErrorStateCopyWithImpl<$Res>;
+abstract class _$$LogFoodsErrorStateImplCopyWith<$Res> {
+  factory _$$LogFoodsErrorStateImplCopyWith(_$LogFoodsErrorStateImpl value,
+          $Res Function(_$LogFoodsErrorStateImpl) then) =
+      __$$LogFoodsErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$LogFoodsErrorStateCopyWithImpl<$Res>
-    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsErrorState>
-    implements _$$LogFoodsErrorStateCopyWith<$Res> {
-  __$$LogFoodsErrorStateCopyWithImpl(
-      _$LogFoodsErrorState _value, $Res Function(_$LogFoodsErrorState) _then)
+class __$$LogFoodsErrorStateImplCopyWithImpl<$Res>
+    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsErrorStateImpl>
+    implements _$$LogFoodsErrorStateImplCopyWith<$Res> {
+  __$$LogFoodsErrorStateImplCopyWithImpl(_$LogFoodsErrorStateImpl _value,
+      $Res Function(_$LogFoodsErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -635,7 +641,7 @@ class __$$LogFoodsErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$LogFoodsErrorState(
+    return _then(_$LogFoodsErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -646,8 +652,8 @@ class __$$LogFoodsErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LogFoodsErrorState implements LogFoodsErrorState {
-  const _$LogFoodsErrorState(this.message);
+class _$LogFoodsErrorStateImpl implements LogFoodsErrorState {
+  const _$LogFoodsErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -658,10 +664,10 @@ class _$LogFoodsErrorState implements LogFoodsErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LogFoodsErrorState &&
+            other is _$LogFoodsErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -671,8 +677,8 @@ class _$LogFoodsErrorState implements LogFoodsErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LogFoodsErrorStateCopyWith<_$LogFoodsErrorState> get copyWith =>
-      __$$LogFoodsErrorStateCopyWithImpl<_$LogFoodsErrorState>(
+  _$$LogFoodsErrorStateImplCopyWith<_$LogFoodsErrorStateImpl> get copyWith =>
+      __$$LogFoodsErrorStateImplCopyWithImpl<_$LogFoodsErrorStateImpl>(
           this, _$identity);
 
   @override
@@ -751,34 +757,35 @@ class _$LogFoodsErrorState implements LogFoodsErrorState {
 }
 
 abstract class LogFoodsErrorState implements LogFoodsState {
-  const factory LogFoodsErrorState(final String message) = _$LogFoodsErrorState;
+  const factory LogFoodsErrorState(final String message) =
+      _$LogFoodsErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$LogFoodsErrorStateCopyWith<_$LogFoodsErrorState> get copyWith =>
+  _$$LogFoodsErrorStateImplCopyWith<_$LogFoodsErrorStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LogFoodsLoadedStateCopyWith<$Res> {
-  factory _$$LogFoodsLoadedStateCopyWith(_$LogFoodsLoadedState value,
-          $Res Function(_$LogFoodsLoadedState) then) =
-      __$$LogFoodsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$LogFoodsLoadedStateImplCopyWith<$Res> {
+  factory _$$LogFoodsLoadedStateImplCopyWith(_$LogFoodsLoadedStateImpl value,
+          $Res Function(_$LogFoodsLoadedStateImpl) then) =
+      __$$LogFoodsLoadedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogFoodsLoadedStateCopyWithImpl<$Res>
-    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsLoadedState>
-    implements _$$LogFoodsLoadedStateCopyWith<$Res> {
-  __$$LogFoodsLoadedStateCopyWithImpl(
-      _$LogFoodsLoadedState _value, $Res Function(_$LogFoodsLoadedState) _then)
+class __$$LogFoodsLoadedStateImplCopyWithImpl<$Res>
+    extends _$LogFoodsStateCopyWithImpl<$Res, _$LogFoodsLoadedStateImpl>
+    implements _$$LogFoodsLoadedStateImplCopyWith<$Res> {
+  __$$LogFoodsLoadedStateImplCopyWithImpl(_$LogFoodsLoadedStateImpl _value,
+      $Res Function(_$LogFoodsLoadedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogFoodsLoadedState implements LogFoodsLoadedState {
-  const _$LogFoodsLoadedState();
+class _$LogFoodsLoadedStateImpl implements LogFoodsLoadedState {
+  const _$LogFoodsLoadedStateImpl();
 
   @override
   String toString() {
@@ -786,9 +793,10 @@ class _$LogFoodsLoadedState implements LogFoodsLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogFoodsLoadedState);
+        (other.runtimeType == runtimeType &&
+            other is _$LogFoodsLoadedStateImpl);
   }
 
   @override
@@ -870,5 +878,5 @@ class _$LogFoodsLoadedState implements LogFoodsLoadedState {
 }
 
 abstract class LogFoodsLoadedState implements LogFoodsState {
-  const factory LogFoodsLoadedState() = _$LogFoodsLoadedState;
+  const factory LogFoodsLoadedState() = _$LogFoodsLoadedStateImpl;
 }

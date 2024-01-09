@@ -147,10 +147,10 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
 }
 
 /// @nodoc
-abstract class _$$_ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
-  factory _$$_ProfileCopyWith(
-          _$_Profile value, $Res Function(_$_Profile) then) =
-      __$$_ProfileCopyWithImpl<$Res>;
+abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
+  factory _$$ProfileImplCopyWith(
+          _$ProfileImpl value, $Res Function(_$ProfileImpl) then) =
+      __$$ProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -171,10 +171,11 @@ abstract class _$$_ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ProfileCopyWithImpl<$Res>
-    extends _$ProfileCopyWithImpl<$Res, _$_Profile>
-    implements _$$_ProfileCopyWith<$Res> {
-  __$$_ProfileCopyWithImpl(_$_Profile _value, $Res Function(_$_Profile) _then)
+class __$$ProfileImplCopyWithImpl<$Res>
+    extends _$ProfileCopyWithImpl<$Res, _$ProfileImpl>
+    implements _$$ProfileImplCopyWith<$Res> {
+  __$$ProfileImplCopyWithImpl(
+      _$ProfileImpl _value, $Res Function(_$ProfileImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -195,7 +196,7 @@ class __$$_ProfileCopyWithImpl<$Res>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
   }) {
-    return _then(_$_Profile(
+    return _then(_$ProfileImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -258,8 +259,8 @@ class __$$_ProfileCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Profile implements _Profile {
-  _$_Profile(
+class _$ProfileImpl implements _Profile {
+  _$ProfileImpl(
       {this.email = '',
       this.id = '',
       this.firstName = '',
@@ -331,10 +332,10 @@ class _$_Profile implements _Profile {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Profile &&
+            other is _$ProfileImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.firstName, firstName) ||
@@ -380,8 +381,8 @@ class _$_Profile implements _Profile {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ProfileCopyWith<_$_Profile> get copyWith =>
-      __$$_ProfileCopyWithImpl<_$_Profile>(this, _$identity);
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
+      __$$ProfileImplCopyWithImpl<_$ProfileImpl>(this, _$identity);
 }
 
 abstract class _Profile implements Profile {
@@ -399,7 +400,7 @@ abstract class _Profile implements Profile {
       final List<String> dailyMacroGoal,
       final String age,
       final String activityLevel,
-      final String weightChangeWeekly}) = _$_Profile;
+      final String weightChangeWeekly}) = _$ProfileImpl;
 
   @override
   String get email;
@@ -431,6 +432,6 @@ abstract class _Profile implements Profile {
   String get weightChangeWeekly;
   @override
   @JsonKey(ignore: true)
-  _$$_ProfileCopyWith<_$_Profile> get copyWith =>
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

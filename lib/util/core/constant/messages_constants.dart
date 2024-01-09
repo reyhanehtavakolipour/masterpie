@@ -240,6 +240,10 @@ const PAYMENT_CENCELLED_MSG= 'Payment cancelled';
 const TOTAL_PRICE_LABEL= 'Total Price';
 const PLAN_LABEL= 'Plan';
 const FREE_PLAN_SWITCH_MSG= 'Are you sure you want to switch to free plan?';
+const PLAN_UPDATED_SUCCESSFULLY_MSG= 'Plan updated successfully';
+const ALREADY_FREE_PLAN= 'You are already on free plan';
+const AUTO_PAYMENT_LABEL= 'Auto payment';
+
 
 
 

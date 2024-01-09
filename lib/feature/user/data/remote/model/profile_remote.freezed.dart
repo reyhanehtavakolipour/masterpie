@@ -149,11 +149,11 @@ class _$ProfileRemoteCopyWithImpl<$Res, $Val extends ProfileRemote>
 }
 
 /// @nodoc
-abstract class _$$_ProfileRemoteCopyWith<$Res>
+abstract class _$$ProfileRemoteImplCopyWith<$Res>
     implements $ProfileRemoteCopyWith<$Res> {
-  factory _$$_ProfileRemoteCopyWith(
-          _$_ProfileRemote value, $Res Function(_$_ProfileRemote) then) =
-      __$$_ProfileRemoteCopyWithImpl<$Res>;
+  factory _$$ProfileRemoteImplCopyWith(
+          _$ProfileRemoteImpl value, $Res Function(_$ProfileRemoteImpl) then) =
+      __$$ProfileRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -174,11 +174,11 @@ abstract class _$$_ProfileRemoteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ProfileRemoteCopyWithImpl<$Res>
-    extends _$ProfileRemoteCopyWithImpl<$Res, _$_ProfileRemote>
-    implements _$$_ProfileRemoteCopyWith<$Res> {
-  __$$_ProfileRemoteCopyWithImpl(
-      _$_ProfileRemote _value, $Res Function(_$_ProfileRemote) _then)
+class __$$ProfileRemoteImplCopyWithImpl<$Res>
+    extends _$ProfileRemoteCopyWithImpl<$Res, _$ProfileRemoteImpl>
+    implements _$$ProfileRemoteImplCopyWith<$Res> {
+  __$$ProfileRemoteImplCopyWithImpl(
+      _$ProfileRemoteImpl _value, $Res Function(_$ProfileRemoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -199,7 +199,7 @@ class __$$_ProfileRemoteCopyWithImpl<$Res>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
   }) {
-    return _then(_$_ProfileRemote(
+    return _then(_$ProfileRemoteImpl(
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -262,8 +262,8 @@ class __$$_ProfileRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ProfileRemote implements _ProfileRemote {
-  _$_ProfileRemote(
+class _$ProfileRemoteImpl implements _ProfileRemote {
+  _$ProfileRemoteImpl(
       {this.email = '',
       this.id = '',
       this.firstName = '',
@@ -335,10 +335,10 @@ class _$_ProfileRemote implements _ProfileRemote {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ProfileRemote &&
+            other is _$ProfileRemoteImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.firstName, firstName) ||
@@ -384,8 +384,8 @@ class _$_ProfileRemote implements _ProfileRemote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ProfileRemoteCopyWith<_$_ProfileRemote> get copyWith =>
-      __$$_ProfileRemoteCopyWithImpl<_$_ProfileRemote>(this, _$identity);
+  _$$ProfileRemoteImplCopyWith<_$ProfileRemoteImpl> get copyWith =>
+      __$$ProfileRemoteImplCopyWithImpl<_$ProfileRemoteImpl>(this, _$identity);
 }
 
 abstract class _ProfileRemote implements ProfileRemote {
@@ -403,7 +403,7 @@ abstract class _ProfileRemote implements ProfileRemote {
       final List<String> dailyMacroGoal,
       final String age,
       final String activityLevel,
-      final String weightChangeWeekly}) = _$_ProfileRemote;
+      final String weightChangeWeekly}) = _$ProfileRemoteImpl;
 
   @override
   String get email;
@@ -435,6 +435,6 @@ abstract class _ProfileRemote implements ProfileRemote {
   String get weightChangeWeekly;
   @override
   @JsonKey(ignore: true)
-  _$$_ProfileRemoteCopyWith<_$_ProfileRemote> get copyWith =>
+  _$$ProfileRemoteImplCopyWith<_$ProfileRemoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -75,25 +75,25 @@ class _$LogoutEventCopyWithImpl<$Res, $Val extends LogoutEvent>
 }
 
 /// @nodoc
-abstract class _$$LogoutUserEventCopyWith<$Res> {
-  factory _$$LogoutUserEventCopyWith(
-          _$LogoutUserEvent value, $Res Function(_$LogoutUserEvent) then) =
-      __$$LogoutUserEventCopyWithImpl<$Res>;
+abstract class _$$LogoutUserEventImplCopyWith<$Res> {
+  factory _$$LogoutUserEventImplCopyWith(_$LogoutUserEventImpl value,
+          $Res Function(_$LogoutUserEventImpl) then) =
+      __$$LogoutUserEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogoutUserEventCopyWithImpl<$Res>
-    extends _$LogoutEventCopyWithImpl<$Res, _$LogoutUserEvent>
-    implements _$$LogoutUserEventCopyWith<$Res> {
-  __$$LogoutUserEventCopyWithImpl(
-      _$LogoutUserEvent _value, $Res Function(_$LogoutUserEvent) _then)
+class __$$LogoutUserEventImplCopyWithImpl<$Res>
+    extends _$LogoutEventCopyWithImpl<$Res, _$LogoutUserEventImpl>
+    implements _$$LogoutUserEventImplCopyWith<$Res> {
+  __$$LogoutUserEventImplCopyWithImpl(
+      _$LogoutUserEventImpl _value, $Res Function(_$LogoutUserEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogoutUserEvent implements LogoutUserEvent {
-  const _$LogoutUserEvent();
+class _$LogoutUserEventImpl implements LogoutUserEvent {
+  const _$LogoutUserEventImpl();
 
   @override
   String toString() {
@@ -101,9 +101,9 @@ class _$LogoutUserEvent implements LogoutUserEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogoutUserEvent);
+        (other.runtimeType == runtimeType && other is _$LogoutUserEventImpl);
   }
 
   @override
@@ -173,27 +173,29 @@ class _$LogoutUserEvent implements LogoutUserEvent {
 }
 
 abstract class LogoutUserEvent implements LogoutEvent {
-  const factory LogoutUserEvent() = _$LogoutUserEvent;
+  const factory LogoutUserEvent() = _$LogoutUserEventImpl;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$LogoutEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$LogoutEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -201,9 +203,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -273,7 +275,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements LogoutEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -349,25 +351,25 @@ class _$LogoutStateCopyWithImpl<$Res, $Val extends LogoutState>
 }
 
 /// @nodoc
-abstract class _$$LogoutInitialStateCopyWith<$Res> {
-  factory _$$LogoutInitialStateCopyWith(_$LogoutInitialState value,
-          $Res Function(_$LogoutInitialState) then) =
-      __$$LogoutInitialStateCopyWithImpl<$Res>;
+abstract class _$$LogoutInitialStateImplCopyWith<$Res> {
+  factory _$$LogoutInitialStateImplCopyWith(_$LogoutInitialStateImpl value,
+          $Res Function(_$LogoutInitialStateImpl) then) =
+      __$$LogoutInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogoutInitialStateCopyWithImpl<$Res>
-    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutInitialState>
-    implements _$$LogoutInitialStateCopyWith<$Res> {
-  __$$LogoutInitialStateCopyWithImpl(
-      _$LogoutInitialState _value, $Res Function(_$LogoutInitialState) _then)
+class __$$LogoutInitialStateImplCopyWithImpl<$Res>
+    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutInitialStateImpl>
+    implements _$$LogoutInitialStateImplCopyWith<$Res> {
+  __$$LogoutInitialStateImplCopyWithImpl(_$LogoutInitialStateImpl _value,
+      $Res Function(_$LogoutInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogoutInitialState implements LogoutInitialState {
-  const _$LogoutInitialState();
+class _$LogoutInitialStateImpl implements LogoutInitialState {
+  const _$LogoutInitialStateImpl();
 
   @override
   String toString() {
@@ -375,9 +377,9 @@ class _$LogoutInitialState implements LogoutInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogoutInitialState);
+        (other.runtimeType == runtimeType && other is _$LogoutInitialStateImpl);
   }
 
   @override
@@ -459,29 +461,29 @@ class _$LogoutInitialState implements LogoutInitialState {
 }
 
 abstract class LogoutInitialState implements LogoutState {
-  const factory LogoutInitialState() = _$LogoutInitialState;
+  const factory LogoutInitialState() = _$LogoutInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$LogoutLoadingStateCopyWith<$Res> {
-  factory _$$LogoutLoadingStateCopyWith(_$LogoutLoadingState value,
-          $Res Function(_$LogoutLoadingState) then) =
-      __$$LogoutLoadingStateCopyWithImpl<$Res>;
+abstract class _$$LogoutLoadingStateImplCopyWith<$Res> {
+  factory _$$LogoutLoadingStateImplCopyWith(_$LogoutLoadingStateImpl value,
+          $Res Function(_$LogoutLoadingStateImpl) then) =
+      __$$LogoutLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogoutLoadingStateCopyWithImpl<$Res>
-    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutLoadingState>
-    implements _$$LogoutLoadingStateCopyWith<$Res> {
-  __$$LogoutLoadingStateCopyWithImpl(
-      _$LogoutLoadingState _value, $Res Function(_$LogoutLoadingState) _then)
+class __$$LogoutLoadingStateImplCopyWithImpl<$Res>
+    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutLoadingStateImpl>
+    implements _$$LogoutLoadingStateImplCopyWith<$Res> {
+  __$$LogoutLoadingStateImplCopyWithImpl(_$LogoutLoadingStateImpl _value,
+      $Res Function(_$LogoutLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogoutLoadingState implements LogoutLoadingState {
-  const _$LogoutLoadingState();
+class _$LogoutLoadingStateImpl implements LogoutLoadingState {
+  const _$LogoutLoadingStateImpl();
 
   @override
   String toString() {
@@ -489,9 +491,9 @@ class _$LogoutLoadingState implements LogoutLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogoutLoadingState);
+        (other.runtimeType == runtimeType && other is _$LogoutLoadingStateImpl);
   }
 
   @override
@@ -573,24 +575,24 @@ class _$LogoutLoadingState implements LogoutLoadingState {
 }
 
 abstract class LogoutLoadingState implements LogoutState {
-  const factory LogoutLoadingState() = _$LogoutLoadingState;
+  const factory LogoutLoadingState() = _$LogoutLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$LogoutErrorStateCopyWith<$Res> {
-  factory _$$LogoutErrorStateCopyWith(
-          _$LogoutErrorState value, $Res Function(_$LogoutErrorState) then) =
-      __$$LogoutErrorStateCopyWithImpl<$Res>;
+abstract class _$$LogoutErrorStateImplCopyWith<$Res> {
+  factory _$$LogoutErrorStateImplCopyWith(_$LogoutErrorStateImpl value,
+          $Res Function(_$LogoutErrorStateImpl) then) =
+      __$$LogoutErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$LogoutErrorStateCopyWithImpl<$Res>
-    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutErrorState>
-    implements _$$LogoutErrorStateCopyWith<$Res> {
-  __$$LogoutErrorStateCopyWithImpl(
-      _$LogoutErrorState _value, $Res Function(_$LogoutErrorState) _then)
+class __$$LogoutErrorStateImplCopyWithImpl<$Res>
+    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutErrorStateImpl>
+    implements _$$LogoutErrorStateImplCopyWith<$Res> {
+  __$$LogoutErrorStateImplCopyWithImpl(_$LogoutErrorStateImpl _value,
+      $Res Function(_$LogoutErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -598,7 +600,7 @@ class __$$LogoutErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$LogoutErrorState(
+    return _then(_$LogoutErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -609,8 +611,8 @@ class __$$LogoutErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LogoutErrorState implements LogoutErrorState {
-  const _$LogoutErrorState(this.message);
+class _$LogoutErrorStateImpl implements LogoutErrorState {
+  const _$LogoutErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -621,10 +623,10 @@ class _$LogoutErrorState implements LogoutErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LogoutErrorState &&
+            other is _$LogoutErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -634,8 +636,9 @@ class _$LogoutErrorState implements LogoutErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LogoutErrorStateCopyWith<_$LogoutErrorState> get copyWith =>
-      __$$LogoutErrorStateCopyWithImpl<_$LogoutErrorState>(this, _$identity);
+  _$$LogoutErrorStateImplCopyWith<_$LogoutErrorStateImpl> get copyWith =>
+      __$$LogoutErrorStateImplCopyWithImpl<_$LogoutErrorStateImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -713,34 +716,34 @@ class _$LogoutErrorState implements LogoutErrorState {
 }
 
 abstract class LogoutErrorState implements LogoutState {
-  const factory LogoutErrorState(final String message) = _$LogoutErrorState;
+  const factory LogoutErrorState(final String message) = _$LogoutErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$LogoutErrorStateCopyWith<_$LogoutErrorState> get copyWith =>
+  _$$LogoutErrorStateImplCopyWith<_$LogoutErrorStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LogoutLoadedStateCopyWith<$Res> {
-  factory _$$LogoutLoadedStateCopyWith(
-          _$LogoutLoadedState value, $Res Function(_$LogoutLoadedState) then) =
-      __$$LogoutLoadedStateCopyWithImpl<$Res>;
+abstract class _$$LogoutLoadedStateImplCopyWith<$Res> {
+  factory _$$LogoutLoadedStateImplCopyWith(_$LogoutLoadedStateImpl value,
+          $Res Function(_$LogoutLoadedStateImpl) then) =
+      __$$LogoutLoadedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LogoutLoadedStateCopyWithImpl<$Res>
-    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutLoadedState>
-    implements _$$LogoutLoadedStateCopyWith<$Res> {
-  __$$LogoutLoadedStateCopyWithImpl(
-      _$LogoutLoadedState _value, $Res Function(_$LogoutLoadedState) _then)
+class __$$LogoutLoadedStateImplCopyWithImpl<$Res>
+    extends _$LogoutStateCopyWithImpl<$Res, _$LogoutLoadedStateImpl>
+    implements _$$LogoutLoadedStateImplCopyWith<$Res> {
+  __$$LogoutLoadedStateImplCopyWithImpl(_$LogoutLoadedStateImpl _value,
+      $Res Function(_$LogoutLoadedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LogoutLoadedState implements LogoutLoadedState {
-  const _$LogoutLoadedState();
+class _$LogoutLoadedStateImpl implements LogoutLoadedState {
+  const _$LogoutLoadedStateImpl();
 
   @override
   String toString() {
@@ -748,9 +751,9 @@ class _$LogoutLoadedState implements LogoutLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LogoutLoadedState);
+        (other.runtimeType == runtimeType && other is _$LogoutLoadedStateImpl);
   }
 
   @override
@@ -832,5 +835,5 @@ class _$LogoutLoadedState implements LogoutLoadedState {
 }
 
 abstract class LogoutLoadedState implements LogoutState {
-  const factory LogoutLoadedState() = _$LogoutLoadedState;
+  const factory LogoutLoadedState() = _$LogoutLoadedStateImpl;
 }

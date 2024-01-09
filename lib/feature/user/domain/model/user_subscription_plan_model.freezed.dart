@@ -20,6 +20,7 @@ mixin _$UserSubscriptionPlan {
   String get plan => throw _privateConstructorUsedError;
   String get upgradeDate => throw _privateConstructorUsedError;
   String get planType => throw _privateConstructorUsedError;
+  bool get isAutoPaymentOn => throw _privateConstructorUsedError;
   int get favoriteFoodRequestsLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
   int get foodPortionRequestsLeft => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $UserSubscriptionPlanCopyWith<$Res> {
       String plan,
       String upgradeDate,
       String planType,
+      bool isAutoPaymentOn,
       int favoriteFoodRequestsLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
@@ -63,6 +65,7 @@ class _$UserSubscriptionPlanCopyWithImpl<$Res,
     Object? plan = null,
     Object? upgradeDate = null,
     Object? planType = null,
+    Object? isAutoPaymentOn = null,
     Object? favoriteFoodRequestsLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
@@ -84,6 +87,10 @@ class _$UserSubscriptionPlanCopyWithImpl<$Res,
           ? _value.planType
           : planType // ignore: cast_nullable_to_non_nullable
               as String,
+      isAutoPaymentOn: null == isAutoPaymentOn
+          ? _value.isAutoPaymentOn
+          : isAutoPaymentOn // ignore: cast_nullable_to_non_nullable
+              as bool,
       favoriteFoodRequestsLeft: null == favoriteFoodRequestsLeft
           ? _value.favoriteFoodRequestsLeft
           : favoriteFoodRequestsLeft // ignore: cast_nullable_to_non_nullable
@@ -101,11 +108,11 @@ class _$UserSubscriptionPlanCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_UserSubscriptionPlanCopyWith<$Res>
+abstract class _$$UserSubscriptionPlanImplCopyWith<$Res>
     implements $UserSubscriptionPlanCopyWith<$Res> {
-  factory _$$_UserSubscriptionPlanCopyWith(_$_UserSubscriptionPlan value,
-          $Res Function(_$_UserSubscriptionPlan) then) =
-      __$$_UserSubscriptionPlanCopyWithImpl<$Res>;
+  factory _$$UserSubscriptionPlanImplCopyWith(_$UserSubscriptionPlanImpl value,
+          $Res Function(_$UserSubscriptionPlanImpl) then) =
+      __$$UserSubscriptionPlanImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -113,17 +120,18 @@ abstract class _$$_UserSubscriptionPlanCopyWith<$Res>
       String plan,
       String upgradeDate,
       String planType,
+      bool isAutoPaymentOn,
       int favoriteFoodRequestsLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
 }
 
 /// @nodoc
-class __$$_UserSubscriptionPlanCopyWithImpl<$Res>
-    extends _$UserSubscriptionPlanCopyWithImpl<$Res, _$_UserSubscriptionPlan>
-    implements _$$_UserSubscriptionPlanCopyWith<$Res> {
-  __$$_UserSubscriptionPlanCopyWithImpl(_$_UserSubscriptionPlan _value,
-      $Res Function(_$_UserSubscriptionPlan) _then)
+class __$$UserSubscriptionPlanImplCopyWithImpl<$Res>
+    extends _$UserSubscriptionPlanCopyWithImpl<$Res, _$UserSubscriptionPlanImpl>
+    implements _$$UserSubscriptionPlanImplCopyWith<$Res> {
+  __$$UserSubscriptionPlanImplCopyWithImpl(_$UserSubscriptionPlanImpl _value,
+      $Res Function(_$UserSubscriptionPlanImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -133,11 +141,12 @@ class __$$_UserSubscriptionPlanCopyWithImpl<$Res>
     Object? plan = null,
     Object? upgradeDate = null,
     Object? planType = null,
+    Object? isAutoPaymentOn = null,
     Object? favoriteFoodRequestsLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
   }) {
-    return _then(_$_UserSubscriptionPlan(
+    return _then(_$UserSubscriptionPlanImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -154,6 +163,10 @@ class __$$_UserSubscriptionPlanCopyWithImpl<$Res>
           ? _value.planType
           : planType // ignore: cast_nullable_to_non_nullable
               as String,
+      isAutoPaymentOn: null == isAutoPaymentOn
+          ? _value.isAutoPaymentOn
+          : isAutoPaymentOn // ignore: cast_nullable_to_non_nullable
+              as bool,
       favoriteFoodRequestsLeft: null == favoriteFoodRequestsLeft
           ? _value.favoriteFoodRequestsLeft
           : favoriteFoodRequestsLeft // ignore: cast_nullable_to_non_nullable
@@ -172,12 +185,13 @@ class __$$_UserSubscriptionPlanCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserSubscriptionPlan implements _UserSubscriptionPlan {
-  _$_UserSubscriptionPlan(
+class _$UserSubscriptionPlanImpl implements _UserSubscriptionPlan {
+  _$UserSubscriptionPlanImpl(
       {this.userId = '',
       this.plan = '',
       this.upgradeDate = '',
       this.planType = '',
+      this.isAutoPaymentOn = true,
       this.favoriteFoodRequestsLeft = 0,
       this.suggestFoodRequestsLeft = 0,
       this.foodPortionRequestsLeft = 0});
@@ -196,6 +210,9 @@ class _$_UserSubscriptionPlan implements _UserSubscriptionPlan {
   final String planType;
   @override
   @JsonKey()
+  final bool isAutoPaymentOn;
+  @override
+  @JsonKey()
   final int favoriteFoodRequestsLeft;
   @override
   @JsonKey()
@@ -206,20 +223,22 @@ class _$_UserSubscriptionPlan implements _UserSubscriptionPlan {
 
   @override
   String toString() {
-    return 'UserSubscriptionPlan(userId: $userId, plan: $plan, upgradeDate: $upgradeDate, planType: $planType, favoriteFoodRequestsLeft: $favoriteFoodRequestsLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserSubscriptionPlan(userId: $userId, plan: $plan, upgradeDate: $upgradeDate, planType: $planType, isAutoPaymentOn: $isAutoPaymentOn, favoriteFoodRequestsLeft: $favoriteFoodRequestsLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserSubscriptionPlan &&
+            other is _$UserSubscriptionPlanImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.plan, plan) || other.plan == plan) &&
             (identical(other.upgradeDate, upgradeDate) ||
                 other.upgradeDate == upgradeDate) &&
             (identical(other.planType, planType) ||
                 other.planType == planType) &&
+            (identical(other.isAutoPaymentOn, isAutoPaymentOn) ||
+                other.isAutoPaymentOn == isAutoPaymentOn) &&
             (identical(
                     other.favoriteFoodRequestsLeft, favoriteFoodRequestsLeft) ||
                 other.favoriteFoodRequestsLeft == favoriteFoodRequestsLeft) &&
@@ -238,6 +257,7 @@ class _$_UserSubscriptionPlan implements _UserSubscriptionPlan {
       plan,
       upgradeDate,
       planType,
+      isAutoPaymentOn,
       favoriteFoodRequestsLeft,
       suggestFoodRequestsLeft,
       foodPortionRequestsLeft);
@@ -245,9 +265,10 @@ class _$_UserSubscriptionPlan implements _UserSubscriptionPlan {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserSubscriptionPlanCopyWith<_$_UserSubscriptionPlan> get copyWith =>
-      __$$_UserSubscriptionPlanCopyWithImpl<_$_UserSubscriptionPlan>(
-          this, _$identity);
+  _$$UserSubscriptionPlanImplCopyWith<_$UserSubscriptionPlanImpl>
+      get copyWith =>
+          __$$UserSubscriptionPlanImplCopyWithImpl<_$UserSubscriptionPlanImpl>(
+              this, _$identity);
 }
 
 abstract class _UserSubscriptionPlan implements UserSubscriptionPlan {
@@ -256,9 +277,10 @@ abstract class _UserSubscriptionPlan implements UserSubscriptionPlan {
       final String plan,
       final String upgradeDate,
       final String planType,
+      final bool isAutoPaymentOn,
       final int favoriteFoodRequestsLeft,
       final int suggestFoodRequestsLeft,
-      final int foodPortionRequestsLeft}) = _$_UserSubscriptionPlan;
+      final int foodPortionRequestsLeft}) = _$UserSubscriptionPlanImpl;
 
   @override
   String get userId;
@@ -269,6 +291,8 @@ abstract class _UserSubscriptionPlan implements UserSubscriptionPlan {
   @override
   String get planType;
   @override
+  bool get isAutoPaymentOn;
+  @override
   int get favoriteFoodRequestsLeft;
   @override
   int get suggestFoodRequestsLeft;
@@ -276,6 +300,6 @@ abstract class _UserSubscriptionPlan implements UserSubscriptionPlan {
   int get foodPortionRequestsLeft;
   @override
   @JsonKey(ignore: true)
-  _$$_UserSubscriptionPlanCopyWith<_$_UserSubscriptionPlan> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UserSubscriptionPlanImplCopyWith<_$UserSubscriptionPlanImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

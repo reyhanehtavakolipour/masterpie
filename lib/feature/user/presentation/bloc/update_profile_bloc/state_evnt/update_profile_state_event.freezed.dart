@@ -223,11 +223,11 @@ class _$UpdateProfileEventCopyWithImpl<$Res, $Val extends UpdateProfileEvent>
 }
 
 /// @nodoc
-abstract class _$$UpdateProfileAfterRegistrationCopyWith<$Res> {
-  factory _$$UpdateProfileAfterRegistrationCopyWith(
-          _$UpdateProfileAfterRegistration value,
-          $Res Function(_$UpdateProfileAfterRegistration) then) =
-      __$$UpdateProfileAfterRegistrationCopyWithImpl<$Res>;
+abstract class _$$UpdateProfileAfterRegistrationImplCopyWith<$Res> {
+  factory _$$UpdateProfileAfterRegistrationImplCopyWith(
+          _$UpdateProfileAfterRegistrationImpl value,
+          $Res Function(_$UpdateProfileAfterRegistrationImpl) then) =
+      __$$UpdateProfileAfterRegistrationImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {String email,
@@ -245,13 +245,13 @@ abstract class _$$UpdateProfileAfterRegistrationCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$UpdateProfileAfterRegistrationCopyWithImpl<$Res>
+class __$$UpdateProfileAfterRegistrationImplCopyWithImpl<$Res>
     extends _$UpdateProfileEventCopyWithImpl<$Res,
-        _$UpdateProfileAfterRegistration>
-    implements _$$UpdateProfileAfterRegistrationCopyWith<$Res> {
-  __$$UpdateProfileAfterRegistrationCopyWithImpl(
-      _$UpdateProfileAfterRegistration _value,
-      $Res Function(_$UpdateProfileAfterRegistration) _then)
+        _$UpdateProfileAfterRegistrationImpl>
+    implements _$$UpdateProfileAfterRegistrationImplCopyWith<$Res> {
+  __$$UpdateProfileAfterRegistrationImplCopyWithImpl(
+      _$UpdateProfileAfterRegistrationImpl _value,
+      $Res Function(_$UpdateProfileAfterRegistrationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -270,7 +270,7 @@ class __$$UpdateProfileAfterRegistrationCopyWithImpl<$Res>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
   }) {
-    return _then(_$UpdateProfileAfterRegistration(
+    return _then(_$UpdateProfileAfterRegistrationImpl(
       null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -325,9 +325,9 @@ class __$$UpdateProfileAfterRegistrationCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UpdateProfileAfterRegistration
+class _$UpdateProfileAfterRegistrationImpl
     implements UpdateProfileAfterRegistration {
-  const _$UpdateProfileAfterRegistration(
+  const _$UpdateProfileAfterRegistrationImpl(
       this.email,
       this.firstName,
       this.lastName,
@@ -372,10 +372,10 @@ class _$UpdateProfileAfterRegistration
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateProfileAfterRegistration &&
+            other is _$UpdateProfileAfterRegistrationImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
@@ -416,9 +416,10 @@ class _$UpdateProfileAfterRegistration
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateProfileAfterRegistrationCopyWith<_$UpdateProfileAfterRegistration>
-      get copyWith => __$$UpdateProfileAfterRegistrationCopyWithImpl<
-          _$UpdateProfileAfterRegistration>(this, _$identity);
+  _$$UpdateProfileAfterRegistrationImplCopyWith<
+          _$UpdateProfileAfterRegistrationImpl>
+      get copyWith => __$$UpdateProfileAfterRegistrationImplCopyWithImpl<
+          _$UpdateProfileAfterRegistrationImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -680,7 +681,7 @@ abstract class UpdateProfileAfterRegistration implements UpdateProfileEvent {
       final String goalWeight,
       final String age,
       final String activityLevel,
-      final String weightChangeWeekly) = _$UpdateProfileAfterRegistration;
+      final String weightChangeWeekly) = _$UpdateProfileAfterRegistrationImpl;
 
   String get email;
   String get firstName;
@@ -695,25 +696,26 @@ abstract class UpdateProfileAfterRegistration implements UpdateProfileEvent {
   String get activityLevel;
   String get weightChangeWeekly;
   @JsonKey(ignore: true)
-  _$$UpdateProfileAfterRegistrationCopyWith<_$UpdateProfileAfterRegistration>
+  _$$UpdateProfileAfterRegistrationImplCopyWith<
+          _$UpdateProfileAfterRegistrationImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$UpdateUserInfoCopyWith<$Res> {
-  factory _$$UpdateUserInfoCopyWith(
-          _$UpdateUserInfo value, $Res Function(_$UpdateUserInfo) then) =
-      __$$UpdateUserInfoCopyWithImpl<$Res>;
+abstract class _$$UpdateUserInfoImplCopyWith<$Res> {
+  factory _$$UpdateUserInfoImplCopyWith(_$UpdateUserInfoImpl value,
+          $Res Function(_$UpdateUserInfoImpl) then) =
+      __$$UpdateUserInfoImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String firstName, String lastName});
 }
 
 /// @nodoc
-class __$$UpdateUserInfoCopyWithImpl<$Res>
-    extends _$UpdateProfileEventCopyWithImpl<$Res, _$UpdateUserInfo>
-    implements _$$UpdateUserInfoCopyWith<$Res> {
-  __$$UpdateUserInfoCopyWithImpl(
-      _$UpdateUserInfo _value, $Res Function(_$UpdateUserInfo) _then)
+class __$$UpdateUserInfoImplCopyWithImpl<$Res>
+    extends _$UpdateProfileEventCopyWithImpl<$Res, _$UpdateUserInfoImpl>
+    implements _$$UpdateUserInfoImplCopyWith<$Res> {
+  __$$UpdateUserInfoImplCopyWithImpl(
+      _$UpdateUserInfoImpl _value, $Res Function(_$UpdateUserInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -722,7 +724,7 @@ class __$$UpdateUserInfoCopyWithImpl<$Res>
     Object? firstName = null,
     Object? lastName = null,
   }) {
-    return _then(_$UpdateUserInfo(
+    return _then(_$UpdateUserInfoImpl(
       null == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -737,8 +739,8 @@ class __$$UpdateUserInfoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UpdateUserInfo implements UpdateUserInfo {
-  const _$UpdateUserInfo(this.firstName, this.lastName);
+class _$UpdateUserInfoImpl implements UpdateUserInfo {
+  const _$UpdateUserInfoImpl(this.firstName, this.lastName);
 
   @override
   final String firstName;
@@ -751,10 +753,10 @@ class _$UpdateUserInfo implements UpdateUserInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateUserInfo &&
+            other is _$UpdateUserInfoImpl &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
@@ -767,8 +769,9 @@ class _$UpdateUserInfo implements UpdateUserInfo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateUserInfoCopyWith<_$UpdateUserInfo> get copyWith =>
-      __$$UpdateUserInfoCopyWithImpl<_$UpdateUserInfo>(this, _$identity);
+  _$$UpdateUserInfoImplCopyWith<_$UpdateUserInfoImpl> get copyWith =>
+      __$$UpdateUserInfoImplCopyWithImpl<_$UpdateUserInfoImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -983,20 +986,21 @@ class _$UpdateUserInfo implements UpdateUserInfo {
 
 abstract class UpdateUserInfo implements UpdateProfileEvent {
   const factory UpdateUserInfo(final String firstName, final String lastName) =
-      _$UpdateUserInfo;
+      _$UpdateUserInfoImpl;
 
   String get firstName;
   String get lastName;
   @JsonKey(ignore: true)
-  _$$UpdateUserInfoCopyWith<_$UpdateUserInfo> get copyWith =>
+  _$$UpdateUserInfoImplCopyWith<_$UpdateUserInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CalculateDailyMacroGoalCopyWith<$Res> {
-  factory _$$CalculateDailyMacroGoalCopyWith(_$CalculateDailyMacroGoal value,
-          $Res Function(_$CalculateDailyMacroGoal) then) =
-      __$$CalculateDailyMacroGoalCopyWithImpl<$Res>;
+abstract class _$$CalculateDailyMacroGoalImplCopyWith<$Res> {
+  factory _$$CalculateDailyMacroGoalImplCopyWith(
+          _$CalculateDailyMacroGoalImpl value,
+          $Res Function(_$CalculateDailyMacroGoalImpl) then) =
+      __$$CalculateDailyMacroGoalImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {String gender,
@@ -1011,11 +1015,13 @@ abstract class _$$CalculateDailyMacroGoalCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$CalculateDailyMacroGoalCopyWithImpl<$Res>
-    extends _$UpdateProfileEventCopyWithImpl<$Res, _$CalculateDailyMacroGoal>
-    implements _$$CalculateDailyMacroGoalCopyWith<$Res> {
-  __$$CalculateDailyMacroGoalCopyWithImpl(_$CalculateDailyMacroGoal _value,
-      $Res Function(_$CalculateDailyMacroGoal) _then)
+class __$$CalculateDailyMacroGoalImplCopyWithImpl<$Res>
+    extends _$UpdateProfileEventCopyWithImpl<$Res,
+        _$CalculateDailyMacroGoalImpl>
+    implements _$$CalculateDailyMacroGoalImplCopyWith<$Res> {
+  __$$CalculateDailyMacroGoalImplCopyWithImpl(
+      _$CalculateDailyMacroGoalImpl _value,
+      $Res Function(_$CalculateDailyMacroGoalImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1031,7 +1037,7 @@ class __$$CalculateDailyMacroGoalCopyWithImpl<$Res>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
   }) {
-    return _then(_$CalculateDailyMacroGoal(
+    return _then(_$CalculateDailyMacroGoalImpl(
       null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -1074,8 +1080,8 @@ class __$$CalculateDailyMacroGoalCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CalculateDailyMacroGoal implements CalculateDailyMacroGoal {
-  const _$CalculateDailyMacroGoal(
+class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
+  const _$CalculateDailyMacroGoalImpl(
       this.gender,
       this.weight,
       this.height,
@@ -1111,10 +1117,10 @@ class _$CalculateDailyMacroGoal implements CalculateDailyMacroGoal {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CalculateDailyMacroGoal &&
+            other is _$CalculateDailyMacroGoalImpl &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.height, height) || other.height == height) &&
@@ -1147,9 +1153,9 @@ class _$CalculateDailyMacroGoal implements CalculateDailyMacroGoal {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CalculateDailyMacroGoalCopyWith<_$CalculateDailyMacroGoal> get copyWith =>
-      __$$CalculateDailyMacroGoalCopyWithImpl<_$CalculateDailyMacroGoal>(
-          this, _$identity);
+  _$$CalculateDailyMacroGoalImplCopyWith<_$CalculateDailyMacroGoalImpl>
+      get copyWith => __$$CalculateDailyMacroGoalImplCopyWithImpl<
+          _$CalculateDailyMacroGoalImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1375,7 +1381,7 @@ abstract class CalculateDailyMacroGoal implements UpdateProfileEvent {
       final String goalWeight,
       final String age,
       final String activityLevel,
-      final String weightChangeWeekly) = _$CalculateDailyMacroGoal;
+      final String weightChangeWeekly) = _$CalculateDailyMacroGoalImpl;
 
   String get gender;
   String get weight;
@@ -1387,25 +1393,25 @@ abstract class CalculateDailyMacroGoal implements UpdateProfileEvent {
   String get activityLevel;
   String get weightChangeWeekly;
   @JsonKey(ignore: true)
-  _$$CalculateDailyMacroGoalCopyWith<_$CalculateDailyMacroGoal> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CalculateDailyMacroGoalImplCopyWith<_$CalculateDailyMacroGoalImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$UpdateDailyMacroGoalCopyWith<$Res> {
-  factory _$$UpdateDailyMacroGoalCopyWith(_$UpdateDailyMacroGoal value,
-          $Res Function(_$UpdateDailyMacroGoal) then) =
-      __$$UpdateDailyMacroGoalCopyWithImpl<$Res>;
+abstract class _$$UpdateDailyMacroGoalImplCopyWith<$Res> {
+  factory _$$UpdateDailyMacroGoalImplCopyWith(_$UpdateDailyMacroGoalImpl value,
+          $Res Function(_$UpdateDailyMacroGoalImpl) then) =
+      __$$UpdateDailyMacroGoalImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String calorie, String protein, String carb, String fat});
 }
 
 /// @nodoc
-class __$$UpdateDailyMacroGoalCopyWithImpl<$Res>
-    extends _$UpdateProfileEventCopyWithImpl<$Res, _$UpdateDailyMacroGoal>
-    implements _$$UpdateDailyMacroGoalCopyWith<$Res> {
-  __$$UpdateDailyMacroGoalCopyWithImpl(_$UpdateDailyMacroGoal _value,
-      $Res Function(_$UpdateDailyMacroGoal) _then)
+class __$$UpdateDailyMacroGoalImplCopyWithImpl<$Res>
+    extends _$UpdateProfileEventCopyWithImpl<$Res, _$UpdateDailyMacroGoalImpl>
+    implements _$$UpdateDailyMacroGoalImplCopyWith<$Res> {
+  __$$UpdateDailyMacroGoalImplCopyWithImpl(_$UpdateDailyMacroGoalImpl _value,
+      $Res Function(_$UpdateDailyMacroGoalImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1416,7 +1422,7 @@ class __$$UpdateDailyMacroGoalCopyWithImpl<$Res>
     Object? carb = null,
     Object? fat = null,
   }) {
-    return _then(_$UpdateDailyMacroGoal(
+    return _then(_$UpdateDailyMacroGoalImpl(
       null == calorie
           ? _value.calorie
           : calorie // ignore: cast_nullable_to_non_nullable
@@ -1439,8 +1445,9 @@ class __$$UpdateDailyMacroGoalCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UpdateDailyMacroGoal implements UpdateDailyMacroGoal {
-  const _$UpdateDailyMacroGoal(this.calorie, this.protein, this.carb, this.fat);
+class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
+  const _$UpdateDailyMacroGoalImpl(
+      this.calorie, this.protein, this.carb, this.fat);
 
   @override
   final String calorie;
@@ -1457,10 +1464,10 @@ class _$UpdateDailyMacroGoal implements UpdateDailyMacroGoal {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateDailyMacroGoal &&
+            other is _$UpdateDailyMacroGoalImpl &&
             (identical(other.calorie, calorie) || other.calorie == calorie) &&
             (identical(other.protein, protein) || other.protein == protein) &&
             (identical(other.carb, carb) || other.carb == carb) &&
@@ -1473,9 +1480,10 @@ class _$UpdateDailyMacroGoal implements UpdateDailyMacroGoal {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateDailyMacroGoalCopyWith<_$UpdateDailyMacroGoal> get copyWith =>
-      __$$UpdateDailyMacroGoalCopyWithImpl<_$UpdateDailyMacroGoal>(
-          this, _$identity);
+  _$$UpdateDailyMacroGoalImplCopyWith<_$UpdateDailyMacroGoalImpl>
+      get copyWith =>
+          __$$UpdateDailyMacroGoalImplCopyWithImpl<_$UpdateDailyMacroGoalImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1690,23 +1698,23 @@ class _$UpdateDailyMacroGoal implements UpdateDailyMacroGoal {
 
 abstract class UpdateDailyMacroGoal implements UpdateProfileEvent {
   const factory UpdateDailyMacroGoal(final String calorie, final String protein,
-      final String carb, final String fat) = _$UpdateDailyMacroGoal;
+      final String carb, final String fat) = _$UpdateDailyMacroGoalImpl;
 
   String get calorie;
   String get protein;
   String get carb;
   String get fat;
   @JsonKey(ignore: true)
-  _$$UpdateDailyMacroGoalCopyWith<_$UpdateDailyMacroGoal> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UpdateDailyMacroGoalImplCopyWith<_$UpdateDailyMacroGoalImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$UpdateMacroGoalsAndInputsCopyWith<$Res> {
-  factory _$$UpdateMacroGoalsAndInputsCopyWith(
-          _$UpdateMacroGoalsAndInputs value,
-          $Res Function(_$UpdateMacroGoalsAndInputs) then) =
-      __$$UpdateMacroGoalsAndInputsCopyWithImpl<$Res>;
+abstract class _$$UpdateMacroGoalsAndInputsImplCopyWith<$Res> {
+  factory _$$UpdateMacroGoalsAndInputsImplCopyWith(
+          _$UpdateMacroGoalsAndInputsImpl value,
+          $Res Function(_$UpdateMacroGoalsAndInputsImpl) then) =
+      __$$UpdateMacroGoalsAndInputsImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {String gender,
@@ -1725,11 +1733,13 @@ abstract class _$$UpdateMacroGoalsAndInputsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$UpdateMacroGoalsAndInputsCopyWithImpl<$Res>
-    extends _$UpdateProfileEventCopyWithImpl<$Res, _$UpdateMacroGoalsAndInputs>
-    implements _$$UpdateMacroGoalsAndInputsCopyWith<$Res> {
-  __$$UpdateMacroGoalsAndInputsCopyWithImpl(_$UpdateMacroGoalsAndInputs _value,
-      $Res Function(_$UpdateMacroGoalsAndInputs) _then)
+class __$$UpdateMacroGoalsAndInputsImplCopyWithImpl<$Res>
+    extends _$UpdateProfileEventCopyWithImpl<$Res,
+        _$UpdateMacroGoalsAndInputsImpl>
+    implements _$$UpdateMacroGoalsAndInputsImplCopyWith<$Res> {
+  __$$UpdateMacroGoalsAndInputsImplCopyWithImpl(
+      _$UpdateMacroGoalsAndInputsImpl _value,
+      $Res Function(_$UpdateMacroGoalsAndInputsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1749,7 +1759,7 @@ class __$$UpdateMacroGoalsAndInputsCopyWithImpl<$Res>
     Object? carb = null,
     Object? fat = null,
   }) {
-    return _then(_$UpdateMacroGoalsAndInputs(
+    return _then(_$UpdateMacroGoalsAndInputsImpl(
       null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -1808,8 +1818,8 @@ class __$$UpdateMacroGoalsAndInputsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UpdateMacroGoalsAndInputs implements UpdateMacroGoalsAndInputs {
-  const _$UpdateMacroGoalsAndInputs(
+class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
+  const _$UpdateMacroGoalsAndInputsImpl(
       this.gender,
       this.weight,
       this.height,
@@ -1857,10 +1867,10 @@ class _$UpdateMacroGoalsAndInputs implements UpdateMacroGoalsAndInputs {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateMacroGoalsAndInputs &&
+            other is _$UpdateMacroGoalsAndInputsImpl &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.height, height) || other.height == height) &&
@@ -1901,9 +1911,9 @@ class _$UpdateMacroGoalsAndInputs implements UpdateMacroGoalsAndInputs {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateMacroGoalsAndInputsCopyWith<_$UpdateMacroGoalsAndInputs>
-      get copyWith => __$$UpdateMacroGoalsAndInputsCopyWithImpl<
-          _$UpdateMacroGoalsAndInputs>(this, _$identity);
+  _$$UpdateMacroGoalsAndInputsImplCopyWith<_$UpdateMacroGoalsAndInputsImpl>
+      get copyWith => __$$UpdateMacroGoalsAndInputsImplCopyWithImpl<
+          _$UpdateMacroGoalsAndInputsImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2169,7 +2179,7 @@ abstract class UpdateMacroGoalsAndInputs implements UpdateProfileEvent {
       final String calorie,
       final String protein,
       final String carb,
-      final String fat) = _$UpdateMacroGoalsAndInputs;
+      final String fat) = _$UpdateMacroGoalsAndInputsImpl;
 
   String get gender;
   String get weight;
@@ -2185,28 +2195,30 @@ abstract class UpdateMacroGoalsAndInputs implements UpdateProfileEvent {
   String get carb;
   String get fat;
   @JsonKey(ignore: true)
-  _$$UpdateMacroGoalsAndInputsCopyWith<_$UpdateMacroGoalsAndInputs>
+  _$$UpdateMacroGoalsAndInputsImplCopyWith<_$UpdateMacroGoalsAndInputsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$UpdateProfileEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$UpdateProfileEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -2214,9 +2226,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -2434,7 +2446,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements UpdateProfileEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -2541,26 +2553,28 @@ class _$UpdateProfileStateCopyWithImpl<$Res, $Val extends UpdateProfileState>
 }
 
 /// @nodoc
-abstract class _$$UpdateProfileInitialStateCopyWith<$Res> {
-  factory _$$UpdateProfileInitialStateCopyWith(
-          _$UpdateProfileInitialState value,
-          $Res Function(_$UpdateProfileInitialState) then) =
-      __$$UpdateProfileInitialStateCopyWithImpl<$Res>;
+abstract class _$$UpdateProfileInitialStateImplCopyWith<$Res> {
+  factory _$$UpdateProfileInitialStateImplCopyWith(
+          _$UpdateProfileInitialStateImpl value,
+          $Res Function(_$UpdateProfileInitialStateImpl) then) =
+      __$$UpdateProfileInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$UpdateProfileInitialStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$UpdateProfileInitialState>
-    implements _$$UpdateProfileInitialStateCopyWith<$Res> {
-  __$$UpdateProfileInitialStateCopyWithImpl(_$UpdateProfileInitialState _value,
-      $Res Function(_$UpdateProfileInitialState) _then)
+class __$$UpdateProfileInitialStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res,
+        _$UpdateProfileInitialStateImpl>
+    implements _$$UpdateProfileInitialStateImplCopyWith<$Res> {
+  __$$UpdateProfileInitialStateImplCopyWithImpl(
+      _$UpdateProfileInitialStateImpl _value,
+      $Res Function(_$UpdateProfileInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$UpdateProfileInitialState implements UpdateProfileInitialState {
-  const _$UpdateProfileInitialState();
+class _$UpdateProfileInitialStateImpl implements UpdateProfileInitialState {
+  const _$UpdateProfileInitialStateImpl();
 
   @override
   String toString() {
@@ -2568,10 +2582,10 @@ class _$UpdateProfileInitialState implements UpdateProfileInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateProfileInitialState);
+            other is _$UpdateProfileInitialStateImpl);
   }
 
   @override
@@ -2684,30 +2698,32 @@ class _$UpdateProfileInitialState implements UpdateProfileInitialState {
 }
 
 abstract class UpdateProfileInitialState implements UpdateProfileState {
-  const factory UpdateProfileInitialState() = _$UpdateProfileInitialState;
+  const factory UpdateProfileInitialState() = _$UpdateProfileInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$UpdateProfileLoadingStateCopyWith<$Res> {
-  factory _$$UpdateProfileLoadingStateCopyWith(
-          _$UpdateProfileLoadingState value,
-          $Res Function(_$UpdateProfileLoadingState) then) =
-      __$$UpdateProfileLoadingStateCopyWithImpl<$Res>;
+abstract class _$$UpdateProfileLoadingStateImplCopyWith<$Res> {
+  factory _$$UpdateProfileLoadingStateImplCopyWith(
+          _$UpdateProfileLoadingStateImpl value,
+          $Res Function(_$UpdateProfileLoadingStateImpl) then) =
+      __$$UpdateProfileLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$UpdateProfileLoadingStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$UpdateProfileLoadingState>
-    implements _$$UpdateProfileLoadingStateCopyWith<$Res> {
-  __$$UpdateProfileLoadingStateCopyWithImpl(_$UpdateProfileLoadingState _value,
-      $Res Function(_$UpdateProfileLoadingState) _then)
+class __$$UpdateProfileLoadingStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res,
+        _$UpdateProfileLoadingStateImpl>
+    implements _$$UpdateProfileLoadingStateImplCopyWith<$Res> {
+  __$$UpdateProfileLoadingStateImplCopyWithImpl(
+      _$UpdateProfileLoadingStateImpl _value,
+      $Res Function(_$UpdateProfileLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$UpdateProfileLoadingState implements UpdateProfileLoadingState {
-  const _$UpdateProfileLoadingState();
+class _$UpdateProfileLoadingStateImpl implements UpdateProfileLoadingState {
+  const _$UpdateProfileLoadingStateImpl();
 
   @override
   String toString() {
@@ -2715,10 +2731,10 @@ class _$UpdateProfileLoadingState implements UpdateProfileLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateProfileLoadingState);
+            other is _$UpdateProfileLoadingStateImpl);
   }
 
   @override
@@ -2831,24 +2847,27 @@ class _$UpdateProfileLoadingState implements UpdateProfileLoadingState {
 }
 
 abstract class UpdateProfileLoadingState implements UpdateProfileState {
-  const factory UpdateProfileLoadingState() = _$UpdateProfileLoadingState;
+  const factory UpdateProfileLoadingState() = _$UpdateProfileLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$UpdateProfileErrorStateCopyWith<$Res> {
-  factory _$$UpdateProfileErrorStateCopyWith(_$UpdateProfileErrorState value,
-          $Res Function(_$UpdateProfileErrorState) then) =
-      __$$UpdateProfileErrorStateCopyWithImpl<$Res>;
+abstract class _$$UpdateProfileErrorStateImplCopyWith<$Res> {
+  factory _$$UpdateProfileErrorStateImplCopyWith(
+          _$UpdateProfileErrorStateImpl value,
+          $Res Function(_$UpdateProfileErrorStateImpl) then) =
+      __$$UpdateProfileErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$UpdateProfileErrorStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$UpdateProfileErrorState>
-    implements _$$UpdateProfileErrorStateCopyWith<$Res> {
-  __$$UpdateProfileErrorStateCopyWithImpl(_$UpdateProfileErrorState _value,
-      $Res Function(_$UpdateProfileErrorState) _then)
+class __$$UpdateProfileErrorStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res,
+        _$UpdateProfileErrorStateImpl>
+    implements _$$UpdateProfileErrorStateImplCopyWith<$Res> {
+  __$$UpdateProfileErrorStateImplCopyWithImpl(
+      _$UpdateProfileErrorStateImpl _value,
+      $Res Function(_$UpdateProfileErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2856,7 +2875,7 @@ class __$$UpdateProfileErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$UpdateProfileErrorState(
+    return _then(_$UpdateProfileErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -2867,8 +2886,8 @@ class __$$UpdateProfileErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UpdateProfileErrorState implements UpdateProfileErrorState {
-  const _$UpdateProfileErrorState(this.message);
+class _$UpdateProfileErrorStateImpl implements UpdateProfileErrorState {
+  const _$UpdateProfileErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -2879,10 +2898,10 @@ class _$UpdateProfileErrorState implements UpdateProfileErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UpdateProfileErrorState &&
+            other is _$UpdateProfileErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -2892,9 +2911,9 @@ class _$UpdateProfileErrorState implements UpdateProfileErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UpdateProfileErrorStateCopyWith<_$UpdateProfileErrorState> get copyWith =>
-      __$$UpdateProfileErrorStateCopyWithImpl<_$UpdateProfileErrorState>(
-          this, _$identity);
+  _$$UpdateProfileErrorStateImplCopyWith<_$UpdateProfileErrorStateImpl>
+      get copyWith => __$$UpdateProfileErrorStateImplCopyWithImpl<
+          _$UpdateProfileErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3004,38 +3023,38 @@ class _$UpdateProfileErrorState implements UpdateProfileErrorState {
 
 abstract class UpdateProfileErrorState implements UpdateProfileState {
   const factory UpdateProfileErrorState(final String message) =
-      _$UpdateProfileErrorState;
+      _$UpdateProfileErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$UpdateProfileErrorStateCopyWith<_$UpdateProfileErrorState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UpdateProfileErrorStateImplCopyWith<_$UpdateProfileErrorStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ProfileUpdatedAfterRegisterStateCopyWith<$Res> {
-  factory _$$ProfileUpdatedAfterRegisterStateCopyWith(
-          _$ProfileUpdatedAfterRegisterState value,
-          $Res Function(_$ProfileUpdatedAfterRegisterState) then) =
-      __$$ProfileUpdatedAfterRegisterStateCopyWithImpl<$Res>;
+abstract class _$$ProfileUpdatedAfterRegisterStateImplCopyWith<$Res> {
+  factory _$$ProfileUpdatedAfterRegisterStateImplCopyWith(
+          _$ProfileUpdatedAfterRegisterStateImpl value,
+          $Res Function(_$ProfileUpdatedAfterRegisterStateImpl) then) =
+      __$$ProfileUpdatedAfterRegisterStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ProfileUpdatedAfterRegisterStateCopyWithImpl<$Res>
+class __$$ProfileUpdatedAfterRegisterStateImplCopyWithImpl<$Res>
     extends _$UpdateProfileStateCopyWithImpl<$Res,
-        _$ProfileUpdatedAfterRegisterState>
-    implements _$$ProfileUpdatedAfterRegisterStateCopyWith<$Res> {
-  __$$ProfileUpdatedAfterRegisterStateCopyWithImpl(
-      _$ProfileUpdatedAfterRegisterState _value,
-      $Res Function(_$ProfileUpdatedAfterRegisterState) _then)
+        _$ProfileUpdatedAfterRegisterStateImpl>
+    implements _$$ProfileUpdatedAfterRegisterStateImplCopyWith<$Res> {
+  __$$ProfileUpdatedAfterRegisterStateImplCopyWithImpl(
+      _$ProfileUpdatedAfterRegisterStateImpl _value,
+      $Res Function(_$ProfileUpdatedAfterRegisterStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ProfileUpdatedAfterRegisterState
+class _$ProfileUpdatedAfterRegisterStateImpl
     implements ProfileUpdatedAfterRegisterState {
-  const _$ProfileUpdatedAfterRegisterState();
+  const _$ProfileUpdatedAfterRegisterStateImpl();
 
   @override
   String toString() {
@@ -3043,10 +3062,10 @@ class _$ProfileUpdatedAfterRegisterState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProfileUpdatedAfterRegisterState);
+            other is _$ProfileUpdatedAfterRegisterStateImpl);
   }
 
   @override
@@ -3160,25 +3179,27 @@ class _$ProfileUpdatedAfterRegisterState
 
 abstract class ProfileUpdatedAfterRegisterState implements UpdateProfileState {
   const factory ProfileUpdatedAfterRegisterState() =
-      _$ProfileUpdatedAfterRegisterState;
+      _$ProfileUpdatedAfterRegisterStateImpl;
 }
 
 /// @nodoc
-abstract class _$$MacroGoalsCalculatedStateCopyWith<$Res> {
-  factory _$$MacroGoalsCalculatedStateCopyWith(
-          _$MacroGoalsCalculatedState value,
-          $Res Function(_$MacroGoalsCalculatedState) then) =
-      __$$MacroGoalsCalculatedStateCopyWithImpl<$Res>;
+abstract class _$$MacroGoalsCalculatedStateImplCopyWith<$Res> {
+  factory _$$MacroGoalsCalculatedStateImplCopyWith(
+          _$MacroGoalsCalculatedStateImpl value,
+          $Res Function(_$MacroGoalsCalculatedStateImpl) then) =
+      __$$MacroGoalsCalculatedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<String> dailyGoals});
 }
 
 /// @nodoc
-class __$$MacroGoalsCalculatedStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$MacroGoalsCalculatedState>
-    implements _$$MacroGoalsCalculatedStateCopyWith<$Res> {
-  __$$MacroGoalsCalculatedStateCopyWithImpl(_$MacroGoalsCalculatedState _value,
-      $Res Function(_$MacroGoalsCalculatedState) _then)
+class __$$MacroGoalsCalculatedStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res,
+        _$MacroGoalsCalculatedStateImpl>
+    implements _$$MacroGoalsCalculatedStateImplCopyWith<$Res> {
+  __$$MacroGoalsCalculatedStateImplCopyWithImpl(
+      _$MacroGoalsCalculatedStateImpl _value,
+      $Res Function(_$MacroGoalsCalculatedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3186,7 +3207,7 @@ class __$$MacroGoalsCalculatedStateCopyWithImpl<$Res>
   $Res call({
     Object? dailyGoals = null,
   }) {
-    return _then(_$MacroGoalsCalculatedState(
+    return _then(_$MacroGoalsCalculatedStateImpl(
       null == dailyGoals
           ? _value._dailyGoals
           : dailyGoals // ignore: cast_nullable_to_non_nullable
@@ -3197,8 +3218,8 @@ class __$$MacroGoalsCalculatedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MacroGoalsCalculatedState implements MacroGoalsCalculatedState {
-  const _$MacroGoalsCalculatedState(final List<String> dailyGoals)
+class _$MacroGoalsCalculatedStateImpl implements MacroGoalsCalculatedState {
+  const _$MacroGoalsCalculatedStateImpl(final List<String> dailyGoals)
       : _dailyGoals = dailyGoals;
 
   final List<String> _dailyGoals;
@@ -3215,10 +3236,10 @@ class _$MacroGoalsCalculatedState implements MacroGoalsCalculatedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MacroGoalsCalculatedState &&
+            other is _$MacroGoalsCalculatedStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._dailyGoals, _dailyGoals));
   }
@@ -3230,9 +3251,9 @@ class _$MacroGoalsCalculatedState implements MacroGoalsCalculatedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MacroGoalsCalculatedStateCopyWith<_$MacroGoalsCalculatedState>
-      get copyWith => __$$MacroGoalsCalculatedStateCopyWithImpl<
-          _$MacroGoalsCalculatedState>(this, _$identity);
+  _$$MacroGoalsCalculatedStateImplCopyWith<_$MacroGoalsCalculatedStateImpl>
+      get copyWith => __$$MacroGoalsCalculatedStateImplCopyWithImpl<
+          _$MacroGoalsCalculatedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3342,34 +3363,34 @@ class _$MacroGoalsCalculatedState implements MacroGoalsCalculatedState {
 
 abstract class MacroGoalsCalculatedState implements UpdateProfileState {
   const factory MacroGoalsCalculatedState(final List<String> dailyGoals) =
-      _$MacroGoalsCalculatedState;
+      _$MacroGoalsCalculatedStateImpl;
 
   List<String> get dailyGoals;
   @JsonKey(ignore: true)
-  _$$MacroGoalsCalculatedStateCopyWith<_$MacroGoalsCalculatedState>
+  _$$MacroGoalsCalculatedStateImplCopyWith<_$MacroGoalsCalculatedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$UserInfoUpdatedStateCopyWith<$Res> {
-  factory _$$UserInfoUpdatedStateCopyWith(_$UserInfoUpdatedState value,
-          $Res Function(_$UserInfoUpdatedState) then) =
-      __$$UserInfoUpdatedStateCopyWithImpl<$Res>;
+abstract class _$$UserInfoUpdatedStateImplCopyWith<$Res> {
+  factory _$$UserInfoUpdatedStateImplCopyWith(_$UserInfoUpdatedStateImpl value,
+          $Res Function(_$UserInfoUpdatedStateImpl) then) =
+      __$$UserInfoUpdatedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$UserInfoUpdatedStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$UserInfoUpdatedState>
-    implements _$$UserInfoUpdatedStateCopyWith<$Res> {
-  __$$UserInfoUpdatedStateCopyWithImpl(_$UserInfoUpdatedState _value,
-      $Res Function(_$UserInfoUpdatedState) _then)
+class __$$UserInfoUpdatedStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res, _$UserInfoUpdatedStateImpl>
+    implements _$$UserInfoUpdatedStateImplCopyWith<$Res> {
+  __$$UserInfoUpdatedStateImplCopyWithImpl(_$UserInfoUpdatedStateImpl _value,
+      $Res Function(_$UserInfoUpdatedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$UserInfoUpdatedState implements UserInfoUpdatedState {
-  const _$UserInfoUpdatedState();
+class _$UserInfoUpdatedStateImpl implements UserInfoUpdatedState {
+  const _$UserInfoUpdatedStateImpl();
 
   @override
   String toString() {
@@ -3377,9 +3398,10 @@ class _$UserInfoUpdatedState implements UserInfoUpdatedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$UserInfoUpdatedState);
+        (other.runtimeType == runtimeType &&
+            other is _$UserInfoUpdatedStateImpl);
   }
 
   @override
@@ -3492,29 +3514,31 @@ class _$UserInfoUpdatedState implements UserInfoUpdatedState {
 }
 
 abstract class UserInfoUpdatedState implements UpdateProfileState {
-  const factory UserInfoUpdatedState() = _$UserInfoUpdatedState;
+  const factory UserInfoUpdatedState() = _$UserInfoUpdatedStateImpl;
 }
 
 /// @nodoc
-abstract class _$$MacroGoalsUpdatedStateCopyWith<$Res> {
-  factory _$$MacroGoalsUpdatedStateCopyWith(_$MacroGoalsUpdatedState value,
-          $Res Function(_$MacroGoalsUpdatedState) then) =
-      __$$MacroGoalsUpdatedStateCopyWithImpl<$Res>;
+abstract class _$$MacroGoalsUpdatedStateImplCopyWith<$Res> {
+  factory _$$MacroGoalsUpdatedStateImplCopyWith(
+          _$MacroGoalsUpdatedStateImpl value,
+          $Res Function(_$MacroGoalsUpdatedStateImpl) then) =
+      __$$MacroGoalsUpdatedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MacroGoalsUpdatedStateCopyWithImpl<$Res>
-    extends _$UpdateProfileStateCopyWithImpl<$Res, _$MacroGoalsUpdatedState>
-    implements _$$MacroGoalsUpdatedStateCopyWith<$Res> {
-  __$$MacroGoalsUpdatedStateCopyWithImpl(_$MacroGoalsUpdatedState _value,
-      $Res Function(_$MacroGoalsUpdatedState) _then)
+class __$$MacroGoalsUpdatedStateImplCopyWithImpl<$Res>
+    extends _$UpdateProfileStateCopyWithImpl<$Res, _$MacroGoalsUpdatedStateImpl>
+    implements _$$MacroGoalsUpdatedStateImplCopyWith<$Res> {
+  __$$MacroGoalsUpdatedStateImplCopyWithImpl(
+      _$MacroGoalsUpdatedStateImpl _value,
+      $Res Function(_$MacroGoalsUpdatedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MacroGoalsUpdatedState implements MacroGoalsUpdatedState {
-  const _$MacroGoalsUpdatedState();
+class _$MacroGoalsUpdatedStateImpl implements MacroGoalsUpdatedState {
+  const _$MacroGoalsUpdatedStateImpl();
 
   @override
   String toString() {
@@ -3522,9 +3546,10 @@ class _$MacroGoalsUpdatedState implements MacroGoalsUpdatedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MacroGoalsUpdatedState);
+        (other.runtimeType == runtimeType &&
+            other is _$MacroGoalsUpdatedStateImpl);
   }
 
   @override
@@ -3637,33 +3662,33 @@ class _$MacroGoalsUpdatedState implements MacroGoalsUpdatedState {
 }
 
 abstract class MacroGoalsUpdatedState implements UpdateProfileState {
-  const factory MacroGoalsUpdatedState() = _$MacroGoalsUpdatedState;
+  const factory MacroGoalsUpdatedState() = _$MacroGoalsUpdatedStateImpl;
 }
 
 /// @nodoc
-abstract class _$$MacroGoalsAndInputsUpdatedStateCopyWith<$Res> {
-  factory _$$MacroGoalsAndInputsUpdatedStateCopyWith(
-          _$MacroGoalsAndInputsUpdatedState value,
-          $Res Function(_$MacroGoalsAndInputsUpdatedState) then) =
-      __$$MacroGoalsAndInputsUpdatedStateCopyWithImpl<$Res>;
+abstract class _$$MacroGoalsAndInputsUpdatedStateImplCopyWith<$Res> {
+  factory _$$MacroGoalsAndInputsUpdatedStateImplCopyWith(
+          _$MacroGoalsAndInputsUpdatedStateImpl value,
+          $Res Function(_$MacroGoalsAndInputsUpdatedStateImpl) then) =
+      __$$MacroGoalsAndInputsUpdatedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MacroGoalsAndInputsUpdatedStateCopyWithImpl<$Res>
+class __$$MacroGoalsAndInputsUpdatedStateImplCopyWithImpl<$Res>
     extends _$UpdateProfileStateCopyWithImpl<$Res,
-        _$MacroGoalsAndInputsUpdatedState>
-    implements _$$MacroGoalsAndInputsUpdatedStateCopyWith<$Res> {
-  __$$MacroGoalsAndInputsUpdatedStateCopyWithImpl(
-      _$MacroGoalsAndInputsUpdatedState _value,
-      $Res Function(_$MacroGoalsAndInputsUpdatedState) _then)
+        _$MacroGoalsAndInputsUpdatedStateImpl>
+    implements _$$MacroGoalsAndInputsUpdatedStateImplCopyWith<$Res> {
+  __$$MacroGoalsAndInputsUpdatedStateImplCopyWithImpl(
+      _$MacroGoalsAndInputsUpdatedStateImpl _value,
+      $Res Function(_$MacroGoalsAndInputsUpdatedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MacroGoalsAndInputsUpdatedState
+class _$MacroGoalsAndInputsUpdatedStateImpl
     implements MacroGoalsAndInputsUpdatedState {
-  const _$MacroGoalsAndInputsUpdatedState();
+  const _$MacroGoalsAndInputsUpdatedStateImpl();
 
   @override
   String toString() {
@@ -3671,10 +3696,10 @@ class _$MacroGoalsAndInputsUpdatedState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MacroGoalsAndInputsUpdatedState);
+            other is _$MacroGoalsAndInputsUpdatedStateImpl);
   }
 
   @override
@@ -3788,5 +3813,5 @@ class _$MacroGoalsAndInputsUpdatedState
 
 abstract class MacroGoalsAndInputsUpdatedState implements UpdateProfileState {
   const factory MacroGoalsAndInputsUpdatedState() =
-      _$MacroGoalsAndInputsUpdatedState;
+      _$MacroGoalsAndInputsUpdatedStateImpl;
 }

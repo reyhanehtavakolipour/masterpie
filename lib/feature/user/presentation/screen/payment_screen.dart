@@ -31,24 +31,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   double _amount = 0;
 
-  bool _isFree = false;
-
   @override
   void initState() {
     super.initState();
-    checkPlan();
     initPlanTypeOptions();
   }
-
-
-  void checkPlan(){
-    if(widget.userSubscriptionPlan.plan == FREE_PLAN){
-      _isFree = true;
-    }else{
-      _isFree = false;
-    }
-  }
-
 
   void initPlanTypeOptions(){
       if(widget.userSubscriptionPlan.plan == BASIC_PLAN){
@@ -94,86 +81,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomRadioListTile(
+                            options: _planTypeOptions,
+                            onSelectedOptionChanged: updateSelectedPlanType,
+                            selectedOption: _selectedPlanType,
+                            orientation: VERTICAL_ORIENTATION,
+                            isEditable: true,
+                          ),
 
-                      Visibility(
-                        visible: _isFree,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-
-                              const SizedBox(height: 8,),
+                          const SizedBox(height: 48,),
 
 
-                              const Text(
-                                  FREE_PLAN_SWITCH_MSG,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: DARK_PRIMARY_COLOR,
+
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${widget.userSubscriptionPlan.plan.capitalize()} $PLAN_LABEL',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      color: DARK_PRIMARY_COLOR,
+                                      fontWeight: FontWeight.w600
+                                  ),
                                 ),
-                              ),
 
-                              const SizedBox(height: 32,),
+                                Text(
+                                  '$TOTAL_PRICE_LABEL: $_amount',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      color: DARK_PRIMARY_COLOR,
+                                      fontWeight: FontWeight.w600
 
-
-                              cancelButton(),
-                            ],
-                          )
-                      ),
-
-
-                      Visibility(
-                        visible: !_isFree,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              CustomRadioListTile(
-                                options: _planTypeOptions,
-                                onSelectedOptionChanged: updateSelectedPlanType,
-                                selectedOption: _selectedPlanType,
-                                orientation: VERTICAL_ORIENTATION,
-                                isEditable: true,
-                              ),
-
-                              const SizedBox(height: 48,),
-
-
-
-                              Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${widget.userSubscriptionPlan.plan.capitalize()} $PLAN_LABEL',
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          color: DARK_PRIMARY_COLOR,
-                                          fontWeight: FontWeight.w600
-                                      ),
-                                    ),
-
-                                    Text(
-                                      '$TOTAL_PRICE_LABEL: $_amount',
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          color: DARK_PRIMARY_COLOR,
-                                          fontWeight: FontWeight.w600
-
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
+                            ),
+                          ),
 
-                              const SizedBox(height: 32,),
-
-
-                              buildPayButton(context),
-                            ],
-                          )
-                      ),
+                          const SizedBox(height: 32,),
 
 
+                          buildPayButton(context),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -181,26 +136,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ],
             )
         ),
-      ),
-    );
-  }
-
-
-
-  Widget cancelButton(){
-    return  ElevatedButton(
-      onPressed: () {
-        //todo cancel
-      },
-      style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: DARK_PRIMARY_COLOR
-      ),
-      child:  const Padding(
-          padding: EdgeInsets.all(12),
-          child: Text(YES_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
       ),
     );
   }
@@ -330,9 +265,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
     return response;
   }
-
-
-
 
 
 }

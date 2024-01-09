@@ -70,25 +70,26 @@ class _$GetUserCredentialsEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$GetUserCredentialsCopyWith<$Res> {
-  factory _$$GetUserCredentialsCopyWith(_$GetUserCredentials value,
-          $Res Function(_$GetUserCredentials) then) =
-      __$$GetUserCredentialsCopyWithImpl<$Res>;
+abstract class _$$GetUserCredentialsImplCopyWith<$Res> {
+  factory _$$GetUserCredentialsImplCopyWith(_$GetUserCredentialsImpl value,
+          $Res Function(_$GetUserCredentialsImpl) then) =
+      __$$GetUserCredentialsImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetUserCredentialsCopyWithImpl<$Res>
-    extends _$GetUserCredentialsEventCopyWithImpl<$Res, _$GetUserCredentials>
-    implements _$$GetUserCredentialsCopyWith<$Res> {
-  __$$GetUserCredentialsCopyWithImpl(
-      _$GetUserCredentials _value, $Res Function(_$GetUserCredentials) _then)
+class __$$GetUserCredentialsImplCopyWithImpl<$Res>
+    extends _$GetUserCredentialsEventCopyWithImpl<$Res,
+        _$GetUserCredentialsImpl>
+    implements _$$GetUserCredentialsImplCopyWith<$Res> {
+  __$$GetUserCredentialsImplCopyWithImpl(_$GetUserCredentialsImpl _value,
+      $Res Function(_$GetUserCredentialsImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetUserCredentials implements GetUserCredentials {
-  const _$GetUserCredentials();
+class _$GetUserCredentialsImpl implements GetUserCredentials {
+  const _$GetUserCredentialsImpl();
 
   @override
   String toString() {
@@ -96,9 +97,9 @@ class _$GetUserCredentials implements GetUserCredentials {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetUserCredentials);
+        (other.runtimeType == runtimeType && other is _$GetUserCredentialsImpl);
   }
 
   @override
@@ -162,7 +163,7 @@ class _$GetUserCredentials implements GetUserCredentials {
 }
 
 abstract class GetUserCredentials implements GetUserCredentialsEvent {
-  const factory GetUserCredentials() = _$GetUserCredentials;
+  const factory GetUserCredentials() = _$GetUserCredentialsImpl;
 }
 
 /// @nodoc
@@ -239,29 +240,29 @@ class _$GetUserCredentialsStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$GetUserCredentialsInitialStateCopyWith<$Res> {
-  factory _$$GetUserCredentialsInitialStateCopyWith(
-          _$GetUserCredentialsInitialState value,
-          $Res Function(_$GetUserCredentialsInitialState) then) =
-      __$$GetUserCredentialsInitialStateCopyWithImpl<$Res>;
+abstract class _$$GetUserCredentialsInitialStateImplCopyWith<$Res> {
+  factory _$$GetUserCredentialsInitialStateImplCopyWith(
+          _$GetUserCredentialsInitialStateImpl value,
+          $Res Function(_$GetUserCredentialsInitialStateImpl) then) =
+      __$$GetUserCredentialsInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetUserCredentialsInitialStateCopyWithImpl<$Res>
+class __$$GetUserCredentialsInitialStateImplCopyWithImpl<$Res>
     extends _$GetUserCredentialsStateCopyWithImpl<$Res,
-        _$GetUserCredentialsInitialState>
-    implements _$$GetUserCredentialsInitialStateCopyWith<$Res> {
-  __$$GetUserCredentialsInitialStateCopyWithImpl(
-      _$GetUserCredentialsInitialState _value,
-      $Res Function(_$GetUserCredentialsInitialState) _then)
+        _$GetUserCredentialsInitialStateImpl>
+    implements _$$GetUserCredentialsInitialStateImplCopyWith<$Res> {
+  __$$GetUserCredentialsInitialStateImplCopyWithImpl(
+      _$GetUserCredentialsInitialStateImpl _value,
+      $Res Function(_$GetUserCredentialsInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetUserCredentialsInitialState
+class _$GetUserCredentialsInitialStateImpl
     implements GetUserCredentialsInitialState {
-  const _$GetUserCredentialsInitialState();
+  const _$GetUserCredentialsInitialStateImpl();
 
   @override
   String toString() {
@@ -269,10 +270,10 @@ class _$GetUserCredentialsInitialState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetUserCredentialsInitialState);
+            other is _$GetUserCredentialsInitialStateImpl);
   }
 
   @override
@@ -356,33 +357,33 @@ class _$GetUserCredentialsInitialState
 abstract class GetUserCredentialsInitialState
     implements GetUserCredentialsState {
   const factory GetUserCredentialsInitialState() =
-      _$GetUserCredentialsInitialState;
+      _$GetUserCredentialsInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetUserCredentialsLoadingStateCopyWith<$Res> {
-  factory _$$GetUserCredentialsLoadingStateCopyWith(
-          _$GetUserCredentialsLoadingState value,
-          $Res Function(_$GetUserCredentialsLoadingState) then) =
-      __$$GetUserCredentialsLoadingStateCopyWithImpl<$Res>;
+abstract class _$$GetUserCredentialsLoadingStateImplCopyWith<$Res> {
+  factory _$$GetUserCredentialsLoadingStateImplCopyWith(
+          _$GetUserCredentialsLoadingStateImpl value,
+          $Res Function(_$GetUserCredentialsLoadingStateImpl) then) =
+      __$$GetUserCredentialsLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetUserCredentialsLoadingStateCopyWithImpl<$Res>
+class __$$GetUserCredentialsLoadingStateImplCopyWithImpl<$Res>
     extends _$GetUserCredentialsStateCopyWithImpl<$Res,
-        _$GetUserCredentialsLoadingState>
-    implements _$$GetUserCredentialsLoadingStateCopyWith<$Res> {
-  __$$GetUserCredentialsLoadingStateCopyWithImpl(
-      _$GetUserCredentialsLoadingState _value,
-      $Res Function(_$GetUserCredentialsLoadingState) _then)
+        _$GetUserCredentialsLoadingStateImpl>
+    implements _$$GetUserCredentialsLoadingStateImplCopyWith<$Res> {
+  __$$GetUserCredentialsLoadingStateImplCopyWithImpl(
+      _$GetUserCredentialsLoadingStateImpl _value,
+      $Res Function(_$GetUserCredentialsLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetUserCredentialsLoadingState
+class _$GetUserCredentialsLoadingStateImpl
     implements GetUserCredentialsLoadingState {
-  const _$GetUserCredentialsLoadingState();
+  const _$GetUserCredentialsLoadingStateImpl();
 
   @override
   String toString() {
@@ -390,10 +391,10 @@ class _$GetUserCredentialsLoadingState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetUserCredentialsLoadingState);
+            other is _$GetUserCredentialsLoadingStateImpl);
   }
 
   @override
@@ -477,27 +478,27 @@ class _$GetUserCredentialsLoadingState
 abstract class GetUserCredentialsLoadingState
     implements GetUserCredentialsState {
   const factory GetUserCredentialsLoadingState() =
-      _$GetUserCredentialsLoadingState;
+      _$GetUserCredentialsLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$GetUserCredentialsErrorStateCopyWith<$Res> {
-  factory _$$GetUserCredentialsErrorStateCopyWith(
-          _$GetUserCredentialsErrorState value,
-          $Res Function(_$GetUserCredentialsErrorState) then) =
-      __$$GetUserCredentialsErrorStateCopyWithImpl<$Res>;
+abstract class _$$GetUserCredentialsErrorStateImplCopyWith<$Res> {
+  factory _$$GetUserCredentialsErrorStateImplCopyWith(
+          _$GetUserCredentialsErrorStateImpl value,
+          $Res Function(_$GetUserCredentialsErrorStateImpl) then) =
+      __$$GetUserCredentialsErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$GetUserCredentialsErrorStateCopyWithImpl<$Res>
+class __$$GetUserCredentialsErrorStateImplCopyWithImpl<$Res>
     extends _$GetUserCredentialsStateCopyWithImpl<$Res,
-        _$GetUserCredentialsErrorState>
-    implements _$$GetUserCredentialsErrorStateCopyWith<$Res> {
-  __$$GetUserCredentialsErrorStateCopyWithImpl(
-      _$GetUserCredentialsErrorState _value,
-      $Res Function(_$GetUserCredentialsErrorState) _then)
+        _$GetUserCredentialsErrorStateImpl>
+    implements _$$GetUserCredentialsErrorStateImplCopyWith<$Res> {
+  __$$GetUserCredentialsErrorStateImplCopyWithImpl(
+      _$GetUserCredentialsErrorStateImpl _value,
+      $Res Function(_$GetUserCredentialsErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -505,7 +506,7 @@ class __$$GetUserCredentialsErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$GetUserCredentialsErrorState(
+    return _then(_$GetUserCredentialsErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -516,8 +517,9 @@ class __$$GetUserCredentialsErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetUserCredentialsErrorState implements GetUserCredentialsErrorState {
-  const _$GetUserCredentialsErrorState(this.message);
+class _$GetUserCredentialsErrorStateImpl
+    implements GetUserCredentialsErrorState {
+  const _$GetUserCredentialsErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -528,10 +530,10 @@ class _$GetUserCredentialsErrorState implements GetUserCredentialsErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetUserCredentialsErrorState &&
+            other is _$GetUserCredentialsErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -541,9 +543,10 @@ class _$GetUserCredentialsErrorState implements GetUserCredentialsErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetUserCredentialsErrorStateCopyWith<_$GetUserCredentialsErrorState>
-      get copyWith => __$$GetUserCredentialsErrorStateCopyWithImpl<
-          _$GetUserCredentialsErrorState>(this, _$identity);
+  _$$GetUserCredentialsErrorStateImplCopyWith<
+          _$GetUserCredentialsErrorStateImpl>
+      get copyWith => __$$GetUserCredentialsErrorStateImplCopyWithImpl<
+          _$GetUserCredentialsErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -622,20 +625,21 @@ class _$GetUserCredentialsErrorState implements GetUserCredentialsErrorState {
 
 abstract class GetUserCredentialsErrorState implements GetUserCredentialsState {
   const factory GetUserCredentialsErrorState(final String message) =
-      _$GetUserCredentialsErrorState;
+      _$GetUserCredentialsErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$GetUserCredentialsErrorStateCopyWith<_$GetUserCredentialsErrorState>
+  _$$GetUserCredentialsErrorStateImplCopyWith<
+          _$GetUserCredentialsErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetUserCredentialsLoadedStateCopyWith<$Res> {
-  factory _$$GetUserCredentialsLoadedStateCopyWith(
-          _$GetUserCredentialsLoadedState value,
-          $Res Function(_$GetUserCredentialsLoadedState) then) =
-      __$$GetUserCredentialsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$GetUserCredentialsLoadedStateImplCopyWith<$Res> {
+  factory _$$GetUserCredentialsLoadedStateImplCopyWith(
+          _$GetUserCredentialsLoadedStateImpl value,
+          $Res Function(_$GetUserCredentialsLoadedStateImpl) then) =
+      __$$GetUserCredentialsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({UserCredentials userCredentials});
 
@@ -643,13 +647,13 @@ abstract class _$$GetUserCredentialsLoadedStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GetUserCredentialsLoadedStateCopyWithImpl<$Res>
+class __$$GetUserCredentialsLoadedStateImplCopyWithImpl<$Res>
     extends _$GetUserCredentialsStateCopyWithImpl<$Res,
-        _$GetUserCredentialsLoadedState>
-    implements _$$GetUserCredentialsLoadedStateCopyWith<$Res> {
-  __$$GetUserCredentialsLoadedStateCopyWithImpl(
-      _$GetUserCredentialsLoadedState _value,
-      $Res Function(_$GetUserCredentialsLoadedState) _then)
+        _$GetUserCredentialsLoadedStateImpl>
+    implements _$$GetUserCredentialsLoadedStateImplCopyWith<$Res> {
+  __$$GetUserCredentialsLoadedStateImplCopyWithImpl(
+      _$GetUserCredentialsLoadedStateImpl _value,
+      $Res Function(_$GetUserCredentialsLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -657,7 +661,7 @@ class __$$GetUserCredentialsLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? userCredentials = null,
   }) {
-    return _then(_$GetUserCredentialsLoadedState(
+    return _then(_$GetUserCredentialsLoadedStateImpl(
       null == userCredentials
           ? _value.userCredentials
           : userCredentials // ignore: cast_nullable_to_non_nullable
@@ -676,8 +680,9 @@ class __$$GetUserCredentialsLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetUserCredentialsLoadedState implements GetUserCredentialsLoadedState {
-  const _$GetUserCredentialsLoadedState(this.userCredentials);
+class _$GetUserCredentialsLoadedStateImpl
+    implements GetUserCredentialsLoadedState {
+  const _$GetUserCredentialsLoadedStateImpl(this.userCredentials);
 
   @override
   final UserCredentials userCredentials;
@@ -688,10 +693,10 @@ class _$GetUserCredentialsLoadedState implements GetUserCredentialsLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetUserCredentialsLoadedState &&
+            other is _$GetUserCredentialsLoadedStateImpl &&
             (identical(other.userCredentials, userCredentials) ||
                 other.userCredentials == userCredentials));
   }
@@ -702,9 +707,10 @@ class _$GetUserCredentialsLoadedState implements GetUserCredentialsLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GetUserCredentialsLoadedStateCopyWith<_$GetUserCredentialsLoadedState>
-      get copyWith => __$$GetUserCredentialsLoadedStateCopyWithImpl<
-          _$GetUserCredentialsLoadedState>(this, _$identity);
+  _$$GetUserCredentialsLoadedStateImplCopyWith<
+          _$GetUserCredentialsLoadedStateImpl>
+      get copyWith => __$$GetUserCredentialsLoadedStateImplCopyWithImpl<
+          _$GetUserCredentialsLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -784,10 +790,12 @@ class _$GetUserCredentialsLoadedState implements GetUserCredentialsLoadedState {
 abstract class GetUserCredentialsLoadedState
     implements GetUserCredentialsState {
   const factory GetUserCredentialsLoadedState(
-      final UserCredentials userCredentials) = _$GetUserCredentialsLoadedState;
+          final UserCredentials userCredentials) =
+      _$GetUserCredentialsLoadedStateImpl;
 
   UserCredentials get userCredentials;
   @JsonKey(ignore: true)
-  _$$GetUserCredentialsLoadedStateCopyWith<_$GetUserCredentialsLoadedState>
+  _$$GetUserCredentialsLoadedStateImplCopyWith<
+          _$GetUserCredentialsLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

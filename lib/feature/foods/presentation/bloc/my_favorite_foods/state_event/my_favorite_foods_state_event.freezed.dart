@@ -86,20 +86,20 @@ class _$MyFavoriteFoodsEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$FavoriteFoodsCopyWith<$Res> {
-  factory _$$FavoriteFoodsCopyWith(
-          _$FavoriteFoods value, $Res Function(_$FavoriteFoods) then) =
-      __$$FavoriteFoodsCopyWithImpl<$Res>;
+abstract class _$$FavoriteFoodsImplCopyWith<$Res> {
+  factory _$$FavoriteFoodsImplCopyWith(
+          _$FavoriteFoodsImpl value, $Res Function(_$FavoriteFoodsImpl) then) =
+      __$$FavoriteFoodsImplCopyWithImpl<$Res>;
   @useResult
   $Res call({FoodType foodType, String query});
 }
 
 /// @nodoc
-class __$$FavoriteFoodsCopyWithImpl<$Res>
-    extends _$MyFavoriteFoodsEventCopyWithImpl<$Res, _$FavoriteFoods>
-    implements _$$FavoriteFoodsCopyWith<$Res> {
-  __$$FavoriteFoodsCopyWithImpl(
-      _$FavoriteFoods _value, $Res Function(_$FavoriteFoods) _then)
+class __$$FavoriteFoodsImplCopyWithImpl<$Res>
+    extends _$MyFavoriteFoodsEventCopyWithImpl<$Res, _$FavoriteFoodsImpl>
+    implements _$$FavoriteFoodsImplCopyWith<$Res> {
+  __$$FavoriteFoodsImplCopyWithImpl(
+      _$FavoriteFoodsImpl _value, $Res Function(_$FavoriteFoodsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -108,7 +108,7 @@ class __$$FavoriteFoodsCopyWithImpl<$Res>
     Object? foodType = null,
     Object? query = null,
   }) {
-    return _then(_$FavoriteFoods(
+    return _then(_$FavoriteFoodsImpl(
       null == foodType
           ? _value.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
@@ -123,8 +123,8 @@ class __$$FavoriteFoodsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FavoriteFoods implements FavoriteFoods {
-  const _$FavoriteFoods(this.foodType, this.query);
+class _$FavoriteFoodsImpl implements FavoriteFoods {
+  const _$FavoriteFoodsImpl(this.foodType, this.query);
 
   @override
   final FoodType foodType;
@@ -137,10 +137,10 @@ class _$FavoriteFoods implements FavoriteFoods {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FavoriteFoods &&
+            other is _$FavoriteFoodsImpl &&
             (identical(other.foodType, foodType) ||
                 other.foodType == foodType) &&
             (identical(other.query, query) || other.query == query));
@@ -152,8 +152,8 @@ class _$FavoriteFoods implements FavoriteFoods {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FavoriteFoodsCopyWith<_$FavoriteFoods> get copyWith =>
-      __$$FavoriteFoodsCopyWithImpl<_$FavoriteFoods>(this, _$identity);
+  _$$FavoriteFoodsImplCopyWith<_$FavoriteFoodsImpl> get copyWith =>
+      __$$FavoriteFoodsImplCopyWithImpl<_$FavoriteFoodsImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -230,21 +230,21 @@ class _$FavoriteFoods implements FavoriteFoods {
 
 abstract class FavoriteFoods implements MyFavoriteFoodsEvent {
   const factory FavoriteFoods(final FoodType foodType, final String query) =
-      _$FavoriteFoods;
+      _$FavoriteFoodsImpl;
 
   FoodType get foodType;
   String get query;
   @JsonKey(ignore: true)
-  _$$FavoriteFoodsCopyWith<_$FavoriteFoods> get copyWith =>
+  _$$FavoriteFoodsImplCopyWith<_$FavoriteFoodsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ImmediateSearchFavoriteFoodsCopyWith<$Res> {
-  factory _$$ImmediateSearchFavoriteFoodsCopyWith(
-          _$ImmediateSearchFavoriteFoods value,
-          $Res Function(_$ImmediateSearchFavoriteFoods) then) =
-      __$$ImmediateSearchFavoriteFoodsCopyWithImpl<$Res>;
+abstract class _$$ImmediateSearchFavoriteFoodsImplCopyWith<$Res> {
+  factory _$$ImmediateSearchFavoriteFoodsImplCopyWith(
+          _$ImmediateSearchFavoriteFoodsImpl value,
+          $Res Function(_$ImmediateSearchFavoriteFoodsImpl) then) =
+      __$$ImmediateSearchFavoriteFoodsImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Food food});
 
@@ -252,13 +252,13 @@ abstract class _$$ImmediateSearchFavoriteFoodsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ImmediateSearchFavoriteFoodsCopyWithImpl<$Res>
+class __$$ImmediateSearchFavoriteFoodsImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsEventCopyWithImpl<$Res,
-        _$ImmediateSearchFavoriteFoods>
-    implements _$$ImmediateSearchFavoriteFoodsCopyWith<$Res> {
-  __$$ImmediateSearchFavoriteFoodsCopyWithImpl(
-      _$ImmediateSearchFavoriteFoods _value,
-      $Res Function(_$ImmediateSearchFavoriteFoods) _then)
+        _$ImmediateSearchFavoriteFoodsImpl>
+    implements _$$ImmediateSearchFavoriteFoodsImplCopyWith<$Res> {
+  __$$ImmediateSearchFavoriteFoodsImplCopyWithImpl(
+      _$ImmediateSearchFavoriteFoodsImpl _value,
+      $Res Function(_$ImmediateSearchFavoriteFoodsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -266,7 +266,7 @@ class __$$ImmediateSearchFavoriteFoodsCopyWithImpl<$Res>
   $Res call({
     Object? food = null,
   }) {
-    return _then(_$ImmediateSearchFavoriteFoods(
+    return _then(_$ImmediateSearchFavoriteFoodsImpl(
       null == food
           ? _value.food
           : food // ignore: cast_nullable_to_non_nullable
@@ -285,8 +285,9 @@ class __$$ImmediateSearchFavoriteFoodsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ImmediateSearchFavoriteFoods implements ImmediateSearchFavoriteFoods {
-  const _$ImmediateSearchFavoriteFoods(this.food);
+class _$ImmediateSearchFavoriteFoodsImpl
+    implements ImmediateSearchFavoriteFoods {
+  const _$ImmediateSearchFavoriteFoodsImpl(this.food);
 
   @override
   final Food food;
@@ -297,10 +298,10 @@ class _$ImmediateSearchFavoriteFoods implements ImmediateSearchFavoriteFoods {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ImmediateSearchFavoriteFoods &&
+            other is _$ImmediateSearchFavoriteFoodsImpl &&
             (identical(other.food, food) || other.food == food));
   }
 
@@ -310,9 +311,10 @@ class _$ImmediateSearchFavoriteFoods implements ImmediateSearchFavoriteFoods {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ImmediateSearchFavoriteFoodsCopyWith<_$ImmediateSearchFavoriteFoods>
-      get copyWith => __$$ImmediateSearchFavoriteFoodsCopyWithImpl<
-          _$ImmediateSearchFavoriteFoods>(this, _$identity);
+  _$$ImmediateSearchFavoriteFoodsImplCopyWith<
+          _$ImmediateSearchFavoriteFoodsImpl>
+      get copyWith => __$$ImmediateSearchFavoriteFoodsImplCopyWithImpl<
+          _$ImmediateSearchFavoriteFoodsImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -389,32 +391,35 @@ class _$ImmediateSearchFavoriteFoods implements ImmediateSearchFavoriteFoods {
 
 abstract class ImmediateSearchFavoriteFoods implements MyFavoriteFoodsEvent {
   const factory ImmediateSearchFavoriteFoods(final Food food) =
-      _$ImmediateSearchFavoriteFoods;
+      _$ImmediateSearchFavoriteFoodsImpl;
 
   Food get food;
   @JsonKey(ignore: true)
-  _$$ImmediateSearchFavoriteFoodsCopyWith<_$ImmediateSearchFavoriteFoods>
+  _$$ImmediateSearchFavoriteFoodsImplCopyWith<
+          _$ImmediateSearchFavoriteFoodsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResetCopyWith<$Res> {
-  factory _$$ResetCopyWith(_$Reset value, $Res Function(_$Reset) then) =
-      __$$ResetCopyWithImpl<$Res>;
+abstract class _$$ResetImplCopyWith<$Res> {
+  factory _$$ResetImplCopyWith(
+          _$ResetImpl value, $Res Function(_$ResetImpl) then) =
+      __$$ResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ResetCopyWithImpl<$Res>
-    extends _$MyFavoriteFoodsEventCopyWithImpl<$Res, _$Reset>
-    implements _$$ResetCopyWith<$Res> {
-  __$$ResetCopyWithImpl(_$Reset _value, $Res Function(_$Reset) _then)
+class __$$ResetImplCopyWithImpl<$Res>
+    extends _$MyFavoriteFoodsEventCopyWithImpl<$Res, _$ResetImpl>
+    implements _$$ResetImplCopyWith<$Res> {
+  __$$ResetImplCopyWithImpl(
+      _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Reset implements Reset {
-  const _$Reset();
+class _$ResetImpl implements Reset {
+  const _$ResetImpl();
 
   @override
   String toString() {
@@ -422,9 +427,9 @@ class _$Reset implements Reset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Reset);
+        (other.runtimeType == runtimeType && other is _$ResetImpl);
   }
 
   @override
@@ -504,7 +509,7 @@ class _$Reset implements Reset {
 }
 
 abstract class Reset implements MyFavoriteFoodsEvent {
-  const factory Reset() = _$Reset;
+  const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
@@ -591,28 +596,28 @@ class _$MyFavoriteFoodsStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$MyFavoriteFoodsInitialStateCopyWith<$Res> {
-  factory _$$MyFavoriteFoodsInitialStateCopyWith(
-          _$MyFavoriteFoodsInitialState value,
-          $Res Function(_$MyFavoriteFoodsInitialState) then) =
-      __$$MyFavoriteFoodsInitialStateCopyWithImpl<$Res>;
+abstract class _$$MyFavoriteFoodsInitialStateImplCopyWith<$Res> {
+  factory _$$MyFavoriteFoodsInitialStateImplCopyWith(
+          _$MyFavoriteFoodsInitialStateImpl value,
+          $Res Function(_$MyFavoriteFoodsInitialStateImpl) then) =
+      __$$MyFavoriteFoodsInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MyFavoriteFoodsInitialStateCopyWithImpl<$Res>
+class __$$MyFavoriteFoodsInitialStateImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
-        _$MyFavoriteFoodsInitialState>
-    implements _$$MyFavoriteFoodsInitialStateCopyWith<$Res> {
-  __$$MyFavoriteFoodsInitialStateCopyWithImpl(
-      _$MyFavoriteFoodsInitialState _value,
-      $Res Function(_$MyFavoriteFoodsInitialState) _then)
+        _$MyFavoriteFoodsInitialStateImpl>
+    implements _$$MyFavoriteFoodsInitialStateImplCopyWith<$Res> {
+  __$$MyFavoriteFoodsInitialStateImplCopyWithImpl(
+      _$MyFavoriteFoodsInitialStateImpl _value,
+      $Res Function(_$MyFavoriteFoodsInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MyFavoriteFoodsInitialState implements MyFavoriteFoodsInitialState {
-  const _$MyFavoriteFoodsInitialState();
+class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
+  const _$MyFavoriteFoodsInitialStateImpl();
 
   @override
   String toString() {
@@ -620,10 +625,10 @@ class _$MyFavoriteFoodsInitialState implements MyFavoriteFoodsInitialState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyFavoriteFoodsInitialState);
+            other is _$MyFavoriteFoodsInitialStateImpl);
   }
 
   @override
@@ -715,32 +720,33 @@ class _$MyFavoriteFoodsInitialState implements MyFavoriteFoodsInitialState {
 }
 
 abstract class MyFavoriteFoodsInitialState implements MyFavoriteFoodsState {
-  const factory MyFavoriteFoodsInitialState() = _$MyFavoriteFoodsInitialState;
+  const factory MyFavoriteFoodsInitialState() =
+      _$MyFavoriteFoodsInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$MyFavoriteFoodsLoadingStateCopyWith<$Res> {
-  factory _$$MyFavoriteFoodsLoadingStateCopyWith(
-          _$MyFavoriteFoodsLoadingState value,
-          $Res Function(_$MyFavoriteFoodsLoadingState) then) =
-      __$$MyFavoriteFoodsLoadingStateCopyWithImpl<$Res>;
+abstract class _$$MyFavoriteFoodsLoadingStateImplCopyWith<$Res> {
+  factory _$$MyFavoriteFoodsLoadingStateImplCopyWith(
+          _$MyFavoriteFoodsLoadingStateImpl value,
+          $Res Function(_$MyFavoriteFoodsLoadingStateImpl) then) =
+      __$$MyFavoriteFoodsLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MyFavoriteFoodsLoadingStateCopyWithImpl<$Res>
+class __$$MyFavoriteFoodsLoadingStateImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
-        _$MyFavoriteFoodsLoadingState>
-    implements _$$MyFavoriteFoodsLoadingStateCopyWith<$Res> {
-  __$$MyFavoriteFoodsLoadingStateCopyWithImpl(
-      _$MyFavoriteFoodsLoadingState _value,
-      $Res Function(_$MyFavoriteFoodsLoadingState) _then)
+        _$MyFavoriteFoodsLoadingStateImpl>
+    implements _$$MyFavoriteFoodsLoadingStateImplCopyWith<$Res> {
+  __$$MyFavoriteFoodsLoadingStateImplCopyWithImpl(
+      _$MyFavoriteFoodsLoadingStateImpl _value,
+      $Res Function(_$MyFavoriteFoodsLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MyFavoriteFoodsLoadingState implements MyFavoriteFoodsLoadingState {
-  const _$MyFavoriteFoodsLoadingState();
+class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
+  const _$MyFavoriteFoodsLoadingStateImpl();
 
   @override
   String toString() {
@@ -748,10 +754,10 @@ class _$MyFavoriteFoodsLoadingState implements MyFavoriteFoodsLoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyFavoriteFoodsLoadingState);
+            other is _$MyFavoriteFoodsLoadingStateImpl);
   }
 
   @override
@@ -843,26 +849,28 @@ class _$MyFavoriteFoodsLoadingState implements MyFavoriteFoodsLoadingState {
 }
 
 abstract class MyFavoriteFoodsLoadingState implements MyFavoriteFoodsState {
-  const factory MyFavoriteFoodsLoadingState() = _$MyFavoriteFoodsLoadingState;
+  const factory MyFavoriteFoodsLoadingState() =
+      _$MyFavoriteFoodsLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$MyFavoriteFoodsErrorStateCopyWith<$Res> {
-  factory _$$MyFavoriteFoodsErrorStateCopyWith(
-          _$MyFavoriteFoodsErrorState value,
-          $Res Function(_$MyFavoriteFoodsErrorState) then) =
-      __$$MyFavoriteFoodsErrorStateCopyWithImpl<$Res>;
+abstract class _$$MyFavoriteFoodsErrorStateImplCopyWith<$Res> {
+  factory _$$MyFavoriteFoodsErrorStateImplCopyWith(
+          _$MyFavoriteFoodsErrorStateImpl value,
+          $Res Function(_$MyFavoriteFoodsErrorStateImpl) then) =
+      __$$MyFavoriteFoodsErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$MyFavoriteFoodsErrorStateCopyWithImpl<$Res>
+class __$$MyFavoriteFoodsErrorStateImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
-        _$MyFavoriteFoodsErrorState>
-    implements _$$MyFavoriteFoodsErrorStateCopyWith<$Res> {
-  __$$MyFavoriteFoodsErrorStateCopyWithImpl(_$MyFavoriteFoodsErrorState _value,
-      $Res Function(_$MyFavoriteFoodsErrorState) _then)
+        _$MyFavoriteFoodsErrorStateImpl>
+    implements _$$MyFavoriteFoodsErrorStateImplCopyWith<$Res> {
+  __$$MyFavoriteFoodsErrorStateImplCopyWithImpl(
+      _$MyFavoriteFoodsErrorStateImpl _value,
+      $Res Function(_$MyFavoriteFoodsErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -870,7 +878,7 @@ class __$$MyFavoriteFoodsErrorStateCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$MyFavoriteFoodsErrorState(
+    return _then(_$MyFavoriteFoodsErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -881,8 +889,8 @@ class __$$MyFavoriteFoodsErrorStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MyFavoriteFoodsErrorState implements MyFavoriteFoodsErrorState {
-  const _$MyFavoriteFoodsErrorState(this.message);
+class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
+  const _$MyFavoriteFoodsErrorStateImpl(this.message);
 
   @override
   final String message;
@@ -893,10 +901,10 @@ class _$MyFavoriteFoodsErrorState implements MyFavoriteFoodsErrorState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyFavoriteFoodsErrorState &&
+            other is _$MyFavoriteFoodsErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -906,9 +914,9 @@ class _$MyFavoriteFoodsErrorState implements MyFavoriteFoodsErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MyFavoriteFoodsErrorStateCopyWith<_$MyFavoriteFoodsErrorState>
-      get copyWith => __$$MyFavoriteFoodsErrorStateCopyWithImpl<
-          _$MyFavoriteFoodsErrorState>(this, _$identity);
+  _$$MyFavoriteFoodsErrorStateImplCopyWith<_$MyFavoriteFoodsErrorStateImpl>
+      get copyWith => __$$MyFavoriteFoodsErrorStateImplCopyWithImpl<
+          _$MyFavoriteFoodsErrorStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -997,32 +1005,32 @@ class _$MyFavoriteFoodsErrorState implements MyFavoriteFoodsErrorState {
 
 abstract class MyFavoriteFoodsErrorState implements MyFavoriteFoodsState {
   const factory MyFavoriteFoodsErrorState(final String message) =
-      _$MyFavoriteFoodsErrorState;
+      _$MyFavoriteFoodsErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$MyFavoriteFoodsErrorStateCopyWith<_$MyFavoriteFoodsErrorState>
+  _$$MyFavoriteFoodsErrorStateImplCopyWith<_$MyFavoriteFoodsErrorStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$MyFavoriteFoodsLoadedStateCopyWith<$Res> {
-  factory _$$MyFavoriteFoodsLoadedStateCopyWith(
-          _$MyFavoriteFoodsLoadedState value,
-          $Res Function(_$MyFavoriteFoodsLoadedState) then) =
-      __$$MyFavoriteFoodsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$MyFavoriteFoodsLoadedStateImplCopyWith<$Res> {
+  factory _$$MyFavoriteFoodsLoadedStateImplCopyWith(
+          _$MyFavoriteFoodsLoadedStateImpl value,
+          $Res Function(_$MyFavoriteFoodsLoadedStateImpl) then) =
+      __$$MyFavoriteFoodsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Food> foods});
 }
 
 /// @nodoc
-class __$$MyFavoriteFoodsLoadedStateCopyWithImpl<$Res>
+class __$$MyFavoriteFoodsLoadedStateImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
-        _$MyFavoriteFoodsLoadedState>
-    implements _$$MyFavoriteFoodsLoadedStateCopyWith<$Res> {
-  __$$MyFavoriteFoodsLoadedStateCopyWithImpl(
-      _$MyFavoriteFoodsLoadedState _value,
-      $Res Function(_$MyFavoriteFoodsLoadedState) _then)
+        _$MyFavoriteFoodsLoadedStateImpl>
+    implements _$$MyFavoriteFoodsLoadedStateImplCopyWith<$Res> {
+  __$$MyFavoriteFoodsLoadedStateImplCopyWithImpl(
+      _$MyFavoriteFoodsLoadedStateImpl _value,
+      $Res Function(_$MyFavoriteFoodsLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1030,7 +1038,7 @@ class __$$MyFavoriteFoodsLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? foods = null,
   }) {
-    return _then(_$MyFavoriteFoodsLoadedState(
+    return _then(_$MyFavoriteFoodsLoadedStateImpl(
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
@@ -1041,8 +1049,8 @@ class __$$MyFavoriteFoodsLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MyFavoriteFoodsLoadedState implements MyFavoriteFoodsLoadedState {
-  const _$MyFavoriteFoodsLoadedState({required final List<Food> foods})
+class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
+  const _$MyFavoriteFoodsLoadedStateImpl({required final List<Food> foods})
       : _foods = foods;
 
   final List<Food> _foods;
@@ -1059,10 +1067,10 @@ class _$MyFavoriteFoodsLoadedState implements MyFavoriteFoodsLoadedState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyFavoriteFoodsLoadedState &&
+            other is _$MyFavoriteFoodsLoadedStateImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods));
   }
 
@@ -1073,9 +1081,9 @@ class _$MyFavoriteFoodsLoadedState implements MyFavoriteFoodsLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MyFavoriteFoodsLoadedStateCopyWith<_$MyFavoriteFoodsLoadedState>
-      get copyWith => __$$MyFavoriteFoodsLoadedStateCopyWithImpl<
-          _$MyFavoriteFoodsLoadedState>(this, _$identity);
+  _$$MyFavoriteFoodsLoadedStateImplCopyWith<_$MyFavoriteFoodsLoadedStateImpl>
+      get copyWith => __$$MyFavoriteFoodsLoadedStateImplCopyWithImpl<
+          _$MyFavoriteFoodsLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1164,32 +1172,32 @@ class _$MyFavoriteFoodsLoadedState implements MyFavoriteFoodsLoadedState {
 
 abstract class MyFavoriteFoodsLoadedState implements MyFavoriteFoodsState {
   const factory MyFavoriteFoodsLoadedState({required final List<Food> foods}) =
-      _$MyFavoriteFoodsLoadedState;
+      _$MyFavoriteFoodsLoadedStateImpl;
 
   List<Food> get foods;
   @JsonKey(ignore: true)
-  _$$MyFavoriteFoodsLoadedStateCopyWith<_$MyFavoriteFoodsLoadedState>
+  _$$MyFavoriteFoodsLoadedStateImplCopyWith<_$MyFavoriteFoodsLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ImmediateSearchInFoodsLoadedStateCopyWith<$Res> {
-  factory _$$ImmediateSearchInFoodsLoadedStateCopyWith(
-          _$ImmediateSearchInFoodsLoadedState value,
-          $Res Function(_$ImmediateSearchInFoodsLoadedState) then) =
-      __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl<$Res>;
+abstract class _$$ImmediateSearchInFoodsLoadedStateImplCopyWith<$Res> {
+  factory _$$ImmediateSearchInFoodsLoadedStateImplCopyWith(
+          _$ImmediateSearchInFoodsLoadedStateImpl value,
+          $Res Function(_$ImmediateSearchInFoodsLoadedStateImpl) then) =
+      __$$ImmediateSearchInFoodsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String favoriteId});
 }
 
 /// @nodoc
-class __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl<$Res>
+class __$$ImmediateSearchInFoodsLoadedStateImplCopyWithImpl<$Res>
     extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
-        _$ImmediateSearchInFoodsLoadedState>
-    implements _$$ImmediateSearchInFoodsLoadedStateCopyWith<$Res> {
-  __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl(
-      _$ImmediateSearchInFoodsLoadedState _value,
-      $Res Function(_$ImmediateSearchInFoodsLoadedState) _then)
+        _$ImmediateSearchInFoodsLoadedStateImpl>
+    implements _$$ImmediateSearchInFoodsLoadedStateImplCopyWith<$Res> {
+  __$$ImmediateSearchInFoodsLoadedStateImplCopyWithImpl(
+      _$ImmediateSearchInFoodsLoadedStateImpl _value,
+      $Res Function(_$ImmediateSearchInFoodsLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1197,7 +1205,7 @@ class __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl<$Res>
   $Res call({
     Object? favoriteId = null,
   }) {
-    return _then(_$ImmediateSearchInFoodsLoadedState(
+    return _then(_$ImmediateSearchInFoodsLoadedStateImpl(
       favoriteId: null == favoriteId
           ? _value.favoriteId
           : favoriteId // ignore: cast_nullable_to_non_nullable
@@ -1208,9 +1216,9 @@ class __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ImmediateSearchInFoodsLoadedState
+class _$ImmediateSearchInFoodsLoadedStateImpl
     implements ImmediateSearchInFoodsLoadedState {
-  const _$ImmediateSearchInFoodsLoadedState({required this.favoriteId});
+  const _$ImmediateSearchInFoodsLoadedStateImpl({required this.favoriteId});
 
   @override
   final String favoriteId;
@@ -1221,10 +1229,10 @@ class _$ImmediateSearchInFoodsLoadedState
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ImmediateSearchInFoodsLoadedState &&
+            other is _$ImmediateSearchInFoodsLoadedStateImpl &&
             (identical(other.favoriteId, favoriteId) ||
                 other.favoriteId == favoriteId));
   }
@@ -1235,10 +1243,10 @@ class _$ImmediateSearchInFoodsLoadedState
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ImmediateSearchInFoodsLoadedStateCopyWith<
-          _$ImmediateSearchInFoodsLoadedState>
-      get copyWith => __$$ImmediateSearchInFoodsLoadedStateCopyWithImpl<
-          _$ImmediateSearchInFoodsLoadedState>(this, _$identity);
+  _$$ImmediateSearchInFoodsLoadedStateImplCopyWith<
+          _$ImmediateSearchInFoodsLoadedStateImpl>
+      get copyWith => __$$ImmediateSearchInFoodsLoadedStateImplCopyWithImpl<
+          _$ImmediateSearchInFoodsLoadedStateImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1328,11 +1336,12 @@ class _$ImmediateSearchInFoodsLoadedState
 abstract class ImmediateSearchInFoodsLoadedState
     implements MyFavoriteFoodsState {
   const factory ImmediateSearchInFoodsLoadedState(
-      {required final String favoriteId}) = _$ImmediateSearchInFoodsLoadedState;
+          {required final String favoriteId}) =
+      _$ImmediateSearchInFoodsLoadedStateImpl;
 
   String get favoriteId;
   @JsonKey(ignore: true)
-  _$$ImmediateSearchInFoodsLoadedStateCopyWith<
-          _$ImmediateSearchInFoodsLoadedState>
+  _$$ImmediateSearchInFoodsLoadedStateImplCopyWith<
+          _$ImmediateSearchInFoodsLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
