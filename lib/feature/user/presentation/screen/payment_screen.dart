@@ -1,16 +1,18 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:masterpie/util/core/constant/subscription_constants.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:masterpie/util/design/toast/app_toast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/messages_constants.dart';
+import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../domain/model/user_subscription_plan_model.dart';
-
 
 class PaymentScreen extends StatefulWidget {
 
@@ -24,6 +26,8 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+
+
 
   List<String> _planTypeOptions= [];
 
@@ -161,7 +165,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-
   Widget buildPayButton(BuildContext context){
     return ElevatedButton(
       onPressed: (){
@@ -182,38 +185,56 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
   void payButtonClickListener(BuildContext context) async{
-    final initResponse= await initPaymentSheet();
-    if(initResponse){
-      final confirmResponse= await confirmPayment();
-      if(confirmResponse){
-        if(context.mounted){
-          showSuccessToast(context, PAYMENT_SUCCEED_MSG);
-        }
-      }else{
-        if(context.mounted){
-          showErrorToast(context, PAYMENT_CENCELLED_MSG);
-        }
-      }
-    }else{
-      if(context.mounted){
-        showErrorToast(context, ERROR_TRY_AGAIN);
-      }
-    }
+    final _customer = await _createCustomer();
+    final _paymentIntent = await _createPaymentIntents();
+    await _createCreditCard(_customer['id'], _paymentIntent['client_secret']);
+    final _paymentMethod = await _getPaymentMethods(_paymentIntent['id']);
+    await _attachPaymentMethod(_paymentMethod['payment_method'], _customer['id']);
+    await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
+    await _createScheduleSubscriptions(_customer['id']);
   }
 
 
 
+  Future<FunctionResponse> _createSubscription(String customerId) async {
+    final response = await Supabase.instance.client.functions
+        .invoke('create_subscription', body: {
+      'customer': customerId,
+    });
+    return response;
+  }
+
+  Future<Map<String, dynamic>> _createPaymentIntents() async {
+    const String url = 'https://api.stripe.com/v1/payment_intents';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    Map<String, dynamic> body = {
+      //todo
+      'amount': 999,
+      'currency': 'usd',
+      'payment_method_types[]': 'card',
+      'setup_future_usage' : 'off_session'
+    };
+
+    final response= await request.post(url, data: body);
+    final data = await response.data;
+    return data;
+  }
 
 
+  Future<Map<String, dynamic>> _getPaymentMethods(String paymentIntentId) async {
+    final String url = 'https://api.stripe.com/v1/payment_intents/$paymentIntentId';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url);
+    final data = await response.data;
+    return data;
+  }
 
-  Future<bool> initPaymentSheet() async {
-    try {
 
-      final data = await _createPaymentIntent();
-
-      await Stripe.instance.initPaymentSheet(
+  Future<void> _createCreditCard(String customerId, String paymentIntentClientSecret) async {
+    await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: data.data.toString(),
+          customerId: customerId,
+          paymentIntentClientSecret: paymentIntentClientSecret,
           merchantDisplayName: MASTERPIE_NAME,
           primaryButtonLabel: '$PAY_LABEL $_amount',
           applePay: const PaymentSheetApplePay(
@@ -237,34 +258,78 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ),
-          // billingDetails: billingDetails,
-        ),
-      );
-      return true;
-    } catch (e) {
-      print('error_stripe_init: $e');
-      return false;
-    }
+        ));
+
+    await Stripe.instance.presentPaymentSheet();
   }
 
-  Future<bool> confirmPayment() async {
-    try {
-      await Stripe.instance.presentPaymentSheet();
-      return true;
-    } on Exception catch (e) {
-      print('error_stripe_confirm: $e');
-      return false;
-    }
-  }
-
-  Future<FunctionResponse> _createPaymentIntent() async {
-    final response = await Supabase.instance.client.functions
-        .invoke('create_payment_intent', body: {
-      'orderId': widget.userSubscriptionPlan.userId,
-      'amount': _amount,
+  Future<Map<String, dynamic>> _updateCustomer(
+      String paymentMethodId, String customerId) async {
+    final String url = 'https://api.stripe.com/v1/customers/$customerId';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url, data:{
+      'invoice_settings[default_payment_method]': paymentMethodId,
     });
-    return response;
+    final data = await response.data;
+    return data;
   }
+
+  Future<Map<String, dynamic>> _attachPaymentMethod(String paymentMethodId, String customerId) async {
+    final String url = 'https://api.stripe.com/v1/payment_methods/$paymentMethodId/attach';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url, data:{
+      'customer': customerId,
+    });
+    final data = await response.data;
+    return data;
+  }
+
+  Future<Map<String, dynamic>> _createCustomer() async {
+    const String url = 'https://api.stripe.com/v1/customers';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url, data:{
+    'description': widget.userSubscriptionPlan.userId
+    });
+    final data = await response.data;
+    return data;
+  }
+
+  Future<Map<String, dynamic>> _createSubscriptions(String customerId) async {
+    const String url = 'https://api.stripe.com/v1/subscriptions';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url, data:{
+      'customer': customerId,
+      //todo
+      'items[0][price]': 'price_1OWUlOFawMQyAsivJcIc5vB3',
+      'payment_behavior': 'default_incomplete',
+    });
+    final data = await response.data;
+    return data;
+  }
+
+
+  Future<Map<String, dynamic>> _createScheduleSubscriptions(String customerId) async {
+
+
+    print('show_cus: $customerId');
+
+    const String url = 'https://api.stripe.com/v1/subscription_schedules';
+    final NetworkRequest request = await NetworkRequest.createStripe();
+    final response= await request.post(url, data:{
+      'customer': customerId,
+      'start_date': 'now',
+      'phases': [
+        {
+          //todo
+          "items": [{"price": "price_1OWUlOFawMQyAsivJcIc5vB3", "quantity": 1}],
+        }
+      ],
+    });
+    final data = await response.data;
+    return data;
+  }
+
+
 
 
 }

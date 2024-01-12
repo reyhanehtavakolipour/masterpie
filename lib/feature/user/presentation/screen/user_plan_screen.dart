@@ -284,7 +284,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               onChanged: (value) {
                 setState(() {
                   _isAutoPaymentOn = value;
-                  // todo update auto payment
+                  // todo update auto payment in Stripe
                 });
               },
             ),

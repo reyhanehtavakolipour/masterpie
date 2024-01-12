@@ -557,6 +557,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, List<FoodRemote>>> getLoggedFoods(String date, String userId) async{
     try {
+
       final supabase = Supabase.instance.client;
       final data = await supabase
           .from(USER_LOGGED_FOOD_REMOTE_TABLE)
