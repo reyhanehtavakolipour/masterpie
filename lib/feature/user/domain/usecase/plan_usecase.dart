@@ -6,7 +6,7 @@ import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
-import '../model/user_subscription_plan_model.dart';
+import '../model/user_plan_model.dart';
 import '../repository/user_repository.dart';
 
 class PlanUseCase{
@@ -14,8 +14,8 @@ class PlanUseCase{
   final repo = serviceLocator<UserRepository>();
 
 
-  Future<Either<Failure, UserSubscriptionPlan>> getUserPlan() async{
-    final planResponse = await repo.getUserSubscriptionPlanInRemote();
+  Future<Either<Failure, UserPlan>> getUserPlan() async{
+    final planResponse = await repo.getUserPlanInRemote();
     if(planResponse.isRight()){
       return Right(planResponse.asRight());
     }

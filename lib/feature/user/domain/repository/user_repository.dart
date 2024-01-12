@@ -3,12 +3,13 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
 import '../model/google_signin_response_model.dart';
 import '../model/profile_model.dart';
 import '../model/user_credentials_model.dart';
-import '../model/user_subscription_plan_model.dart';
+import '../model/subscription_plan_model.dart';
 
 abstract class UserRepository{
 
@@ -37,10 +38,10 @@ abstract class UserRepository{
   Future<Either<Failure, Success>> updateSubscriptionPlanInRemote(String plan);
 
 
-  Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeededInRemote();
+  Future<Either<Failure, UserPlan>> getUserPlanInRemote();
 
 
-  Future<Either<Failure, UserSubscriptionPlan>> getUserSubscriptionPlanInRemote();
+  Future<Either<Failure, List<SubscriptionPlan>>> getSubscriptionPlansInRemote();
 
 
   Future<Either<Failure, Success>> saveUserEmailInHive(String email);

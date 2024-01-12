@@ -18,7 +18,6 @@ class LoginUseCase{
       await repo.saveUserIdInHive(loginResponseRemote.getOrElse(() => ''));
       await repo.saveUserEmailInHive(email);
       await repo.saveUserPasswordInHive(password);
-      await repo.updateSubscriptionPlanAfterLoginIfNeededInRemote();
       return const Right(Success());
     }
     return Left(getFailure(loginResponseRemote.asLeft()));
@@ -31,7 +30,6 @@ class LoginUseCase{
       await repo.saveUserIdInHive(loginResponseRemote.asRight().id);
       await repo.saveUserEmailInHive(loginResponseRemote.asRight().email);
       await repo.saveUserPasswordInHive('');
-      await repo.updateSubscriptionPlanAfterLoginIfNeededInRemote();
       return const Right(Success());
     }
     return Left(getFailure(loginResponseRemote.asLeft()));

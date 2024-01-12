@@ -1,20 +1,19 @@
 
 
 import 'package:dartz/dartz.dart';
-import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_local_datasource.dart';
 import 'package:masterpie/feature/user/data/remote/datasource/user_remote_datasource.dart';
+import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
+import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
-import '../../../../util/core/helper/helper.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
 import '../../domain/model/google_signin_response_model.dart';
 import '../../domain/model/profile_model.dart';
 import '../../domain/model/user_credentials_model.dart';
-import '../../domain/model/user_subscription_plan_model.dart';
 import '../../domain/repository/user_repository.dart';
 import '../mapper/user_mapper.dart';
 
@@ -259,21 +258,11 @@ class UserRepositoryImpl extends UserRepository{
   }
 
   @override
-  Future<Either<Failure, UserSubscriptionPlan>> getUserSubscriptionPlanInRemote() async{
-    final userId = await getUserIdFromHive();
-    final planResponse = await userRemoteDataSource.getUserSubscriptionPlan(userId.asRight());
-    if(planResponse.isRight()){
-      return Right(mapper.fromUserSubscriptionRemote(planResponse.asRight()));
-    }
-    return Left(planResponse.asLeft());
-  }
-
-  @override
   Future<Either<Failure, Success>> updateFavoriteRequestsLeftInRemote() async{
     final userId = await getUserIdFromHive();
-    final planResponse = await userRemoteDataSource.getUserSubscriptionPlan(userId.asRight());
+    final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
-      return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().favoriteFoodRequestsLeft -1);
+      return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().favoriteFoodLeft -1);
     }
     return Left(planResponse.asLeft());
   }
@@ -281,28 +270,13 @@ class UserRepositoryImpl extends UserRepository{
   @override
   Future<Either<Failure, Success>> updateFoodsPortionRequestsLeftInRemote() async{
     final userId = await getUserIdFromHive();
-    final planResponse = await userRemoteDataSource.getUserSubscriptionPlan(userId.asRight());
+    final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
       return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().foodPortionRequestsLeft -1);
     }
     return Left(planResponse.asLeft());
   }
 
-  @override
-  Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeededInRemote() async{
-    final userId = await getUserIdFromHive();
-    final planResponse = await userRemoteDataSource.getUserSubscriptionPlan(userId.asRight());
-    if(planResponse.isRight()){
-      DateTime today = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-      DateTime upgradeDate = DateTime.parse(planResponse.asRight().upgradeDate);
-      int differenceInDays = calculateDifferenceInDays(today, upgradeDate);
-      if(differenceInDays > 30){
-        //todo handle check if the user had any payment , handle auto-payment
-      }
-      return const Right(Success());
-    }
-    return Left(planResponse.asLeft());
-  }
 
   @override
   Future<Either<Failure, Success>> updateSubscriptionPlanInRemote(String plan) async{
@@ -317,9 +291,28 @@ class UserRepositoryImpl extends UserRepository{
   @override
   Future<Either<Failure, Success>> updateSuggestFoodRequestsLeftInRemote() async{
     final userId = await getUserIdFromHive();
-    final planResponse = await userRemoteDataSource.getUserSubscriptionPlan(userId.asRight());
+    final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
       return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().suggestFoodRequestsLeft -1);
+    }
+    return Left(planResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, List<SubscriptionPlan>>> getSubscriptionPlansInRemote() async{
+    final planResponse = await userRemoteDataSource.getSubscriptionPlans();
+    if(planResponse.isRight()){
+      return Right(mapper.fromSubscriptionPlansRemote(planResponse.asRight()));
+    }
+    return Left(planResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, UserPlan>> getUserPlanInRemote() async{
+    final userId = await getUserIdFromHive();
+    final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
+    if(planResponse.isRight()){
+      return Right(mapper.fromUserPlanRemote(planResponse.asRight()));
     }
     return Left(planResponse.asLeft());
   }

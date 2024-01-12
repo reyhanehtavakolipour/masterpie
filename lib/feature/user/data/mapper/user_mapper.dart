@@ -2,13 +2,16 @@
 
 
 
+import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
+import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
+import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
+import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
+
 import '../../domain/model/google_signin_response_model.dart';
 import '../../domain/model/profile_model.dart';
-import '../../domain/model/user_subscription_plan_model.dart';
 import '../local/model/profile_local.dart';
 import '../remote/model/google_signin_remote_model.dart';
 import '../remote/model/profile_remote.dart';
-import '../remote/model/user_subscription_plan_remote_model.dart';
 
 abstract class UserMapper {
 
@@ -23,6 +26,11 @@ abstract class UserMapper {
 
   Profile fromProfileRemote(ProfileRemote profileRemote);
 
-  UserSubscriptionPlan fromUserSubscriptionRemote(UserSubscriptionPlanRemote userSubscriptionPlanRemote);
+  UserPlan fromUserPlanRemote(UserPlanRemote userPlanRemote);
+
+  List<SubscriptionPlan> fromSubscriptionPlansRemote(List<SubscriptionPlanRemote> subscriptionPlansRemote);
+
+  SubscriptionPlan fromSubscriptionPlanRemote(SubscriptionPlanRemote subscriptionRemote);
+
 
 }

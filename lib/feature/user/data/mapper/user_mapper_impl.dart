@@ -2,13 +2,17 @@
 
 
 
+import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
+
+import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
+
 import '../../domain/model/google_signin_response_model.dart';
 import '../../domain/model/profile_model.dart';
-import '../../domain/model/user_subscription_plan_model.dart';
+import '../../domain/model/subscription_plan_model.dart';
 import '../local/model/profile_local.dart';
 import '../remote/model/google_signin_remote_model.dart';
 import '../remote/model/profile_remote.dart';
-import '../remote/model/user_subscription_plan_remote_model.dart';
+import '../remote/model/subscription_plan_remote_model.dart';
 import 'user_mapper.dart';
 
 class UserMapperImpl extends UserMapper{
@@ -102,16 +106,44 @@ class UserMapperImpl extends UserMapper{
     );
   }
 
+
   @override
-  UserSubscriptionPlan fromUserSubscriptionRemote(UserSubscriptionPlanRemote userSubscriptionPlanRemote) {
-    return UserSubscriptionPlan(
-      userId: userSubscriptionPlanRemote.userId,
-      upgradeDate: userSubscriptionPlanRemote.upgradeDate,
-      plan: userSubscriptionPlanRemote.plan,
-      favoriteFoodRequestsLeft: userSubscriptionPlanRemote.favoriteFoodRequestsLeft,
-      suggestFoodRequestsLeft: userSubscriptionPlanRemote.suggestFoodRequestsLeft,
-      foodPortionRequestsLeft: userSubscriptionPlanRemote.foodPortionRequestsLeft,
-      planType: userSubscriptionPlanRemote.planType
+  List<SubscriptionPlan> fromSubscriptionPlansRemote(List<SubscriptionPlanRemote> subscriptionPlansRemote) {
+    return subscriptionPlansRemote.map((subscriptionRemote) =>
+        SubscriptionPlan(
+          id: subscriptionRemote.id,
+          plan: subscriptionRemote.plan,
+          intervals: subscriptionRemote.intervals,
+          prices: subscriptionRemote.prices,
+          favoriteFoodLimit: subscriptionRemote.favoriteFoodLimit,
+          suggestFoodRequestsLimit: subscriptionRemote.suggestFoodRequestsLimit,
+          foodPortionRequestsLimit: subscriptionRemote.foodPortionRequestsLimit
+        )
+    ).toList();
+  }
+
+  @override
+  UserPlan fromUserPlanRemote(UserPlanRemote userPlanRemote) {
+    return UserPlan(
+        id: userPlanRemote.id,
+        isAutoPaymentOn: userPlanRemote.isAutoPaymentOn,
+        subscriptionPlan: fromSubscriptionPlanRemote(userPlanRemote.subscriptionPlan!),
+        favoriteFoodLeft: userPlanRemote.favoriteFoodLeft,
+        suggestFoodRequestsLeft: userPlanRemote.suggestFoodRequestsLeft,
+        foodPortionRequestsLeft: userPlanRemote.foodPortionRequestsLeft,
+    );
+  }
+
+  @override
+  SubscriptionPlan fromSubscriptionPlanRemote(SubscriptionPlanRemote subscriptionRemote) {
+    return SubscriptionPlan(
+        id: subscriptionRemote.id,
+        plan: subscriptionRemote.plan,
+        intervals: subscriptionRemote.intervals,
+        prices: subscriptionRemote.prices,
+        favoriteFoodLimit: subscriptionRemote.favoriteFoodLimit,
+        suggestFoodRequestsLimit: subscriptionRemote.suggestFoodRequestsLimit,
+        foodPortionRequestsLimit: subscriptionRemote.foodPortionRequestsLimit
     );
   }
 

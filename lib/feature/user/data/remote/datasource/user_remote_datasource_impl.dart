@@ -1,22 +1,19 @@
 
-
-
-
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
+import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
-import '../../../../../util/core/constant/subscription_constants.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
 import '../../../../../util/core/response/success.dart';
 import '../model/google_signin_remote_model.dart';
 import '../model/profile_remote.dart';
-import '../model/user_subscription_plan_remote_model.dart';
 import 'user_remote_datasource.dart';
 
 class UserRemoteDataSourceImpl extends UserRemoteDataSource{
@@ -313,22 +310,28 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-      final updates = {
-        'plan': FREE_PLAN,
-        'suggest_food_left_request': FREE_SUGGEST_FOOD_LIMIT,
-        'food_portion_left_request': FREE_FOODS_PORTION_REQUEST_LIMIT,
-        'favorite_food_left': FREE_FAVORITE_LIMIT,
-        'modified_at': formattedDate,
-        'plan_type': MONTHLY_PLAN,
-      };
+      final subscriptions = await getSubscriptionPlans();
+      if(subscriptions.isRight()){
+        
+        final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == 'free');
+        
+        final updates = {
+          'plan': freeSubscription.plan,
+          'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
+          'food_portion_left_request': freeSubscription.foodPortionRequestsLimit,
+          'favorite_food_left': freeSubscription.favoriteFoodLimit,
+          'modified_at': formattedDate,
+          'plan_type': freeSubscription.intervals[0],
+        };
 
-      final data = await supabase
-          .from(SUBSCRIPTION_PLAN_TABLE)
-          .update(updates)
-          .eq('id', userId);
+        final data = await supabase
+            .from(SUBSCRIPTION_PLAN_TABLE)
+            .update(updates)
+            .eq('id', userId);
 
-      return const Right(Success());
-
+        return const Right(Success());
+      }
+      return const Left(FailureResponse(''));
     }on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
     } catch (error) {
@@ -336,34 +339,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     }
   }
 
-  @override
-  Future<Either<Failure, UserSubscriptionPlanRemote>> getUserSubscriptionPlan(String userId) async{
-    try {
-      final supabase = Supabase.instance.client;
-      final data = await supabase
-          .from(SUBSCRIPTION_PLAN_TABLE)
-          .select<List<dynamic>>()
-          .eq('id', userId);
-
-
-      UserSubscriptionPlanRemote userSubscriptionPlanRemote = UserSubscriptionPlanRemote(
-        userId: data[0]['id'],
-        plan: data[0]['plan'] ?? '',
-        planType: data[0]['plan_type'] ?? '',
-        suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
-        foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
-        favoriteFoodRequestsLeft: data[0]['favorite_food_left'] ?? 0,
-        upgradeDate: data[0]['modified_at'] ?? '',
-      );
-
-      return Right(userSubscriptionPlanRemote);
-
-    } on PostgrestException catch (error) {
-      return Left(ExceptionFailure(error));
-    } catch (error) {
-      return Left(ExceptionFailure(error));
-    }
-  }
 
   @override
   Future<Either<Failure, Success>> updateFavoriteRequestsLeft(String userId, int requestsLeft) async{
@@ -385,9 +360,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, Success>> updateSubscriptionPlan(String userId, String plan) async{
-    if(plan == FREE_PLAN){
-      return setUserSubscriptionPlanAfterRegister(userId);
-    }
+    //todo handle
     return const Right(Success());
   }
 
@@ -395,6 +368,43 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeeded(String userId) async{
     //todo handle
     return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, List<SubscriptionPlanRemote>>> getSubscriptionPlans() {
+    // TODO: implement getSubscriptionPlans
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, UserPlanRemote>> getUserPlan(String userId) async{
+    try {
+      final supabase = Supabase.instance.client;
+      final data = await supabase
+          .from(SUBSCRIPTION_PLAN_TABLE)
+          .select<List<dynamic>>()
+          .eq('id', userId);
+
+
+      UserPlanRemote userSubscriptionPlanRemote = UserPlanRemote(
+        id: data[0]['id'],
+        subscriptionPlan: SubscriptionPlanRemote(
+          id: userId,
+          plan: data[0]['plan'] ?? '',
+          intervals: [data[0]['plan_type'] ?? ''],
+        ),
+        suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
+        foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
+        favoriteFoodLeft: data[0]['favorite_food_left'] ?? 0,
+      );
+
+      return Right(userSubscriptionPlanRemote);
+
+    } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
   }
 
 

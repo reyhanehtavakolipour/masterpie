@@ -2,24 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:masterpie/util/core/constant/subscription_constants.dart';
-import 'package:masterpie/util/core/helper/print.dart';
+import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import 'package:masterpie/util/design/toast/app_toast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
-import '../../domain/model/user_subscription_plan_model.dart';
 
 class PaymentScreen extends StatefulWidget {
 
 
-  final UserSubscriptionPlan userSubscriptionPlan;
+  final SubscriptionPlan subscriptionPlan;
 
-  const PaymentScreen({super.key, required this.userSubscriptionPlan});
+  const PaymentScreen({super.key, required this.subscriptionPlan});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -29,11 +26,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
 
-  List<String> _planTypeOptions= [];
+  List<String> _intervalOptions= [];
 
-  String _selectedPlanType= '';
+  String _selectedInterval= '';
 
-  double _amount = 0;
+  int _amount = 0;
 
   @override
   void initState() {
@@ -42,15 +39,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void initPlanTypeOptions(){
-      if(widget.userSubscriptionPlan.plan == BASIC_PLAN){
-        _planTypeOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-$BASIC_PRICE_MONTHLY', '${ANNUAL_PLAN_LABEL.capitalize()}-${BASIC_PRICE_ANNUAL_MONTHLY * 12}'];
-        _selectedPlanType = '${MONTHLY_PLAN_LABEL.capitalize()}-$BASIC_PRICE_MONTHLY';
-        _amount= BASIC_PRICE_MONTHLY;
-      }else if(widget.userSubscriptionPlan.plan == PREMIUM_PLAN){
-        _planTypeOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-$PREMIUM_PRICE_MONTHLY', '${ANNUAL_PLAN_LABEL.capitalize()}-${PREMIUM_PRICE_ANNUAL_MONTHLY * 12}'];
-        _selectedPlanType = '${MONTHLY_PLAN_LABEL.capitalize()}-$PREMIUM_PRICE_MONTHLY';
-        _amount= PREMIUM_PRICE_MONTHLY;
-      }
+    _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[1] * 12}'];
+    _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}';
+    _amount= widget.subscriptionPlan.prices[0];
   }
 
   @override
@@ -89,9 +80,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           CustomRadioListTile(
-                            options: _planTypeOptions,
+                            options: _intervalOptions,
                             onSelectedOptionChanged: updateSelectedPlanType,
-                            selectedOption: _selectedPlanType,
+                            selectedOption: _selectedInterval,
                             orientation: VERTICAL_ORIENTATION,
                             isEditable: true,
                           ),
@@ -106,7 +97,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${widget.userSubscriptionPlan.plan.capitalize()} $PLAN_LABEL',
+                                  '${widget.subscriptionPlan.plan.capitalize()} $PLAN_LABEL',
                                   style: const TextStyle(
                                       fontSize: 14,
                                       color: DARK_PRIMARY_COLOR,
@@ -145,21 +136,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  void updateSelectedPlanType(String type){
+  void updateSelectedPlanType(String interval){
     setState(() {
-      _selectedPlanType= type;
-      if(widget.userSubscriptionPlan.plan.toLowerCase().contains(BASIC_PLAN.toLowerCase())){
-        if(type.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
-          _amount= BASIC_PRICE_MONTHLY;
-        }else if(type.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
-          _amount= BASIC_PRICE_ANNUAL_MONTHLY * 12;
-        }
-      }else if(widget.userSubscriptionPlan.plan.toLowerCase().contains(PREMIUM_PLAN.toLowerCase())){
-        if(type.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
-          _amount= PREMIUM_PRICE_MONTHLY;
-        }else if(type.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
-          _amount= PREMIUM_PRICE_ANNUAL_MONTHLY * 12;
-        }
+      _selectedInterval= interval;
+      if(interval.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
+        _amount= widget.subscriptionPlan.prices[0];
+      }else if(interval.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
+        _amount= widget.subscriptionPlan.prices[1] * 12;
       }
     });
   }
@@ -231,6 +214,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
   Future<void> _createCreditCard(String customerId, String paymentIntentClientSecret) async {
+
+    final billingDetails = BillingDetails(
+      name: 'Flutter Stripe',
+      email: 'email@stripe.com',
+      phone: '+48888000888',
+      address: Address(
+        city: 'Houston',
+        country: 'US',
+        line1: '1459  Circle Drive',
+        line2: '',
+        state: 'Texas',
+        postalCode: '77063',
+      ),
+    );
+
     await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           customerId: customerId,
@@ -258,10 +256,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ),
+          billingDetails: billingDetails
         ));
 
     await Stripe.instance.presentPaymentSheet();
   }
+
 
   Future<Map<String, dynamic>> _updateCustomer(
       String paymentMethodId, String customerId) async {
@@ -288,7 +288,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     const String url = 'https://api.stripe.com/v1/customers';
     final NetworkRequest request = await NetworkRequest.createStripe();
     final response= await request.post(url, data:{
-    'description': widget.userSubscriptionPlan.userId
+    'description': 'user id or email'
     });
     final data = await response.data;
     return data;

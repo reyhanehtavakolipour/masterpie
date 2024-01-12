@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$PlanEvent {
+mixin _$UserPlanEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String plan) onUpdateUserPlan,
@@ -63,15 +63,16 @@ mixin _$PlanEvent {
 }
 
 /// @nodoc
-abstract class $PlanEventCopyWith<$Res> {
-  factory $PlanEventCopyWith(PlanEvent value, $Res Function(PlanEvent) then) =
-      _$PlanEventCopyWithImpl<$Res, PlanEvent>;
+abstract class $UserPlanEventCopyWith<$Res> {
+  factory $UserPlanEventCopyWith(
+          UserPlanEvent value, $Res Function(UserPlanEvent) then) =
+      _$UserPlanEventCopyWithImpl<$Res, UserPlanEvent>;
 }
 
 /// @nodoc
-class _$PlanEventCopyWithImpl<$Res, $Val extends PlanEvent>
-    implements $PlanEventCopyWith<$Res> {
-  _$PlanEventCopyWithImpl(this._value, this._then);
+class _$UserPlanEventCopyWithImpl<$Res, $Val extends UserPlanEvent>
+    implements $UserPlanEventCopyWith<$Res> {
+  _$UserPlanEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -90,7 +91,7 @@ abstract class _$$UpdateUserPlanEventImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$UpdateUserPlanEventImplCopyWithImpl<$Res>
-    extends _$PlanEventCopyWithImpl<$Res, _$UpdateUserPlanEventImpl>
+    extends _$UserPlanEventCopyWithImpl<$Res, _$UpdateUserPlanEventImpl>
     implements _$$UpdateUserPlanEventImplCopyWith<$Res> {
   __$$UpdateUserPlanEventImplCopyWithImpl(_$UpdateUserPlanEventImpl _value,
       $Res Function(_$UpdateUserPlanEventImpl) _then)
@@ -120,7 +121,7 @@ class _$UpdateUserPlanEventImpl implements UpdateUserPlanEvent {
 
   @override
   String toString() {
-    return 'PlanEvent.onUpdateUserPlan(plan: $plan)';
+    return 'UserPlanEvent.onUpdateUserPlan(plan: $plan)';
   }
 
   @override
@@ -210,7 +211,7 @@ class _$UpdateUserPlanEventImpl implements UpdateUserPlanEvent {
   }
 }
 
-abstract class UpdateUserPlanEvent implements PlanEvent {
+abstract class UpdateUserPlanEvent implements UserPlanEvent {
   const factory UpdateUserPlanEvent(final String plan) =
       _$UpdateUserPlanEventImpl;
 
@@ -229,7 +230,7 @@ abstract class _$$GetUserPlanEventImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GetUserPlanEventImplCopyWithImpl<$Res>
-    extends _$PlanEventCopyWithImpl<$Res, _$GetUserPlanEventImpl>
+    extends _$UserPlanEventCopyWithImpl<$Res, _$GetUserPlanEventImpl>
     implements _$$GetUserPlanEventImplCopyWith<$Res> {
   __$$GetUserPlanEventImplCopyWithImpl(_$GetUserPlanEventImpl _value,
       $Res Function(_$GetUserPlanEventImpl) _then)
@@ -243,7 +244,7 @@ class _$GetUserPlanEventImpl implements GetUserPlanEvent {
 
   @override
   String toString() {
-    return 'PlanEvent.onGetUserPlan()';
+    return 'UserPlanEvent.onGetUserPlan()';
   }
 
   @override
@@ -324,7 +325,7 @@ class _$GetUserPlanEventImpl implements GetUserPlanEvent {
   }
 }
 
-abstract class GetUserPlanEvent implements PlanEvent {
+abstract class GetUserPlanEvent implements UserPlanEvent {
   const factory GetUserPlanEvent() = _$GetUserPlanEventImpl;
 }
 
@@ -337,7 +338,7 @@ abstract class _$$ResetImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ResetImplCopyWithImpl<$Res>
-    extends _$PlanEventCopyWithImpl<$Res, _$ResetImpl>
+    extends _$UserPlanEventCopyWithImpl<$Res, _$ResetImpl>
     implements _$$ResetImplCopyWith<$Res> {
   __$$ResetImplCopyWithImpl(
       _$ResetImpl _value, $Res Function(_$ResetImpl) _then)
@@ -351,7 +352,7 @@ class _$ResetImpl implements Reset {
 
   @override
   String toString() {
-    return 'PlanEvent.onReset()';
+    return 'UserPlanEvent.onReset()';
   }
 
   @override
@@ -432,18 +433,18 @@ class _$ResetImpl implements Reset {
   }
 }
 
-abstract class Reset implements PlanEvent {
+abstract class Reset implements UserPlanEvent {
   const factory Reset() = _$ResetImpl;
 }
 
 /// @nodoc
-mixin _$PlanState {
+mixin _$UserPlanState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) =>
       throw _privateConstructorUsedError;
@@ -452,7 +453,7 @@ mixin _$PlanState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) =>
       throw _privateConstructorUsedError;
@@ -461,51 +462,52 @@ mixin _$PlanState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PlanStateCopyWith<$Res> {
-  factory $PlanStateCopyWith(PlanState value, $Res Function(PlanState) then) =
-      _$PlanStateCopyWithImpl<$Res, PlanState>;
+abstract class $UserPlanStateCopyWith<$Res> {
+  factory $UserPlanStateCopyWith(
+          UserPlanState value, $Res Function(UserPlanState) then) =
+      _$UserPlanStateCopyWithImpl<$Res, UserPlanState>;
 }
 
 /// @nodoc
-class _$PlanStateCopyWithImpl<$Res, $Val extends PlanState>
-    implements $PlanStateCopyWith<$Res> {
-  _$PlanStateCopyWithImpl(this._value, this._then);
+class _$UserPlanStateCopyWithImpl<$Res, $Val extends UserPlanState>
+    implements $UserPlanStateCopyWith<$Res> {
+  _$UserPlanStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -514,35 +516,36 @@ class _$PlanStateCopyWithImpl<$Res, $Val extends PlanState>
 }
 
 /// @nodoc
-abstract class _$$PlanInitialStateImplCopyWith<$Res> {
-  factory _$$PlanInitialStateImplCopyWith(_$PlanInitialStateImpl value,
-          $Res Function(_$PlanInitialStateImpl) then) =
-      __$$PlanInitialStateImplCopyWithImpl<$Res>;
+abstract class _$$UserPlanInitialStateImplCopyWith<$Res> {
+  factory _$$UserPlanInitialStateImplCopyWith(_$UserPlanInitialStateImpl value,
+          $Res Function(_$UserPlanInitialStateImpl) then) =
+      __$$UserPlanInitialStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PlanInitialStateImplCopyWithImpl<$Res>
-    extends _$PlanStateCopyWithImpl<$Res, _$PlanInitialStateImpl>
-    implements _$$PlanInitialStateImplCopyWith<$Res> {
-  __$$PlanInitialStateImplCopyWithImpl(_$PlanInitialStateImpl _value,
-      $Res Function(_$PlanInitialStateImpl) _then)
+class __$$UserPlanInitialStateImplCopyWithImpl<$Res>
+    extends _$UserPlanStateCopyWithImpl<$Res, _$UserPlanInitialStateImpl>
+    implements _$$UserPlanInitialStateImplCopyWith<$Res> {
+  __$$UserPlanInitialStateImplCopyWithImpl(_$UserPlanInitialStateImpl _value,
+      $Res Function(_$UserPlanInitialStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$PlanInitialStateImpl implements PlanInitialState {
-  const _$PlanInitialStateImpl();
+class _$UserPlanInitialStateImpl implements UserPlanInitialState {
+  const _$UserPlanInitialStateImpl();
 
   @override
   String toString() {
-    return 'PlanState.initial()';
+    return 'UserPlanState.initial()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlanInitialStateImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$UserPlanInitialStateImpl);
   }
 
   @override
@@ -554,7 +557,7 @@ class _$PlanInitialStateImpl implements PlanInitialState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) {
     return initial();
@@ -566,7 +569,7 @@ class _$PlanInitialStateImpl implements PlanInitialState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) {
     return initial?.call();
@@ -578,7 +581,7 @@ class _$PlanInitialStateImpl implements PlanInitialState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) {
@@ -591,11 +594,11 @@ class _$PlanInitialStateImpl implements PlanInitialState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) {
     return initial(this);
   }
@@ -603,11 +606,11 @@ class _$PlanInitialStateImpl implements PlanInitialState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) {
     return initial?.call(this);
   }
@@ -615,11 +618,11 @@ class _$PlanInitialStateImpl implements PlanInitialState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -629,40 +632,41 @@ class _$PlanInitialStateImpl implements PlanInitialState {
   }
 }
 
-abstract class PlanInitialState implements PlanState {
-  const factory PlanInitialState() = _$PlanInitialStateImpl;
+abstract class UserPlanInitialState implements UserPlanState {
+  const factory UserPlanInitialState() = _$UserPlanInitialStateImpl;
 }
 
 /// @nodoc
-abstract class _$$PlanLoadingStateImplCopyWith<$Res> {
-  factory _$$PlanLoadingStateImplCopyWith(_$PlanLoadingStateImpl value,
-          $Res Function(_$PlanLoadingStateImpl) then) =
-      __$$PlanLoadingStateImplCopyWithImpl<$Res>;
+abstract class _$$UserPlanLoadingStateImplCopyWith<$Res> {
+  factory _$$UserPlanLoadingStateImplCopyWith(_$UserPlanLoadingStateImpl value,
+          $Res Function(_$UserPlanLoadingStateImpl) then) =
+      __$$UserPlanLoadingStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PlanLoadingStateImplCopyWithImpl<$Res>
-    extends _$PlanStateCopyWithImpl<$Res, _$PlanLoadingStateImpl>
-    implements _$$PlanLoadingStateImplCopyWith<$Res> {
-  __$$PlanLoadingStateImplCopyWithImpl(_$PlanLoadingStateImpl _value,
-      $Res Function(_$PlanLoadingStateImpl) _then)
+class __$$UserPlanLoadingStateImplCopyWithImpl<$Res>
+    extends _$UserPlanStateCopyWithImpl<$Res, _$UserPlanLoadingStateImpl>
+    implements _$$UserPlanLoadingStateImplCopyWith<$Res> {
+  __$$UserPlanLoadingStateImplCopyWithImpl(_$UserPlanLoadingStateImpl _value,
+      $Res Function(_$UserPlanLoadingStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$PlanLoadingStateImpl implements PlanLoadingState {
-  const _$PlanLoadingStateImpl();
+class _$UserPlanLoadingStateImpl implements UserPlanLoadingState {
+  const _$UserPlanLoadingStateImpl();
 
   @override
   String toString() {
-    return 'PlanState.loading()';
+    return 'UserPlanState.loading()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlanLoadingStateImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$UserPlanLoadingStateImpl);
   }
 
   @override
@@ -674,7 +678,7 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) {
     return loading();
@@ -686,7 +690,7 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) {
     return loading?.call();
@@ -698,7 +702,7 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) {
@@ -711,11 +715,11 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) {
     return loading(this);
   }
@@ -723,11 +727,11 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) {
     return loading?.call(this);
   }
@@ -735,11 +739,11 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -749,25 +753,25 @@ class _$PlanLoadingStateImpl implements PlanLoadingState {
   }
 }
 
-abstract class PlanLoadingState implements PlanState {
-  const factory PlanLoadingState() = _$PlanLoadingStateImpl;
+abstract class UserPlanLoadingState implements UserPlanState {
+  const factory UserPlanLoadingState() = _$UserPlanLoadingStateImpl;
 }
 
 /// @nodoc
-abstract class _$$PlanErrorStateImplCopyWith<$Res> {
-  factory _$$PlanErrorStateImplCopyWith(_$PlanErrorStateImpl value,
-          $Res Function(_$PlanErrorStateImpl) then) =
-      __$$PlanErrorStateImplCopyWithImpl<$Res>;
+abstract class _$$UserPlanErrorStateImplCopyWith<$Res> {
+  factory _$$UserPlanErrorStateImplCopyWith(_$UserPlanErrorStateImpl value,
+          $Res Function(_$UserPlanErrorStateImpl) then) =
+      __$$UserPlanErrorStateImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$PlanErrorStateImplCopyWithImpl<$Res>
-    extends _$PlanStateCopyWithImpl<$Res, _$PlanErrorStateImpl>
-    implements _$$PlanErrorStateImplCopyWith<$Res> {
-  __$$PlanErrorStateImplCopyWithImpl(
-      _$PlanErrorStateImpl _value, $Res Function(_$PlanErrorStateImpl) _then)
+class __$$UserPlanErrorStateImplCopyWithImpl<$Res>
+    extends _$UserPlanStateCopyWithImpl<$Res, _$UserPlanErrorStateImpl>
+    implements _$$UserPlanErrorStateImplCopyWith<$Res> {
+  __$$UserPlanErrorStateImplCopyWithImpl(_$UserPlanErrorStateImpl _value,
+      $Res Function(_$UserPlanErrorStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -775,7 +779,7 @@ class __$$PlanErrorStateImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$PlanErrorStateImpl(
+    return _then(_$UserPlanErrorStateImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -786,22 +790,22 @@ class __$$PlanErrorStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PlanErrorStateImpl implements PlanErrorState {
-  const _$PlanErrorStateImpl(this.message);
+class _$UserPlanErrorStateImpl implements UserPlanErrorState {
+  const _$UserPlanErrorStateImpl(this.message);
 
   @override
   final String message;
 
   @override
   String toString() {
-    return 'PlanState.error(message: $message)';
+    return 'UserPlanState.error(message: $message)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PlanErrorStateImpl &&
+            other is _$UserPlanErrorStateImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -811,8 +815,8 @@ class _$PlanErrorStateImpl implements PlanErrorState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PlanErrorStateImplCopyWith<_$PlanErrorStateImpl> get copyWith =>
-      __$$PlanErrorStateImplCopyWithImpl<_$PlanErrorStateImpl>(
+  _$$UserPlanErrorStateImplCopyWith<_$UserPlanErrorStateImpl> get copyWith =>
+      __$$UserPlanErrorStateImplCopyWithImpl<_$UserPlanErrorStateImpl>(
           this, _$identity);
 
   @override
@@ -821,7 +825,7 @@ class _$PlanErrorStateImpl implements PlanErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) {
     return error(message);
@@ -833,7 +837,7 @@ class _$PlanErrorStateImpl implements PlanErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) {
     return error?.call(message);
@@ -845,7 +849,7 @@ class _$PlanErrorStateImpl implements PlanErrorState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) {
@@ -858,11 +862,11 @@ class _$PlanErrorStateImpl implements PlanErrorState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) {
     return error(this);
   }
@@ -870,11 +874,11 @@ class _$PlanErrorStateImpl implements PlanErrorState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) {
     return error?.call(this);
   }
@@ -882,11 +886,11 @@ class _$PlanErrorStateImpl implements PlanErrorState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -896,32 +900,33 @@ class _$PlanErrorStateImpl implements PlanErrorState {
   }
 }
 
-abstract class PlanErrorState implements PlanState {
-  const factory PlanErrorState(final String message) = _$PlanErrorStateImpl;
+abstract class UserPlanErrorState implements UserPlanState {
+  const factory UserPlanErrorState(final String message) =
+      _$UserPlanErrorStateImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$PlanErrorStateImplCopyWith<_$PlanErrorStateImpl> get copyWith =>
+  _$$UserPlanErrorStateImplCopyWith<_$UserPlanErrorStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$PlanLoadedStateImplCopyWith<$Res> {
-  factory _$$PlanLoadedStateImplCopyWith(_$PlanLoadedStateImpl value,
-          $Res Function(_$PlanLoadedStateImpl) then) =
-      __$$PlanLoadedStateImplCopyWithImpl<$Res>;
+abstract class _$$UserPlanLoadedStateImplCopyWith<$Res> {
+  factory _$$UserPlanLoadedStateImplCopyWith(_$UserPlanLoadedStateImpl value,
+          $Res Function(_$UserPlanLoadedStateImpl) then) =
+      __$$UserPlanLoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserSubscriptionPlan userSubscriptionPlan});
+  $Res call({UserPlan userSubscriptionPlan});
 
-  $UserSubscriptionPlanCopyWith<$Res> get userSubscriptionPlan;
+  $UserPlanCopyWith<$Res> get userSubscriptionPlan;
 }
 
 /// @nodoc
-class __$$PlanLoadedStateImplCopyWithImpl<$Res>
-    extends _$PlanStateCopyWithImpl<$Res, _$PlanLoadedStateImpl>
-    implements _$$PlanLoadedStateImplCopyWith<$Res> {
-  __$$PlanLoadedStateImplCopyWithImpl(
-      _$PlanLoadedStateImpl _value, $Res Function(_$PlanLoadedStateImpl) _then)
+class __$$UserPlanLoadedStateImplCopyWithImpl<$Res>
+    extends _$UserPlanStateCopyWithImpl<$Res, _$UserPlanLoadedStateImpl>
+    implements _$$UserPlanLoadedStateImplCopyWith<$Res> {
+  __$$UserPlanLoadedStateImplCopyWithImpl(_$UserPlanLoadedStateImpl _value,
+      $Res Function(_$UserPlanLoadedStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -929,19 +934,18 @@ class __$$PlanLoadedStateImplCopyWithImpl<$Res>
   $Res call({
     Object? userSubscriptionPlan = null,
   }) {
-    return _then(_$PlanLoadedStateImpl(
+    return _then(_$UserPlanLoadedStateImpl(
       null == userSubscriptionPlan
           ? _value.userSubscriptionPlan
           : userSubscriptionPlan // ignore: cast_nullable_to_non_nullable
-              as UserSubscriptionPlan,
+              as UserPlan,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserSubscriptionPlanCopyWith<$Res> get userSubscriptionPlan {
-    return $UserSubscriptionPlanCopyWith<$Res>(_value.userSubscriptionPlan,
-        (value) {
+  $UserPlanCopyWith<$Res> get userSubscriptionPlan {
+    return $UserPlanCopyWith<$Res>(_value.userSubscriptionPlan, (value) {
       return _then(_value.copyWith(userSubscriptionPlan: value));
     });
   }
@@ -949,22 +953,22 @@ class __$$PlanLoadedStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PlanLoadedStateImpl implements PlanLoadedState {
-  const _$PlanLoadedStateImpl(this.userSubscriptionPlan);
+class _$UserPlanLoadedStateImpl implements UserPlanLoadedState {
+  const _$UserPlanLoadedStateImpl(this.userSubscriptionPlan);
 
   @override
-  final UserSubscriptionPlan userSubscriptionPlan;
+  final UserPlan userSubscriptionPlan;
 
   @override
   String toString() {
-    return 'PlanState.loaded(userSubscriptionPlan: $userSubscriptionPlan)';
+    return 'UserPlanState.loaded(userSubscriptionPlan: $userSubscriptionPlan)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PlanLoadedStateImpl &&
+            other is _$UserPlanLoadedStateImpl &&
             (identical(other.userSubscriptionPlan, userSubscriptionPlan) ||
                 other.userSubscriptionPlan == userSubscriptionPlan));
   }
@@ -975,8 +979,8 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PlanLoadedStateImplCopyWith<_$PlanLoadedStateImpl> get copyWith =>
-      __$$PlanLoadedStateImplCopyWithImpl<_$PlanLoadedStateImpl>(
+  _$$UserPlanLoadedStateImplCopyWith<_$UserPlanLoadedStateImpl> get copyWith =>
+      __$$UserPlanLoadedStateImplCopyWithImpl<_$UserPlanLoadedStateImpl>(
           this, _$identity);
 
   @override
@@ -985,7 +989,7 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) {
     return loaded(userSubscriptionPlan);
@@ -997,7 +1001,7 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) {
     return loaded?.call(userSubscriptionPlan);
@@ -1009,7 +1013,7 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) {
@@ -1022,11 +1026,11 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) {
     return loaded(this);
   }
@@ -1034,11 +1038,11 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) {
     return loaded?.call(this);
   }
@@ -1046,11 +1050,11 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -1060,46 +1064,47 @@ class _$PlanLoadedStateImpl implements PlanLoadedState {
   }
 }
 
-abstract class PlanLoadedState implements PlanState {
-  const factory PlanLoadedState(
-      final UserSubscriptionPlan userSubscriptionPlan) = _$PlanLoadedStateImpl;
+abstract class UserPlanLoadedState implements UserPlanState {
+  const factory UserPlanLoadedState(final UserPlan userSubscriptionPlan) =
+      _$UserPlanLoadedStateImpl;
 
-  UserSubscriptionPlan get userSubscriptionPlan;
+  UserPlan get userSubscriptionPlan;
   @JsonKey(ignore: true)
-  _$$PlanLoadedStateImplCopyWith<_$PlanLoadedStateImpl> get copyWith =>
+  _$$UserPlanLoadedStateImplCopyWith<_$UserPlanLoadedStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$PlanUpdatedStateImplCopyWith<$Res> {
-  factory _$$PlanUpdatedStateImplCopyWith(_$PlanUpdatedStateImpl value,
-          $Res Function(_$PlanUpdatedStateImpl) then) =
-      __$$PlanUpdatedStateImplCopyWithImpl<$Res>;
+abstract class _$$UserPlanUpdatedStateImplCopyWith<$Res> {
+  factory _$$UserPlanUpdatedStateImplCopyWith(_$UserPlanUpdatedStateImpl value,
+          $Res Function(_$UserPlanUpdatedStateImpl) then) =
+      __$$UserPlanUpdatedStateImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PlanUpdatedStateImplCopyWithImpl<$Res>
-    extends _$PlanStateCopyWithImpl<$Res, _$PlanUpdatedStateImpl>
-    implements _$$PlanUpdatedStateImplCopyWith<$Res> {
-  __$$PlanUpdatedStateImplCopyWithImpl(_$PlanUpdatedStateImpl _value,
-      $Res Function(_$PlanUpdatedStateImpl) _then)
+class __$$UserPlanUpdatedStateImplCopyWithImpl<$Res>
+    extends _$UserPlanStateCopyWithImpl<$Res, _$UserPlanUpdatedStateImpl>
+    implements _$$UserPlanUpdatedStateImplCopyWith<$Res> {
+  __$$UserPlanUpdatedStateImplCopyWithImpl(_$UserPlanUpdatedStateImpl _value,
+      $Res Function(_$UserPlanUpdatedStateImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$PlanUpdatedStateImpl implements PlanUpdatedState {
-  const _$PlanUpdatedStateImpl();
+class _$UserPlanUpdatedStateImpl implements UserPlanUpdatedState {
+  const _$UserPlanUpdatedStateImpl();
 
   @override
   String toString() {
-    return 'PlanState.updated()';
+    return 'UserPlanState.updated()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlanUpdatedStateImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$UserPlanUpdatedStateImpl);
   }
 
   @override
@@ -1111,7 +1116,7 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(UserSubscriptionPlan userSubscriptionPlan) loaded,
+    required TResult Function(UserPlan userSubscriptionPlan) loaded,
     required TResult Function() updated,
   }) {
     return updated();
@@ -1123,7 +1128,7 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult? Function(UserPlan userSubscriptionPlan)? loaded,
     TResult? Function()? updated,
   }) {
     return updated?.call();
@@ -1135,7 +1140,7 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(UserSubscriptionPlan userSubscriptionPlan)? loaded,
+    TResult Function(UserPlan userSubscriptionPlan)? loaded,
     TResult Function()? updated,
     required TResult orElse(),
   }) {
@@ -1148,11 +1153,11 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(PlanInitialState value) initial,
-    required TResult Function(PlanLoadingState value) loading,
-    required TResult Function(PlanErrorState value) error,
-    required TResult Function(PlanLoadedState value) loaded,
-    required TResult Function(PlanUpdatedState value) updated,
+    required TResult Function(UserPlanInitialState value) initial,
+    required TResult Function(UserPlanLoadingState value) loading,
+    required TResult Function(UserPlanErrorState value) error,
+    required TResult Function(UserPlanLoadedState value) loaded,
+    required TResult Function(UserPlanUpdatedState value) updated,
   }) {
     return updated(this);
   }
@@ -1160,11 +1165,11 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(PlanInitialState value)? initial,
-    TResult? Function(PlanLoadingState value)? loading,
-    TResult? Function(PlanErrorState value)? error,
-    TResult? Function(PlanLoadedState value)? loaded,
-    TResult? Function(PlanUpdatedState value)? updated,
+    TResult? Function(UserPlanInitialState value)? initial,
+    TResult? Function(UserPlanLoadingState value)? loading,
+    TResult? Function(UserPlanErrorState value)? error,
+    TResult? Function(UserPlanLoadedState value)? loaded,
+    TResult? Function(UserPlanUpdatedState value)? updated,
   }) {
     return updated?.call(this);
   }
@@ -1172,11 +1177,11 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(PlanInitialState value)? initial,
-    TResult Function(PlanLoadingState value)? loading,
-    TResult Function(PlanErrorState value)? error,
-    TResult Function(PlanLoadedState value)? loaded,
-    TResult Function(PlanUpdatedState value)? updated,
+    TResult Function(UserPlanInitialState value)? initial,
+    TResult Function(UserPlanLoadingState value)? loading,
+    TResult Function(UserPlanErrorState value)? error,
+    TResult Function(UserPlanLoadedState value)? loaded,
+    TResult Function(UserPlanUpdatedState value)? updated,
     required TResult orElse(),
   }) {
     if (updated != null) {
@@ -1186,6 +1191,6 @@ class _$PlanUpdatedStateImpl implements PlanUpdatedState {
   }
 }
 
-abstract class PlanUpdatedState implements PlanState {
-  const factory PlanUpdatedState() = _$PlanUpdatedStateImpl;
+abstract class UserPlanUpdatedState implements UserPlanState {
+  const factory UserPlanUpdatedState() = _$UserPlanUpdatedStateImpl;
 }

@@ -2,13 +2,14 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
 
 
 import '../../../../../util/core/response/failure.dart';
 import '../../../../../util/core/response/success.dart';
 import '../model/google_signin_remote_model.dart';
 import '../model/profile_remote.dart';
-import '../model/user_subscription_plan_remote_model.dart';
+import '../model/subscription_plan_remote_model.dart';
 
 abstract class UserRemoteDataSource{
 
@@ -56,7 +57,10 @@ abstract class UserRemoteDataSource{
   Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeeded(String userId);
 
 
-  Future<Either<Failure, UserSubscriptionPlanRemote>> getUserSubscriptionPlan(String userId);
+  Future<Either<Failure, UserPlanRemote>> getUserPlan(String userId);
+
+
+  Future<Either<Failure, List<SubscriptionPlanRemote>>> getSubscriptionPlans();
 
 
   Future<Either<Failure, Success>> logout();

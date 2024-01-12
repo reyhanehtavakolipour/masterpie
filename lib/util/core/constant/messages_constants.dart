@@ -1,6 +1,4 @@
 
-import 'package:masterpie/util/core/constant/subscription_constants.dart';
-
 import '../../../feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
 
 const ERROR_TRY_AGAIN = 'Try again later';
@@ -229,10 +227,10 @@ const SUGGEST_FOOD_ACCESS= 'Personalized Meal Recommendation';
 const FOOD_PORTION_ACCESS= 'Food Portion Recommender';
 const DIETITIAN_CONTACT_US = 'For more information about this plan, contact us at admin@masterpieapp.com .';
 const MONTHLY_PLAN_LABEL= 'monthly';
-const ANNUAL_PLAN_LABEL= 'annual';
+const ANNUAL_PLAN_LABEL= 'yearly';
 const CONTINUE_LABEL= 'Continue';
 const CANCEL_SUBSCRIPTION_LABEL= 'Cancel Subscription';
-const FAVORITE_FOOD_INFO_FREE_PLAN= '$FREE_FAVORITE_LIMIT favorites for lifetime';
+const FAVORITE_FOOD_INFO_FREE_PLAN= 'favorites for lifetime';
 const PAYMENT_LABEL= 'Payment';
 const PAY_LABEL= 'Pay';
 const PAYMENT_SUCCEED_MSG= 'Payment successfully completed';
@@ -243,6 +241,10 @@ const FREE_PLAN_SWITCH_MSG= 'Are you sure you want to switch to free plan?';
 const PLAN_UPDATED_SUCCESSFULLY_MSG= 'Plan updated successfully';
 const ALREADY_FREE_PLAN= 'You are already on free plan';
 const AUTO_PAYMENT_LABEL= 'Auto payment';
+const FREE_LABEL= 'free';
+const BASIC_LABEL= 'basic';
+const PREMIUM_LABEL= 'premium';
+
 
 
 

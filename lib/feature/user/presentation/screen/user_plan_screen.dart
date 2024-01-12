@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
+import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
+import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
-import '../../../../util/core/constant/subscription_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../domain/model/user_subscription_plan_model.dart';
-import '../bloc/plan_bloc/plan_bloc.dart';
-import '../bloc/plan_bloc/state_event/plan_state_event.dart';
+import '../bloc/user_plan_bloc/state_event/plan_state_event.dart';
+
 
 
 class UserPlanScreen extends StatefulWidget {
@@ -27,24 +28,24 @@ class UserPlanScreen extends StatefulWidget {
 class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
-  late PlanBloc _planBloc;
+  late UserPlanBloc _userPlanBloc;
 
-  UserSubscriptionPlan _userSubscriptionPlan= UserSubscriptionPlan();
+  late UserPlan _userPlan;
 
-  String _selectedPlan= '';
+  late SubscriptionPlan _selectedSubscriptionPlan;
 
   bool _isAutoPaymentOn= false;
 
   @override
   void initState() {
     super.initState();
-    _planBloc = context.read<PlanBloc>();
+    _userPlanBloc = context.read<UserPlanBloc>();
     getPlan();
   }
 
 
   void getPlan(){
-    _planBloc.add(const PlanEvent.onGetUserPlan());
+    _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
   }
 
 
@@ -91,7 +92,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                         children: [
                           ///plan
                           Text(
-                            _userSubscriptionPlan.plan.capitalize(),
+                            _userPlan.subscriptionPlan!.plan.capitalize(),
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
                           ),
 
@@ -100,7 +101,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           /// favorites left
                           Text(
-                            '$NEW_FAVORITES_LEFT: ${_userSubscriptionPlan.favoriteFoodRequestsLeft}',
+                            '$NEW_FAVORITES_LEFT: ${_userPlan.favoriteFoodLeft}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -108,7 +109,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           /// food portion lef
                           Text(
-                            '$FOOD_PORTION_LEFT: ${_userSubscriptionPlan.foodPortionRequestsLeft}',
+                            '$FOOD_PORTION_LEFT: ${_userPlan.foodPortionRequestsLeft}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -117,7 +118,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           /// suggest food
                           Text(
-                            '$SUGGEST_FOOD_LEFT: ${_userSubscriptionPlan.suggestFoodRequestsLeft}',
+                            '$SUGGEST_FOOD_LEFT: ${_userPlan.suggestFoodRequestsLeft}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -191,24 +192,24 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
              continueButton(),
 
-              BlocConsumer<PlanBloc, PlanState>(
+              BlocConsumer<UserPlanBloc, UserPlanState>(
                   builder: (mcontext, state) {
-                    if (state is PlanLoadingState) {
+                    if (state is UserPlanLoadingState) {
                       return const GFLoader(
                         type: GFLoaderType.circle,
                         loaderColorOne: DARK_PRIMARY_COLOR,
                         loaderColorTwo: DARK_PRIMARY_COLOR,
                         loaderColorThree: DARK_PRIMARY_COLOR,
                       );
-                    }else if(state is PlanLoadedState){
-                      _planBloc.add(const PlanEvent.onReset());
+                    }else if(state is UserPlanLoadedState){
+                      _userPlanBloc.add(const UserPlanEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         setState(() {
-                          _userSubscriptionPlan= state.userSubscriptionPlan;
-                          _isAutoPaymentOn= _userSubscriptionPlan.isAutoPaymentOn;
+                          _userPlan= state.userSubscriptionPlan;
+                          _isAutoPaymentOn= _userPlan.isAutoPaymentOn;
                         });
                       });
-                    }else if(state is PlanErrorState){
+                    }else if(state is UserPlanErrorState){
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });
@@ -318,7 +319,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget continueButton(){
     return  Visibility(
-      visible: _selectedPlan== BASIC_PLAN || _selectedPlan == PREMIUM_PLAN || _selectedPlan == FREE_PLAN,
+      visible: _selectedSubscriptionPlan.plan== BASIC_LABEL || _selectedSubscriptionPlan.plan == PREMIUM_LABEL || _selectedSubscriptionPlan.plan == FREE_LABEL,
       child: Positioned(
         bottom: 0,
         left: 0,
@@ -335,8 +336,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
-              if(_selectedPlan == FREE_PLAN){
-                if(_userSubscriptionPlan.plan == FREE_PLAN){
+              if(_selectedSubscriptionPlan.plan == FREE_LABEL){
+                if(_userPlan.subscriptionPlan!.plan == FREE_LABEL){
                   showSuccessToast(context, ALREADY_FREE_PLAN);
                 }else{
                   _showCancelPlanConfirmation(context);
@@ -345,7 +346,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(userSubscriptionPlan: UserSubscriptionPlan(userId: _userSubscriptionPlan.userId, plan: _selectedPlan),),
+                    builder: (context) => PaymentScreen(subscriptionPlan: _selectedSubscriptionPlan,),
                   ),
                 );
               }
@@ -386,7 +387,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedPlan == FREE_PLAN ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _selectedSubscriptionPlan.plan == FREE_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -395,7 +396,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Text(FREE_PLAN.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
+            Text(FREE_LABEL.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
 
 
             const SizedBox(height: 16,),
@@ -619,10 +620,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedPlan == FREE_PLAN){
-            _selectedPlan= '';
+          if(_selectedSubscriptionPlan.plan == FREE_LABEL){
+            _selectedSubscriptionPlan = SubscriptionPlan();
           }else{
-            _selectedPlan= FREE_PLAN;
+            _selectedSubscriptionPlan= FREE_PLAN;
           }
         });
       },
@@ -639,7 +640,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedPlan == BASIC_PLAN ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _selectedSubscriptionPlan.plan == BASIC_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -648,7 +649,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Text(BASIC_PLAN.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
+            Text(BASIC_LABEL.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
 
 
             const SizedBox(height: 16,),
@@ -910,10 +911,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedPlan == BASIC_PLAN){
-            _selectedPlan= '';
+          if(_selectedSubscriptionPlan == BASIC_PLAN){
+            _selectedSubscriptionPlan= '';
           }else{
-            _selectedPlan= BASIC_PLAN;
+            _selectedSubscriptionPlan= BASIC_PLAN;
           }
         });
       },
@@ -928,7 +929,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedPlan == PREMIUM_PLAN ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _selectedSubscriptionPlan == PREMIUM_PLAN ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -1198,10 +1199,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedPlan == PREMIUM_PLAN){
-            _selectedPlan= '';
+          if(_selectedSubscriptionPlan == PREMIUM_PLAN){
+            _selectedSubscriptionPlan= '';
           }else{
-            _selectedPlan= PREMIUM_PLAN;
+            _selectedSubscriptionPlan= PREMIUM_PLAN;
           }
         });
       },
@@ -1216,7 +1217,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedPlan == DIETITIAN_PLAN ? SELECTED_PLAN_COLOR: Colors.white,
+          color: _selectedSubscriptionPlan == DIETITIAN_PLAN ? SELECTED_PLAN_COLOR: Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -1241,10 +1242,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedPlan == DIETITIAN_PLAN){
-            _selectedPlan= '';
+          if(_selectedSubscriptionPlan == DIETITIAN_PLAN){
+            _selectedSubscriptionPlan= '';
           }else{
-            _selectedPlan= DIETITIAN_PLAN;
+            _selectedSubscriptionPlan= DIETITIAN_PLAN;
           }
         });
       },

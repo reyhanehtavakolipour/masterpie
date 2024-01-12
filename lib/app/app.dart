@@ -15,9 +15,9 @@ import '../feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart
 import '../feature/user/presentation/bloc/get_user_credentials_bloc/get_user_credentials_bloc.dart';
 import '../feature/user/presentation/bloc/login_bloc/login_bloc.dart';
 import '../feature/user/presentation/bloc/logout_bloc/logout_bloc.dart';
-import '../feature/user/presentation/bloc/plan_bloc/plan_bloc.dart';
 import '../feature/user/presentation/bloc/register_bloc/register_bloc.dart';
 import '../feature/user/presentation/bloc/update_profile_bloc/update_profile_bloc.dart';
+import '../feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import '../feature/user/presentation/screen/landing_screen.dart';
 
 
@@ -37,7 +37,7 @@ class App extends StatelessWidget {
             create: (_) => LoginBloc(),
           ),
           BlocProvider(
-            create: (_) => PlanBloc(),
+            create: (_) => UserPlanBloc(),
           ),
           BlocProvider(
             create: (_) => LogoutBloc(),
