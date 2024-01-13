@@ -16,10 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SubscriptionPlan {
-  String get id => throw _privateConstructorUsedError;
+  List<String> get ids => throw _privateConstructorUsedError;
   String get plan => throw _privateConstructorUsedError;
   List<String> get intervals => throw _privateConstructorUsedError;
-  List<int> get prices => throw _privateConstructorUsedError;
+  List<double> get prices => throw _privateConstructorUsedError;
   int get favoriteFoodLimit => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLimit => throw _privateConstructorUsedError;
   int get foodPortionRequestsLimit => throw _privateConstructorUsedError;
@@ -36,10 +36,10 @@ abstract class $SubscriptionPlanCopyWith<$Res> {
       _$SubscriptionPlanCopyWithImpl<$Res, SubscriptionPlan>;
   @useResult
   $Res call(
-      {String id,
+      {List<String> ids,
       String plan,
       List<String> intervals,
-      List<int> prices,
+      List<double> prices,
       int favoriteFoodLimit,
       int suggestFoodRequestsLimit,
       int foodPortionRequestsLimit});
@@ -58,7 +58,7 @@ class _$SubscriptionPlanCopyWithImpl<$Res, $Val extends SubscriptionPlan>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? ids = null,
     Object? plan = null,
     Object? intervals = null,
     Object? prices = null,
@@ -67,10 +67,10 @@ class _$SubscriptionPlanCopyWithImpl<$Res, $Val extends SubscriptionPlan>
     Object? foodPortionRequestsLimit = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
+      ids: null == ids
+          ? _value.ids
+          : ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       plan: null == plan
           ? _value.plan
           : plan // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,7 @@ class _$SubscriptionPlanCopyWithImpl<$Res, $Val extends SubscriptionPlan>
       prices: null == prices
           ? _value.prices
           : prices // ignore: cast_nullable_to_non_nullable
-              as List<int>,
+              as List<double>,
       favoriteFoodLimit: null == favoriteFoodLimit
           ? _value.favoriteFoodLimit
           : favoriteFoodLimit // ignore: cast_nullable_to_non_nullable
@@ -108,10 +108,10 @@ abstract class _$$SubscriptionPlanImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {List<String> ids,
       String plan,
       List<String> intervals,
-      List<int> prices,
+      List<double> prices,
       int favoriteFoodLimit,
       int suggestFoodRequestsLimit,
       int foodPortionRequestsLimit});
@@ -128,7 +128,7 @@ class __$$SubscriptionPlanImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? ids = null,
     Object? plan = null,
     Object? intervals = null,
     Object? prices = null,
@@ -137,10 +137,10 @@ class __$$SubscriptionPlanImplCopyWithImpl<$Res>
     Object? foodPortionRequestsLimit = null,
   }) {
     return _then(_$SubscriptionPlanImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
+      ids: null == ids
+          ? _value._ids
+          : ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       plan: null == plan
           ? _value.plan
           : plan // ignore: cast_nullable_to_non_nullable
@@ -152,7 +152,7 @@ class __$$SubscriptionPlanImplCopyWithImpl<$Res>
       prices: null == prices
           ? _value._prices
           : prices // ignore: cast_nullable_to_non_nullable
-              as List<int>,
+              as List<double>,
       favoriteFoodLimit: null == favoriteFoodLimit
           ? _value.favoriteFoodLimit
           : favoriteFoodLimit // ignore: cast_nullable_to_non_nullable
@@ -173,19 +173,26 @@ class __$$SubscriptionPlanImplCopyWithImpl<$Res>
 
 class _$SubscriptionPlanImpl implements _SubscriptionPlan {
   _$SubscriptionPlanImpl(
-      {this.id = '',
+      {final List<String> ids = const [],
       this.plan = '',
       final List<String> intervals = const [],
-      final List<int> prices = const [],
+      final List<double> prices = const [],
       this.favoriteFoodLimit = 0,
       this.suggestFoodRequestsLimit = 0,
       this.foodPortionRequestsLimit = 0})
-      : _intervals = intervals,
+      : _ids = ids,
+        _intervals = intervals,
         _prices = prices;
 
+  final List<String> _ids;
   @override
   @JsonKey()
-  final String id;
+  List<String> get ids {
+    if (_ids is EqualUnmodifiableListView) return _ids;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_ids);
+  }
+
   @override
   @JsonKey()
   final String plan;
@@ -198,10 +205,10 @@ class _$SubscriptionPlanImpl implements _SubscriptionPlan {
     return EqualUnmodifiableListView(_intervals);
   }
 
-  final List<int> _prices;
+  final List<double> _prices;
   @override
   @JsonKey()
-  List<int> get prices {
+  List<double> get prices {
     if (_prices is EqualUnmodifiableListView) return _prices;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_prices);
@@ -219,7 +226,7 @@ class _$SubscriptionPlanImpl implements _SubscriptionPlan {
 
   @override
   String toString() {
-    return 'SubscriptionPlan(id: $id, plan: $plan, intervals: $intervals, prices: $prices, favoriteFoodLimit: $favoriteFoodLimit, suggestFoodRequestsLimit: $suggestFoodRequestsLimit, foodPortionRequestsLimit: $foodPortionRequestsLimit)';
+    return 'SubscriptionPlan(ids: $ids, plan: $plan, intervals: $intervals, prices: $prices, favoriteFoodLimit: $favoriteFoodLimit, suggestFoodRequestsLimit: $suggestFoodRequestsLimit, foodPortionRequestsLimit: $foodPortionRequestsLimit)';
   }
 
   @override
@@ -227,7 +234,7 @@ class _$SubscriptionPlanImpl implements _SubscriptionPlan {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SubscriptionPlanImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other._ids, _ids) &&
             (identical(other.plan, plan) || other.plan == plan) &&
             const DeepCollectionEquality()
                 .equals(other._intervals, _intervals) &&
@@ -245,7 +252,7 @@ class _$SubscriptionPlanImpl implements _SubscriptionPlan {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      const DeepCollectionEquality().hash(_ids),
       plan,
       const DeepCollectionEquality().hash(_intervals),
       const DeepCollectionEquality().hash(_prices),
@@ -263,22 +270,22 @@ class _$SubscriptionPlanImpl implements _SubscriptionPlan {
 
 abstract class _SubscriptionPlan implements SubscriptionPlan {
   factory _SubscriptionPlan(
-      {final String id,
+      {final List<String> ids,
       final String plan,
       final List<String> intervals,
-      final List<int> prices,
+      final List<double> prices,
       final int favoriteFoodLimit,
       final int suggestFoodRequestsLimit,
       final int foodPortionRequestsLimit}) = _$SubscriptionPlanImpl;
 
   @override
-  String get id;
+  List<String> get ids;
   @override
   String get plan;
   @override
   List<String> get intervals;
   @override
-  List<int> get prices;
+  List<double> get prices;
   @override
   int get favoriteFoodLimit;
   @override

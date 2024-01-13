@@ -30,7 +30,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   String _selectedInterval= '';
 
-  int _amount = 0;
+  double _amount = 0;
 
   @override
   void initState() {
@@ -309,10 +309,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
   Future<Map<String, dynamic>> _createScheduleSubscriptions(String customerId) async {
-
-
-    print('show_cus: $customerId');
-
     const String url = 'https://api.stripe.com/v1/subscription_schedules';
     final NetworkRequest request = await NetworkRequest.createStripe();
     final response= await request.post(url, data:{

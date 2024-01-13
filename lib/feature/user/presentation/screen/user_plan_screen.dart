@@ -34,7 +34,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   late GetSubscriptionPlansBloc _getSubscriptionPlansBloc;
 
 
-  late UserPlan _userPlan;
+  UserPlan _userPlan= UserPlan(subscriptionPlan: SubscriptionPlan());
 
   SubscriptionPlan _selectedSubscriptionPlan=SubscriptionPlan();
 
@@ -548,9 +548,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  '$FAVORITE_FOOD_INFO_FREE_PLAN',
-                  style: TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
+                Text(
+                  '${_subscriptions[0].favoriteFoodLimit} $FAVORITE_FOOD_INFO_FREE_PLAN',
+                  style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
@@ -722,7 +722,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${_subscriptions[1].prices[1]}\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      Text('${_subscriptions[1].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
                       const SizedBox(width: 1,),
                       const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -981,7 +981,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan == PREMIUM_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _selectedSubscriptionPlan.plan == PREMIUM_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),

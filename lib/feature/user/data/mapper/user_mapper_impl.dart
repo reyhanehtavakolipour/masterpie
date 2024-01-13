@@ -111,7 +111,7 @@ class UserMapperImpl extends UserMapper{
   List<SubscriptionPlan> fromSubscriptionPlansRemote(List<SubscriptionPlanRemote> subscriptionPlansRemote) {
     return subscriptionPlansRemote.map((subscriptionRemote) =>
         SubscriptionPlan(
-          id: subscriptionRemote.id,
+          ids: subscriptionRemote.ids,
           plan: subscriptionRemote.plan,
           intervals: subscriptionRemote.intervals,
           prices: subscriptionRemote.prices,
@@ -137,7 +137,7 @@ class UserMapperImpl extends UserMapper{
   @override
   SubscriptionPlan fromSubscriptionPlanRemote(SubscriptionPlanRemote subscriptionRemote) {
     return SubscriptionPlan(
-        id: subscriptionRemote.id,
+        ids: subscriptionRemote.ids,
         plan: subscriptionRemote.plan,
         intervals: subscriptionRemote.intervals,
         prices: subscriptionRemote.prices,

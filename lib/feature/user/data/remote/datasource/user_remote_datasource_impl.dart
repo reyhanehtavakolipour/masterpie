@@ -325,7 +325,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         };
 
         final data = await supabase
-            .from(SUBSCRIPTION_PLAN_TABLE)
+            .from(USER_PLAN_TABLE)
             .update(updates)
             .eq('id', userId);
 
@@ -371,9 +371,34 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, List<SubscriptionPlanRemote>>> getSubscriptionPlans() {
-    // TODO: implement getSubscriptionPlans
-    throw UnimplementedError();
+  Future<Either<Failure, List<SubscriptionPlanRemote>>> getSubscriptionPlans() async{
+    try {
+      final supabase = Supabase.instance.client;
+      final data = await supabase
+          .from(PLANS_TABLE)
+          .select<List<Map<String, dynamic>>>();
+
+      List<SubscriptionPlanRemote> subscriptionPlans= [];
+      data.forEach((element) {
+        final plan= SubscriptionPlanRemote(
+          plan: element['plan_name'],
+          prices: [double.parse(element['price'].toString())],
+          intervals: [element['interval']],
+          ids: [element['plan_id']],
+          favoriteFoodLimit: element['favorite_food_limit'],
+          suggestFoodRequestsLimit: element['suggest_food_limit'],
+          foodPortionRequestsLimit: element['food_portion_limit']
+        );
+        subscriptionPlans.add(plan);
+      });
+
+      return Right(subscriptionPlans);
+
+    } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
   }
 
   @override
@@ -381,7 +406,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     try {
       final supabase = Supabase.instance.client;
       final data = await supabase
-          .from(SUBSCRIPTION_PLAN_TABLE)
+          .from(USER_PLAN_TABLE)
           .select<List<dynamic>>()
           .eq('id', userId);
 
@@ -389,7 +414,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       UserPlanRemote userSubscriptionPlanRemote = UserPlanRemote(
         id: data[0]['id'],
         subscriptionPlan: SubscriptionPlanRemote(
-          id: userId,
+          ids: [userId],
           plan: data[0]['plan'] ?? '',
           intervals: [data[0]['plan_type'] ?? ''],
         ),

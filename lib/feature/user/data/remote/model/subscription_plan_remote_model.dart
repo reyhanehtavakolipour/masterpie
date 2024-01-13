@@ -7,13 +7,15 @@ part 'subscription_plan_remote_model.freezed.dart';
 class SubscriptionPlanRemote with _$SubscriptionPlanRemote{
 
   factory SubscriptionPlanRemote({
-    @Default('') String id,
+    @Default([]) List<String> ids,
     @Default('') String plan,
     @Default([]) List<String> intervals,
-    @Default([]) List<int> prices,
+    @Default([]) List<double> prices,
     @Default(0) int favoriteFoodLimit,
     @Default(0) int suggestFoodRequestsLimit,
     @Default(0) int foodPortionRequestsLimit,
   })= _SubscriptionPlanRemote;
 
 }
+
+

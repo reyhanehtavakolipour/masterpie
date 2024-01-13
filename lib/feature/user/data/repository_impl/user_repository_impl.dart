@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_local_datasource.dart';
 import 'package:masterpie/feature/user/data/remote/datasource/user_remote_datasource.dart';
+import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
 import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
 import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -302,7 +303,45 @@ class UserRepositoryImpl extends UserRepository{
   Future<Either<Failure, List<SubscriptionPlan>>> getSubscriptionPlansInRemote() async{
     final planResponse = await userRemoteDataSource.getSubscriptionPlans();
     if(planResponse.isRight()){
-      return Right(mapper.fromSubscriptionPlansRemote(planResponse.asRight()));
+
+      List<SubscriptionPlanRemote> plans = [];
+      final basics = planResponse.asRight().where((element) => element.plan == 'basic').toList();
+      final premiums = planResponse.asRight().where((element) => element.plan == 'premium').toList();
+      final free= planResponse.asRight().where((element) => element.plan == 'free').toList();
+      final dietitian= planResponse.asRight().where((element) => element.plan == 'dietitian').toList();
+
+      plans.addAll(free);
+
+      //basics
+      plans.add(
+        SubscriptionPlanRemote(
+          plan: basics[0].plan,
+          ids: [basics[0].ids[0], basics[1].ids[0]],
+          prices: [basics[0].prices[0], basics[1].prices[0]],
+          intervals: [basics[0].intervals[0], basics[1].intervals[0]],
+          favoriteFoodLimit: basics[0].favoriteFoodLimit,
+          suggestFoodRequestsLimit: basics[0].suggestFoodRequestsLimit,
+          foodPortionRequestsLimit: basics[0].foodPortionRequestsLimit
+        )
+      );
+
+
+      //premiums
+      plans.add(
+          SubscriptionPlanRemote(
+              plan: premiums[0].plan,
+              ids: [premiums[0].ids[0], premiums[1].ids[0]],
+              prices: [premiums[0].prices[0], premiums[1].prices[0]],
+              intervals: [premiums[0].intervals[0], premiums[1].intervals[0]],
+              favoriteFoodLimit: premiums[0].favoriteFoodLimit,
+              suggestFoodRequestsLimit: premiums[0].suggestFoodRequestsLimit,
+              foodPortionRequestsLimit: premiums[0].foodPortionRequestsLimit
+          )
+      );
+
+      plans.addAll(dietitian);
+
+      return Right(mapper.fromSubscriptionPlansRemote(plans));
     }
     return Left(planResponse.asLeft());
   }

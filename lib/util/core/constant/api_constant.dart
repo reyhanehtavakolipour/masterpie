@@ -25,7 +25,9 @@ const PROFILE_REMOTE_TABLE = 'profile';
 const MY_FAVORITE_REMOTE_TABLE = 'user_favourite_food';
 const USER_SUGGESTED_FOOD_REMOTE_TABLE = 'user_suggested_food';
 const USER_LOGGED_FOOD_REMOTE_TABLE = 'logged_foods';
-const SUBSCRIPTION_PLAN_TABLE = 'subscription';
+const USER_PLAN_TABLE = 'user_plan';
+const PLANS_TABLE = 'plans';
+
 
 const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.net/portionRecommendation';
 
