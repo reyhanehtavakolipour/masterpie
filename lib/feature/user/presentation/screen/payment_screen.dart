@@ -5,11 +5,14 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
+import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
+import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
 
 class PaymentScreen extends StatefulWidget {
 
@@ -24,6 +27,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
 
+  final userHiveDataSource = serviceLocator<UserHiveDataSource>();
 
 
   List<String> _intervalOptions= [];
@@ -167,25 +171,36 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
+
   void payButtonClickListener(BuildContext context) async{
-    final _customer = await _createCustomer();
-    final _paymentIntent = await _createPaymentIntents();
-    await _createCreditCard(_customer['id'], _paymentIntent['client_secret']);
-    final _paymentMethod = await _getPaymentMethods(_paymentIntent['id']);
-    await _attachPaymentMethod(_paymentMethod['payment_method'], _customer['id']);
-    await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
-    await _createScheduleSubscriptions(_customer['id']);
+    final _customer = await _createCustomer2();
+    final _paymentIntent = await _createPaymentIntents2();
+    await _createCreditCard(_customer.data['id'], _paymentIntent.data['client_secret']);
+    final _paymentMethod = await _getPaymentMethods2(_paymentIntent.data['id']);
+    print('show_log: ${_paymentMethod.data}');
+
+    // await _attachPaymentMethod2(_paymentMethod.data['payment_method'], _customer.data['id']);
+    // await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
+    // await _scheduleSubscription2(_customer.data['id']);
+
+
+
+
+
+
+
+
+
+
+    // final _paymentIntent = await _createPaymentIntents();
+    // await _createCreditCard(_customer['id'], _paymentIntent['client_secret']);
+    // final _paymentMethod = await _getPaymentMethods(_paymentIntent['id']);
+    // await _attachPaymentMethod(_paymentMethod['payment_method'], _customer['id']);
+    // await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
+    // await _createScheduleSubscriptions(_customer['id']);
   }
 
 
-
-  Future<FunctionResponse> _createSubscription(String customerId) async {
-    final response = await Supabase.instance.client.functions
-        .invoke('create_subscription', body: {
-      'customer': customerId,
-    });
-    return response;
-  }
 
   Future<Map<String, dynamic>> _createPaymentIntents() async {
     const String url = 'https://api.stripe.com/v1/payment_intents';
@@ -292,6 +307,61 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
     final data = await response.data;
     return data;
+  }
+
+  Future<FunctionResponse> _createCustomer2() async {
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    String email = await userHiveDataSource.getString(KEY_EMAIL);
+    final response = await Supabase.instance.client.functions
+        .invoke('create_customer', body: {
+      'email': email,
+      'supabase_id': userId,
+      'city': '',
+      'country': '',
+      'line1': '',
+      'line2': '',
+      'postal_code': '',
+      'state': '',
+      'phone': '',
+      'name': '',
+    });
+    return response;
+  }
+
+
+  Future<FunctionResponse> _getPaymentMethods2(String paymentIntentId) async {
+    final response = await Supabase.instance.client.functions
+        .invoke('get_payment_method', body: {
+      'payment_id': paymentIntentId,
+    });
+    return response;
+  }
+
+
+  Future<FunctionResponse> _createPaymentIntents2() async {
+    final response = await Supabase.instance.client.functions
+        .invoke('create_payment_intent', body: {
+      'amount': _amount*100,
+    });
+    return response;
+  }
+
+
+  Future<FunctionResponse> _scheduleSubscription2(String customerId) async {
+    final response = await Supabase.instance.client.functions
+        .invoke('schedule_subscription', body: {
+      'customer_id': customerId,
+    });
+    return response;
+  }
+
+  Future<FunctionResponse> _attachPaymentMethod2(String paymentMethodId, String customerId) async {
+    final response = await Supabase.instance.client.functions
+        .invoke('attach_payment_method', body: {
+      'payment_id': paymentMethodId,
+      'customer_id': customerId
+    });
+    return response;
   }
 
   Future<Map<String, dynamic>> _createSubscriptions(String customerId) async {
