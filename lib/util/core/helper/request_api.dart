@@ -24,20 +24,6 @@ class NetworkRequest extends BaseRequest{
     return request;
   }
 
-
-  static Future<NetworkRequest> createStripe() async {
-    request.updateDioInterceptors();
-    await request.addStripeHeaders();
-    return request;
-  }
-
-
-  Future<void> addStripeHeaders() async{
-    _dio.options.headers['Authorization'] = 'Bearer sk_test_51OUvYPFawMQyAsivVC0vyv3DHyPbhwbV7a5qU7DNJ930bPpLutVgYqi113gTYEBMmLIvfmxDZMwpwhxCRwnqP4zd00l24lcC8F';
-    _dio.options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-
-  }
-
   static Future<NetworkRequest> createFoodDataCentral() async {
     request.updateDioInterceptors();
     return request;

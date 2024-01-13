@@ -8,7 +8,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
-import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
@@ -36,6 +35,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   double _amount = 0;
 
+
+  String _priceId= '';
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[1] * 12}'];
     _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}';
     _amount= widget.subscriptionPlan.prices[0];
+    _priceId= widget.subscriptionPlan.ids[0];
   }
 
   @override
@@ -144,8 +147,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       _selectedInterval= interval;
       if(interval.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
+        _priceId = widget.subscriptionPlan.ids[0];
         _amount= widget.subscriptionPlan.prices[0];
       }else if(interval.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
+        _priceId = widget.subscriptionPlan.ids[1];
         _amount= widget.subscriptionPlan.prices[1] * 12;
       }
     });
@@ -173,59 +178,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
   void payButtonClickListener(BuildContext context) async{
-    final _customer = await _createCustomer2();
-    final _paymentIntent = await _createPaymentIntents2();
+    final _customer = await _createCustomer();
+    final _paymentIntent = await _createPaymentIntents();
     await _createCreditCard(_customer.data['id'], _paymentIntent.data['client_secret']);
-    final _paymentMethod = await _getPaymentMethods2(_paymentIntent.data['id']);
-    print('show_log: ${_paymentMethod.data}');
-
-    // await _attachPaymentMethod2(_paymentMethod.data['payment_method'], _customer.data['id']);
-    // await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
-    // await _scheduleSubscription2(_customer.data['id']);
-
-
-
-
-
-
-
-
-
-
-    // final _paymentIntent = await _createPaymentIntents();
-    // await _createCreditCard(_customer['id'], _paymentIntent['client_secret']);
-    // final _paymentMethod = await _getPaymentMethods(_paymentIntent['id']);
-    // await _attachPaymentMethod(_paymentMethod['payment_method'], _customer['id']);
-    // await _updateCustomer(_paymentMethod['payment_method'], _customer['id']);
-    // await _createScheduleSubscriptions(_customer['id']);
+    final _paymentMethod = await _getPaymentMethods(_paymentIntent.data['id']);
+    await _attachPaymentMethod(_paymentMethod.data['payment_method'], _customer.data['id']);
+    await _scheduleSubscription(_customer.data['id']);
   }
 
-
-
-  Future<Map<String, dynamic>> _createPaymentIntents() async {
-    const String url = 'https://api.stripe.com/v1/payment_intents';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    Map<String, dynamic> body = {
-      //todo
-      'amount': 999,
-      'currency': 'usd',
-      'payment_method_types[]': 'card',
-      'setup_future_usage' : 'off_session'
-    };
-
-    final response= await request.post(url, data: body);
-    final data = await response.data;
-    return data;
-  }
-
-
-  Future<Map<String, dynamic>> _getPaymentMethods(String paymentIntentId) async {
-    final String url = 'https://api.stripe.com/v1/payment_intents/$paymentIntentId';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url);
-    final data = await response.data;
-    return data;
-  }
 
 
   Future<void> _createCreditCard(String customerId, String paymentIntentClientSecret) async {
@@ -278,38 +238,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  Future<Map<String, dynamic>> _updateCustomer(
-      String paymentMethodId, String customerId) async {
-    final String url = 'https://api.stripe.com/v1/customers/$customerId';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url, data:{
-      'invoice_settings[default_payment_method]': paymentMethodId,
-    });
-    final data = await response.data;
-    return data;
-  }
 
-  Future<Map<String, dynamic>> _attachPaymentMethod(String paymentMethodId, String customerId) async {
-    final String url = 'https://api.stripe.com/v1/payment_methods/$paymentMethodId/attach';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url, data:{
-      'customer': customerId,
-    });
-    final data = await response.data;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> _createCustomer() async {
-    const String url = 'https://api.stripe.com/v1/customers';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url, data:{
-    'description': 'user id or email'
-    });
-    final data = await response.data;
-    return data;
-  }
-
-  Future<FunctionResponse> _createCustomer2() async {
+  Future<FunctionResponse> _createCustomer() async {
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     String email = await userHiveDataSource.getString(KEY_EMAIL);
     final response = await Supabase.instance.client.functions
@@ -329,7 +259,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  Future<FunctionResponse> _getPaymentMethods2(String paymentIntentId) async {
+  Future<FunctionResponse> _getPaymentMethods(String paymentIntentId) async {
     final response = await Supabase.instance.client.functions
         .invoke('get_payment_method', body: {
       'payment_id': paymentIntentId,
@@ -338,65 +268,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  Future<FunctionResponse> _createPaymentIntents2() async {
+  Future<FunctionResponse> _createPaymentIntents() async {
     final response = await Supabase.instance.client.functions
         .invoke('create_payment_intent', body: {
-      'amount': _amount*100,
+      'amount': _amount,
     });
     return response;
   }
 
-
-  Future<FunctionResponse> _scheduleSubscription2(String customerId) async {
+  Future<FunctionResponse> _scheduleSubscription(String customerId) async {
     final response = await Supabase.instance.client.functions
-        .invoke('schedule_subscription', body: {
+        .invoke('create_subscription_schedule', body: {
       'customer_id': customerId,
+      'price_id' : _priceId
     });
     return response;
   }
 
-  Future<FunctionResponse> _attachPaymentMethod2(String paymentMethodId, String customerId) async {
+  Future<FunctionResponse> _attachPaymentMethod(String paymentMethodId, String customerId) async {
     final response = await Supabase.instance.client.functions
         .invoke('attach_payment_method', body: {
-      'payment_id': paymentMethodId,
+      'payment_method': paymentMethodId,
       'customer_id': customerId
     });
     return response;
   }
-
-  Future<Map<String, dynamic>> _createSubscriptions(String customerId) async {
-    const String url = 'https://api.stripe.com/v1/subscriptions';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url, data:{
-      'customer': customerId,
-      //todo
-      'items[0][price]': 'price_1OWUlOFawMQyAsivJcIc5vB3',
-      'payment_behavior': 'default_incomplete',
-    });
-    final data = await response.data;
-    return data;
-  }
-
-
-  Future<Map<String, dynamic>> _createScheduleSubscriptions(String customerId) async {
-    const String url = 'https://api.stripe.com/v1/subscription_schedules';
-    final NetworkRequest request = await NetworkRequest.createStripe();
-    final response= await request.post(url, data:{
-      'customer': customerId,
-      'start_date': 'now',
-      'phases': [
-        {
-          //todo
-          "items": [{"price": "price_1OWUlOFawMQyAsivJcIc5vB3", "quantity": 1}],
-        }
-      ],
-    });
-    final data = await response.data;
-    return data;
-  }
-
-
-
 
 }
 
