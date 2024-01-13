@@ -13,6 +13,7 @@ import 'package:masterpie/feature/user/data/remote/datasource/user_remote_dataso
 import 'package:masterpie/feature/user/data/remote/datasource/user_remote_datasource_impl.dart';
 import 'package:masterpie/feature/user/data/repository_impl/user_repository_impl.dart';
 import 'package:masterpie/feature/user/domain/repository/user_repository.dart';
+import 'package:masterpie/feature/user/domain/usecase/subscriptions_usecase.dart';
 import '../../../feature/foods/data/local/datasource/food_local_datasource.dart';
 import '../../../feature/foods/data/local/datasource/food_local_datasource_impl.dart';
 import '../../../feature/foods/data/mapper/foods_mapper.dart';
@@ -38,7 +39,7 @@ import '../../../feature/user/domain/usecase/get_profile_usecase.dart';
 import '../../../feature/user/domain/usecase/get_user_credentials_usecase.dart';
 import '../../../feature/user/domain/usecase/login_usecase.dart';
 import '../../../feature/user/domain/usecase/logout_usecase.dart';
-import '../../../feature/user/domain/usecase/plan_usecase.dart';
+import '../../../feature/user/domain/usecase/user_plan_usecase.dart';
 import '../../../feature/user/domain/usecase/register_usecase.dart';
 import '../../../feature/user/domain/usecase/update_profile_usecase.dart';
 import '../helper/request_api.dart';
@@ -69,7 +70,9 @@ Future<void> setUpServiceLocator() async{
 
   serviceLocator.registerFactory<LogOutUseCase>(() => LogOutUseCase());
 
-  serviceLocator.registerFactory<PlanUseCase>(() => PlanUseCase());
+  serviceLocator.registerFactory<UserPlanUseCase>(() => UserPlanUseCase());
+
+  serviceLocator.registerFactory<SubscriptionPlansUseCase>(() => SubscriptionPlansUseCase());
 
 
 

@@ -9,7 +9,7 @@ import '../../../../util/core/response/success.dart';
 import '../model/user_plan_model.dart';
 import '../repository/user_repository.dart';
 
-class PlanUseCase{
+class UserPlanUseCase{
 
   final repo = serviceLocator<UserRepository>();
 

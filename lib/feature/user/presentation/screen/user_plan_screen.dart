@@ -5,6 +5,8 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
 import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
+import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
+import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/state_event/subscription_plans_state_event.dart';
 import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
@@ -29,10 +31,14 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   late UserPlanBloc _userPlanBloc;
+  late GetSubscriptionPlansBloc _getSubscriptionPlansBloc;
+
 
   late UserPlan _userPlan;
 
-  late SubscriptionPlan _selectedSubscriptionPlan;
+  SubscriptionPlan _selectedSubscriptionPlan=SubscriptionPlan();
+
+  List<SubscriptionPlan> _subscriptions= [];
 
   bool _isAutoPaymentOn= false;
 
@@ -40,12 +46,20 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   void initState() {
     super.initState();
     _userPlanBloc = context.read<UserPlanBloc>();
+    _getSubscriptionPlansBloc = context.read<GetSubscriptionPlansBloc>();
+
     getPlan();
+    getSubscriptionPlans();
   }
 
 
   void getPlan(){
     _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
+  }
+
+
+  void getSubscriptionPlans(){
+    _getSubscriptionPlansBloc.add(const SubscriptionPlanEvent.onGetPlans());
   }
 
 
@@ -221,6 +235,35 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                   }
               ),
+
+              BlocConsumer<GetSubscriptionPlansBloc, SubscriptionPlansState>(
+                  builder: (mcontext, state) {
+                    if (state is SubscriptionPlansLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
+                      );
+                    }else if(state is SubscriptionPlansLoadedState){
+                      _getSubscriptionPlansBloc.add(const SubscriptionPlanEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        setState(() {
+                          _subscriptions= state.subscriptions;
+                        });
+                      });
+                    }else if(state is SubscriptionPlansErrorState){
+                      Future.delayed(Duration.zero,(){
+                        return showErrorToast(context, state.message);
+                      });
+                    }else{
+                    }
+                    return Container();
+                  },
+                  listener: (context, state){
+
+                  }
+              ),
             ],
           )
         ),
@@ -381,6 +424,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   Widget freePlan(){
+    if(_subscriptions.isEmpty){
+      return Container();
+    }
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -623,7 +669,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           if(_selectedSubscriptionPlan.plan == FREE_LABEL){
             _selectedSubscriptionPlan = SubscriptionPlan();
           }else{
-            _selectedSubscriptionPlan= FREE_PLAN;
+            _selectedSubscriptionPlan= _subscriptions[0];
           }
         });
       },
@@ -634,6 +680,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   Widget basicPlan(){
+    if(_subscriptions.isEmpty){
+      return Container();
+    }
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -656,26 +705,26 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
             //price
-            const Center(
+            Center(
               child: Column(
                 children: [
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$BASIC_PRICE_MONTHLY\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      SizedBox(width: 1,),
-                      Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                      Text('${_subscriptions[1].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      const SizedBox(width: 1,),
+                      const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
                   ),
-                  SizedBox(height: 4,),
+                  const SizedBox(height: 4,),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$BASIC_PRICE_ANNUAL_MONTHLY\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      SizedBox(width: 1,),
-                      Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                      Text('${_subscriptions[1].prices[1]}\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      const SizedBox(width: 1,),
+                      const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
                   ),
                 ],
@@ -789,7 +838,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 const Text(
-                  UNLIMITED,
+                  UNLIMITED_LABEL,
                   style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
@@ -825,9 +874,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  '$BASIC_FOODS_PORTION_REQUEST_LIMIT',
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                Text(
+                  '${_subscriptions[1].foodPortionRequestsLimit}',
+                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
@@ -863,9 +912,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  '$BASIC_SUGGEST_FOOD_LIMIT',
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                Text(
+                  '${_subscriptions[1].suggestFoodRequestsLimit}',
+                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
@@ -911,10 +960,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan == BASIC_PLAN){
-            _selectedSubscriptionPlan= '';
+          if(_selectedSubscriptionPlan.plan == BASIC_LABEL){
+            _selectedSubscriptionPlan= SubscriptionPlan();
           }else{
-            _selectedSubscriptionPlan= BASIC_PLAN;
+            _selectedSubscriptionPlan= _subscriptions[1];
           }
         });
       },
@@ -923,13 +972,16 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   Widget premiumPlan(){
+    if(_subscriptions.isEmpty){
+      return Container();
+    }
     return GestureDetector(
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan == PREMIUM_PLAN ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _selectedSubscriptionPlan == PREMIUM_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -938,33 +990,33 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Text(PREMIUM_PLAN.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
+            Text(PREMIUM_LABEL.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
 
 
             const SizedBox(height: 16,),
 
 
             //price
-            const Center(
+            Center(
               child: Column(
                 children: [
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$PREMIUM_PRICE_MONTHLY\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      SizedBox(width: 1,),
-                      Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                      Text('${_subscriptions[2].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      const SizedBox(width: 1,),
+                      const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
                   ),
-                  SizedBox(height: 4,),
+                  const SizedBox(height: 4,),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$PREMIUM_PRICE_ANNUAL_MONTHLY\$/mo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      SizedBox(width: 1,),
-                      Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                      Text('${_subscriptions[2].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      const SizedBox(width: 1,),
+                      const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
                   ),
                 ],
@@ -1078,7 +1130,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 const Text(
-                  UNLIMITED,
+                  UNLIMITED_LABEL,
                   style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
@@ -1114,9 +1166,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  '$PREMIUM_FOODS_PORTION_REQUEST_LIMIT',
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                Text(
+                  '${_subscriptions[2].foodPortionRequestsLimit}',
+                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
@@ -1152,9 +1204,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  '$PREMIUM_SUGGEST_FOOD_LIMIT',
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                Text(
+                  '${_subscriptions[2].suggestFoodRequestsLimit}',
+                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
@@ -1199,10 +1251,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan == PREMIUM_PLAN){
-            _selectedSubscriptionPlan= '';
+          if(_selectedSubscriptionPlan.plan == PREMIUM_LABEL){
+            _selectedSubscriptionPlan= SubscriptionPlan();
           }else{
-            _selectedSubscriptionPlan= PREMIUM_PLAN;
+            _selectedSubscriptionPlan= _subscriptions[2];
           }
         });
       },
@@ -1211,13 +1263,16 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   Widget dietitianPlan(){
+    if(_subscriptions.isEmpty){
+      return Container();
+    }
     return GestureDetector(
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan == DIETITIAN_PLAN ? SELECTED_PLAN_COLOR: Colors.white,
+          color: _selectedSubscriptionPlan.plan == DIETITIAN_LABEL ? SELECTED_PLAN_COLOR: Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -1226,7 +1281,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Text(DIETITIAN_PLAN.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
+            Text(DIETITIAN_LABEL.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
 
 
             const SizedBox(height: 16,),
@@ -1242,10 +1297,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan == DIETITIAN_PLAN){
-            _selectedSubscriptionPlan= '';
+          if(_selectedSubscriptionPlan.plan == DIETITIAN_LABEL){
+            _selectedSubscriptionPlan= SubscriptionPlan();
           }else{
-            _selectedSubscriptionPlan= DIETITIAN_PLAN;
+            _selectedSubscriptionPlan= _subscriptions[3];
           }
         });
       },

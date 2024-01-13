@@ -244,6 +244,8 @@ const AUTO_PAYMENT_LABEL= 'Auto payment';
 const FREE_LABEL= 'free';
 const BASIC_LABEL= 'basic';
 const PREMIUM_LABEL= 'premium';
+const DIETITIAN_LABEL= 'dietitian';
+const UNLIMITED_LABEL= 'unlimited';
 
 
 
