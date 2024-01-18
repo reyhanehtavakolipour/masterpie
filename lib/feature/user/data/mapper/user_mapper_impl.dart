@@ -128,6 +128,7 @@ class UserMapperImpl extends UserMapper{
         id: userPlanRemote.id,
         isAutoPaymentOn: userPlanRemote.isAutoPaymentOn,
         customerId: userPlanRemote.customerId,
+        subscriptionId: userPlanRemote.subscriptionId,
         subscriptionPlan: fromSubscriptionPlanRemote(userPlanRemote.subscriptionPlan!),
         favoriteFoodLeft: userPlanRemote.favoriteFoodLeft,
         suggestFoodRequestsLeft: userPlanRemote.suggestFoodRequestsLeft,

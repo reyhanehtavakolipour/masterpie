@@ -19,6 +19,7 @@ mixin _$UserPlan {
   String get id => throw _privateConstructorUsedError;
   bool get isAutoPaymentOn => throw _privateConstructorUsedError;
   String get customerId => throw _privateConstructorUsedError;
+  String get subscriptionId => throw _privateConstructorUsedError;
   SubscriptionPlan? get subscriptionPlan => throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
@@ -38,6 +39,7 @@ abstract class $UserPlanCopyWith<$Res> {
       {String id,
       bool isAutoPaymentOn,
       String customerId,
+      String subscriptionId,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -62,6 +64,7 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
     Object? id = null,
     Object? isAutoPaymentOn = null,
     Object? customerId = null,
+    Object? subscriptionId = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -79,6 +82,10 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
       customerId: null == customerId
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      subscriptionId: null == subscriptionId
+          ? _value.subscriptionId
+          : subscriptionId // ignore: cast_nullable_to_non_nullable
               as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
@@ -124,6 +131,7 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       {String id,
       bool isAutoPaymentOn,
       String customerId,
+      String subscriptionId,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -147,6 +155,7 @@ class __$$UserPlanImplCopyWithImpl<$Res>
     Object? id = null,
     Object? isAutoPaymentOn = null,
     Object? customerId = null,
+    Object? subscriptionId = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -164,6 +173,10 @@ class __$$UserPlanImplCopyWithImpl<$Res>
       customerId: null == customerId
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      subscriptionId: null == subscriptionId
+          ? _value.subscriptionId
+          : subscriptionId // ignore: cast_nullable_to_non_nullable
               as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
@@ -192,6 +205,7 @@ class _$UserPlanImpl implements _UserPlan {
       {this.id = '',
       this.isAutoPaymentOn = true,
       this.customerId = '',
+      this.subscriptionId = '',
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
@@ -208,6 +222,9 @@ class _$UserPlanImpl implements _UserPlan {
   final String customerId;
   @override
   @JsonKey()
+  final String subscriptionId;
+  @override
+  @JsonKey()
   final SubscriptionPlan? subscriptionPlan;
   @override
   @JsonKey()
@@ -221,7 +238,7 @@ class _$UserPlanImpl implements _UserPlan {
 
   @override
   String toString() {
-    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -234,6 +251,8 @@ class _$UserPlanImpl implements _UserPlan {
                 other.isAutoPaymentOn == isAutoPaymentOn) &&
             (identical(other.customerId, customerId) ||
                 other.customerId == customerId) &&
+            (identical(other.subscriptionId, subscriptionId) ||
+                other.subscriptionId == subscriptionId) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
                 other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
@@ -252,6 +271,7 @@ class _$UserPlanImpl implements _UserPlan {
       id,
       isAutoPaymentOn,
       customerId,
+      subscriptionId,
       subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
@@ -269,6 +289,7 @@ abstract class _UserPlan implements UserPlan {
       {final String id,
       final bool isAutoPaymentOn,
       final String customerId,
+      final String subscriptionId,
       final SubscriptionPlan? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
@@ -280,6 +301,8 @@ abstract class _UserPlan implements UserPlan {
   bool get isAutoPaymentOn;
   @override
   String get customerId;
+  @override
+  String get subscriptionId;
   @override
   SubscriptionPlan? get subscriptionPlan;
   @override

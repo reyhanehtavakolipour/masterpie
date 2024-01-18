@@ -10,6 +10,7 @@ class UserPlanRemote with _$UserPlanRemote{
     @Default('') String id,
     @Default(true) bool isAutoPaymentOn,
     @Default('') String customerId,
+    @Default('') String subscriptionId,
     @Default(null) SubscriptionPlanRemote? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,

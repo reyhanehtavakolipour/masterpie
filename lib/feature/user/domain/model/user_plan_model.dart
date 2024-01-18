@@ -10,6 +10,7 @@ class UserPlan with _$UserPlan{
     @Default('') String id,
     @Default(true) bool isAutoPaymentOn,
     @Default('') String customerId,
+    @Default('') String subscriptionId,
     @Default(null) SubscriptionPlan? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,

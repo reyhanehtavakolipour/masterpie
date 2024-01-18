@@ -5,6 +5,7 @@ import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import 'package:masterpie/util/design/toast/app_toast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../util/core/constant/hive_constants.dart';
@@ -258,10 +259,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     String email = await _userHiveDataSource.getString(KEY_EMAIL);
     String customerId = widget.newPlanInfo.customerId;
 
-    print('show_email: $email');
-    print('show_customer: $customerId');
-    print('show_price: $_priceId');
-
     FunctionResponse response;
     if(customerId.isNotEmpty){
        response = await Supabase.instance.client.functions
@@ -281,15 +278,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
       });
     }
 
+    if(response.status == 200){
+      final Uri url = Uri.parse('${response.data['url']}');
+      await launchUrl(url);
 
-    printWrapped('show_result: ${response.data}');
-
-    final Uri url = Uri.parse('${response.data['url']}');
-    await launchUrl(url);
-
-    if(mounted){
-      Navigator.pop(context);
+      if(mounted){
+        Navigator.pop(context);
+      }
+    }else{
+      if(mounted){
+        showErrorToast(context, ERROR_TRY_AGAIN);
+      }
     }
+
   }
 }
 

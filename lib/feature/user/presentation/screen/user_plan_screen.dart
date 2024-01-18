@@ -11,6 +11,7 @@ import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_pla
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -283,7 +284,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-                //todo cancel subscription in Stripe
+                cancelAutoRenewal();
               },
             ),
             TextButton(
@@ -296,6 +297,21 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         );
       },
     );
+  }
+
+
+  void cancelAutoRenewal() async{
+    final response = await Supabase.instance.client.functions
+        .invoke('cancel_subscription', body: {
+      'sub_id': _userPlan.subscriptionId,
+    });
+
+    if(response.status == 200){
+      print('show_cancel: ${response.data} ,, ${_userPlan.subscriptionId}');
+    }else{
+      print('show_cancel1: ${response.data} ,, ${_userPlan.subscriptionId}');
+    }
+
   }
 
 
