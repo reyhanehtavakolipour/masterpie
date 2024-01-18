@@ -418,6 +418,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           plan: data[0]['plan'] ?? '',
           intervals: [data[0]['plan_type'] ?? ''],
         ),
+        customerId: data[0]['customer_id'] ?? '',
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
         favoriteFoodLeft: data[0]['favorite_food_left'] ?? 0,

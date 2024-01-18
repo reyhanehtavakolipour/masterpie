@@ -33,7 +33,3 @@ const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.n
 
 
 const GOOGLE_CLOUD_KEY = 'JWT_REMOVED';
-
-
-
-const String STRIPE_PUBLISHABLE_KEY= 'pk_test_51OUvYPFawMQyAsivQtnr8WtjzV4KGeW8MNS7lQw1w4opBkfyr18gSuUasfz1RiHGiqNkrftcEuTlJHDdavOUD6ae00si1Z9Oxj';

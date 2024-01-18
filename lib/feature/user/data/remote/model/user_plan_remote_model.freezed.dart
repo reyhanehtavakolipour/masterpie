@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UserPlanRemote {
   String get id => throw _privateConstructorUsedError;
   bool get isAutoPaymentOn => throw _privateConstructorUsedError;
+  String get customerId => throw _privateConstructorUsedError;
   SubscriptionPlanRemote? get subscriptionPlan =>
       throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
@@ -38,6 +39,7 @@ abstract class $UserPlanRemoteCopyWith<$Res> {
   $Res call(
       {String id,
       bool isAutoPaymentOn,
+      String customerId,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -61,6 +63,7 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
   $Res call({
     Object? id = null,
     Object? isAutoPaymentOn = null,
+    Object? customerId = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -75,6 +78,10 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
           ? _value.isAutoPaymentOn
           : isAutoPaymentOn // ignore: cast_nullable_to_non_nullable
               as bool,
+      customerId: null == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -119,6 +126,7 @@ abstract class _$$UserPlanRemoteImplCopyWith<$Res>
   $Res call(
       {String id,
       bool isAutoPaymentOn,
+      String customerId,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -141,6 +149,7 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? isAutoPaymentOn = null,
+    Object? customerId = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -155,6 +164,10 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
           ? _value.isAutoPaymentOn
           : isAutoPaymentOn // ignore: cast_nullable_to_non_nullable
               as bool,
+      customerId: null == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -181,6 +194,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
   _$UserPlanRemoteImpl(
       {this.id = '',
       this.isAutoPaymentOn = true,
+      this.customerId = '',
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
@@ -192,6 +206,9 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
   @override
   @JsonKey()
   final bool isAutoPaymentOn;
+  @override
+  @JsonKey()
+  final String customerId;
   @override
   @JsonKey()
   final SubscriptionPlanRemote? subscriptionPlan;
@@ -207,7 +224,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
 
   @override
   String toString() {
-    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -218,6 +235,8 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.isAutoPaymentOn, isAutoPaymentOn) ||
                 other.isAutoPaymentOn == isAutoPaymentOn) &&
+            (identical(other.customerId, customerId) ||
+                other.customerId == customerId) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
                 other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
@@ -235,6 +254,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       runtimeType,
       id,
       isAutoPaymentOn,
+      customerId,
       subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
@@ -252,6 +272,7 @@ abstract class _UserPlanRemote implements UserPlanRemote {
   factory _UserPlanRemote(
       {final String id,
       final bool isAutoPaymentOn,
+      final String customerId,
       final SubscriptionPlanRemote? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
@@ -261,6 +282,8 @@ abstract class _UserPlanRemote implements UserPlanRemote {
   String get id;
   @override
   bool get isAutoPaymentOn;
+  @override
+  String get customerId;
   @override
   SubscriptionPlanRemote? get subscriptionPlan;
   @override

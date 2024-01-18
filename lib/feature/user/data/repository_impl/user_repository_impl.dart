@@ -305,12 +305,35 @@ class UserRepositoryImpl extends UserRepository{
     if(planResponse.isRight()){
 
       List<SubscriptionPlanRemote> plans = [];
-      final basics = planResponse.asRight().where((element) => element.plan == 'basic').toList();
-      final premiums = planResponse.asRight().where((element) => element.plan == 'premium').toList();
+
+      List<SubscriptionPlanRemote> basics= [];
+      basics.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'monthly' && element.plan == 'basic'));
+      basics.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'basic'));
+
+
+      List<SubscriptionPlanRemote> basicsOneTime= [];
+      basicsOneTime.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'monthly' && element.plan == 'basic one-time'));
+      basicsOneTime.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'basic one-time'));
+
+
+      List<SubscriptionPlanRemote> premiums= [];
+      premiums.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'monthly' && element.plan == 'premium'));
+      premiums.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'premium'));
+
+
+
+      List<SubscriptionPlanRemote> premiumsOneTime= [];
+      premiumsOneTime.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'monthly' && element.plan == 'premium one-time'));
+      premiumsOneTime.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'premium one-time'));
+
+
+
       final free= planResponse.asRight().where((element) => element.plan == 'free').toList();
+
       final dietitian= planResponse.asRight().where((element) => element.plan == 'dietitian').toList();
 
       plans.addAll(free);
+
 
       //basics
       plans.add(
@@ -326,6 +349,20 @@ class UserRepositoryImpl extends UserRepository{
       );
 
 
+      //basics one time
+      plans.add(
+          SubscriptionPlanRemote(
+              plan: basicsOneTime[0].plan,
+              ids: [basicsOneTime[0].ids[0], basicsOneTime[1].ids[0]],
+              prices: [basicsOneTime[0].prices[0], basicsOneTime[1].prices[0]],
+              intervals: [basicsOneTime[0].intervals[0], basicsOneTime[1].intervals[0]],
+              favoriteFoodLimit: basicsOneTime[0].favoriteFoodLimit,
+              suggestFoodRequestsLimit: basicsOneTime[0].suggestFoodRequestsLimit,
+              foodPortionRequestsLimit: basicsOneTime[0].foodPortionRequestsLimit
+          )
+      );
+
+
       //premiums
       plans.add(
           SubscriptionPlanRemote(
@@ -336,6 +373,20 @@ class UserRepositoryImpl extends UserRepository{
               favoriteFoodLimit: premiums[0].favoriteFoodLimit,
               suggestFoodRequestsLimit: premiums[0].suggestFoodRequestsLimit,
               foodPortionRequestsLimit: premiums[0].foodPortionRequestsLimit
+          )
+      );
+
+
+      //premiums one time
+      plans.add(
+          SubscriptionPlanRemote(
+              plan: premiumsOneTime[0].plan,
+              ids: [premiumsOneTime[0].ids[0], premiumsOneTime[1].ids[0]],
+              prices: [premiumsOneTime[0].prices[0], premiumsOneTime[1].prices[0]],
+              intervals: [premiumsOneTime[0].intervals[0], premiumsOneTime[1].intervals[0]],
+              favoriteFoodLimit: premiumsOneTime[0].favoriteFoodLimit,
+              suggestFoodRequestsLimit: premiumsOneTime[0].suggestFoodRequestsLimit,
+              foodPortionRequestsLimit: premiumsOneTime[0].foodPortionRequestsLimit
           )
       );
 

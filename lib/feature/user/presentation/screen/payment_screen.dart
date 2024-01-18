@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
+import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
@@ -16,9 +18,9 @@ import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
 class PaymentScreen extends StatefulWidget {
 
 
-  final SubscriptionPlan subscriptionPlan;
+  final NewPlanInfo newPlanInfo;
 
-  const PaymentScreen({super.key, required this.subscriptionPlan});
+  const PaymentScreen({super.key, required this.newPlanInfo});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -26,8 +28,10 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
 
-  final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+  bool _isAutoPaymentOn= true;
 
+
+  final _userHiveDataSource = serviceLocator<UserHiveDataSource>();
 
   List<String> _intervalOptions= [];
 
@@ -45,10 +49,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void initPlanTypeOptions(){
-    _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[1] * 12}'];
-    _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.subscriptionPlan.prices[0]}';
-    _amount= widget.subscriptionPlan.prices[0];
-    _priceId= widget.subscriptionPlan.ids[0];
+    _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12}'];
+    _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}';
+    _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
+    final subs = widget.newPlanInfo.subscriptionPlans.where((element) => !element.plan.contains('one-time')).toList();
+    _priceId= subs[0].ids[0];
   }
 
   @override
@@ -94,6 +99,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             isEditable: true,
                           ),
 
+
+                          const SizedBox(height: 16,),
+
+                          autPaymentWidget(),
+
+
                           const SizedBox(height: 48,),
 
 
@@ -104,7 +115,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${widget.subscriptionPlan.plan.capitalize()} $PLAN_LABEL',
+                                  '${(widget.newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? BASIC_LABEL : PREMIUM_LABEL).capitalize()} $PLAN_LABEL',
                                   style: const TextStyle(
                                       fontSize: 14,
                                       color: DARK_PRIMARY_COLOR,
@@ -124,6 +135,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ],
                             ),
                           ),
+
 
                           const SizedBox(height: 32,),
 
@@ -147,11 +159,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       _selectedInterval= interval;
       if(interval.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
-        _priceId = widget.subscriptionPlan.ids[0];
-        _amount= widget.subscriptionPlan.prices[0];
+        List<SubscriptionPlan> list= [];
+        if(_isAutoPaymentOn){
+          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
+          if(basics.isEmpty){
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == PREMIUM_LABEL).toList();
+          }else{
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == BASIC_LABEL).toList();
+          }
+          _priceId = list[0].ids[0];
+        }else{
+          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
+          if(basics.isEmpty){
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
+          }else{
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
+          }
+          _priceId = list[0].ids[0];
+        }
+        _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
       }else if(interval.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
-        _priceId = widget.subscriptionPlan.ids[1];
-        _amount= widget.subscriptionPlan.prices[1] * 12;
+        List<SubscriptionPlan> list= [];
+        if(_isAutoPaymentOn){
+          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
+          if(basics.isEmpty){
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == PREMIUM_LABEL).toList();
+          }else{
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == BASIC_LABEL).toList();
+          }
+          _priceId = list[0].ids[1];
+        }else{
+          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
+          if(basics.isEmpty){
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
+          }else{
+            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
+          }
+          _priceId = list[0].ids[1];
+        }
+        _amount= widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12;
       }
     });
   }
@@ -177,123 +223,74 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
 
-  void payButtonClickListener(BuildContext context) async{
-    final _customer = await _createCustomer();
-    final _paymentIntent = await _createPaymentIntents();
-    await _createCreditCard(_customer.data['id'], _paymentIntent.data['client_secret']);
-    final _paymentMethod = await _getPaymentMethods(_paymentIntent.data['id']);
-    await _attachPaymentMethod(_paymentMethod.data['payment_method'], _customer.data['id']);
-    await _scheduleSubscription(_customer.data['id']);
-  }
+  Widget autPaymentWidget(){
+    return  Visibility(
+      // visible: _userSubscriptionPlan.plan != FREE_PLAN,
+      visible: true,
+      child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              const Text(AUTO_RENEWAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontSize: 14),),
+              const SizedBox(width: 8,),
+              Switch(
+                value: _isAutoPaymentOn,
+                activeTrackColor: Colors.green, // Color when switch is ON
+                activeColor: DARK_PRIMARY_COLOR, // Thumb color when switch is ON
+                inactiveTrackColor: LIGHT_GREY_COLOR, // Color when switch is OFF
+                inactiveThumbColor: DARK_PRIMARY_COLOR,
 
-
-
-  Future<void> _createCreditCard(String customerId, String paymentIntentClientSecret) async {
-
-    final billingDetails = BillingDetails(
-      name: 'Flutter Stripe',
-      email: 'email@stripe.com',
-      phone: '+48888000888',
-      address: Address(
-        city: 'Houston',
-        country: 'US',
-        line1: '1459  Circle Drive',
-        line2: '',
-        state: 'Texas',
-        postalCode: '77063',
+                onChanged: (value) {
+                  setState(() {
+                    _isAutoPaymentOn = value;
+                    updateSelectedPlanType(_selectedInterval);
+                  });
+                },
+              ),
+            ],
+          )
       ),
     );
-
-    await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          customerId: customerId,
-          paymentIntentClientSecret: paymentIntentClientSecret,
-          merchantDisplayName: MASTERPIE_NAME,
-          primaryButtonLabel: '$PAY_LABEL $_amount',
-          applePay: const PaymentSheetApplePay(
-            buttonType: PlatformButtonType.buy,
-            merchantCountryCode: 'CA',
-          ),
-          googlePay: const PaymentSheetGooglePay(
-            merchantCountryCode: 'CA',
-            testEnv: true,
-          ),
-          style: ThemeMode.light,
-          appearance: const PaymentSheetAppearance(
-            primaryButton: PaymentSheetPrimaryButtonAppearance(
-              shapes: PaymentSheetPrimaryButtonShape(blurRadius: 8),
-              colors: PaymentSheetPrimaryButtonTheme(
-                light: PaymentSheetPrimaryButtonThemeColors(
-                  background: DARK_PRIMARY_COLOR,
-                  text: Colors.white,
-                  border: DARK_PRIMARY_COLOR,
-                ),
-              ),
-            ),
-          ),
-          billingDetails: billingDetails
-        ));
-
-    await Stripe.instance.presentPaymentSheet();
   }
 
+  void payButtonClickListener(BuildContext context) async{
+    String email = await _userHiveDataSource.getString(KEY_EMAIL);
+    String customerId = widget.newPlanInfo.customerId;
+
+    print('show_email: $email');
+    print('show_customer: $customerId');
+    print('show_price: $_priceId');
+
+    FunctionResponse response;
+    if(customerId.isNotEmpty){
+       response = await Supabase.instance.client.functions
+          .invoke('create_checkout_session', body: {
+        'customer_id': customerId,
+        'customer_email': '',
+        'price_id': _priceId,
+        'mode': _isAutoPaymentOn ? 'subscription' : 'payment'
+      });
+    }else{
+      response = await Supabase.instance.client.functions
+          .invoke('create_checkout_session', body: {
+        'customer_id': '',
+        'customer_email': email,
+        'price_id': _priceId,
+        'mode': _isAutoPaymentOn ? 'subscription' : 'payment'
+      });
+    }
 
 
-  Future<FunctionResponse> _createCustomer() async {
-    String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    String email = await userHiveDataSource.getString(KEY_EMAIL);
-    final response = await Supabase.instance.client.functions
-        .invoke('create_customer', body: {
-      'email': email,
-      'supabase_id': userId,
-      'city': '',
-      'country': '',
-      'line1': '',
-      'line2': '',
-      'postal_code': '',
-      'state': '',
-      'phone': '',
-      'name': '',
-    });
-    return response;
+    printWrapped('show_result: ${response.data}');
+
+    final Uri url = Uri.parse('${response.data['url']}');
+    await launchUrl(url);
+
+    if(mounted){
+      Navigator.pop(context);
+    }
   }
-
-
-  Future<FunctionResponse> _getPaymentMethods(String paymentIntentId) async {
-    final response = await Supabase.instance.client.functions
-        .invoke('get_payment_method', body: {
-      'payment_id': paymentIntentId,
-    });
-    return response;
-  }
-
-
-  Future<FunctionResponse> _createPaymentIntents() async {
-    final response = await Supabase.instance.client.functions
-        .invoke('create_payment_intent', body: {
-      'amount': _amount,
-    });
-    return response;
-  }
-
-  Future<FunctionResponse> _scheduleSubscription(String customerId) async {
-    final response = await Supabase.instance.client.functions
-        .invoke('create_subscription_schedule', body: {
-      'customer_id': customerId,
-      'price_id' : _priceId
-    });
-    return response;
-  }
-
-  Future<FunctionResponse> _attachPaymentMethod(String paymentMethodId, String customerId) async {
-    final response = await Supabase.instance.client.functions
-        .invoke('attach_payment_method', body: {
-      'payment_method': paymentMethodId,
-      'customer_id': customerId
-    });
-    return response;
-  }
-
 }
 
 

@@ -9,6 +9,7 @@ class UserPlanRemote with _$UserPlanRemote{
   factory UserPlanRemote({
     @Default('') String id,
     @Default(true) bool isAutoPaymentOn,
+    @Default('') String customerId,
     @Default(null) SubscriptionPlanRemote? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,

@@ -8,6 +8,7 @@ import 'package:masterpie/feature/user/domain/model/user_plan_model.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/state_event/subscription_plans_state_event.dart';
 import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
+import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -36,11 +37,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   UserPlan _userPlan= UserPlan(subscriptionPlan: SubscriptionPlan());
 
-  SubscriptionPlan _selectedSubscriptionPlan=SubscriptionPlan();
+  NewPlanInfo _newPlanInfo = NewPlanInfo(subscriptionPlans: [SubscriptionPlan()]);
 
   List<SubscriptionPlan> _subscriptions= [];
-
-  bool _isAutoPaymentOn= false;
 
   @override
   void initState() {
@@ -137,11 +136,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                           ),
 
 
-                          const SizedBox(height: 6,),
-
-
-                          autPaymentWidget(),
-
                           const SizedBox(height: 20,),
 
                           cancelSubscriptionButton(),
@@ -220,7 +214,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                       Future.delayed(Duration.zero,(){
                         setState(() {
                           _userPlan= state.userSubscriptionPlan;
-                          _isAutoPaymentOn= _userPlan.isAutoPaymentOn;
                         });
                       });
                     }else if(state is UserPlanErrorState){
@@ -271,7 +264,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     );
   }
 
-  Future<void> _showCancelPlanConfirmation(BuildContext context) async {
+  Future<void> _showCancelSubscriptionConfirmation(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // User must tap a button to close the dialog
@@ -281,7 +274,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(FREE_PLAN_SWITCH_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+                Text(CANCEL_RENEWAL_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
               ],
             ),
           ),
@@ -307,37 +300,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
 
-
-  Widget autPaymentWidget(){
-    return  Visibility(
-      // visible: _userSubscriptionPlan.plan != FREE_PLAN,
-      visible: true,
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          children: [
-            const Text(AUTO_PAYMENT_LABEL, style: TextStyle( color: Colors.white, fontSize: 14),),
-            const SizedBox(width: 8,),
-            Switch(
-              value: _isAutoPaymentOn,
-              activeTrackColor: Colors.green, // Color when switch is ON
-              activeColor: DARK_PRIMARY_COLOR, // Thumb color when switch is ON
-              inactiveTrackColor: LIGHT_GREY_COLOR, // Color when switch is OFF
-              inactiveThumbColor: DARK_PRIMARY_COLOR,
-
-              onChanged: (value) {
-                setState(() {
-                  _isAutoPaymentOn = value;
-                  // todo update auto payment in Stripe
-                });
-              },
-            ),
-          ],
-        )
-      ),
-    );
-  }
-
   Widget cancelSubscriptionButton(){
     return  Visibility(
       // visible: _userSubscriptionPlan.plan != FREE_PLAN,
@@ -352,9 +314,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               backgroundColor: MASTERPIE_YELLOW_COLOR
           ),
           onPressed: () {
-            _showCancelPlanConfirmation(context);
+            _showCancelSubscriptionConfirmation(context);
           },
-          child: const Text(CANCEL_SUBSCRIPTION_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
+          child: const Text(CANCEL_RENEWAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
         ),
       ),
     );
@@ -362,7 +324,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget continueButton(){
     return  Visibility(
-      visible: _selectedSubscriptionPlan.plan== BASIC_LABEL || _selectedSubscriptionPlan.plan == PREMIUM_LABEL || _selectedSubscriptionPlan.plan == FREE_LABEL,
+      visible: _newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) || _newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL) || _newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL),
       child: Positioned(
         bottom: 0,
         left: 0,
@@ -379,17 +341,18 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
-              if(_selectedSubscriptionPlan.plan == FREE_LABEL){
-                if(_userPlan.subscriptionPlan!.plan == FREE_LABEL){
+              if(_newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL)){
+                if(_userPlan.subscriptionPlan!.plan.contains(FREE_LABEL)){
                   showSuccessToast(context, ALREADY_FREE_PLAN);
                 }else{
-                  _showCancelPlanConfirmation(context);
+                  _showCancelSubscriptionConfirmation(context);
                 }
               }else{
+                _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(subscriptionPlan: _selectedSubscriptionPlan,),
+                    builder: (context) => PaymentScreen(newPlanInfo: _newPlanInfo,),
                   ),
                 );
               }
@@ -433,7 +396,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan.plan == FREE_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL) ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -666,10 +629,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan.plan == FREE_LABEL){
-            _selectedSubscriptionPlan = SubscriptionPlan();
+          if(_newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL)){
+            _newPlanInfo = _newPlanInfo.copyWith(subscriptionPlans:  [SubscriptionPlan()]);
           }else{
-            _selectedSubscriptionPlan= _subscriptions[0];
+            final list = _subscriptions.where((element) => element.plan.contains(FREE_LABEL)).toList();
+            _newPlanInfo= _newPlanInfo.copyWith(subscriptionPlans: list);
           }
         });
       },
@@ -689,7 +653,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan.plan == BASIC_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -960,10 +924,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan.plan == BASIC_LABEL){
-            _selectedSubscriptionPlan= SubscriptionPlan();
+          if(_newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL)){
+            _newPlanInfo = _newPlanInfo.copyWith(subscriptionPlans:  [SubscriptionPlan()]);
           }else{
-            _selectedSubscriptionPlan= _subscriptions[1];
+            final list = _subscriptions.where((element) => element.plan.contains(BASIC_LABEL)).toList();
+            _newPlanInfo= _newPlanInfo.copyWith(subscriptionPlans: list);
           }
         });
       },
@@ -981,7 +946,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan.plan == PREMIUM_LABEL ? SELECTED_PLAN_COLOR : Colors.white,
+          color: _newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL) ? SELECTED_PLAN_COLOR : Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -1251,10 +1216,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan.plan == PREMIUM_LABEL){
-            _selectedSubscriptionPlan= SubscriptionPlan();
+          if(_newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL)){
+            _newPlanInfo = _newPlanInfo.copyWith(subscriptionPlans:  [SubscriptionPlan()]);
           }else{
-            _selectedSubscriptionPlan= _subscriptions[2];
+            final list = _subscriptions.where((element) => element.plan.contains(PREMIUM_LABEL)).toList();
+            _newPlanInfo= _newPlanInfo.copyWith(subscriptionPlans: list);
           }
         });
       },
@@ -1272,7 +1238,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _selectedSubscriptionPlan.plan == DIETITIAN_LABEL ? SELECTED_PLAN_COLOR: Colors.white,
+          color: _newPlanInfo.subscriptionPlans[0].plan.contains(DIETITIAN_LABEL) ? SELECTED_PLAN_COLOR: Colors.white,
           border: Border.all(
             color: Colors.grey,
           ),
@@ -1297,10 +1263,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
       onTap: (){
         setState(() {
-          if(_selectedSubscriptionPlan.plan == DIETITIAN_LABEL){
-            _selectedSubscriptionPlan= SubscriptionPlan();
+          if(_newPlanInfo.subscriptionPlans[0].plan.contains(DIETITIAN_LABEL)){
+            _newPlanInfo = _newPlanInfo.copyWith(subscriptionPlans:  [SubscriptionPlan()]);
           }else{
-            _selectedSubscriptionPlan= _subscriptions[3];
+            final list = _subscriptions.where((element) => element.plan.contains(DIETITIAN_LABEL)).toList();
+            _newPlanInfo= _newPlanInfo.copyWith(subscriptionPlans: list);
           }
         });
       },
