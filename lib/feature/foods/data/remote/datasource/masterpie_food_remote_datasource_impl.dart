@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../util/core/constant/api_constant.dart';
@@ -557,7 +558,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, List<FoodRemote>>> getLoggedFoods(String date, String userId) async{
     try {
-
       final supabase = Supabase.instance.client;
       final data = await supabase
           .from(USER_LOGGED_FOOD_REMOTE_TABLE)
@@ -789,7 +789,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         );
         foods.add(foodRemote);
       }
-
       return Right(foods);
 
     } on PostgrestException catch (error) {

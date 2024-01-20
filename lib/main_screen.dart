@@ -45,14 +45,12 @@ class MainScreen extends StatefulWidget {
 
   final List<String>? dailyMacroGoal;
 
-  // final List<Food>? loggedFoods;
-
-
   const MainScreen({Key? key, this.dailyMacroGoal}) : super(key: key);
 
 @override
 State<MainScreen> createState() => _MainScreenState();
 }
+
 
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
@@ -71,7 +69,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   double _totalTakenProteins= 0;
   double _totalTakenCarbs= 0;
   double _totalTakenFats= 0;
-
 
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
@@ -98,8 +95,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _logoutBloc = context.read<LogoutBloc>();
     _tabController.addListener(_handleTabSelection);
 
+    _getProfileBloc.add(const GetProfileEvent.onReset());
+    _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+    _logFoodsBloc.add(const LogFoodsEvent.onReset());
     setMacroGoals();
     requestProfile();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
 
@@ -364,7 +370,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 title: const Text(MACRO_GOAL_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CalculateUserMacroGoalScreen(),
@@ -806,7 +812,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: (){
-                                                              Navigator.push(
+                                                              Navigator.pushReplacement(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                   builder: (context) => const RequestFoodsPortionsScreen(),
@@ -939,6 +945,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         loaderColorThree: DARK_PRIMARY_COLOR,
                                                       );
                                                     }else if(state is GetProfileLoadedState){
+                                                      _getProfileBloc.add(const GetProfileEvent.onReset());
                                                       Future.delayed(Duration.zero,(){
                                                         requestLoggedFoods(_focusedDay);
                                                         setMacros(state.profile);
@@ -1174,7 +1181,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   void myFavoriteClickListener() async{
-    await Navigator.push(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const MyFavoriteFoodsScreen(),
@@ -1183,13 +1190,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void searchFoodClickListener() async{
-    await Navigator.push(
+     await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const SearchFoodScreen(),
       ),
     );
   }
+
+
 
   void updateScreenWithNewLoggedFoods(List<Food> foods){
     setState(() {
@@ -1250,13 +1259,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         );
       },
     );
-  }
-
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
 }

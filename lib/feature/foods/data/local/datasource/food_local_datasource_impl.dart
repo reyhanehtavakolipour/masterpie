@@ -414,7 +414,6 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
         }
       }
 
-
       List<LoggedFoodsLocal> loggedFoods = [];
       final list = await db?.query(
           TABLE_LOGGED_FOODS

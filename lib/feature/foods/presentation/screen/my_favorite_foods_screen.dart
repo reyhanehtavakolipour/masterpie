@@ -329,54 +329,14 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
   }
 
   void logFoodsOfToday(List<Food> foodsLoggedBefore){
-    /// 1. get new foods which are going to be logged using changedFoods
-    /// 2. get previously logged foods from backend : foodsLoggedBefore
-    /// 3. log Foods = compare them and update quantities if there is mutual food between 1 and 2.
-    /// remove foods which are in 2 but not in 1. add foods which are in 1 and not in 2.
-    /// 4. send foods in step 3 to the backend to reset logged foods of the day
-
     List<Food> foods = [];
 
+    foods.addAll(foodsLoggedBefore);
+    foods.addAll(_addedMyFavorites);
 
-    // step 1
-    final newFoods = [];
-    newFoods.addAll(_addedMyFavorites);
-
-
-    newFoods.forEach((element) {
-      print("show_item: $element");
-    });
-
-    // step 2: foodsLoggedBefore
-
-
-    //step 3:
-    foodsLoggedBefore.forEach((element) {
-      final length= newFoods.where((food) => food.id == element.id && food.servingAmount== element.servingAmount && food.calorie == element.calorie && food.protein == element.protein && food.carb == element.carb && food.fat == element.fat).length;
-      if(length == 0){
-        foods.add(element);
-      }else{
-        for(int i = 0; i < newFoods.length; i++){
-          if(newFoods[i].id == element.id && newFoods[i].servingAmount== element.servingAmount && newFoods[i].calorie == element.calorie && newFoods[i].protein == element.protein && newFoods[i].carb == element.carb && newFoods[i].fat == element.fat){
-            double quantity= newFoods[i].count + element.count;
-            newFoods[i]= newFoods[i].copyWith(count: quantity);
-            foods.add(newFoods[i]);
-          }
-        }
-      }
-    });
-    newFoods.forEach((element) {
-      final length= foodsLoggedBefore.where((food) => food.id == element.id && food.servingAmount== element.servingAmount && food.calorie == element.calorie && food.protein == element.protein && food.carb == element.carb && food.fat == element.fat).length;
-      if(length == 0){
-        foods.add(element);
-      }
-    });
-
-    // step 4:
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
     );
-
   }
 
   void updateChangedFavoriteFoods(List<Food> foods) {
