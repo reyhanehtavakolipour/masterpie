@@ -257,7 +257,12 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
                       child: ElevatedButton(
                         onPressed: (){
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, CalculateUserMacroGoalScreen.routeName);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CalculateUserMacroGoalScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

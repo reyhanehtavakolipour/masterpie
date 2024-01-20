@@ -298,72 +298,93 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
       children: [
 
         ///calorie
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: MACRO_PORTION_RECOM_COLOR,
-            borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
-          ),
-          child: Text(
-            '${_combinationMacros[index][0].toInt()} $CALORIE_LABEL',
-            style: const TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600,
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: MACRO_PORTION_RECOM_COLOR,
+              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                '${_combinationMacros[index][0].toInt()} $CALORIE_LABEL',
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         ),
 
 
-        const SizedBox(width: 4,),
+        // const SizedBox(width: 4,),
 
         ///protein
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: MACRO_PORTION_RECOM_COLOR,
-            borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
-          ),
-          child: Text(
-            '${_combinationMacros[index][1].toInt()} $GRAM_LABEL $PROTEIN_LABEL',
-            style: const TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            margin: const EdgeInsets.only(left: 4),
+            decoration: BoxDecoration(
+              color: MACRO_PORTION_RECOM_COLOR,
+              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                '${_combinationMacros[index][1].toInt()} $GRAM_LABEL $PROTEIN_LABEL',
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+                ),
+              ),
             ),
           ),
         ),
 
 
-        const SizedBox(width: 4,),
 
 
         ///carb
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: MACRO_PORTION_RECOM_COLOR,
-            borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
-          ),
-          child: Text(
-            '${_combinationMacros[index][2].toInt()} $GRAM_LABEL $CARB_LABEL',
-            style: const TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            margin: const EdgeInsets.only(left: 4),
+            decoration: BoxDecoration(
+              color: MACRO_PORTION_RECOM_COLOR,
+              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                '${_combinationMacros[index][2].toInt()} $GRAM_LABEL $CARB_LABEL',
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+                ),
+              ),
             ),
           ),
         ),
 
 
-        const SizedBox(width: 4,),
 
 
         ///fat
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: MACRO_PORTION_RECOM_COLOR,
-            borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
-          ),
-          child: Text(
-            '${_combinationMacros[index][3].toInt()} $GRAM_LABEL $FAT_LABEL',
-            style: const TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            margin: const EdgeInsets.only(left: 4),
+            decoration: BoxDecoration(
+              color: MACRO_PORTION_RECOM_COLOR,
+              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                '${_combinationMacros[index][3].toInt()} $GRAM_LABEL $FAT_LABEL',
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600
+                ),
+              ),
             ),
           ),
         ),

@@ -53,75 +53,66 @@ class _LandingScreenState extends State<LandingScreen>{
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(28),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-              Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                  Image.asset(LANDING_IMAGE_PATH),
 
-                        Image.asset(LANDING_IMAGE_PATH, width: 500, height: 500,),
+                  const SizedBox(height: 32,),
 
+                  const Text(WELCOME_MASTERPIE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w900, fontSize: 24),),
 
-                        const Text(WELCOME_MASTERPIE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w900, fontSize: 24),),
+                  const SizedBox(height: 4,),
 
-                        const SizedBox(height: 4,),
+                  const Text(MOTTO_MASTERPIE_LABEL, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11, fontStyle: FontStyle.italic),),
 
-                        const Text(MOTTO_MASTERPIE_LABEL, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11, fontStyle: FontStyle.italic),),
-
-                        const SizedBox(height: 32,
-                        ),
+                  const SizedBox(height: 20,),
 
 
 
-                        /// features
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                  /// features
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
                           children: [
-                            const SizedBox(width: 40,),
-
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  _featureTextWidget(CUSTOMIZABLE_FEATURE_LABEL),
-                                  _featureTextWidget(PORTION_SUGGESTION_LABEL),
-                                  _featureTextWidget(MACRO_TRACKING_LABEL),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(width: 12,),
-
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  _featureTextWidget(INTERNATIONAL_MEAL_LABEL),
-                                  _featureTextWidget(CREATE_FOOD_LABEL),
-                                  _featureTextWidget(USER_FRIENDLY_LABEL),
-                                ],
-                              ),
-                            )
+                            _featureTextWidget(CUSTOMIZABLE_FEATURE_LABEL),
+                            _featureTextWidget(PORTION_SUGGESTION_LABEL),
+                            _featureTextWidget(MACRO_TRACKING_LABEL),
                           ],
                         ),
+                      ),
 
-                      ],
-                    ),
-                  )
-              ),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-                child: Center(
-                  child: Row(
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _featureTextWidget(INTERNATIONAL_MEAL_LABEL),
+                            _featureTextWidget(CREATE_FOOD_LABEL),
+                            _featureTextWidget(USER_FRIENDLY_LABEL),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+
+                  const SizedBox(height: 32,),
+
+                  Row(
                     children: [
 
 
@@ -143,10 +134,10 @@ class _LandingScreenState extends State<LandingScreen>{
                             ),
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(8),
                             child: Text(
                               SIGNIN_LABEL,
-                              style: TextStyle(fontSize: 18.0, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -174,36 +165,34 @@ class _LandingScreenState extends State<LandingScreen>{
                             ),
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(8),
                             child: Text(
                               REGISTER_LABEL,
-                              style: TextStyle(fontSize: 18.0, color: Colors.white),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                       )
                     ],
                   ),
-                ),
+
+                  BlocConsumer<GetUserCredentialsBloc, GetUserCredentialsState>(
+                      builder: (mcontext, state) {
+                        if(state is GetUserCredentialsLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            handleNavigation(state.userCredentials);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+                ],
               ),
-
-
-              BlocConsumer<GetUserCredentialsBloc, GetUserCredentialsState>(
-                  builder: (mcontext, state) {
-                    if(state is GetUserCredentialsLoadedState){
-                      Future.delayed(Duration.zero,(){
-                        handleNavigation(state.userCredentials);
-                      });
-                    }else{
-                    }
-                    return Container();
-                  },
-                  listener: (context, state){
-
-                  }
-              ),
-
-            ],
+            ),
           ),
         ),
       ),
@@ -226,16 +215,17 @@ class _LandingScreenState extends State<LandingScreen>{
     return Container(
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
             Icons.fiber_manual_record,
             size: 8.0,
             color: DARK_PRIMARY_COLOR,
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: 2.0),
           Text(
             featureText,
-            style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.blueGrey),
           ),
         ],
       ),

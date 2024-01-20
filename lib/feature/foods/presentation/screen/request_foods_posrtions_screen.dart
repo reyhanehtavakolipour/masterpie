@@ -315,25 +315,33 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
                                   Container(
                                     color: LIGHT_GREY_COLOR,
-                                    padding: const EdgeInsets.all(24),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Text('$ADD_FOOD_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-                                        const SizedBox(height: 8,),
+                                        Container(
+                                          padding: const EdgeInsets.all(24),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text('$ADD_FOOD_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-                                        /// food type
-                                        CustomRadioListTile(
-                                          options: const [GROCERY_LABEL, MEAL_LABEL],
-                                          onSelectedOptionChanged: updateSelectedFoodType,
-                                          selectedOption: _foodType,
-                                          orientation: HORIZONTAL_ORIENTATION,
-                                          isEditable: true,
+                                              const SizedBox(height: 8,),
+
+                                              /// food type
+                                              CustomRadioListTile(
+                                                options: const [GROCERY_LABEL, MEAL_LABEL],
+                                                onSelectedOptionChanged: updateSelectedFoodType,
+                                                selectedOption: _foodType,
+                                                orientation: HORIZONTAL_ORIENTATION,
+                                                isEditable: true,
+                                              ),
+
+                                              /// add foods chips : add food by search or manual
+                                              addFoodsChips(),
+                                            ],
+                                          ),
                                         ),
-
-                                        /// add foods chips : add food by search or manual
-                                        addFoodsChips(),
 
                                         /// new food
                                         newFood(),
@@ -1109,6 +1117,8 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
         ///  serving + unit
         Row(
           children: [
+
+
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)

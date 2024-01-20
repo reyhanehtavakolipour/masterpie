@@ -67,69 +67,68 @@ class _RegisterScreenState extends State<RegisterScreen>{
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
       home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(32),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-
-                const SizedBox(height: 200,),
-
-                const Text(REGISTER_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 36),),
-
-                const SizedBox(height: 64,),
-
-                buildEmailField(),
-                const SizedBox(height: 16),
-                buildPasswordField(hintText: PASSWORD_LABEL, controller: _passwordController, borderColor: _passwordBorderColor),
-                const SizedBox(height: 16),
-                buildPasswordField(hintText: CONFIRM_PASSWORD_LABEL, controller: _confirmPasswordController, borderColor: _confirmPasswordBorderColor),
-                const SizedBox(height: 48),
-                buildRegisterButton(text: REGISTER_LABEL),
-                const SizedBox(height: 16),
-                const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
-                const SizedBox(height: 16),
-                buildGoogleRegisterButton(),
-                const SizedBox(height: 20),
-                buildLoginRow(),
-
-                const SizedBox(height: 18),
-
-                BlocConsumer<RegisterBloc, RegisterState>(
-                    builder: (mcontext, state) {
-                      if (state is RegisterLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is RegisterLoadedState){
-                        _registerBloc.add(const RegisterEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfileAfterRegistrationScreen(),
-                            ),
+                  const Text(REGISTER_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 36),),
+          
+                  const SizedBox(height: 64,),
+          
+                  buildEmailField(),
+                  const SizedBox(height: 16),
+                  buildPasswordField(hintText: PASSWORD_LABEL, controller: _passwordController, borderColor: _passwordBorderColor),
+                  const SizedBox(height: 16),
+                  buildPasswordField(hintText: CONFIRM_PASSWORD_LABEL, controller: _confirmPasswordController, borderColor: _confirmPasswordBorderColor),
+                  const SizedBox(height: 48),
+                  buildRegisterButton(text: REGISTER_LABEL),
+                  const SizedBox(height: 16),
+                  const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
+                  const SizedBox(height: 16),
+                  buildGoogleRegisterButton(),
+                  const SizedBox(height: 20),
+                  buildLoginRow(),
+          
+                  const SizedBox(height: 18),
+          
+                  BlocConsumer<RegisterBloc, RegisterState>(
+                      builder: (mcontext, state) {
+                        if (state is RegisterLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
                           );
-                        });
-                      }else if(state is RegisterErrorState){
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }else{
+                        }else if(state is RegisterLoadedState){
+                          _registerBloc.add(const RegisterEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileAfterRegistrationScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is RegisterErrorState){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+          
                       }
-                      return Container();
-                    },
-                    listener: (context, state){
-
-                    }
-                )
-
-              ],
+                  )
+          
+                ],
+              ),
             ),
           ),
         ),

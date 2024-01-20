@@ -79,65 +79,67 @@ class _SignInScreenState extends State<SignInScreen>{
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
       home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(32),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 200,),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                const Text(SIGNIN_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 36),),
+                  const Text(SIGNIN_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 36),),
 
-                const SizedBox(height: 64,),
+                  const SizedBox(height: 64,),
 
-                buildEmailField(),
-                const SizedBox(height: 16),
-                buildPasswordField(),
+                  buildEmailField(),
+                  const SizedBox(height: 16),
+                  buildPasswordField(),
 
-                const SizedBox(height: 48),
-                buildSignInButton(text: SIGNIN_LABEL),
-                const SizedBox(height: 16),
-                const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
-                const SizedBox(height: 16),
-                buildGoogleSignInButton(),
-                const SizedBox(height: 20),
-                buildRegisterRow(),
+                  const SizedBox(height: 48),
+                  buildSignInButton(text: SIGNIN_LABEL),
+                  const SizedBox(height: 16),
+                  const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
+                  const SizedBox(height: 16),
+                  buildGoogleSignInButton(),
+                  const SizedBox(height: 20),
+                  buildRegisterRow(),
 
-                const SizedBox(height: 18,),
+                  const SizedBox(height: 18,),
 
-                BlocConsumer<LoginBloc, LoginState>(
-                    builder: (mcontext, state) {
-                      if (state is LoginLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is LoginLoadedState){
-                        Future.delayed(Duration.zero,(){
-                          _loginBloc.add(const LoginEvent.onReset());
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainScreen(),
-                            ),
+                  BlocConsumer<LoginBloc, LoginState>(
+                      builder: (mcontext, state) {
+                        if (state is LoginLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
                           );
-                        });
-                      }else if(state is LoginErrorState){
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }else{
+                        }else if(state is LoginLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _loginBloc.add(const LoginEvent.onReset());
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is LoginErrorState){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
                       }
-                      return Container();
-                    },
-                    listener: (context, state){
+                  )
 
-                    }
-                )
-
-              ],
+                ],
+              ),
             ),
           ),
         ),
