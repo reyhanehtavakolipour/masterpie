@@ -53,8 +53,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initPlanTypeOptions(){
     _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];
     _selectedInterval = MONTHLY_PLAN_LABEL.capitalize();
-    // _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12}'];
-    // _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}';
     _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
     final subs = widget.newPlanInfo.subscriptionPlans.where((element) => !element.plan.contains('one-time')).toList();
     _priceId= subs[0].ids[0];
@@ -98,13 +96,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Image.asset(SPOON_PATH, width: 60, height: 60,)
+                        child: Image.asset(widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MEASURE_PATH : ACCURACY_PATH,
+                          width: 60, height: 60, color: widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MASTERPIE_ORANGE_COLOR : GREEN_COLOR,)
                       ),
 
 
                       //plan name
                       Text(
-                        '${(widget.newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? BASIC_LABEL : PREMIUM_LABEL).capitalize()} $PLAN_LABEL',
+                        '${widget.newPlanInfo.subscriptionPlans[0].plan.capitalize()} $PLAN_LABEL',
                         style: const TextStyle(
                             fontSize: 36,
                             color: DARK_PRIMARY_COLOR,
@@ -117,9 +116,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
                       // description
-                      const Text(
-                        'Great choice for one person',
-                        style: TextStyle(
+                      Text(
+                        (widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? BASIC_GREAT_FOR_INFO : PREMIUM_GREAT_FOR_INFO).capitalize(),
+                        style: const TextStyle(
                           fontSize: 20,
                           color: Colors.blueGrey,
                         ),
@@ -159,23 +158,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   child: Row(
                                     children: [
                                       Checkbox(
-                                        value: true,
+                                        value: _isAutoPaymentOn,
                                         activeColor: DARK_PRIMARY_COLOR,
                                         checkColor: Colors.white,
                                         onChanged: (value) {
                                           setState(() {
+                                            _isAutoPaymentOn = value ?? false;
+                                            updateSelectedPlanType(_selectedInterval);
                                           });
                                         },
                                       ),
-                                      Text('Auto Payment', style: TextStyle(fontSize: 13),),
+                                      const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
                                     ],
                                   ),
                                 ),
 
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    '9.99 \$',
-                                    style: TextStyle(
+                                    '$_amount \$',
+                                    style: const TextStyle(
                                       fontSize: 56,
                                       color: Colors.green,
                                     ),
@@ -194,9 +195,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       const SizedBox(height: 36,),
 
 
-                      Text(
-                        'Features:',
-                        style: const TextStyle(
+                      const Text(
+                        '$FEATURES_LABEL:',
+                        style: TextStyle(
                           fontSize: 20,
                           color: MACRO_COLOR,
                           fontWeight: FontWeight.w400
@@ -345,7 +346,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(width: 8,),
 
                           Text(
-                            '30',
+                            widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString(),
                             style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                           ),
 
@@ -383,7 +384,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(width: 8,),
 
                           Text(
-                            '40',
+                            widget.newPlanInfo.subscriptionPlans[0].suggestFoodRequestsLimit.toString(),
                             style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                           ),
 
@@ -512,38 +513,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-
-
-  Widget autPaymentWidget(){
-    return  Visibility(
-      // visible: _userSubscriptionPlan.plan != FREE_PLAN,
-      visible: true,
-      child: Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            children: [
-              const Text(AUTO_RENEWAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontSize: 14),),
-              const SizedBox(width: 8,),
-              Switch(
-                value: _isAutoPaymentOn,
-                activeTrackColor: Colors.green, // Color when switch is ON
-                activeColor: DARK_PRIMARY_COLOR, // Thumb color when switch is ON
-                inactiveTrackColor: LIGHT_GREY_COLOR, // Color when switch is OFF
-                inactiveThumbColor: DARK_PRIMARY_COLOR,
-
-                onChanged: (value) {
-                  setState(() {
-                    _isAutoPaymentOn = value;
-                    updateSelectedPlanType(_selectedInterval);
-                  });
-                },
-              ),
-            ],
-          )
-      ),
-    );
-  }
 
   void payButtonClickListener(BuildContext context) async{
     String email = await _userHiveDataSource.getString(KEY_EMAIL);

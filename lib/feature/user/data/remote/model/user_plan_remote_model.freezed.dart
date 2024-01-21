@@ -20,6 +20,9 @@ mixin _$UserPlanRemote {
   bool get isAutoPaymentOn => throw _privateConstructorUsedError;
   String get customerId => throw _privateConstructorUsedError;
   String get subscriptionId => throw _privateConstructorUsedError;
+  String get interval => throw _privateConstructorUsedError;
+  String get endsAt => throw _privateConstructorUsedError;
+  String get cancelReason => throw _privateConstructorUsedError;
   SubscriptionPlanRemote? get subscriptionPlan =>
       throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
@@ -42,10 +45,15 @@ abstract class $UserPlanRemoteCopyWith<$Res> {
       bool isAutoPaymentOn,
       String customerId,
       String subscriptionId,
+      String interval,
+      String endsAt,
+      String cancelReason,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
+
+  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -65,6 +73,9 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
     Object? isAutoPaymentOn = null,
     Object? customerId = null,
     Object? subscriptionId = null,
+    Object? interval = null,
+    Object? endsAt = null,
+    Object? cancelReason = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -87,6 +98,18 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
           ? _value.subscriptionId
           : subscriptionId // ignore: cast_nullable_to_non_nullable
               as String,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsAt: null == endsAt
+          ? _value.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelReason: null == cancelReason
+          ? _value.cancelReason
+          : cancelReason // ignore: cast_nullable_to_non_nullable
+              as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -105,6 +128,19 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
               as int,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan {
+    if (_value.subscriptionPlan == null) {
+      return null;
+    }
+
+    return $SubscriptionPlanRemoteCopyWith<$Res>(_value.subscriptionPlan!,
+        (value) {
+      return _then(_value.copyWith(subscriptionPlan: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -120,10 +156,16 @@ abstract class _$$UserPlanRemoteImplCopyWith<$Res>
       bool isAutoPaymentOn,
       String customerId,
       String subscriptionId,
+      String interval,
+      String endsAt,
+      String cancelReason,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
+
+  @override
+  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -141,6 +183,9 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
     Object? isAutoPaymentOn = null,
     Object? customerId = null,
     Object? subscriptionId = null,
+    Object? interval = null,
+    Object? endsAt = null,
+    Object? cancelReason = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -162,6 +207,18 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
       subscriptionId: null == subscriptionId
           ? _value.subscriptionId
           : subscriptionId // ignore: cast_nullable_to_non_nullable
+              as String,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsAt: null == endsAt
+          ? _value.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelReason: null == cancelReason
+          ? _value.cancelReason
+          : cancelReason // ignore: cast_nullable_to_non_nullable
               as String,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
@@ -191,6 +248,9 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       this.isAutoPaymentOn = true,
       this.customerId = '',
       this.subscriptionId = '',
+      this.interval = '',
+      this.endsAt = '',
+      this.cancelReason = '',
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
@@ -210,6 +270,15 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
   final String subscriptionId;
   @override
   @JsonKey()
+  final String interval;
+  @override
+  @JsonKey()
+  final String endsAt;
+  @override
+  @JsonKey()
+  final String cancelReason;
+  @override
+  @JsonKey()
   final SubscriptionPlanRemote? subscriptionPlan;
   @override
   @JsonKey()
@@ -223,7 +292,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
 
   @override
   String toString() {
-    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, cancelReason: $cancelReason, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -238,8 +307,13 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
                 other.customerId == customerId) &&
             (identical(other.subscriptionId, subscriptionId) ||
                 other.subscriptionId == subscriptionId) &&
-            const DeepCollectionEquality()
-                .equals(other.subscriptionPlan, subscriptionPlan) &&
+            (identical(other.interval, interval) ||
+                other.interval == interval) &&
+            (identical(other.endsAt, endsAt) || other.endsAt == endsAt) &&
+            (identical(other.cancelReason, cancelReason) ||
+                other.cancelReason == cancelReason) &&
+            (identical(other.subscriptionPlan, subscriptionPlan) ||
+                other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
                 other.favoriteFoodLeft == favoriteFoodLeft) &&
             (identical(
@@ -257,7 +331,10 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       isAutoPaymentOn,
       customerId,
       subscriptionId,
-      const DeepCollectionEquality().hash(subscriptionPlan),
+      interval,
+      endsAt,
+      cancelReason,
+      subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
       foodPortionRequestsLeft);
@@ -276,6 +353,9 @@ abstract class _UserPlanRemote implements UserPlanRemote {
       final bool isAutoPaymentOn,
       final String customerId,
       final String subscriptionId,
+      final String interval,
+      final String endsAt,
+      final String cancelReason,
       final SubscriptionPlanRemote? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
@@ -289,6 +369,12 @@ abstract class _UserPlanRemote implements UserPlanRemote {
   String get customerId;
   @override
   String get subscriptionId;
+  @override
+  String get interval;
+  @override
+  String get endsAt;
+  @override
+  String get cancelReason;
   @override
   SubscriptionPlanRemote? get subscriptionPlan;
   @override

@@ -10,7 +10,5 @@ const String MONTSERRAT_FONT = 'Montserrat';
 const String GOOGLE_PATH = 'assets/google.png';
 const String WELCOME_PATH = 'assets/welcome.png';
 const String MAIN_DISH_PATH = 'assets/main_page_dish.png';
-const String SPOON_PATH = 'assets/spoon.png';
 const String MEASURE_PATH = 'assets/measure.png';
 const String ACCURACY_PATH = 'assets/accuracy.png';
-const String MASTERPIE_LOGO_LAUNCHER_PATH = 'assets/masterpie_logo_launcher.png';

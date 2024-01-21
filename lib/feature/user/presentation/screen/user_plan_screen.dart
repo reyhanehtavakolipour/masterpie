@@ -67,6 +67,16 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   }
 
+
+  String getUserPlanName(){
+    if(_userPlan.subscriptionPlan!.plan == 'basic one-time' || _userPlan.subscriptionPlan!.plan == 'basic'){
+      return BASIC_LABEL;
+    }else if(_userPlan.subscriptionPlan!.plan == 'premium one-time' || _userPlan.subscriptionPlan!.plan == 'premium'){
+      return PREMIUM_LABEL;
+    }
+    return _userPlan.subscriptionPlan!.plan;
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -106,9 +116,19 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                         children: [
                           ///plan
                           Text(
-                            _userPlan.subscriptionPlan!.plan.capitalize(),
+                            getUserPlanName().capitalize(),
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
                           ),
+
+                          const SizedBox(height: 4,),
+
+                          subscriptionDetail(),
+
+                          oneTimePaymentDetail(),
+
+                          cancelReason(),
+
+
 
 
                           const SizedBox(height: 24,),
@@ -299,6 +319,40 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     );
   }
 
+  Future<void> _showFreePlanConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // User must tap a button to close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(FREE_LABEL.capitalize(), style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(SWITCH_FREE_PLAN_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                //todo switch to free plan
+              },
+            ),
+            TextButton(
+              child: const Text(NO_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   void cancelAutoRenewal() async{
     final response = await Supabase.instance.client.functions
@@ -315,6 +369,38 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   }
 
 
+
+  Widget subscriptionDetail(){
+    return Visibility(
+      visible: _userPlan.subscriptionId.isNotEmpty,
+        child: Text(
+          '${_userPlan.interval.capitalize()}, $AUTO_RENEWAL_LABEL',
+          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
+        )
+    );
+  }
+
+
+  Widget oneTimePaymentDetail(){
+    return Visibility(
+        visible: _userPlan.subscriptionId.isEmpty && _userPlan.endsAt.isNotEmpty,
+        child: Text(
+          '$ENDS_AT_LABEL: ${_userPlan.endsAt}',
+          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
+        )
+    );
+  }
+
+
+  Widget cancelReason(){
+    return Visibility(
+        visible: _userPlan.cancelReason.isNotEmpty ,
+        child: Text(
+          _userPlan.cancelReason,
+          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: RED_ERROR_COLOR),
+        )
+    );
+  }
 
   Widget cancelSubscriptionButton(){
     return  Visibility(
@@ -361,7 +447,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 if(_userPlan.subscriptionPlan!.plan.contains(FREE_LABEL)){
                   showSuccessToast(context, ALREADY_FREE_PLAN);
                 }else{
-                  _showCancelSubscriptionConfirmation(context);
+                  _showFreePlanConfirmation(context);
                 }
               }else{
                 _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId);
@@ -649,6 +735,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     if(_subscriptions.isEmpty){
       return Container();
     }
+    final subs = _subscriptions.where((element) => element.plan.contains(BASIC_LABEL)).toList();
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -678,7 +765,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${_subscriptions[1].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
                       const SizedBox(width: 1,),
                       const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -688,7 +775,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${_subscriptions[1].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
                       const SizedBox(width: 1,),
                       const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -841,7 +928,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${_subscriptions[1].foodPortionRequestsLimit}',
+                  '${subs[0].foodPortionRequestsLimit}',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
@@ -879,7 +966,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${_subscriptions[1].suggestFoodRequestsLimit}',
+                  '${subs[0].suggestFoodRequestsLimit}',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
@@ -942,6 +1029,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     if(_subscriptions.isEmpty){
       return Container();
     }
+
+    final subs = _subscriptions.where((element) => element.plan.contains(PREMIUM_LABEL)).toList();
+
     return GestureDetector(
       child: Container(
         width: double.infinity,
@@ -971,7 +1061,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${_subscriptions[2].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
                       const SizedBox(width: 1,),
                       const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -981,7 +1071,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${_subscriptions[2].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                      Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
                       const SizedBox(width: 1,),
                       const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
                     ],
@@ -1134,7 +1224,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${_subscriptions[2].foodPortionRequestsLimit}',
+                  '${subs[0].foodPortionRequestsLimit}',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
@@ -1172,7 +1262,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${_subscriptions[2].suggestFoodRequestsLimit}',
+                  '${subs[0].suggestFoodRequestsLimit}',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 

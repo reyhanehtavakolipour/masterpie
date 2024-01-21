@@ -227,7 +227,7 @@ const SUGGEST_FOOD_ACCESS= 'Personalized Meal Recommendation';
 const FOOD_PORTION_ACCESS= 'Food Portion Recommender';
 const DIETITIAN_CONTACT_US = 'For more information about this plan, contact us at admin@masterpieapp.com .';
 const MONTHLY_PLAN_LABEL= 'monthly';
-const ANNUAL_PLAN_LABEL= 'yearly';
+const ANNUAL_PLAN_LABEL= 'annually';
 const CONTINUE_LABEL= 'Continue';
 const FAVORITE_FOOD_INFO_FREE_PLAN= 'favorites for lifetime';
 const PAYMENT_LABEL= 'Payment';
@@ -237,6 +237,7 @@ const PAYMENT_CENCELLED_MSG= 'Payment cancelled';
 const TOTAL_PRICE_LABEL= 'Total Price';
 const PLAN_LABEL= 'Plan';
 const CANCEL_RENEWAL_MSG= 'Are you sure you want to cancel auto renewal?';
+const SWITCH_FREE_PLAN_MSG= 'Are you sure you want to switch to free plan?';
 const PLAN_UPDATED_SUCCESSFULLY_MSG= 'Plan updated successfully';
 const ALREADY_FREE_PLAN= 'You are already on free plan';
 const AUTO_RENEWAL_LABEL= 'Auto renewal';
@@ -246,6 +247,14 @@ const BASIC_LABEL= 'basic';
 const PREMIUM_LABEL= 'premium';
 const DIETITIAN_LABEL= 'dietitian';
 const UNLIMITED_LABEL= 'unlimited';
+const BASIC_GREAT_FOR_INFO= 'Great choice for one person';
+const PREMIUM_GREAT_FOR_INFO= 'Great choice for families';
+const FEATURES_LABEL= 'Features per month';
+const ENDS_AT_LABEL= 'Ends at';
+
+
+
+
 
 
 
