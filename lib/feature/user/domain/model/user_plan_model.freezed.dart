@@ -44,8 +44,6 @@ abstract class $UserPlanCopyWith<$Res> {
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
-
-  $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -105,18 +103,6 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
               as int,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan {
-    if (_value.subscriptionPlan == null) {
-      return null;
-    }
-
-    return $SubscriptionPlanCopyWith<$Res>(_value.subscriptionPlan!, (value) {
-      return _then(_value.copyWith(subscriptionPlan: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -136,9 +122,6 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
-
-  @override
-  $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -253,8 +236,8 @@ class _$UserPlanImpl implements _UserPlan {
                 other.customerId == customerId) &&
             (identical(other.subscriptionId, subscriptionId) ||
                 other.subscriptionId == subscriptionId) &&
-            (identical(other.subscriptionPlan, subscriptionPlan) ||
-                other.subscriptionPlan == subscriptionPlan) &&
+            const DeepCollectionEquality()
+                .equals(other.subscriptionPlan, subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
                 other.favoriteFoodLeft == favoriteFoodLeft) &&
             (identical(
@@ -272,7 +255,7 @@ class _$UserPlanImpl implements _UserPlan {
       isAutoPaymentOn,
       customerId,
       subscriptionId,
-      subscriptionPlan,
+      const DeepCollectionEquality().hash(subscriptionPlan),
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
       foodPortionRequestsLeft);

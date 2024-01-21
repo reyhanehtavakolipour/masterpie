@@ -12,6 +12,7 @@ import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
@@ -50,8 +51,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void initPlanTypeOptions(){
-    _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12}'];
-    _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}';
+    _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];
+    _selectedInterval = MONTHLY_PLAN_LABEL.capitalize();
+    // _intervalOptions= ['${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}', '${ANNUAL_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12}'];
+    // _selectedInterval = '${MONTHLY_PLAN_LABEL.capitalize()}-${widget.newPlanInfo.subscriptionPlans[0].prices[0]}';
     _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
     final subs = widget.newPlanInfo.subscriptionPlans.where((element) => !element.plan.contains('one-time')).toList();
     _priceId= subs[0].ids[0];
@@ -84,66 +87,353 @@ class _PaymentScreenState extends State<PaymentScreen> {
             body: Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  color: LIGHT_GREY_COLOR,
+                  padding: const EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
 
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          CustomRadioListTile(
-                            options: _intervalOptions,
-                            onSelectedOptionChanged: updateSelectedPlanType,
-                            selectedOption: _selectedInterval,
-                            orientation: VERTICAL_ORIENTATION,
-                            isEditable: true,
+
+                      const SizedBox(height: 12,),
+
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Image.asset(SPOON_PATH, width: 60, height: 60,)
+                      ),
+
+
+                      //plan name
+                      Text(
+                        '${(widget.newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? BASIC_LABEL : PREMIUM_LABEL).capitalize()} $PLAN_LABEL',
+                        style: const TextStyle(
+                            fontSize: 36,
+                            color: DARK_PRIMARY_COLOR,
+                        ),
+                      ),
+
+
+
+                      const SizedBox(height: 4,),
+
+
+                      // description
+                      const Text(
+                        'Great choice for one person',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.blueGrey,
+                        ),
+                      ),
+
+
+                      const SizedBox(height: 16,),
+
+
+                      //price-auto payment checkbox - interval
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(BORDER_RADIUS,),
+                          color: Colors.white,
+                          border: Border.all(
+                            color: DARK_PRIMARY_COLOR,
                           ),
+                        ),
+                        child: Column(
+                          children: [
+
+                            CustomRadioListTile(
+                              options: _intervalOptions,
+                              onSelectedOptionChanged: updateSelectedPlanType,
+                              selectedOption: _selectedInterval,
+                              orientation: HORIZONTAL_ORIENTATION,
+                              isEditable: true,
+                            ),
 
 
-                          const SizedBox(height: 16,),
+                            const SizedBox(height: 24,),
 
-                          autPaymentWidget(),
-
-
-                          const SizedBox(height: 48,),
-
-
-
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Text(
-                                  '${(widget.newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? BASIC_LABEL : PREMIUM_LABEL).capitalize()} $PLAN_LABEL',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      color: DARK_PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: true,
+                                        activeColor: DARK_PRIMARY_COLOR,
+                                        checkColor: Colors.white,
+                                        onChanged: (value) {
+                                          setState(() {
+                                          });
+                                        },
+                                      ),
+                                      Text('Auto Payment', style: TextStyle(fontSize: 13),),
+                                    ],
                                   ),
                                 ),
 
-                                Text(
-                                  '$TOTAL_PRICE_LABEL: $_amount',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      color: DARK_PRIMARY_COLOR,
-                                      fontWeight: FontWeight.w600
-
+                                const Expanded(
+                                  child: Text(
+                                    '9.99 \$',
+                                    style: TextStyle(
+                                      fontSize: 56,
+                                      color: Colors.green,
+                                    ),
                                   ),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+
+
+
+                      const SizedBox(height: 36,),
+
+
+                      Text(
+                        'Features:',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: MACRO_COLOR,
+                          fontWeight: FontWeight.w400
+                        ),
+                      ),
+
+
+                      const SizedBox(height: 16,),
+
+
+                      //macro tracking
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: MACRO_TRACKING_ACCESS,
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
                                 ),
                               ],
                             ),
                           ),
 
 
-                          const SizedBox(height: 32,),
+                          const SizedBox(width: 8,),
 
+                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
 
-                          buildPayButton(context),
                         ],
-                      )
+                      ),
+
+
+                      //usda nutrition access
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: USDA_NUTRITION_ACCESS,
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+
+                          const SizedBox(width: 8,),
+
+                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
+
+                        ],
+                      ),
+
+
+
+                      //favorite food access
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$FAVORITE_FOOD_ACCESS:',
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 8,),
+
+                          const Text(
+                            UNLIMITED_LABEL,
+                            style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                          ),
+
+                        ],
+                      ),
+
+                      //food portion
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$FOOD_PORTION_ACCESS:',
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 8,),
+
+                          Text(
+                            '30',
+                            style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                          ),
+
+                        ],
+                      ),
+
+
+                      //suggest food
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$SUGGEST_FOOD_ACCESS:',
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 8,),
+
+                          Text(
+                            '40',
+                            style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                          ),
+
+                        ],
+                      ),
+
+
+                      //macro adjustment
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$MACRO_ADJUSTMENT_ACCESS:',
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 8,),
+
+                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
+
+                        ],
+
+                      ),
+
+
+
+
+                      const SizedBox(height: 48,),
+
+
+
+                      buildPayButton(context),
                     ],
                   ),
                 ),
@@ -213,11 +503,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          backgroundColor: DARK_PRIMARY_COLOR
+          backgroundColor: MASTERPIE_YELLOW_COLOR
       ),
       child: const Padding(
           padding: EdgeInsets.all(12),
-          child: Text(PAY_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+          child: Text(PAY_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
       ),
     );
   }

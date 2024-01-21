@@ -46,8 +46,6 @@ abstract class $UserPlanRemoteCopyWith<$Res> {
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
-
-  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -107,19 +105,6 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
               as int,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan {
-    if (_value.subscriptionPlan == null) {
-      return null;
-    }
-
-    return $SubscriptionPlanRemoteCopyWith<$Res>(_value.subscriptionPlan!,
-        (value) {
-      return _then(_value.copyWith(subscriptionPlan: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -139,9 +124,6 @@ abstract class _$$UserPlanRemoteImplCopyWith<$Res>
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft});
-
-  @override
-  $SubscriptionPlanRemoteCopyWith<$Res>? get subscriptionPlan;
 }
 
 /// @nodoc
@@ -256,8 +238,8 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
                 other.customerId == customerId) &&
             (identical(other.subscriptionId, subscriptionId) ||
                 other.subscriptionId == subscriptionId) &&
-            (identical(other.subscriptionPlan, subscriptionPlan) ||
-                other.subscriptionPlan == subscriptionPlan) &&
+            const DeepCollectionEquality()
+                .equals(other.subscriptionPlan, subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
                 other.favoriteFoodLeft == favoriteFoodLeft) &&
             (identical(
@@ -275,7 +257,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       isAutoPaymentOn,
       customerId,
       subscriptionId,
-      subscriptionPlan,
+      const DeepCollectionEquality().hash(subscriptionPlan),
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
       foodPortionRequestsLeft);

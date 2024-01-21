@@ -358,13 +358,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   children: [
                     const SizedBox(height: 16,),
                     Image.asset(MASTERPIE_LOGO_PATH, width: 50, height: 50,),
-                    const SizedBox(height: 8,),
+                    const SizedBox(height: 16,),
                     const Text(WELCOME_MASTERPIE_LABEL, style: TextStyle(fontSize: 14, color: Colors.white),),
-                    const Text(MOTTO_MASTERPIE_LABEL, style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
                   ],
                 ),
               ),
               ListTile(
+                leading: const Icon(Icons.account_box),
                 title: const Text(PROFILE_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
@@ -377,6 +377,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.accessibility),
                 title: const Text(MACRO_GOAL_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
@@ -389,6 +390,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.credit_card),
                 title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
@@ -401,6 +403,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.logout),
                 title: const Text(LOGOUT_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();

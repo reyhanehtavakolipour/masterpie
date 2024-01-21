@@ -46,7 +46,7 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^6.6.1
   mocktail: ^0.3.0
-
+  flutter_launcher_icons: ^0.13.0
 
 
 flutter:
@@ -60,3 +60,7 @@ flutter:
         - asset: fonts/Montserrat-Bold.ttf
 
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/masterpie_logo_launcher.png"
