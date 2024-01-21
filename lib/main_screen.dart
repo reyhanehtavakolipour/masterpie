@@ -10,6 +10,7 @@ import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'feature/foods/domain/model/food_model.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
@@ -76,8 +77,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   late LogoutBloc _logoutBloc;
 
   late TextEditingController _todayWeightController;
-
-  String _userFirstName = '';
 
   int _calorieGoal= 0;
   int _proteinGoal= 0;
@@ -201,6 +200,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     // }
   }
 
+  Future<String> _getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
+    return version;
+  }
+
   void onUpdatedGoalMacrosFromDialog(List<String> goalMacros) {
     setState(() {
       _calorieGoal = int.parse(goalMacros[0]);
@@ -322,7 +332,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         backgroundColor: TOP_PART_MAIN_SCREE_COLOR,
         appBar: AppBar(
           backgroundColor: TOP_PART_MAIN_SCREE_COLOR,
-          title: Text('$HELLO_LABEL $_userFirstName', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -339,21 +348,22 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-               SizedBox(
-                 height: 200,
-                 child: DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: DARK_PRIMARY_COLOR,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 16,),
-                      Image.asset(MASTERPIE_LOGO_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT,),
-                    ],
-                  ),
-                 ),
-               ),
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: DARK_PRIMARY_COLOR,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 16,),
+                    Image.asset(MASTERPIE_LOGO_PATH, width: 50, height: 50,),
+                    const SizedBox(height: 8,),
+                    const Text(WELCOME_MASTERPIE_LABEL, style: TextStyle(fontSize: 14, color: Colors.white),),
+                    const Text(MOTTO_MASTERPIE_LABEL, style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
+                  ],
+                ),
+              ),
               ListTile(
                 title: const Text(PROFILE_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
@@ -396,6 +406,22 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   _scaffoldKey.currentState?.openEndDrawer();
                   showLogoutDialog(context);
                 },
+              ),
+
+              const Divider(),
+
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: FutureBuilder<String>(
+                  future: _getAppVersion(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text('Version: ${snapshot.data}', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),);
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                ),
               ),
             ],
           ),
@@ -1214,7 +1240,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _getProfileBloc.add(const GetProfileEvent.onReset());
 
     setState(() {
-      _userFirstName = profile.firstName ?? '';
       _calorieGoal = profile.dailyMacroGoal[0].isEmpty ? 0 : int.parse(profile.dailyMacroGoal[0]);
       _proteinGoal = profile.dailyMacroGoal[1].isEmpty ? 0 : int.parse(profile.dailyMacroGoal[1]);
       _carbGoal = profile.dailyMacroGoal[2].isEmpty ? 0 : int.parse(profile.dailyMacroGoal[2]);

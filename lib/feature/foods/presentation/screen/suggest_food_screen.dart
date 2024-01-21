@@ -76,170 +76,177 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ///Diet
-                        const Text(DIET_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                        const SizedBox(height: 10,),
-                        CustomRadioListTile(
-                          options: const [NONE_LABEL, LOWCARB_LABEL, KETO_LABEL, VEGAN_LABEL],
-                          onSelectedOptionChanged: updateSelectedDiet,
-                          selectedOption: selectedDiet,
-                          orientation: VERTICAL_ORIENTATION,
-                          isEditable: true,
-                        ),
-                        const SizedBox(height: 10,),
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                        ///Contains
-                        Row(
-                          children: [
-                            const SizedBox(
-                                width: MACRO_WIDTH,
-                                child:  Text(CONTAINS_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                            ),
-                            const SizedBox(width: 30,),
-                            Expanded(
-                              child: SizedBox(
-                                height: SEARCH_BAR_HEIGHT,
-                                child: TextField(
-                                  controller: _ingredientsController,
-                                  decoration: InputDecoration(
-                                    suffixIcon: IconButton(
-                                      icon: Theme(
-                                        data: ThemeData(
-                                          iconTheme: const IconThemeData(color: DARK_PRIMARY_COLOR),
-                                        ),
-                                        child:  const Icon(Icons.check,),
+                      ///Diet
+                      const Text(DIET_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 10,),
+                      CustomRadioListTile(
+                        options: const [NONE_LABEL, LOWCARB_LABEL, KETO_LABEL, VEGAN_LABEL],
+                        onSelectedOptionChanged: updateSelectedDiet,
+                        selectedOption: selectedDiet,
+                        orientation: VERTICAL_ORIENTATION,
+                        isEditable: true,
+                      ),
+                      const SizedBox(height: 10,),
+
+                      ///Contains
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: MACRO_WIDTH,
+                            child:  Text(CONTAINS_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                          ),
+                          const SizedBox(width: 30,),
+                          Expanded(
+                            child: SizedBox(
+                              height: SEARCH_BAR_HEIGHT,
+                              child: TextField(
+                                controller: _ingredientsController,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Theme(
+                                      data: ThemeData(
+                                        iconTheme: const IconThemeData(color: DARK_PRIMARY_COLOR),
                                       ),
-                                      onPressed: () {
-                                        if(_ingredientsController.text.isNotEmpty){
-                                          setState(() {
-                                            ingredients.add(_ingredientsController.text.toString());
-                                            _ingredientsController.clear();
-                                          });
-                                        }
-                                      },
+                                      child:  const Icon(Icons.check,),
                                     ),
-                                    hintText: CHEDDAR_CHEESE_LABEL,
-                                    border: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                    onPressed: () {
+                                      if(_ingredientsController.text.isNotEmpty){
+                                        setState(() {
+                                          ingredients.add(_ingredientsController.text.toString());
+                                          _ingredientsController.clear();
+                                        });
+                                      }
+                                    },
                                   ),
+                                  hintText: CHEDDAR_CHEESE_LABEL,
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 10,),
-                        DynamicChips(items: ingredients, onItemRemoved: updateIngredients),
-                        const SizedBox(height: 10,),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10,),
+                      DynamicChips(items: ingredients, onItemRemoved: updateIngredients),
+                      const SizedBox(height: 10,),
 
 
-                        ///Allergies
-                        Row(
-                          children: [
-                            const SizedBox(
-                                width: MACRO_WIDTH,
-                                child: Text(ALLERGIC_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                            ),
-                            const SizedBox(width: 30,),
-                            Expanded(
-                              child: SizedBox(
-                                height: SEARCH_BAR_HEIGHT,
-                                child: TextField(
-                                  controller: _allergicToController,
-                                  decoration: InputDecoration(
-                                    suffixIcon: IconButton(
-                                      icon: Theme(
-                                        data: ThemeData(
-                                          iconTheme: const IconThemeData(color: DARK_PRIMARY_COLOR),
-                                        ),
-                                        child:  const Icon(Icons.check,),
+                      ///Allergies
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: MACRO_WIDTH,
+                            child: Text(ALLERGIC_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                          ),
+                          const SizedBox(width: 30,),
+                          Expanded(
+                            child: SizedBox(
+                              height: SEARCH_BAR_HEIGHT,
+                              child: TextField(
+                                controller: _allergicToController,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Theme(
+                                      data: ThemeData(
+                                        iconTheme: const IconThemeData(color: DARK_PRIMARY_COLOR),
                                       ),
-                                      onPressed: () {
-                                        if(_allergicToController.text.isNotEmpty){
-                                          setState(() {
-                                            allergies.add(_allergicToController.text.toString());
-                                            _allergicToController.clear();
-                                          });
-                                        }
-                                      },
+                                      child:  const Icon(Icons.check,),
                                     ),
-                                    hintText: NUTS_LABEL,
-                                    border: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                    onPressed: () {
+                                      if(_allergicToController.text.isNotEmpty){
+                                        setState(() {
+                                          allergies.add(_allergicToController.text.toString());
+                                          _allergicToController.clear();
+                                        });
+                                      }
+                                    },
                                   ),
+                                  hintText: NUTS_LABEL,
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 10,),
-                        DynamicChips(items: allergies, onItemRemoved: updateAllergies),
-                        const SizedBox(height: 10,),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10,),
+                      DynamicChips(items: allergies, onItemRemoved: updateAllergies),
+                      const SizedBox(height: 10,),
 
 
-                        ///Nationalities
-                        const Text(NATIONALITIES_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                        const SizedBox(height: 10,),
-                        Wrap(
-                          spacing: 24,
-                          children: nationalities.map((item) {
-                            if(selectedNationality == item){
-                              return createNationalityChipSelected(item);
-                            }else{
-                              return createNationalityChipNotSelected(item);
-                            }
-                          },).toList(),
-                        ),
-                      ],
-                    )),
+                      ///Nationalities
+                      const Text(NATIONALITIES_LABEL, style: TextStyle(fontSize: FONT_HEADER, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 10,),
+                      Wrap(
+                        spacing: 24,
+                        children: nationalities.map((item) {
+                          if(selectedNationality == item){
+                            return createNationalityChipSelected(item);
+                          }else{
+                            return createNationalityChipNotSelected(item);
+                          }
+                        },).toList(),
+                      ),
 
-                ///suggest food button
-                Container(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+
+                      const SizedBox(height: 32,),
+
+
+
+                      ///suggest food button
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              backgroundColor: DARK_PRIMARY_COLOR
+                          ),
+                          onPressed: () {
+                            _suggestFoodBloc.add(
+                              SuggestFoodEvent.onSuggestFood(
+                                  ingredients,
+                                  allergies,
+                                  selectedNationality,
+                                  selectedDiet
+                              ),
+                            );
+                          },
+                          child: const Text(SUGGEST_FOOD_LABEL, style: TextStyle( color: Colors.white),),
                         ),
-                        backgroundColor: DARK_PRIMARY_COLOR
-                    ),
-                    onPressed: () {
-                      _suggestFoodBloc.add(
-                        SuggestFoodEvent.onSuggestFood(
-                          ingredients,
-                          allergies,
-                          selectedNationality,
-                          selectedDiet
-                        ),
-                      );
-                    },
-                    child: const Text(SUGGEST_FOOD_LABEL, style: TextStyle( color: Colors.white),),
+                      ),
+
+
+                    ],
                   ),
                 ),
-
 
                 BlocConsumer<SuggestFoodBloc, SuggestFoodState>(
                     builder: (mcontext, state) {
@@ -273,8 +280,9 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
 
                     }
                 ),
+
               ],
-            ),
+            )
           ),
         ),
       ),

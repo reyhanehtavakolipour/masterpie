@@ -499,40 +499,26 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
             //favorite access
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  const WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 14.0),
+                      child: Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
                       ),
-                      TextSpan(
-                        text: '$FAVORITE_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Text(
-                  '${_subscriptions[0].favoriteFoodLimit} $FAVORITE_FOOD_INFO_FREE_PLAN',
-                  style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
+                  TextSpan(
+                    text: '${_subscriptions[0].favoriteFoodLimit} $FAVORITE_FOOD_INFO_FREE_PLAN',
+                    style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
 
             //food portion
