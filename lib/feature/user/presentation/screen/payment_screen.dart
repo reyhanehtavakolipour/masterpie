@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/util/core/helper/print.dart';
@@ -42,12 +43,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
   double _amount = 0;
 
 
+  bool _payBtnEnabled = true;
+
   String _priceId= '';
 
   @override
   void initState() {
     super.initState();
     initPlanTypeOptions();
+    handlePayButtonState();
   }
 
   void initPlanTypeOptions(){
@@ -57,6 +61,130 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final subs = widget.newPlanInfo.subscriptionPlans.where((element) => !element.plan.contains('one-time')).toList();
     _priceId= subs[0].ids[0];
   }
+
+
+
+  void handlePayButtonState(){
+    if(widget.newPlanInfo.subscriptionId.isEmpty && widget.newPlanInfo.customerId.isNotEmpty && widget.newPlanInfo.updatedAt.isNotEmpty){
+      int millisecondsSinceEpoch = 0;
+      DateTime updatedAtDate = DateTime(millisecondsSinceEpoch);
+      millisecondsSinceEpoch = int.parse(widget.newPlanInfo.updatedAt) * 1000;
+      updatedAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+      DateTime endsAtDate= updatedAtDate.add(Duration(days: widget.newPlanInfo.interval == 'monthly' ? 30 : 365));
+      DateTime now = DateTime.now();
+      if(!endsAtDate.isBefore(now)){
+        // disable pay button
+        setState(() {
+          _payBtnEnabled = false;
+        });
+      }
+    }else if(widget.newPlanInfo.subscriptionId.isNotEmpty && widget.newPlanInfo.endsAt.isNotEmpty){
+      int millisecondsSinceEpoch = 0;
+      DateTime endsAtDate = DateTime(millisecondsSinceEpoch);
+      millisecondsSinceEpoch = int.parse(widget.newPlanInfo.endsAt) * 1000;
+      endsAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+      DateTime now = DateTime.now();
+      if(endsAtDate.isBefore(now) && _isAutoPaymentOn){
+        // do nothing
+      }else{
+        // disable pay button
+        setState(() {
+          _payBtnEnabled = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _showOptionsForChangingSubscription(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // User must tap a button to close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(USER_OPTIONS_FOR_SUBSCRIBED_USERS_DIALOG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(UPDATE_SUBSCRIPTION_RIGHT_AWAY_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                pay();
+              },
+            ),
+            TextButton(
+              child: const Text(CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                cancelAutoRenewal();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Future<void> _showErrorForPaymentRequest(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // User must tap a button to close the dialog
+      builder: (BuildContext context) {
+        return SizedBox(
+          width: double.infinity,
+          child: AlertDialog(
+            title: const Text(PAYMENT_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+            content: const SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(ALREADY_ON_PAYMENT_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Ok', style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+
+  void cancelAutoRenewal() async{
+
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    String supabaseId = await userHiveDataSource.getString(KEY_USER_ID);
+    final response = await Supabase.instance.client.functions
+        .invoke('cancel_subscription', body: {
+      'sub_id': widget.newPlanInfo.subscriptionId,
+      'supabase_id': supabaseId
+    });
+
+    if(response.status == 200){
+      if(mounted){
+        showSuccessToast(context, CANCEL_SUBSCRIPTION_SUCCESS_MSG);
+        Navigator.pop(context);
+      }
+    }else{
+      if(mounted){
+        showErrorToast(context, CANCEL_SUBSCRIPTION_FAILED_MSG);
+      }
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -497,14 +625,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget buildPayButton(BuildContext context){
     return ElevatedButton(
-      onPressed: (){
+      onPressed: _payBtnEnabled ? (){
         payButtonClickListener(context);
+      } : (){
+        _showErrorForPaymentRequest(context);
       },
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          backgroundColor: MASTERPIE_YELLOW_COLOR
+          backgroundColor: _payBtnEnabled ? MASTERPIE_YELLOW_COLOR : LIGHT_GREY_COLOR
       ),
       child: const Padding(
           padding: EdgeInsets.all(12),
@@ -514,13 +644,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  void payButtonClickListener(BuildContext context) async{
+  void payButtonClickListener(BuildContext context){
+    if(widget.newPlanInfo.subscriptionId.isNotEmpty && widget.newPlanInfo.endsAt.isNotEmpty){
+      int millisecondsSinceEpoch = 0;
+      DateTime endsAtDate = DateTime(millisecondsSinceEpoch);
+      millisecondsSinceEpoch = int.parse(widget.newPlanInfo.endsAt) * 1000;
+      endsAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+      DateTime now = DateTime.now();
+      if(endsAtDate.isBefore(now) && _isAutoPaymentOn){
+        // ask user to choose between cancel payment or cancel subscription first
+        _showOptionsForChangingSubscription(context);
+        return;
+      }
+    }
+    pay();
+  }
+
+
+
+
+  void pay() async{
     String email = await _userHiveDataSource.getString(KEY_EMAIL);
     String customerId = widget.newPlanInfo.customerId;
 
     FunctionResponse response;
     if(customerId.isNotEmpty){
-       response = await Supabase.instance.client.functions
+      response = await Supabase.instance.client.functions
           .invoke('create_checkout_session', body: {
         'customer_id': customerId,
         'customer_email': '',
@@ -549,8 +698,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         showErrorToast(context, ERROR_TRY_AGAIN);
       }
     }
-
   }
+
+
+
 }
 
 

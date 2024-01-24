@@ -237,7 +237,7 @@ const PAYMENT_CENCELLED_MSG= 'Payment cancelled';
 const TOTAL_PRICE_LABEL= 'Total Price';
 const PLAN_LABEL= 'Plan';
 const CANCEL_RENEWAL_MSG= 'Are you sure you want to cancel auto renewal?';
-const SWITCH_FREE_PLAN_MSG= 'Are you sure you want to switch to free plan?';
+const SWITCH_FREE_PLAN_MSG= 'Are you sure you want to switch to free plan?\n\nEven if you switch to free plan, you still keep your left over requests until your plan expiry.';
 const PLAN_UPDATED_SUCCESSFULLY_MSG= 'Plan updated successfully';
 const ALREADY_FREE_PLAN= 'You are already on free plan';
 const AUTO_RENEWAL_LABEL= 'Auto renewal';
@@ -251,6 +251,19 @@ const BASIC_GREAT_FOR_INFO= 'Great choice for one person';
 const PREMIUM_GREAT_FOR_INFO= 'Great choice for families';
 const FEATURES_LABEL= 'Features per month';
 const ENDS_AT_LABEL= 'Ends at';
+const NEXT_PAYMENT_LABEL= 'Next payment on';
+const CANCEL_SUBSCRIPTION_FAILED_MSG= 'cancel subscription failed';
+const CANCEL_SUBSCRIPTION_SUCCESS_MSG= 'auto renewal subscription cancelled successfully';
+const CANCELED_AUTO_RENEWAL_INFO= 'auto renewal has been canceled';
+const USER_OPTIONS_FOR_SUBSCRIBED_USERS_DIALOG= 'You are already on an auto renewal subscription. If you would like to update your subscription'
+    ', you can either update it immediately which means you\'ll be charged for the new subscription right away and if you have any left over food portion recommender or suggest food'
+    'request, they will be gone and they get updated based on your new subscription . Or you can cancel your current subscription'
+    'now which means you won\'t get charged for next month anymore and you can use your left over requests by expiration time and then buy a new subscription after your plan gets expired' ;
+
+const UPDATE_SUBSCRIPTION_RIGHT_AWAY_MSG= 'Update subscription right away';
+const CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG= 'Only cancel my auto renewal subscription';
+const ALREADY_ON_PAYMENT_MSG= 'You are already on a paid plan which has not expired yet. You can buy a new plan after plan expiry date. Thank you.';
+
 
 
 

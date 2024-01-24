@@ -132,6 +132,8 @@ class UserMapperImpl extends UserMapper{
         interval: userPlanRemote.interval,
         cancelReason: userPlanRemote.cancelReason,
         endsAt: userPlanRemote.endsAt,
+        cancelAtPeriodEnd: userPlanRemote.cancelAtPeriodEnd,
+        updatedAt: userPlanRemote.updatedAt,
         subscriptionPlan: fromSubscriptionPlanRemote(userPlanRemote.subscriptionPlan!),
         favoriteFoodLeft: userPlanRemote.favoriteFoodLeft,
         suggestFoodRequestsLeft: userPlanRemote.suggestFoodRequestsLeft,

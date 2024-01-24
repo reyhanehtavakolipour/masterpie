@@ -13,6 +13,8 @@ class UserPlanRemote with _$UserPlanRemote{
     @Default('') String subscriptionId,
     @Default('') String interval,
     @Default('') String endsAt,
+    @Default('') String updatedAt,
+    @Default(true) bool cancelAtPeriodEnd,
     @Default('') String cancelReason,
     @Default(null) SubscriptionPlanRemote? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,

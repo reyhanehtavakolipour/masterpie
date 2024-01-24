@@ -22,7 +22,9 @@ mixin _$UserPlan {
   String get subscriptionId => throw _privateConstructorUsedError;
   String get interval => throw _privateConstructorUsedError;
   String get endsAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
   String get cancelReason => throw _privateConstructorUsedError;
+  bool get cancelAtPeriodEnd => throw _privateConstructorUsedError;
   SubscriptionPlan? get subscriptionPlan => throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
@@ -45,7 +47,9 @@ abstract class $UserPlanCopyWith<$Res> {
       String subscriptionId,
       String interval,
       String endsAt,
+      String updatedAt,
       String cancelReason,
+      bool cancelAtPeriodEnd,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -73,7 +77,9 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
     Object? subscriptionId = null,
     Object? interval = null,
     Object? endsAt = null,
+    Object? updatedAt = null,
     Object? cancelReason = null,
+    Object? cancelAtPeriodEnd = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -104,10 +110,18 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
           ? _value.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
       cancelReason: null == cancelReason
           ? _value.cancelReason
           : cancelReason // ignore: cast_nullable_to_non_nullable
               as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -155,7 +169,9 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       String subscriptionId,
       String interval,
       String endsAt,
+      String updatedAt,
       String cancelReason,
+      bool cancelAtPeriodEnd,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -182,7 +198,9 @@ class __$$UserPlanImplCopyWithImpl<$Res>
     Object? subscriptionId = null,
     Object? interval = null,
     Object? endsAt = null,
+    Object? updatedAt = null,
     Object? cancelReason = null,
+    Object? cancelAtPeriodEnd = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -213,10 +231,18 @@ class __$$UserPlanImplCopyWithImpl<$Res>
           ? _value.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
       cancelReason: null == cancelReason
           ? _value.cancelReason
           : cancelReason // ignore: cast_nullable_to_non_nullable
               as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -247,7 +273,9 @@ class _$UserPlanImpl implements _UserPlan {
       this.subscriptionId = '',
       this.interval = '',
       this.endsAt = '',
+      this.updatedAt = '',
       this.cancelReason = '',
+      this.cancelAtPeriodEnd = true,
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
@@ -273,7 +301,13 @@ class _$UserPlanImpl implements _UserPlan {
   final String endsAt;
   @override
   @JsonKey()
+  final String updatedAt;
+  @override
+  @JsonKey()
   final String cancelReason;
+  @override
+  @JsonKey()
+  final bool cancelAtPeriodEnd;
   @override
   @JsonKey()
   final SubscriptionPlan? subscriptionPlan;
@@ -289,7 +323,7 @@ class _$UserPlanImpl implements _UserPlan {
 
   @override
   String toString() {
-    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, cancelReason: $cancelReason, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -307,8 +341,12 @@ class _$UserPlanImpl implements _UserPlan {
             (identical(other.interval, interval) ||
                 other.interval == interval) &&
             (identical(other.endsAt, endsAt) || other.endsAt == endsAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.cancelReason, cancelReason) ||
                 other.cancelReason == cancelReason) &&
+            (identical(other.cancelAtPeriodEnd, cancelAtPeriodEnd) ||
+                other.cancelAtPeriodEnd == cancelAtPeriodEnd) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
                 other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
@@ -330,7 +368,9 @@ class _$UserPlanImpl implements _UserPlan {
       subscriptionId,
       interval,
       endsAt,
+      updatedAt,
       cancelReason,
+      cancelAtPeriodEnd,
       subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
@@ -351,7 +391,9 @@ abstract class _UserPlan implements UserPlan {
       final String subscriptionId,
       final String interval,
       final String endsAt,
+      final String updatedAt,
       final String cancelReason,
+      final bool cancelAtPeriodEnd,
       final SubscriptionPlan? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
@@ -370,7 +412,11 @@ abstract class _UserPlan implements UserPlan {
   @override
   String get endsAt;
   @override
+  String get updatedAt;
+  @override
   String get cancelReason;
+  @override
+  bool get cancelAtPeriodEnd;
   @override
   SubscriptionPlan? get subscriptionPlan;
   @override

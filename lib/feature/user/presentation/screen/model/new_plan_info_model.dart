@@ -9,6 +9,10 @@ class NewPlanInfo with _$NewPlanInfo{
   factory NewPlanInfo({
     @Default([]) List<SubscriptionPlan> subscriptionPlans,
     @Default('') String customerId,
+    @Default('') String subscriptionId,
+    @Default('') String endsAt,
+    @Default('') String interval,
+    @Default('') String updatedAt,
   })= _NewPlanInfo;
 
 }

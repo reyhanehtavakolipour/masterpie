@@ -22,6 +22,8 @@ mixin _$UserPlanRemote {
   String get subscriptionId => throw _privateConstructorUsedError;
   String get interval => throw _privateConstructorUsedError;
   String get endsAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
+  bool get cancelAtPeriodEnd => throw _privateConstructorUsedError;
   String get cancelReason => throw _privateConstructorUsedError;
   SubscriptionPlanRemote? get subscriptionPlan =>
       throw _privateConstructorUsedError;
@@ -47,6 +49,8 @@ abstract class $UserPlanRemoteCopyWith<$Res> {
       String subscriptionId,
       String interval,
       String endsAt,
+      String updatedAt,
+      bool cancelAtPeriodEnd,
       String cancelReason,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
@@ -75,6 +79,8 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
     Object? subscriptionId = null,
     Object? interval = null,
     Object? endsAt = null,
+    Object? updatedAt = null,
+    Object? cancelAtPeriodEnd = null,
     Object? cancelReason = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
@@ -106,6 +112,14 @@ class _$UserPlanRemoteCopyWithImpl<$Res, $Val extends UserPlanRemote>
           ? _value.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
       cancelReason: null == cancelReason
           ? _value.cancelReason
           : cancelReason // ignore: cast_nullable_to_non_nullable
@@ -158,6 +172,8 @@ abstract class _$$UserPlanRemoteImplCopyWith<$Res>
       String subscriptionId,
       String interval,
       String endsAt,
+      String updatedAt,
+      bool cancelAtPeriodEnd,
       String cancelReason,
       SubscriptionPlanRemote? subscriptionPlan,
       int favoriteFoodLeft,
@@ -185,6 +201,8 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
     Object? subscriptionId = null,
     Object? interval = null,
     Object? endsAt = null,
+    Object? updatedAt = null,
+    Object? cancelAtPeriodEnd = null,
     Object? cancelReason = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
@@ -216,6 +234,14 @@ class __$$UserPlanRemoteImplCopyWithImpl<$Res>
           ? _value.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
       cancelReason: null == cancelReason
           ? _value.cancelReason
           : cancelReason // ignore: cast_nullable_to_non_nullable
@@ -250,6 +276,8 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       this.subscriptionId = '',
       this.interval = '',
       this.endsAt = '',
+      this.updatedAt = '',
+      this.cancelAtPeriodEnd = true,
       this.cancelReason = '',
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
@@ -276,6 +304,12 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
   final String endsAt;
   @override
   @JsonKey()
+  final String updatedAt;
+  @override
+  @JsonKey()
+  final bool cancelAtPeriodEnd;
+  @override
+  @JsonKey()
   final String cancelReason;
   @override
   @JsonKey()
@@ -292,7 +326,7 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
 
   @override
   String toString() {
-    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, cancelReason: $cancelReason, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlanRemote(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelAtPeriodEnd: $cancelAtPeriodEnd, cancelReason: $cancelReason, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -310,6 +344,10 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
             (identical(other.interval, interval) ||
                 other.interval == interval) &&
             (identical(other.endsAt, endsAt) || other.endsAt == endsAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.cancelAtPeriodEnd, cancelAtPeriodEnd) ||
+                other.cancelAtPeriodEnd == cancelAtPeriodEnd) &&
             (identical(other.cancelReason, cancelReason) ||
                 other.cancelReason == cancelReason) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
@@ -333,6 +371,8 @@ class _$UserPlanRemoteImpl implements _UserPlanRemote {
       subscriptionId,
       interval,
       endsAt,
+      updatedAt,
+      cancelAtPeriodEnd,
       cancelReason,
       subscriptionPlan,
       favoriteFoodLeft,
@@ -355,6 +395,8 @@ abstract class _UserPlanRemote implements UserPlanRemote {
       final String subscriptionId,
       final String interval,
       final String endsAt,
+      final String updatedAt,
+      final bool cancelAtPeriodEnd,
       final String cancelReason,
       final SubscriptionPlanRemote? subscriptionPlan,
       final int favoriteFoodLeft,
@@ -373,6 +415,10 @@ abstract class _UserPlanRemote implements UserPlanRemote {
   String get interval;
   @override
   String get endsAt;
+  @override
+  String get updatedAt;
+  @override
+  bool get cancelAtPeriodEnd;
   @override
   String get cancelReason;
   @override

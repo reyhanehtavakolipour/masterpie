@@ -19,6 +19,10 @@ mixin _$NewPlanInfo {
   List<SubscriptionPlan> get subscriptionPlans =>
       throw _privateConstructorUsedError;
   String get customerId => throw _privateConstructorUsedError;
+  String get subscriptionId => throw _privateConstructorUsedError;
+  String get endsAt => throw _privateConstructorUsedError;
+  String get interval => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NewPlanInfoCopyWith<NewPlanInfo> get copyWith =>
@@ -31,7 +35,13 @@ abstract class $NewPlanInfoCopyWith<$Res> {
           NewPlanInfo value, $Res Function(NewPlanInfo) then) =
       _$NewPlanInfoCopyWithImpl<$Res, NewPlanInfo>;
   @useResult
-  $Res call({List<SubscriptionPlan> subscriptionPlans, String customerId});
+  $Res call(
+      {List<SubscriptionPlan> subscriptionPlans,
+      String customerId,
+      String subscriptionId,
+      String endsAt,
+      String interval,
+      String updatedAt});
 }
 
 /// @nodoc
@@ -49,6 +59,10 @@ class _$NewPlanInfoCopyWithImpl<$Res, $Val extends NewPlanInfo>
   $Res call({
     Object? subscriptionPlans = null,
     Object? customerId = null,
+    Object? subscriptionId = null,
+    Object? endsAt = null,
+    Object? interval = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       subscriptionPlans: null == subscriptionPlans
@@ -58,6 +72,22 @@ class _$NewPlanInfoCopyWithImpl<$Res, $Val extends NewPlanInfo>
       customerId: null == customerId
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      subscriptionId: null == subscriptionId
+          ? _value.subscriptionId
+          : subscriptionId // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsAt: null == endsAt
+          ? _value.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -71,7 +101,13 @@ abstract class _$$NewPlanInfoImplCopyWith<$Res>
       __$$NewPlanInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SubscriptionPlan> subscriptionPlans, String customerId});
+  $Res call(
+      {List<SubscriptionPlan> subscriptionPlans,
+      String customerId,
+      String subscriptionId,
+      String endsAt,
+      String interval,
+      String updatedAt});
 }
 
 /// @nodoc
@@ -87,6 +123,10 @@ class __$$NewPlanInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? subscriptionPlans = null,
     Object? customerId = null,
+    Object? subscriptionId = null,
+    Object? endsAt = null,
+    Object? interval = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$NewPlanInfoImpl(
       subscriptionPlans: null == subscriptionPlans
@@ -97,6 +137,22 @@ class __$$NewPlanInfoImplCopyWithImpl<$Res>
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
               as String,
+      subscriptionId: null == subscriptionId
+          ? _value.subscriptionId
+          : subscriptionId // ignore: cast_nullable_to_non_nullable
+              as String,
+      endsAt: null == endsAt
+          ? _value.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -106,7 +162,11 @@ class __$$NewPlanInfoImplCopyWithImpl<$Res>
 class _$NewPlanInfoImpl implements _NewPlanInfo {
   _$NewPlanInfoImpl(
       {final List<SubscriptionPlan> subscriptionPlans = const [],
-      this.customerId = ''})
+      this.customerId = '',
+      this.subscriptionId = '',
+      this.endsAt = '',
+      this.interval = '',
+      this.updatedAt = ''})
       : _subscriptionPlans = subscriptionPlans;
 
   final List<SubscriptionPlan> _subscriptionPlans;
@@ -122,10 +182,22 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
   @override
   @JsonKey()
   final String customerId;
+  @override
+  @JsonKey()
+  final String subscriptionId;
+  @override
+  @JsonKey()
+  final String endsAt;
+  @override
+  @JsonKey()
+  final String interval;
+  @override
+  @JsonKey()
+  final String updatedAt;
 
   @override
   String toString() {
-    return 'NewPlanInfo(subscriptionPlans: $subscriptionPlans, customerId: $customerId)';
+    return 'NewPlanInfo(subscriptionPlans: $subscriptionPlans, customerId: $customerId, subscriptionId: $subscriptionId, endsAt: $endsAt, interval: $interval, updatedAt: $updatedAt)';
   }
 
   @override
@@ -136,12 +208,25 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
             const DeepCollectionEquality()
                 .equals(other._subscriptionPlans, _subscriptionPlans) &&
             (identical(other.customerId, customerId) ||
-                other.customerId == customerId));
+                other.customerId == customerId) &&
+            (identical(other.subscriptionId, subscriptionId) ||
+                other.subscriptionId == subscriptionId) &&
+            (identical(other.endsAt, endsAt) || other.endsAt == endsAt) &&
+            (identical(other.interval, interval) ||
+                other.interval == interval) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_subscriptionPlans), customerId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_subscriptionPlans),
+      customerId,
+      subscriptionId,
+      endsAt,
+      interval,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -153,12 +238,24 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
 abstract class _NewPlanInfo implements NewPlanInfo {
   factory _NewPlanInfo(
       {final List<SubscriptionPlan> subscriptionPlans,
-      final String customerId}) = _$NewPlanInfoImpl;
+      final String customerId,
+      final String subscriptionId,
+      final String endsAt,
+      final String interval,
+      final String updatedAt}) = _$NewPlanInfoImpl;
 
   @override
   List<SubscriptionPlan> get subscriptionPlans;
   @override
   String get customerId;
+  @override
+  String get subscriptionId;
+  @override
+  String get endsAt;
+  @override
+  String get interval;
+  @override
+  String get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$NewPlanInfoImplCopyWith<_$NewPlanInfoImpl> get copyWith =>
