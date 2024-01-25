@@ -446,11 +446,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     if(_userPlan.cancelAtPeriodEnd && _userPlan.endsAt.isNotEmpty){
       renewAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
       endsAt = DateTime.fromMillisecondsSinceEpoch(renewAtMillisecondsSinceEpoch);
-    }else if(_userPlan.endsAt.isEmpty && _userPlan.updatedAt.isNotEmpty){
-      int endsAtMillisecondsSinceEpoch = int.parse(_userPlan.updatedAt) * 1000;
-      DateTime updatedAtDate= DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
-      // todo update with calculated date
-      endsAt= updatedAtDate.add(Duration(days: _userPlan.interval == 'monthly' ? 30 : 365));
     }
     String endsAtString= DateFormat('MMMM d, y').format(endsAt);
     DateTime now = DateTime.now();
@@ -463,7 +458,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     }
 
     return Visibility(
-        visible: (_userPlan.subscriptionPlan!.plan == 'basic one-time' || _userPlan.subscriptionPlan!.plan == 'premium one-time') &&
+        visible: (_userPlan.subscriptionPlan!.plan.contains('basic') || _userPlan.subscriptionPlan!.plan.contains('premium')) &&
             _userPlan.subscriptionId.isEmpty && _userPlan.cancelAtPeriodEnd && !endsAt.isBefore(now),
         child: Text(
           '$ENDS_AT_LABEL: $endsAtString',

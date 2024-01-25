@@ -308,21 +308,22 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
       final supabase = Supabase.instance.client;
 
-      String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
 
       final subscriptions = await getSubscriptionPlans();
       if(subscriptions.isRight()){
         
         final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == 'free');
-        
+
         final updates = {
-          'plan': freeSubscription.plan,
+          'plan_name': freeSubscription.plan,
           'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
           'food_portion_left_request': freeSubscription.foodPortionRequestsLimit,
           'favorite_food_left': freeSubscription.favoriteFoodLimit,
-          'modified_at': formattedDate,
-          'plan_type': freeSubscription.intervals[0],
+          'plan_updated_at': timestamp.toString(),
+          'plan_interval': freeSubscription.intervals[0],
         };
+
 
         final data = await supabase
             .from(USER_PLAN_TABLE)

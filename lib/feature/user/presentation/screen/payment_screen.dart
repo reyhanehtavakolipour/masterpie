@@ -67,8 +67,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _priceId= subs[0].ids[0];
   }
 
-
-
   void handlePayButtonState(){
     if(widget.newPlanInfo.currentPlanName != FREE_LABEL &&  widget.newPlanInfo.currentPlanName != DIETITIAN_LABEL
         && widget.newPlanInfo.customerId.isNotEmpty && widget.newPlanInfo.updatedAt.isNotEmpty && widget.newPlanInfo.cancelAtPeriodEnd){
