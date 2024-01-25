@@ -12,6 +12,7 @@ import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'feature/foods/domain/model/food_model.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
@@ -264,6 +265,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   }
 
+
+  void showCredits() async{
+    //todo change address
+    final Uri url = Uri.parse('https://masterpieapp.com');
+    await launchUrl(url);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -412,6 +420,31 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               ),
 
               const Divider(),
+
+              Visibility(
+                visible: false,
+                child: ListTile(
+                  leading: const Icon(Icons.attribution),
+                  title: const Text(CREDITS_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                   showCredits();
+                  },
+                ),
+              ),
+
+
+              Visibility(
+                visible: false,
+                child: ListTile(
+                  leading: const Icon(Icons.privacy_tip),
+                  title: const Text(PRIVACY_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                    showCredits();
+                  },
+                ),
+              ),
 
               ListTile(
                 leading: const Icon(Icons.info),

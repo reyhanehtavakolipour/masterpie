@@ -59,6 +59,67 @@ class _PaymentScreenState extends State<PaymentScreen> {
     handlePayButtonState();
   }
 
+  DateTime calculateDate(DateTime inputDate, int interval, String intervalType) {
+    if (interval <= 0) {
+      return DateTime.now();
+    }
+    DateTime resultDate;
+
+    switch (intervalType) {
+      case 'month':
+        resultDate = DateTime.utc(
+          inputDate.year,
+          inputDate.month + interval,
+          inputDate.day,
+          inputDate.hour,
+          inputDate.minute,
+          inputDate.second,
+          inputDate.millisecond,
+          inputDate.microsecond,
+        );
+        break;
+      case 'year':
+        resultDate = DateTime.utc(
+          inputDate.year + interval,
+          inputDate.month,
+          inputDate.day,
+          inputDate.hour,
+          inputDate.minute,
+          inputDate.second,
+          inputDate.millisecond,
+          inputDate.microsecond,
+        );
+        break;
+      default:
+        return DateTime.now();
+    }
+
+    // Handle varying month lengths
+    while (resultDate.month != (inputDate.month + interval) % 12) {
+      resultDate = resultDate.subtract(const Duration(days: 1));
+    }
+
+    // Handle leap year, especially for February
+    if (inputDate.month == 2 && inputDate.day == 29 && !isLeapYear(resultDate.year)) {
+      resultDate = DateTime.utc(resultDate.year, 2, 28);
+    }
+
+
+    return resultDate;
+  }
+
+  bool isLeapYear(int year) {
+    if (year % 4 != 0) {
+      return false;
+    } else if (year % 100 != 0) {
+      return true;
+    } else if (year % 400 != 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void initPlanTypeOptions(){
     _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];
     _selectedInterval = MONTHLY_PLAN_LABEL.capitalize();
@@ -74,8 +135,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       DateTime updatedAtDate = DateTime(millisecondsSinceEpoch);
       millisecondsSinceEpoch = int.parse(widget.newPlanInfo.updatedAt) * 1000;
       updatedAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-      // todo update with calculated date
-      DateTime endsAtDate= updatedAtDate.add(Duration(days: widget.newPlanInfo.interval == 'monthly' ? 30 : 365));
+      DateTime endsAtDate = calculateDate(updatedAtDate, 1, widget.newPlanInfo.interval == 'monthly' ? 'month' : 'year');
       DateTime now = DateTime.now();
       if(!endsAtDate.isBefore(now)){
         // disable pay button
@@ -89,7 +149,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _showOptionsForChangingSubscription(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // User must tap a button to close the dialog
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(PAYMENT_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),

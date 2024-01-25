@@ -263,6 +263,9 @@ const USER_OPTIONS_FOR_SUBSCRIBED_USERS_DIALOG= 'You are already on an auto rene
 const UPDATE_SUBSCRIPTION_RIGHT_AWAY_MSG= 'Update subscription right away';
 const CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG= 'Only cancel my auto renewal subscription';
 const ALREADY_ON_PAYMENT_MSG= 'You are already on a paid plan which has not expired yet. You can buy a new plan after plan expiry date. Thank you.';
+const CREDITS_LABEL= 'Credits';
+const PRIVACY_LABEL= 'Privacy & Policies';
+const ICONS_LABEL= 'Icons';
 
 
 
