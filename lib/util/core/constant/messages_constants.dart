@@ -251,14 +251,14 @@ const BASIC_GREAT_FOR_INFO= 'Great choice for one person';
 const PREMIUM_GREAT_FOR_INFO= 'Great choice for families';
 const FEATURES_LABEL= 'Features per month';
 const ENDS_AT_LABEL= 'Ends at';
-const NEXT_PAYMENT_LABEL= 'Next payment on';
+const NEXT_PAYMENT_LABEL= 'Next payment will be at';
 const CANCEL_SUBSCRIPTION_FAILED_MSG= 'cancel subscription failed';
 const CANCEL_SUBSCRIPTION_SUCCESS_MSG= 'auto renewal subscription cancelled successfully';
 const CANCELED_AUTO_RENEWAL_INFO= 'auto renewal has been canceled';
 const USER_OPTIONS_FOR_SUBSCRIBED_USERS_DIALOG= 'You are already on an auto renewal subscription. If you would like to update your subscription'
     ', you can either update it immediately which means you\'ll be charged for the new subscription right away and if you have any left over food portion recommender or suggest food'
     'request, they will be gone and they get updated based on your new subscription . Or you can cancel your current subscription'
-    'now which means you won\'t get charged for next month anymore and you can use your left over requests by expiration time and then buy a new subscription after your plan gets expired' ;
+    'now which means you won\'t get charged for next month anymore and you can use your left over requests by expiration time and then buy a new subscription after your plan gets expired.' ;
 
 const UPDATE_SUBSCRIPTION_RIGHT_AWAY_MSG= 'Update subscription right away';
 const CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG= 'Only cancel my auto renewal subscription';

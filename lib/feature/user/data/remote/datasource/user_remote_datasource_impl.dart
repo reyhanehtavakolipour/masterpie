@@ -421,7 +421,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         customerId: data[0]['customer_id'] ?? '',
         interval: data[0]['plan_interval'] ?? '',
         cancelReason: data[0]['cancel_reason'] ?? '',
-        cancelAtPeriodEnd: data[0]['cancel_at_period)end'] ?? true,
+        cancelAtPeriodEnd: data[0]['cancel_at_period_end'] ?? true,
         endsAt: data[0]['current_period_end'] ?? '',
         updatedAt: data[0]['plan_updated_at'] ?? '',
         subscriptionId: data[0]['subscription_id'] ?? '',

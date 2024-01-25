@@ -23,6 +23,8 @@ mixin _$NewPlanInfo {
   String get endsAt => throw _privateConstructorUsedError;
   String get interval => throw _privateConstructorUsedError;
   String get updatedAt => throw _privateConstructorUsedError;
+  String get currentPlanName => throw _privateConstructorUsedError;
+  bool get cancelAtPeriodEnd => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NewPlanInfoCopyWith<NewPlanInfo> get copyWith =>
@@ -41,7 +43,9 @@ abstract class $NewPlanInfoCopyWith<$Res> {
       String subscriptionId,
       String endsAt,
       String interval,
-      String updatedAt});
+      String updatedAt,
+      String currentPlanName,
+      bool cancelAtPeriodEnd});
 }
 
 /// @nodoc
@@ -63,6 +67,8 @@ class _$NewPlanInfoCopyWithImpl<$Res, $Val extends NewPlanInfo>
     Object? endsAt = null,
     Object? interval = null,
     Object? updatedAt = null,
+    Object? currentPlanName = null,
+    Object? cancelAtPeriodEnd = null,
   }) {
     return _then(_value.copyWith(
       subscriptionPlans: null == subscriptionPlans
@@ -89,6 +95,14 @@ class _$NewPlanInfoCopyWithImpl<$Res, $Val extends NewPlanInfo>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      currentPlanName: null == currentPlanName
+          ? _value.currentPlanName
+          : currentPlanName // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -107,7 +121,9 @@ abstract class _$$NewPlanInfoImplCopyWith<$Res>
       String subscriptionId,
       String endsAt,
       String interval,
-      String updatedAt});
+      String updatedAt,
+      String currentPlanName,
+      bool cancelAtPeriodEnd});
 }
 
 /// @nodoc
@@ -127,6 +143,8 @@ class __$$NewPlanInfoImplCopyWithImpl<$Res>
     Object? endsAt = null,
     Object? interval = null,
     Object? updatedAt = null,
+    Object? currentPlanName = null,
+    Object? cancelAtPeriodEnd = null,
   }) {
     return _then(_$NewPlanInfoImpl(
       subscriptionPlans: null == subscriptionPlans
@@ -153,6 +171,14 @@ class __$$NewPlanInfoImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      currentPlanName: null == currentPlanName
+          ? _value.currentPlanName
+          : currentPlanName // ignore: cast_nullable_to_non_nullable
+              as String,
+      cancelAtPeriodEnd: null == cancelAtPeriodEnd
+          ? _value.cancelAtPeriodEnd
+          : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -166,7 +192,9 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
       this.subscriptionId = '',
       this.endsAt = '',
       this.interval = '',
-      this.updatedAt = ''})
+      this.updatedAt = '',
+      this.currentPlanName = '',
+      this.cancelAtPeriodEnd = true})
       : _subscriptionPlans = subscriptionPlans;
 
   final List<SubscriptionPlan> _subscriptionPlans;
@@ -194,10 +222,16 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
   @override
   @JsonKey()
   final String updatedAt;
+  @override
+  @JsonKey()
+  final String currentPlanName;
+  @override
+  @JsonKey()
+  final bool cancelAtPeriodEnd;
 
   @override
   String toString() {
-    return 'NewPlanInfo(subscriptionPlans: $subscriptionPlans, customerId: $customerId, subscriptionId: $subscriptionId, endsAt: $endsAt, interval: $interval, updatedAt: $updatedAt)';
+    return 'NewPlanInfo(subscriptionPlans: $subscriptionPlans, customerId: $customerId, subscriptionId: $subscriptionId, endsAt: $endsAt, interval: $interval, updatedAt: $updatedAt, currentPlanName: $currentPlanName, cancelAtPeriodEnd: $cancelAtPeriodEnd)';
   }
 
   @override
@@ -215,7 +249,11 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
             (identical(other.interval, interval) ||
                 other.interval == interval) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.currentPlanName, currentPlanName) ||
+                other.currentPlanName == currentPlanName) &&
+            (identical(other.cancelAtPeriodEnd, cancelAtPeriodEnd) ||
+                other.cancelAtPeriodEnd == cancelAtPeriodEnd));
   }
 
   @override
@@ -226,7 +264,9 @@ class _$NewPlanInfoImpl implements _NewPlanInfo {
       subscriptionId,
       endsAt,
       interval,
-      updatedAt);
+      updatedAt,
+      currentPlanName,
+      cancelAtPeriodEnd);
 
   @JsonKey(ignore: true)
   @override
@@ -242,7 +282,9 @@ abstract class _NewPlanInfo implements NewPlanInfo {
       final String subscriptionId,
       final String endsAt,
       final String interval,
-      final String updatedAt}) = _$NewPlanInfoImpl;
+      final String updatedAt,
+      final String currentPlanName,
+      final bool cancelAtPeriodEnd}) = _$NewPlanInfoImpl;
 
   @override
   List<SubscriptionPlan> get subscriptionPlans;
@@ -256,6 +298,10 @@ abstract class _NewPlanInfo implements NewPlanInfo {
   String get interval;
   @override
   String get updatedAt;
+  @override
+  String get currentPlanName;
+  @override
+  bool get cancelAtPeriodEnd;
   @override
   @JsonKey(ignore: true)
   _$$NewPlanInfoImplCopyWith<_$NewPlanInfoImpl> get copyWith =>

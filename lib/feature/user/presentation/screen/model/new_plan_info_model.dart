@@ -13,6 +13,8 @@ class NewPlanInfo with _$NewPlanInfo{
     @Default('') String endsAt,
     @Default('') String interval,
     @Default('') String updatedAt,
+    @Default('') String currentPlanName,
+    @Default(true) bool cancelAtPeriodEnd,
   })= _NewPlanInfo;
 
 }

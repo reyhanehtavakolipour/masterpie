@@ -46,6 +46,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   List<SubscriptionPlan> _subscriptions= [];
 
+
+  bool _loaderVisible= false;
+
   @override
   void initState() {
     super.initState();
@@ -131,7 +134,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           subscriptionDetail(),
 
-                          oneTimePaymentDetail(),
+                          paymentDetail(),
 
                           cancelReason(),
 
@@ -284,12 +287,23 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                   }
               ),
+
+              Visibility(
+                visible: _loaderVisible,
+                child: const GFLoader(
+                  type: GFLoaderType.circle,
+                  loaderColorOne: DARK_PRIMARY_COLOR,
+                  loaderColorTwo: DARK_PRIMARY_COLOR,
+                  loaderColorThree: DARK_PRIMARY_COLOR,
+                ),
+              )
             ],
           )
         ),
       ),
     );
   }
+
 
   Future<void> _showCancelSubscriptionConfirmation(BuildContext context) async {
     return showDialog<void>(
@@ -361,7 +375,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
 
   void cancelAutoRenewal() async{
-
+    setState(() {
+      _loaderVisible = true;
+    });
     final userHiveDataSource = serviceLocator<UserHiveDataSource>();
     String supabaseId = await userHiveDataSource.getString(KEY_USER_ID);
     final response = await Supabase.instance.client.functions
@@ -372,6 +388,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
     if(response.status == 200){
       if(mounted){
+
+        setState(() {
+          _loaderVisible = false;
+        });
+
         showSuccessToast(context, CANCEL_SUBSCRIPTION_SUCCESS_MSG);
         setState(() {
           _userPlan = _userPlan.copyWith(
@@ -383,6 +404,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     }else{
       print('show_cancel1: ${response.data} ,, ${_userPlan.subscriptionId}');
       if(mounted){
+
+        setState(() {
+          _loaderVisible = false;
+        });
+
         showErrorToast(context, CANCEL_SUBSCRIPTION_FAILED_MSG);
       }
     }
@@ -390,10 +416,9 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   }
 
 
-
   Widget subscriptionDetail(){
     return Visibility(
-      visible: _userPlan.subscriptionId.isNotEmpty,
+      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd,
         child: Text(
           '${_userPlan.interval.capitalize()}, $AUTO_RENEWAL_LABEL',
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
@@ -402,30 +427,46 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   }
 
 
-  Widget oneTimePaymentDetail(){
-    int millisecondsSinceEpoch = 0;
-    DateTime endsAtDate = DateTime(millisecondsSinceEpoch);
-    if(_userPlan.endsAt.isNotEmpty){
-      millisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
-      endsAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-    }
-    String renewAt= DateFormat('MMMM d, y').format(endsAtDate.add(const Duration(days: 1)));
+  Widget paymentDetail(){
 
-    String endsAt= DateFormat('MMMM d, y').format(endsAtDate);
+    // renew case
+    int endsAtMillisecondsSinceEpoch = 0;
+    DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
+    if(_userPlan.endsAt.isNotEmpty && !_userPlan.cancelAtPeriodEnd){
+      endsAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
+      renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+    }
+    String renewAtString= DateFormat('MMMM d, y').format(renewAt);
+
+
+
+    // ends case
+    int renewAtMillisecondsSinceEpoch = 0;
+    DateTime endsAt = DateTime(renewAtMillisecondsSinceEpoch);
+    if(_userPlan.cancelAtPeriodEnd && _userPlan.endsAt.isNotEmpty){
+      renewAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
+      endsAt = DateTime.fromMillisecondsSinceEpoch(renewAtMillisecondsSinceEpoch);
+    }else if(_userPlan.endsAt.isEmpty && _userPlan.updatedAt.isNotEmpty){
+      int endsAtMillisecondsSinceEpoch = int.parse(_userPlan.updatedAt) * 1000;
+      DateTime updatedAtDate= DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+      // todo update with calculated date
+      endsAt= updatedAtDate.add(Duration(days: _userPlan.interval == 'monthly' ? 30 : 365));
+    }
+    String endsAtString= DateFormat('MMMM d, y').format(endsAt);
     DateTime now = DateTime.now();
 
-
-    if(_userPlan.subscriptionId.isNotEmpty){
+    if(_userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd){
       return Text(
-        '$NEXT_PAYMENT_LABEL $renewAt',
+        '$NEXT_PAYMENT_LABEL $renewAtString',
         style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.redAccent),
       );
     }
 
     return Visibility(
-        visible: _userPlan.subscriptionId.isEmpty && _userPlan.endsAt.isNotEmpty && !endsAtDate.isBefore(now),
+        visible: (_userPlan.subscriptionPlan!.plan == 'basic one-time' || _userPlan.subscriptionPlan!.plan == 'premium one-time') &&
+            _userPlan.subscriptionId.isEmpty && _userPlan.cancelAtPeriodEnd && !endsAt.isBefore(now),
         child: Text(
-          '$ENDS_AT_LABEL: $endsAt',
+          '$ENDS_AT_LABEL: $endsAtString',
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.redAccent),
         )
     );
@@ -448,17 +489,17 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     }
 
     return Visibility(
-        visible: _userPlan.cancelReason.isNotEmpty  && _userPlan.subscriptionId.isEmpty && !endsAtDate.isBefore(now),
+        visible: _userPlan.cancelReason.isNotEmpty  && _userPlan.subscriptionId.isEmpty && _userPlan.cancelAtPeriodEnd && !endsAtDate.isBefore(now),
         child: Text(
           reason,
-          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: GREEN_COLOR),
+          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.grey),
         )
     );
   }
 
   Widget cancelSubscriptionButton(){
     return  Visibility(
-      visible: _userPlan.subscriptionId.isNotEmpty,
+      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd,
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -479,7 +520,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget continueButton(){
     return  Visibility(
-      visible: _newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) || _newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL) || _newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL),
+      visible: _newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) || _newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL) ||
+          _newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL),
       child: Positioned(
         bottom: 0,
         left: 0,
@@ -505,7 +547,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               }else{
                 _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId,
                     subscriptionId: _userPlan.subscriptionId, endsAt: _userPlan.endsAt,
-                    interval: _userPlan.interval, updatedAt: _userPlan.updatedAt);
+                    interval: _userPlan.interval, updatedAt: _userPlan.updatedAt,
+                    currentPlanName: _userPlan.subscriptionPlan!.plan, cancelAtPeriodEnd: _userPlan.cancelAtPeriodEnd);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
