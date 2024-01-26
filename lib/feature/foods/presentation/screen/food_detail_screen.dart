@@ -175,12 +175,32 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
    }
 
    void logFoodsOfToday(List<Food> foodsLoggedBefore){
-     List<Food> foods = [];
-     foods.addAll(foodsLoggedBefore);
-     foods.add(newFood);
-     _logFoodsBloc.add(
-         LogFoodsEvent.onLogFoods(foods)
-     );
+     if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
+       List<Food> foods = [];
+       for(int i = 0; i < foodsLoggedBefore.length; i++){
+         if(foodsLoggedBefore[i].name.toString() == widget.foodDetailArgumentModel.food!.name.toString() &&
+             foodsLoggedBefore[i].foodType.name.toString() == widget.foodDetailArgumentModel.food!.foodType.name.toString() &&
+             foodsLoggedBefore[i].calorie.toString() == widget.foodDetailArgumentModel.food!.calorie.toString() &&
+             foodsLoggedBefore[i].protein.toString() == widget.foodDetailArgumentModel.food!.protein.toString() &&
+             foodsLoggedBefore[i].carb.toString() == widget.foodDetailArgumentModel.food!.carb.toString() &&
+             foodsLoggedBefore[i].fat.toString() == widget.foodDetailArgumentModel.food!.fat.toString()){
+           foods.add(newFood);
+         }else{
+           foods.add(foodsLoggedBefore[i]);
+         }
+       }
+
+       _logFoodsBloc.add(
+           LogFoodsEvent.onLogFoods(foods)
+       );
+     }else{
+       List<Food> foods = [];
+       foods.addAll(foodsLoggedBefore);
+       foods.add(newFood);
+       _logFoodsBloc.add(
+           LogFoodsEvent.onLogFoods(foods)
+       );
+     }
    }
 
 
