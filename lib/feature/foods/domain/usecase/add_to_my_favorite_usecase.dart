@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -14,6 +15,7 @@ class AddToMyFavoriteUseCase{
   final repo = serviceLocator<FoodsRepository>();
 
   Future<Either<Failure, Food>> addToMyFavorites(Food food) async{
+    food = checkFood(food);
     if(food.foodType == FoodType.meal){
       final addToMyFavoritesRemoteResponse = await repo.saveMyMealToRemote(food);
       if(addToMyFavoritesRemoteResponse.isRight()){
@@ -33,6 +35,7 @@ class AddToMyFavoriteUseCase{
 
 
   Future<Either<Failure, Food>> updateMyFavoriteFood(Food food) async{
+    food = checkFood(food);
     if(food.foodType == FoodType.meal){
       final addToMyFavoritesRemoteResponse = await repo.updateMyFavoriteMealInRemote(food);
       if(addToMyFavoritesRemoteResponse.isRight()){
@@ -62,6 +65,77 @@ class AddToMyFavoriteUseCase{
       }
     }
     return Left(getFailure(myFavoriteFoodResponse.asLeft()));
+  }
+
+
+  Food checkFood(Food food){
+    List<String> calorie= [];
+    food.calorie.forEach((element) {
+      if(element.isEmpty){
+        calorie.add('0');
+      }else{
+        calorie.add(element);
+      }
+    });
+
+
+
+    List<String> protein= [];
+    food.protein.forEach((element) {
+      if(element.isEmpty){
+        protein.add('0');
+      }else{
+        protein.add(element);
+      }
+    });
+
+    List<String> carb= [];
+    food.carb.forEach((element) {
+      if(element.isEmpty){
+        carb.add('0');
+      }else{
+        carb.add(element);
+      }
+    });
+
+    List<String> fat= [];
+    food.fat.forEach((element) {
+      if(element.isEmpty){
+        fat.add('0');
+      }else{
+        fat.add(element);
+      }
+    });
+
+
+    List<String> units= [];
+    food.units.forEach((element) {
+      if(element.isEmpty){
+        units.add('g');
+      }else{
+        units.add(element);
+      }
+    });
+
+    List<String> servingAmounts= [];
+    food.servingAmounts.forEach((element) {
+      if(element.isEmpty){
+        servingAmounts.add('100');
+      }else{
+        servingAmounts.add(element);
+      }
+    });
+
+    food = food.copyWith(
+      calorie: calorie,
+      protein: protein,
+      carb: carb,
+      fat: fat,
+      units: units,
+      servingAmounts: servingAmounts,
+      unit:  food.foodType == FoodType.meal && food.unit.isEmpty ? SERVING_LABEL : food.unit,
+    );
+    return food;
   }
 
 }

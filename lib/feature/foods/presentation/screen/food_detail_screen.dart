@@ -707,27 +707,27 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
      if(_foodType == MEAL_LABEL){
        double calorie = 0;
        for (int i = 0; i < newFood.calorie.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i]);
-         calorie = calorie + double.parse(newFood.calorie[i])*servingCount;
+         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
+         calorie = calorie + double.parse(newFood.calorie[i].isEmpty ? '0' : newFood.calorie[i])*servingCount;
        }
 
        double protein = 0;
        for (int i = 0; i < newFood.protein.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i]);
-         protein = protein + double.parse(newFood.protein[i])*servingCount;
+         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
+         protein = protein + double.parse(newFood.protein[i].isEmpty ? '0' : newFood.protein[i])*servingCount;
        }
 
        double carb = 0;
        for (int i = 0; i < newFood.carb.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i]);
-         carb = carb + double.parse(newFood.carb[i])*servingCount;
+         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
+         carb = carb + double.parse(newFood.carb[i].isEmpty ? '0' : newFood.carb[i])*servingCount;
        }
 
 
        double fat = 0;
        for (int i = 0; i < newFood.fat.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i]);
-         fat = fat + double.parse(newFood.fat[i])*servingCount;
+         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
+         fat = fat + double.parse(newFood.fat[i].isEmpty ? '0' : newFood.fat[i])*servingCount;
        }
 
 

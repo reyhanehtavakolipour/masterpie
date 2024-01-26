@@ -131,11 +131,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void handlePayButtonState(){
     if(widget.newPlanInfo.currentPlanName != FREE_LABEL &&  widget.newPlanInfo.currentPlanName != DIETITIAN_LABEL
         && widget.newPlanInfo.customerId.isNotEmpty && widget.newPlanInfo.updatedAt.isNotEmpty && widget.newPlanInfo.cancelAtPeriodEnd){
-      int millisecondsSinceEpoch = 0;
-      DateTime updatedAtDate = DateTime(millisecondsSinceEpoch);
-      millisecondsSinceEpoch = int.parse(widget.newPlanInfo.updatedAt) * 1000;
-      updatedAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-      DateTime endsAtDate = calculateDate(updatedAtDate, 1, widget.newPlanInfo.interval == 'monthly' ? 'month' : 'year');
+      int endsAtMillisecondsSinceEpoch = 0;
+      DateTime endsAtDate = DateTime(endsAtMillisecondsSinceEpoch);
+      endsAtMillisecondsSinceEpoch = int.parse(widget.newPlanInfo.endsAt) * 1000;
+      endsAtDate= DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+
       DateTime now = DateTime.now();
       if(!endsAtDate.isBefore(now)){
         // disable pay button
@@ -282,355 +282,357 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Container(
                   color: LIGHT_GREY_COLOR,
                   padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
 
 
-                      const SizedBox(height: 12,),
+                        const SizedBox(height: 12,),
 
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Image.asset(widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MEASURE_PATH : ACCURACY_PATH,
-                          width: 60, height: 60, color: widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MASTERPIE_ORANGE_COLOR : GREEN_COLOR,)
-                      ),
-
-
-                      //plan name
-                      Text(
-                        '${widget.newPlanInfo.subscriptionPlans[0].plan.capitalize()} $PLAN_LABEL',
-                        style: const TextStyle(
-                            fontSize: 36,
-                            color: DARK_PRIMARY_COLOR,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Image.asset(widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MEASURE_PATH : ACCURACY_PATH,
+                            width: 60, height: 60, color: widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? MASTERPIE_ORANGE_COLOR : GREEN_COLOR,)
                         ),
-                      ),
 
 
-
-                      const SizedBox(height: 4,),
-
-
-                      // description
-                      Text(
-                        (widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? BASIC_GREAT_FOR_INFO : PREMIUM_GREAT_FOR_INFO).capitalize(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.blueGrey,
-                        ),
-                      ),
-
-
-                      const SizedBox(height: 16,),
-
-
-                      //price-auto payment checkbox - interval
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-                          color: Colors.white,
-                          border: Border.all(
-                            color: DARK_PRIMARY_COLOR,
+                        //plan name
+                        Text(
+                          '${widget.newPlanInfo.subscriptionPlans[0].plan.capitalize()} $PLAN_LABEL',
+                          style: const TextStyle(
+                              fontSize: 36,
+                              color: DARK_PRIMARY_COLOR,
                           ),
                         ),
-                        child: Column(
-                          children: [
 
-                            CustomRadioListTile(
-                              options: _intervalOptions,
-                              onSelectedOptionChanged: updateSelectedPlanType,
-                              selectedOption: _selectedInterval,
-                              orientation: HORIZONTAL_ORIENTATION,
-                              isEditable: true,
+
+
+                        const SizedBox(height: 4,),
+
+
+                        // description
+                        Text(
+                          (widget.newPlanInfo.subscriptionPlans[0].plan == BASIC_LABEL ? BASIC_GREAT_FOR_INFO : PREMIUM_GREAT_FOR_INFO).capitalize(),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 16,),
+
+
+                        //price-auto payment checkbox - interval
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(BORDER_RADIUS,),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: DARK_PRIMARY_COLOR,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+
+                              CustomRadioListTile(
+                                options: _intervalOptions,
+                                onSelectedOptionChanged: updateSelectedPlanType,
+                                selectedOption: _selectedInterval,
+                                orientation: HORIZONTAL_ORIENTATION,
+                                isEditable: true,
+                              ),
+
+
+                              const SizedBox(height: 24,),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Checkbox(
+                                          value: _isAutoPaymentOn,
+                                          activeColor: DARK_PRIMARY_COLOR,
+                                          checkColor: Colors.white,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _isAutoPaymentOn = value ?? false;
+                                              updateSelectedPlanType(_selectedInterval);
+                                            });
+                                          },
+                                        ),
+                                        const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
+                                      ],
+                                    ),
+                                  ),
+
+                                  Expanded(
+                                    child: Text(
+                                      '$_amount \$',
+                                      style: const TextStyle(
+                                        fontSize: 56,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                            ],
+                          ),
+                        ),
+
+
+
+
+                        const SizedBox(height: 36,),
+
+
+                        const Text(
+                          '$FEATURES_LABEL:',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: MACRO_COLOR,
+                            fontWeight: FontWeight.w400
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 16,),
+
+
+                        //macro tracking
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: MACRO_TRACKING_ACCESS,
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
                             ),
 
 
-                            const SizedBox(height: 24,),
+                            const SizedBox(width: 8,),
 
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: _isAutoPaymentOn,
-                                        activeColor: DARK_PRIMARY_COLOR,
-                                        checkColor: Colors.white,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isAutoPaymentOn = value ?? false;
-                                            updateSelectedPlanType(_selectedInterval);
-                                          });
-                                        },
+                            const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
+
+                          ],
+                        ),
+
+
+                        //usda nutrition access
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
                                       ),
-                                      const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
-                                    ],
-                                  ),
-                                ),
-
-                                Expanded(
-                                  child: Text(
-                                    '$_amount \$',
-                                    style: const TextStyle(
-                                      fontSize: 56,
-                                      color: Colors.green,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  TextSpan(
+                                    text: USDA_NUTRITION_ACCESS,
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
+                            const SizedBox(width: 8,),
+
+                            const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
+
+                          ],
+                        ),
+
+
+
+                        //favorite food access
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '$FAVORITE_FOOD_ACCESS:',
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(width: 8,),
+
+                            const Text(
+                              UNLIMITED_LABEL,
+                              style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                             ),
 
                           ],
                         ),
-                      ),
 
+                        //food portion
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
 
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '$FOOD_PORTION_ACCESS:',
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
+                            ),
 
+                            const SizedBox(width: 8,),
 
-                      const SizedBox(height: 36,),
+                            Text(
+                              widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString(),
+                              style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                            ),
 
-
-                      const Text(
-                        '$FEATURES_LABEL:',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: MACRO_COLOR,
-                          fontWeight: FontWeight.w400
+                          ],
                         ),
-                      ),
 
 
-                      const SizedBox(height: 16,),
+                        //suggest food
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
 
-
-                      //macro tracking
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                      ),
                                     ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: MACRO_TRACKING_ACCESS,
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
+                                  TextSpan(
+                                    text: '$SUGGEST_FOOD_ACCESS:',
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+
+                            const SizedBox(width: 8,),
+
+                            Text(
+                              widget.newPlanInfo.subscriptionPlans[0].suggestFoodRequestsLimit.toString(),
+                              style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                            ),
+
+                          ],
+                        ),
 
 
-                          const SizedBox(width: 8,),
+                        //macro adjustment
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
 
-                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-                        ],
-                      ),
-
-
-                      //usda nutrition access
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 8,
+                                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                      ),
                                     ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: USDA_NUTRITION_ACCESS,
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-
-                          const SizedBox(width: 8,),
-
-                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-                        ],
-                      ),
-
-
-
-                      //favorite food access
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
+                                  TextSpan(
+                                    text: '$MACRO_ADJUSTMENT_ACCESS:',
+                                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: '$FAVORITE_FOOD_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
 
-                          const SizedBox(width: 8,),
+                            const SizedBox(width: 8,),
 
-                          const Text(
-                            UNLIMITED_LABEL,
-                            style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                          ),
+                            const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
 
-                        ],
-                      ),
+                          ],
 
-                      //food portion
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '$FOOD_PORTION_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 8,),
-
-                          Text(
-                            widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString(),
-                            style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                          ),
-
-                        ],
-                      ),
-
-
-                      //suggest food
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '$SUGGEST_FOOD_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 8,),
-
-                          Text(
-                            widget.newPlanInfo.subscriptionPlans[0].suggestFoodRequestsLimit.toString(),
-                            style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                          ),
-
-                        ],
-                      ),
-
-
-                      //macro adjustment
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '$MACRO_ADJUSTMENT_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 8,),
-
-                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-                        ],
-
-                      ),
+                        ),
 
 
 
 
-                      const SizedBox(height: 48,),
+                        const SizedBox(height: 48,),
 
 
 
-                      buildPayButton(context),
-                    ],
+                        buildPayButton(context),
+                      ],
+                    ),
                   ),
                 ),
 
