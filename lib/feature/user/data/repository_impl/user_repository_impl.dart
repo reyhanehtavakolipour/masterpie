@@ -273,7 +273,7 @@ class UserRepositoryImpl extends UserRepository{
     final userId = await getUserIdFromHive();
     final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
-      return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().foodPortionRequestsLeft -1);
+      return await userRemoteDataSource.updateFoodsPortionRequestsLeft(userId.asRight(), planResponse.asRight().foodPortionRequestsLeft -1);
     }
     return Left(planResponse.asLeft());
   }
@@ -294,7 +294,7 @@ class UserRepositoryImpl extends UserRepository{
     final userId = await getUserIdFromHive();
     final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
-      return await userRemoteDataSource.updateFavoriteRequestsLeft(userId.asRight(), planResponse.asRight().suggestFoodRequestsLeft -1);
+      return await userRemoteDataSource.updateSuggestFoodRequestsLeft(userId.asRight(), planResponse.asRight().suggestFoodRequestsLeft -1);
     }
     return Left(planResponse.asLeft());
   }

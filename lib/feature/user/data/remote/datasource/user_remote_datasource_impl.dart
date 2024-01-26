@@ -344,20 +344,67 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, Success>> updateFavoriteRequestsLeft(String userId, int requestsLeft) async{
-    //todo handle
-    return const Right(Success());
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'favorite_food_left': requestsLeft,
+      };
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> updateFoodsPortionRequestsLeft(String userId, int requestsLeft) async{
-    //todo handle
-    return const Right(Success());
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'food_portion_left_request': requestsLeft,
+      };
+
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> updateSuggestFoodRequestsLeft(String userId, int requestsLeft) async{
-    //todo handle
-    return const Right(Success());
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'suggest_food_left_request': requestsLeft,
+      };
+
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
   }
 
   @override

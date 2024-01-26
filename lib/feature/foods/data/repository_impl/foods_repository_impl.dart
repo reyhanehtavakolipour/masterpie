@@ -93,6 +93,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         if(userPlanResponse.asRight().suggestFoodRequestsLeft > 0){
           final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
           if(suggestMealResponse.isRight()){
+            userRepo.updateSuggestFoodRequestsLeftInRemote();
             return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
           }
           return Left(suggestMealResponse.asLeft());
@@ -103,6 +104,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
       if(userPlanResponse.asRight().suggestFoodRequestsLeft > 0){
         final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
         if(suggestMealResponse.isRight()){
+          userRepo.updateSuggestFoodRequestsLeftInRemote();
           return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
         }
         return Left(suggestMealResponse.asLeft());
@@ -170,6 +172,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
+            userRepo.updateFavoriteRequestsLeftInRemote();
             return const Right(Success());
           }
           return Left(saveMyFoodsResponse.asLeft());
@@ -195,6 +198,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
+            userRepo.updateFavoriteRequestsLeftInRemote();
             return const Right(Success());
           }
           return Left(saveMyFoodsResponse.asLeft());
@@ -429,6 +433,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
           final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
               macroGoalsRange, restriction);
           if(suggestedFoodsPortionResponse.isRight()){
+            userRepo.updateFoodsPortionRequestsLeftInRemote();
             return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
           }
           return Left(suggestedFoodsPortionResponse.asLeft());
@@ -440,6 +445,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
             macroGoalsRange, restriction);
         if(suggestedFoodsPortionResponse.isRight()){
+          userRepo.updateFoodsPortionRequestsLeftInRemote();
           return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
         }
         return Left(suggestedFoodsPortionResponse.asLeft());
