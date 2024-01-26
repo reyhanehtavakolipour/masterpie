@@ -16,6 +16,7 @@ class UserPlan with _$UserPlan{
     @Default('') String updatedAt,
     @Default('') String cancelReason,
     @Default(true) bool cancelAtPeriodEnd,
+    @Default(false) bool macroEdition,
     @Default(null) SubscriptionPlan? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,

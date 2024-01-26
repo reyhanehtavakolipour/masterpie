@@ -67,6 +67,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   /// Here foods actually means eaten foods
   List<Food> _foods = [];
 
+  bool _macroEdition = false;
+
   double _totalTakenCalories= 0;
   double _totalTakenProteins= 0;
   double _totalTakenCarbs= 0;
@@ -1105,7 +1107,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         visible: _foods.isNotEmpty,
                                                         child: FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
                                                           onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
-                                                          foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), foodDetailScreenType: FoodDetailScreenType.LOGGED_FOOD_VIEW, foodsListScreen: FoodsListScreen.MAIN_SCREEN,)
+                                                          foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
+                                                          foodDetailScreenType: FoodDetailScreenType.LOGGED_FOOD_VIEW, foodsListScreen: FoodsListScreen.MAIN_SCREEN, macroEdition: _macroEdition,)
                                                     ),
 
                                                     Positioned(
@@ -1154,6 +1157,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       }else if(state is GetLoggedFoodsLoadedState){
                                         Future.delayed(Duration.zero,(){
                                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                                          _macroEdition = state.loggedFoods.macroEdition;
                                           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
                                         });
                                         return Container();

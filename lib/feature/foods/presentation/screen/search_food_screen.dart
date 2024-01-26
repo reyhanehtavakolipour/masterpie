@@ -91,7 +91,6 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   List<Food> _newGroceries= [];
   List<Food> _newMyFavorites= [];
 
-
   bool _createNewClicked= false;
 
 
@@ -720,7 +719,8 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                         /// My favorite list
                         FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
                           onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: _foodsTypeRequested,
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,), foodDetailScreenType: FoodDetailScreenType.VIEW_FAVORITE, foodsListScreen: FoodsListScreen.SEARCH_FOOD_SCREEN,),
+                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                          foodDetailScreenType: FoodDetailScreenType.VIEW_FAVORITE, foodsListScreen: FoodsListScreen.SEARCH_FOOD_SCREEN, macroEdition: true,),
 
 
                         /// Groceries list
@@ -728,7 +728,8 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                           visible: _foodsResource == ALL_LABEL,
                           child: FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
                             onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: _foodsTypeRequested,
-                            foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), foodDetailScreenType: FoodDetailScreenType.VIEW, foodsListScreen: FoodsListScreen.SEARCH_FOOD_SCREEN,),
+                            foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
+                            foodDetailScreenType: FoodDetailScreenType.VIEW, foodsListScreen: FoodsListScreen.SEARCH_FOOD_SCREEN, macroEdition: true,),
                         ),
 
                       ],

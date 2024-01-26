@@ -25,6 +25,7 @@ mixin _$UserPlan {
   String get updatedAt => throw _privateConstructorUsedError;
   String get cancelReason => throw _privateConstructorUsedError;
   bool get cancelAtPeriodEnd => throw _privateConstructorUsedError;
+  bool get macroEdition => throw _privateConstructorUsedError;
   SubscriptionPlan? get subscriptionPlan => throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $UserPlanCopyWith<$Res> {
       String updatedAt,
       String cancelReason,
       bool cancelAtPeriodEnd,
+      bool macroEdition,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -80,6 +82,7 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
     Object? updatedAt = null,
     Object? cancelReason = null,
     Object? cancelAtPeriodEnd = null,
+    Object? macroEdition = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -121,6 +124,10 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
       cancelAtPeriodEnd: null == cancelAtPeriodEnd
           ? _value.cancelAtPeriodEnd
           : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
+              as bool,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
               as bool,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
@@ -172,6 +179,7 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       String updatedAt,
       String cancelReason,
       bool cancelAtPeriodEnd,
+      bool macroEdition,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
@@ -201,6 +209,7 @@ class __$$UserPlanImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? cancelReason = null,
     Object? cancelAtPeriodEnd = null,
+    Object? macroEdition = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
@@ -243,6 +252,10 @@ class __$$UserPlanImplCopyWithImpl<$Res>
           ? _value.cancelAtPeriodEnd
           : cancelAtPeriodEnd // ignore: cast_nullable_to_non_nullable
               as bool,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
+              as bool,
       subscriptionPlan: freezed == subscriptionPlan
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
@@ -276,6 +289,7 @@ class _$UserPlanImpl implements _UserPlan {
       this.updatedAt = '',
       this.cancelReason = '',
       this.cancelAtPeriodEnd = true,
+      this.macroEdition = false,
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
@@ -310,6 +324,9 @@ class _$UserPlanImpl implements _UserPlan {
   final bool cancelAtPeriodEnd;
   @override
   @JsonKey()
+  final bool macroEdition;
+  @override
+  @JsonKey()
   final SubscriptionPlan? subscriptionPlan;
   @override
   @JsonKey()
@@ -323,7 +340,7 @@ class _$UserPlanImpl implements _UserPlan {
 
   @override
   String toString() {
-    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, macroEdition: $macroEdition, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
   }
 
   @override
@@ -347,6 +364,8 @@ class _$UserPlanImpl implements _UserPlan {
                 other.cancelReason == cancelReason) &&
             (identical(other.cancelAtPeriodEnd, cancelAtPeriodEnd) ||
                 other.cancelAtPeriodEnd == cancelAtPeriodEnd) &&
+            (identical(other.macroEdition, macroEdition) ||
+                other.macroEdition == macroEdition) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
                 other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
@@ -371,6 +390,7 @@ class _$UserPlanImpl implements _UserPlan {
       updatedAt,
       cancelReason,
       cancelAtPeriodEnd,
+      macroEdition,
       subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
@@ -394,6 +414,7 @@ abstract class _UserPlan implements UserPlan {
       final String updatedAt,
       final String cancelReason,
       final bool cancelAtPeriodEnd,
+      final bool macroEdition,
       final SubscriptionPlan? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
@@ -417,6 +438,8 @@ abstract class _UserPlan implements UserPlan {
   String get cancelReason;
   @override
   bool get cancelAtPeriodEnd;
+  @override
+  bool get macroEdition;
   @override
   SubscriptionPlan? get subscriptionPlan;
   @override

@@ -26,7 +26,7 @@ abstract class UserRepository{
   Future<Either<Failure, Success>> setUserSubscriptionPlanAfterRegisterInRemote();
 
 
-  Future<Either<Failure, Success>> updateFavoriteRequestsLeftInRemote();
+  Future<Either<Failure, Success>> updateFavoriteRequestsLeftInRemote(bool isAdded);
 
 
   Future<Either<Failure, Success>> updateSuggestFoodRequestsLeftInRemote();

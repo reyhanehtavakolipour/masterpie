@@ -19,6 +19,7 @@ mixin _$LoggedFoods {
   List<Food> get foods => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   List<double> get goals => throw _privateConstructorUsedError;
+  bool get macroEdition => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoggedFoodsCopyWith<LoggedFoods> get copyWith =>
@@ -31,7 +32,8 @@ abstract class $LoggedFoodsCopyWith<$Res> {
           LoggedFoods value, $Res Function(LoggedFoods) then) =
       _$LoggedFoodsCopyWithImpl<$Res, LoggedFoods>;
   @useResult
-  $Res call({List<Food> foods, String date, List<double> goals});
+  $Res call(
+      {List<Food> foods, String date, List<double> goals, bool macroEdition});
 }
 
 /// @nodoc
@@ -50,6 +52,7 @@ class _$LoggedFoodsCopyWithImpl<$Res, $Val extends LoggedFoods>
     Object? foods = null,
     Object? date = null,
     Object? goals = null,
+    Object? macroEdition = null,
   }) {
     return _then(_value.copyWith(
       foods: null == foods
@@ -64,6 +67,10 @@ class _$LoggedFoodsCopyWithImpl<$Res, $Val extends LoggedFoods>
           ? _value.goals
           : goals // ignore: cast_nullable_to_non_nullable
               as List<double>,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -76,7 +83,8 @@ abstract class _$$LoggedFoodsImplCopyWith<$Res>
       __$$LoggedFoodsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Food> foods, String date, List<double> goals});
+  $Res call(
+      {List<Food> foods, String date, List<double> goals, bool macroEdition});
 }
 
 /// @nodoc
@@ -93,6 +101,7 @@ class __$$LoggedFoodsImplCopyWithImpl<$Res>
     Object? foods = null,
     Object? date = null,
     Object? goals = null,
+    Object? macroEdition = null,
   }) {
     return _then(_$LoggedFoodsImpl(
       foods: null == foods
@@ -107,6 +116,10 @@ class __$$LoggedFoodsImplCopyWithImpl<$Res>
           ? _value._goals
           : goals // ignore: cast_nullable_to_non_nullable
               as List<double>,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -117,7 +130,8 @@ class _$LoggedFoodsImpl implements _LoggedFoods {
   _$LoggedFoodsImpl(
       {final List<Food> foods = const [],
       this.date = '',
-      final List<double> goals = const []})
+      final List<double> goals = const [],
+      this.macroEdition = false})
       : _foods = foods,
         _goals = goals;
 
@@ -143,8 +157,12 @@ class _$LoggedFoodsImpl implements _LoggedFoods {
   }
 
   @override
+  @JsonKey()
+  final bool macroEdition;
+
+  @override
   String toString() {
-    return 'LoggedFoods(foods: $foods, date: $date, goals: $goals)';
+    return 'LoggedFoods(foods: $foods, date: $date, goals: $goals, macroEdition: $macroEdition)';
   }
 
   @override
@@ -154,7 +172,9 @@ class _$LoggedFoodsImpl implements _LoggedFoods {
             other is _$LoggedFoodsImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
             (identical(other.date, date) || other.date == date) &&
-            const DeepCollectionEquality().equals(other._goals, _goals));
+            const DeepCollectionEquality().equals(other._goals, _goals) &&
+            (identical(other.macroEdition, macroEdition) ||
+                other.macroEdition == macroEdition));
   }
 
   @override
@@ -162,7 +182,8 @@ class _$LoggedFoodsImpl implements _LoggedFoods {
       runtimeType,
       const DeepCollectionEquality().hash(_foods),
       date,
-      const DeepCollectionEquality().hash(_goals));
+      const DeepCollectionEquality().hash(_goals),
+      macroEdition);
 
   @JsonKey(ignore: true)
   @override
@@ -175,7 +196,8 @@ abstract class _LoggedFoods implements LoggedFoods {
   factory _LoggedFoods(
       {final List<Food> foods,
       final String date,
-      final List<double> goals}) = _$LoggedFoodsImpl;
+      final List<double> goals,
+      final bool macroEdition}) = _$LoggedFoodsImpl;
 
   @override
   List<Food> get foods;
@@ -183,6 +205,8 @@ abstract class _LoggedFoods implements LoggedFoods {
   String get date;
   @override
   List<double> get goals;
+  @override
+  bool get macroEdition;
   @override
   @JsonKey(ignore: true)
   _$$LoggedFoodsImplCopyWith<_$LoggedFoodsImpl> get copyWith =>

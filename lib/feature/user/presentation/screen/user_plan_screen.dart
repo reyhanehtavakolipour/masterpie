@@ -150,7 +150,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           const SizedBox(height: 6,),
 
-                          /// food portion lef
+                          /// food portion left
                           Text(
                             '$FOOD_PORTION_LEFT: ${_userPlan.foodPortionRequestsLeft}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
@@ -162,6 +162,15 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                           /// suggest food
                           Text(
                             '$SUGGEST_FOOD_LEFT: ${_userPlan.suggestFoodRequestsLeft}',
+                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+                          ),
+
+
+                          const SizedBox(height: 6,),
+
+                          /// macro edition access
+                          Text(
+                            '$MACRO_EDITION_ACCESS: ${_userPlan.macroEdition ? EVERY_WHERE_LABEL : ONLY_FOR_FAVORITES_LABEL}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -694,7 +703,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   ),
                   TextSpan(
                     text: '${_subscriptions[0].favoriteFoodLimit} $FAVORITE_FOOD_INFO_FREE_PLAN',
-                    style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -801,7 +810,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Icon(Icons.clear, color: RED_ERROR_COLOR, size: 18,)
+                const Text(
+                  ONLY_FOR_FAVORITES_LABEL,
+                  style: TextStyle(fontSize: 13, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
+                ),
 
               ],
             ),
@@ -1096,8 +1108,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
 
+                const Text(
+                  EVERY_WHERE_LABEL,
+                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                ),
               ],
 
             ),
@@ -1392,8 +1407,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
+                const Text(
+                  EVERY_WHERE_LABEL,
+                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ],

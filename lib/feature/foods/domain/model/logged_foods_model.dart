@@ -13,7 +13,8 @@ class LoggedFoods with _$LoggedFoods{
   factory LoggedFoods({
     @Default([]) List<Food> foods,
     @Default('') String date,
-    @Default([]) List<double> goals
+    @Default([]) List<double> goals,
+    @Default(false) bool macroEdition
   })= _LoggedFoods;
 
 }

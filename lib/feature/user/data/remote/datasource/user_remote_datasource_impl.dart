@@ -323,6 +323,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           'favorite_food_left': freeSubscription.favoriteFoodLimit,
           'plan_updated_at': timestamp.toString(),
           'plan_interval': freeSubscription.intervals[0],
+          'macro_edition': false,
         };
 
 
@@ -434,6 +435,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           prices: [double.parse(element['price'].toString())],
           intervals: [element['interval']],
           ids: [element['plan_id']],
+          macroEdition: element['macro_edition'],
           favoriteFoodLimit: element['favorite_food_limit'],
           suggestFoodRequestsLimit: element['suggest_food_limit'],
           foodPortionRequestsLimit: element['food_portion_limit']
@@ -467,6 +469,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           ids: [userId],
           plan: data[0]['plan_name'] ?? '',
           intervals: [data[0]['plan_interval'] ?? ''],
+          macroEdition: data[0]['macro_edition']
         ),
         customerId: data[0]['customer_id'] ?? '',
         interval: data[0]['plan_interval'] ?? '',
@@ -474,6 +477,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         cancelAtPeriodEnd: data[0]['cancel_at_period_end'] ?? true,
         endsAt: data[0]['current_period_end'] ?? '',
         updatedAt: data[0]['plan_updated_at'] ?? '',
+        macroEdition: data[0]['macro_edition'],
         subscriptionId: data[0]['subscription_id'] ?? '',
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,

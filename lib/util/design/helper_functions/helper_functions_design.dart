@@ -85,7 +85,7 @@ Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) 
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const UserPlanScreen(),

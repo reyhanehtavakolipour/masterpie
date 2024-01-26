@@ -126,7 +126,9 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FoodDetailScreen(foodDetailArgumentModel: FoodDetailArgumentModel(foodsListScreen: FoodsListScreen.MY_FAVORITE_FOODS_SCREEN),),
+                      builder: (context) => FoodDetailScreen(
+                        foodDetailArgumentModel: FoodDetailArgumentModel(foodsListScreen: FoodsListScreen.MY_FAVORITE_FOODS_SCREEN),
+                      ),
                     ),
                   );
                 },
@@ -192,7 +194,8 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                       /// My favorite list
                       FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
                           onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,), foodDetailScreenType: FoodDetailScreenType.VIEW_FAVORITE, foodsListScreen: FoodsListScreen.MY_FAVORITE_FOODS_SCREEN,),
+                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                        foodDetailScreenType: FoodDetailScreenType.VIEW_FAVORITE, foodsListScreen: FoodsListScreen.MY_FAVORITE_FOODS_SCREEN, macroEdition: true,),
 
                     ],
                   ),

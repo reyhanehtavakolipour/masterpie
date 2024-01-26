@@ -30,10 +30,12 @@ class FoodsListUi extends StatefulWidget {
   final Icon foodIcon;
   final FoodDetailScreenType foodDetailScreenType;
   final FoodsListScreen foodsListScreen;
+  final bool macroEdition;
 
   const FoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
     required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
-  required this.foodBackGroundColor, required this.foodIcon, required this.foodDetailScreenType, required this.foodsListScreen});
+  required this.foodBackGroundColor, required this.foodIcon, required this.foodDetailScreenType,
+    required this.foodsListScreen, required this.macroEdition});
 
 
   @override
@@ -137,7 +139,12 @@ class _FoodsListUiState extends State<FoodsListUi> {
 
               return GestureDetector(
                 onTap: (){
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(foodDetailScreenType: widget.foodDetailScreenType, food: checkFoodParameters(food), foodsListScreen: widget.foodsListScreen);
+                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
+                      foodDetailScreenType: widget.foodDetailScreenType,
+                      food: checkFoodParameters(food),
+                      foodsListScreen: widget.foodsListScreen,
+                      macroEdition: widget.macroEdition
+                    );
                     Navigator.push(
                       context,
                       MaterialPageRoute(

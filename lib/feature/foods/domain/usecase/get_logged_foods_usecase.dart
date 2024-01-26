@@ -21,6 +21,7 @@ class GetLoggedFoodsUseCase{
     late Either<Failure, List<Food>> foodsLocalDb;
     foodsLocalDb= await repo.getLoggedFoodsFromLocalDb(date);
     final userEmail= await userRepo.getEmailFromHive();
+    final userPlan = await userRepo.getUserPlanInRemote();
     final profileResponse = await userRepo.getProfileFromLocal(userEmail.asRight());
     if(profileResponse.isRight()){
       List<String> goals = profileResponse.asRight().dailyMacroGoal;
@@ -32,10 +33,12 @@ class GetLoggedFoodsUseCase{
       macroGoals.add(goals[1].isNotEmpty ? double.parse(goals[1]) : 0);
       macroGoals.add(goals[2].isNotEmpty ? double.parse(goals[2]) : 0);
       macroGoals.add(goals[3].isNotEmpty ? double.parse(goals[3]) : 0);
-      return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals));
+      return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: userPlan.asRight().subscriptionPlan!.macroEdition));
     }
     return Left(getFailure(foodsLocalDb.asLeft()));
   }
+
+
 
   Future<Either<Failure, LoggedFoods>> getLoggedFoods(String date) async{
     final foodsResponseRemote = await repo.getLoggedFoodsFromRemote(date);

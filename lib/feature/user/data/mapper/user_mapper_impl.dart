@@ -132,6 +132,7 @@ class UserMapperImpl extends UserMapper{
         interval: userPlanRemote.interval,
         cancelReason: userPlanRemote.cancelReason,
         endsAt: userPlanRemote.endsAt,
+        macroEdition: userPlanRemote.macroEdition,
         cancelAtPeriodEnd: userPlanRemote.cancelAtPeriodEnd,
         updatedAt: userPlanRemote.updatedAt,
         subscriptionPlan: fromSubscriptionPlanRemote(userPlanRemote.subscriptionPlan!),
@@ -148,6 +149,7 @@ class UserMapperImpl extends UserMapper{
         plan: subscriptionRemote.plan,
         intervals: subscriptionRemote.intervals,
         prices: subscriptionRemote.prices,
+        macroEdition: subscriptionRemote.macroEdition,
         favoriteFoodLimit: subscriptionRemote.favoriteFoodLimit,
         suggestFoodRequestsLimit: subscriptionRemote.suggestFoodRequestsLimit,
         foodPortionRequestsLimit: subscriptionRemote.foodPortionRequestsLimit

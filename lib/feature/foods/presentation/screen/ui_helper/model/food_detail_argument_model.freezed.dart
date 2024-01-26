@@ -20,6 +20,7 @@ mixin _$FoodDetailArgumentModel {
       throw _privateConstructorUsedError;
   Food? get food => throw _privateConstructorUsedError;
   FoodsListScreen? get foodsListScreen => throw _privateConstructorUsedError;
+  bool get macroEdition => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FoodDetailArgumentModelCopyWith<FoodDetailArgumentModel> get copyWith =>
@@ -35,7 +36,8 @@ abstract class $FoodDetailArgumentModelCopyWith<$Res> {
   $Res call(
       {FoodDetailScreenType foodDetailScreenType,
       Food? food,
-      FoodsListScreen? foodsListScreen});
+      FoodsListScreen? foodsListScreen,
+      bool macroEdition});
 
   $FoodCopyWith<$Res>? get food;
 }
@@ -57,6 +59,7 @@ class _$FoodDetailArgumentModelCopyWithImpl<$Res,
     Object? foodDetailScreenType = null,
     Object? food = freezed,
     Object? foodsListScreen = freezed,
+    Object? macroEdition = null,
   }) {
     return _then(_value.copyWith(
       foodDetailScreenType: null == foodDetailScreenType
@@ -71,6 +74,10 @@ class _$FoodDetailArgumentModelCopyWithImpl<$Res,
           ? _value.foodsListScreen
           : foodsListScreen // ignore: cast_nullable_to_non_nullable
               as FoodsListScreen?,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -99,7 +106,8 @@ abstract class _$$FoodDetailArgumentModelImplCopyWith<$Res>
   $Res call(
       {FoodDetailScreenType foodDetailScreenType,
       Food? food,
-      FoodsListScreen? foodsListScreen});
+      FoodsListScreen? foodsListScreen,
+      bool macroEdition});
 
   @override
   $FoodCopyWith<$Res>? get food;
@@ -121,6 +129,7 @@ class __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>
     Object? foodDetailScreenType = null,
     Object? food = freezed,
     Object? foodsListScreen = freezed,
+    Object? macroEdition = null,
   }) {
     return _then(_$FoodDetailArgumentModelImpl(
       foodDetailScreenType: null == foodDetailScreenType
@@ -135,6 +144,10 @@ class __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>
           ? _value.foodsListScreen
           : foodsListScreen // ignore: cast_nullable_to_non_nullable
               as FoodsListScreen?,
+      macroEdition: null == macroEdition
+          ? _value.macroEdition
+          : macroEdition // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -145,7 +158,8 @@ class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
   _$FoodDetailArgumentModelImpl(
       {this.foodDetailScreenType = FoodDetailScreenType.ADD_NEW_FAVORITE,
       this.food = null,
-      this.foodsListScreen = null});
+      this.foodsListScreen = null,
+      this.macroEdition = false});
 
   @override
   @JsonKey()
@@ -156,10 +170,13 @@ class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
   @override
   @JsonKey()
   final FoodsListScreen? foodsListScreen;
+  @override
+  @JsonKey()
+  final bool macroEdition;
 
   @override
   String toString() {
-    return 'FoodDetailArgumentModel(foodDetailScreenType: $foodDetailScreenType, food: $food, foodsListScreen: $foodsListScreen)';
+    return 'FoodDetailArgumentModel(foodDetailScreenType: $foodDetailScreenType, food: $food, foodsListScreen: $foodsListScreen, macroEdition: $macroEdition)';
   }
 
   @override
@@ -171,12 +188,14 @@ class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
                 other.foodDetailScreenType == foodDetailScreenType) &&
             (identical(other.food, food) || other.food == food) &&
             (identical(other.foodsListScreen, foodsListScreen) ||
-                other.foodsListScreen == foodsListScreen));
+                other.foodsListScreen == foodsListScreen) &&
+            (identical(other.macroEdition, macroEdition) ||
+                other.macroEdition == macroEdition));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, foodDetailScreenType, food, foodsListScreen);
+  int get hashCode => Object.hash(
+      runtimeType, foodDetailScreenType, food, foodsListScreen, macroEdition);
 
   @JsonKey(ignore: true)
   @override
@@ -190,7 +209,8 @@ abstract class _FoodDetailArgumentModel implements FoodDetailArgumentModel {
   factory _FoodDetailArgumentModel(
       {final FoodDetailScreenType foodDetailScreenType,
       final Food? food,
-      final FoodsListScreen? foodsListScreen}) = _$FoodDetailArgumentModelImpl;
+      final FoodsListScreen? foodsListScreen,
+      final bool macroEdition}) = _$FoodDetailArgumentModelImpl;
 
   @override
   FoodDetailScreenType get foodDetailScreenType;
@@ -198,6 +218,8 @@ abstract class _FoodDetailArgumentModel implements FoodDetailArgumentModel {
   Food? get food;
   @override
   FoodsListScreen? get foodsListScreen;
+  @override
+  bool get macroEdition;
   @override
   @JsonKey(ignore: true)
   _$$FoodDetailArgumentModelImplCopyWith<_$FoodDetailArgumentModelImpl>

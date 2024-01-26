@@ -337,8 +337,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW){
                       type = FoodDetailScreenType.LOGGED_FOOD_EDIT;
                     }
-
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(foodDetailScreenType: type, food: newFood, foodsListScreen: widget.foodDetailArgumentModel.foodsListScreen);
+                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(foodDetailScreenType: type, food: newFood,
+                        foodsListScreen: widget.foodDetailArgumentModel.foodsListScreen, macroEdition: widget.foodDetailArgumentModel.macroEdition);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -1006,6 +1006,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         ),
       );
     }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
+
+      if(!widget.foodDetailArgumentModel.macroEdition){
+        showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
+        return;
+      }
+
+
       if(_favoriteId.isNotEmpty){
         _showUpdateLoggedFoodAndFavoriteConfirmation(context);
       }else{

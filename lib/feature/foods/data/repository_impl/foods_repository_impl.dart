@@ -172,7 +172,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
-            userRepo.updateFavoriteRequestsLeftInRemote();
+            userRepo.updateFavoriteRequestsLeftInRemote(true);
             return const Right(Success());
           }
           return Left(saveMyFoodsResponse.asLeft());
@@ -198,7 +198,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
-            userRepo.updateFavoriteRequestsLeftInRemote();
+            userRepo.updateFavoriteRequestsLeftInRemote(true);
             return const Right(Success());
           }
           return Left(saveMyFoodsResponse.asLeft());
@@ -398,6 +398,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final removeGroceryResponse= await masterPieFoodRemoteDataSource.removeFoodFromMyFavorites(mapper.toGroceryRemote(food), userId);
     if(removeGroceryResponse.isRight()){
+      userRepo.updateFavoriteRequestsLeftInRemote(false);
       return Right(removeGroceryResponse.asRight());
     }
     return Left(removeGroceryResponse.asLeft());

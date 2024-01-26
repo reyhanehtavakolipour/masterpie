@@ -15,6 +15,7 @@ class FoodDetailArgumentModel with _$FoodDetailArgumentModel{
     @Default(FoodDetailScreenType.ADD_NEW_FAVORITE) FoodDetailScreenType foodDetailScreenType,
     @Default(null) Food? food,
     @Default(null) FoodsListScreen? foodsListScreen,
+    @Default(false) bool macroEdition
   })= _FoodDetailArgumentModel;
 
 }

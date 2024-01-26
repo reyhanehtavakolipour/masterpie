@@ -217,6 +217,7 @@ const ERROR_RESTRICTION_FAT = 'Enter fat range first';
 const OPTIONAL_LABEL = 'Optional';
 const NEW_FAVORITES_LEFT= 'New favorites';
 const SUGGEST_FOOD_LEFT= 'Suggest food';
+const MACRO_EDITION_ACCESS= 'Macro edition access';
 const FOOD_PORTION_LEFT= 'Food portion recommender';
 const ALL_PLANS_LABBEL= 'All Plans';
 const MACRO_TRACKING_ACCESS= 'Macro tracking access';
@@ -273,6 +274,10 @@ const ERROR_OVER_LIMIT_SUGGEST_FOOD_MSG= 'not allowed to request suggest food an
 const ERROR_OVER_LIMIT_FOODS_PORTION_MSG= 'not allowed to use foods portion recommender anymore.';
 const UPGRADE_MSG_SUGGEST_FOOD= 'You can upgrade to any of our paid plan which allows you to use suggest food feature in the app.';
 const UPGRADE_MSG_FOODS_PORTION= 'You can upgrade to any of our paid plan which allows you to use foods portion recommender feature in the app.';
+const UPGRADE_MSG_MACRO_EDITION= 'You can upgrade to any of our paid plan which allows you to edit any macro';
+const EVERY_WHERE_LABEL= 'Every where';
+const ONLY_FOR_FAVORITES_LABEL= 'Only for favorites';
+
 
 
 

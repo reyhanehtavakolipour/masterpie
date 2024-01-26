@@ -11,6 +11,7 @@ class SubscriptionPlanRemote with _$SubscriptionPlanRemote{
     @Default('') String plan,
     @Default([]) List<String> intervals,
     @Default([]) List<double> prices,
+    @Default(false) bool macroEdition,
     @Default(0) int favoriteFoodLimit,
     @Default(0) int suggestFoodRequestsLimit,
     @Default(0) int foodPortionRequestsLimit,
