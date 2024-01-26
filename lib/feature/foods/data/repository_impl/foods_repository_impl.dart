@@ -21,6 +21,12 @@ import '../remote/datasource/masterpie_food_remote_datasource.dart';
 import '../remote/datasource/openai_food_remote_datasource.dart';
 import '../remote/model/food_remote_model.dart';
 
+const ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED= 'free user, not allowed to use suggest food';
+const ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED= 'free user, not allowed to use foods portion recommender';
+const ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT= 'paid user, suggest foods over than limit';
+const ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT= 'paid user, foods portion recommender over than limit';
+const ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED= 'free user, not allowed to create a new favorite anymore';
+
 
 class FoodsRepositoryImpl extends FoodsRepository{
 
@@ -81,11 +87,30 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, Food>> suggestMealFromRemote(List<String> mustIngredients, String nationality, List<String> allergies, String diet) async{
-    final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
-    if(suggestMealResponse.isRight()){
-      return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
+    final userPlanResponse= await userRepo.getUserPlanInRemote();
+    if(userPlanResponse.isRight()){
+      if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
+        if(userPlanResponse.asRight().suggestFoodRequestsLeft > 0){
+          final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
+          if(suggestMealResponse.isRight()){
+            return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
+          }
+          return Left(suggestMealResponse.asLeft());
+        }else{
+          return const Left(FailureResponse(ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED));
+        }
+      }
+      if(userPlanResponse.asRight().suggestFoodRequestsLeft > 0){
+        final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
+        if(suggestMealResponse.isRight()){
+          return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
+        }
+        return Left(suggestMealResponse.asLeft());
+      }else{
+        return const Left(FailureResponse(ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT));
+      }
     }
-    return Left(suggestMealResponse.asLeft());
+    return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
 
   @override
@@ -397,13 +422,35 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction) async{
-    final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
-    macroGoalsRange, restriction);
-    if(suggestedFoodsPortionResponse.isRight()){
-      return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
+    final userPlanResponse= await userRepo.getUserPlanInRemote();
+    if(userPlanResponse.isRight()){
+      if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
+        if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
+          final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+              macroGoalsRange, restriction);
+          if(suggestedFoodsPortionResponse.isRight()){
+            return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
+          }
+          return Left(suggestedFoodsPortionResponse.asLeft());
+        }else{
+          return const Left(FailureResponse(ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED));
+        }
+      }
+      if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
+        final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+            macroGoalsRange, restriction);
+        if(suggestedFoodsPortionResponse.isRight()){
+          return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
+        }
+        return Left(suggestedFoodsPortionResponse.asLeft());
+      }else{
+        return const Left(FailureResponse(ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT));
+      }
     }
-    return Left(suggestedFoodsPortionResponse.asLeft());
+    return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
+
+
 
   @override
   Future<Either<Failure, List<Food>>> logFoodsInRemote(List<Food> foods) async{

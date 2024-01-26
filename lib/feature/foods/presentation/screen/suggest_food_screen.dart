@@ -8,11 +8,13 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_chi
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../data/repository_impl/foods_repository_impl.dart';
 import '../bloc/suggest_food_bloc/state_event/suggest_food_state_event.dart';
 import '../bloc/suggest_food_bloc/suggest_food_bloc.dart';
 import 'food_detail_screen.dart';
@@ -49,7 +51,9 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
     _allergicToController = TextEditingController();
     nationalities= [ITALIAN_LABEL, CHINESE_LABEL, MEXICAN_LABEL,];
     _suggestFoodBloc = context.read<SuggestFoodBloc>();
+    _suggestFoodBloc.add(const SuggestFoodEvent.onReset());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +254,6 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
 
                 BlocConsumer<SuggestFoodBloc, SuggestFoodState>(
                     builder: (mcontext, state) {
-
                       if (state is SuggestFoodStateLoadingState) {
                         return const GFLoader(
                           type: GFLoaderType.circle,
@@ -270,7 +273,13 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
                           );
                         });
                       }else if(state is SuggestFoodStateErrorState){
+                        _suggestFoodBloc.add(const SuggestFoodEvent.onReset());
                         Future.delayed(Duration.zero,(){
+                          if(state.message == ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED){
+                            return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_SUGGEST_FOOD);
+                          }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                            return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_SUGGEST_FOOD_MSG);
+                          }
                           return showErrorToast(context, state.message);
                         });
                       }

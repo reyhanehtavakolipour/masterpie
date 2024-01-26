@@ -56,7 +56,7 @@ bool isValidPassword(String password) {
 }
 
 
-Future<void> showUpgradePopupForFreeUsers(BuildContext context) async {
+Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -72,7 +72,52 @@ Future<void> showUpgradePopupForFreeUsers(BuildContext context) async {
 
               const SizedBox(height: 16,),
 
-              const Text(UPGRADE_MSG_FAVORITE_FOOD, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR))
+              Text(message, style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR))
+
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          Center(
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(MASTERPIE_YELLOW_COLOR),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserPlanScreen(),
+                  ),
+                );
+              },
+              child: const Text(CHECKOUT_PLANS_LABEL, style: TextStyle(fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+Future<void> showOVerLimitPaidUsers(BuildContext context, String message) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(UPGRADE_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              Image.asset(SAND_CLOCK_PATH, width: SIZE_IMAGE_UPGRADE_PLAN, height: SIZE_IMAGE_UPGRADE_PLAN,),
+
+              const SizedBox(height: 16,),
+
+              Text(message, style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR))
 
             ],
           ),

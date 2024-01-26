@@ -266,10 +266,14 @@ const ALREADY_ON_PAYMENT_MSG= 'You are already on a paid plan which has not expi
 const CREDITS_LABEL= 'Credits';
 const PRIVACY_LABEL= 'Privacy & Policies';
 const ICONS_LABEL= 'Icons';
-const ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED= 'free user, not allowed to create a new favorite anymore';
 const UPGRADE_LABEL= 'Upgrade';
 const CHECKOUT_PLANS_LABEL= 'Check out Plans';
 const UPGRADE_MSG_FAVORITE_FOOD= 'You can upgrade to any of our paid plan which allows you to create favorite food as many as you want.';
+const ERROR_OVER_LIMIT_SUGGEST_FOOD_MSG= 'not allowed to request suggest food anymore.';
+const ERROR_OVER_LIMIT_FOODS_PORTION_MSG= 'not allowed to use foods portion recommender anymore.';
+const UPGRADE_MSG_SUGGEST_FOOD= 'You can upgrade to any of our paid plan which allows you to use suggest food feature in the app.';
+const UPGRADE_MSG_FOODS_PORTION= 'You can upgrade to any of our paid plan which allows you to use foods portion recommender feature in the app.';
+
 
 
 

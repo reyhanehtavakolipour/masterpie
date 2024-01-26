@@ -16,6 +16,7 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../../domain/model/logged_foods_model.dart';
@@ -122,6 +123,8 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
 
     _foodNameController.addListener(_onSearchFoodChanged);
+
+    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
 
     requestLoggedFoods();
   }
@@ -392,7 +395,6 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
                     BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
                         builder: (context, state) {
-
                           if (state is SuggestFoodsPortionLoadingState) {
                             return const GFLoader(
                               type: GFLoaderType.circle,
@@ -411,7 +413,13 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                                 );
                               });
                           }else if(state is SuggestFoodsPortionErrorState){
+                            _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                             Future.delayed(Duration.zero,(){
+                              if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
+                                return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
+                              }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                                return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
+                              }
                               return showErrorToast(context, state.message);
                             });
                           }

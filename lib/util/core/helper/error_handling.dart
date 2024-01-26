@@ -1,6 +1,7 @@
 
 
 
+import '../../../feature/foods/data/repository_impl/foods_repository_impl.dart';
 import '../constant/messages_constants.dart';
 import '../constant/sqflite_constants.dart';
 import '../response/failure.dart';
@@ -31,6 +32,18 @@ Failure failureHandler(String message, int? errorCode){
   }
   if(message.contains(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED)){
     return const FailureResponse(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED);
+  }
+  if(message.contains(ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT)){
+    return const FailureResponse(ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT);
+  }
+  if(message.contains(ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT)){
+    return const FailureResponse(ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT);
+  }
+  if(message.contains(ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED)){
+    return const FailureResponse(ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED);
+  }
+  if(message.contains(ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED)){
+    return const FailureResponse(ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED);
   }
   if(message.contains(ERROR_INTERNET_CONNECTION)){
     return const FailureResponse(ERROR_INTERNET_CONNECTION);

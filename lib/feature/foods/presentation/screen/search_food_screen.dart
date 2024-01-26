@@ -18,6 +18,7 @@ import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
@@ -862,7 +863,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                           _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                              return showUpgradePopupForFreeUsers(context);
+                              return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
                             }
                             return showErrorToast(context, state.message);
                           });
