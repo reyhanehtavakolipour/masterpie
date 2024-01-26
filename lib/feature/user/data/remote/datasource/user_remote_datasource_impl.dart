@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
 import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../util/core/constant/api_constant.dart';
@@ -392,6 +393,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         );
         subscriptionPlans.add(plan);
       });
+
 
       return Right(subscriptionPlans);
 

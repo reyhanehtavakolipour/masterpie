@@ -849,6 +849,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                       }
                   ),
 
+
                   BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
                       builder: (context, state) {
                         return Container(height: 1,);
@@ -857,6 +858,15 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                         if(state is AddOrUpdateMyFavoriteLoadedState){
                           resetNewFood();
                           requestFoodsList();
+                        }else if(state is AddOrUpdateMyFavoriteErrorState){
+                          _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                              return showUpgradePopupForFreeUsers(context);
+                            }
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
                         }
                       }
                   ),

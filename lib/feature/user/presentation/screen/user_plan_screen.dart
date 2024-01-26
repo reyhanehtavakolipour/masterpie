@@ -144,7 +144,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           /// favorites left
                           Text(
-                            '$NEW_FAVORITES_LEFT: ${_userPlan.favoriteFoodLeft}',
+                            '$NEW_FAVORITES_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.favoriteFoodLeft}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 

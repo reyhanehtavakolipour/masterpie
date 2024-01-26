@@ -266,6 +266,13 @@ const ALREADY_ON_PAYMENT_MSG= 'You are already on a paid plan which has not expi
 const CREDITS_LABEL= 'Credits';
 const PRIVACY_LABEL= 'Privacy & Policies';
 const ICONS_LABEL= 'Icons';
+const ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED= 'free user, not allowed to create a new favorite anymore';
+const UPGRADE_LABEL= 'Upgrade';
+const CHECKOUT_PLANS_LABEL= 'Check out Plans';
+const UPGRADE_MSG_FAVORITE_FOOD= 'You can upgrade to any of our paid plan which allows you to create favorite food as many as you want.';
+
+
+
 
 
 

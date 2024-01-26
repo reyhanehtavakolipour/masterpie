@@ -12,6 +12,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
@@ -229,6 +230,15 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                     listener: (context, state){
                       if(state is AddOrUpdateMyFavoriteLoadedState){
                         requestMyFavoriteFoods();
+                      }else if(state is AddOrUpdateMyFavoriteErrorState){
+                        _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                            return showUpgradePopupForFreeUsers(context);
+                          }
+                          return showErrorToast(context, state.message);
+                        });
+                      }else{
                       }
                     }
                 ),

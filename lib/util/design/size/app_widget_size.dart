@@ -11,6 +11,7 @@ const double FONT_CATS_LABEL = 12;
 const double FONT_CALORIE_INFO = 8;
 const double FONT_HEADER= 13;
 const SIZE_IMAGE_CAT = 80.0;
+const SIZE_IMAGE_UPGRADE_PLAN = 80.0;
 const TABS_SIZE = 2;
 const PADDING_SEARCH_HORIZONTAL = 30.0;
 const PADDING_SEARCH_VERTICAL = 15.0;

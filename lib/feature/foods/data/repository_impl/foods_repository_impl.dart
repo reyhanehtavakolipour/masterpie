@@ -3,12 +3,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
+import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/print.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
+import '../../../user/domain/repository/user_repository.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/suggested_foods_portion_model.dart';
 import '../../domain/repository/foods_repository.dart';
@@ -28,6 +30,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   final productRemoteDataSource = serviceLocator<GroceryProductRemoteDataSource>();
   final userHiveDataSource = serviceLocator<UserHiveDataSource>();
   final mapper = serviceLocator<FoodsMapper>();
+  final userRepo = serviceLocator<UserRepository>();
 
 
 
@@ -136,21 +139,51 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, Success>> saveMyGroceryProductToRemote(Food food) async{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
-    if(saveMyFoodsResponse.isRight()){
-      return const Right(Success());
+    final userPlanResponse= await userRepo.getUserPlanInRemote();
+    if(userPlanResponse.isRight()){
+      if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
+        if(userPlanResponse.asRight().favoriteFoodLeft > 0){
+          final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
+          if(saveMyFoodsResponse.isRight()){
+            return const Right(Success());
+          }
+          return Left(saveMyFoodsResponse.asLeft());
+        }else{
+          return const Left(FailureResponse(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED));
+        }
+      }
+      final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
+      if(saveMyFoodsResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(saveMyFoodsResponse.asLeft());
     }
-    return Left(saveMyFoodsResponse.asLeft());
+    return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
 
   @override
   Future<Either<Failure, Success>> saveMyMealToRemote(Food food) async{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
-    if(saveMyFoodsResponse.isRight()){
-      return const Right(Success());
+    final userPlanResponse= await userRepo.getUserPlanInRemote();
+    if(userPlanResponse.isRight()){
+      if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
+        if(userPlanResponse.asRight().favoriteFoodLeft > 0){
+          final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
+          if(saveMyFoodsResponse.isRight()){
+            return const Right(Success());
+          }
+          return Left(saveMyFoodsResponse.asLeft());
+        }else{
+          return const Left(FailureResponse(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED));
+        }
+      }
+      final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
+      if(saveMyFoodsResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(saveMyFoodsResponse.asLeft());
     }
-    return Left(saveMyFoodsResponse.asLeft());
+    return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
 
   @override

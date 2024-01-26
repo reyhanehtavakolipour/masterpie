@@ -12,3 +12,4 @@ const String WELCOME_PATH = 'assets/welcome.png';
 const String MAIN_DISH_PATH = 'assets/main_page_dish.png';
 const String MEASURE_PATH = 'assets/measure.png';
 const String ACCURACY_PATH = 'assets/accuracy.png';
+const String PLANS_PATH = 'assets/plans.png';

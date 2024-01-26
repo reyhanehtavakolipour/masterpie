@@ -29,6 +29,9 @@ Failure failureHandler(String message, int? errorCode){
         return FailureResponse(getError500(message));
     }
   }
+  if(message.contains(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED)){
+    return const FailureResponse(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED);
+  }
   if(message.contains(ERROR_INTERNET_CONNECTION)){
     return const FailureResponse(ERROR_INTERNET_CONNECTION);
   }
