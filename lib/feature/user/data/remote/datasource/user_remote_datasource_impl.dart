@@ -432,14 +432,14 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       List<SubscriptionPlanRemote> subscriptionPlans= [];
       data.forEach((element) {
         final plan= SubscriptionPlanRemote(
-          plan: element['plan_name'],
-          prices: [double.parse(element['price'].toString())],
-          intervals: [element['interval']],
-          ids: [element['plan_id']],
-          macroEdition: element['macro_edition'],
-          favoriteFoodLimit: element['favorite_food_limit'],
-          suggestFoodRequestsLimit: element['suggest_food_limit'],
-          foodPortionRequestsLimit: element['food_portion_limit']
+          plan: element['plan_name'] ?? '',
+          prices: [double.parse((element['price'] ?? '0').toString())],
+          intervals: [element['interval'] ?? ''],
+          ids: [element['plan_id'] ?? ''],
+          macroEdition: element['macro_edition'] ?? false,
+          favoriteFoodLimit: element['favorite_food_limit'] ?? 0,
+          suggestFoodRequestsLimit: element['suggest_food_limit'] ?? 0,
+          foodPortionRequestsLimit: element['food_portion_limit'] ?? 0
         );
         subscriptionPlans.add(plan);
       });

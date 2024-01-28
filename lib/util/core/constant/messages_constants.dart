@@ -266,6 +266,7 @@ const CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG= 'Only cancel my auto renewal subscri
 const ALREADY_ON_PAYMENT_MSG= 'You are already on a paid plan which has not expired yet. You can buy a new plan after plan expiry date. Thank you.';
 const CREDITS_LABEL= 'Credits';
 const PRIVACY_LABEL= 'Privacy & Policies';
+const CONTACT_US_LABEL= 'Contact us';
 const ICONS_LABEL= 'Icons';
 const UPGRADE_LABEL= 'Upgrade';
 const CHECKOUT_PLANS_LABEL= 'Check out Plans';

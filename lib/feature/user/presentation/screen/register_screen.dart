@@ -112,6 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
                             );
                           });
                         }else if(state is RegisterErrorState){
+                          _registerBloc.add(const RegisterEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });

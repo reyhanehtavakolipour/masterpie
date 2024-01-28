@@ -268,6 +268,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+  void showContactPage() async{
+    final Uri url = Uri.parse('https://www.masterpieapp.com/contact-10');
+    await launchUrl(url);
+  }
+
+  void showPrivacy() async{
+    final Uri url = Uri.parse('https://www.masterpieapp.com/general-clean');
+    await launchUrl(url);
+  }
+
   void showCredits() async{
     //todo change address
     final Uri url = Uri.parse('https://masterpieapp.com');
@@ -436,16 +446,23 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               ),
 
 
-              Visibility(
-                visible: false,
-                child: ListTile(
-                  leading: const Icon(Icons.privacy_tip),
-                  title: const Text(PRIVACY_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                  onTap: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                    showCredits();
-                  },
-                ),
+              ListTile(
+                leading: const Icon(Icons.privacy_tip),
+                title: const Text(PRIVACY_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  showPrivacy();
+                },
+              ),
+
+
+              ListTile(
+                leading: const Icon(Icons.contact_page),
+                title: const Text(CONTACT_US_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  showContactPage();
+                },
               ),
 
               ListTile(

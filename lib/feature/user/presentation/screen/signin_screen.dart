@@ -138,6 +138,7 @@ class _SignInScreenState extends State<SignInScreen>{
                             );
                           });
                         }else if(state is LoginErrorState){
+                          _loginBloc.add(const LoginEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
