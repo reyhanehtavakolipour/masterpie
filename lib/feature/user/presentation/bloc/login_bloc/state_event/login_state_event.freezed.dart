@@ -467,6 +467,7 @@ mixin _$LoginState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -475,6 +476,7 @@ mixin _$LoginState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -483,6 +485,7 @@ mixin _$LoginState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -492,6 +495,8 @@ mixin _$LoginState {
     required TResult Function(LoginLoadingState value) loading,
     required TResult Function(LoginErrorState value) error,
     required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -500,6 +505,8 @@ mixin _$LoginState {
     TResult? Function(LoginLoadingState value)? loading,
     TResult? Function(LoginErrorState value)? error,
     TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -508,6 +515,8 @@ mixin _$LoginState {
     TResult Function(LoginLoadingState value)? loading,
     TResult Function(LoginErrorState value)? error,
     TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -573,6 +582,7 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
   }) {
     return initial();
   }
@@ -584,6 +594,7 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
   }) {
     return initial?.call();
   }
@@ -595,6 +606,7 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -610,6 +622,8 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     required TResult Function(LoginLoadingState value) loading,
     required TResult Function(LoginErrorState value) error,
     required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
   }) {
     return initial(this);
   }
@@ -621,6 +635,8 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     TResult? Function(LoginLoadingState value)? loading,
     TResult? Function(LoginErrorState value)? error,
     TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
   }) {
     return initial?.call(this);
   }
@@ -632,6 +648,8 @@ class _$LoginInitialStateImpl implements LoginInitialState {
     TResult Function(LoginLoadingState value)? loading,
     TResult Function(LoginErrorState value)? error,
     TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -687,6 +705,7 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
   }) {
     return loading();
   }
@@ -698,6 +717,7 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
   }) {
     return loading?.call();
   }
@@ -709,6 +729,7 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -724,6 +745,8 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     required TResult Function(LoginLoadingState value) loading,
     required TResult Function(LoginErrorState value) error,
     required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
   }) {
     return loading(this);
   }
@@ -735,6 +758,8 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     TResult? Function(LoginLoadingState value)? loading,
     TResult? Function(LoginErrorState value)? error,
     TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
   }) {
     return loading?.call(this);
   }
@@ -746,6 +771,8 @@ class _$LoginLoadingStateImpl implements LoginLoadingState {
     TResult Function(LoginLoadingState value)? loading,
     TResult Function(LoginErrorState value)? error,
     TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -828,6 +855,7 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
   }) {
     return error(message);
   }
@@ -839,6 +867,7 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
   }) {
     return error?.call(message);
   }
@@ -850,6 +879,7 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -865,6 +895,8 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     required TResult Function(LoginLoadingState value) loading,
     required TResult Function(LoginErrorState value) error,
     required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
   }) {
     return error(this);
   }
@@ -876,6 +908,8 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     TResult? Function(LoginLoadingState value)? loading,
     TResult? Function(LoginErrorState value)? error,
     TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
   }) {
     return error?.call(this);
   }
@@ -887,6 +921,8 @@ class _$LoginErrorStateImpl implements LoginErrorState {
     TResult Function(LoginLoadingState value)? loading,
     TResult Function(LoginErrorState value)? error,
     TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -947,6 +983,7 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
   }) {
     return loaded();
   }
@@ -958,6 +995,7 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
   }) {
     return loaded?.call();
   }
@@ -969,6 +1007,7 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -984,6 +1023,8 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     required TResult Function(LoginLoadingState value) loading,
     required TResult Function(LoginErrorState value) error,
     required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
   }) {
     return loaded(this);
   }
@@ -995,6 +1036,8 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     TResult? Function(LoginLoadingState value)? loading,
     TResult? Function(LoginErrorState value)? error,
     TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
   }) {
     return loaded?.call(this);
   }
@@ -1006,6 +1049,8 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
     TResult Function(LoginLoadingState value)? loading,
     TResult Function(LoginErrorState value)? error,
     TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -1017,4 +1062,132 @@ class _$LoginLoadedStateImpl implements LoginLoadedState {
 
 abstract class LoginLoadedState implements LoginState {
   const factory LoginLoadedState() = _$LoginLoadedStateImpl;
+}
+
+/// @nodoc
+abstract class _$$RegisterWithGoogleLoadedStateImplCopyWith<$Res> {
+  factory _$$RegisterWithGoogleLoadedStateImplCopyWith(
+          _$RegisterWithGoogleLoadedStateImpl value,
+          $Res Function(_$RegisterWithGoogleLoadedStateImpl) then) =
+      __$$RegisterWithGoogleLoadedStateImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RegisterWithGoogleLoadedStateImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$RegisterWithGoogleLoadedStateImpl>
+    implements _$$RegisterWithGoogleLoadedStateImplCopyWith<$Res> {
+  __$$RegisterWithGoogleLoadedStateImplCopyWithImpl(
+      _$RegisterWithGoogleLoadedStateImpl _value,
+      $Res Function(_$RegisterWithGoogleLoadedStateImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$RegisterWithGoogleLoadedStateImpl
+    implements RegisterWithGoogleLoadedState {
+  const _$RegisterWithGoogleLoadedStateImpl();
+
+  @override
+  String toString() {
+    return 'LoginState.registerWithGoogleLoaded()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegisterWithGoogleLoadedStateImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(String message) error,
+    required TResult Function() loaded,
+    required TResult Function() registerWithGoogleLoaded,
+  }) {
+    return registerWithGoogleLoaded();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(String message)? error,
+    TResult? Function()? loaded,
+    TResult? Function()? registerWithGoogleLoaded,
+  }) {
+    return registerWithGoogleLoaded?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String message)? error,
+    TResult Function()? loaded,
+    TResult Function()? registerWithGoogleLoaded,
+    required TResult orElse(),
+  }) {
+    if (registerWithGoogleLoaded != null) {
+      return registerWithGoogleLoaded();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoginInitialState value) initial,
+    required TResult Function(LoginLoadingState value) loading,
+    required TResult Function(LoginErrorState value) error,
+    required TResult Function(LoginLoadedState value) loaded,
+    required TResult Function(RegisterWithGoogleLoadedState value)
+        registerWithGoogleLoaded,
+  }) {
+    return registerWithGoogleLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginInitialState value)? initial,
+    TResult? Function(LoginLoadingState value)? loading,
+    TResult? Function(LoginErrorState value)? error,
+    TResult? Function(LoginLoadedState value)? loaded,
+    TResult? Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
+  }) {
+    return registerWithGoogleLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginInitialState value)? initial,
+    TResult Function(LoginLoadingState value)? loading,
+    TResult Function(LoginErrorState value)? error,
+    TResult Function(LoginLoadedState value)? loaded,
+    TResult Function(RegisterWithGoogleLoadedState value)?
+        registerWithGoogleLoaded,
+    required TResult orElse(),
+  }) {
+    if (registerWithGoogleLoaded != null) {
+      return registerWithGoogleLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RegisterWithGoogleLoadedState implements LoginState {
+  const factory RegisterWithGoogleLoadedState() =
+      _$RegisterWithGoogleLoadedStateImpl;
 }

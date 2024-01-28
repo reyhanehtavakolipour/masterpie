@@ -57,7 +57,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     if (idToken == null) {
       throw 'No ID Token found.';
     }
-
     final supabase = Supabase.instance.client;
 
     final response= await supabase.auth.signInWithIdToken(
@@ -65,6 +64,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       idToken: idToken,
       accessToken: accessToken,
     );
+
 
     if(response.session == null){
       return const Left(ExceptionFailure('authentication failed'));
@@ -151,6 +151,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         dailyMacroGoal: data[0]['dailyMacroGoal'] == null ? ['', '', '', ''] : (data[0]['dailyMacroGoal'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         age: data[0]['age'] ?? '',
         weightChangeWeekly: data[0]['weightChangeWeekly'] ?? '',
+        updateProfileShown: data[0]['update_profile_shown'] ?? false
       );
 
       return Right(profileRemote);
@@ -469,7 +470,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           ids: [userId],
           plan: data[0]['plan_name'] ?? '',
           intervals: [data[0]['plan_interval'] ?? ''],
-          macroEdition: data[0]['macro_edition']
+          macroEdition: data[0]['macro_edition'] ?? false
         ),
         customerId: data[0]['customer_id'] ?? '',
         interval: data[0]['plan_interval'] ?? '',
@@ -477,7 +478,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         cancelAtPeriodEnd: data[0]['cancel_at_period_end'] ?? true,
         endsAt: data[0]['current_period_end'] ?? '',
         updatedAt: data[0]['plan_updated_at'] ?? '',
-        macroEdition: data[0]['macro_edition'],
+        macroEdition: data[0]['macro_edition'] ?? false,
         subscriptionId: data[0]['subscription_id'] ?? '',
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,

@@ -21,6 +21,7 @@ class ProfileRemote with _$ProfileRemote{
     @Default('') String age,
     @Default('') String activityLevel,
     @Default('') String weightChangeWeekly,
+    @Default(false) bool updateProfileShown,
   })= _ProfileRemote;
 
 }
@@ -42,5 +43,6 @@ Map<String, dynamic> profileRemoteToJson(ProfileRemote profileRemote) {
   data['dailyMacroGoal'] = profileRemote.dailyMacroGoal;
   data['activityLevel'] = profileRemote.activityLevel;
   data['weightChangeWeekly'] = profileRemote.weightChangeWeekly;
+  data['update_profile_shown'] = profileRemote.updateProfileShown;
   return data;
 }

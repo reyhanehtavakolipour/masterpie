@@ -8,7 +8,8 @@ class GoogleSignInRemote with _$GoogleSignInRemote{
 
   factory GoogleSignInRemote({
     @Default('') String email,
-    @Default('') String id
+    @Default('') String id,
+    @Default(false) bool updateProfileShown
   })= _GoogleSignInRemote;
 
 }

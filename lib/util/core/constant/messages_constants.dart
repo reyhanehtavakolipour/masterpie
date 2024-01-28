@@ -277,6 +277,7 @@ const UPGRADE_MSG_FOODS_PORTION= 'You can upgrade to any of our paid plan which 
 const UPGRADE_MSG_MACRO_EDITION= 'You can upgrade to any of our paid plan which allows you to edit any macro';
 const EVERY_WHERE_LABEL= 'Every where';
 const ONLY_FOR_FAVORITES_LABEL= 'Only for favorites';
+const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
 
 
 

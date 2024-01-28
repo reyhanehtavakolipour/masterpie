@@ -30,6 +30,7 @@ mixin _$Profile {
   String get age => throw _privateConstructorUsedError;
   String get activityLevel => throw _privateConstructorUsedError;
   String get weightChangeWeekly => throw _privateConstructorUsedError;
+  bool get updateProfileShown => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileCopyWith<Profile> get copyWith => throw _privateConstructorUsedError;
@@ -54,7 +55,8 @@ abstract class $ProfileCopyWith<$Res> {
       List<String> dailyMacroGoal,
       String age,
       String activityLevel,
-      String weightChangeWeekly});
+      String weightChangeWeekly,
+      bool updateProfileShown});
 }
 
 /// @nodoc
@@ -84,6 +86,7 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? age = null,
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -142,6 +145,10 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.weightChangeWeekly
           : weightChangeWeekly // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -167,7 +174,8 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       List<String> dailyMacroGoal,
       String age,
       String activityLevel,
-      String weightChangeWeekly});
+      String weightChangeWeekly,
+      bool updateProfileShown});
 }
 
 /// @nodoc
@@ -195,6 +203,7 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? age = null,
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_$ProfileImpl(
       email: null == email
@@ -253,6 +262,10 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value.weightChangeWeekly
           : weightChangeWeekly // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -274,7 +287,8 @@ class _$ProfileImpl implements _Profile {
       final List<String> dailyMacroGoal = const ['', '', '', ''],
       this.age = '',
       this.activityLevel = '',
-      this.weightChangeWeekly = ''})
+      this.weightChangeWeekly = '',
+      this.updateProfileShown = false})
       : _dailyMacroGoal = dailyMacroGoal;
 
   @override
@@ -325,10 +339,13 @@ class _$ProfileImpl implements _Profile {
   @override
   @JsonKey()
   final String weightChangeWeekly;
+  @override
+  @JsonKey()
+  final bool updateProfileShown;
 
   @override
   String toString() {
-    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly)';
+    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown)';
   }
 
   @override
@@ -357,7 +374,9 @@ class _$ProfileImpl implements _Profile {
             (identical(other.activityLevel, activityLevel) ||
                 other.activityLevel == activityLevel) &&
             (identical(other.weightChangeWeekly, weightChangeWeekly) ||
-                other.weightChangeWeekly == weightChangeWeekly));
+                other.weightChangeWeekly == weightChangeWeekly) &&
+            (identical(other.updateProfileShown, updateProfileShown) ||
+                other.updateProfileShown == updateProfileShown));
   }
 
   @override
@@ -376,7 +395,8 @@ class _$ProfileImpl implements _Profile {
       const DeepCollectionEquality().hash(_dailyMacroGoal),
       age,
       activityLevel,
-      weightChangeWeekly);
+      weightChangeWeekly,
+      updateProfileShown);
 
   @JsonKey(ignore: true)
   @override
@@ -400,7 +420,8 @@ abstract class _Profile implements Profile {
       final List<String> dailyMacroGoal,
       final String age,
       final String activityLevel,
-      final String weightChangeWeekly}) = _$ProfileImpl;
+      final String weightChangeWeekly,
+      final bool updateProfileShown}) = _$ProfileImpl;
 
   @override
   String get email;
@@ -430,6 +451,8 @@ abstract class _Profile implements Profile {
   String get activityLevel;
   @override
   String get weightChangeWeekly;
+  @override
+  bool get updateProfileShown;
   @override
   @JsonKey(ignore: true)
   _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>

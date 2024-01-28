@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GoogleSignInResponse {
   String get email => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
+  bool get updateProfileShown => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GoogleSignInResponseCopyWith<GoogleSignInResponse> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $GoogleSignInResponseCopyWith<$Res> {
           $Res Function(GoogleSignInResponse) then) =
       _$GoogleSignInResponseCopyWithImpl<$Res, GoogleSignInResponse>;
   @useResult
-  $Res call({String email, String id});
+  $Res call({String email, String id, bool updateProfileShown});
 }
 
 /// @nodoc
@@ -49,6 +50,7 @@ class _$GoogleSignInResponseCopyWithImpl<$Res,
   $Res call({
     Object? email = null,
     Object? id = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -59,6 +61,10 @@ class _$GoogleSignInResponseCopyWithImpl<$Res,
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -71,7 +77,7 @@ abstract class _$$GoogleSignInResponseImplCopyWith<$Res>
       __$$GoogleSignInResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String id});
+  $Res call({String email, String id, bool updateProfileShown});
 }
 
 /// @nodoc
@@ -87,6 +93,7 @@ class __$$GoogleSignInResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? id = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_$GoogleSignInResponseImpl(
       email: null == email
@@ -97,6 +104,10 @@ class __$$GoogleSignInResponseImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -104,7 +115,8 @@ class __$$GoogleSignInResponseImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GoogleSignInResponseImpl implements _GoogleSignInResponse {
-  _$GoogleSignInResponseImpl({this.email = '', this.id = ''});
+  _$GoogleSignInResponseImpl(
+      {this.email = '', this.id = '', this.updateProfileShown = false});
 
   @override
   @JsonKey()
@@ -112,10 +124,13 @@ class _$GoogleSignInResponseImpl implements _GoogleSignInResponse {
   @override
   @JsonKey()
   final String id;
+  @override
+  @JsonKey()
+  final bool updateProfileShown;
 
   @override
   String toString() {
-    return 'GoogleSignInResponse(email: $email, id: $id)';
+    return 'GoogleSignInResponse(email: $email, id: $id, updateProfileShown: $updateProfileShown)';
   }
 
   @override
@@ -124,11 +139,13 @@ class _$GoogleSignInResponseImpl implements _GoogleSignInResponse {
         (other.runtimeType == runtimeType &&
             other is _$GoogleSignInResponseImpl &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.updateProfileShown, updateProfileShown) ||
+                other.updateProfileShown == updateProfileShown));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email, id);
+  int get hashCode => Object.hash(runtimeType, email, id, updateProfileShown);
 
   @JsonKey(ignore: true)
   @override
@@ -140,13 +157,17 @@ class _$GoogleSignInResponseImpl implements _GoogleSignInResponse {
 }
 
 abstract class _GoogleSignInResponse implements GoogleSignInResponse {
-  factory _GoogleSignInResponse({final String email, final String id}) =
-      _$GoogleSignInResponseImpl;
+  factory _GoogleSignInResponse(
+      {final String email,
+      final String id,
+      final bool updateProfileShown}) = _$GoogleSignInResponseImpl;
 
   @override
   String get email;
   @override
   String get id;
+  @override
+  bool get updateProfileShown;
   @override
   @JsonKey(ignore: true)
   _$$GoogleSignInResponseImplCopyWith<_$GoogleSignInResponseImpl>

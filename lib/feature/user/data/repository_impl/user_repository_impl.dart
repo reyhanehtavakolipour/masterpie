@@ -78,7 +78,24 @@ class UserRepositoryImpl extends UserRepository{
     //register and sign-in with google functionality is both the same thing which is sign-in
     final loginRemoteResponse = await userRemoteDataSource.signInUserWithGoogle();
     if(loginRemoteResponse.isRight()){
-      return Right(mapper.fromGoogleSignInResponseRemote(loginRemoteResponse.asRight()));
+      //check if the user plan is not set, then create a free plan for user
+      final userId = await getUserIdFromHive();
+      final userPlanResponse= await userRemoteDataSource.getUserPlan(userId.asRight());
+      if(userPlanResponse.isRight()){
+        if(userPlanResponse.asRight().subscriptionPlan!.plan.isEmpty){
+          await userRemoteDataSource.setUserSubscriptionPlanAfterRegister(userId.asRight());
+        }
+      }
+
+      final email = await getEmailFromHive();
+      final profileResponse= await userRemoteDataSource.getProfile(email.asRight(), userId.asRight());
+      if(profileResponse.isRight()){
+        if(!profileResponse.asRight().updateProfileShown){
+          return Right(mapper.fromGoogleSignInResponseRemote(loginRemoteResponse.asRight().copyWith(updateProfileShown: false)));
+        }
+      }
+
+      return Right(mapper.fromGoogleSignInResponseRemote(loginRemoteResponse.asRight().copyWith(updateProfileShown: true)));
     }
     return Left(loginRemoteResponse.asLeft());
   }

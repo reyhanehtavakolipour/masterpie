@@ -52,7 +52,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
               emit(LoginState.error(failure.message));
             },
                 (data) {
-              emit(const LoginState.loaded());
+
+                if(!data.updateProfileShown){
+                  emit(const LoginState.registerWithGoogleLoaded());
+                }else{
+                  emit(const LoginState.loaded());
+                }
             },
           );
         }

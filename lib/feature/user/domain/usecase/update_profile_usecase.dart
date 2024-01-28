@@ -28,7 +28,8 @@ class UpdateProfileUseCase{
       goalWeight: goalWeight,
       age: age,
       activityLevel: activityLevel,
-      weightChangeWeekly: weightChangeWeekly
+      weightChangeWeekly: weightChangeWeekly,
+      updateProfileShown: true
     );
 
     final upsertProfileResponse = await repo.upsertProfileAfterRegisterInRemote(profile);

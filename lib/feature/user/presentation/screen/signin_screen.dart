@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/presentation/screen/profile_after_registration_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -53,6 +54,7 @@ class _SignInScreenState extends State<SignInScreen>{
   void initState() {
     super.initState();
     _loginBloc = context.read<LoginBloc>();
+    _loginBloc.add(const LoginEvent.onReset());
     handleLoginRequestType();
   }
 
@@ -122,6 +124,16 @@ class _SignInScreenState extends State<SignInScreen>{
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const MainScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is RegisterWithGoogleLoadedState){
+                          _loginBloc.add(const LoginEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileAfterRegistrationScreen(),
                               ),
                             );
                           });

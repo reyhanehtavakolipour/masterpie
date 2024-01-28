@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GoogleSignInRemote {
   String get email => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
+  bool get updateProfileShown => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GoogleSignInRemoteCopyWith<GoogleSignInRemote> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $GoogleSignInRemoteCopyWith<$Res> {
           GoogleSignInRemote value, $Res Function(GoogleSignInRemote) then) =
       _$GoogleSignInRemoteCopyWithImpl<$Res, GoogleSignInRemote>;
   @useResult
-  $Res call({String email, String id});
+  $Res call({String email, String id, bool updateProfileShown});
 }
 
 /// @nodoc
@@ -48,6 +49,7 @@ class _$GoogleSignInRemoteCopyWithImpl<$Res, $Val extends GoogleSignInRemote>
   $Res call({
     Object? email = null,
     Object? id = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -58,6 +60,10 @@ class _$GoogleSignInRemoteCopyWithImpl<$Res, $Val extends GoogleSignInRemote>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -70,7 +76,7 @@ abstract class _$$GoogleSignInRemoteImplCopyWith<$Res>
       __$$GoogleSignInRemoteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String id});
+  $Res call({String email, String id, bool updateProfileShown});
 }
 
 /// @nodoc
@@ -86,6 +92,7 @@ class __$$GoogleSignInRemoteImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? id = null,
+    Object? updateProfileShown = null,
   }) {
     return _then(_$GoogleSignInRemoteImpl(
       email: null == email
@@ -96,6 +103,10 @@ class __$$GoogleSignInRemoteImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      updateProfileShown: null == updateProfileShown
+          ? _value.updateProfileShown
+          : updateProfileShown // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -103,7 +114,8 @@ class __$$GoogleSignInRemoteImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GoogleSignInRemoteImpl implements _GoogleSignInRemote {
-  _$GoogleSignInRemoteImpl({this.email = '', this.id = ''});
+  _$GoogleSignInRemoteImpl(
+      {this.email = '', this.id = '', this.updateProfileShown = false});
 
   @override
   @JsonKey()
@@ -111,10 +123,13 @@ class _$GoogleSignInRemoteImpl implements _GoogleSignInRemote {
   @override
   @JsonKey()
   final String id;
+  @override
+  @JsonKey()
+  final bool updateProfileShown;
 
   @override
   String toString() {
-    return 'GoogleSignInRemote(email: $email, id: $id)';
+    return 'GoogleSignInRemote(email: $email, id: $id, updateProfileShown: $updateProfileShown)';
   }
 
   @override
@@ -123,11 +138,13 @@ class _$GoogleSignInRemoteImpl implements _GoogleSignInRemote {
         (other.runtimeType == runtimeType &&
             other is _$GoogleSignInRemoteImpl &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.updateProfileShown, updateProfileShown) ||
+                other.updateProfileShown == updateProfileShown));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email, id);
+  int get hashCode => Object.hash(runtimeType, email, id, updateProfileShown);
 
   @JsonKey(ignore: true)
   @override
@@ -138,13 +155,17 @@ class _$GoogleSignInRemoteImpl implements _GoogleSignInRemote {
 }
 
 abstract class _GoogleSignInRemote implements GoogleSignInRemote {
-  factory _GoogleSignInRemote({final String email, final String id}) =
-      _$GoogleSignInRemoteImpl;
+  factory _GoogleSignInRemote(
+      {final String email,
+      final String id,
+      final bool updateProfileShown}) = _$GoogleSignInRemoteImpl;
 
   @override
   String get email;
   @override
   String get id;
+  @override
+  bool get updateProfileShown;
   @override
   @JsonKey(ignore: true)
   _$$GoogleSignInRemoteImplCopyWith<_$GoogleSignInRemoteImpl> get copyWith =>

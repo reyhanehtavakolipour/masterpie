@@ -21,6 +21,7 @@ class Profile with _$Profile{
     @Default('') String age,
     @Default('') String activityLevel,
     @Default('') String weightChangeWeekly,
+    @Default(false) bool updateProfileShown,
   })= _Profile;
 
 }

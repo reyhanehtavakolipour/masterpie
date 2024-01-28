@@ -29,7 +29,7 @@ class RegisterUseCase{
       return Left(getFailure(const FailureResponse('login failed')));
     }
     if(registerResponseRemote.asLeft().message == 'User already registered'){
-      // todo handle
+      return Left(getFailure(const FailureResponse('User already registered')));
     }
     return Left(getFailure(registerResponseRemote.asLeft()));
   }

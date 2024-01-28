@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/user/domain/model/google_signin_response_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -24,13 +25,13 @@ class LoginUseCase{
   }
 
 
-  Future<Either<Failure, Success>> loginWithGoogle() async{
+  Future<Either<Failure, GoogleSignInResponse>> loginWithGoogle() async{
     final loginResponseRemote = await repo.loginUserWithGoogleInRemote();
     if(loginResponseRemote.isRight()){
       await repo.saveUserIdInHive(loginResponseRemote.asRight().id);
       await repo.saveUserEmailInHive(loginResponseRemote.asRight().email);
       await repo.saveUserPasswordInHive('');
-      return const Right(Success());
+      return Right(loginResponseRemote.asRight());
     }
     return Left(getFailure(loginResponseRemote.asLeft()));
   }

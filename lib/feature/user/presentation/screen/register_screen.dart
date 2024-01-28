@@ -58,6 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
   void initState() {
     super.initState();
     _registerBloc = context.read<RegisterBloc>();
+    _registerBloc.add(const RegisterEvent.onReset());
   }
 
   @override
@@ -86,10 +87,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   buildPasswordField(hintText: CONFIRM_PASSWORD_LABEL, controller: _confirmPasswordController, borderColor: _confirmPasswordBorderColor),
                   const SizedBox(height: 48),
                   buildRegisterButton(text: REGISTER_LABEL),
-                  const SizedBox(height: 16),
-                  const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
-                  const SizedBox(height: 16),
-                  buildGoogleRegisterButton(),
                   const SizedBox(height: 20),
                   buildLoginRow(),
           
@@ -235,38 +232,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
         ),
         child: Text(text, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
       ),
-    );
-  }
-
-  Widget buildGoogleRegisterButton() {
-    return roundedGoogleContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            GOOGLE_PATH,
-            height: 24,
-            width: 24,
-          ),
-          const SizedBox(width: 10),
-          const Text(REGISTER_WITH_GOOGLE, style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),),
-        ],
-      ),
-    );
-  }
-
-  Widget roundedGoogleContainer({required Widget child}) {
-    return ElevatedButton(
-      onPressed: (){
-        registerWithGoogleClickListener();
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        backgroundColor: DARK_PRIMARY_COLOR
-      ),
-      child: child,
     );
   }
 

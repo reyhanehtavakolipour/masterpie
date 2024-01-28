@@ -23,5 +23,7 @@ abstract class LoginState with _$LoginState{
  const factory LoginState.loading()= LoginLoadingState;
  const factory LoginState.error(String message)= LoginErrorState;
  const factory LoginState.loaded()= LoginLoadedState;
+ const factory LoginState.registerWithGoogleLoaded()= RegisterWithGoogleLoadedState;
+
 }
 

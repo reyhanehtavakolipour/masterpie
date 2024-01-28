@@ -22,7 +22,8 @@ class UserMapperImpl extends UserMapper{
   GoogleSignInResponse fromGoogleSignInResponseRemote(GoogleSignInRemote googleSignInRemote) {
     return GoogleSignInResponse(
       email: googleSignInRemote.email,
-      id: googleSignInRemote.id
+      id: googleSignInRemote.id,
+      updateProfileShown: googleSignInRemote.updateProfileShown
     );
   }
 
@@ -62,7 +63,8 @@ class UserMapperImpl extends UserMapper{
         dailyMacroGoal: profile.dailyMacroGoal,
         age: profile.age,
         activityLevel: profile.activityLevel,
-        weightChangeWeekly: profile.weightChangeWeekly
+        weightChangeWeekly: profile.weightChangeWeekly,
+        updateProfileShown: profile.updateProfileShown
     );
   }
 
@@ -102,7 +104,8 @@ class UserMapperImpl extends UserMapper{
         dailyMacroGoal: profile.dailyMacroGoal,
         age: profile.age,
         activityLevel: profile.activityLevel,
-        weightChangeWeekly: profile.weightChangeWeekly
+        weightChangeWeekly: profile.weightChangeWeekly,
+        updateProfileShown: profile.updateProfileShown
     );
   }
 

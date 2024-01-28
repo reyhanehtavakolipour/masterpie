@@ -30,6 +30,9 @@ Failure failureHandler(String message, int? errorCode){
         return FailureResponse(getError500(message));
     }
   }
+  if(message.contains('User already registered')){
+    return const FailureResponse(ERROR_USER_ALREADY_REGISTERED);
+  }
   if(message.contains(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED)){
     return const FailureResponse(ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED);
   }

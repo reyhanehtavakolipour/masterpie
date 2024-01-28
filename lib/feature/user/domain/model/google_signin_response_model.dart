@@ -8,7 +8,8 @@ class GoogleSignInResponse with _$GoogleSignInResponse{
 
   factory GoogleSignInResponse({
     @Default('') String email,
-    @Default('') String id
+    @Default('') String id,
+    @Default(false) bool updateProfileShown
   })= _GoogleSignInResponse;
 
 }
