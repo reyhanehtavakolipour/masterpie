@@ -298,6 +298,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                         fulfillWidgets(state.profile);
                       });
                     }else if(state is GetProfileErrorState){
+                      _getProfileBloc.add(const GetProfileEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });
@@ -328,6 +329,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
                       });
                     }else if(state is UpdateProfileErrorState){
+                      _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });

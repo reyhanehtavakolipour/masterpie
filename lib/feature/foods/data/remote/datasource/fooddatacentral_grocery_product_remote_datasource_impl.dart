@@ -47,8 +47,8 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
           productsRemote.add(
               FoodRemote(
                 id: foodId,
-                name: foods[i]['description']?.toLowerCase() ?? '',
-                brandName: foods[i]['brandName']?.toLowerCase() ?? '',
+                name: (foods[i]['description']?.toLowerCase() ?? '').toString().replaceAll(',', ''),
+                brandName: (foods[i]['brandName']?.toLowerCase() ?? '').toString().replaceAll(',', ''),
                 servingAmount: DEFAULT_SERVING_SIZE,
                 barcode: foods[i]['gtinUpc'] ?? '',
                 servingAmounts: [DEFAULT_SERVING_SIZE.toString()],

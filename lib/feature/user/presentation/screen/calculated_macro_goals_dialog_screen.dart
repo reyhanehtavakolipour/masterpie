@@ -285,6 +285,7 @@ class _CalculatedMacroGoalsPopupState extends State<CalculatedMacroGoalsPopup> {
                               Navigator.pop(context);
                             });
                           }else if(state is UpdateProfileErrorState){
+                            _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                             Future.delayed(Duration.zero,(){
                               return showErrorToast(context, state.message);
                             });

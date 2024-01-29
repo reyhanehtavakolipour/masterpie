@@ -147,6 +147,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         fulfillWidgets(state.profile);
                       });
                     }else if(state is GetProfileErrorState){
+                      _getProfileBloc.add(const GetProfileEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });
@@ -176,6 +177,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         });
                       });
                     }else if(state is UpdateProfileErrorState){
+                      _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });

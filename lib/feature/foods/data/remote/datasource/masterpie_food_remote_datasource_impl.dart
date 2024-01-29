@@ -70,9 +70,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, Success>> saveToMyFavoriteMeals(FoodRemote mealRemote, String userId) async{
     try {
-
       final favoriteListResponse = await getMyFavoriteFoods('', userId);
-
       if(favoriteListResponse.isRight()){
         final list = favoriteListResponse.asRight();
 
@@ -189,6 +187,9 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       final protein = buildListOfLists(data[0]['protein']);
       final carb = buildListOfLists(data[0]['carb']);
       final fat = buildListOfLists(data[0]['fat']);
+
+
+
 
 
       List<FoodRemote> foods = [];
@@ -555,6 +556,38 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
     }
   }
 
+  String parseFraction(String fraction) {
+    List<String> parts = fraction.split('/');
+
+    double numerator = 0.0;
+    double denominator = 0.0;
+
+    String type= checkType(parts[0]);
+    if(type == 'double'){
+      numerator = double.parse(parts[0]);
+      denominator = parts.length > 1 ? double.parse(parts[1]) : 1.0;
+    }else if(type == 'int'){
+      numerator = int.parse(parts[0]).toDouble();
+      denominator = (parts.length > 1 ? int.parse(parts[1]) : 1.0).toDouble();
+    }
+
+    return (numerator / denominator).toString();
+  }
+
+
+  String checkType(String input) {
+    double? doubleValue = double.tryParse(input);
+    int? intValue = int.tryParse(input);
+
+    if (doubleValue != null) {
+      return 'double';
+    } else if (intValue != null) {
+      return 'int';
+    } else {
+      return 'not valid';
+    }
+  }
+
   @override
   Future<Either<Failure, List<FoodRemote>>> getLoggedFoods(String date, String userId) async{
     try {
@@ -659,8 +692,10 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> parts = element.split(':');
         String responseDate = parts[0].replaceAll('[', '');
         if(responseDate == date){
-          List<dynamic> resultList = json.decode(parts[1]);
-          List<String> result = resultList.map((element) => element.toString()).toList();
+          String input= parts[1];
+          input = input.substring(1, input.length - 1);
+          List<String> fractions = input.split(', ');
+          List<String> result = fractions.map(parseFraction).toList();
           servingAmounts.add(result);
         }
       });
@@ -707,8 +742,10 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         String responseDate = parts[0].replaceAll('[', '');
         if(responseDate == date){
           if(parts[1].contains('[')){
-            // it's a meal
-            String groceries = parts[1].replaceAllMapped(RegExp(r'\b\w+\b'), (match) => '"${match.group(0)}"');
+            String input= parts[1];
+            input = input.substring(1, input.length - 1);
+            List<String> ingredients1 = input.split(', ');
+            String groceries = '[${ingredients1.map((ingredient) => '"$ingredient"').join(', ')}]';
             List<dynamic> resultList = json.decode(groceries);
             List<String> result = resultList.map((element) => element.toString()).toList();
             ingredients.add(result);
@@ -792,8 +829,11 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       return Right(foods);
 
     } on PostgrestException catch (error) {
+      print('ghjfg: $error');
       return Left(ExceptionFailure(error));
     } catch (error) {
+      print('ghjfg: $error');
+
       return Left(ExceptionFailure(error));
     }
   }

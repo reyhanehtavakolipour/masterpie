@@ -256,6 +256,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                         });
                       });
                     }else if(state is UserPlanErrorState){
+                      _userPlanBloc.add(const UserPlanEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });
@@ -285,6 +286,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                         });
                       });
                     }else if(state is SubscriptionPlansErrorState){
+                      _getSubscriptionPlansBloc.add(const SubscriptionPlanEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });

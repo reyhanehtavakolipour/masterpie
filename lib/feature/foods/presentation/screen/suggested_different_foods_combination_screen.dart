@@ -197,6 +197,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                             }
                           });
                       }else if(state is GetLoggedFoodsErrorState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });
@@ -230,6 +231,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                             }
                           });
                       }else if(state is LogFoodsErrorState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });

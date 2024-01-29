@@ -382,6 +382,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                               setMacroGoalsInScreen(state.loggedFoods);
                             });
                           }else if(state is GetLoggedFoodsErrorState){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
                               return showErrorToast(context, state.message);
                             });
@@ -981,6 +982,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                         });
                       });
                     }else if(state is GroceriesErrorState){
+                      _groceriesBloc.add(const GroceriesEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });
@@ -1009,6 +1011,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                         });
                       });
                     }else if(state is MyFavoriteFoodsErrorState){
+                      _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
                       });

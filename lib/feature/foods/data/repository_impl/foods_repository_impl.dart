@@ -70,7 +70,12 @@ class FoodsRepositoryImpl extends FoodsRepository{
     if(productsRemoteFromFoodDataCentral.isRight()){
       if(productsRemoteFromFoodDataCentral.asRight().isNotEmpty){
         FoodRemote food = productsRemoteFromFoodDataCentral.asRight()[0];
-        await saveUserSuggestedFoodInRemote(food.name, food.ingredients, '', '');
+        final userPlan= await userRepo.getUserPlanInRemote();
+        if(userPlan.isRight()){
+          if(userPlan.asRight().subscriptionPlan!.plan != FREE_LABEL){
+            await saveUserSuggestedFoodInRemote(food.name, food.ingredients, '', '');
+          }
+        }
       }
       foods.addAll(mapper.fromGroceryProductsRemote(productsRemoteFromFoodDataCentral.asRight()));
     }
@@ -105,6 +110,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
         if(suggestMealResponse.isRight()){
           userRepo.updateSuggestFoodRequestsLeftInRemote();
+          await saveUserSuggestedFoodInRemote(suggestMealResponse.asRight().name, suggestMealResponse.asRight().ingredients, '', '');
           return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
         }
         return Left(suggestMealResponse.asLeft());

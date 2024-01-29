@@ -337,6 +337,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
                       fulfillWidgets(state.profile);
                     });
                   }else if(state is GetProfileErrorState){
+                    _getProfileBloc.add(const GetProfileEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       return showErrorToast(context, state.message);
                     });
@@ -374,6 +375,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
                     });
 
                   }else if(state is UpdateProfileErrorState){
+                    _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       return showErrorToast(context, state.message);
                     });

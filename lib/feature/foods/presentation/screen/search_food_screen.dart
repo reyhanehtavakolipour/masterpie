@@ -752,6 +752,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                             checkIfFavoriteFoodsAddedBefore(state.foods);
                           });
                         }else if(state is MyFavoriteFoodsErrorState){
+                          _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
@@ -780,6 +781,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                           });
 
                         }else if(state is GroceriesErrorState){
+                          _groceriesBloc.add(const GroceriesEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
@@ -808,6 +810,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                             });
                           }
                         }else if(state is GetLoggedFoodsErrorState){
+                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
@@ -840,6 +843,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                             });
                           }
                         }else if(state is LogFoodsErrorState){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });

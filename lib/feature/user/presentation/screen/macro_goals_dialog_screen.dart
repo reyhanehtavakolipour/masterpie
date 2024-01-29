@@ -303,6 +303,7 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
                             });
 
                           }else if(state is UpdateProfileErrorState){
+                            _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                             Future.delayed(Duration.zero,(){
                               return showErrorToast(context, state.message);
                             });

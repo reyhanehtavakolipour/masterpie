@@ -69,6 +69,17 @@ class AddToMyFavoriteUseCase{
 
 
   Food checkFood(Food food){
+
+    List<String> ingredients= [];
+    food.ingredients.forEach((element) {
+      if(element.isEmpty){
+        ingredients.add('-');
+      }else{
+        ingredients.add(element.replaceAll(',', ''));
+      }
+    });
+
+
     List<String> calorie= [];
     food.calorie.forEach((element) {
       if(element.isEmpty){
@@ -113,7 +124,7 @@ class AddToMyFavoriteUseCase{
       if(element.isEmpty){
         units.add('g');
       }else{
-        units.add(element);
+        units.add(element.replaceAll(',', ''));
       }
     });
 
@@ -127,6 +138,7 @@ class AddToMyFavoriteUseCase{
     });
 
     food = food.copyWith(
+      ingredients: ingredients,
       calorie: calorie,
       protein: protein,
       carb: carb,

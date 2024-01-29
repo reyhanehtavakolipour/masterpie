@@ -17,116 +17,120 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
   Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName) async{
     OpenAI.apiKey = OPENAI_API_KEY;
 
-    final systemMessage = OpenAIChatCompletionChoiceMessageModel(
-      content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(
-          "You are an assistant that gives ingredients, serving amount of each ingredient, unit of each ingredient, calorie of each ingredient, protein of each ingredient, carb of each ingredient, fat of each ingredient and a recipe to cook of a given food for one serving in a valid JSON format. The number of ingredients, serving amount, unit, calorie, protein, carb and fat must be the same. Serving amount must be number. The number of ingredients, serving amount, unit, calorie, protein, carb and fat must be the same. Serving amount must be number.",
-        ),
-      ],
-      role: OpenAIChatMessageRole.assistant,
-    );
+    try{
+      final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+              'You are an assistant that gives ingredients, serving amounts of each ingredient, unit of each ingredient, calorie of each ingredient, protein of each ingredient, carb of each ingredient, fat of each ingredient and a recipe to cook of a given food for one serving in a valid JSON format. The number of ingredients, serving amount, unit, calorie, protein, carb and fat must be the same. Serving amount must be number.'
+          ),
+        ],
+        role: OpenAIChatMessageRole.assistant,
+      );
 
-    final userMessage = OpenAIChatCompletionChoiceMessageModel(
-      content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(
-          "What is the nutrition facts of ingredients and recipe of this food: $mealName?",
-        ),
-      ],
-      role: OpenAIChatMessageRole.user,
-    );
+      final userMessage = OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "What is the nutrition facts of ingredients and recipe of this food: $mealName?",
+          ),
+        ],
+        role: OpenAIChatMessageRole.user,
+      );
 
-    final requestMessages = [
-      systemMessage,
-      userMessage,
-    ];
+      final requestMessages = [
+        systemMessage,
+        userMessage,
+      ];
 
-    OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-      model: "ft:gpt-3.5-turbo-1106:masterpie::8cdRVF8f",
-      messages: requestMessages,
-      temperature: 1,
-      maxTokens: 1024,
-      responseFormat: { "type": "json_object" }
-    );
+      OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+          model: "ft:gpt-3.5-turbo-1106:masterpie::8ltWnLFR",
+          messages: requestMessages,
+          temperature: 1,
+          maxTokens: 1024,
+          responseFormat: { "type": "json_object" }
+      );
 
-    final result= chatCompletion.choices.first.message.content?.first.text;
-    printWrapped('RECIPE_OPENAI_RESPONSE: $result');
-
-
-    Map<String, dynamic> jsonMap = json.decode(result!);
+      final result= chatCompletion.choices.first.message.content?.first.text;
+      printWrapped('RECIPE_OPENAI_RESPONSE: $result');
 
 
-    List<String> ingredients= [];
-    ingredients = (jsonMap['ingredients'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      Map<String, dynamic> jsonMap = json.decode(result!);
 
 
-    List<String> calorie= [];
-    calorie = (jsonMap['calorie'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> ingredients= [];
+      ingredients = (jsonMap['ingredients'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString().replaceAll(',', '')).toList();
 
 
-    List<String> protein= [];
-    protein = (jsonMap['protein'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> calorie= [];
+      calorie = (jsonMap['calorie'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
 
 
-
-    List<String> carb= [];
-    carb = (jsonMap['carb'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> protein= [];
+      protein = (jsonMap['protein'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
 
 
 
-
-    List<String> fat= [];
-    fat = (jsonMap['fat'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> carb= [];
+      carb = (jsonMap['carb'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
 
 
 
 
-    List<String> servingAmounts= [];
-    servingAmounts = (jsonMap['serving amount'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> fat= [];
+      fat = (jsonMap['fat'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
 
 
 
 
-    List<String> units= [];
-    units = (jsonMap['unit'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      List<String> servingAmounts= [];
+      servingAmounts = (jsonMap['serving amount'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
 
 
 
-    String recipe = '';
-    recipe = jsonMap['recipe'];
 
-    print("Ingredients: $ingredients");
-    print("Serving Amounts: $servingAmounts");
-    print("units: $units");
-    print("Calorie: $calorie");
-    print("Protein: $protein");
-    print("Carb: $carb");
-    print("Fat: $fat");
-    print("Recipe: $recipe");
+      List<String> units= [];
+      units = (jsonMap['unit'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString().replaceAll(',', '')).toList();
 
 
-    List<String> servingIngredientsCount= [];
-    ingredients.forEach((element) {
-      servingIngredientsCount.add('1.0');
-    });
+
+      String recipe = '';
+      recipe = jsonMap['recipe'];
+
+      print("Ingredients: $ingredients ,, ${ingredients.length}");
+      print("Serving Amounts: $servingAmounts ${servingAmounts.length}");
+      print("units: $units ${units.length}");
+      print("Calorie: $calorie ${calorie.length}");
+      print("Protein: $protein ${protein.length}");
+      print("Carb: $carb ${carb.length}");
+      print("Fat: $fat ${fat.length}");
+      print("Recipe: $recipe");
 
 
-    return Right(
-        FoodRemote(
-          name: mealName.trim(),
-          foodTypeRemote: FoodTypeRemote.meal,
-          ingredients: ingredients,
-          servingAmounts: servingAmounts,
-          units: units,
-          calorie: calorie,
-          protein: protein,
-          carb: carb,
-          fat: fat,
-          recipe: recipe,
-          servingIngredientsCount: servingIngredientsCount,
-          unit: SERVING_LABEL,
-          servingAmount: 1
-        )
-    );
+      List<String> servingIngredientsCount= [];
+      ingredients.forEach((element) {
+        servingIngredientsCount.add('1.0');
+      });
+
+
+      return Right(
+          FoodRemote(
+              name: mealName.trim(),
+              foodTypeRemote: FoodTypeRemote.meal,
+              ingredients: ingredients,
+              servingAmounts: servingAmounts,
+              units: units,
+              calorie: calorie,
+              protein: protein,
+              carb: carb,
+              fat: fat,
+              recipe: recipe,
+              servingIngredientsCount: servingIngredientsCount,
+              unit: SERVING_LABEL,
+              servingAmount: 1
+          )
+      );
+    }catch(e){
+      return Left(ExceptionFailure(e));
+    }
   }
 
 
@@ -169,7 +173,7 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
 
     print('show_prompt: $promptMessage');
     final completion = await OpenAI.instance.completion.create(
-        model: "text-davinci-003",
+        model: "gpt-3.5-turbo-instruct",
         prompt: promptMessage,
         // maxTokens: 1000
     );

@@ -202,6 +202,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                 ),
 
 
+
                 BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
                     builder: (context, state) {
                       if (state is MyFavoriteFoodsLoadingState) {
@@ -217,6 +218,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                           checkIfFavoriteFoodsAddedBefore(state.foods);
                         });
                       }else if(state is MyFavoriteFoodsErrorState){
+                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });
@@ -274,6 +276,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                           });
                         }
                       }else if(state is GetLoggedFoodsErrorState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });
@@ -305,6 +308,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                           });
                         }
                       }else if(state is LogFoodsErrorState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });
