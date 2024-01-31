@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
+import 'package:masterpie/main_screen.dart';
 import '../feature/foods/presentation/bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
 import '../feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../feature/foods/presentation/bloc/groceries_bloc/groceries_bloc.dart';
@@ -22,10 +23,9 @@ import '../feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import '../feature/user/presentation/screen/landing_screen.dart';
 
 
+
 class App extends StatelessWidget {
   App({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           initialRoute: '/',
           routes: {
-            LandingScreen.routeName: (context) => LandingScreen(),
+            LandingScreen.routeName: (context) => const MainScreen(),
           },
         ),
     );

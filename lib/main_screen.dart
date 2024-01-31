@@ -1032,7 +1032,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         setMacros(state.profile);
                                                       });
                                                     }else if(state is GetProfileErrorState){
+                                                      _getProfileBloc.add(const GetProfileEvent.onReset());
+
                                                       Future.delayed(Duration.zero,(){
+                                                        if(state.message == 'email not found'){
+                                                          return Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) => const SignInScreen(),
+                                                            ),
+                                                          );
+                                                        }
                                                         return showErrorToast(context, state.message);
                                                       });
                                                     }else{

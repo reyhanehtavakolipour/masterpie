@@ -7,6 +7,7 @@ import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
+import '../model/profile_model.dart';
 import '../repository/user_repository.dart';
 
 class LoginUseCase{
@@ -31,6 +32,14 @@ class LoginUseCase{
       await repo.saveUserIdInHive(loginResponseRemote.asRight().id);
       await repo.saveUserEmailInHive(loginResponseRemote.asRight().email);
       await repo.saveUserPasswordInHive('');
+
+      final profileResponse = await repo.getProfileFromLocal(loginResponseRemote.asRight().email);
+      if(profileResponse.isLeft()){
+        if(profileResponse.asLeft().message == 'profile not found'){
+          await repo.upsertProfileInLocal(Profile(id: loginResponseRemote.asRight().id, email: loginResponseRemote.asRight().email));
+        }
+      }
+
       return Right(loginResponseRemote.asRight());
     }
     return Left(getFailure(loginResponseRemote.asLeft()));

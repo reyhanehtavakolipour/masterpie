@@ -20,6 +20,12 @@ class GetProfileUseCase{
     if(emailResponse.isLeft()){
       return const Left(ExceptionFailure('email not found'));
     }
+
+    if(emailResponse.asRight().isEmpty){
+      return const Left(ExceptionFailure('email not found'));
+    }
+
+
     final profileResponse = await repo.getProfileFromLocal(emailResponse.asRight());
     if(profileResponse.isRight()){
       return Right(profileResponse.asRight());
@@ -33,13 +39,16 @@ class GetProfileUseCase{
     if(emailResponse.isLeft()){
       return const Left(ExceptionFailure('email not found'));
     }
+    if(emailResponse.asRight().isEmpty){
+      return const Left(ExceptionFailure('email not found'));
+    }
     if(idResponse.isLeft()){
       return const Left(ExceptionFailure('user not found'));
     }
     final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight(), idResponse.asRight());
     if(profileResponse.isRight()){
       await repo.upsertProfileInLocal(profileResponse.asRight());
-      return await getImmediateResponse();
+      return  Right(profileResponse.asRight());
     }
 
     return Left(getFailure(profileResponse.asLeft()));
