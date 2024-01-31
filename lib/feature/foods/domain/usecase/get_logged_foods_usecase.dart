@@ -21,8 +21,9 @@ class GetLoggedFoodsUseCase{
     late Either<Failure, List<Food>> foodsLocalDb;
     foodsLocalDb= await repo.getLoggedFoodsFromLocalDb(date);
     final userEmail= await userRepo.getEmailFromHive();
+    final userId= await userRepo.getUserIdFromHive();
     final userPlan = await userRepo.getUserPlanInRemote();
-    final profileResponse = await userRepo.getProfileFromLocal(userEmail.asRight());
+    final profileResponse = await userRepo.getProfileFromRemote(userEmail.asRight(), userId.asRight());
     if(profileResponse.isRight()){
       List<String> goals = profileResponse.asRight().dailyMacroGoal;
       if(goals.isEmpty){
