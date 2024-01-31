@@ -49,7 +49,7 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
     super.initState();
     _ingredientsController = TextEditingController();
     _allergicToController = TextEditingController();
-    nationalities= [ITALIAN_LABEL, CHINESE_LABEL, MEXICAN_LABEL,];
+    nationalities= [ITALIAN_LABEL, CHINESE_LABEL, MEXICAN_LABEL, INDIAN_LABEL, THAI_LABEL];
     _suggestFoodBloc = context.read<SuggestFoodBloc>();
     _suggestFoodBloc.add(const SuggestFoodEvent.onReset());
   }

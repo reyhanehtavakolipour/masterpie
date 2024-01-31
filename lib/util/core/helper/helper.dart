@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 int calculateDifferenceInDays(DateTime date1, DateTime date2) {
 
   Duration difference = date2.difference(date1);
@@ -7,4 +9,12 @@ int calculateDifferenceInDays(DateTime date1, DateTime date2) {
   int differenceInDays = difference.inDays;
 
   return differenceInDays;
+}
+
+
+int generateRandomNumber(int length) {
+  Random random = Random();
+  int randomNumber = random.nextInt(length);
+  print('random_number: $randomNumber');
+  return randomNumber;
 }

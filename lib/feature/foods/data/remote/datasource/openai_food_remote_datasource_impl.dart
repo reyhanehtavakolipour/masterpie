@@ -1,11 +1,13 @@
 
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
+import '../../../../../util/core/helper/helper.dart';
 import '../../../../../util/core/helper/print.dart';
 import '../../../../../util/core/response/failure.dart';
 import '../model/food_remote_model.dart';
@@ -128,6 +130,8 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
               servingAmount: 1
           )
       );
+
+
     }catch(e){
       return Left(ExceptionFailure(e));
     }
@@ -140,55 +144,89 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
   }
 
 
-
   @override
   Future<Either<Failure, FoodRemote>> suggestMeal(List<String> mustIngredients, String nationality, List<String> allergies, String diet) async{
-    String promptMessage = 'Suggest a meal';
-    if(nationality.isNotEmpty && diet != NONE_LABEL){
-      promptMessage = 'Suggest a $diet, $nationality meal';
-    }else if(nationality.isNotEmpty && diet == NONE_LABEL){
-      promptMessage = 'Suggest a $nationality meal';
-    }else if(nationality.isEmpty && diet != NONE_LABEL){
-      promptMessage = 'Suggest a $diet meal';
+    try{
+      int desiredListLength= 20;
+      String promptMessage = 'suggest a list of $desiredListLength random meals.';
+      if(nationality.isNotEmpty && diet != NONE_LABEL){
+        promptMessage = 'Suggest a list of $desiredListLength  $diet, $nationality meals';
+      }else if(nationality.isNotEmpty && diet == NONE_LABEL){
+        promptMessage = 'Suggest a list of $desiredListLength $nationality meals';
+      }else if(nationality.isEmpty && diet != NONE_LABEL){
+        promptMessage = 'Suggest a list of $desiredListLength $diet meals';
+      }
+
+      if(mustIngredients.isNotEmpty){
+        promptMessage = '${promptMessage} which includes';
+        mustIngredients.forEach((element) {
+          promptMessage = promptMessage + ' $element,';
+        });
+      }
+
+      if(allergies.isNotEmpty){
+        promptMessage = '$promptMessage. also doesnt have any';
+        allergies.forEach((element) {
+          promptMessage = promptMessage + ' $element,';
+        });
+      }
+
+
+      promptMessage = '$promptMessage. only give the names without any explanation.';
+
+
+      OpenAI.apiKey = OPENAI_API_KEY;
+
+      print('show_prompt: $promptMessage');
+
+      final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            // "return any message you are given as JSON object with the key of meals.",
+            "return any message you are given as JSON object with the key of meals. you should always try to suggest a very random meals list with length of $desiredListLength",
+          ),
+        ],
+        role: OpenAIChatMessageRole.assistant,
+      );
+
+      // the user message that will be sent to the request.
+      final userMessage = OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            promptMessage,
+          ),
+        ],
+        role: OpenAIChatMessageRole.user,
+      );
+
+      final requestMessages = [systemMessage, userMessage,];
+      OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+        model: "gpt-3.5-turbo-1106",
+        responseFormat: {"type": "json_object"},
+        // seed: 6,
+        messages: requestMessages,
+        temperature: 1.2,
+        maxTokens: 1024,
+        // toolChoice: "auto",
+      );
+
+
+      printWrapped('MEALS_NAME_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
+
+
+      Map<String, dynamic> jsonMap = json.decode(chatCompletion.choices.first.message.content?.first.text ?? '');
+
+      List<String> meals = (jsonMap['meals'] as List<dynamic>).map((value) => value.toString()).toList();
+
+      String selectedRandomMeal= meals[generateRandomNumber(meals.length)];
+
+      print('MEAL_NAME: $selectedRandomMeal');
+
+      return Right(FoodRemote(name: selectedRandomMeal));
+
+    }catch(e){
+      return Left(ExceptionFailure(e));
     }
-
-    if(mustIngredients.isNotEmpty){
-      promptMessage = '${promptMessage} which includes';
-      mustIngredients.forEach((element) {
-        promptMessage = promptMessage + ' $element,';
-      });
-    }
-
-    if(allergies.isNotEmpty){
-      promptMessage = '$promptMessage. also doesnt have any';
-      allergies.forEach((element) {
-        promptMessage = promptMessage + ' $element,';
-      });
-    }
-
-
-    promptMessage = '$promptMessage. only give the name without any explanation.';
-
-    OpenAI.apiKey = OPENAI_API_KEY;
-
-    print('show_prompt: $promptMessage');
-    final completion = await OpenAI.instance.completion.create(
-        model: "gpt-3.5-turbo-instruct",
-        prompt: promptMessage,
-        // maxTokens: 1000
-    );
-
-    String mealName = '';
-    if(completion.choices.isNotEmpty){
-       mealName = completion.choices[0].text;
-    }
-
-    print('MEAL_NAME_OPENAI_RESPONSE: $mealName');
-
-    if(mealName.isEmpty){
-      return const Left(FailureResponse(''));
-    }
-    return Right(FoodRemote(name: mealName));
 
   }
 
