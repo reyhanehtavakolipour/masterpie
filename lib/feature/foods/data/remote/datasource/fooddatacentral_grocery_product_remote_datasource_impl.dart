@@ -1,7 +1,6 @@
 
 
 import 'package:dartz/dartz.dart';
-
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
@@ -39,10 +38,36 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
         for (int i = 0; i < maxProductsSize; i++){
           String foodId = foods[i]['fdcId'].toString();
           final nutrients = foods[i]['foodNutrients'] as List<dynamic>;
-          int calorie= nutrients[3]['value']?.toInt() ?? 0;
-          int protein= nutrients[0]['value']?.toInt() ?? 0;
-          int carb= nutrients[2]['value']?.toInt() ?? 0;
-          int fat= nutrients[1]['value']?.toInt() ?? 0;
+
+          double calorie= 0;
+          double protein= 0;
+          double carb= 0;
+          double fat= 0;
+
+
+          final calorieObjects= nutrients.where((element) => element['nutrientName'] == 'Energy').toList();
+          if(calorieObjects.isNotEmpty){
+            calorie = (calorieObjects[0]['value'])?.toDouble() ?? 0;
+          }
+
+
+          final proteinObjects= nutrients.where((element) => element['nutrientName'].contains('Protein')).toList();
+          if(proteinObjects.isNotEmpty){
+            protein = (proteinObjects[0]['value'])?.toDouble() ?? 0;
+          }
+
+
+          final carbObjects= nutrients.where((element) => element['nutrientName'].contains('Carbohydrate')).toList();
+          if(carbObjects.isNotEmpty){
+            carb = (carbObjects[0]['value'])?.toDouble() ?? 0;
+          }
+
+
+          final fatObjects= nutrients.where((element) => element['nutrientName'].contains('Total lipid')).toList();
+          if(fatObjects.isNotEmpty){
+            fat = (fatObjects[0]['value'])?.toDouble() ?? 0;
+          }
+
 
           productsRemote.add(
               FoodRemote(
@@ -65,6 +90,8 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
       }
       return  Left(RemoteFailure(response.statusCode, response.data['message']));
     }catch(e){
+
+      print('sdgsss: $e');
       return Left(ExceptionFailure(e));
     }
   }
