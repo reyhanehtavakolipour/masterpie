@@ -23,7 +23,7 @@ class GetLoggedFoodsUseCase{
     final userEmail= await userRepo.getEmailFromHive();
     final userId= await userRepo.getUserIdFromHive();
     final userPlan = await userRepo.getUserPlanInRemote();
-    final profileResponse = await userRepo.getProfileFromRemote(userEmail.asRight(), userId.asRight());
+    final profileResponse = await userRepo.getProfileFromRemote(userEmail.asRight());
     if(profileResponse.isRight()){
       List<String> goals = profileResponse.asRight().dailyMacroGoal;
       if(goals.isEmpty){

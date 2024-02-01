@@ -45,7 +45,7 @@ class GetProfileUseCase{
     if(idResponse.isLeft()){
       return const Left(ExceptionFailure('user not found'));
     }
-    final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight(), idResponse.asRight());
+    final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight());
     if(profileResponse.isRight()){
       await repo.upsertProfileInLocal(profileResponse.asRight());
       return  Right(profileResponse.asRight());

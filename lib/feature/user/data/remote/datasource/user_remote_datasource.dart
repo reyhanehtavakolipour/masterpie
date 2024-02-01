@@ -33,7 +33,7 @@ abstract class UserRemoteDataSource{
   Future<Either<Failure, List<String>>> calculateDailyMacroGoal(ProfileRemote profile);
 
 
-  Future<Either<Failure, ProfileRemote>> getProfile(String email, String id);
+  Future<Either<Failure, ProfileRemote>> getProfile(String email);
 
 
   Future<Either<Failure, Success>> updateDailyMacroAndInputs(ProfileRemote profile);

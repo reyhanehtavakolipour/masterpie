@@ -88,7 +88,7 @@ class UserRepositoryImpl extends UserRepository{
       }
 
       final email = await getEmailFromHive();
-      final profileResponse= await userRemoteDataSource.getProfile(email.asRight(), userId.asRight());
+      final profileResponse= await userRemoteDataSource.getProfile(email.asRight());
       if(profileResponse.isRight()){
         if(!profileResponse.asRight().updateProfileShown){
           return Right(mapper.fromGoogleSignInResponseRemote(loginRemoteResponse.asRight().copyWith(updateProfileShown: false)));
@@ -133,8 +133,8 @@ class UserRepositoryImpl extends UserRepository{
   }
 
   @override
-  Future<Either<Failure, Profile>> getProfileFromRemote(String email, String id) async{
-    final profileResponse = await userRemoteDataSource.getProfile(email, id);
+  Future<Either<Failure, Profile>> getProfileFromRemote(String email) async{
+    final profileResponse = await userRemoteDataSource.getProfile(email);
     if(profileResponse.isRight()){
       return Right(mapper.fromProfileRemote(profileResponse.asRight()));
     }

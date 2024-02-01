@@ -54,7 +54,7 @@ abstract class UserRepository{
 
   Future<Either<Failure, Profile>> getProfileFromLocal(String email);
 
-  Future<Either<Failure, Profile>> getProfileFromRemote(String email, String id);
+  Future<Either<Failure, Profile>> getProfileFromRemote(String email);
 
   Future<Either<Failure, String>> getEmailFromHive();
 

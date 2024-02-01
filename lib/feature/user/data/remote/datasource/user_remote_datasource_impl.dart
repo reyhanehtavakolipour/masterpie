@@ -124,14 +124,13 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, ProfileRemote>> getProfile(String email, String id) async{
+  Future<Either<Failure, ProfileRemote>> getProfile(String email) async{
     try {
       final supabase = Supabase.instance.client;
       final data = await supabase
           .from(PROFILE_REMOTE_TABLE)
           .select<List<dynamic>>()
-          .eq('email', email)
-          .eq('id', id);
+          .eq('email', email);
 
       if(data.isEmpty){
         return Right(ProfileRemote());
