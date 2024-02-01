@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:dart_openai/dart_openai.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_config/flutter_config.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/core/helper/helper.dart';
@@ -17,7 +18,8 @@ import 'openai_food_remote_datasource.dart';
 class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
   @override
   Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName) async{
-    OpenAI.apiKey = OPENAI_API_KEY;
+    final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
+    OpenAI.apiKey = openAIKey;
 
     try{
       final systemMessage = OpenAIChatCompletionChoiceMessageModel(
@@ -175,7 +177,9 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
       promptMessage = '$promptMessage. only give the names without any explanation.';
 
 
-      OpenAI.apiKey = OPENAI_API_KEY;
+      final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
+
+      OpenAI.apiKey = openAIKey;
 
       print('show_prompt: $promptMessage');
 

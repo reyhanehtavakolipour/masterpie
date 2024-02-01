@@ -1,5 +1,6 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
@@ -42,9 +43,14 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, GoogleSignInRemote>> signInUserWithGoogle() async{
+
+    final webClientId= await FlutterConfig.get(WEB_CLIENT_ID);
+    final iosClientId= await FlutterConfig.get(IOS_CLIENT_ID);
+
+
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: IOS_CLIENT_ID,
-      serverClientId: WEB_CLIENT_ID,
+      clientId: iosClientId,
+      serverClientId: webClientId,
     );
     final googleUser = await googleSignIn.signIn();
     final googleAuth = await googleUser?.authentication;
@@ -196,7 +202,9 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       };
 
 
-      final response= await request.post(CALCULATE_MACRO_GOAL_API, data: calculateMacroGoalRemoteBody);
+      final macroGoalApi= await FlutterConfig.get(CALCULATE_MACRO_GOAL_API);
+
+      final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
 
       if(response.statusCode == SUCCESS_API_CODE){
         List<String> macroGoal = [

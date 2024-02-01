@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_config/flutter_config.dart';
 import '../constant/api_constant.dart';
 import '../constant/messages_constants.dart';
 
@@ -30,14 +31,16 @@ class NetworkRequest extends BaseRequest{
   }
 
   Future<void> addHeaders() async{
-    _dio.options.headers['Authorization'] = 'Bearer $SUPABSE_PUBLIC_ANON_KEY';
+    final anonKey= await FlutterConfig.get(SUPABSE_PUBLIC_ANON_KEY);
+    _dio.options.headers['Authorization'] = 'Bearer $anonKey';
 
-    _dio.options.headers['apikey'] = SUPABSE_PUBLIC_ANON_KEY;
+    _dio.options.headers['apikey'] = anonKey;
 
   }
 
   Future<void> addGoogleCloudHeaders() async{
-    _dio.options.headers['Authorization'] = 'Bearer $GOOGLE_CLOUD_KEY';
+    final cloudKey= await FlutterConfig.get(GOOGLE_CLOUD_KEY);
+    _dio.options.headers['Authorization'] = 'Bearer $cloudKey';
   }
 }
 

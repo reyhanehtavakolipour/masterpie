@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_config/flutter_config.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
@@ -21,8 +22,9 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
 
     try{
       final NetworkRequest request = await NetworkRequest.createFoodDataCentral();
+      final dataCentralKey= await FlutterConfig.get(FOOD_DATA_CENTRAL_KEY);
       final Map<String, dynamic> queryParams = {
-        'api_key': FOOD_DATA_CENTRAL_KEY,
+        'api_key': dataCentralKey,
         'query': query,
         'pageNumber': 1,
         'pageSize': 3
