@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
@@ -792,7 +793,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                             ],
                           )
-
                         ],
                       ),
                   ),
@@ -1039,7 +1039,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           return Navigator.pushReplacement(
                                                             context,
                                                             MaterialPageRoute(
-                                                              builder: (context) => const SignInScreen(),
+                                                              builder: (context) => const LandingScreen(),
                                                             ),
                                                           );
                                                         }

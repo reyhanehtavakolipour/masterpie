@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../firebase_options.dart';
 import '../util/core/constant/api_constant.dart';
 import '../util/core/di/service_locator.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError = (details) {
@@ -21,6 +25,21 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
           await setUpServiceLocator();
           await Hive.initFlutter();
           await initSupabase();
+
+
+
+          await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          );
+          FlutterError.onError = (errorDetails) {
+            FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+          };
+          PlatformDispatcher.instance.onError = (error, stack) {
+            FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+            return true;
+          };
+
+
 
           runApp(await builder());
     },

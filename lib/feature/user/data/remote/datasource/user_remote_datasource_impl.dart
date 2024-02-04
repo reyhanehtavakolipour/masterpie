@@ -418,13 +418,11 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, Success>> updateSubscriptionPlan(String userId, String plan) async{
-    //todo handle
     return const Right(Success());
   }
 
   @override
   Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeeded(String userId) async{
-    //todo handle
     return const Right(Success());
   }
 
