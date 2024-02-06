@@ -10,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../firebase_options.dart';
 import '../util/core/constant/api_constant.dart';
+import '../util/core/constant/hive_constants.dart';
 import '../util/core/di/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -25,7 +26,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
           await setUpServiceLocator();
           await Hive.initFlutter();
           await initSupabase();
-
+          await initHive();
 
 
           await Firebase.initializeApp(
@@ -55,4 +56,14 @@ Future<void> initSupabase() async {
     url: supabaseKey,
     anonKey: anonKey,
   );
+}
+
+
+Future<void> initHive() async {
+  AUTH_BOX= await FlutterConfig.get(AUTH_BOX);
+  KEY_ORIGIN= await FlutterConfig.get(KEY_ORIGIN);
+  KEY_USERNAME= await FlutterConfig.get(KEY_USERNAME);
+  KEY_EMAIL= await FlutterConfig.get(KEY_EMAIL);
+  KEY_PASSWORD= await FlutterConfig.get(KEY_PASSWORD);
+  KEY_USER_ID= await FlutterConfig.get(KEY_USER_ID);
 }
