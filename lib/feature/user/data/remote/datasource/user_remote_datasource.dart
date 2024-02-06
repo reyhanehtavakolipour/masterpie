@@ -65,4 +65,7 @@ abstract class UserRemoteDataSource{
 
   Future<Either<Failure, Success>> logout();
 
+  Future<Either<Failure, Success>> forgotPassword(String email);
+
+
 }

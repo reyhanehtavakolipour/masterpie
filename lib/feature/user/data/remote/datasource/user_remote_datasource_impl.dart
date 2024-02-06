@@ -2,13 +2,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
 import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
-import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/core/helper/request_api.dart';
@@ -499,7 +496,20 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     }
   }
 
+  @override
+  Future<Either<Failure, Success>> forgotPassword(String email) async{
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.auth.resetPasswordForEmail(email,
+        redirectTo: RESET_PASSWORD_URL,
+      );
+      return const Right(Success());
 
-
+    } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
 
 }

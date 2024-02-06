@@ -13,6 +13,7 @@ import 'package:masterpie/feature/user/data/remote/datasource/user_remote_dataso
 import 'package:masterpie/feature/user/data/remote/datasource/user_remote_datasource_impl.dart';
 import 'package:masterpie/feature/user/data/repository_impl/user_repository_impl.dart';
 import 'package:masterpie/feature/user/domain/repository/user_repository.dart';
+import 'package:masterpie/feature/user/domain/usecase/forgot_password_usecase.dart';
 import 'package:masterpie/feature/user/domain/usecase/subscriptions_usecase.dart';
 import '../../../feature/foods/data/local/datasource/food_local_datasource.dart';
 import '../../../feature/foods/data/local/datasource/food_local_datasource_impl.dart';
@@ -73,6 +74,8 @@ Future<void> setUpServiceLocator() async{
   serviceLocator.registerFactory<UserPlanUseCase>(() => UserPlanUseCase());
 
   serviceLocator.registerFactory<SubscriptionPlansUseCase>(() => SubscriptionPlansUseCase());
+
+  serviceLocator.registerFactory<ForgotPasswordUseCase>(() => ForgotPasswordUseCase());
 
 
 

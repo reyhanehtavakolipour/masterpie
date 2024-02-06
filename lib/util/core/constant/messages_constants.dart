@@ -134,14 +134,18 @@ const REGISTER_WITH_GOOGLE = 'Register With Google';
 const SIGN_IN_WITH_GOOGLE = 'Sign In With Google';
 const OR_LABEL = 'OR';
 const EMAIL_LABEL = 'Email';
+const FORGET_PASS_EMAIL_SENT_MSG = 'We sent you an email which includes a link. please click on it to change your password';
+const REQUEST_RESET_PASSWORD_LABEL = 'Request Reset Password';
 const PASSWORD_LABEL = 'Password';
 const CONFIRM_PASSWORD_LABEL = 'Confirm Password';
 const DONT_HAVE_AN_ACCOUNT = 'Don\'t have an account?';
+const FORGOT_PASS = 'Forgot your password?';
 const PASSWORDS_NOT_MATCH_ERROR = 'password and confirm password don\'t match!';
 const INVALID_EMAIL_ERROR = 'invalid email!';
 const INVALID_PASSWORD_ERROR = 'password must be:\n- At least 6 characters long.\n-Contains at least one digit.'
     '\n-Contains at least one special character.\n-Contains both uppercase and lowercase letters.';
 const PROFILE_LABEL = 'Profile';
+const RESET_PASS_LABEL = 'Reset Password';
 const FIRST_NAME_LABEL = 'First Name';
 const LAST_NAME_LABEL = 'Last Name';
 const HEIGHT_LABEL = 'Height';
@@ -281,6 +285,7 @@ const UPGRADE_MSG_MACRO_EDITION= 'You can upgrade to any of our paid plan which 
 const EVERY_WHERE_LABEL= 'Every where';
 const ONLY_FOR_FAVORITES_LABEL= 'Only for favorites';
 const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
+const ERROR_RESET_PASS_REQUEST_EACH_60_SEC= 'you can only request this once every 60 seconds. please wait until then';
 
 
 

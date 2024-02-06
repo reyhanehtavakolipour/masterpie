@@ -427,6 +427,15 @@ class UserRepositoryImpl extends UserRepository{
     return Left(planResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Success>> forgotPasswordInRemote(String email) async{
+    final forgotPassResponse = await userRemoteDataSource.forgotPassword(email);
+    if(forgotPassResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(forgotPassResponse.asLeft());
+  }
+
 
 
 }

@@ -14,3 +14,4 @@
 -dontwarn net.jcip.annotations.Immutable
 -dontwarn net.jcip.annotations.NotThreadSafe
 -dontwarn net.jcip.annotations.ThreadSafe
+-keep class com.app.masterpie.BuildConfig { *; }

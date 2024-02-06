@@ -30,6 +30,9 @@ Failure failureHandler(String message, int? errorCode){
         return FailureResponse(getError500(message));
     }
   }
+  if(message.contains('For security purposes, you can only request this once every 60 seconds')){
+    return const FailureResponse(ERROR_RESET_PASS_REQUEST_EACH_60_SEC);
+  }
   if(message.contains('User already registered')){
     return const FailureResponse(ERROR_USER_ALREADY_REGISTERED);
   }

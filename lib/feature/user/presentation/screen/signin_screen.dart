@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/presentation/screen/forgot_password_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/profile_after_registration_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import '../../../../main_screen.dart';
@@ -97,6 +98,10 @@ class _SignInScreenState extends State<SignInScreen>{
                   const SizedBox(height: 16),
                   buildPasswordField(),
 
+                  const SizedBox(height: 4),
+
+                  buildForgotPass(),
+
                   const SizedBox(height: 48),
                   buildSignInButton(text: SIGNIN_LABEL),
                   const SizedBox(height: 16),
@@ -157,6 +162,22 @@ class _SignInScreenState extends State<SignInScreen>{
           ),
         ),
       ),
+    );
+  }
+
+
+
+  Widget buildForgotPass(){
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ForgotPasswordScreen(),
+          ),
+        );
+      },
+      child:const Text(FORGOT_PASS, style: TextStyle(fontSize: 12, color: DARK_PRIMARY_COLOR),),
     );
   }
 

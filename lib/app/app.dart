@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masterpie/feature/user/presentation/bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
 import 'package:masterpie/main_screen.dart';
 import '../feature/foods/presentation/bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
@@ -42,6 +43,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => GetSubscriptionPlansBloc(),
+          ),
+          BlocProvider(
+            create: (_) => ForgotPasswordBloc(),
           ),
           BlocProvider(
             create: (_) => LogoutBloc(),
