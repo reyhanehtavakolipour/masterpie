@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter_config/flutter_config.dart';
+import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../../constant/sqflite_constants.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+
+
+const SQFLITE_PASSWORD_KEY = 'SQFLITE_PASSWORD_KEY';
 
 class DatabaseHelper {
 
@@ -19,8 +23,9 @@ class DatabaseHelper {
 
   initDatabase() async {
     var docdir = await getApplicationDocumentsDirectory();
-    String path = join(docdir.path, 'rtp_fitness_db.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    String path = join(docdir.path, 'masterpie_db.db');
+    final password= await FlutterConfig.get(SQFLITE_PASSWORD_KEY);
+    return await openDatabase(path, version: 1, onCreate: _onCreate, password: password);
   }
 
   Future _onCreate(Database db, int version) async {

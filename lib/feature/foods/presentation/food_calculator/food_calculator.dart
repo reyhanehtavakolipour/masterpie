@@ -32,7 +32,15 @@ class FoodCalculator{
         if(food.servingAmounts[0].isEmpty){
           serving = "0";
         }
-        servingAmount = int.parse(serving);
+
+        int? intValue = int.tryParse(serving);
+        if (intValue != null) {
+          servingAmount = int.parse(serving);
+        } else {
+          double doubleValue = double.parse(serving);
+          servingAmount = doubleValue.toInt();
+        }
+
         foodUnit = food.units[0];
       }else{
         food.calorie.forEach((element) {

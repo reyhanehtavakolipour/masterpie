@@ -3,8 +3,7 @@
 
 
 import 'package:dartz/dartz.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../../../../../util/core/constant/sqflite_constants.dart';
 import '../../../../../util/core/di/service_locator.dart';
 import '../../../../../util/core/helper/print.dart';
