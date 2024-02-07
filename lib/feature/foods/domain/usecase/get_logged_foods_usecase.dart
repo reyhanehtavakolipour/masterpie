@@ -34,6 +34,12 @@ class GetLoggedFoodsUseCase{
       macroGoals.add(goals[1].isNotEmpty ? double.parse(goals[1]) : 0);
       macroGoals.add(goals[2].isNotEmpty ? double.parse(goals[2]) : 0);
       macroGoals.add(goals[3].isNotEmpty ? double.parse(goals[3]) : 0);
+
+
+      if(userPlan.isLeft()){
+        return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: false));
+      }
+
       return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: userPlan.asRight().subscriptionPlan!.macroEdition));
     }
     return Left(getFailure(foodsLocalDb.asLeft()));

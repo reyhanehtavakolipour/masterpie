@@ -344,6 +344,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
 
+    _totalTakenCalories = double.parse(_totalTakenCalories.toStringAsFixed(1));
+    _totalTakenProteins = double.parse(_totalTakenProteins.toStringAsFixed(1));
+    _totalTakenCarbs = double.parse(_totalTakenCarbs.toStringAsFixed(1));
+    _totalTakenFats = double.parse(_totalTakenFats.toStringAsFixed(1));
+
+
     GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
     return MaterialApp(

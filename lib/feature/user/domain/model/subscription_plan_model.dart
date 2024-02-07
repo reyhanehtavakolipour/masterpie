@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'subscription_plan_model.freezed.dart';
 
 
-@freezed
+@ freezed
 class SubscriptionPlan with _$SubscriptionPlan{
   factory SubscriptionPlan({
     @Default([]) List<String> ids,

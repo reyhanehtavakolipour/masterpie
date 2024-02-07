@@ -431,6 +431,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           .from(PLANS_TABLE)
           .select<List<Map<String, dynamic>>>();
 
+
       List<SubscriptionPlanRemote> subscriptionPlans= [];
       data.forEach((element) {
         final plan= SubscriptionPlanRemote(
@@ -470,7 +471,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         id: data[0]['id'],
         subscriptionPlan: SubscriptionPlanRemote(
           ids: [userId],
-          plan: data[0]['plan_name'] ?? '',
+          plan: data[0]['plan_name'] ?? FREE_LABEL,
           intervals: [data[0]['plan_interval'] ?? ''],
           macroEdition: data[0]['macro_edition'] ?? false
         ),
