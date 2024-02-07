@@ -448,7 +448,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
       },
       child: Container(
         width: double.infinity,
-        color: TOTAL_MACRO_PORTION_BACKGROUND_COLOR,
+        color: TOTAL_MACRO_RESTRICTION_BACKGROUND_COLOR,
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

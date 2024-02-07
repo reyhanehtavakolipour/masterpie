@@ -369,6 +369,57 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               );
             },
           ),
+          title: Container(
+            /**
+             * date
+             */
+            width: double.infinity,
+            height: DATE_CONTAINER_HEIGHT,
+            color: TOP_PART_MAIN_SCREE_COLOR,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: false,
+                  child: GestureDetector(
+                    onTap: (){
+                      if(DateTime.now().difference(_focusedDay.subtract(const Duration(days: 1))).inDays < MAX_DIFFERENCE_DAYS + 1){
+                        setState(() {
+                          _focusedDay = _focusedDay.subtract(const Duration(days: 1));
+                        });
+                      }
+                    },
+                    child: const Icon(Icons.arrow_left, color: Colors.white,),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 24, right: 24),
+                      child: Text(
+                        DateFormat('d MMMM yy').format(_focusedDay),
+                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
+                      )
+                  ),
+                ),
+                Visibility(
+                  visible: false,
+                  child: GestureDetector(
+                    onTap: (){
+                      if(_focusedDay.add(const Duration(days: 1)).isBefore(DateTime.now())){
+                        setState(() {
+                          _focusedDay = _focusedDay.add(const Duration(days: 1));
+                        });
+                      }
+                    },
+                    child: const Icon(Icons.arrow_right, color: Colors.white,),
+                  ),
+                )
+              ],
+            ),
+          ),
          ),
         drawer: Drawer(
           backgroundColor: Colors.white,
@@ -488,331 +539,270 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             ],
           ),
         ),
-        body: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
+        body: Column(
+              children: [
+
+                Expanded(
                   child: Container(
-                    height: TOP_PART_MAIN_SCREEN_HEIGHT,
                     color: TOP_PART_MAIN_SCREE_COLOR,
-                    child: Stack(
-                        children: [
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
 
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+
+                        /// calorie and protein row
+                        Expanded(
+                          child: Row(
                             children: [
-
-                              /**
-                               * date
-                               */
-                              Container(
-                                width: double.infinity,
-                                height: DATE_CONTAINER_HEIGHT,
-                                color: TOP_PART_MAIN_SCREE_COLOR,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Visibility(
-                                      visible: false,
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          if(DateTime.now().difference(_focusedDay.subtract(const Duration(days: 1))).inDays < MAX_DIFFERENCE_DAYS + 1){
-                                            setState(() {
-                                              _focusedDay = _focusedDay.subtract(const Duration(days: 1));
-                                            });
-                                          }
-                                        },
-                                        child: const Icon(Icons.arrow_left, color: Colors.white,),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: (){
-
-                                      },
-                                      child: Container(
-                                          margin: const EdgeInsets.only(left: 24, right: 24),
-                                          child: Text(
-                                            DateFormat('d MMMM yy').format(_focusedDay),
-                                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
-                                          )
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: false,
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          if(_focusedDay.add(const Duration(days: 1)).isBefore(DateTime.now())){
-                                            setState(() {
-                                              _focusedDay = _focusedDay.add(const Duration(days: 1));
-                                            });
-                                          }
-                                        },
-                                        child: const Icon(Icons.arrow_right, color: Colors.white,),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-
-
-
-                              /// calorie and protein row
+                              /// calorie
                               Expanded(
-                                child: Row(
-                                  children: [
-                                    /// calorie
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: MACRO_CONTAINER_HEIGHT,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                          ),
-                                          color: MACRO_COLOR,
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              showMacroGoalsPopup(context);
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.all(MACRO_MARGIN),
-                                              child: CircularPercentIndicator(
-                                                radius: MACRO_CIRCLE_RADIUS,
-                                                animation: true,
-                                                animationDuration: MACRO_ANIMATION_DURATION,
-                                                lineWidth: MACRO_CIRCLE_WIDTH,
-                                                percent: caloriePercent,
-                                                center: Text(
-                                                  "${(caloriePercent*100).toInt()}%",
-                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                                ),
-                                                circularStrokeCap: CircularStrokeCap.butt,
-                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                                progressColor: (_totalTakenCalories == 0.0 && _calorieGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
-                                                footer: Column(
-                                                  children: [
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                      child: Text(
-                                                        '$CALORIE_LABEL ($remainedCalorie cal $REMAINS_LABEL)',
-                                                        style:
-                                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_LABEL_COLOR),
-                                                      ),
-                                                    ),
-
-                                                    const SizedBox(height: 2,),
-
-                                                    Text(
-                                                      '$_totalTakenCalories/$_calorieGoal',
-                                                      style:
-                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_PERCENTAGE_COLOR),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                child: GestureDetector(
+                                  onTap: (){
+                                    showMacroGoalsPopup(context);
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                      border: Border.all(
+                                        color: LIGHT_GREY_COLOR,
+                                        width: 0.25,
                                       ),
                                     ),
-
-                                    /// protein
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: MACRO_CONTAINER_HEIGHT,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                          ),
-                                          color: MACRO_COLOR,
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              showMacroGoalsPopup(context);
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.all(MACRO_MARGIN),
-                                              child: CircularPercentIndicator(
-                                                radius: MACRO_CIRCLE_RADIUS,
-                                                animation: true,
-                                                animationDuration: MACRO_ANIMATION_DURATION,
-                                                lineWidth: MACRO_CIRCLE_WIDTH,
-                                                percent: proteinPercent,
-                                                center: Text(
-                                                  "${(proteinPercent*100).toInt()}%",
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                                ),
-                                                circularStrokeCap: CircularStrokeCap.butt,
-                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                                progressColor: (_totalTakenProteins == 0.0 && _proteinGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
-                                                footer: Column(
-                                                  children: [
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                      child: Text(
-                                                        '$PROTEIN_LABEL ($remainedProtein g $REMAINS_LABEL)',
-                                                        style:
-                                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_LABEL_COLOR),
-                                                      ),
-                                                    ),
-
-                                                    const SizedBox(height: 2,),
-
-                                                    Text(
-                                                      '$_totalTakenProteins/$_proteinGoal',
-                                                      style:
-                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_PERCENTAGE_COLOR),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                    margin: const EdgeInsets.all(MACRO_MARGIN),
+                                    child: CircularPercentIndicator(
+                                      radius: MACRO_CIRCLE_RADIUS,
+                                      animation: true,
+                                      animationDuration: MACRO_ANIMATION_DURATION,
+                                      lineWidth: MACRO_CIRCLE_WIDTH,
+                                      percent: caloriePercent,
+                                      center: Text(
+                                        "${(caloriePercent*100).toInt()}%",
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                      ),
+                                      circularStrokeCap: CircularStrokeCap.butt,
+                                      backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                      progressColor: (_totalTakenCalories == 0.0 && _calorieGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      footer: Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                            child: Text(
+                                              '$CALORIE_LABEL ($remainedCalorie cal $REMAINS_LABEL)',
+                                              style:
+                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
                                             ),
                                           ),
-                                        ),
+
+                                          const SizedBox(height: 6,),
+
+                                          Text(
+                                            '$_totalTakenCalories/$_calorieGoal',
+                                            style:
+                                            const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
 
-
-
-                              /// carb and fat
+                              /// protein
                               Expanded(
-                                child: Row(
-                                  children: [
-                                    /// carb
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: MACRO_CONTAINER_HEIGHT,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                          ),
-                                          color: MACRO_COLOR,
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              showMacroGoalsPopup(context);
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.all(MACRO_MARGIN),
-                                              child: CircularPercentIndicator(
-                                                radius: MACRO_CIRCLE_RADIUS,
-                                                animation: true,
-                                                animationDuration: MACRO_ANIMATION_DURATION,
-                                                lineWidth: MACRO_CIRCLE_WIDTH,
-                                                percent: carbPercent,
-                                                center: Text(
-                                                  "${(carbPercent*100).toInt()}%",
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                                ),
-                                                circularStrokeCap: CircularStrokeCap.butt,
-                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                                progressColor: (_totalTakenCarbs == 0.0 && _carbGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
-                                                footer: Column(
-                                                  children: [
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                      child: Text(
-                                                        '$CARB_LABEL ($remainedCarb g $REMAINS_LABEL)',
-                                                        style:
-                                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_LABEL_COLOR),
-                                                      ),
+                                child: GestureDetector(
+                                  onTap: (){
+                                    showMacroGoalsPopup(context);
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
 
-                                                    ),
-
-                                                    const SizedBox(height: 2,),
-
-                                                    Text(
-                                                      '$_totalTakenCarbs/$_carbGoal',
-                                                      style:
-                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_PERCENTAGE_COLOR),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                      border: Border.all(
+                                        color: LIGHT_GREY_COLOR,
+                                        width: 0.25,
                                       ),
                                     ),
-
-
-
-                                    /// fat
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: MACRO_CONTAINER_HEIGHT,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                          ),
-                                          color: MACRO_COLOR,
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              showMacroGoalsPopup(context);
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.all(MACRO_MARGIN),
-                                              child: CircularPercentIndicator(
-                                                radius: MACRO_CIRCLE_RADIUS,
-                                                animation: true,
-                                                animationDuration: MACRO_ANIMATION_DURATION,
-                                                lineWidth: MACRO_CIRCLE_WIDTH,
-                                                percent: fatPercent,
-                                                center: Text(
-                                                  "${(fatPercent*100).toInt()}%",
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                                ),
-                                                circularStrokeCap: CircularStrokeCap.butt,
-                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                                progressColor: (_totalTakenFats == 0.0 && _fatGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
-                                                footer: Column(
-                                                  children: [
-                                                    Container(
-                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                      child: Text(
-                                                        '$FAT_LABEL ($remainedFat g $REMAINS_LABEL)',
-                                                        style:
-                                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_LABEL_COLOR),
-                                                      ),
-                                                    ),
-
-                                                    const SizedBox(height: 2,),
-
-                                                    Text(
-                                                      '$_totalTakenFats/$_fatGoal',
-                                                      style:
-                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MACRO_PERCENTAGE_COLOR),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                    margin: const EdgeInsets.all(MACRO_MARGIN),
+                                    child: CircularPercentIndicator(
+                                      radius: MACRO_CIRCLE_RADIUS,
+                                      animation: true,
+                                      animationDuration: MACRO_ANIMATION_DURATION,
+                                      lineWidth: MACRO_CIRCLE_WIDTH,
+                                      percent: proteinPercent,
+                                      center: Text(
+                                        "${(proteinPercent*100).toInt()}%",
+                                        style:
+                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                      ),
+                                      circularStrokeCap: CircularStrokeCap.butt,
+                                      backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                      progressColor: (_totalTakenProteins == 0.0 && _proteinGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      footer: Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                            child: Text(
+                                              '$PROTEIN_LABEL ($remainedProtein g $REMAINS_LABEL)',
+                                              style:
+                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
                                             ),
                                           ),
-                                        ),
+
+                                          const SizedBox(height: 6,),
+
+                                          Text(
+                                            '$_totalTakenProteins/$_proteinGoal',
+                                            style:
+                                            const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+
+
+
+                        /// carb and fat
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              /// carb
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    showMacroGoalsPopup(context);
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                      border: Border.all(
+                                        color: LIGHT_GREY_COLOR,
+                                        width: 0.25,
+                                      ),
+                                    ),
+                                    margin: const EdgeInsets.all(MACRO_MARGIN),
+                                    child: CircularPercentIndicator(
+                                      radius: MACRO_CIRCLE_RADIUS,
+                                      animation: true,
+                                      animationDuration: MACRO_ANIMATION_DURATION,
+                                      lineWidth: MACRO_CIRCLE_WIDTH,
+                                      percent: carbPercent,
+                                      center: Text(
+                                        "${(carbPercent*100).toInt()}%",
+                                        style:
+                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                      ),
+                                      circularStrokeCap: CircularStrokeCap.butt,
+                                      backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                      progressColor: (_totalTakenCarbs == 0.0 && _carbGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      footer: Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                            child: Text(
+                                              '$CARB_LABEL ($remainedCarb g $REMAINS_LABEL)',
+                                              style:
+                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                            ),
+
+                                          ),
+
+                                          const SizedBox(height: 6,),
+
+                                          Text(
+                                            '$_totalTakenCarbs/$_carbGoal',
+                                            style:
+                                            const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+
+
+                              /// fat
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    showMacroGoalsPopup(context);
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                      border: Border.all(
+                                        color: LIGHT_GREY_COLOR,
+                                        width: 0.25,
+                                      ),
+                                    ),
+                                    margin: const EdgeInsets.all(MACRO_MARGIN),
+                                    child: CircularPercentIndicator(
+                                      radius: MACRO_CIRCLE_RADIUS,
+                                      animation: true,
+                                      animationDuration: MACRO_ANIMATION_DURATION,
+                                      lineWidth: MACRO_CIRCLE_WIDTH,
+                                      percent: fatPercent,
+                                      center: Text(
+                                        "${(fatPercent*100).toInt()}%",
+                                        style:
+                                        const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                      ),
+                                      circularStrokeCap: CircularStrokeCap.butt,
+                                      backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                      progressColor: (_totalTakenFats == 0.0 && _fatGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      footer: Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                            child: Text(
+                                              '$FAT_LABEL ($remainedFat g $REMAINS_LABEL)',
+                                              style:
+                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                            ),
+                                          ),
+
+                                          const SizedBox(height: 6,),
+
+                                          Text(
+                                            '$_totalTakenFats/$_fatGoal',
+                                            style:
+                                            const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      ],
+                    ),
                   ),
                 ),
 
-
-                SliverFillRemaining(
+                Expanded(
                     child:  ClipRRect(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
                       child: Scaffold(
-                        backgroundColor: TAB_BAR_COLOR,
+                        backgroundColor: MASTERPIE_YELLOW_COLOR,
                         body: Stack(
                           children: [
                             DefaultTabController(
@@ -831,119 +821,117 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                   ),
 
 
-
                                   Expanded(
-                                    child: TabBarView(
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: TabBarView(
+                                        controller: _tabController,
+                                        children: [
 
-                                      controller: _tabController,
-                                      children: [
 
-
-                                        /**
-                                         * Home Tab
-                                         */
-                                        Container(
-                                          color: BACKGROUND_CATEGORY_COLOR,
-                                          child: Stack(
+                                          /**
+                                           * Home Tab
+                                           */
+                                          Stack(
                                             children: [
-                                              SingleChildScrollView(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                              Column(
+
+                                                children: [
 
 
-                                                child: Column(
-
-                                                  children: [
-
-
-                                                    Row(
-                                                      children: [
-                                                        /**
-                                                         * my favorite
-                                                         */
-                                                        Expanded(
-                                                          child: GestureDetector(
-                                                            onTap: (){
-                                                              myFavoriteClickListener();
-                                                            },
-                                                            child: Container(
-                                                              width: double.infinity,
-                                                              height: CAT_HEIGHT,
-                                                              padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-                                                                color: CATEGORY_COLOR,
-                                                              ),
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Image.asset(FAVORITE_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT,),
-
-                                                                  const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
-
-                                                                  const Text(MY_FAVORITE_FOOD_LABEL,
-                                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
-                                                                  )
-
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-
-
-                                                        const SizedBox(width: 8,),
-
-                                                        /**
-                                                         * request foods portion
-                                                         */
-                                                        Expanded(
-                                                          child: GestureDetector(
-                                                            onTap: (){
-                                                              Navigator.pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) => const RequestFoodsPortionsScreen(),
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      child: Row(
+                                                        children: [
+                                                          /**
+                                                           * my favorite
+                                                           */
+                                                          Expanded(
+                                                            child: GestureDetector(
+                                                              onTap: (){
+                                                                myFavoriteClickListener();
+                                                              },
+                                                              child: Container(
+                                                                width: double.infinity,
+                                                                padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(BORDER_RADIUS,),
+                                                                  color: CATEGORY_COLOR,
                                                                 ),
-                                                              );
-                                                            },
-                                                            child: Container(
-                                                              width: double.infinity,
-                                                              height: CAT_HEIGHT,
-                                                              padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-                                                                color: CATEGORY_COLOR,
-                                                              ),
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT,),
+                                                                child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    Image.asset(FAVORITE_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
-                                                                  const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
+                                                                    const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                  const Text(HOW_MUCH_TO_EAT,
-                                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
-                                                                  )
+                                                                    const Text(MY_FAVORITE_FOOD_LABEL,
+                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
+                                                                    )
 
-
-                                                                ],
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+
+
+                                                          const SizedBox(width: 8,),
+
+                                                          /**
+                                                           * request foods portion
+                                                           */
+                                                          Expanded(
+                                                            child: GestureDetector(
+                                                              onTap: (){
+                                                                Navigator.pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => const RequestFoodsPortionsScreen(),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                width: double.infinity,
+                                                                padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(BORDER_RADIUS,),
+                                                                  color: CATEGORY_COLOR,
+                                                                ),
+                                                                child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                    const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
+
+                                                                    const Text(HOW_MUCH_TO_EAT,
+                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
+                                                                    )
+
+
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
+                                                  ),
 
 
 
 
 
-                                                    const SizedBox(height: 8,),
+                                                  const SizedBox(height: 8,),
 
 
 
 
-                                                    Row(
+                                                  Expanded(
+                                                    child: Row(
                                                       children: [
                                                         /**
                                                          * suggest foods
@@ -960,7 +948,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
-                                                              height: CAT_HEIGHT,
                                                               padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(BORDER_RADIUS,),
@@ -969,7 +956,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(SUGGEST_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT),
+                                                                  Image.asset(SUGGEST_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
@@ -994,7 +981,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
-                                                              height: CAT_HEIGHT,
                                                               padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(BORDER_RADIUS,),
@@ -1003,7 +989,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT),
+                                                                  Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
@@ -1015,11 +1001,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           ),
                                                         ),
                                                       ],
-                                                    )
+                                                    ),
+                                                  )
 
 
-                                                  ],
-                                                ),
+                                                ],
                                               ),
 
                                               BlocConsumer<GetProfileBloc, GetProfileState>(
@@ -1062,110 +1048,110 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                             ],
                                           ),
-                                        ),
 
-                                        /**
-                                         * Food Tab
-                                         */
-                                        Container(
-                                          color: BACKGROUND_CATEGORY_COLOR,
-                                          child: Column(
-                                            children: [
+                                          /**
+                                           * Food Tab
+                                           */
+                                          Container(
+                                            color: BACKGROUND_MACRO_TRACK_COLOR,
+                                            child: Column(
+                                              children: [
 
 
-                                              /**
-                                               * today weight
-                                               */
-                                              Visibility(
-                                                visible: false,
-                                                child: Container(
-                                                  color: TODAY_WEIGHT_CONTAINER_COLOR,
-                                                  padding: const EdgeInsets.all(12),
-                                                  child: Row(
-                                                      children: [
-                                                        const Text('$TODAY_WEIGHT:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),),
-                                                        Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: SizedBox(
-                                                            width: 20,
-                                                            height: 10,
-                                                            child: TextField(
-                                                              textAlign: TextAlign.center, // Set text alignment to center
-                                                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),
-                                                              decoration: const InputDecoration(
-                                                                labelStyle: TextStyle(color: DARK_PRIMARY_COLOR), // Color of the label text
-                                                                enabledBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when enabled
+                                                /**
+                                                 * today weight
+                                                 */
+                                                Visibility(
+                                                  visible: false,
+                                                  child: Container(
+                                                    color: TODAY_WEIGHT_CONTAINER_COLOR,
+                                                    padding: const EdgeInsets.all(12),
+                                                    child: Row(
+                                                        children: [
+                                                          const Text('$TODAY_WEIGHT:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                            child: SizedBox(
+                                                              width: 20,
+                                                              height: 10,
+                                                              child: TextField(
+                                                                textAlign: TextAlign.center, // Set text alignment to center
+                                                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),
+                                                                decoration: const InputDecoration(
+                                                                  labelStyle: TextStyle(color: DARK_PRIMARY_COLOR), // Color of the label text
+                                                                  enabledBorder: UnderlineInputBorder(
+                                                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when enabled
+                                                                  ),
+                                                                  focusedBorder: UnderlineInputBorder(
+                                                                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when focused
+                                                                  ),
                                                                 ),
-                                                                focusedBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when focused
-                                                                ),
+                                                                controller: _todayWeightController,
+                                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                                inputFormatters: <TextInputFormatter>[
+                                                                  FilteringTextInputFormatter.digitsOnly,
+                                                                  FilteringTextInputFormatter.allow(numericRegExp),
+                                                                ],
                                                               ),
-                                                              controller: _todayWeightController,
-                                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                                              inputFormatters: <TextInputFormatter>[
-                                                                FilteringTextInputFormatter.digitsOnly,
-                                                                FilteringTextInputFormatter.allow(numericRegExp),
-                                                              ],
                                                             ),
                                                           ),
-                                                        ),
 
-                                                        const Text('Kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_WEIGH_INFO, color: DARK_PRIMARY_COLOR),),
-                                                        Expanded(child: Container())
-                                                      ]
+                                                          const Text('Kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_WEIGH_INFO, color: DARK_PRIMARY_COLOR),),
+                                                          Expanded(child: Container())
+                                                        ]
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
 
 
-                                              /**
-                                               * fab / click fab to start
-                                               */
-                                              Expanded(
-                                                child: Stack(
-                                                  children: [
-                                                    Visibility(
-                                                      visible: _foods.isEmpty,
-                                                      child: Center(
-                                                          child: Container(
-                                                            margin: const EdgeInsets.all(64),
+                                                /**
+                                                 * fab / click fab to start
+                                                 */
+                                                Expanded(
+                                                  child: Stack(
+                                                    children: [
+                                                      Visibility(
+                                                        visible: _foods.isEmpty,
+                                                        child: Center(
+                                                            child: Container(
+                                                              margin: const EdgeInsets.all(64),
 
-                                                            child: const Text(CLICK_FAB_TO_START, style: TextStyle(color: PRIMARY_COLOR, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                                                          )
+                                                              child: const Text(CLICK_FAB_TO_START, style: TextStyle(color: PRIMARY_COLOR, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                                                            )
+                                                        ),
                                                       ),
-                                                    ),
 
-                                                    Visibility(
-                                                        visible: _foods.isNotEmpty,
-                                                        child: FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
-                                                          onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
-                                                          foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
-                                                          foodDetailScreenType: FoodDetailScreenType.LOGGED_FOOD_VIEW, foodsListScreen: FoodsListScreen.MAIN_SCREEN, macroEdition: _macroEdition,)
-                                                    ),
-
-                                                    Positioned(
-                                                      bottom: FAB_MARGIN,
-                                                      right: FAB_MARGIN,
-                                                      child: FloatingActionButton(
-                                                        backgroundColor: PRIMARY_COLOR,
-                                                        onPressed: () {
-                                                          searchFoodClickListener();
-                                                        },
-                                                        child: const Icon(Icons.add, color: Colors.white,),
+                                                      Visibility(
+                                                          visible: _foods.isNotEmpty,
+                                                          child: FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
+                                                            onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
+                                                            foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
+                                                            foodDetailScreenType: FoodDetailScreenType.LOGGED_FOOD_VIEW, foodsListScreen: FoodsListScreen.MAIN_SCREEN, macroEdition: _macroEdition,)
                                                       ),
-                                                    )
-                                                  ],
 
+                                                      Positioned(
+                                                        bottom: FAB_MARGIN,
+                                                        right: FAB_MARGIN,
+                                                        child: FloatingActionButton(
+                                                          backgroundColor: PRIMARY_COLOR,
+                                                          onPressed: () {
+                                                            searchFoodClickListener();
+                                                          },
+                                                          child: const Icon(Icons.add, color: Colors.white,),
+                                                        ),
+                                                      )
+                                                    ],
+
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
 
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

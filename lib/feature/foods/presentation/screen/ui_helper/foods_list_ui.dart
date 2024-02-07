@@ -119,7 +119,6 @@ class _FoodsListUiState extends State<FoodsListUi> {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: widget.foodsListScreen == FoodsListScreen.MAIN_SCREEN ? null : const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: 4, left: 4, right: 4),
             itemCount: widget.foods.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {

@@ -112,6 +112,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
    late LogFoodsBloc _logFoodsBloc;
 
 
+   List<Food> _suggestedGroceries= [];
+
+
    bool _enabled =  false;
 
    String _favoriteId= '';
@@ -211,6 +214,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
      });
      _debouncer.run(() {
+       _suggestedGroceries.clear();
        if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL && widget.foodDetailArgumentModel.food == null){
          _groceriesBloc.add(
            GroceriesEvent.onGetGroceries(_groceryNameController.text),
@@ -229,6 +233,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
      });
      _debouncer.run(() {
+       _suggestedGroceries.clear();
        if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH && _enabled){
          _groceriesBloc.add(
            GroceriesEvent.onGetGroceries(_ingredientNameController.text),
@@ -1541,7 +1546,10 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   },
                 ),
 
-                BlocConsumer<GroceriesBloc, GroceriesState>(
+        suggestedGroceriesList(isTotal),
+
+
+        BlocConsumer<GroceriesBloc, GroceriesState>(
                     builder: (context, state) {
                       if (state is GroceriesLoadingState) {
                         return const Stack(
@@ -1555,12 +1563,12 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        _groceriesBloc.add(const GroceriesEvent.onReset());
-                        if(state.foods.isEmpty){
-                          return const Center(child: Text(NOTHING_FOUND, style: TextStyle(color: Colors.grey, fontSize: 12,)));
-                        }else{
-                          return suggestedGroceriesList(isTotal, state.foods);
-                        }
+                        Future.delayed(Duration.zero,(){
+                          setState(() {
+                            _suggestedGroceries.addAll(state.foods);
+                            _groceriesBloc.add(const GroceriesEvent.onReset());
+                          });
+                        });
                       }else if(state is GroceriesErrorState){
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
@@ -1580,12 +1588,12 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     );
   }
 
-  Widget suggestedGroceriesList(bool isTotal, List<Food> foods){
+  Widget suggestedGroceriesList(bool isTotal){
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: foods.length,
+      itemCount: _suggestedGroceries.length,
       itemBuilder: (context, index){
-        Food grocery = foods[index];
+        Food grocery = _suggestedGroceries[index];
         return GestureDetector(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
