@@ -829,11 +829,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       return Right(foods);
 
     } on PostgrestException catch (error) {
-      print('ghjfg: $error');
       return Left(ExceptionFailure(error));
     } catch (error) {
-      print('ghjfg: $error');
-
       return Left(ExceptionFailure(error));
     }
   }
@@ -917,7 +914,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> updateMyFavoriteGrocery(FoodRemote grocery, String userId) async{
     try{
       final favoriteListResponse = await getMyFavoriteFoods('', userId);
-
       if(favoriteListResponse.isRight()){
         final list = favoriteListResponse.asRight();
 
@@ -953,11 +949,11 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newServingUnits.add(foodRemote.units.toString());
           newName.add(foodRemote.name.toString());
           newTypes.add(foodRemote.foodTypeRemote.name.toString());
-          newServingAmount.add('-1');
-          newServingUnit.add('-1');
-          newRecipe.add('-1');
-          newIngredients.add('-1');
-          newServingIngredientsCount.add('-1');
+          newServingAmount.add(foodRemote.servingAmount.toString());
+          newServingUnit.add(foodRemote.unit.toString());
+          newRecipe.add(foodRemote.recipe.toString());
+          newIngredients.add(foodRemote.ingredients.toString());
+          newServingIngredientsCount.add(foodRemote.servingIngredientsCount.toString());
         });
 
 
@@ -994,6 +990,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, Success>> updateMyFavoriteMeal(FoodRemote meal, String userId) async{
     try{
+
       final favoriteListResponse = await getMyFavoriteFoods('', userId);
 
       if(favoriteListResponse.isRight()){

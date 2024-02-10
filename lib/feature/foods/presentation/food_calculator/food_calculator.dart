@@ -43,24 +43,32 @@ class FoodCalculator{
 
         foodUnit = food.units[0];
       }else{
-        food.calorie.forEach((element) {
-          calorie= calorie + double.parse(element.isEmpty ? '0' : element);
-        });
-        food.protein.forEach((element) {
-          protein= protein + double.parse(element.isEmpty ? '0' : element);
-        });
-        food.carb.forEach((element) {
-          carb= carb + double.parse(element.isEmpty ? '0' : element);
-        });
-        food.fat.forEach((element) {
-          fat= fat + double.parse(element.isEmpty ? '0' : element);
-        });
+        for (int i = 0; i < food.calorie.length; i++) {
+          double servingCount = double.parse(food.servingIngredientsCount[i].isEmpty ? '1' : food.servingIngredientsCount[i]);
+          calorie = calorie + double.parse(food.calorie[i].isEmpty ? '0' : food.calorie[i])*servingCount;
+        }
+
+        for (int i = 0; i < food.protein.length; i++) {
+          double servingCount = double.parse(food.servingIngredientsCount[i].isEmpty ? '1' : food.servingIngredientsCount[i]);
+          protein = protein + double.parse(food.protein[i].isEmpty ? '0' : food.protein[i])*servingCount;
+        }
+
+        for (int i = 0; i < food.carb.length; i++) {
+          double servingCount = double.parse(food.servingIngredientsCount[i].isEmpty ? '1' : food.servingIngredientsCount[i]);
+          carb = carb + double.parse(food.carb[i].isEmpty ? '0' : food.carb[i])*servingCount;
+        }
+
+        for (int i = 0; i < food.fat.length; i++) {
+          double servingCount = double.parse(food.servingIngredientsCount[i].isEmpty ? '1' : food.servingIngredientsCount[i]);
+          fat = fat + double.parse(food.fat[i].isEmpty ? '0' : food.fat[i])*servingCount;
+        }
       }
 
       final totalCalorie = calorie * quantity;
       final totalProtein = protein * quantity;
       final totalCarb = carb * quantity;
       final totalFat = fat * quantity;
+
 
       return FoodInformation(
           calorie: calorie,

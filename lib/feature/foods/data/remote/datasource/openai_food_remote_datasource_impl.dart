@@ -17,7 +17,7 @@ import 'openai_food_remote_datasource.dart';
 
 class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
   @override
-  Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName) async{
+  Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName, List<String> mustIngredient, List<String> allergies) async{
     final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
     OpenAI.apiKey = openAIKey;
 
@@ -31,10 +31,26 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
         role: OpenAIChatMessageRole.assistant,
       );
 
+
+      String promptMessage= 'What is the nutrition facts of ingredients and recipe of this food: $mealName';
+      if(mustIngredient.isNotEmpty){
+        promptMessage = '${promptMessage} with ';
+        mustIngredient.forEach((element) {
+          promptMessage = promptMessage + ' $element,';
+        });
+      }
+
+      if(allergies.isNotEmpty){
+        promptMessage = '$promptMessage. also doesnt have any';
+        allergies.forEach((element) {
+          promptMessage = promptMessage + ' $element,';
+        });
+      }
+
       final userMessage = OpenAIChatCompletionChoiceMessageModel(
         content: [
           OpenAIChatCompletionChoiceMessageContentItemModel.text(
-            "What is the nutrition facts of ingredients and recipe of this food: $mealName?",
+            promptMessage,
           ),
         ],
         role: OpenAIChatMessageRole.user,

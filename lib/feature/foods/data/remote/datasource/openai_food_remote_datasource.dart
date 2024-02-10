@@ -13,7 +13,7 @@ abstract class OpenAIFoodRemoteDataSource{
   Future<Either<Failure, FoodRemote>> suggestMeal(List<String> mustIngredients, String nationality, List<String> allergies, String diet);
 
 
-  Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName);
+  Future<Either<Failure, FoodRemote>> getMealRecipe(String mealName, List<String> mustIngredient, List<String> allergies);
 
 
 }

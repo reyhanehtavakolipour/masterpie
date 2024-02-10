@@ -26,4 +26,4 @@ const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.n
 
 const GOOGLE_CLOUD_KEY = 'GOOGLE_CLOUD_KEY';
 
-const RESET_PASSWORD_URL = 'https://www.masterpieapp.com/forget-password';
+const RESET_PASSWORD_URL = 'https://www.masterpieapp.com/reset-password';

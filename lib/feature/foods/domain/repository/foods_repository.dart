@@ -58,7 +58,7 @@ abstract class FoodsRepository{
   //source: openAI
   Future<Either<Failure, Food>> suggestMealFromRemote(List<String> mustIngredients, String nationality, List<String> allergies, String diet);
 
-  Future<Either<Failure, Food>> getMealRecipeFromRemote(String name);
+  Future<Either<Failure, Food>> getMealRecipeFromRemote(String name, List<String> mustIngredient, List<String> allergies);
 
 
   // source: table LoggedFoods

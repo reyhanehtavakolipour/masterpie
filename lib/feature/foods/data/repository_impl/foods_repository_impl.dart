@@ -508,8 +508,8 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, Food>> getMealRecipeFromRemote(String name) async{
-    final mealResponse= await openAIFoodRemoteDataSource.getMealRecipe(name);
+  Future<Either<Failure, Food>> getMealRecipeFromRemote(String name, List<String> mustIngredient, List<String> allergies) async{
+    final mealResponse= await openAIFoodRemoteDataSource.getMealRecipe(name, mustIngredient, allergies);
     if(mealResponse.isRight()){
       return Right(mapper.fromMealRemote(mealResponse.asRight()));
     }

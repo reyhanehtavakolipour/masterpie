@@ -21,7 +21,7 @@ class SuggestFoodUseCase{
 
       final foodResponseRemote = await repo.suggestMealFromRemote(ingredientsIncluded ?? [], nationality ?? '', allergies ?? [], diet ?? '');
       if(foodResponseRemote.isRight()){
-        final foodDetailResponseRemote = await repo.getMealRecipeFromRemote(foodResponseRemote.asRight().name);
+        final foodDetailResponseRemote = await repo.getMealRecipeFromRemote(foodResponseRemote.asRight().name, ingredientsIncluded ?? [], allergies ?? []);
         if(foodDetailResponseRemote.isRight()){
           return Right(foodDetailResponseRemote.asRight());
         }

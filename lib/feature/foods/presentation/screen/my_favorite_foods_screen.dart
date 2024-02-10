@@ -36,7 +36,6 @@ class MyFavoriteFoodsScreen extends StatefulWidget {
 
   const MyFavoriteFoodsScreen({Key? key}) : super(key: key);
 
-  static const routeName = '/my-favorite-foods-screen';
 
 
   @override
