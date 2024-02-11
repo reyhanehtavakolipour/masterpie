@@ -134,6 +134,8 @@ class UserRepositoryImpl extends UserRepository{
 
   @override
   Future<Either<Failure, Profile>> getProfileFromRemote(String email) async{
+    final userId = await getUserIdFromHive();
+    await userRemoteDataSource.checkSubscription(userId.asRight());
     final profileResponse = await userRemoteDataSource.getProfile(email);
     if(profileResponse.isRight()){
       return Right(mapper.fromProfileRemote(profileResponse.asRight()));
@@ -420,6 +422,7 @@ class UserRepositoryImpl extends UserRepository{
   @override
   Future<Either<Failure, UserPlan>> getUserPlanInRemote() async{
     final userId = await getUserIdFromHive();
+    await userRemoteDataSource.checkSubscription(userId.asRight());
     final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
     if(planResponse.isRight()){
       return Right(mapper.fromUserPlanRemote(planResponse.asRight()));
@@ -434,6 +437,27 @@ class UserRepositoryImpl extends UserRepository{
       return const Right(Success());
     }
     return Left(forgotPassResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> checkSubscriptionInRemote() async{
+    final userId = await getUserIdFromHive();
+    final checkPlanResponse = await userRemoteDataSource.checkSubscription(userId.asRight());
+    if(checkPlanResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(checkPlanResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, bool>> isMacroEditionAvailableInRemote() async{
+    final userId = await getUserIdFromHive();
+    await userRemoteDataSource.checkSubscription(userId.asRight());
+    final userPlanResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
+    if(userPlanResponse.isRight()){
+      return Right(userPlanResponse.asRight().macroEdition);
+    }
+    return Left(userPlanResponse.asLeft());
   }
 
 

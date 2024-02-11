@@ -25,6 +25,8 @@ abstract class UserRepository{
 
   Future<Either<Failure, Success>> setUserSubscriptionPlanAfterRegisterInRemote();
 
+  Future<Either<Failure, bool>> isMacroEditionAvailableInRemote();
+
 
   Future<Either<Failure, Success>> updateFavoriteRequestsLeftInRemote(bool isAdded);
 
@@ -49,6 +51,8 @@ abstract class UserRepository{
   Future<Either<Failure, Success>> saveUserPasswordInHive(String password);
 
   Future<Either<Failure, Success>> upsertProfileAfterRegisterInRemote(Profile profile);
+
+  Future<Either<Failure, Success>> checkSubscriptionInRemote();
 
   Future<Either<Failure, Success>> upsertProfileInLocal(Profile profile);
 

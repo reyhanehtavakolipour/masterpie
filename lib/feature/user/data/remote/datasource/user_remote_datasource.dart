@@ -54,7 +54,7 @@ abstract class UserRemoteDataSource{
   Future<Either<Failure, Success>> updateSubscriptionPlan(String userId, String plan);
 
 
-  Future<Either<Failure, Success>> updateSubscriptionPlanAfterLoginIfNeeded(String userId);
+  Future<Either<Failure, Success>> checkSubscription(String userId);
 
 
   Future<Either<Failure, UserPlanRemote>> getUserPlan(String userId);

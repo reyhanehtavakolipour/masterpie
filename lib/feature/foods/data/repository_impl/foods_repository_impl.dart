@@ -92,6 +92,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, Food>> suggestMealFromRemote(List<String> mustIngredients, String nationality, List<String> allergies, String diet) async{
+    await userRepo.checkSubscriptionInRemote();
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
@@ -433,6 +434,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction) async{
+    await userRepo.checkSubscriptionInRemote();
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){

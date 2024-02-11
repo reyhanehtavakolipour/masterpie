@@ -1010,11 +1010,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         ),
       );
     }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE){
-      _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
+      if(widget.foodDetailArgumentModel.macroEdition){
+        _addOrUpdateMyFavoriteBloc.add(
+          AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
             newFood,
-        ),
-      );
+          ),
+        );
+        return;
+      }
+      showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
+
     }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
 
       if(!widget.foodDetailArgumentModel.macroEdition){
