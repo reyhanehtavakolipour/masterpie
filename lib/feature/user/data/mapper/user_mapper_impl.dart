@@ -142,6 +142,7 @@ class UserMapperImpl extends UserMapper{
         favoriteFoodLeft: userPlanRemote.favoriteFoodLeft,
         suggestFoodRequestsLeft: userPlanRemote.suggestFoodRequestsLeft,
         foodPortionRequestsLeft: userPlanRemote.foodPortionRequestsLeft,
+      favoriteFoodsCreatedCount: userPlanRemote.favoriteFoodsCreatedCount
     );
   }
 

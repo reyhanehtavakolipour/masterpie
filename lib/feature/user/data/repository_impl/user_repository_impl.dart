@@ -460,6 +460,19 @@ class UserRepositoryImpl extends UserRepository{
     return Left(userPlanResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Success>> updateFavoritesCreatedCountInRemote(bool isAdded) async{
+    final userId = await getUserIdFromHive();
+    final planResponse = await userRemoteDataSource.getUserPlan(userId.asRight());
+    if(planResponse.isRight()){
+      if(isAdded){
+        return await userRemoteDataSource.updateFavoritesCreatedCount(userId.asRight(), planResponse.asRight().favoriteFoodsCreatedCount +1);
+      }
+      return await userRemoteDataSource.updateFavoritesCreatedCount(userId.asRight(), planResponse.asRight().favoriteFoodsCreatedCount - 1);
+    }
+    return Left(planResponse.asLeft());
+  }
+
 
 
 }

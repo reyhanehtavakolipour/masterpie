@@ -30,6 +30,7 @@ mixin _$UserPlan {
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
   int get foodPortionRequestsLeft => throw _privateConstructorUsedError;
+  int get favoriteFoodsCreatedCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserPlanCopyWith<UserPlan> get copyWith =>
@@ -55,7 +56,8 @@ abstract class $UserPlanCopyWith<$Res> {
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
-      int foodPortionRequestsLeft});
+      int foodPortionRequestsLeft,
+      int favoriteFoodsCreatedCount});
 
   $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
 }
@@ -87,6 +89,7 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
+    Object? favoriteFoodsCreatedCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -145,6 +148,10 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
           ? _value.foodPortionRequestsLeft
           : foodPortionRequestsLeft // ignore: cast_nullable_to_non_nullable
               as int,
+      favoriteFoodsCreatedCount: null == favoriteFoodsCreatedCount
+          ? _value.favoriteFoodsCreatedCount
+          : favoriteFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -183,7 +190,8 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
       int suggestFoodRequestsLeft,
-      int foodPortionRequestsLeft});
+      int foodPortionRequestsLeft,
+      int favoriteFoodsCreatedCount});
 
   @override
   $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
@@ -214,6 +222,7 @@ class __$$UserPlanImplCopyWithImpl<$Res>
     Object? favoriteFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
+    Object? favoriteFoodsCreatedCount = null,
   }) {
     return _then(_$UserPlanImpl(
       id: null == id
@@ -272,6 +281,10 @@ class __$$UserPlanImplCopyWithImpl<$Res>
           ? _value.foodPortionRequestsLeft
           : foodPortionRequestsLeft // ignore: cast_nullable_to_non_nullable
               as int,
+      favoriteFoodsCreatedCount: null == favoriteFoodsCreatedCount
+          ? _value.favoriteFoodsCreatedCount
+          : favoriteFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -293,7 +306,8 @@ class _$UserPlanImpl implements _UserPlan {
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
-      this.foodPortionRequestsLeft = 0});
+      this.foodPortionRequestsLeft = 0,
+      this.favoriteFoodsCreatedCount = 0});
 
   @override
   @JsonKey()
@@ -337,10 +351,13 @@ class _$UserPlanImpl implements _UserPlan {
   @override
   @JsonKey()
   final int foodPortionRequestsLeft;
+  @override
+  @JsonKey()
+  final int favoriteFoodsCreatedCount;
 
   @override
   String toString() {
-    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, macroEdition: $macroEdition, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft)';
+    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, macroEdition: $macroEdition, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft, favoriteFoodsCreatedCount: $favoriteFoodsCreatedCount)';
   }
 
   @override
@@ -375,7 +392,10 @@ class _$UserPlanImpl implements _UserPlan {
                 other.suggestFoodRequestsLeft == suggestFoodRequestsLeft) &&
             (identical(
                     other.foodPortionRequestsLeft, foodPortionRequestsLeft) ||
-                other.foodPortionRequestsLeft == foodPortionRequestsLeft));
+                other.foodPortionRequestsLeft == foodPortionRequestsLeft) &&
+            (identical(other.favoriteFoodsCreatedCount,
+                    favoriteFoodsCreatedCount) ||
+                other.favoriteFoodsCreatedCount == favoriteFoodsCreatedCount));
   }
 
   @override
@@ -394,7 +414,8 @@ class _$UserPlanImpl implements _UserPlan {
       subscriptionPlan,
       favoriteFoodLeft,
       suggestFoodRequestsLeft,
-      foodPortionRequestsLeft);
+      foodPortionRequestsLeft,
+      favoriteFoodsCreatedCount);
 
   @JsonKey(ignore: true)
   @override
@@ -418,7 +439,8 @@ abstract class _UserPlan implements UserPlan {
       final SubscriptionPlan? subscriptionPlan,
       final int favoriteFoodLeft,
       final int suggestFoodRequestsLeft,
-      final int foodPortionRequestsLeft}) = _$UserPlanImpl;
+      final int foodPortionRequestsLeft,
+      final int favoriteFoodsCreatedCount}) = _$UserPlanImpl;
 
   @override
   String get id;
@@ -448,6 +470,8 @@ abstract class _UserPlan implements UserPlan {
   int get suggestFoodRequestsLeft;
   @override
   int get foodPortionRequestsLeft;
+  @override
+  int get favoriteFoodsCreatedCount;
   @override
   @JsonKey(ignore: true)
   _$$UserPlanImplCopyWith<_$UserPlanImpl> get copyWith =>

@@ -21,6 +21,7 @@ class UserPlanRemote with _$UserPlanRemote{
     @Default(0) int favoriteFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,
     @Default(0) int foodPortionRequestsLeft,
+    @Default(0) int favoriteFoodsCreatedCount,
   })= _UserPlanRemote;
 
 }

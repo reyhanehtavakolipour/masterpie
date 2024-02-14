@@ -7,7 +7,6 @@ import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
-import '../../../../util/core/helper/print.dart';
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
 import '../../../user/domain/repository/user_repository.dart';
@@ -175,11 +174,12 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
+      await userRepo.updateFavoritesCreatedCountInRemote(true);
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteGrocery(mapper.toGroceryRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
-            userRepo.updateFavoriteRequestsLeftInRemote(true);
+            await userRepo.updateFavoriteRequestsLeftInRemote(true);
             return const Right(Success());
           }
           return Left(saveMyFoodsResponse.asLeft());
@@ -201,6 +201,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
+      await userRepo.updateFavoritesCreatedCountInRemote(true);
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
         if(userPlanResponse.asRight().favoriteFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
@@ -405,7 +406,13 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final removeGroceryResponse= await masterPieFoodRemoteDataSource.removeFoodFromMyFavorites(mapper.toGroceryRemote(food), userId);
     if(removeGroceryResponse.isRight()){
-      userRepo.updateFavoriteRequestsLeftInRemote(false);
+      await userRepo.updateFavoritesCreatedCountInRemote(false);
+      final userPlanResponse= await userRepo.getUserPlanInRemote();
+      if(userPlanResponse.isRight()) {
+        if (userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL) {
+          await userRepo.updateFavoriteRequestsLeftInRemote(false);
+        }
+      }
       return Right(removeGroceryResponse.asRight());
     }
     return Left(removeGroceryResponse.asLeft());
@@ -424,11 +431,18 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, Success>> removeMealFromMyFavoritesInRemote(Food food) async{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    final removeGroceryResponse= await masterPieFoodRemoteDataSource.removeFoodFromMyFavorites(mapper.toMealRemote(food), userId);
-    if(removeGroceryResponse.isRight()){
-      return Right(removeGroceryResponse.asRight());
+    final removeMealResponse= await masterPieFoodRemoteDataSource.removeFoodFromMyFavorites(mapper.toMealRemote(food), userId);
+    if(removeMealResponse.isRight()){
+      await userRepo.updateFavoritesCreatedCountInRemote(false);
+      final userPlanResponse= await userRepo.getUserPlanInRemote();
+      if(userPlanResponse.isRight()) {
+        if (userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL) {
+          await userRepo.updateFavoriteRequestsLeftInRemote(false);
+        }
+      }
+      return Right(removeMealResponse.asRight());
     }
-    return Left(removeGroceryResponse.asLeft());
+    return Left(removeMealResponse.asLeft());
   }
 
   @override

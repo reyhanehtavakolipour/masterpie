@@ -319,7 +319,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       final subscriptions = await getSubscriptionPlans();
       if(subscriptions.isRight()){
         
-        final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == 'free');
+        final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
 
         final updates = {
           'plan_name': freeSubscription.plan,
@@ -420,6 +420,63 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
   @override
   Future<Either<Failure, Success>> checkSubscription(String userId) async{
+    try{
+      final supabase = Supabase.instance.client;
+      final userPlan = await supabase
+          .from(USER_PLAN_TABLE)
+          .select<List<Map<String, dynamic>>>()
+          .eq('id', userId);
+
+      if(userPlan.isNotEmpty){
+
+        if(userPlan[0]['current_period_end'] == null){
+          return const Right(Success());
+        }
+
+        int currentTime = DateTime.now().millisecondsSinceEpoch;
+
+        DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(currentTime);
+        DateTime currentPeriodEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['current_period_end']) * 1000);
+
+
+        if (currentDate.isAfter(currentPeriodEnd) && (userPlan[0]['cancel_at_period_end'] ?? true) && userPlan[0]['plan_name'] != FREE_LABEL) {
+
+          final subscriptions = await getSubscriptionPlans();
+
+          int favoriteLeft = 0;
+          int suggestFoodLeft = 0;
+          int foodPortionLeft = 0;
+
+          if(subscriptions.isRight()){
+
+            final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
+            suggestFoodLeft = freeSubscription.suggestFoodRequestsLimit;
+            foodPortionLeft = freeSubscription.foodPortionRequestsLimit;
+
+            if(userPlan[0]['favorites_created_count'] >= freeSubscription.favoriteFoodLimit){
+              favoriteLeft = 0;
+            }else{
+              favoriteLeft = freeSubscription.favoriteFoodLimit - ((userPlan[0]['favorites_created_count'] ?? 0) as int);
+            }
+          }
+
+          final updates = {
+            'plan_name': FREE_LABEL,
+            'suggest_food_left_request' : suggestFoodLeft,
+            'food_portion_left_request' : foodPortionLeft,
+            'favorite_food_left' :  favoriteLeft,
+            'macro_edition' : false
+          };
+
+          final data = await supabase
+              .from(USER_PLAN_TABLE)
+              .update(updates)
+              .eq('id', userId);
+        }
+      }
+
+    }catch(e){
+    }
     return const Right(Success());
   }
 
@@ -486,6 +543,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
         favoriteFoodLeft: data[0]['favorite_food_left'] ?? 0,
+        favoriteFoodsCreatedCount: data[0]['favorites_created_count'] ?? 0
       );
 
       return Right(userSubscriptionPlanRemote);
@@ -507,6 +565,27 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       return const Right(Success());
 
     } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateFavoritesCreatedCount(String userId, int count) async{
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'favorites_created_count': count,
+      };
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
     } catch (error) {
       return Left(ExceptionFailure(error));
