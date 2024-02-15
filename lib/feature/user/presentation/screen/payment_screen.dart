@@ -59,66 +59,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     handlePayButtonState();
   }
 
-  DateTime calculateDate(DateTime inputDate, int interval, String intervalType) {
-    if (interval <= 0) {
-      return DateTime.now();
-    }
-    DateTime resultDate;
-
-    switch (intervalType) {
-      case 'month':
-        resultDate = DateTime.utc(
-          inputDate.year,
-          inputDate.month + interval,
-          inputDate.day,
-          inputDate.hour,
-          inputDate.minute,
-          inputDate.second,
-          inputDate.millisecond,
-          inputDate.microsecond,
-        );
-        break;
-      case 'year':
-        resultDate = DateTime.utc(
-          inputDate.year + interval,
-          inputDate.month,
-          inputDate.day,
-          inputDate.hour,
-          inputDate.minute,
-          inputDate.second,
-          inputDate.millisecond,
-          inputDate.microsecond,
-        );
-        break;
-      default:
-        return DateTime.now();
-    }
-
-    // Handle varying month lengths
-    while (resultDate.month != (inputDate.month + interval) % 12) {
-      resultDate = resultDate.subtract(const Duration(days: 1));
-    }
-
-    // Handle leap year, especially for February
-    if (inputDate.month == 2 && inputDate.day == 29 && !isLeapYear(resultDate.year)) {
-      resultDate = DateTime.utc(resultDate.year, 2, 28);
-    }
-
-
-    return resultDate;
-  }
-
-  bool isLeapYear(int year) {
-    if (year % 4 != 0) {
-      return false;
-    } else if (year % 100 != 0) {
-      return true;
-    } else if (year % 400 != 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   void initPlanTypeOptions(){
     _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];

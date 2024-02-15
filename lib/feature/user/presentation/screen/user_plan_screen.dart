@@ -170,7 +170,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           /// macro edition access
                           Text(
-                            '$MACRO_EDITION_ACCESS: ${_userPlan.macroEdition ? EVERY_WHERE_LABEL : ONLY_FOR_FAVORITES_LABEL}',
+                            '$MACRO_EDITION_ACCESS: ${_userPlan.macroEdition ? YES_LABEL : NO_LABEL}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -812,10 +812,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  ONLY_FOR_FAVORITES_LABEL,
-                  style: TextStyle(fontSize: 13, color: RED_ERROR_COLOR, fontWeight: FontWeight.w600),
-                ),
+                const Icon(Icons.close, color: RED_ERROR_COLOR, size: 18,)
 
               ],
             ),
@@ -1111,10 +1108,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
 
-                const Text(
-                  EVERY_WHERE_LABEL,
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
+                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
+
               ],
 
             ),
@@ -1409,10 +1404,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const SizedBox(width: 8,),
 
-                const Text(
-                  EVERY_WHERE_LABEL,
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
+                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
               ],
             ),
           ],

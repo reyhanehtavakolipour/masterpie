@@ -283,8 +283,6 @@ const ERROR_OVER_LIMIT_FOODS_PORTION_MSG= 'Requesting "foods portion calculation
 const UPGRADE_MSG_SUGGEST_FOOD= 'Upgrade to any of our premium/basic plans to unlock the ability to use the "suggest food" feature in the app.';
 const UPGRADE_MSG_FOODS_PORTION= 'Upgrade to any of our premium/basic plans to unlock the ability to use the "foods portion calculation" feature in the app.';
 const UPGRADE_MSG_MACRO_EDITION= 'Upgrade to any of our premium/basic plans to unlock the "macro customization" feature.';
-const EVERY_WHERE_LABEL= 'Everywhere';
-const ONLY_FOR_FAVORITES_LABEL= 'Only for favorites';
 const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
 const ERROR_RESET_PASS_REQUEST_EACH_60_SEC= 'You may submit this request only once every 60 seconds. Please wait until that time has passed.';
 
