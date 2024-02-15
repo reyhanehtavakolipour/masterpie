@@ -435,6 +435,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
         int currentTime = DateTime.now().millisecondsSinceEpoch;
 
+
         DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(currentTime);
         DateTime currentPeriodEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['current_period_end']) * 1000);
         DateTime yearlyNextRequestUpdate = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['yearly_next_requests_update_date'] ?? '') * 1000);
@@ -473,16 +474,14 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
               .update(updates)
               .eq('id', userId);
 
-        }else if(currentDate.isAfter(yearlyNextRequestUpdate) && userPlan[0]['plan_name'] == 'yearly'){
-
-          print('ddsgs');
+        }else if(currentDate.isAfter(yearlyNextRequestUpdate) && userPlan[0]['plan_interval'] == 'yearly'){
 
           int suggestFoodLeft = 0;
           int foodPortionLeft = 0;
 
           if(subscriptions.isRight()){
 
-            final yearlySubscription = subscriptions.asRight().firstWhere((element) => element.plan == 'yearly');
+            final yearlySubscription = subscriptions.asRight().firstWhere((element) => element.plan == userPlan[0]['plan_name']);
             suggestFoodLeft = yearlySubscription.suggestFoodRequestsLimit;
             foodPortionLeft = yearlySubscription.foodPortionRequestsLimit;
 
