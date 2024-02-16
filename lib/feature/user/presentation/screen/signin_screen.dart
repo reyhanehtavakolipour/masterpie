@@ -322,6 +322,9 @@ class _SignInScreenState extends State<SignInScreen>{
 
   void signInWithCredentialClickListener(){
 
+    FocusScope.of(context).unfocus();
+
+
     ///empty email
     if(_emailController.text.isEmpty){
       setState(() {

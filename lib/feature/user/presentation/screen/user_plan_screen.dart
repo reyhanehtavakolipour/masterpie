@@ -14,6 +14,7 @@ import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -369,7 +370,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-                //todo switch to free plan
+                switchToFreePlan();
               },
             ),
             TextButton(
@@ -379,6 +380,35 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+  
+  
+  void switchToFreePlan() async{
+    String message = '';
+    if(_userPlan.subscriptionId.isEmpty){
+      message = SWITCH_FREE_SUCCESS_ONE_TIME_MSG;
+    }else{
+      cancelAutoRenewal();
+      message = SWITCH_FREE_SUCCESS_SUBSCRIPTION_MSG;
+    }
+
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // User must tap a button to close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(SUCCESS_LABEL.capitalize(), style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message, style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -413,9 +443,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
         _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
       }
     }else{
-      print('show_cancel1: ${response.data} ,, ${_userPlan.subscriptionId}');
+      print('show_cancel: ${response.data} ,, ${_userPlan.subscriptionId}');
       if(mounted){
-
         setState(() {
           _loaderVisible = false;
         });
@@ -429,7 +458,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget subscriptionDetail(){
     return Visibility(
-      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd,
+      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd && _userPlan.subscriptionPlan!.plan != FREE_LABEL,
         child: Text(
           '${_userPlan.interval.capitalize()}, $AUTO_RENEWAL_LABEL',
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
@@ -461,12 +490,13 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     String endsAtString= DateFormat('MMMM d, y').format(endsAt);
     DateTime now = DateTime.now();
 
-    if(_userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd){
+    if(_userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd && _userPlan.subscriptionPlan!.plan != FREE_LABEL){
       return Text(
         '$NEXT_PAYMENT_LABEL $renewAtString',
         style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.redAccent),
       );
     }
+
 
     return Visibility(
         visible: (_userPlan.subscriptionPlan!.plan.contains('basic') || _userPlan.subscriptionPlan!.plan.contains('premium')) &&

@@ -329,6 +329,7 @@ class UserRepositoryImpl extends UserRepository{
       List<SubscriptionPlanRemote> plans = [];
 
       List<SubscriptionPlanRemote> basics= [];
+
       basics.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'monthly' && element.plan == 'basic'));
       basics.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'basic'));
 

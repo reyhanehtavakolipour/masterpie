@@ -54,6 +54,8 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
   String _weightChangeWeekly = LB_1_LABEL;
 
 
+  List<String> _weightChangeWeeklyOptions = [];
+
 
 
   late GetProfileBloc _getProfileBloc;
@@ -65,6 +67,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
     super.initState();
     _getProfileBloc = context.read<GetProfileBloc>();
     _updateProfileBloc = context.read<UpdateProfileBloc>();
+    setLoseWeightAmountWeeklyOptions();
     getProfile();
   }
 
@@ -93,6 +96,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
       )
     );
   }
+
 
 
   @override
@@ -533,7 +537,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
             contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
           ),
           focusColor: PRIMARY_COLOR,
-          items: getLoseWeightAmountPerDayOptions().map((String item) {
+          items: _weightChangeWeeklyOptions.map((String item) {
             return DropdownMenuItem<String>(
               value: item,
               child: Text(item),
@@ -550,13 +554,14 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
   }
 
 
-  List<String> getLoseWeightAmountPerDayOptions(){
+  setLoseWeightAmountWeeklyOptions(){
     if(_weightSelectedUnit == KG_LABEL){
-      return [GRAM_250_LABEL, GRAM_500_LABEL, GRAM_750_LABEL, GRAM_1000_LABEL];
+      _weightChangeWeeklyOptions =  [GRAM_250_LABEL, GRAM_500_LABEL, GRAM_750_LABEL, GRAM_1000_LABEL];
     }else{
-      return [LB_HALF_LABEL, LB_1_LABEL, LB_15_LABEL, LB_2_LABEL];
+      _weightChangeWeeklyOptions =  [LB_HALF_LABEL, LB_1_LABEL, LB_15_LABEL, LB_2_LABEL];
     }
   }
+
 
 
   Widget buildWeightUnitDropdown() {

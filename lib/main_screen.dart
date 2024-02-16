@@ -862,7 +862,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
-                                                                    Image.asset(FAVORITE_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                    Image.asset(FAVORITE_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
@@ -902,7 +903,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
-                                                                    Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+                                                                    Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
@@ -956,7 +957,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(SUGGEST_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+                                                                  Image.asset(SUGGEST_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
@@ -989,7 +990,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                  Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 

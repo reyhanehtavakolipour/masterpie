@@ -245,6 +245,9 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   void registerWithCredentialClickListener(){
 
+    FocusScope.of(context).unfocus();
+
+
     ///empty email
     if(_emailController.text.isEmpty){
       setState(() {

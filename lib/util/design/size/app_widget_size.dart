@@ -10,7 +10,7 @@ const double FONT_WEIGH_INFO = 10;
 const double FONT_CATS_LABEL = 12;
 const double FONT_CALORIE_INFO = 8;
 const double FONT_HEADER= 13;
-const SIZE_IMAGE_CAT = 80.0;
+const SIZE_IMAGE_CAT = 70.0;
 const SIZE_IMAGE_UPGRADE_PLAN = 80.0;
 const TABS_SIZE = 2;
 const PADDING_SEARCH_HORIZONTAL = 30.0;
@@ -45,9 +45,11 @@ const MACRO_LABEL_FONT_SIZE = 11.0;
 
 const CAT_HORIZONTAL_PADDING = 2.0;
 const CAT_VETICAL_PADDING = 32.0;
-const CAT_LABEL_TOP_MARGIN = 12.0;
+const CAT_LABEL_TOP_MARGIN = 8.0;
 
 const CAT_HEIGHT = 210.0;
+
+
 
 const MACRO_SIZE_WIDTH = 100.0;
 

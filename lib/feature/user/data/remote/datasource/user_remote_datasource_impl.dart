@@ -435,12 +435,12 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
         int currentTime = DateTime.now().millisecondsSinceEpoch;
 
-
         DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(currentTime);
         DateTime currentPeriodEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['current_period_end']) * 1000);
-        DateTime yearlyNextRequestUpdate = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['yearly_next_requests_update_date'] ?? '') * 1000);
+        DateTime yearlyNextRequestUpdate = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['yearly_next_requests_update_date'] ?? '0') * 1000);
 
         final subscriptions = await getSubscriptionPlans();
+
 
         if (currentDate.isAfter(currentPeriodEnd) && (userPlan[0]['cancel_at_period_end'] ?? true) && userPlan[0]['plan_name'] != FREE_LABEL) {
 
@@ -505,6 +505,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       }
 
     }catch(e){
+      return const Left(FailureResponse(''));
     }
     return const Right(Success());
   }
@@ -577,7 +578,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           .from(PLANS_TABLE)
           .select<List<Map<String, dynamic>>>();
 
-
       List<SubscriptionPlanRemote> subscriptionPlans= [];
       data.forEach((element) {
         final plan= SubscriptionPlanRemote(
@@ -592,6 +592,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         );
         subscriptionPlans.add(plan);
       });
+
 
 
       return Right(subscriptionPlans);
