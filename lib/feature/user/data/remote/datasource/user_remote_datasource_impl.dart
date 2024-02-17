@@ -31,6 +31,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       final User? user = res.user;
       return  Right(user?.id ?? '');
 
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
     }catch(e){
       return Left(ExceptionFailure(e));
     }
@@ -96,6 +98,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       );
       final User? user = res.user;
       return  Right(user?.id ?? '');
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
     }catch(e){
       return Left(ExceptionFailure(e));
     }
@@ -607,6 +611,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   @override
   Future<Either<Failure, UserPlanRemote>> getUserPlan(String userId) async{
     try {
+
       final supabase = Supabase.instance.client;
       final data = await supabase
           .from(USER_PLAN_TABLE)

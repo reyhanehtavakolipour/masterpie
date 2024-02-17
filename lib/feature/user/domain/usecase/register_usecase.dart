@@ -26,7 +26,7 @@ class RegisterUseCase{
         await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight(), email: email));
         return  Right(email);
       }
-      return Left(getFailure(const FailureResponse('login failed')));
+      return Left(getFailure(FailureResponse(loginResponseRemote.asLeft().message)));
     }
     if(registerResponseRemote.asLeft().message == 'User already registered'){
       return Left(getFailure(const FailureResponse('User already registered')));

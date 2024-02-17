@@ -288,6 +288,7 @@ const UPGRADE_MSG_FOODS_PORTION= 'Upgrade to any of our premium/basic plans to u
 const UPGRADE_MSG_MACRO_EDITION= 'Upgrade to any of our premium/basic plans to unlock the "macro customization" feature.';
 const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
 const ERROR_RESET_PASS_REQUEST_EACH_60_SEC= 'You may submit this request only once every 60 seconds. Please wait until that time has passed.';
+const ERROR_CONFIRM_USER_SIGN_UP= 'Please verify your account by checking the confirmation email sent to your inbox';
 
 
 

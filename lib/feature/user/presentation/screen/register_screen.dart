@@ -52,11 +52,13 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   Color _confirmPasswordBorderColor = DARK_PRIMARY_COLOR;
 
+  bool _emailSent = false;
 
 
   @override
   void initState() {
     super.initState();
+    _emailSent = false;
     _registerBloc = context.read<RegisterBloc>();
     _registerBloc.add(const RegisterEvent.onReset());
   }
@@ -114,6 +116,12 @@ class _RegisterScreenState extends State<RegisterScreen>{
                         }else if(state is RegisterErrorState){
                           _registerBloc.add(const RegisterEvent.onReset());
                           Future.delayed(Duration.zero,(){
+                            if(state.message == ERROR_CONFIRM_USER_SIGN_UP){
+                              setState(() {
+                                _emailSent = true;
+                              });
+                              return Container();
+                            }
                             return showErrorToast(context, state.message);
                           });
                         }else{
@@ -123,8 +131,12 @@ class _RegisterScreenState extends State<RegisterScreen>{
                       listener: (context, state){
           
                       }
-                  )
-          
+                  ),
+
+
+                  emailSentMessage()
+
+
                 ],
               ),
             ),
@@ -313,6 +325,24 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
     _registerBloc.add(
       RegisterEvent.onRegisterWithCredential(_emailController.text, _passwordController.text),
+    );
+
+    setState(() {
+      _emailSent = false;
+    });
+
+  }
+
+  Widget emailSentMessage(){
+    return Visibility(
+        visible: _emailSent,
+        child: Container(
+          color: LIGHT_GREY_COLOR,
+          padding: const EdgeInsets.all(16),
+          child: const Center(
+            child: Text(ERROR_CONFIRM_USER_SIGN_UP, ),
+          ),
+        )
     );
   }
 

@@ -30,6 +30,9 @@ Failure failureHandler(String message, int? errorCode){
         return FailureResponse(getError500(message));
     }
   }
+  if(message.contains('Email not confirmed')){
+    return const FailureResponse(ERROR_CONFIRM_USER_SIGN_UP);
+  }
   if(message.contains('For security purposes, you can only request this once every 60 seconds')){
     return const FailureResponse(ERROR_RESET_PASS_REQUEST_EACH_60_SEC);
   }
