@@ -28,22 +28,14 @@ abstract class FoodsRepository{
       List<List<double>> macroGoalsRange, List<String> restriction);
 
 
-  //case 4
-  Future<Either<Failure, List<Food>>> getInternationalMealsFromRemote(String query);
 
   Future<Either<Failure, Success>> saveMyGroceryProductToRemote(Food food);
 
   Future<Either<Failure, Success>> removeGroceryFromMyFavoritesInRemote(Food food);
 
-  Future<Either<Failure, List<Food>>> getMyGroceryProductsFromRemote(String query);
-
   Future<Either<Failure, Success>> saveMyMealToRemote(Food food);
 
   Future<Either<Failure, Success>> removeMealFromMyFavoritesInRemote(Food food);
-
-  Future<Either<Failure, List<Food>>> getMyMealsFromRemote(String query);
-
-  Future<Either<Failure, Success>> saveSuggestedMealToRemote(Food food);
 
   Future<Either<Failure, List<Food>>> logFoodsInRemote(List<Food> foods);
 
@@ -117,10 +109,6 @@ abstract class FoodsRepository{
   Future<Either<Failure, List<Food>>> getGroceryProductsFromLocalDb(String query);
 
   Future<Either<Failure, List<Food>>> getLastSearchedGroceryProducts();
-
-  Future<Either<Failure, Food>> getMealFromLocalDb(int mealId);
-
-  Future<Either<Failure, int>> saveMealToLocalDb(Food food);
 
   Future<Either<Failure, Success>> updateFavoriteFieldOfMealLocalDb(Food food, bool isFavorite);
 

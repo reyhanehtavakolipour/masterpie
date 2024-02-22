@@ -41,30 +41,12 @@ class GetMyFavoriteFoodsUseCase{
   }
 
   Future<Either<Failure, List<Food>>> getMyFavoriteFoods(FoodType foodsType, String query) async {
-    if (foodsType == FoodType.meal) {
-      final myFavoritesMealsRemoteResponse = await foodRepo.getMyMealsFromRemote(
-          query);
-      if (myFavoritesMealsRemoteResponse.isRight()) {
-        await foodRepo.saveMyMealsToLocalDb(myFavoritesMealsRemoteResponse.asRight());
-        return getImmediateResponse(foodsType, query);
-      }
-      return Left(getFailure(myFavoritesMealsRemoteResponse.asLeft()));
-    } else if (foodsType == FoodType.groceryProduct) {
-      final myFavoriteGroceriesRemoteResponse = await foodRepo
-          .getMyGroceryProductsFromRemote(query);
-      if (myFavoriteGroceriesRemoteResponse.isRight()) {
-        await foodRepo.saveMyGroceryProductsToLocalDb(myFavoriteGroceriesRemoteResponse.asRight());
-        return getImmediateResponse(foodsType, query);
-      }
-      return Left(getFailure(myFavoriteGroceriesRemoteResponse.asLeft()));
-    } else {
-      final myFavoritesRemoteResponse = await foodRepo.getMyFoodsFromRemote(query);
-      if (myFavoritesRemoteResponse.isRight()) {
-        await foodRepo.saveMyFoodsToLocalDb(myFavoritesRemoteResponse.asRight());
-        return getImmediateResponse(foodsType, query);
-      }
-      return Left(getFailure(myFavoritesRemoteResponse.asLeft()));
+    final myFavoritesRemoteResponse = await foodRepo.getMyFoodsFromRemote(query);
+    if (myFavoritesRemoteResponse.isRight()) {
+      await foodRepo.saveMyFoodsToLocalDb(myFavoritesRemoteResponse.asRight());
+      return getImmediateResponse(foodsType, query);
     }
+    return Left(getFailure(myFavoritesRemoteResponse.asLeft()));
   }
 
 }

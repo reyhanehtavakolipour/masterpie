@@ -19,52 +19,6 @@ import 'masterpie_food_remote_datasource.dart';
 
 class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getInternationalMeals(String nationalityRemote) {
-    // TODO: implement getInternationalMeals
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getMyGroceryProducts(String query, String userId) async{
-    return Right([]);
-  }
-
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getMyFavoriteMeals(String query, String userId) async{
-    return Right([]);
-  }
-
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getPreviouslySearchedGroceries() {
-    // TODO: implement getPreviouslySearchedGroceries
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getPreviouslySuggestedMeals() {
-    // TODO: implement getPreviouslySuggestedMeals
-    throw UnimplementedError();
-  }
-
-
-  @override
-  Future<Either<Failure, Success>> saveSearchedGroceryProducts(List<FoodRemote> groceries) {
-    // TODO: implement saveGroceryProducts
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Success>> saveSuggestedMeal(FoodRemote mealRemote) {
-    // TODO: implement saveSuggestedMeal
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Success>> saveToMyGroceries(List<FoodRemote> groceries) {
-    // TODO: implement saveToMyGroceries
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, Success>> saveToMyFavoriteMeals(FoodRemote mealRemote, String userId) async{

@@ -280,8 +280,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void showCredits() async{
-    //todo change address
-    final Uri url = Uri.parse('https://masterpieapp.com');
+    final Uri url = Uri.parse('https://www.masterpieapp.com/credits');
     await launchUrl(url);
   }
 
@@ -491,16 +490,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
               const Divider(),
 
-              Visibility(
-                visible: false,
-                child: ListTile(
-                  leading: const Icon(Icons.attribution),
-                  title: const Text(CREDITS_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                  onTap: () {
-                    _scaffoldKey.currentState?.openEndDrawer();
-                   showCredits();
-                  },
-                ),
+              ListTile(
+                leading: const Icon(Icons.attribution),
+                title: const Text(CREDITS_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  showCredits();
+                },
               ),
 
 

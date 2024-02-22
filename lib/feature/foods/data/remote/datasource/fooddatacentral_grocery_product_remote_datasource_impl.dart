@@ -11,11 +11,6 @@ import 'fooddatacentral_grocery_product_remote_datasource.dart';
 
 class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
 
-  @override
-  Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromOpenFoodFacts(String query) {
-    // TODO: implement getGroceryProductsFromOpenFoodFacts
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromFoodDataCentral(String query) async{
@@ -93,7 +88,6 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
       return  Left(RemoteFailure(response.statusCode, response.data['message']));
     }catch(e){
 
-      print('sdgsss: $e');
       return Left(ExceptionFailure(e));
     }
   }
@@ -101,14 +95,12 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
   // @override
   // Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromOpenFoodFacts(String query) async{
   //
-  //   //todo handle pagination
   //   final parameters = <Parameter>[
   //     const PageNumber(page: 1),
   //     const PageSize(size: PAGE_SIZE),
   //     SearchTerms(terms: <String>[query])
   //   ];
   //
-  //   //todo put user country and language here
   //   final ProductSearchQueryConfiguration configuration =
   //   ProductSearchQueryConfiguration(
   //     parametersList: parameters,
@@ -119,7 +111,6 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
   //   );
   //
   //
-  //   // todo put user information here
   //   const User user = User(
   //     userId: '',
   //     password: '',

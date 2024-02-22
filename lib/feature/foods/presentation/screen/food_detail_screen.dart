@@ -1027,12 +1027,14 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         return;
       }
 
-      if(_favoriteId.isNotEmpty){
-        _showUpdateLoggedFoodAndFavoriteConfirmation(context);
-      }else{
+      //todo fix this issue for production: when click on yes, favorite food only gets updated but logged food not
+      // if(_favoriteId.isNotEmpty){
+      //   _showUpdateLoggedFoodAndFavoriteConfirmation(context);
+      // }else{
         _updatebuttonClicked= true;
         requestLoggedFoods();
-      }
+      // }
+
     }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW ||
         widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW){
       if(_favoriteId.isNotEmpty){

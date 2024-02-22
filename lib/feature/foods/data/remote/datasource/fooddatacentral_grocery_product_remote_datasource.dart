@@ -11,7 +11,4 @@ abstract class GroceryProductRemoteDataSource{
 
   Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromFoodDataCentral(String query);
 
-  Future<Either<Failure, List<FoodRemote>>> getGroceryProductsFromOpenFoodFacts(String query);
-
-
 }

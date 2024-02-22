@@ -51,17 +51,6 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, List<Food>>> getMyGroceryProductsFromRemote(String query) async{
-    String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    List<Food> foods = [];
-    final myGroceriesRemoteResponse = await masterPieFoodRemoteDataSource.getMyGroceryProducts(query, userId);
-    if(myGroceriesRemoteResponse.isRight()){
-      foods.addAll(mapper.fromGroceryProductsRemote(myGroceriesRemoteResponse.asRight()));
-    }
-    return Right(foods);
-  }
-
-  @override
   Future<Either<Failure, List<Food>>> getGroceryProductsFromRemote(String query) async{
     List<Food> foods = [];
     // remote source: Food Data Central
@@ -120,23 +109,6 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
 
-  @override
-  Future<Either<Failure, Food>> getMealFromLocalDb(int mealId) async{
-    final mealLocalDbResponse= await foodLocalDataSource.getMeal(mealId);
-    if(mealLocalDbResponse.isRight()){
-      return Right(mapper.fromMealLocal(mealLocalDbResponse.asRight()));
-    }
-    return Left(mealLocalDbResponse.asLeft());
-  }
-
-  @override
-  Future<Either<Failure, int>> saveMealToLocalDb(Food food) async{
-    final saveMealResponse= await foodLocalDataSource.saveFood(mapper.toMealLocal(food));
-    if(saveMealResponse.isRight()){
-      return Right(saveMealResponse.asRight());
-    }
-    return Left(saveMealResponse.asLeft());
-  }
 
   @override
   Future<Either<Failure, List<Food>>> getLastSearchedGroceryProducts() async{
@@ -223,25 +195,6 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, Success>> saveSuggestedMealToRemote(Food food) async{
-    final saveFoodResponse= await masterPieFoodRemoteDataSource.saveSuggestedMeal(mapper.toMealRemote(food));
-    if(saveFoodResponse.isRight()){
-      return const Right(Success());
-    }
-    return Left(saveFoodResponse.asLeft());
-  }
-
-  @override
-  Future<Either<Failure, List<Food>>> getInternationalMealsFromRemote(String query) async{
-    List<Food> foods = [];
-    final foodsRemoteResponse = await masterPieFoodRemoteDataSource.getInternationalMeals(query);
-    if(foodsRemoteResponse.isRight()){
-      foods.addAll(mapper.fromGroceryProductsRemote(foodsRemoteResponse.asRight()));
-    }
-    return Right(foods);
-  }
-
-  @override
   Future<Either<Failure, List<Food>>> getMyFoodsFromRemote(String query) async{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     List<Food> foods = [];
@@ -307,17 +260,6 @@ class FoodsRepositoryImpl extends FoodsRepository{
     final foodsLocal = await foodLocalDataSource.getMyFoods(query);
     if(foodsLocal.isRight()){
       foods.addAll(mapper.fromMyFoodsLocal(foodsLocal.asRight()));
-    }
-    return Right(foods);
-  }
-
-  @override
-  Future<Either<Failure, List<Food>>> getMyMealsFromRemote(String query) async{
-    String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    List<Food> foods = [];
-    final myMealsRemoteResponse = await masterPieFoodRemoteDataSource.getMyFavoriteMeals(query, userId);
-    if(myMealsRemoteResponse.isRight()){
-      foods.addAll(mapper.fromGroceryProductsRemote(myMealsRemoteResponse.asRight()));
     }
     return Right(foods);
   }

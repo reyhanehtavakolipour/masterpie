@@ -148,11 +148,6 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     return Right(meals);
   }
 
-  @override
-  Future<Either<Failure, List<FoodLocal>>> getPreviouslySuggestedMeals() {
-    // TODO: implement getPreviouslySuggestedMeals
-    throw UnimplementedError();
-  }
 
 
   @override
@@ -183,17 +178,7 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     return const Right(Success());
   }
 
-  @override
-  Future<Either<Failure, int>> saveFood(FoodLocal meal) {
-    // TODO: implement saveSuggestedMeal
-    throw UnimplementedError();
-  }
 
-  @override
-  Future<Either<Failure, FoodLocal>> getMeal(int mealId) {
-    // TODO: implement getMeal
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, List<FoodLocal>>> getLastSearchedGroceryProducts() async{

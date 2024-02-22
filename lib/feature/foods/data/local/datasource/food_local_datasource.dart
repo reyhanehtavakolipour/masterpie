@@ -22,12 +22,6 @@ abstract class FoodLocalDataSource{
 
   Future<Either<Failure, List<FoodLocal>>> getLastSearchedGroceryProducts();
 
-  Future<Either<Failure, int>> saveFood(FoodLocal foodLocal);
-
-  Future<Either<Failure, List<FoodLocal>>> getPreviouslySuggestedMeals();
-
-  Future<Either<Failure, FoodLocal>> getMeal(int mealId);
-
   Future<Either<Failure, Success>> updateFavoriteFieldOfFood(FoodLocal foodLocal, bool isFavorite);
 
 
