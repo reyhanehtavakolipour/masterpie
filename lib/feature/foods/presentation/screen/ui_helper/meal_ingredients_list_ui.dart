@@ -91,15 +91,17 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
         itemBuilder: (context, index){
           String ingredientName = widget.meal.ingredients[index];
           if(widget.ingredientsExpansionState[index] ){
-            _calorieController= TextEditingController(text: widget.meal.calorie[index]);
-            _proteinController= TextEditingController(text: widget.meal.protein[index]);
-            _carbController= TextEditingController(text: widget.meal.carb[index]);
-            _fatController= TextEditingController(text: widget.meal.fat[index]);
-            _servingController= TextEditingController(text: widget.meal.servingAmounts[index]);
-            _ingredientNameController= TextEditingController(text: widget.ingredients[index]);
-            _ingredientServingCountController= TextEditingController(text: widget.meal.servingIngredientsCount[index]);
-            _unitController = TextEditingController(text: widget.meal.units[index]);
+            _calorieController.text = widget.meal.calorie[index];
+            _proteinController.text = widget.meal.protein[index];
+            _carbController.text = widget.meal.carb[index];
+            _fatController.text = widget.meal.fat[index];
+            _servingController.text = widget.meal.servingAmounts[index];
+            _ingredientNameController.text = widget.meal.ingredients[index];
+            _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index];
+            _unitController.text = widget.meal.units[index];
             _ingredientNameController.addListener(_onSearchIngredientChanged);
+
+
           }
 
           return SizedBox(
@@ -363,6 +365,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
       widget.onIngredientUpdated(updatedFood);
     });
   }
+
 
 
   void updatedIngredientMacroListener(String value){
