@@ -20,10 +20,10 @@ class RegisterUseCase{
       await repo.saveUserEmailInHive(email);
       await repo.saveUserPasswordInHive(password);
       await repo.saveUserIdInHive(registerResponseRemote.getOrElse(() => ''));
-      await repo.setUserSubscriptionPlanAfterRegisterInRemote();
       final loginResponseRemote = await repo.loginUserWithCredentialInRemote(email, password);
       if(loginResponseRemote.isRight()){
         await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight(), email: email));
+        await repo.setUserSubscriptionPlanAfterRegisterInRemote();
         return  Right(email);
       }
       return Left(getFailure(FailureResponse(loginResponseRemote.asLeft().message)));

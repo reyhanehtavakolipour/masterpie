@@ -43,6 +43,7 @@ class FoodCalculator{
 
         foodUnit = food.units[0];
       }else{
+
         for (int i = 0; i < food.calorie.length; i++) {
           double servingCount = double.parse(food.servingIngredientsCount[i].isEmpty ? '1' : food.servingIngredientsCount[i]);
           calorie = calorie + double.parse(food.calorie[i].isEmpty ? '0' : food.calorie[i])*servingCount;

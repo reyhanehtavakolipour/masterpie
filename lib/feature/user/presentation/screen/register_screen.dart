@@ -248,13 +248,6 @@ class _RegisterScreenState extends State<RegisterScreen>{
     );
   }
 
-
-  void registerWithGoogleClickListener(){
-    _registerBloc.add(
-      const RegisterEvent.onRegisterWithGoogle(),
-    );
-  }
-
   void registerWithCredentialClickListener(){
 
     FocusScope.of(context).unfocus();

@@ -89,6 +89,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
 
+
   @override
   Future<Either<Failure, Food>> suggestMealFromRemote(List<String> mustIngredients, String nationality, List<String> allergies, String diet) async{
     await userRepo.checkSubscriptionInRemote();
@@ -109,8 +110,6 @@ class FoodsRepositoryImpl extends FoodsRepository{
       if(userPlanResponse.asRight().suggestFoodRequestsLeft > 0){
         final suggestMealResponse= await openAIFoodRemoteDataSource.suggestMeal(mustIngredients, nationality, allergies, diet);
         if(suggestMealResponse.isRight()){
-          userRepo.updateSuggestFoodRequestsLeftInRemote();
-          await saveUserSuggestedFoodInRemote(suggestMealResponse.asRight().name, suggestMealResponse.asRight().ingredients, '', '');
           return Right(mapper.fromMealRemote(suggestMealResponse.asRight()));
         }
         return Left(suggestMealResponse.asLeft());
@@ -527,6 +526,8 @@ class FoodsRepositoryImpl extends FoodsRepository{
   Future<Either<Failure, Food>> getMealRecipeFromRemote(String name, List<String> mustIngredient, List<String> allergies) async{
     final mealResponse= await openAIFoodRemoteDataSource.getMealRecipe(name, mustIngredient, allergies);
     if(mealResponse.isRight()){
+      userRepo.updateSuggestFoodRequestsLeftInRemote();
+      await saveUserSuggestedFoodInRemote(name, mustIngredient, '', '');
       return Right(mapper.fromMealRemote(mealResponse.asRight()));
     }
     return Left(mealResponse.asLeft());

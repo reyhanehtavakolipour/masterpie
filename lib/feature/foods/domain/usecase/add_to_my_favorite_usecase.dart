@@ -68,6 +68,7 @@ class AddToMyFavoriteUseCase{
   }
 
 
+
   Food checkFood(Food food){
 
     List<String> ingredients= [];
@@ -83,9 +84,9 @@ class AddToMyFavoriteUseCase{
     List<String> calorie= [];
     food.calorie.forEach((element) {
       if(element.isEmpty){
-        calorie.add('0');
+        calorie.add('0.0');
       }else{
-        calorie.add(element);
+        calorie.add(double.parse(element).toString());
       }
     });
 
@@ -94,27 +95,27 @@ class AddToMyFavoriteUseCase{
     List<String> protein= [];
     food.protein.forEach((element) {
       if(element.isEmpty){
-        protein.add('0');
+        protein.add('0.0');
       }else{
-        protein.add(element);
+        protein.add(double.parse(element).toString());
       }
     });
 
     List<String> carb= [];
     food.carb.forEach((element) {
       if(element.isEmpty){
-        carb.add('0');
+        carb.add('0.0');
       }else{
-        carb.add(element);
+        carb.add(double.parse(element).toString());
       }
     });
 
     List<String> fat= [];
     food.fat.forEach((element) {
       if(element.isEmpty){
-        fat.add('0');
+        fat.add('0.0');
       }else{
-        fat.add(element);
+        fat.add(double.parse(element).toString());
       }
     });
 
@@ -131,9 +132,9 @@ class AddToMyFavoriteUseCase{
     List<String> servingAmounts= [];
     food.servingAmounts.forEach((element) {
       if(element.isEmpty){
-        servingAmounts.add('100');
+        servingAmounts.add('100.0');
       }else{
-        servingAmounts.add(element);
+        servingAmounts.add(double.parse(element).toString());
       }
     });
 

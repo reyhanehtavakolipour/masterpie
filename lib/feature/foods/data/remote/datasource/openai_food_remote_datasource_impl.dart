@@ -81,28 +81,28 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
 
 
       List<String> calorie= [];
-      calorie = (jsonMap['calorie'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      calorie = (jsonMap['calorie'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
 
 
       List<String> protein= [];
-      protein = (jsonMap['protein'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      protein = (jsonMap['protein'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
 
 
 
       List<String> carb= [];
-      carb = (jsonMap['carb'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      carb = (jsonMap['carb'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
 
 
 
 
       List<String> fat= [];
-      fat = (jsonMap['fat'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      fat = (jsonMap['fat'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
 
 
 
 
       List<String> servingAmounts= [];
-      servingAmounts = (jsonMap['serving amount'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString()).toList();
+      servingAmounts = (jsonMap['serving amount'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
 
 
 
@@ -126,9 +126,23 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
 
 
       List<String> servingIngredientsCount= [];
-      ingredients.forEach((element) {
+      calorie.forEach((element) {
         servingIngredientsCount.add('1.0');
       });
+
+
+
+      final ingredientsLength = ingredients.length;
+      if(servingAmounts.length != ingredientsLength ||
+          units.length != ingredientsLength ||
+          calorie.length != ingredientsLength ||
+          protein.length != ingredientsLength ||
+          carb.length != ingredientsLength ||
+          fat.length != ingredientsLength ||
+          servingIngredientsCount.length != ingredientsLength
+      ){
+        return const Left(FailureResponse(''));
+      }
 
 
       return Right(
@@ -159,6 +173,22 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
   Map<String, dynamic> extractData(String inputString) {
     String validJson = inputString.replaceAll("'", '"');
     return json.decode(validJson);
+  }
+
+
+  String convertToDecimal(dynamicItem) {
+      if (dynamicItem.toString().contains('/')) {
+        List<String> parts = dynamicItem.split('/');
+        if (parts.length == 2) {
+          try {
+            double result = double.parse(parts[0]) / double.parse(parts[1]);
+            return result.toString();
+          } catch (e) {
+            return dynamicItem.toString();
+          }
+        }
+      }
+    return double.parse(dynamicItem.toString()).toString();
   }
 
 

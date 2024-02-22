@@ -442,17 +442,22 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     return const Right(Success());
   }
 
+
   @override
   Future<Either<Failure, String>> isFoodInMyFavorites(MyFoodLocal foodLocal) async{
     final db = await serviceLocator<DatabaseHelper>().db;
     String favoriteId = '';
     try{
+
       final list = await db?.query(TABLE_MY_FOOD,
-        where: '$FOOD_TYPE = ? AND $MY_ID = ? AND $NAME = ? AND $SERVING_AMOUNTS = ? AND $UNITS = ? AND $RECIPE = ? AND $INGREDIENTS = ?'
-            ' AND $SERVING_INGREDIENTS_COUNT = ? AND $SERVING_AMOUNT = ? AND $FOOD_UNIT = ? AND $CALORIE = ? AND $PROTEIN = ? AND $CARB = ? AND $FAT = ?',
-        whereArgs: [getFoodType(foodLocal.toJson()['foodTypeLocal']).name, foodLocal.toJson()['myId'], foodLocal.toJson()['name'], foodLocal.toJson()['servingAmounts'], foodLocal.toJson()['units'], foodLocal.toJson()['recipe'], foodLocal.toJson()['ingredients'],
-    foodLocal.toJson()['servingIngredientsCount'],foodLocal.toJson()['servingAmount'], foodLocal.toJson()['unit'], foodLocal.toJson()['calorie'], foodLocal.toJson()['protein'], foodLocal.toJson()['carb'], foodLocal.toJson()['fat'],
-      ]);
+          where: '$FOOD_TYPE = ? AND $MY_ID = ? AND $NAME = ? AND $SERVING_AMOUNTS = ? AND $UNITS = ? AND $RECIPE = ? AND $INGREDIENTS = ?'
+              ' AND $SERVING_INGREDIENTS_COUNT = ? AND $SERVING_AMOUNT = ? AND $FOOD_UNIT = ? AND $CALORIE = ? AND $PROTEIN = ? AND $CARB = ? AND $FAT = ?',
+          whereArgs: [getFoodType(foodLocal.toJson()['foodTypeLocal']).name.toString(), foodLocal.toJson()['myId'].toString(), foodLocal.toJson()['name'].toString(),
+            foodLocal.toJson()['servingAmounts'].toString(), foodLocal.toJson()['units'].toString(), foodLocal.toJson()['recipe'].toString(), foodLocal.toJson()['ingredients'].toString(),
+            foodLocal.toJson()['servingIngredientsCount'].toString(),foodLocal.toJson()['servingAmount'].toString(), foodLocal.toJson()['unit'].toString(), foodLocal.toJson()['calorie'].toString(),
+            foodLocal.toJson()['protein'].toString(), foodLocal.toJson()['carb'].toString(), foodLocal.toJson()['fat'].toString(),
+          ]);
+
       if((list ?? []).isNotEmpty){
         final food = MyFoodLocal.fromJson(list![0]);
         favoriteId= food.foodId;

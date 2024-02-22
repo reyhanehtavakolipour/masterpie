@@ -1027,7 +1027,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         return;
       }
 
-
       if(_favoriteId.isNotEmpty){
         _showUpdateLoggedFoodAndFavoriteConfirmation(context);
       }else{
@@ -1057,8 +1056,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       );
     }
   }
-
-
    Future<void> _showUpdateLoggedFoodAndFavoriteConfirmation(BuildContext context) async {
      return showDialog<void>(
        context: context,
@@ -1098,9 +1095,15 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
      );
    }
 
-
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
       TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController, bool isTotal){
+
+    bool isEditable= _enabled;
+
+    if(isTotal && _foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && _enabled && (calorieController == _totalCalorieController)){
+      isEditable = false;
+    }
+
     return Column(
       children: [
         ///  serving + unit
@@ -1181,7 +1184,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
+                enabled: isEditable,
                 controller: calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
@@ -1213,7 +1216,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
+                enabled: isEditable,
                 controller: proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
@@ -1252,7 +1255,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
+                enabled: isEditable,
                 controller: carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
@@ -1284,7 +1287,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
+                enabled: isEditable,
                 controller: fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
