@@ -460,7 +460,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
             contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
           ),
           focusColor: PRIMARY_COLOR,
-          items: [MALE_LABEL, FEMALE_LABEL, NOT_WISH_ANSWER_LABEL].map((String item) {
+          items: [MALE_LABEL, FEMALE_LABEL].map((String item) {
             return DropdownMenuItem<String>(
               value: item,
               child: Text(item),

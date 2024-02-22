@@ -150,6 +150,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         lastName: data[0]['lastName'] ?? '',
         weight: data[0]['weight'] ?? '',
         height: data[0]['height'] ?? '',
+        gender: data[0]['gender'],
         weightUnit: data[0]['weightUnit'] ?? '',
         heightUnit: data[0]['heightUnit'] ?? '',
         goalWeight: data[0]['goalWeight'] ?? '',
