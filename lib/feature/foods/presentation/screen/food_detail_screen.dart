@@ -674,6 +674,27 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
 
   Widget recipe(){
+
+    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW ||
+        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE ||
+        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW){
+
+      return Visibility(
+          visible: _foodType == MEAL_LABEL,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16,),
+              const Text('$RECIPE_LABEL:', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 16),),
+              Text(newFood.recipe, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),),
+            ],
+          )
+      );
+    }
+
+
+
+
     return Visibility(
       visible: _foodType == MEAL_LABEL,
       child: Container(
@@ -751,6 +772,28 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   }
 
   Widget addedIngredients(){
+    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW ||
+        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE ||
+        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW){
+
+      String ingredients = '';
+      for (int i = 0; i < newFood.ingredients.length; i++){
+        ingredients = '$ingredients\n- ${newFood.ingredients[i].capitalize()}, ${newFood.servingAmounts[i]} ${newFood.units[i]}';
+      }
+
+        return Visibility(
+          visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16,),
+              const Text('$INGREDIENTS_LABEL:', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 16),),
+              Text(ingredients, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal, fontSize: 15),),
+            ],
+          )
+      );
+    }
+
      return Visibility(
        visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty,
          child: Column(
