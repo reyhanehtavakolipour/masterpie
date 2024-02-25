@@ -1,11 +1,47 @@
 
 import 'dart:math';
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_config/flutter_config.dart';
 import '../constant/api_constant.dart';
 import '../constant/messages_constants.dart';
+import 'package:oauth2/oauth2.dart' as oauth2;
+
+import '../response/failure.dart';
+
+
+
+Future<Either<Failure, oauth2.Client>> authFatSecret() async{
+
+  final authorizationEndpoint = Uri.parse('https://oauth.fatsecret.com/connect/token');
+  const identifier = 'c75c4c004d3e4823965e117075ce07f8';
+  const secret = 'b122d44d5a02433c8be4d6abe65fa3e5';
+
+  final scopes = ['basic'];
+
+  try {
+    final client = await oauth2.clientCredentialsGrant(
+        authorizationEndpoint,
+        identifier,
+        secret,
+        scopes: scopes
+    );
+
+    if (client.credentials.isExpired) {
+      await client.refreshCredentials();
+      print('Token refreshed successfully!');
+    }
+
+    return Right(client);
+
+  } catch (e) {
+    print('Failed to authenticate: $e');
+    return const Left(FailureResponse('oauth2 failed'));
+  }
+}
+
 
 
 class NetworkRequest extends BaseRequest{
@@ -18,6 +54,11 @@ class NetworkRequest extends BaseRequest{
     return request;
   }
 
+  static Future<NetworkRequest> createFatSecret(String token) async {
+    request.updateDioInterceptors();
+    await request.addFatSecretHeaders(token);
+    return request;
+  }
 
   static Future<NetworkRequest> createGoogleCloud() async {
     request.updateDioInterceptors();
@@ -36,6 +77,10 @@ class NetworkRequest extends BaseRequest{
 
     _dio.options.headers['apikey'] = anonKey;
 
+  }
+
+  Future<void> addFatSecretHeaders(String token) async{
+    _dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
   Future<void> addGoogleCloudHeaders() async{
@@ -99,6 +144,10 @@ class BaseRequest {
 
   Future<Response> post(String path, {Object? data}) async {
     return await _dio.post(path, data: data);
+  }
+
+  Future<Response> postParams(String path, {Map<String, dynamic>? params}) async {
+    return await _dio.post(path, queryParameters: params);
   }
 
   Future<Response> getWithQueries(String path, Map<String, dynamic> queryParams) async {
