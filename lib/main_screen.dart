@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
@@ -18,12 +19,10 @@ import 'feature/foods/domain/model/food_model.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
-import 'feature/foods/presentation/screen/food_detail_screen.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
 import 'feature/foods/presentation/screen/search_food_screen.dart';
 import 'feature/foods/presentation/screen/suggest_food_screen.dart';
-import 'feature/foods/presentation/screen/ui_helper/foods_list_ui.dart';
 import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -1121,10 +1120,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                                       Visibility(
                                                           visible: _foods.isNotEmpty,
-                                                          child: FoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
+                                                          child: LoggedFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
                                                             onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
                                                             foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
-                                                            foodDetailScreenType: FoodDetailScreenType.LOGGED_FOOD_VIEW, foodsListScreen: FoodsListScreen.MAIN_SCREEN, macroEdition: _macroEdition,)
+                                                           macroEdition: _macroEdition,)
                                                       ),
 
                                                       Positioned(

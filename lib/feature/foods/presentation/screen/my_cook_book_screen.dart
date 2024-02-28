@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
-import 'package:masterpie/feature/foods/presentation/screen/my_favorite_foods_list_ui.dart';
+import 'package:masterpie/feature/foods/presentation/screen/add_new_cook_book_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -30,19 +31,19 @@ import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
 import '../food_calculator/food_calculator.dart';
 
-class MyFavoriteFoodsScreen extends StatefulWidget {
+class MyCookBookScreen extends StatefulWidget {
 
-  const MyFavoriteFoodsScreen({Key? key}) : super(key: key);
+  const MyCookBookScreen({Key? key}) : super(key: key);
 
 
 
   @override
-  State<MyFavoriteFoodsScreen> createState() => _MyFavoriteFoodsScreenState();
+  State<MyCookBookScreen> createState() => _MyCookBookScreenState();
 }
 
 
 
-class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
+class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
   late AddOrUpdateMyFavoriteBloc _addToMyFavoriteBloc;
@@ -117,7 +118,17 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
               ),
             ),
             actions: [
-
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white,),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddNewCookBookScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           body:
@@ -177,7 +188,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
 
 
                       /// My favorite list
-                      MyFavoritesFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
+                      MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
                           onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
                           foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
                         macroEdition: true,),

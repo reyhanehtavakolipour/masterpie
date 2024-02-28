@@ -3,23 +3,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/screen/edit_suggested_food_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/edit_food_information_dialog.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/edit_food_info_ui_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
 import '../../../../../util/design/size/app_widget_size.dart';
 import '../../../../../util/design/text/app_assets.dart';
-import '../../../domain/model/food_model.dart';
-import '../../../domain/model/food_type.dart';
-import '../../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
-import '../../food_calculator/food_calculator.dart';
-import '../food_detail_screen.dart';
-import 'edit_food_information_dialog.dart';
-import 'model/edit_food_info_ui_model.dart';
-import 'model/food_detail_argument_model.dart';
+import '../../domain/model/food_model.dart';
+import '../../domain/model/food_type.dart';
+import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
+import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
+import '../food_calculator/food_calculator.dart';
 
 
-class FoodsListUi extends StatefulWidget {
+
+class SuggestFoodsListUi extends StatefulWidget {
 
   final FoodCalculator foodCalculator;
   final Function(List<Food>) onFoodsChanged;
@@ -28,33 +29,23 @@ class FoodsListUi extends StatefulWidget {
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
-  final FoodDetailScreenType foodDetailScreenType;
-  final FoodsListScreen foodsListScreen;
   final bool macroEdition;
 
-  const FoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
+  const SuggestFoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
     required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
-  required this.foodBackGroundColor, required this.foodIcon, required this.foodDetailScreenType,
-    required this.foodsListScreen, required this.macroEdition});
+  required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
   @override
-  State<FoodsListUi> createState() => _FoodsListUiState();
+  State<SuggestFoodsListUi> createState() => _SuggestFoodsListUiState();
 
-  static _FoodsListUiState? of(BuildContext context) {
-    return context.findAncestorStateOfType<_FoodsListUiState>();
+  static _SuggestFoodsListUiState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_SuggestFoodsListUiState>();
   }
 }
 
-enum FoodsListScreen{
-  SEARCH_FOOD_SCREEN,
-  MAIN_SCREEN,
-  MY_FAVORITE_FOODS_SCREEN,
-  INTERNATIONAL_MEALS_SCREEN,
-  SUGGEST_FOOD_SCREEN
-}
 
-class _FoodsListUiState extends State<FoodsListUi> {
+class _SuggestFoodsListUiState extends State<SuggestFoodsListUi> {
 
 
   List<Food> foodsChanged= [];
@@ -118,7 +109,7 @@ class _FoodsListUiState extends State<FoodsListUi> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: widget.foodsListScreen == FoodsListScreen.MAIN_SCREEN ? null : const NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.foods.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
@@ -139,15 +130,13 @@ class _FoodsListUiState extends State<FoodsListUi> {
               return GestureDetector(
                 onTap: (){
                     FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
-                      foodDetailScreenType: widget.foodDetailScreenType,
                       food: checkFoodParameters(food),
-                      foodsListScreen: widget.foodsListScreen,
                       macroEdition: widget.macroEdition
                     );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FoodDetailScreen(foodDetailArgumentModel: argumentModel,),
+                        builder: (context) => EditSuggestedFoodScreen(foodDetailArgumentModel: argumentModel,),
                       ),
                     );
                 },
@@ -221,28 +210,25 @@ class _FoodsListUiState extends State<FoodsListUi> {
 
 
                               /// more icon: add/remove favorite
-                              Visibility(
-                                visible: widget.foodsListScreen != FoodsListScreen.MAIN_SCREEN,
-                                child: PopupMenuButton<String>(
-                                  icon: const Icon(Icons.more_horiz),
-                                  onSelected: (String result) {
-                                    if(result == ADD_TO_MY_FAVORTITE){
-                                      widget.onFavoriteButtonClicked(food, true);
-                                    }else{
-                                      widget.onFavoriteButtonClicked(food, false);
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                    PopupMenuItem<String>(
-                                      value: widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE,
-                                      child: ListTile(
-                                        leading: widget.foodIcon.icon == Icons.favorite ? const Icon(Icons.delete) : const Icon(Icons.favorite),
-                                        title: Text(widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE, style: const TextStyle(fontFamily: MONTSERRAT_FONT),),
-                                      ),
+                              PopupMenuButton<String>(
+                                icon: const Icon(Icons.more_horiz),
+                                onSelected: (String result) {
+                                  if(result == ADD_TO_MY_FAVORTITE){
+                                    widget.onFavoriteButtonClicked(food, true);
+                                  }else{
+                                    widget.onFavoriteButtonClicked(food, false);
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) =>
+                                <PopupMenuEntry<String>>[
+                                  PopupMenuItem<String>(
+                                    value: widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE,
+                                    child: ListTile(
+                                      leading: widget.foodIcon.icon == Icons.favorite ? const Icon(Icons.delete) : const Icon(Icons.favorite),
+                                      title: Text(widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE, style: const TextStyle(fontFamily: MONTSERRAT_FONT),),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
 
 

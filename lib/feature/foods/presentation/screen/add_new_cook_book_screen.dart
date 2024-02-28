@@ -4,62 +4,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:intl/intl.dart';
-import 'package:masterpie/feature/foods/presentation/screen/search_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../../user/presentation/screen/user_plan_screen.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
 import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
-import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
-import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
-import '../bloc/log_foods_bloc/log_foods_bloc.dart';
-import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
-import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
-import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
-import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
 import 'my_favorite_foods_screen.dart';
 
 
-enum FoodDetailScreenType{
-  ADD_NEW_FAVORITE,
-  EDIT_FAVORITE,
-  VIEW_FAVORITE,
-  VIEW,
-  LOGGED_FOOD_VIEW,
-  LOGGED_FOOD_EDIT,
-  SUGGEST_FOOD_EDIT
-}
 
-class FoodDetailScreen extends StatefulWidget {
+class AddNewCookBookScreen extends StatefulWidget {
 
-  static const routeName = '/food-detail-screen';
-
-  final FoodDetailArgumentModel foodDetailArgumentModel;
-
-  const FoodDetailScreen({super.key, required this.foodDetailArgumentModel});
+  const AddNewCookBookScreen({super.key});
 
   @override
-  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
+  State<AddNewCookBookScreen> createState() => _AddNewCookBookScreenState();
 }
 
-class _FoodDetailScreenState extends State<FoodDetailScreen> {
+class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
   /// for whole meal OR grocery,
    /// groceries: the first(the only item in the list) element is the value
@@ -104,34 +77,17 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
   String _foodType = GROCERY_LABEL;
   late GroceriesBloc _groceriesBloc;
-  late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
   Food newFood = Food();
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
-  late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
-   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
-   late LogFoodsBloc _logFoodsBloc;
 
 
    List<Food> _suggestedGroceries= [];
 
 
-   bool _enabled =  false;
-
-   String _favoriteId= '';
-
-   bool _updatebuttonClicked= false;
-
   @override
   void initState() {
     super.initState();
     _addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-    _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
-    _myFavoriteFoodsBloc = context.read<MyFavoriteFoodsBloc>();
-    _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
-    _logFoodsBloc = context.read<LogFoodsBloc>();
-    _removeFromMyFavoriteBloc.add(
-      const RemoveFromMyFavoriteEvent.onReset(),
-    );
     _addOrUpdateMyFavoriteBloc.add(
       const AddOrUpdateMyFavoriteEvent.onReset(),
     );
@@ -159,54 +115,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     _groceryNameController.addListener(_onSearchGroceryChanged);
     
     _groceriesBloc = context.read<GroceriesBloc>();
-
-    init();
   }
-
-
-   void requestLoggedFoods(){
-     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-     _getLoggedFoodsBloc.add(
-         GetLoggedFoodsEvent.onGetImmediateLoggedFoods(formattedDate)
-     );
-   }
-
-   void searchFoodInFavorites(Food food){
-     _myFavoriteFoodsBloc.add(
-       MyFavoriteFoodsEvent.onImmediateSearchInMyFavoriteFoods(
-           food
-       ),
-     );
-   }
-
-   void logFoodsOfToday(List<Food> foodsLoggedBefore){
-     if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
-       List<Food> foods = [];
-       for(int i = 0; i < foodsLoggedBefore.length; i++){
-         if(foodsLoggedBefore[i].name.toString() == widget.foodDetailArgumentModel.food!.name.toString() &&
-             foodsLoggedBefore[i].foodType.name.toString() == widget.foodDetailArgumentModel.food!.foodType.name.toString() &&
-             foodsLoggedBefore[i].calorie.toString() == widget.foodDetailArgumentModel.food!.calorie.toString() &&
-             foodsLoggedBefore[i].protein.toString() == widget.foodDetailArgumentModel.food!.protein.toString() &&
-             foodsLoggedBefore[i].carb.toString() == widget.foodDetailArgumentModel.food!.carb.toString() &&
-             foodsLoggedBefore[i].fat.toString() == widget.foodDetailArgumentModel.food!.fat.toString()){
-           foods.add(newFood);
-         }else{
-           foods.add(foodsLoggedBefore[i]);
-         }
-       }
-
-       _logFoodsBloc.add(
-           LogFoodsEvent.onLogFoods(foods)
-       );
-     }else{
-       List<Food> foods = [];
-       foods.addAll(foodsLoggedBefore);
-       foods.add(newFood);
-       _logFoodsBloc.add(
-           LogFoodsEvent.onLogFoods(foods)
-       );
-     }
-   }
 
 
    void _onSearchGroceryChanged() {
@@ -215,7 +124,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
      });
      _debouncer.run(() {
        _suggestedGroceries.clear();
-       if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL && widget.foodDetailArgumentModel.food == null){
+       if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL){
          _groceriesBloc.add(
            GroceriesEvent.onGetGroceries(_groceryNameController.text),
          );
@@ -234,7 +143,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
      });
      _debouncer.run(() {
        _suggestedGroceries.clear();
-       if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH && _enabled){
+       if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH){
          _groceriesBloc.add(
            GroceriesEvent.onGetGroceries(_ingredientNameController.text),
          );
@@ -244,45 +153,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
        }
      });
    }
-
-   Future<void> _showDeleteConfirmation(BuildContext context) async {
-     return showDialog<void>(
-       context: context,
-       barrierDismissible: true, // User must tap a button to close the dialog
-       builder: (BuildContext context) {
-         return AlertDialog(
-           title: const Text(DELETE_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-           content: const SingleChildScrollView(
-             child: ListBody(
-               children: <Widget>[
-                 Text(DELETE_CONFIRMATION_QUESTION, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-               ],
-             ),
-           ),
-           actions: <Widget>[
-             TextButton(
-               child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-               onPressed: () {
-                 Navigator.of(context).pop();
-                 _removeFromMyFavoriteBloc.add(
-                   RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
-                       newFood
-                   ),
-                 );
-               },
-             ),
-             TextButton(
-               child: const Text(NO_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-               onPressed: () {
-                 Navigator.of(context).pop(); // Close the dialog
-               },
-             ),
-           ],
-         );
-       },
-     );
-   }
-
 
    void handleMealMacrosWithoutIngredient(){
      if(newFood.foodType == FoodType.meal && newFood.ingredients.isEmpty){
@@ -301,14 +171,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    String appBarTitle = '';
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE){
-      appBarTitle = ADD_NEW_LABEL;
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE){
-      appBarTitle = UPDATE_LABEL;
-    }else{
-      appBarTitle = FOOD_DETAIL_LABEL;
-    }
     return PopScope(
       canPop: false,
       onPopInvoked : (didPop){
@@ -317,7 +179,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
         home: Scaffold(
           appBar: AppBar(
-            title: Text(appBarTitle, style: const TextStyle(color: Colors.white),),
+            title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
               onTap: () {
@@ -330,38 +192,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               ),
             ),
             actions: [
-              Visibility(
-                visible: widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE ||
-                    widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW,
-                child: IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.white,),
-                  onPressed: () {
-                    FoodDetailScreenType type = FoodDetailScreenType.EDIT_FAVORITE;
-                    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE){
-                      type = FoodDetailScreenType.EDIT_FAVORITE;
-                    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW){
-                      type = FoodDetailScreenType.LOGGED_FOOD_EDIT;
-                    }
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(foodDetailScreenType: type, food: newFood,
-                        foodsListScreen: widget.foodDetailArgumentModel.foodsListScreen, macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FoodDetailScreen(foodDetailArgumentModel: argumentModel,),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Visibility(
-                visible: widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE,
-                child: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.white,),
-                  onPressed: () {
-                    _showDeleteConfirmation(context);
-                  },
-                ),
-              ),
+
             ],
           ),
           body: Padding(
@@ -375,11 +206,11 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
                     /// food type
                     CustomRadioListTile(
-                      options: widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE ? const [GROCERY_LABEL, MEAL_LABEL] : [_foodType],
+                      options: const [GROCERY_LABEL, MEAL_LABEL],
                       onSelectedOptionChanged: updateSelectedFoodType,
                       selectedOption: _foodType,
                       orientation: HORIZONTAL_ORIENTATION,
-                      isEditable: widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE,
+                      isEditable: true,
                     ),
 
                     Visibility(
@@ -437,156 +268,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
                    /// button
                    buildBottomButton(context),
-
-                    BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                        builder: (mcontext, state) {
-                          if (state is RemoveFromMyFavoriteLoadingState) {
-                            return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                          }else if(state is RemoveFromMyFavoriteLoadedState){
-                            Future.delayed(Duration.zero,(){
-                              _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
-                              if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.MY_FAVORITE_FOODS_SCREEN){
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MyFavoriteFoodsScreen(),
-                                  ),
-                                  (route) => false
-                                );
-                              }else if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.SEARCH_FOOD_SCREEN){
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SearchFoodScreen(),
-                                  ),
-                                 (route) => false
-                                );
-                              }else if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.MAIN_SCREEN){
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const MainScreen(),
-                                    ),
-                                        (route) => false
-                                );
-                              }
-                            });
-                          }else if(state is RemoveFromMyFavoriteErrorState){
-                            _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }else{
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
-                        }
-                    ),
-
-                    BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
-                        builder: (context, state) {
-                          if (state is MyFavoriteFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is MyFavoriteFoodsLoadedState){
-                            Future.delayed(Duration.zero,(){
-                              _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                            });
-                          }else if(state is ImmediateSearchInFoodsLoadedState){
-                            Future.delayed(Duration.zero,(){
-                              _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                              setState(() {
-                                _favoriteId= state.favoriteId;
-                              });
-                            });
-                          }else if(state is MyFavoriteFoodsErrorState){
-                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
-                        }
-                    ),
-
-
-                    BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                        builder: (mcontext, state) {
-
-                          if (state is GetLoggedFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is GetImmediateLoggedFoodsState){
-                            if(_updatebuttonClicked){
-                              _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                              Future.delayed(Duration.zero,(){
-                                logFoodsOfToday(state.loggedFoods.foods);
-                              });
-                            }
-                          }else if(state is GetLoggedFoodsErrorState){
-                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
-                        }
-                    ),
-
-
-                    BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                        builder: (mcontext, state) {
-                          if (state is LogFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is LogFoodsLoadedState){
-                            if(_updatebuttonClicked){
-                              _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                              Future.delayed(Duration.zero,(){
-                                _updatebuttonClicked= false;
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                  builder: (context) => const MainScreen(),
-                                ), (route) => false);
-                              });
-                            }
-                          }else if(state is LogFoodsErrorState){
-                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
-                        }
-                    ),
-
                   ],
                 ),
               )
@@ -597,104 +278,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   }
 
 
-  void init(){
-
-    _enabled= widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.SUGGEST_FOOD_EDIT;
-
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
-      searchFoodInFavorites(widget.foodDetailArgumentModel.food ?? Food());
-    }
-    
-    if(widget.foodDetailArgumentModel.foodDetailScreenType != FoodDetailScreenType.ADD_NEW_FAVORITE){
-      ///food type, food name
-      if(widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct){
-        _foodType = GROCERY_LABEL;
-        _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-        _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
-        _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
-        _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
-        _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
-        _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
-        _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
-      }else{
-        double calorie = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i])*servingCount;
-          }
-        }
-
-        double protein = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i])*servingCount;
-          }
-        }
-
-        double carb = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i])*servingCount;
-          }
-        }
-
-
-        double fat = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i])*servingCount;
-          }
-        }
-        _foodType = MEAL_LABEL;
-        _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
-        _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount.toString();
-        _totalCalorieController.text = calorie.toString();
-        _totalProteinController.text = protein.toString();
-        _totalCarbController.text = carb.toString();
-        _totalFatController.text = fat.toString();
-        _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit;
-        _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
-        widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
-          _ingredientsExpansionState.add(false);
-        });
-      }
-
-      newFood = widget.foodDetailArgumentModel.food!;
-    }
-  }
-
-
   Widget recipe(){
-
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW){
-
-      return Visibility(
-          visible: _foodType == MEAL_LABEL,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16,),
-              const Text('$RECIPE_LABEL:', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 16),),
-              Text(newFood.recipe, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),),
-            ],
-          )
-      );
-    }
-
-
-
-
     return Visibility(
       visible: _foodType == MEAL_LABEL,
       child: Container(
@@ -710,7 +294,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 controller: _recipeController,
                 maxLines: null,
                 expands: true,
-                readOnly: !_enabled,
                 textAlign: TextAlign.start,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
@@ -772,28 +355,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   }
 
   Widget addedIngredients(){
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW_FAVORITE ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW){
-
-      String ingredients = '';
-      for (int i = 0; i < newFood.ingredients.length; i++){
-        ingredients = '$ingredients\n- ${newFood.ingredients[i].capitalize()}, ${newFood.servingAmounts[i]} ${newFood.units[i]}';
-      }
-
-        return Visibility(
-          visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16,),
-              const Text('$INGREDIENTS_LABEL:', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 16),),
-              Text(ingredients, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal, fontSize: 15),),
-            ],
-          )
-      );
-    }
-
      return Visibility(
        visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty,
          child: Column(
@@ -804,7 +365,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
              const SizedBox(height: 16,),
              MealIngredientsListUi(meal: newFood, ingredientsExpansionState: _ingredientsExpansionState,
                onExpansionStateChanged: updateIngredientsListUi, onIngredientUpdated: updateUiAfterIngredientUpdated,
-               onServingCountChangeRequested: updateServingCountInUi, isEditable: _enabled,
+               onServingCountChangeRequested: updateServingCountInUi, isEditable: true,
                ingredients: newFood.ingredients,
              )
            ],
@@ -860,123 +421,66 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
 
   Widget buildBottomButton(BuildContext context){
-
-    bool isVisible = false;
-    String buttonText = '';
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.SUGGEST_FOOD_EDIT){
-      buttonText = ADD_TO_MY_FAVORTITE;
-      isVisible = true;
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
-      buttonText = UPDATE_LOG_LABEL;
-      isVisible = true;
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE){
-      buttonText = UPDATE_FAVORITE_LABEL;
-      isVisible = true;
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW || widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW){
-      if(_favoriteId.isNotEmpty){
-        buttonText = REMOVE_FROM_FAVORITE_LABEL ;
-      }else{
-        buttonText = ADD_TO_MY_FAVORTITE;
-      }
-      isVisible = true;
-    }
-
-     return  Visibility(
-       visible: isVisible,
-       child: Column(
-         children: [
-           Container(
-          padding: const EdgeInsets.only(bottom: 24),
-          width: double.infinity,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  backgroundColor: DARK_PRIMARY_COLOR
-              ),
-          onPressed: () {
-            bottomButtonClickListener(context);
-          },
-          child: Text(buttonText,
-            style: const TextStyle( color: Colors.white),)
-          ),
-       ),
-           BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
-               builder: (mcontext, state) {
-                 if (state is AddOrUpdateMyFavoriteLoadingState) {
-                   return const Stack(
-                     children: [
-                       GFLoader(
-                         type: GFLoaderType.circle,
-                         loaderColorOne: DARK_PRIMARY_COLOR,
-                         loaderColorTwo: DARK_PRIMARY_COLOR,
-                         loaderColorThree: DARK_PRIMARY_COLOR,
-                       ),
-                     ],
-                   );
-                 }else if(state is AddOrUpdateMyFavoriteLoadedState){
-                   Future.delayed(Duration.zero,(){
-                     _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                     if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.MY_FAVORITE_FOODS_SCREEN){
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) => const MyFavoriteFoodsScreen(),
-                           ),
-                               (route) => false
-                       );
-                     }else if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.SEARCH_FOOD_SCREEN){
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) => const SearchFoodScreen(),
-                           ),
-                               (route) => false
-                       );
-                     }else if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.SUGGEST_FOOD_SCREEN){
-                       showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) => const MainScreen(),
-                           ),
-                               (route) => false
-                       );
-                     }else if(widget.foodDetailArgumentModel.foodsListScreen == FoodsListScreen.MAIN_SCREEN){
-                       if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW){
-                         Navigator.pushAndRemoveUntil(
-                             context,
-                             MaterialPageRoute(
-                               builder: (context) => const MainScreen(),
-                             ),
-                                 (route) => false
-                         );
-                       }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
-                         _updatebuttonClicked= true;
-                         requestLoggedFoods();
-                       }
-                     }
-                   });
-                 }else if(state is AddOrUpdateMyFavoriteErrorState){
-                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                   Future.delayed(Duration.zero,(){
-                     if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                       return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
-                     }
-                     return showErrorToast(context, state.message);
-                   });
-                 }else{
-                 }
-                 return Container();
+     return  Column(
+       children: [
+         Container(
+           padding: const EdgeInsets.only(bottom: 24),
+           width: double.infinity,
+           child: ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   backgroundColor: DARK_PRIMARY_COLOR
+               ),
+               onPressed: () {
+                 bottomButtonClickListener(context);
                },
-               listener: (context, state){
-
-               }
+               child: const Text(ADD_TO_MY_FAVORTITE,
+                 style: TextStyle( color: Colors.white),)
            ),
+         ),
+         BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+             builder: (mcontext, state) {
+               if (state is AddOrUpdateMyFavoriteLoadingState) {
+                 return const Stack(
+                   children: [
+                     GFLoader(
+                       type: GFLoaderType.circle,
+                       loaderColorOne: DARK_PRIMARY_COLOR,
+                       loaderColorTwo: DARK_PRIMARY_COLOR,
+                       loaderColorThree: DARK_PRIMARY_COLOR,
+                     ),
+                   ],
+                 );
+               }else if(state is AddOrUpdateMyFavoriteLoadedState){
+                 Future.delayed(Duration.zero,(){
+                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                     Navigator.pushAndRemoveUntil(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => const MyFavoriteFoodsScreen(),
+                         ),
+                             (route) => false
+                     );
+                 });
+               }else if(state is AddOrUpdateMyFavoriteErrorState){
+                 _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                 Future.delayed(Duration.zero,(){
+                   if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                   }
+                   return showErrorToast(context, state.message);
+                 });
+               }else{
+               }
+               return Container();
+             },
+             listener: (context, state){
+
+             }
+         ),
        ],
-       ),
      );
   }
 
@@ -1046,106 +550,20 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       }
     }
 
-    if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE){
-      _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-            newFood
-        ),
-      );
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE){
-      if(widget.foodDetailArgumentModel.macroEdition){
-        _addOrUpdateMyFavoriteBloc.add(
-          AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
-            newFood,
-          ),
-        );
-        return;
-      }
-      showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
+  _addOrUpdateMyFavoriteBloc.add(
+    AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+        newFood
+    ),
+  );
 
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT){
-
-      if(!widget.foodDetailArgumentModel.macroEdition){
-        showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
-        return;
-      }
-
-      //todo fix this issue for production: when click on yes, favorite food only gets updated but logged food not
-      // if(_favoriteId.isNotEmpty){
-      //   _showUpdateLoggedFoodAndFavoriteConfirmation(context);
-      // }else{
-        _updatebuttonClicked= true;
-        requestLoggedFoods();
-      // }
-
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.VIEW ||
-        widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_VIEW){
-      if(_favoriteId.isNotEmpty){
-        _removeFromMyFavoriteBloc.add(
-          RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
-            newFood.copyWith(id: _favoriteId),
-          ),
-        );
-      }else{
-        _addOrUpdateMyFavoriteBloc.add(
-          AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-            newFood,
-          ),
-        );
-      }
-    }else if(widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.SUGGEST_FOOD_EDIT){
-      _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-          newFood,
-        ),
-      );
-    }
   }
-   Future<void> _showUpdateLoggedFoodAndFavoriteConfirmation(BuildContext context) async {
-     return showDialog<void>(
-       context: context,
-       builder: (BuildContext context) {
-         return AlertDialog(
-           title: const Text(UPDATE_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-           content: const SingleChildScrollView(
-             child: ListBody(
-               children: <Widget>[
-                 Text(UPDATE_FAVORITE_AND_LOGGED_FOOD_CONTENT, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-               ],
-             ),
-           ),
-           actions: <Widget>[
-             TextButton(
-               child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-               onPressed: () {
-                 Navigator.of(context).pop();
-                 _addOrUpdateMyFavoriteBloc.add(
-                   AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
-                     newFood.copyWith(id: _favoriteId),
-                   ),
-                 );
-               },
-             ),
-             TextButton(
-               child: const Text(ONLY_UPDATE_LOGGED_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-               onPressed: () {
-                 Navigator.of(context).pop();
-                 _updatebuttonClicked= true;
-                 requestLoggedFoods();
-               },
-             ),
-           ],
-         );
-       },
-     );
-   }
 
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
       TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController, bool isTotal){
 
-    bool isEditable= _enabled;
+    bool isEditable= true;
 
-    if(isTotal && _foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && _enabled && (calorieController == _totalCalorieController)){
+    if(isTotal && _foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && (calorieController == _totalCalorieController)){
       isEditable = false;
     }
 
@@ -1163,7 +581,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
                 controller: servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
@@ -1195,7 +612,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               width: 70,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: _enabled,
                 style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
                 controller: unitController,
                 decoration: const InputDecoration(
@@ -1393,7 +809,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     width: 60,
                     height: MACRO_HEIGHT,
                     child: TextField(
-                      enabled: _enabled,
                       controller: _ingredientServingCountController,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
@@ -1516,7 +931,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                child: SizedBox(
                  height: SEARCH_BAR_HEIGHT,
                  child: TextField(
-                   enabled: _enabled,
                    controller: _mealNameController,
                    decoration: InputDecoration(
                      border: OutlineInputBorder(
@@ -1542,28 +956,22 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
    Widget addIngredientChips(){
      /// add ingredients chips
-    return Visibility(
-       visible: _foodType == MEAL_LABEL && (widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.EDIT_FAVORITE ||
-           widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.LOGGED_FOOD_EDIT ||
-           widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE ||
-           widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.SUGGEST_FOOD_EDIT),
-       child: Wrap(
-         spacing: 4,
-         children: _addNewIngredientOptions.map((item) {
-           if(_selectedAddIngredientOption == item){
-             return addIngredientOptionChipSelected(item);
-           }else{
-             return addIngredientChipNotSelected(item);
-           }
-         },).toList(),
-       ),
-     );
+    return Wrap(
+      spacing: 4,
+      children: _addNewIngredientOptions.map((item) {
+        if(_selectedAddIngredientOption == item){
+          return addIngredientOptionChipSelected(item);
+        }else{
+          return addIngredientChipNotSelected(item);
+        }
+      },).toList(),
+    );
    }
 
   Widget addGroceryChips(){
     /// add grocery chips
     return Visibility(
-      visible: _foodType == GROCERY_LABEL && widget.foodDetailArgumentModel.foodDetailScreenType == FoodDetailScreenType.ADD_NEW_FAVORITE,
+      visible: _foodType == GROCERY_LABEL,
       child: Wrap(
         spacing: 4,
         children: _addNewGroceryOptions.map((item) {
@@ -1707,7 +1115,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                    child: SizedBox(
                      height: SEARCH_BAR_HEIGHT,
                      child: TextField(
-                       enabled: _enabled,
                        controller: _groceryNameController,
                        decoration:  InputDecoration(
                          hintText: CHEDDAR_CHEESE_LABEL,
@@ -1728,7 +1135,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                  ),
                  const SizedBox(width: 12,),
                  Visibility(
-                   visible: _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL && _enabled,
+                   visible: _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL,
                    child: GestureDetector(
                      child: const CircleAvatar(
                        radius: 18,
@@ -1787,7 +1194,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                                child: SizedBox(
                                  height: SEARCH_BAR_HEIGHT,
                                  child: TextField(
-                                   enabled: _enabled,
                                    controller: _ingredientNameController,
                                    decoration:  InputDecoration(
                                      hintText: CHEDDAR_CHEESE_LABEL,

@@ -16,10 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$FoodDetailArgumentModel {
-  FoodDetailScreenType get foodDetailScreenType =>
-      throw _privateConstructorUsedError;
   Food? get food => throw _privateConstructorUsedError;
-  FoodsListScreen? get foodsListScreen => throw _privateConstructorUsedError;
   bool get macroEdition => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -33,11 +30,7 @@ abstract class $FoodDetailArgumentModelCopyWith<$Res> {
           $Res Function(FoodDetailArgumentModel) then) =
       _$FoodDetailArgumentModelCopyWithImpl<$Res, FoodDetailArgumentModel>;
   @useResult
-  $Res call(
-      {FoodDetailScreenType foodDetailScreenType,
-      Food? food,
-      FoodsListScreen? foodsListScreen,
-      bool macroEdition});
+  $Res call({Food? food, bool macroEdition});
 
   $FoodCopyWith<$Res>? get food;
 }
@@ -56,24 +49,14 @@ class _$FoodDetailArgumentModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? foodDetailScreenType = null,
     Object? food = freezed,
-    Object? foodsListScreen = freezed,
     Object? macroEdition = null,
   }) {
     return _then(_value.copyWith(
-      foodDetailScreenType: null == foodDetailScreenType
-          ? _value.foodDetailScreenType
-          : foodDetailScreenType // ignore: cast_nullable_to_non_nullable
-              as FoodDetailScreenType,
       food: freezed == food
           ? _value.food
           : food // ignore: cast_nullable_to_non_nullable
               as Food?,
-      foodsListScreen: freezed == foodsListScreen
-          ? _value.foodsListScreen
-          : foodsListScreen // ignore: cast_nullable_to_non_nullable
-              as FoodsListScreen?,
       macroEdition: null == macroEdition
           ? _value.macroEdition
           : macroEdition // ignore: cast_nullable_to_non_nullable
@@ -103,11 +86,7 @@ abstract class _$$FoodDetailArgumentModelImplCopyWith<$Res>
       __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {FoodDetailScreenType foodDetailScreenType,
-      Food? food,
-      FoodsListScreen? foodsListScreen,
-      bool macroEdition});
+  $Res call({Food? food, bool macroEdition});
 
   @override
   $FoodCopyWith<$Res>? get food;
@@ -126,24 +105,14 @@ class __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? foodDetailScreenType = null,
     Object? food = freezed,
-    Object? foodsListScreen = freezed,
     Object? macroEdition = null,
   }) {
     return _then(_$FoodDetailArgumentModelImpl(
-      foodDetailScreenType: null == foodDetailScreenType
-          ? _value.foodDetailScreenType
-          : foodDetailScreenType // ignore: cast_nullable_to_non_nullable
-              as FoodDetailScreenType,
       food: freezed == food
           ? _value.food
           : food // ignore: cast_nullable_to_non_nullable
               as Food?,
-      foodsListScreen: freezed == foodsListScreen
-          ? _value.foodsListScreen
-          : foodsListScreen // ignore: cast_nullable_to_non_nullable
-              as FoodsListScreen?,
       macroEdition: null == macroEdition
           ? _value.macroEdition
           : macroEdition // ignore: cast_nullable_to_non_nullable
@@ -155,28 +124,18 @@ class __$$FoodDetailArgumentModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
-  _$FoodDetailArgumentModelImpl(
-      {this.foodDetailScreenType = FoodDetailScreenType.ADD_NEW_FAVORITE,
-      this.food = null,
-      this.foodsListScreen = null,
-      this.macroEdition = false});
+  _$FoodDetailArgumentModelImpl({this.food = null, this.macroEdition = false});
 
   @override
   @JsonKey()
-  final FoodDetailScreenType foodDetailScreenType;
-  @override
-  @JsonKey()
   final Food? food;
-  @override
-  @JsonKey()
-  final FoodsListScreen? foodsListScreen;
   @override
   @JsonKey()
   final bool macroEdition;
 
   @override
   String toString() {
-    return 'FoodDetailArgumentModel(foodDetailScreenType: $foodDetailScreenType, food: $food, foodsListScreen: $foodsListScreen, macroEdition: $macroEdition)';
+    return 'FoodDetailArgumentModel(food: $food, macroEdition: $macroEdition)';
   }
 
   @override
@@ -184,18 +143,13 @@ class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FoodDetailArgumentModelImpl &&
-            (identical(other.foodDetailScreenType, foodDetailScreenType) ||
-                other.foodDetailScreenType == foodDetailScreenType) &&
             (identical(other.food, food) || other.food == food) &&
-            (identical(other.foodsListScreen, foodsListScreen) ||
-                other.foodsListScreen == foodsListScreen) &&
             (identical(other.macroEdition, macroEdition) ||
                 other.macroEdition == macroEdition));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, foodDetailScreenType, food, foodsListScreen, macroEdition);
+  int get hashCode => Object.hash(runtimeType, food, macroEdition);
 
   @JsonKey(ignore: true)
   @override
@@ -207,17 +161,11 @@ class _$FoodDetailArgumentModelImpl implements _FoodDetailArgumentModel {
 
 abstract class _FoodDetailArgumentModel implements FoodDetailArgumentModel {
   factory _FoodDetailArgumentModel(
-      {final FoodDetailScreenType foodDetailScreenType,
-      final Food? food,
-      final FoodsListScreen? foodsListScreen,
+      {final Food? food,
       final bool macroEdition}) = _$FoodDetailArgumentModelImpl;
 
   @override
-  FoodDetailScreenType get foodDetailScreenType;
-  @override
   Food? get food;
-  @override
-  FoodsListScreen? get foodsListScreen;
   @override
   bool get macroEdition;
   @override

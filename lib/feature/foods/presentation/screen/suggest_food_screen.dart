@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_chips.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/view_suggested_food_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -17,13 +17,10 @@ import '../../../../util/design/toast/app_toast.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../bloc/suggest_food_bloc/state_event/suggest_food_state_event.dart';
 import '../bloc/suggest_food_bloc/suggest_food_bloc.dart';
-import 'food_detail_screen.dart';
 
 class SuggestFoodScreen extends StatefulWidget {
 
   const SuggestFoodScreen({Key? key}) : super(key: key);
-
-  static const routeName = '/suggest-food-screen';
 
 
   @override
@@ -264,11 +261,11 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
                       }else if(state is SuggestFoodStateLoadedState){
                         Future.delayed(Duration.zero,(){
                           _suggestFoodBloc.add(const SuggestFoodEvent.onReset());
-                          FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(foodDetailScreenType: FoodDetailScreenType.SUGGEST_FOOD_EDIT, food: state.food, foodsListScreen: FoodsListScreen.SUGGEST_FOOD_SCREEN);
+                          FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(macroEdition: true);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FoodDetailScreen(foodDetailArgumentModel: argumentModel,),
+                              builder: (context) => ViewSuggestedFoodScreen(foodDetailArgumentModel: argumentModel,),
                             ),
                           );
                         });
