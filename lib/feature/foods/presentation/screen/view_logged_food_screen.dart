@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/presentation/screen/edit_logged_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -21,7 +22,6 @@ import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
 import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 
 
-
 class ViewLoggedFoodScreen extends StatefulWidget {
 
   final FoodDetailArgumentModel foodDetailArgumentModel;
@@ -34,16 +34,15 @@ class ViewLoggedFoodScreen extends StatefulWidget {
 
 class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
 
-   late TextEditingController _totalCalorieController;
-   late TextEditingController _totalProteinController;
-   late TextEditingController _totalCarbController;
-   late TextEditingController _totalFatController;
-   late TextEditingController _totalServingController;
-   late TextEditingController _totalUnitController;
 
-   late TextEditingController _groceryNameController;
-   Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
-   String _foodType = GROCERY_LABEL;
+  String _totalCalorie= '';
+  String _totalProtein= '';
+  String _totalCarb= '';
+  String _totalFat= '';
+  String _totalServing= '';
+  String _ingredients= '';
+  String _foodName= '';
+  String _recipe= '';
 
    Food newFood = Food();
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
@@ -59,35 +58,12 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
     _addOrUpdateMyFavoriteBloc.add(
       const AddOrUpdateMyFavoriteEvent.onReset(),
     );
-    _totalCalorieController= TextEditingController(text: '0');
-    _totalProteinController= TextEditingController(text: '0');
-    _totalCarbController= TextEditingController(text: '0');
-    _totalFatController= TextEditingController(text: '0');
-    _totalServingController= TextEditingController(text: '100');
-    _totalUnitController= TextEditingController(text: 'g');
-    _groceryNameController= TextEditingController();
-
     init();
   }
 
 
-   void handleMealMacrosWithoutIngredient(){
-     if(newFood.foodType == FoodType.meal && newFood.ingredients.isEmpty){
-       String calorie= newFood.calorie.isEmpty ? '0.0' : newFood.calorie[0];
-       String protein= newFood.protein.isEmpty ? '0.0' : newFood.protein[0];
-       String carb= newFood.carb.isEmpty ? '0.0' : newFood.carb[0];
-       String fat= newFood.fat.isEmpty ? '0.0' : newFood.fat[0];
-
-       _totalCalorieController = TextEditingController(text: calorie);
-       _totalProteinController = TextEditingController(text: protein);
-       _totalCarbController = TextEditingController(text: carb);
-       _totalFatController = TextEditingController(text: fat);
-     }
-   }
-
 @override
   Widget build(BuildContext context) {
-    handleMealMacrosWithoutIngredient();
     return PopScope(
       canPop: false,
       onPopInvoked : (didPop){
@@ -109,6 +85,18 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
               ),
             ),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: Colors.white,),
+                onPressed: () {
+                  FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood, macroEdition: widget.foodDetailArgumentModel.macroEdition);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditLoggedFoodScreen(foodDetailArgumentModel: argumentModel,),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           body: Padding(
@@ -118,27 +106,122 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const Text('$FOOD_TYPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                    const Text('$NAME_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                    const SizedBox(height: 4,),
+
+                    Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
 
-                    const SizedBox(height: 12,),
+
+                    Visibility(
+                      visible: widget.foodDetailArgumentModel.food!.foodType == FoodType.meal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const SizedBox(height: 16,),
+
+                          const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                          const SizedBox(height: 4,),
 
 
-                    newGrocery(),
+                          Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+
+                          const SizedBox(height: 16,),
+
+                          const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                          const SizedBox(height: 4,),
+
+
+                          Text(_recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+                        ],
+                      ),
+                    ),
+
+
+
+                    const SizedBox(height: 32,),
+
+
+
+                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
 
                     const SizedBox(height: 16,),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                    Row(
+                      children: [
+                        Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                        const SizedBox(width: 4,),
+                        Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                      ],
+                    ),
 
                     const SizedBox(height: 16,),
 
-                    /// total macros
-                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
 
-                    const SizedBox(height: 36,),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Row(
+                              children: [
+                                const Text('$CALORIE_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                const SizedBox(width: 4,),
+                                Text(_totalCalorie, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                              ],
+                            )
+                        ),
+                        Expanded(
+                            child: Row(
+                              children: [
+                                const Text('$PROTEIN_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                const SizedBox(width: 4,),
+                                Text(_totalProtein, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
 
-                   /// button
-                   buildBottomButton(context),
+
+                    const SizedBox(height: 16,),
+
+
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Row(
+                              children: [
+                                const Text('$CARB_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                const SizedBox(width: 4,),
+                                Text(_totalCarb, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                              ],
+                            )
+                        ),
+                        Expanded(
+                            child: Row(
+                              children: [
+                                const Text('$FAT_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                const SizedBox(width: 4,),
+                                Text(_totalFat, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+
+
+
+                    const SizedBox(height: 32,),
+
+
+                    buildBottomButton(context),
 
                     BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
                         builder: (context, state) {
@@ -193,94 +276,76 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
   void init(){
 
     searchFoodInFavorites(widget.foodDetailArgumentModel.food ?? Food());
-      if(widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct){
-        _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-        _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
-        _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
-        _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
-        _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
-        _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
-        _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
-      }else{
-        double calorie = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i])*servingCount;
-          }
+    if (widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct) {
+      _foodName = widget.foodDetailArgumentModel.food!.name;
+      _totalServing = '${widget.foodDetailArgumentModel.food!.servingAmounts[0]} ${widget.foodDetailArgumentModel.food!.units[0]}';
+      _totalCalorie = widget.foodDetailArgumentModel.food!.calorie[0];
+      _totalProtein = widget.foodDetailArgumentModel.food!.protein[0];
+      _totalCarb = widget.foodDetailArgumentModel.food!.carb[0];
+      _totalFat = widget.foodDetailArgumentModel.food!.fat[0];
+    } else {
+      double calorie = 0;
+      for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
+        if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+          double servingCount = double.parse(
+              widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+          calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i]) * servingCount;
         }
-
-        double protein = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i])*servingCount;
-          }
-        }
-
-        double carb = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i])*servingCount;
-          }
-        }
-
-
-        double fat = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
-          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i])*servingCount;
-          }
-        }
-
-        _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount.toString();
-        _totalCalorieController.text = calorie.toString();
-        _totalProteinController.text = protein.toString();
-        _totalCarbController.text = carb.toString();
-        _totalFatController.text = fat.toString();
-        _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit;
       }
+
+      double protein = 0;
+      for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
+        if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+          protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i]) * servingCount;
+        }
+      }
+
+      double carb = 0;
+      for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
+        if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+          carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i]) * servingCount;
+        }
+      }
+
+
+      double fat = 0;
+      for (int i = 0; i <
+          widget.foodDetailArgumentModel.food!.fat.length; i++) {
+        if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+          fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i]) * servingCount;
+        }
+      }
+
+
+      String ingredients = '';
+      for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
+        if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+          String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
+              * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])}'
+              ' ${widget.foodDetailArgumentModel.food!.units[i]} '
+              '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
+          ingredients = ingredients + ingredient;
+        }
+      }
+
+      _foodName = widget.foodDetailArgumentModel.food!.name;
+      _totalServing =
+      '${widget.foodDetailArgumentModel.food!.servingAmount} ${widget
+          .foodDetailArgumentModel.food!.unit}';
+      _totalCalorie = calorie.toString();
+      _totalProtein = protein.toString();
+      _totalCarb = carb.toString();
+      _totalFat = fat.toString();
+      _recipe = widget.foodDetailArgumentModel.food!.recipe;
+      _ingredients = ingredients;
+    }
 
       newFood = widget.foodDetailArgumentModel.food!;
   }
 
-
-  void calculateTotalMacros(){
-     if(_foodType == MEAL_LABEL){
-       double calorie = 0;
-       for (int i = 0; i < newFood.calorie.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
-         calorie = calorie + double.parse(newFood.calorie[i].isEmpty ? '0' : newFood.calorie[i])*servingCount;
-       }
-
-       double protein = 0;
-       for (int i = 0; i < newFood.protein.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
-         protein = protein + double.parse(newFood.protein[i].isEmpty ? '0' : newFood.protein[i])*servingCount;
-       }
-
-       double carb = 0;
-       for (int i = 0; i < newFood.carb.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
-         carb = carb + double.parse(newFood.carb[i].isEmpty ? '0' : newFood.carb[i])*servingCount;
-       }
-
-
-       double fat = 0;
-       for (int i = 0; i < newFood.fat.length; i++) {
-         double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i]);
-         fat = fat + double.parse(newFood.fat[i].isEmpty ? '0' : newFood.fat[i])*servingCount;
-       }
-
-
-       _totalCalorieController = TextEditingController(text: '${calorie.toInt()}');
-       _totalProteinController = TextEditingController(text: '${protein.toInt()}');
-       _totalCarbController = TextEditingController(text: '${carb.toInt()}');
-       _totalFatController = TextEditingController(text: '${fat.toInt()}');
-     }
-  }
 
 
   Widget buildBottomButton(BuildContext context){
@@ -360,49 +425,11 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-     if(_groceryNameController.text.isEmpty){
-       setState(() {
-         _ingredientNameBorderColor = Colors.red;
-       });
-       return;
-     }
-     setState(() {
-       _ingredientNameBorderColor = Colors.black;
-     });
      requestOperationOnFood(context);
   }
 
 
   void requestOperationOnFood(BuildContext context){
-    if(_foodType == GROCERY_LABEL){
-      newFood = newFood.copyWith(
-        foodType: FoodType.groceryProduct,
-        name: _groceryNameController.text,
-        servingAmounts: [_totalServingController.text],
-        units: [_totalUnitController.text],
-        calorie: [_totalCalorieController.text],
-        protein: [_totalProteinController.text],
-        carb: [_totalCarbController.text],
-        fat: [_totalFatController.text]
-      );
-    }else{
-      newFood = newFood.copyWith(
-        foodType: FoodType.meal,
-        name: _groceryNameController.text,
-        servingAmount: int.parse(_totalServingController.text),
-        unit: _totalUnitController.text,
-      );
-
-      if(newFood.ingredients.isEmpty){
-        newFood= newFood.copyWith(
-            calorie: [_totalCalorieController.text],
-            protein: [_totalProteinController.text],
-            carb: [_totalCarbController.text],
-            fat: [_totalFatController.text]
-        );
-      }
-    }
-
     _addOrUpdateMyFavoriteBloc.add(
       AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
         newFood,
@@ -410,239 +437,5 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
     );
   }
 
-  Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
-      TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController, bool isTotal){
-
-    return Column(
-      children: [
-        ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
-
-          ],
-        ),
-        const SizedBox(height: 4,),
-
-        /// total calorie + protein
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$CALORIE_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$PROTEIN_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12,),
-
-        /// total carb + fat
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$CARB_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$FAT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget newGrocery(){
-     return  TextField(
-       controller: _groceryNameController,
-       decoration:  InputDecoration(
-         hintText: CHEDDAR_CHEESE_LABEL,
-         border: OutlineInputBorder(
-           borderSide: BorderSide(color: _ingredientNameBorderColor),
-         ),
-         enabledBorder: OutlineInputBorder(
-           borderSide: BorderSide(color: _ingredientNameBorderColor),
-         ),
-         focusedBorder: OutlineInputBorder(
-           borderSide: BorderSide(color: _ingredientNameBorderColor, width: 2),
-         ),
-         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-       ),
-       style: const TextStyle(color: DARK_PRIMARY_COLOR),
-     );
-  }
-
-
-  void updateSelectedFoodType(String type){
-    setState(() {
-      _foodType = type;
-    });
-  }
 
 }

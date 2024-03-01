@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
@@ -36,8 +35,7 @@ class EditFavoriteFoodScreen extends StatefulWidget {
 
 class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
-  /// for whole meal OR grocery,
-   /// groceries: the first(the only item in the list) element is the value
+
    late TextEditingController _totalCalorieController;
    late TextEditingController _totalProteinController;
    late TextEditingController _totalCarbController;
@@ -49,8 +47,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
    final _debouncer = Debouncer(milliseconds: 1000);
 
 
-   ///only meal
-   /// only for ingredient of the meal
    late TextEditingController _calorieController;
    late TextEditingController _proteinController;
    late TextEditingController _carbController;
@@ -70,8 +66,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
    Color _mealNameBorderColor = DARK_PRIMARY_COLOR;
 
 
-
-   ///only grocery
    String _selectedAddGroceryOption = ADD_GROCERY_BY_SEARCH_LABEL;
    bool _searchedGroceriesVisible = false;
 
@@ -112,7 +106,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
     _ingredientNameController.addListener(_onSearchIngredientChanged);
     _groceryNameController.addListener(_onSearchGroceryChanged);
-    
+
     _groceriesBloc = context.read<GroceriesBloc>();
 
     init();
@@ -203,54 +197,27 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const Text('$FOOD_TYPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-                    /// food type
-                    CustomRadioListTile(
-                      options: [_foodType],
-                      onSelectedOptionChanged: updateSelectedFoodType,
-                      selectedOption: _foodType,
-                      orientation: HORIZONTAL_ORIENTATION,
-                      isEditable: false,
-                    ),
-
-                    Visibility(
-                        visible: _foodType == MEAL_LABEL,
-                        child: const SizedBox(height: 12,)
-                    ),
-
                     /// meal name
                     mealNameWidget(),
 
-                    Visibility(
-                        visible: _foodType == MEAL_LABEL,
-                        child: const SizedBox(height: 24,)
-                    ),
-
-                    Visibility(
-                        visible: _foodType == GROCERY_LABEL,
-                        child: const SizedBox(height: 12,)
-                    ),
 
                     /// add ingredient chips
                     addIngredientChips(),
-
 
                     const SizedBox(height: 8,),
 
                     /// new ingredient
                     newIngredient(),
 
-                    Visibility(
-                        visible: _foodType == GROCERY_LABEL,
-                        child: const SizedBox(height: 12,)
-                    ),
+
                     /// new grocery
-                    newGrocery(),
+                    groceryName(),
 
                     /// added ingredients
                     addedIngredients(),
 
+
+                    /// recipe
                     recipe(),
 
                     const SizedBox(height: 16,),
@@ -278,7 +245,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
 
   void init(){
-     ///food type, food name
       if(widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct){
         _foodType = GROCERY_LABEL;
         _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
@@ -620,7 +586,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       return;
     }
     showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
-
   }
 
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
@@ -988,30 +953,26 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
    Widget mealNameWidget(){
      return Visibility(
        visible: _foodType == MEAL_LABEL,
-       child: Row(
+       child: Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
            children: [
-             const Text('$NAME_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),),
-             const SizedBox(width: 4,),
-             Expanded(
-               child: SizedBox(
-                 height: SEARCH_BAR_HEIGHT,
-                 child: TextField(
-                   controller: _mealNameController,
-                   decoration: InputDecoration(
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(color: _mealNameBorderColor),
-                     ),
-                     enabledBorder: OutlineInputBorder(
-                       borderSide: BorderSide(color: _mealNameBorderColor),
-                     ),
-                     focusedBorder: OutlineInputBorder(
-                       borderSide: BorderSide(color: _mealNameBorderColor, width: 2),
-                     ),
-                     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                   ),
-                   style: const TextStyle(color: DARK_PRIMARY_COLOR),
+             const Text('$NAME_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+             const SizedBox(height: 8,),
+             TextField(
+               controller: _mealNameController,
+               decoration: InputDecoration(
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: _mealNameBorderColor),
                  ),
+                 enabledBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: _mealNameBorderColor),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: _mealNameBorderColor, width: 2),
+                 ),
+                 contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                ),
+               style: const TextStyle(color: DARK_PRIMARY_COLOR),
              ),
            ],
          ),
@@ -1023,16 +984,21 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
      /// add ingredients chips
     return Visibility(
        visible: _foodType == MEAL_LABEL,
-       child: Wrap(
-         spacing: 4,
-         children: _addNewIngredientOptions.map((item) {
-           if(_selectedAddIngredientOption == item){
-             return addIngredientOptionChipSelected(item);
-           }else{
-             return addIngredientChipNotSelected(item);
-           }
-         },).toList(),
-       ),
+       child: Column(
+         children: [
+           const SizedBox(height: 16,),
+           Wrap(
+             spacing: 4,
+             children: _addNewIngredientOptions.map((item) {
+               if(_selectedAddIngredientOption == item){
+                 return addIngredientOptionChipSelected(item);
+               }else{
+                 return addIngredientChipNotSelected(item);
+               }
+             },).toList(),
+           ),
+         ],
+       )
      );
    }
 
@@ -1155,60 +1121,31 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
   );
   }
 
-  Widget newGrocery(){
+  Widget groceryName(){
      return Visibility(
        visible: _selectedAddGroceryOption.isNotEmpty && _foodType == GROCERY_LABEL,
-         child:   Stack(
+         child:  Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
            children: [
-             Row(
-               children: [
-                 Expanded(
-                   child: SizedBox(
-                     height: SEARCH_BAR_HEIGHT,
-                     child: TextField(
-                       controller: _groceryNameController,
-                       decoration:  InputDecoration(
-                         hintText: CHEDDAR_CHEESE_LABEL,
-                         border: OutlineInputBorder(
-                           borderSide: BorderSide(color: _ingredientNameBorderColor),
-                         ),
-                         enabledBorder: OutlineInputBorder(
-                           borderSide: BorderSide(color: _ingredientNameBorderColor),
-                         ),
-                         focusedBorder: OutlineInputBorder(
-                           borderSide: BorderSide(color: _ingredientNameBorderColor, width: 2),
-                         ),
-                         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                       ),
-                       style: const TextStyle(color: DARK_PRIMARY_COLOR),
-                     ),
-                   ),
+             const Text('$NAME_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+             const SizedBox(height: 8,),
+             TextField(
+               controller: _groceryNameController,
+               decoration:  InputDecoration(
+                 hintText: CHEDDAR_CHEESE_LABEL,
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: _ingredientNameBorderColor),
                  ),
-                 const SizedBox(width: 12,),
-                 Visibility(
-                   visible: _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL,
-                   child: GestureDetector(
-                     child: const CircleAvatar(
-                       radius: 18,
-                       backgroundColor: Colors.orange,
-                       child: Icon(
-                         Icons.search,
-                         color: Colors.white,
-                       ),
-                     ),
-                     onTap: () {
-                       _groceriesBloc.add(
-                         GroceriesEvent.onGetGroceries(_groceryNameController.text),
-                       );
-                       setState(() {
-                         _searchedGroceriesVisible = true;
-                       });
-                     },
-                   ),
-                 )
-               ],
+                 enabledBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: _ingredientNameBorderColor),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: _ingredientNameBorderColor, width: 2),
+                 ),
+                 contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+               ),
+               style: const TextStyle(color: DARK_PRIMARY_COLOR),
              ),
-             suggestedGroceriesBloc(true)
            ],
          ),
      );
