@@ -35,7 +35,6 @@ class MyFavoriteFoodsScreen extends StatefulWidget {
   const MyFavoriteFoodsScreen({Key? key}) : super(key: key);
 
 
-
   @override
   State<MyFavoriteFoodsScreen> createState() => _MyFavoriteFoodsScreenState();
 }
@@ -55,6 +54,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
   bool _backButtonCLicked = false;
 
   List<Food> _addedMyFavorites= [];
+
 
   List<Food> _newMyFavorites= [];
 
@@ -101,28 +101,8 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
       },
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(MY_FAVORITE_FOOD_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                _backButtonCLicked = true;
-                requestLoggedFoods();
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-            actions: [
-
-            ],
-          ),
-          body:
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+        home: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1),
             child:Stack(
               children: [
                 SingleChildScrollView(
@@ -174,12 +154,10 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                       ),
 
 
-
-
                       /// My favorite list
                       MyFavoritesFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
-                          onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                        onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                        foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
                         macroEdition: true,),
 
                     ],
@@ -306,7 +284,6 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                 ),
               ],
             )
-          ),
         ),
       ),
     );

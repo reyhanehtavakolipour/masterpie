@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
@@ -15,10 +16,18 @@ import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'feature/foods/data/repository_impl/foods_repository_impl.dart';
 import 'feature/foods/domain/model/food_model.dart';
+import 'feature/foods/presentation/bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
+import 'feature/foods/presentation/bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
+import 'feature/foods/presentation/bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
+import 'feature/foods/presentation/bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
+import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
+import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
+import 'feature/foods/presentation/screen/my_favorite_foods_list_ui.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
 import 'feature/foods/presentation/screen/search_food_screen.dart';
@@ -67,6 +76,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   /// Here foods actually means eaten foods
   List<Food> _foods = [];
 
+
+  List<Food> _addedMyFavorites= [];
+
+  List<Food> _newMyFavorites= [];
+
   bool _macroEdition = false;
 
   double _totalTakenCalories= 0;
@@ -78,6 +92,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   late LogFoodsBloc _logFoodsBloc;
   late GetProfileBloc _getProfileBloc;
   late LogoutBloc _logoutBloc;
+  late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
+  late AddOrUpdateMyFavoriteBloc _addToMyFavoriteBloc;
+  late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
 
   late TextEditingController _todayWeightController;
 
@@ -95,11 +112,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _getProfileBloc = context.read<GetProfileBloc>();
     _logoutBloc = context.read<LogoutBloc>();
+    _myFavoriteFoodsBloc = context.read<MyFavoriteFoodsBloc>();
+    _addToMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
+    _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
     _tabController.addListener(_handleTabSelection);
 
     _getProfileBloc.add(const GetProfileEvent.onReset());
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
+
+    requestMyFavoriteFoods();
+
     setMacroGoals();
     requestProfile();
   }
@@ -111,9 +134,40 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+  void addOrRemoveFavorite(Food food, bool addToFavorite){
+    if(addToFavorite){
+      _addToMyFavoriteBloc.add(
+        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+            food
+        ),
+      );
+    }else{
+      _removeFromMyFavoriteBloc.add(
+        RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
+            food
+        ),
+      );
+    }
+  }
+
+  void requestMyFavoriteFoods(){
+    _myFavoriteFoodsBloc.add(
+      const MyFavoriteFoodsEvent.onGetMyFavoriteFoods(
+          FoodType.all,
+          ''
+      ),
+    );
+  }
+
+  void requestMyFavoriteFoodsImmediately(){
+    _myFavoriteFoodsBloc.add(
+      const MyFavoriteFoodsEvent.onGetFavoriteFoodsImmediately(),
+    );
+  }
+
   void _handleTabSelection() {
     if(_tabController.index == 1){
-      // requestLoggedFoods(DateTime.now());
+      requestMyFavoriteFoodsImmediately();
     }
   }
 
@@ -187,21 +241,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     });
   }
 
-  void addOrRemoveFavorite(Food food, bool addToFavorite){
-    // if(addToFavorite){
-    //   _addToMyFavoriteBloc.add(
-    //     AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-    //         food
-    //     ),
-    //   );
-    // }else{
-    //   _removeFromMyFavoriteBloc.add(
-    //     RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
-    //         food
-    //     ),
-    //   );
-    // }
-  }
 
   Future<String> _getAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -811,6 +850,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                     tabs: const [
                                       Tab(icon: Icon(Icons.home, color: TAB_BAR_ICON_COLOR,)),
+                                      Tab(icon: Icon(Icons.favorite, color: TAB_BAR_ICON_COLOR,)),
                                       Tab(icon: Icon(Icons.fastfood_rounded, color: TAB_BAR_ICON_COLOR,)),
                                     ],
                                   ),
@@ -840,12 +880,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                       child: Row(
                                                         children: [
                                                           /**
-                                                           * my favorite
+                                                           * my cookBook
                                                            */
                                                           Expanded(
                                                             child: GestureDetector(
                                                               onTap: (){
-                                                                myFavoriteClickListener();
+                                                                myCookBookClickListener();
                                                               },
                                                               child: Container(
                                                                 width: double.infinity,
@@ -862,7 +902,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                    const Text(MY_FAVORITE_FOOD_LABEL,
+                                                                    const Text(MY_COOKBOOK_LABEL,
                                                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
                                                                     )
 
@@ -1046,11 +1086,109 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                             ],
                                           ),
 
+
                                           /**
-                                           * Food Tab
+                                           * My favorite tab
+                                           */
+                                          Stack(
+                                            children: [
+                                              SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    MyFavoritesFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
+                                                      onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                                                      foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                                                      macroEdition: true,),
+                                                  ],
+                                                ),
+                                              ),
+
+                                              BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                                                  builder: (context, state) {
+                                                    if (state is MyFavoriteFoodsLoadingState) {
+                                                      return const GFLoader(
+                                                        type: GFLoaderType.circle,
+                                                        loaderColorOne: DARK_PRIMARY_COLOR,
+                                                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                                                        loaderColorThree: DARK_PRIMARY_COLOR,
+                                                      );
+
+                                                    }else if(state is MyFavoriteFoodsLoadedState){
+                                                      Future.delayed(Duration.zero,(){
+                                                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                                                        checkIfFavoriteFoodsAddedBefore(state.foods);
+                                                      });
+                                                    }else if(state is MyFavoriteFoodsLoadedImmediatelyState){
+                                                      Future.delayed(Duration.zero,(){
+                                                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                                                        checkIfFavoriteFoodsAddedBefore(state.foods);
+                                                      });
+                                                    }else if(state is MyFavoriteFoodsErrorState){
+                                                      _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                                                      Future.delayed(Duration.zero,(){
+                                                        return showErrorToast(context, state.message);
+                                                      });
+                                                    }
+                                                    return Container();
+                                                  },
+                                                  listener: (context, state){
+
+                                                  }
+                                              ),
+                                              BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+                                                  builder: (context, state) {
+                                                    return Container(height: 1,);
+                                                  },
+                                                  listener: (context, state){
+                                                    if(state is AddOrUpdateMyFavoriteLoadedState){
+                                                      requestMyFavoriteFoods();
+                                                    }else if(state is AddOrUpdateMyFavoriteErrorState){
+                                                      _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                                                      Future.delayed(Duration.zero,(){
+                                                        if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                                                          return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                                                        }
+                                                        return showErrorToast(context, state.message);
+                                                      });
+                                                    }else{
+                                                    }
+                                                  }
+                                              ),
+                                              BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
+                                                  builder: (context, state) {
+                                                    return Container(height: 1,);
+                                                  },
+                                                  listener: (context, state){
+                                                    if(state is RemoveFromMyFavoriteLoadedState){
+                                                      requestMyFavoriteFoods();
+                                                    }
+                                                  }
+                                              ),
+
+
+
+                                              Visibility(
+                                                visible: _newMyFavorites.isEmpty,
+                                                child: Center(
+                                                    child: Container(
+                                                      margin: const EdgeInsets.all(64),
+
+                                                      child: const Text(EMPTY_FAVORITE_LABEL, style: TextStyle(color: PRIMARY_COLOR, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                                                    )
+                                                ),
+                                              ),
+
+                                            ],
+                                          ),
+
+
+
+
+                                          /**
+                                           * Macro tracking Tab
                                            */
                                           Container(
-                                            color: BACKGROUND_MACRO_TRACK_COLOR,
+                                            color: Colors.white,
                                             child: Column(
                                               children: [
 
@@ -1144,6 +1282,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                               ],
                                             ),
                                           ),
+
+
 
 
 
@@ -1261,12 +1401,63 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     );
   }
 
+  void checkIfFavoriteFoodsAddedBefore(List<Food> foods){
+    setState(() {
+      List<Food> favorites = [];
+      foods.forEach((element) {
+        List<Food> foodsExisted = _addedMyFavorites.where((addedFavorite) => element.id == addedFavorite.id).toList();
+        if(foodsExisted.isEmpty){
+          favorites.add(element);
+        }else{
+          for(int i = 0; i < _addedMyFavorites.length; i++){
+            if(_addedMyFavorites[i].id == element.id){
+              favorites.add(_addedMyFavorites[i]);
+            }
+          }
+        }
+      });
+      _newMyFavorites = favorites;
+    });
+  }
 
-  void myFavoriteClickListener() async{
+
+  void updateChangedFavoriteFoods(List<Food> foods) {
+    setState(() {
+
+      _newMyFavorites = foods;
+
+      List<Food> myFavorites = [];
+      _newMyFavorites.forEach((element) {
+        List<Food> foodsExisted = _addedMyFavorites.where((addedFavorite) => element.id == addedFavorite.id).toList();
+        if(foodsExisted.isEmpty && element.count > 0){
+          myFavorites.add(element);
+        }else{
+          for(int i = 0; i < _addedMyFavorites.length; i++){
+            if(_addedMyFavorites[i].id == element.id){
+              _addedMyFavorites[i] = _addedMyFavorites[i].copyWith(
+                  count: element.count,
+                  units: element.units,
+                  servingAmounts: element.servingAmounts,
+                  calorie: element.calorie,
+                  protein: element.protein,
+                  carb: element.carb,
+                  fat: element.fat,
+                  unit: element.unit,
+                  servingAmount: element.servingAmount
+              );
+            }
+          }
+        }
+      });
+      _addedMyFavorites.addAll(myFavorites);
+    });
+  }
+
+  void myCookBookClickListener() async{
     await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const MyFavoriteFoodsScreen(),
+        builder: (context) => const MyCookBookScreen(),
       ),
     );
   }
@@ -1305,8 +1496,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void logFoodsOfToday(){
+    List<Food> foods = [];
+
+    foods.addAll(_foods);
+    foods.addAll(_addedMyFavorites);
+
+
     _logFoodsBloc.add(
-        LogFoodsEvent.onLogFoods(_foods)
+        LogFoodsEvent.onLogFoods(foods)
     );
   }
 

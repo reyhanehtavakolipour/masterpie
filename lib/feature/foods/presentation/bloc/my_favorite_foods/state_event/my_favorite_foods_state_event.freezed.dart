@@ -21,6 +21,7 @@ mixin _$MyFavoriteFoodsEvent {
     required TResult Function(FoodType foodType, String query)
         onGetMyFavoriteFoods,
     required TResult Function(Food food) onImmediateSearchInMyFavoriteFoods,
+    required TResult Function() onGetFavoriteFoodsImmediately,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,6 +29,7 @@ mixin _$MyFavoriteFoodsEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult? Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult? Function()? onGetFavoriteFoodsImmediately,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -35,6 +37,7 @@ mixin _$MyFavoriteFoodsEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult Function()? onGetFavoriteFoodsImmediately,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
@@ -44,6 +47,8 @@ mixin _$MyFavoriteFoodsEvent {
     required TResult Function(FavoriteFoods value) onGetMyFavoriteFoods,
     required TResult Function(ImmediateSearchFavoriteFoods value)
         onImmediateSearchInMyFavoriteFoods,
+    required TResult Function(GetFavoriteFoodsImmediately value)
+        onGetFavoriteFoodsImmediately,
     required TResult Function(Reset value) onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -52,6 +57,8 @@ mixin _$MyFavoriteFoodsEvent {
     TResult? Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult? Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult? Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult? Function(Reset value)? onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,6 +67,8 @@ mixin _$MyFavoriteFoodsEvent {
     TResult Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) =>
@@ -161,6 +170,7 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
     required TResult Function(FoodType foodType, String query)
         onGetMyFavoriteFoods,
     required TResult Function(Food food) onImmediateSearchInMyFavoriteFoods,
+    required TResult Function() onGetFavoriteFoodsImmediately,
     required TResult Function() onReset,
   }) {
     return onGetMyFavoriteFoods(foodType, query);
@@ -171,6 +181,7 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult? Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult? Function()? onGetFavoriteFoodsImmediately,
     TResult? Function()? onReset,
   }) {
     return onGetMyFavoriteFoods?.call(foodType, query);
@@ -181,6 +192,7 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult Function()? onGetFavoriteFoodsImmediately,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -196,6 +208,8 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
     required TResult Function(FavoriteFoods value) onGetMyFavoriteFoods,
     required TResult Function(ImmediateSearchFavoriteFoods value)
         onImmediateSearchInMyFavoriteFoods,
+    required TResult Function(GetFavoriteFoodsImmediately value)
+        onGetFavoriteFoodsImmediately,
     required TResult Function(Reset value) onReset,
   }) {
     return onGetMyFavoriteFoods(this);
@@ -207,6 +221,8 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
     TResult? Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult? Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult? Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult? Function(Reset value)? onReset,
   }) {
     return onGetMyFavoriteFoods?.call(this);
@@ -218,6 +234,8 @@ class _$FavoriteFoodsImpl implements FavoriteFoods {
     TResult Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -322,6 +340,7 @@ class _$ImmediateSearchFavoriteFoodsImpl
     required TResult Function(FoodType foodType, String query)
         onGetMyFavoriteFoods,
     required TResult Function(Food food) onImmediateSearchInMyFavoriteFoods,
+    required TResult Function() onGetFavoriteFoodsImmediately,
     required TResult Function() onReset,
   }) {
     return onImmediateSearchInMyFavoriteFoods(food);
@@ -332,6 +351,7 @@ class _$ImmediateSearchFavoriteFoodsImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult? Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult? Function()? onGetFavoriteFoodsImmediately,
     TResult? Function()? onReset,
   }) {
     return onImmediateSearchInMyFavoriteFoods?.call(food);
@@ -342,6 +362,7 @@ class _$ImmediateSearchFavoriteFoodsImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult Function()? onGetFavoriteFoodsImmediately,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -357,6 +378,8 @@ class _$ImmediateSearchFavoriteFoodsImpl
     required TResult Function(FavoriteFoods value) onGetMyFavoriteFoods,
     required TResult Function(ImmediateSearchFavoriteFoods value)
         onImmediateSearchInMyFavoriteFoods,
+    required TResult Function(GetFavoriteFoodsImmediately value)
+        onGetFavoriteFoodsImmediately,
     required TResult Function(Reset value) onReset,
   }) {
     return onImmediateSearchInMyFavoriteFoods(this);
@@ -368,6 +391,8 @@ class _$ImmediateSearchFavoriteFoodsImpl
     TResult? Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult? Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult? Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult? Function(Reset value)? onReset,
   }) {
     return onImmediateSearchInMyFavoriteFoods?.call(this);
@@ -379,6 +404,8 @@ class _$ImmediateSearchFavoriteFoodsImpl
     TResult Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -398,6 +425,132 @@ abstract class ImmediateSearchFavoriteFoods implements MyFavoriteFoodsEvent {
   _$$ImmediateSearchFavoriteFoodsImplCopyWith<
           _$ImmediateSearchFavoriteFoodsImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GetFavoriteFoodsImmediatelyImplCopyWith<$Res> {
+  factory _$$GetFavoriteFoodsImmediatelyImplCopyWith(
+          _$GetFavoriteFoodsImmediatelyImpl value,
+          $Res Function(_$GetFavoriteFoodsImmediatelyImpl) then) =
+      __$$GetFavoriteFoodsImmediatelyImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GetFavoriteFoodsImmediatelyImplCopyWithImpl<$Res>
+    extends _$MyFavoriteFoodsEventCopyWithImpl<$Res,
+        _$GetFavoriteFoodsImmediatelyImpl>
+    implements _$$GetFavoriteFoodsImmediatelyImplCopyWith<$Res> {
+  __$$GetFavoriteFoodsImmediatelyImplCopyWithImpl(
+      _$GetFavoriteFoodsImmediatelyImpl _value,
+      $Res Function(_$GetFavoriteFoodsImmediatelyImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$GetFavoriteFoodsImmediatelyImpl implements GetFavoriteFoodsImmediately {
+  const _$GetFavoriteFoodsImmediatelyImpl();
+
+  @override
+  String toString() {
+    return 'MyFavoriteFoodsEvent.onGetFavoriteFoodsImmediately()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetFavoriteFoodsImmediatelyImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(FoodType foodType, String query)
+        onGetMyFavoriteFoods,
+    required TResult Function(Food food) onImmediateSearchInMyFavoriteFoods,
+    required TResult Function() onGetFavoriteFoodsImmediately,
+    required TResult Function() onReset,
+  }) {
+    return onGetFavoriteFoodsImmediately();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
+    TResult? Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult? Function()? onGetFavoriteFoodsImmediately,
+    TResult? Function()? onReset,
+  }) {
+    return onGetFavoriteFoodsImmediately?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
+    TResult Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult Function()? onGetFavoriteFoodsImmediately,
+    TResult Function()? onReset,
+    required TResult orElse(),
+  }) {
+    if (onGetFavoriteFoodsImmediately != null) {
+      return onGetFavoriteFoodsImmediately();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FavoriteFoods value) onGetMyFavoriteFoods,
+    required TResult Function(ImmediateSearchFavoriteFoods value)
+        onImmediateSearchInMyFavoriteFoods,
+    required TResult Function(GetFavoriteFoodsImmediately value)
+        onGetFavoriteFoodsImmediately,
+    required TResult Function(Reset value) onReset,
+  }) {
+    return onGetFavoriteFoodsImmediately(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FavoriteFoods value)? onGetMyFavoriteFoods,
+    TResult? Function(ImmediateSearchFavoriteFoods value)?
+        onImmediateSearchInMyFavoriteFoods,
+    TResult? Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
+    TResult? Function(Reset value)? onReset,
+  }) {
+    return onGetFavoriteFoodsImmediately?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FavoriteFoods value)? onGetMyFavoriteFoods,
+    TResult Function(ImmediateSearchFavoriteFoods value)?
+        onImmediateSearchInMyFavoriteFoods,
+    TResult Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
+    TResult Function(Reset value)? onReset,
+    required TResult orElse(),
+  }) {
+    if (onGetFavoriteFoodsImmediately != null) {
+      return onGetFavoriteFoodsImmediately(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GetFavoriteFoodsImmediately implements MyFavoriteFoodsEvent {
+  const factory GetFavoriteFoodsImmediately() =
+      _$GetFavoriteFoodsImmediatelyImpl;
 }
 
 /// @nodoc
@@ -441,6 +594,7 @@ class _$ResetImpl implements Reset {
     required TResult Function(FoodType foodType, String query)
         onGetMyFavoriteFoods,
     required TResult Function(Food food) onImmediateSearchInMyFavoriteFoods,
+    required TResult Function() onGetFavoriteFoodsImmediately,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -451,6 +605,7 @@ class _$ResetImpl implements Reset {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult? Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult? Function()? onGetFavoriteFoodsImmediately,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -461,6 +616,7 @@ class _$ResetImpl implements Reset {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(FoodType foodType, String query)? onGetMyFavoriteFoods,
     TResult Function(Food food)? onImmediateSearchInMyFavoriteFoods,
+    TResult Function()? onGetFavoriteFoodsImmediately,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -476,6 +632,8 @@ class _$ResetImpl implements Reset {
     required TResult Function(FavoriteFoods value) onGetMyFavoriteFoods,
     required TResult Function(ImmediateSearchFavoriteFoods value)
         onImmediateSearchInMyFavoriteFoods,
+    required TResult Function(GetFavoriteFoodsImmediately value)
+        onGetFavoriteFoodsImmediately,
     required TResult Function(Reset value) onReset,
   }) {
     return onReset(this);
@@ -487,6 +645,8 @@ class _$ResetImpl implements Reset {
     TResult? Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult? Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult? Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult? Function(Reset value)? onReset,
   }) {
     return onReset?.call(this);
@@ -498,6 +658,8 @@ class _$ResetImpl implements Reset {
     TResult Function(FavoriteFoods value)? onGetMyFavoriteFoods,
     TResult Function(ImmediateSearchFavoriteFoods value)?
         onImmediateSearchInMyFavoriteFoods,
+    TResult Function(GetFavoriteFoodsImmediately value)?
+        onGetFavoriteFoodsImmediately,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -520,6 +682,7 @@ mixin _$MyFavoriteFoodsState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) =>
@@ -530,6 +693,7 @@ mixin _$MyFavoriteFoodsState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -539,6 +703,7 @@ mixin _$MyFavoriteFoodsState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) =>
@@ -549,6 +714,8 @@ mixin _$MyFavoriteFoodsState {
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) =>
@@ -559,6 +726,8 @@ mixin _$MyFavoriteFoodsState {
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) =>
@@ -569,6 +738,8 @@ mixin _$MyFavoriteFoodsState {
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),
@@ -641,6 +812,7 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -654,6 +826,7 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) {
     return initial?.call();
@@ -666,6 +839,7 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) {
@@ -682,6 +856,8 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -695,6 +871,8 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) {
@@ -708,6 +886,8 @@ class _$MyFavoriteFoodsInitialStateImpl implements MyFavoriteFoodsInitialState {
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),
@@ -770,6 +950,7 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -783,6 +964,7 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) {
     return loading?.call();
@@ -795,6 +977,7 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) {
@@ -811,6 +994,8 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -824,6 +1009,8 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) {
@@ -837,6 +1024,8 @@ class _$MyFavoriteFoodsLoadingStateImpl implements MyFavoriteFoodsLoadingState {
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),
@@ -925,6 +1114,7 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -938,6 +1128,7 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) {
     return error?.call(message);
@@ -950,6 +1141,7 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) {
@@ -966,6 +1158,8 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -979,6 +1173,8 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) {
@@ -992,6 +1188,8 @@ class _$MyFavoriteFoodsErrorStateImpl implements MyFavoriteFoodsErrorState {
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),
@@ -1092,6 +1290,7 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1105,6 +1304,7 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) {
     return loaded?.call(foods);
@@ -1117,6 +1317,7 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) {
@@ -1133,6 +1334,8 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1146,6 +1349,8 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1159,6 +1364,8 @@ class _$MyFavoriteFoodsLoadedStateImpl implements MyFavoriteFoodsLoadedState {
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),
@@ -1177,6 +1384,188 @@ abstract class MyFavoriteFoodsLoadedState implements MyFavoriteFoodsState {
   List<Food> get foods;
   @JsonKey(ignore: true)
   _$$MyFavoriteFoodsLoadedStateImplCopyWith<_$MyFavoriteFoodsLoadedStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWith<$Res> {
+  factory _$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWith(
+          _$MyFavoriteFoodsLoadedImmediatelyStateImpl value,
+          $Res Function(_$MyFavoriteFoodsLoadedImmediatelyStateImpl) then) =
+      __$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<Food> foods});
+}
+
+/// @nodoc
+class __$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWithImpl<$Res>
+    extends _$MyFavoriteFoodsStateCopyWithImpl<$Res,
+        _$MyFavoriteFoodsLoadedImmediatelyStateImpl>
+    implements _$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWith<$Res> {
+  __$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWithImpl(
+      _$MyFavoriteFoodsLoadedImmediatelyStateImpl _value,
+      $Res Function(_$MyFavoriteFoodsLoadedImmediatelyStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? foods = null,
+  }) {
+    return _then(_$MyFavoriteFoodsLoadedImmediatelyStateImpl(
+      foods: null == foods
+          ? _value._foods
+          : foods // ignore: cast_nullable_to_non_nullable
+              as List<Food>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MyFavoriteFoodsLoadedImmediatelyStateImpl
+    implements MyFavoriteFoodsLoadedImmediatelyState {
+  const _$MyFavoriteFoodsLoadedImmediatelyStateImpl(
+      {required final List<Food> foods})
+      : _foods = foods;
+
+  final List<Food> _foods;
+  @override
+  List<Food> get foods {
+    if (_foods is EqualUnmodifiableListView) return _foods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_foods);
+  }
+
+  @override
+  String toString() {
+    return 'MyFavoriteFoodsState.loadedImmediately(foods: $foods)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MyFavoriteFoodsLoadedImmediatelyStateImpl &&
+            const DeepCollectionEquality().equals(other._foods, _foods));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_foods));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWith<
+          _$MyFavoriteFoodsLoadedImmediatelyStateImpl>
+      get copyWith => __$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWithImpl<
+          _$MyFavoriteFoodsLoadedImmediatelyStateImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(String message) error,
+    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
+    required TResult Function(String favoriteId)
+        immediateSearchInFavoritesLoaded,
+  }) {
+    return loadedImmediately(foods);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(String message)? error,
+    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
+    TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
+  }) {
+    return loadedImmediately?.call(foods);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String message)? error,
+    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
+    TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
+    required TResult orElse(),
+  }) {
+    if (loadedImmediately != null) {
+      return loadedImmediately(foods);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(MyFavoriteFoodsInitialState value) initial,
+    required TResult Function(MyFavoriteFoodsLoadingState value) loading,
+    required TResult Function(MyFavoriteFoodsErrorState value) error,
+    required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
+    required TResult Function(ImmediateSearchInFoodsLoadedState value)
+        immediateSearchInFavoritesLoaded,
+  }) {
+    return loadedImmediately(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(MyFavoriteFoodsInitialState value)? initial,
+    TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
+    TResult? Function(MyFavoriteFoodsErrorState value)? error,
+    TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
+    TResult? Function(ImmediateSearchInFoodsLoadedState value)?
+        immediateSearchInFavoritesLoaded,
+  }) {
+    return loadedImmediately?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(MyFavoriteFoodsInitialState value)? initial,
+    TResult Function(MyFavoriteFoodsLoadingState value)? loading,
+    TResult Function(MyFavoriteFoodsErrorState value)? error,
+    TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
+    TResult Function(ImmediateSearchInFoodsLoadedState value)?
+        immediateSearchInFavoritesLoaded,
+    required TResult orElse(),
+  }) {
+    if (loadedImmediately != null) {
+      return loadedImmediately(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class MyFavoriteFoodsLoadedImmediatelyState
+    implements MyFavoriteFoodsState {
+  const factory MyFavoriteFoodsLoadedImmediatelyState(
+          {required final List<Food> foods}) =
+      _$MyFavoriteFoodsLoadedImmediatelyStateImpl;
+
+  List<Food> get foods;
+  @JsonKey(ignore: true)
+  _$$MyFavoriteFoodsLoadedImmediatelyStateImplCopyWith<
+          _$MyFavoriteFoodsLoadedImmediatelyStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1255,6 +1644,7 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<Food> foods) loadedImmediately,
     required TResult Function(String favoriteId)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1268,6 +1658,7 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<Food> foods)? loadedImmediately,
     TResult? Function(String favoriteId)? immediateSearchInFavoritesLoaded,
   }) {
     return immediateSearchInFavoritesLoaded?.call(favoriteId);
@@ -1280,6 +1671,7 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<Food> foods)? loadedImmediately,
     TResult Function(String favoriteId)? immediateSearchInFavoritesLoaded,
     required TResult orElse(),
   }) {
@@ -1296,6 +1688,8 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     required TResult Function(MyFavoriteFoodsLoadingState value) loading,
     required TResult Function(MyFavoriteFoodsErrorState value) error,
     required TResult Function(MyFavoriteFoodsLoadedState value) loaded,
+    required TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)
+        loadedImmediately,
     required TResult Function(ImmediateSearchInFoodsLoadedState value)
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1309,6 +1703,8 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     TResult? Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult? Function(MyFavoriteFoodsErrorState value)? error,
     TResult? Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult? Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult? Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
   }) {
@@ -1322,6 +1718,8 @@ class _$ImmediateSearchInFoodsLoadedStateImpl
     TResult Function(MyFavoriteFoodsLoadingState value)? loading,
     TResult Function(MyFavoriteFoodsErrorState value)? error,
     TResult Function(MyFavoriteFoodsLoadedState value)? loaded,
+    TResult Function(MyFavoriteFoodsLoadedImmediatelyState value)?
+        loadedImmediately,
     TResult Function(ImmediateSearchInFoodsLoadedState value)?
         immediateSearchInFavoritesLoaded,
     required TResult orElse(),

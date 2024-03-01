@@ -6,6 +6,7 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_cook_book_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -128,7 +129,9 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => const MainScreen(),
+                ),);
               },
               child: const Icon(
                 Icons.arrow_back_ios,

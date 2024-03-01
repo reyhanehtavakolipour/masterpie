@@ -13,6 +13,7 @@ abstract class MyFavoriteFoodsEvent with _$MyFavoriteFoodsEvent {
 
   const factory MyFavoriteFoodsEvent.onGetMyFavoriteFoods(FoodType foodType, String query) = FavoriteFoods;
   const factory MyFavoriteFoodsEvent.onImmediateSearchInMyFavoriteFoods(Food food) = ImmediateSearchFavoriteFoods;
+  const factory MyFavoriteFoodsEvent.onGetFavoriteFoodsImmediately() = GetFavoriteFoodsImmediately;
   const factory MyFavoriteFoodsEvent.onReset() = Reset;
 
 }
@@ -25,6 +26,7 @@ abstract class MyFavoriteFoodsState with _$MyFavoriteFoodsState{
   const factory MyFavoriteFoodsState.loading()= MyFavoriteFoodsLoadingState;
   const factory MyFavoriteFoodsState.error(String message)= MyFavoriteFoodsErrorState;
   const factory MyFavoriteFoodsState.loaded({required List<Food> foods})= MyFavoriteFoodsLoadedState;
+  const factory MyFavoriteFoodsState.loadedImmediately({required List<Food> foods})= MyFavoriteFoodsLoadedImmediatelyState;
   const factory MyFavoriteFoodsState.immediateSearchInFavoritesLoaded({required String favoriteId})= ImmediateSearchInFoodsLoadedState;
 }
 

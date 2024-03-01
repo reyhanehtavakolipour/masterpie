@@ -36,7 +36,6 @@ class MyCookBookScreen extends StatefulWidget {
   const MyCookBookScreen({Key? key}) : super(key: key);
 
 
-
   @override
   State<MyCookBookScreen> createState() => _MyCookBookScreenState();
 }
@@ -104,7 +103,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text(MY_FAVORITE_FOOD_LABEL, style: TextStyle(color: Colors.white),),
+            title: const Text(MY_COOKBOOK_LABEL, style: TextStyle(color: Colors.white),),
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
               onTap: () {

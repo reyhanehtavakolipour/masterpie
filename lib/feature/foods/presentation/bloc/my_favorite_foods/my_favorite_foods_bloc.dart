@@ -3,6 +3,7 @@
 
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 import '../../../../../util/core/di/service_locator.dart';
 import '../../../domain/usecase/get_my_favorite_foods_usecase.dart';
@@ -15,6 +16,30 @@ class MyFavoriteFoodsBloc extends Bloc<MyFavoriteFoodsEvent, MyFavoriteFoodsStat
       emit(const MyFavoriteFoodsState.initial());
     }
     );
+
+
+
+
+    on<GetFavoriteFoodsImmediately>((event, emit) async {
+
+      final useCase= serviceLocator<GetMyFavoriteFoodsUseCase>();
+
+      emit(const MyFavoriteFoodsState.loading());
+
+      ///get immediate  response
+      var immediateResult = await useCase.getImmediateResponse(FoodType.all, '');
+
+      immediateResult.fold(
+            (failure) {
+          emit(MyFavoriteFoodsState.error(failure.message));
+        },
+            (data) {
+          emit(MyFavoriteFoodsState.loadedImmediately(foods: data));
+        },
+      );
+    }
+    );
+
 
     on<ImmediateSearchFavoriteFoods>((event, emit) async {
 
