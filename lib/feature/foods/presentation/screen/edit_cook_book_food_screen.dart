@@ -813,6 +813,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
        onTap: (){
          setState(() {
            _selectedAddIngredientOption= option;
+           _searchUnitOptions = manualUnitOptions;
            _searchedGroceriesVisible = false;
 
            resetMacroAmounts();
@@ -1457,7 +1458,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
            ),
          ),
        ),
-     );;
+     );
    }
 
 
