@@ -1058,6 +1058,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
           ),
           margin: const EdgeInsets.only(top: 36),
           child: SingleChildScrollView(
+            physics: const ScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -1119,6 +1120,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: _suggestedGroceries.length,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index){
           GenericFood grocery = _suggestedGroceries[index];
           return GestureDetector(

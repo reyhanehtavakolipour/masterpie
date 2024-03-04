@@ -1139,22 +1139,26 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
              const SizedBox(width: 4,),
 
 
-             TextField(
-               controller: TextEditingController(text: SERVING_LABEL),
-               enabled: false,
-               decoration: const InputDecoration(
-                 border: OutlineInputBorder(
-                   borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: TextEditingController(text: SERVING_LABEL),
+                 enabled: false,
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                  ),
-                 enabledBorder: OutlineInputBorder(
-                   borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                 ),
-                 focusedBorder: OutlineInputBorder(
-                   borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                 ),
-                 contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13),
                ),
-               style: const TextStyle(color: DARK_PRIMARY_COLOR),
              ),
 
            ],
@@ -1326,9 +1330,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
        onTap: (){
          setState(() {
            _selectedAddIngredientOption= option;
-           if(_selectedAddIngredientOption == ADD_INGREDIENT_MANUALLY){
-             _selectedUnitIndex= 0;
-           }
            _searchUnitOptions = manualUnitOptions;
            _searchedGroceriesVisible = false;
 
@@ -1363,9 +1364,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       onTap: (){
         setState(() {
           _selectedAddGroceryOption= option;
-          if(_selectedAddGroceryOption == ADD_INGREDIENT_MANUALLY){
-            _selectedUnitIndex= 0;
-          }
+          _searchUnitOptions = manualUnitOptions;
           _searchedGroceriesVisible = false;
           resetTotalMacroAmounts();
         });
@@ -1413,15 +1412,18 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
    Widget addIngredientChips(){
      /// add ingredients chips
-    return Wrap(
-      spacing: 4,
-      children: _addNewIngredientOptions.map((item) {
-        if(_selectedAddIngredientOption == item){
-          return addIngredientOptionChipSelected(item);
-        }else{
-          return addIngredientChipNotSelected(item);
-        }
-      },).toList(),
+    return Visibility(
+      visible: _foodType == MEAL_LABEL,
+      child: Wrap(
+        spacing: 4,
+        children: _addNewIngredientOptions.map((item) {
+          if(_selectedAddIngredientOption == item){
+            return addIngredientOptionChipSelected(item);
+          }else{
+            return addIngredientChipNotSelected(item);
+          }
+        },).toList(),
+      ),
     );
    }
 
@@ -1456,6 +1458,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
           ),
           margin: const EdgeInsets.only(top: 36),
           child: SingleChildScrollView(
+            physics: const ScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -1517,7 +1520,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: _suggestedGroceries.length,
-      itemBuilder: (context, index){
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index){
         GenericFood grocery = _suggestedGroceries[index];
         return GestureDetector(
           child: Column(
@@ -1797,7 +1801,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      _fatController.text = '0';
      _servingController.text = '100';
      _selectedUnitIndex= 0;
-     _searchUnitOptions = [];
    }
 
 
