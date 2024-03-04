@@ -1,6 +1,9 @@
 
 
 
+import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../../domain/model/suggested_foods_portion_model.dart';
@@ -81,9 +84,9 @@ class FoodsMapperImpl extends FoodsMapper{
   }
 
   @override
-  List<Food> fromGroceryProductsRemote(List<FoodRemote> productsRemote) {
+  List<GenericFood> fromGroceryProductsRemote(List<GenericFoodRemote> productsRemote) {
     return productsRemote.map((productRemote) =>
-        Food(
+        GenericFood(
             id: productRemote.id,
             foodType: FoodType.groceryProduct,
             name: productRemote.name,
@@ -94,7 +97,7 @@ class FoodsMapperImpl extends FoodsMapper{
             image: productRemote.image,
             servingAmounts: productRemote.servingAmounts,
             ingredients: [],
-            servingIngredientsCount: [],
+            servingIngredientsCount: productRemote.servingIngredientsCount,
             units: productRemote.units,
             recipe: '',
             calorie: productRemote.calorie,
@@ -103,8 +106,8 @@ class FoodsMapperImpl extends FoodsMapper{
             fat: productRemote.fat,
             diets: [],
             allergies: [],
-            servingAmount: 0,
-            unit: ''
+            servingAmount: [],
+            unit: []
         )
     ).toList();
   }
@@ -751,6 +754,12 @@ class FoodsMapperImpl extends FoodsMapper{
     }else{
       return toMyMealLocal(food, userId);
     }
+  }
+
+  @override
+  Food fromGenericFoodToFood(GenericFood genericFood) {
+    // TODO: implement fromGenericFoodToFood
+    throw UnimplementedError();
   }
 
 

@@ -317,7 +317,7 @@ mixin _$GroceriesState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<GenericFood> foods) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -325,7 +325,7 @@ mixin _$GroceriesState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<GenericFood> foods)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -333,7 +333,7 @@ mixin _$GroceriesState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<GenericFood> foods)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -425,7 +425,7 @@ class _$GroceriesInitialStateImpl implements GroceriesInitialState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<GenericFood> foods) loaded,
   }) {
     return initial();
   }
@@ -436,7 +436,7 @@ class _$GroceriesInitialStateImpl implements GroceriesInitialState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<GenericFood> foods)? loaded,
   }) {
     return initial?.call();
   }
@@ -447,7 +447,7 @@ class _$GroceriesInitialStateImpl implements GroceriesInitialState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<GenericFood> foods)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -541,7 +541,7 @@ class _$GroceriesLoadingStateImpl implements GroceriesLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<GenericFood> foods) loaded,
   }) {
     return loading();
   }
@@ -552,7 +552,7 @@ class _$GroceriesLoadingStateImpl implements GroceriesLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<GenericFood> foods)? loaded,
   }) {
     return loading?.call();
   }
@@ -563,7 +563,7 @@ class _$GroceriesLoadingStateImpl implements GroceriesLoadingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<GenericFood> foods)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -682,7 +682,7 @@ class _$GroceriesErrorStateImpl implements GroceriesErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<GenericFood> foods) loaded,
   }) {
     return error(message);
   }
@@ -693,7 +693,7 @@ class _$GroceriesErrorStateImpl implements GroceriesErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<GenericFood> foods)? loaded,
   }) {
     return error?.call(message);
   }
@@ -704,7 +704,7 @@ class _$GroceriesErrorStateImpl implements GroceriesErrorState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<GenericFood> foods)? loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -767,7 +767,7 @@ abstract class _$$GroceriesLoadedStateImplCopyWith<$Res> {
           $Res Function(_$GroceriesLoadedStateImpl) then) =
       __$$GroceriesLoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Food> foods});
+  $Res call({List<GenericFood> foods});
 }
 
 /// @nodoc
@@ -787,7 +787,7 @@ class __$$GroceriesLoadedStateImplCopyWithImpl<$Res>
       foods: null == foods
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
-              as List<Food>,
+              as List<GenericFood>,
     ));
   }
 }
@@ -795,12 +795,12 @@ class __$$GroceriesLoadedStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GroceriesLoadedStateImpl implements GroceriesLoadedState {
-  const _$GroceriesLoadedStateImpl({required final List<Food> foods})
+  const _$GroceriesLoadedStateImpl({required final List<GenericFood> foods})
       : _foods = foods;
 
-  final List<Food> _foods;
+  final List<GenericFood> _foods;
   @override
-  List<Food> get foods {
+  List<GenericFood> get foods {
     if (_foods is EqualUnmodifiableListView) return _foods;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_foods);
@@ -837,7 +837,7 @@ class _$GroceriesLoadedStateImpl implements GroceriesLoadedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(List<Food> foods) loaded,
+    required TResult Function(List<GenericFood> foods) loaded,
   }) {
     return loaded(foods);
   }
@@ -848,7 +848,7 @@ class _$GroceriesLoadedStateImpl implements GroceriesLoadedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<Food> foods)? loaded,
+    TResult? Function(List<GenericFood> foods)? loaded,
   }) {
     return loaded?.call(foods);
   }
@@ -859,7 +859,7 @@ class _$GroceriesLoadedStateImpl implements GroceriesLoadedState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<Food> foods)? loaded,
+    TResult Function(List<GenericFood> foods)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -907,10 +907,10 @@ class _$GroceriesLoadedStateImpl implements GroceriesLoadedState {
 }
 
 abstract class GroceriesLoadedState implements GroceriesState {
-  const factory GroceriesLoadedState({required final List<Food> foods}) =
+  const factory GroceriesLoadedState({required final List<GenericFood> foods}) =
       _$GroceriesLoadedStateImpl;
 
-  List<Food> get foods;
+  List<GenericFood> get foods;
   @JsonKey(ignore: true)
   _$$GroceriesLoadedStateImplCopyWith<_$GroceriesLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;

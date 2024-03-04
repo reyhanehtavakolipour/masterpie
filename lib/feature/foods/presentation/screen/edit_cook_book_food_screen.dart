@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -44,6 +46,9 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
    late TextEditingController _totalServingController;
    late TextEditingController _totalUnitController;
 
+   GenericFood _selectedGenericIngredient = GenericFood();
+   int _selectedUnitIndex = 0;
+   List<String> _searchUnitOptions = [];
 
    final _debouncer = Debouncer(milliseconds: 1000);
 
@@ -77,7 +82,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
 
 
-   List<Food> _suggestedGroceries= [];
+   List<GenericFood> _suggestedGroceries= [];
 
 
   @override
@@ -107,31 +112,11 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
 
     _ingredientNameController.addListener(_onSearchIngredientChanged);
-    _groceryNameController.addListener(_onSearchGroceryChanged);
-    
+
     _groceriesBloc = context.read<GroceriesBloc>();
 
     init();
   }
-
-   void _onSearchGroceryChanged() {
-     setState(() {
-
-     });
-     _debouncer.run(() {
-       _suggestedGroceries.clear();
-       if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL && widget.foodDetailArgumentModel.food == null){
-         _groceriesBloc.add(
-           GroceriesEvent.onGetGroceries(_groceryNameController.text),
-         );
-         setState(() {
-           _searchedGroceriesVisible = true;
-         });
-       }
-     });
-   }
-
-
 
    void _onSearchIngredientChanged() {
      setState(() {
@@ -212,7 +197,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                     newIngredient(),
 
 
-                    /// new grocery
+                    /// grocery
                     groceryName(),
 
                     /// added ingredients
@@ -229,9 +214,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                     const SizedBox(height: 16,),
 
                     /// total macros
-                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
-
-                    const SizedBox(height: 36,),
+                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
 
                     /// button
                     buildBottomButton(context),
@@ -244,7 +227,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
       ),
     );
   }
-
 
   void init(){
      ///food type, food name
@@ -592,11 +574,11 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
   }
 
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
-      TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController, bool isTotal){
+      TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController){
 
     bool isEditable= true;
 
-    if(isTotal && _foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && (calorieController == _totalCalorieController)){
+    if(_foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && (calorieController == _totalCalorieController)){
       isEditable = false;
     }
 
@@ -805,84 +787,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
             ),
           ],
         ),
-
-
-        Visibility(visible: !isTotal,child: const SizedBox(height: 48,),),
-
-        /// how many serving?
-        Visibility(
-          visible: !isTotal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-              const SizedBox(width: 16,),
-              GestureDetector(
-                child: const CircleAvatar(
-                  radius: 14,
-                  backgroundColor: DARK_PRIMARY_COLOR,
-                  child: Icon(
-                    Icons.remove,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: (){
-                  setState(() {
-                    if(double.parse(_ingredientServingCountController.text) >= STEP_AMOUNT){
-                      _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) - STEP_AMOUNT).toString());
-                    }
-                  });
-                },
-
-              ),
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  child: SizedBox(
-                    width: 60,
-                    height: MACRO_HEIGHT,
-                    child: TextField(
-                      controller: _ingredientServingCountController,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                        FilteringTextInputFormatter.allow(numericRegExp),
-                      ],
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: PRIMARY_COLOR),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: PRIMARY_COLOR),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      ),
-                    ),
-                  )
-              ),
-              GestureDetector(
-                child: const CircleAvatar(
-                  radius: 14,
-                  backgroundColor: DARK_PRIMARY_COLOR,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: (){
-                  setState(() {
-                    _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) + STEP_AMOUNT).toString());
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -1006,7 +910,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
    }
 
 
-  Widget suggestedGroceriesBloc(bool isTotal){
+  Widget suggestedGroceriesBloc(){
     return  Visibility(
       visible: _searchedGroceriesVisible,
       child: Container(
@@ -1019,6 +923,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
           ),
           margin: const EdgeInsets.only(top: 36),
           child: SingleChildScrollView(
+            physics: const ScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -1034,7 +939,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                   },
                 ),
 
-        suggestedGroceriesList(isTotal),
+        suggestedGroceriesList(),
 
 
         BlocConsumer<GroceriesBloc, GroceriesState>(
@@ -1076,12 +981,13 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     );
   }
 
-  Widget suggestedGroceriesList(bool isTotal){
+  Widget suggestedGroceriesList(){
     return ListView.builder(
       shrinkWrap: true,
       itemCount: _suggestedGroceries.length,
-      itemBuilder: (context, index){
-        Food grocery = _suggestedGroceries[index];
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index){
+        GenericFood grocery = _suggestedGroceries[index];
         return GestureDetector(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1095,28 +1001,18 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
           ),
           onTap: (){
             setState(() {
-              if(isTotal){
-                  _searchedGroceriesVisible = false;
-                  _groceryNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
-                  _totalServingController = TextEditingController(text: grocery.servingAmounts[0].toString());
-                  _totalCalorieController = TextEditingController(text: grocery.calorie[0].toString());
-                  _totalProteinController = TextEditingController(text: grocery.protein[0].toString());
-                  _totalCarbController = TextEditingController(text: grocery.carb[0].toString());
-                  _totalFatController = TextEditingController(text: grocery.fat[0].toString());
-                  _totalUnitController = TextEditingController(text: grocery.units[0].toString());
-                  _groceryNameController.addListener(_onSearchGroceryChanged);
-              }else{
-                _searchedGroceriesVisible = false;
-                _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
-                _ingredientServingCountController= TextEditingController(text: '1.0');
-                _servingController = TextEditingController(text: grocery.servingAmount.toString() == '0' ? '100' : grocery.servingAmount.toString());
-                _calorieController = TextEditingController(text: grocery.calorie[0].toString());
-                _proteinController = TextEditingController(text: grocery.protein[0].toString());
-                _carbController = TextEditingController(text: grocery.carb[0].toString());
-                _fatController = TextEditingController(text: grocery.fat[0].toString());
-                _unitController = TextEditingController(text: grocery.units[0].toString());
-                _ingredientNameController.addListener(_onSearchIngredientChanged);
-              }
+              _selectedGenericIngredient = grocery;
+              _searchedGroceriesVisible = false;
+              _searchUnitOptions = grocery.units[0];
+              _selectedUnitIndex= 0;
+              _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
+              _ingredientServingCountController= TextEditingController(text: '1.0');
+              _servingController = TextEditingController(text: grocery.servingAmounts[0][_selectedUnitIndex].toString());
+              _calorieController = TextEditingController(text: grocery.calorie[0][_selectedUnitIndex].toString());
+              _proteinController = TextEditingController(text: grocery.protein[0][_selectedUnitIndex].toString());
+              _carbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
+              _fatController = TextEditingController(text: grocery.fat[0][_selectedUnitIndex].toString());
+              _ingredientNameController.addListener(_onSearchIngredientChanged);
             });
           },
         );
@@ -1157,105 +1053,411 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      return Visibility(
        visible: _selectedAddIngredientOption.isNotEmpty && _foodType == MEAL_LABEL,
        child: Card(
-               child: Padding(
-                 padding: const EdgeInsets.all(8),
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
+           child: Padding(
+             padding: const EdgeInsets.all(8),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 GestureDetector(
+                   child: const Icon(
+                     Icons.close,
+                     color: Colors.black,
+                   ),
+                   onTap: () {
+                     setState(() {
+                       _selectedAddIngredientOption = '';
+                     });
+                   },
+                 ),
+                 const SizedBox(height: 12,),
+                 Stack(
                    children: [
-                     GestureDetector(
-                       child: const Icon(
-                         Icons.close,
-                         color: Colors.black,
-                       ),
-                       onTap: () {
-                         setState(() {
-                           _selectedAddIngredientOption = '';
-                         });
-                       },
-                     ),
-                     const SizedBox(height: 12,),
-                     Stack(
+                     Row(
+                       mainAxisSize: MainAxisSize.min,
+                       mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Row(
-                           mainAxisSize: MainAxisSize.min,
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                             Expanded(
-                               child: SizedBox(
-                                 height: SEARCH_BAR_HEIGHT,
-                                 child: TextField(
-                                   controller: _ingredientNameController,
-                                   decoration:  InputDecoration(
-                                     hintText: CHEDDAR_CHEESE_LABEL,
-                                     border: OutlineInputBorder(
-                                       borderSide: BorderSide(color: _ingredientNameBorderColor),
-                                     ),
-                                     enabledBorder: OutlineInputBorder(
-                                       borderSide: BorderSide(color: _ingredientNameBorderColor),
-                                     ),
-                                     focusedBorder: OutlineInputBorder(
-                                       borderSide: BorderSide(color: _ingredientNameBorderColor, width: 2),
-                                     ),
-                                     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                   ),
-                                   style: const TextStyle(color: DARK_PRIMARY_COLOR),
+                         Expanded(
+                           child: SizedBox(
+                             height: SEARCH_BAR_HEIGHT,
+                             child: TextField(
+                               controller: _ingredientNameController,
+                               decoration:  InputDecoration(
+                                 hintText: CHEDDAR_CHEESE_LABEL,
+                                 border: OutlineInputBorder(
+                                   borderSide: BorderSide(color: _ingredientNameBorderColor),
                                  ),
+                                 enabledBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: _ingredientNameBorderColor),
+                                 ),
+                                 focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: _ingredientNameBorderColor, width: 2),
+                                 ),
+                                 contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                               ),
+                               style: const TextStyle(color: DARK_PRIMARY_COLOR),
+                             ),
+                           ),
+                         ),
+                         const SizedBox(width: 12,),
+                         Visibility(
+                           visible: _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH,
+                           child: GestureDetector(
+                             child: const CircleAvatar(
+                               radius: 18,
+                               backgroundColor: Colors.orange,
+                               child: Icon(
+                                 Icons.search,
+                                 color: Colors.white,
                                ),
                              ),
-                             const SizedBox(width: 12,),
-                             Visibility(
-                               visible: _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH,
-                               child: GestureDetector(
-                                 child: const CircleAvatar(
-                                   radius: 18,
-                                   backgroundColor: Colors.orange,
-                                   child: Icon(
-                                     Icons.search,
-                                     color: Colors.white,
-                                   ),
-                                 ),
-                                 onTap: () {
-                                   _groceriesBloc.add(
-                                     GroceriesEvent.onGetGroceries(_ingredientNameController.text),
-                                   );
-                                   setState(() {
-                                     _searchedGroceriesVisible = true;
-                                   });
-                                 },
-                               ),
-                             )
-                           ],
-                         ),
-                         suggestedGroceriesBloc(false)
+                             onTap: () {
+                               _groceriesBloc.add(
+                                 GroceriesEvent.onGetGroceries(_ingredientNameController.text),
+                               );
+                               setState(() {
+                                 _searchedGroceriesVisible = true;
+                               });
+                             },
+                           ),
+                         )
                        ],
                      ),
-
-                     const SizedBox(height: 16,),
-
-                     macroAmountsWidgets(_servingController, _calorieController, _proteinController, _carbController, _fatController, _unitController, false),
-
-                     const SizedBox(height: 16,),
-
-
-                     Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           ElevatedButton(
-                             style: ButtonStyle(
-                               backgroundColor: MaterialStateProperty.all<Color>(PRIMARY_COLOR),
-                             ),
-                             onPressed: () {
-                               addIngredientClickListener();
-                             },
-                             child: const Text(ADD_LABEL, style: TextStyle( color: Colors.white),),
-                           ),
-                         ]
-                     ),
+                     suggestedGroceriesBloc()
                    ],
                  ),
-               )
-           ),
+
+                 const SizedBox(height: 16,),
+
+
+                 macroAmountsIngredient(),
+
+
+                 const SizedBox(height: 16,),
+
+
+                 Row(
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     children: [
+                       ElevatedButton(
+                         style: ButtonStyle(
+                           backgroundColor: MaterialStateProperty.all<Color>(PRIMARY_COLOR),
+                         ),
+                         onPressed: () {
+                           addIngredientClickListener();
+                         },
+                         child: const Text(ADD_LABEL, style: TextStyle( color: Colors.white),),
+                       ),
+                     ]
+                 ),
+               ],
+             ),
+           )
+       ),
      );
+   }
+
+   Widget macroAmountsIngredient(){
+     return Column(
+       children: [
+         ///  serving + unit
+         Row(
+           children: [
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _servingController,
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.digitsOnly,
+                   FilteringTextInputFormatter.allow(numericRegExp),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
+               ),
+             ),
+             const SizedBox(width: 20,),
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+
+             ingredientUnitDropDown()
+
+           ],
+         ),
+         const SizedBox(height: 4,),
+
+         /// total calorie + protein
+         Row(
+           children: [
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$CALORIE_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _calorieController,
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.digitsOnly,
+                   FilteringTextInputFormatter.allow(numericRegExp),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
+               ),
+             ),
+             const SizedBox(width: 20,),
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$PROTEIN_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _proteinController,
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.digitsOnly,
+                   FilteringTextInputFormatter.allow(numericRegExp),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
+               ),
+             ),
+           ],
+         ),
+
+         const SizedBox(height: 12,),
+
+         /// total carb + fat
+         Row(
+           children: [
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$CARB_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _carbController,
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.digitsOnly,
+                   FilteringTextInputFormatter.allow(numericRegExp),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
+               ),
+             ),
+             const SizedBox(width: 20,),
+             const SizedBox(
+                 width: MACRO_TITLE_WIDTH,
+                 child: Text('$FAT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+             ),
+             const SizedBox(width: 4,),
+             SizedBox(
+               width: MACRO_WIDTH,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _fatController,
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.digitsOnly,
+                   FilteringTextInputFormatter.allow(numericRegExp),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
+               ),
+             ),
+           ],
+         ),
+
+
+         const SizedBox(height: 48,),
+
+         /// how many serving?
+         Row(
+           mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+             const SizedBox(width: 16,),
+             GestureDetector(
+               child: const CircleAvatar(
+                 radius: 14,
+                 backgroundColor: DARK_PRIMARY_COLOR,
+                 child: Icon(
+                   Icons.remove,
+                   color: Colors.white,
+                 ),
+               ),
+               onTap: (){
+                 setState(() {
+                   if(double.parse(_ingredientServingCountController.text) >= STEP_AMOUNT){
+                     _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) - STEP_AMOUNT).toString());
+                   }
+                 });
+               },
+
+             ),
+             Container(
+                 margin: const EdgeInsets.symmetric(horizontal: 4),
+                 child: SizedBox(
+                   width: 60,
+                   height: MACRO_HEIGHT,
+                   child: TextField(
+                     controller: _ingredientServingCountController,
+                     textAlign: TextAlign.center,
+                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     inputFormatters: <TextInputFormatter>[
+                       FilteringTextInputFormatter.digitsOnly,
+                       FilteringTextInputFormatter.allow(numericRegExp),
+                     ],
+                     decoration: const InputDecoration(
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       enabledBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       focusedBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                       ),
+                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                     ),
+                   ),
+                 )
+             ),
+             GestureDetector(
+               child: const CircleAvatar(
+                 radius: 14,
+                 backgroundColor: DARK_PRIMARY_COLOR,
+                 child: Icon(
+                   Icons.add,
+                   color: Colors.white,
+                 ),
+               ),
+               onTap: (){
+                 setState(() {
+                   _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) + STEP_AMOUNT).toString());
+                 });
+               },
+             ),
+           ],
+         ),
+       ],
+     );
+   }
+
+   Widget ingredientUnitDropDown(){
+     final dropDownList = _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions;
+     return  SizedBox(
+       width: MACRO_DROP_DOWN_WIDTH,
+       height: MACRO_DROP_DOWN_HEIGHT,
+       child: DropdownButtonHideUnderline(
+         child: ButtonTheme(
+           alignedDropdown: true,
+           child: DropdownButton(
+             isExpanded: true,
+             value: dropDownList[_selectedUnitIndex],
+             items: dropDownList.map((String item) {
+               return DropdownMenuItem<String>(
+                 value: item,
+                 child: Text(item, style: const TextStyle(fontSize: 12),),
+               );
+             }).toList(),
+             onChanged: (String? newValue){
+               setState(() {
+                 int selectedIndex = 0;
+                 for (int i = 0; i < dropDownList.length; i++){
+                   if(newValue.toString() == dropDownList[i]){
+                     selectedIndex = i;
+                   }
+                 }
+                 _selectedUnitIndex = selectedIndex;
+                 _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
+                 _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
+                 _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
+                 _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
+                 _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+               });
+
+             },
+             // style: Theme.of(context).textTheme.title,
+           ),
+         ),
+       ),
+     );;
    }
 
 
@@ -1272,10 +1474,10 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
        if(newFood.foodType == FoodType.meal && newFood.ingredients.isEmpty && _ingredientNameController.text.isNotEmpty){
          newFood= newFood.copyWith(
-           calorie: [],
-           protein: [],
-           carb: [],
-           fat: []
+             calorie: [],
+             protein: [],
+             carb: [],
+             fat: []
          );
        }
        List<String> ingredients = List<String>.from(newFood.ingredients);
@@ -1284,19 +1486,19 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
        if(_ingredientServingCountController.text.isEmpty){
          _ingredientServingCountController = TextEditingController(text: '1.0');
        }
-       servingIngredientsCount.add(_ingredientServingCountController.text);
+       servingIngredientsCount.add(_selectedGenericIngredient.servingIngredientsCount[0][_selectedUnitIndex]);
        List<String> ingredientsUnit = List<String>.from(newFood.units);
-       ingredientsUnit.add(_unitController.text);
+       ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex]);
        List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-       ingredientsServingAmount.add(_servingController.text);
+       ingredientsServingAmount.add(_selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex]);
        List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
-       ingredientsCalorie.add(_calorieController.text);
+       ingredientsCalorie.add(_selectedGenericIngredient.calorie[0][_selectedUnitIndex]);
        List<String> ingredientsProtein = List<String>.from(newFood.protein);
-       ingredientsProtein.add(_proteinController.text);
+       ingredientsProtein.add(_selectedGenericIngredient.protein[0][_selectedUnitIndex]);
        List<String> ingredientsCarb = List<String>.from(newFood.carb);
-       ingredientsCarb.add(_carbController.text);
+       ingredientsCarb.add(_selectedGenericIngredient.carb[0][_selectedUnitIndex]);
        List<String> ingredientsFat = List<String>.from(newFood.fat);
-       ingredientsFat.add(_fatController.text);
+       ingredientsFat.add(_selectedGenericIngredient.fat[0][_selectedUnitIndex]);
 
        newFood = newFood.copyWith(
            ingredients: ingredients,
@@ -1325,6 +1527,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      _fatController.text = '0';
      _servingController.text = '100';
      _unitController.text= GRAM_LABEL;
+     _selectedUnitIndex= 0;
    }
 
 
@@ -1334,6 +1537,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     _totalProteinController.text = '0';
     _totalCarbController.text = '0';
     _totalFatController.text = '0';
+    _selectedUnitIndex= 0;
     if(_foodType == MEAL_LABEL){
       _totalServingController.text = '1';
       _totalUnitController.text= SERVING_LABEL;

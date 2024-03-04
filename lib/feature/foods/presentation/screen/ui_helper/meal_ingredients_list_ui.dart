@@ -1,18 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
-import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
 import '../../../../../util/design/size/app_widget_size.dart';
-import '../../../../../util/design/toast/app_toast.dart';
 import '../../../domain/model/food_model.dart';
-import '../../../domain/model/food_unit.dart';
-import '../../bloc/groceries_bloc/groceries_bloc.dart';
-import '../../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 import 'debouncer.dart';
 
 class MealIngredientsListUi extends StatefulWidget {
@@ -47,9 +40,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
 
   Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
-  final _debouncer = Debouncer(milliseconds: 1000);
-
-  late GroceriesBloc _groceriesBloc;
 
   List<Food> _suggestedGroceries = [];
 
@@ -65,21 +55,9 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController(text: '');
     _ingredientServingCountController= TextEditingController(text: '1.0');
-    _groceriesBloc = context.read<GroceriesBloc>();
   }
 
-  void _onSearchIngredientChanged() {
-    _debouncer.run(() {
-      int indexOfTrue = widget.ingredientsExpansionState.indexOf(true);
-      if(indexOfTrue != -1){
-        if(_ingredientNameController.text != widget.ingredients[indexOfTrue]) {
-          _groceriesBloc.add(
-            GroceriesEvent.onGetGroceries(_ingredientNameController.text),
-          );
-        }
-      }
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +77,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
             _ingredientNameController.text = widget.meal.ingredients[index];
             _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index];
             _unitController.text = widget.meal.units[index];
-            _ingredientNameController.addListener(_onSearchIngredientChanged);
-
-
           }
 
           return SizedBox(
@@ -169,52 +144,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                                           ),
                                         ),
                                       ],
-                                    ),
-
-                                    const SizedBox(height: 16,),
-
-                                    BlocConsumer<GroceriesBloc, GroceriesState>(
-                                        builder: (context, state) {
-                                          if (state is GroceriesLoadingState) {
-                                            return const Stack(
-                                              children: [
-                                                GFLoader(
-                                                  type: GFLoaderType.circle,
-                                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                                ),
-                                              ],
-                                            );
-                                          }else if(state is GroceriesLoadedState){
-                                            Future.delayed(Duration.zero,(){
-                                              setState(() {
-                                                updatedIngredientMacroListener('');
-                                                _groceriesBloc.add(const GroceriesEvent.onReset());
-                                                List<String> list = [];
-                                                for (int i = 0; i < widget.meal.ingredients.length; i++) {
-                                                  if(i == index){
-                                                    list.add(_ingredientNameController.text);
-                                                  }else{
-                                                    list.add(ingredientName);
-                                                  }
-                                                }
-                                                widget.ingredients = list;
-
-                                                _suggestedGroceries = state.foods;
-                                              });
-                                            });
-
-                                          }else if(state is GroceriesErrorState){
-                                            Future.delayed(Duration.zero,(){
-                                              return showErrorToast(context, state.message);
-                                            });
-                                          }
-                                          return Container();
-                                        },
-                                        listener: (context, state){
-
-                                        }
                                     ),
 
                                     const SizedBox(height: 16,),

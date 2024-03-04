@@ -2,6 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -19,6 +20,7 @@ import '../remote/datasource/fooddatacentral_grocery_product_remote_datasource.d
 import '../remote/datasource/masterpie_food_remote_datasource.dart';
 import '../remote/datasource/openai_food_remote_datasource.dart';
 import '../remote/model/food_remote_model.dart';
+import '../remote/model/generic_food_remote_model.dart';
 
 const ERROR_FREE_USER_SUGGEST_FOOD_NOT_ALLOWED= 'free user, not allowed to use suggest food';
 const ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED= 'free user, not allowed to use foods portion recommender';
@@ -51,13 +53,12 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, List<Food>>> getGroceryProductsFromRemote(String query) async{
-    List<Food> foods = [];
-    // remote source: Food Data Central
+  Future<Either<Failure, List<GenericFood>>> getGroceryProductsFromRemote(String query) async{
+    List<GenericFood> foods = [];
     final productsRemoteFromFoodDataCentral = await productRemoteDataSource.getGroceryProductsFromFoodDataCentral(query);
     if(productsRemoteFromFoodDataCentral.isRight()){
       if(productsRemoteFromFoodDataCentral.asRight().isNotEmpty){
-        FoodRemote food = productsRemoteFromFoodDataCentral.asRight()[0];
+        GenericFoodRemote food = productsRemoteFromFoodDataCentral.asRight()[0];
         final userPlan= await userRepo.getUserPlanInRemote();
         if(userPlan.isRight()){
           if(userPlan.asRight().subscriptionPlan!.plan != FREE_LABEL){

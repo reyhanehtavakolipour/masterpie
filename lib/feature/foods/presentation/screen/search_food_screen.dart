@@ -265,7 +265,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                         }else if(state is GroceriesLoadedState){
                           Future.delayed(Duration.zero,(){
                             _groceriesBloc.add(const GroceriesEvent.onReset());
-                            checkIfGroceriesAddedBefore(state.foods);
+                            // checkIfGroceriesAddedBefore(state.foods);
                           });
 
                         }else if(state is GroceriesErrorState){

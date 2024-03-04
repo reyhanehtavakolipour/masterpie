@@ -1,12 +1,14 @@
 
 
 import '../../domain/model/food_model.dart';
+import '../../domain/model/generic_food_model.dart';
 import '../../domain/model/suggested_foods_portion_model.dart';
 import '../local/model/food_local_model.dart';
 import '../local/model/international_meal_local_model.dart';
 import '../local/model/logged_foods_local_model.dart';
 import '../local/model/my_food_local_model.dart';
 import '../remote/model/food_remote_model.dart';
+import '../remote/model/generic_food_remote_model.dart';
 import '../remote/model/suggested_foods_portion_remote_model.dart';
 
 abstract class FoodsMapper{
@@ -26,7 +28,9 @@ abstract class FoodsMapper{
 
   Food fromMealLocal(FoodLocal foodLocal);
 
-  List<Food> fromGroceryProductsRemote(List<FoodRemote> productsRemote);
+  Food fromGenericFoodToFood(GenericFood genericFood);
+
+  List<GenericFood> fromGroceryProductsRemote(List<GenericFoodRemote> productsRemote);
 
   List<FoodLocal> toGroceryProductsLocal(List<Food> foods);
 

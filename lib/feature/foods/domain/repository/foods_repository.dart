@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
@@ -14,7 +15,7 @@ abstract class FoodsRepository{
 
   //source: Foods Data
   // case 3
-  Future<Either<Failure, List<Food>>> getGroceryProductsFromRemote(String query);
+  Future<Either<Failure, List<GenericFood>>> getGroceryProductsFromRemote(String query);
 
 
   //source: supabase

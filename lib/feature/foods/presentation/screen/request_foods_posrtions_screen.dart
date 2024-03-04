@@ -977,7 +977,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                     }else if(state is GroceriesLoadedState){
                       Future.delayed(Duration.zero,(){
                         setState(() {
-                          _suggestedFoods.addAll(state.foods);
+                          // _suggestedFoods.addAll(state.foods);
                           _groceriesBloc.add(const GroceriesEvent.onReset());
                         });
                       });
