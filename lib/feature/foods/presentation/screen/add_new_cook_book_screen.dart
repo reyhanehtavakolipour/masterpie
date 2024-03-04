@@ -560,70 +560,82 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   }
 
    Widget groceryUnitDropDown(){
-     return  Container(
-       margin: const EdgeInsets.symmetric(horizontal: 16),
-       decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(BORDER_RADIUS),
-         border: Border.all(
-           color: DARK_PRIMARY_COLOR,
-           width: 0.5,
-         ),
-       ),
-       child: SizedBox(
-         height: 45,
-         child: DropdownButtonFormField<String?>(
-           value: _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL ? _searchUnitOptions[_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex],
-           decoration: const InputDecoration(
-             border: InputBorder.none,
-             contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+     final dropDownList = _selectedAddIngredientOption == ADD_GROCERY_BY_SEARCH_LABEL ? _searchUnitOptions : manualUnitOptions;
+     return  SizedBox(
+       width: MACRO_DROP_DOWN_WIDTH,
+       height: MACRO_DROP_DOWN_HEIGHT,
+       child: DropdownButtonHideUnderline(
+         child: ButtonTheme(
+           alignedDropdown: true,
+           child: DropdownButton(
+             isExpanded: true,
+             value: dropDownList[_selectedUnitIndex],
+             items: dropDownList.map((String item) {
+               return DropdownMenuItem<String>(
+                 value: item,
+                 child: Text(item, style: const TextStyle(fontSize: 12),),
+               );
+             }).toList(),
+             onChanged: (String? newValue){
+               setState(() {
+                 int selectedIndex = 0;
+                 for (int i = 0; i < dropDownList.length; i++){
+                   if(newValue.toString() == dropDownList[i]){
+                     selectedIndex = i;
+                   }
+                 }
+                 _selectedUnitIndex = selectedIndex;
+                 _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
+                 _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
+                 _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
+                 _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
+                 _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+               });
+
+             },
+             // style: Theme.of(context).textTheme.title,
            ),
-           focusColor: PRIMARY_COLOR,
-           items: (_selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL ? _searchUnitOptions : manualUnitOptions).map((String item) {
-             return DropdownMenuItem<String>(
-               value: item,
-               child: Text(item),
-             );
-           }).toList(),
-           onChanged: (String? newValue) {
-             setState(() {
-               //todo rt set selected unit
-             });
-           },
          ),
        ),
      );
    }
 
    Widget ingredientUnitDropDown(){
-     return  Container(
-       margin: const EdgeInsets.symmetric(horizontal: 16),
-       decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(BORDER_RADIUS),
-         border: Border.all(
-           color: DARK_PRIMARY_COLOR,
-           width: 0.5,
-         ),
-       ),
-       child: SizedBox(
-         height: 45,
-         child: DropdownButtonFormField<String?>(
-           value: _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions[_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex],
-           decoration: const InputDecoration(
-             border: InputBorder.none,
-             contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+     final dropDownList = _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions;
+     return  SizedBox(
+       width: MACRO_DROP_DOWN_WIDTH,
+       height: MACRO_DROP_DOWN_HEIGHT,
+       child: DropdownButtonHideUnderline(
+         child: ButtonTheme(
+           alignedDropdown: true,
+           child: DropdownButton(
+             isExpanded: true,
+             value: dropDownList[_selectedUnitIndex],
+             items: dropDownList.map((String item) {
+               return DropdownMenuItem<String>(
+                 value: item,
+                 child: Text(item, style: const TextStyle(fontSize: 12),),
+               );
+             }).toList(),
+             onChanged: (String? newValue){
+               setState(() {
+                 int selectedIndex = 0;
+                 for (int i = 0; i < dropDownList.length; i++){
+                   if(newValue.toString() == dropDownList[i]){
+                     selectedIndex = i;
+                   }
+                 }
+                 _selectedUnitIndex = selectedIndex;
+                 _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
+                 _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
+                 _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
+                 _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
+                 _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+               });
+
+             },
+             // style: Theme.of(context).textTheme.title,
            ),
-           focusColor: PRIMARY_COLOR,
-           items: (_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions).map((String item) {
-             return DropdownMenuItem<String>(
-               value: item,
-               child: Text(item),
-             );
-           }).toList(),
-           onChanged: (String? newValue) {
-             setState(() {
-               //todo rt set selected unit
-             });
-           },
          ),
        ),
      );
@@ -1317,6 +1329,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
            if(_selectedAddIngredientOption == ADD_INGREDIENT_MANUALLY){
              _selectedUnitIndex= 0;
            }
+           _searchUnitOptions = manualUnitOptions;
            _searchedGroceriesVisible = false;
 
            resetMacroAmounts();
