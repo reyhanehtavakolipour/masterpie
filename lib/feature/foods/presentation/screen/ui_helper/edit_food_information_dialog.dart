@@ -408,7 +408,7 @@ class _EditFoodInfoDialogState extends State<EditFoodInfoDialog> {
           onPressed: () {
             if(foodInfoDialog == FoodInfoDialog.servingAndCalorie){
               final values = ServingMacroDialogValues(
-                serving: int.parse(_textField1Controller.text),
+                serving: double.parse(_textField1Controller.text),
                 calorie: [_textField2Controller.text],
                 protein: [_textField3Controller.text],
                 carb: [_textField4Controller.text],

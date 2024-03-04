@@ -18,7 +18,7 @@ class GenericFood with _$GenericFood{
     @Default('') String description,
     @Default('') String nationality,
     @Default('') String image,
-    @Default([]) List<int> servingAmount,
+    @Default([]) List<double> servingAmount,
     @Default([]) List<String> unit,
     @Default([]) List<String> ingredients,
     @Default([]) List<List<String>> servingIngredientsCount,

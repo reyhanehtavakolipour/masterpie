@@ -30,7 +30,7 @@ class Food with _$Food{
     ///only for meals
     @Default([]) List<String> ingredients,
     @Default('') String unit,
-    @Default(0) int servingAmount,
+    @Default(0.0) double servingAmount,
     @Default('') String recipe,
     @Default('') String nationality,
     @Default('') String description,

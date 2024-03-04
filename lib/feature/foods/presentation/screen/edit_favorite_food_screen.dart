@@ -72,7 +72,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
   Color _mealNameBorderColor = DARK_PRIMARY_COLOR;
 
 
-  String _selectedAddGroceryOption = ADD_GROCERY_BY_SEARCH_LABEL;
   bool _searchedGroceriesVisible = false;
 
 
@@ -112,11 +111,33 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
 
     _ingredientNameController.addListener(_onSearchIngredientChanged);
+    _totalServingController.addListener(_onTotalServingChanged);
 
     _groceriesBloc = context.read<GroceriesBloc>();
 
     init();
   }
+
+
+  void _onTotalServingChanged() {
+    setState(() {
+
+    });
+    _debouncer.run(() {
+      if(_foodType == MEAL_LABEL){
+        if(int.parse(_totalServingController.text) != newFood.servingAmount){
+          double coefficient = int.parse(_totalServingController.text)/newFood.servingAmount;
+          print('fdgod: $coefficient');
+        }
+      }else{
+        if(_totalServingController.text != newFood.servingAmounts[0]){
+
+        }
+      }
+    });
+  }
+
+
 
   void _onSearchIngredientChanged() {
     setState(() {
@@ -549,7 +570,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.meal,
           name: _mealNameController.text,
-          servingAmount: int.parse(_totalServingController.text),
+          servingAmount: double.parse(_totalServingController.text),
           unit: _totalUnitController.text,
           recipe: _recipeController.text
       );
@@ -827,39 +848,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     );
   }
 
-
-  Widget addGroceryOptionChipSelected(String option){
-    return GestureDetector(
-      onTap: (){
-        setState(() {
-          _selectedAddGroceryOption= '';
-          _searchedGroceriesVisible = false;
-          resetTotalMacroAmounts();
-        });
-      },
-      child: Chip(
-        backgroundColor: DARK_PRIMARY_COLOR,
-        label: Text(option, style: const TextStyle(color: Colors.white),),
-      ),
-    );
-  }
-
-  Widget addGroceryChipNotSelected(String option){
-    return GestureDetector(
-      onTap: (){
-        setState(() {
-          _selectedAddGroceryOption= option;
-          _searchedGroceriesVisible = false;
-          resetTotalMacroAmounts();
-        });
-      },
-      child: Chip(
-        label: Text(option),
-      ),
-    );
-  }
-
-
   Widget mealNameWidget(){
     return Visibility(
       visible: _foodType == MEAL_LABEL,
@@ -1025,7 +1013,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
   Widget groceryName(){
     return Visibility(
-      visible: _selectedAddGroceryOption.isNotEmpty && _foodType == GROCERY_LABEL,
+      visible: _foodType == GROCERY_LABEL,
       child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

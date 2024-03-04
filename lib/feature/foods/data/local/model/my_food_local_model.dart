@@ -24,7 +24,7 @@ class MyFoodLocal{
   List<String> fat;
   List<String> diets;
   List<String> allergies;
-  int servingAmount;
+  double servingAmount;
   String unit;
 
 
@@ -77,7 +77,7 @@ class MyFoodLocal{
         fat: (parsedJson['fat'] as String).split(';'),
         diets: (parsedJson['diets'] as String).split(';'),
         allergies: (parsedJson['allergies'] as String).split(';'),
-        servingAmount: parsedJson['servingAmount'],
+        servingAmount: double.parse(parsedJson['servingAmount'].toString()),
         unit: parsedJson['unit']);
   }
 

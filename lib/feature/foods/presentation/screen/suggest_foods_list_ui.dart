@@ -124,7 +124,7 @@ class _SuggestFoodsListUiState extends State<SuggestFoodsListUi> {
               String carb= foodInformation.carb.toStringAsFixed(foodInformation.carb.truncateToDouble() == foodInformation.carb ? 0 : 2);
               String fat= foodInformation.fat.toStringAsFixed(foodInformation.fat.truncateToDouble() == foodInformation.fat ? 0 : 2);
               bool isFoodAdded= foodInformation.isFoodAdded;
-              int servingQuantity= foodInformation.servingQuantity;
+              double servingQuantity= foodInformation.servingQuantity;
               String foodUnit= foodInformation.foodUnit;
 
               return GestureDetector(

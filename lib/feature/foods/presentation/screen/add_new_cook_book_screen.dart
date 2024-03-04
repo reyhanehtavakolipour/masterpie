@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
@@ -54,7 +55,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
    late TextEditingController _ingredientNameController;
    late TextEditingController _groceryNameController;
    int _selectedUnitIndex = 0;
-   List<String> _searchUnitOptions = [];
+   List<String> _searchUnitOptions = manualUnitOptions;
 
 
    final List<bool> _ingredientsExpansionState = [];
@@ -95,7 +96,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     _totalProteinController= TextEditingController(text: '0');
     _totalCarbController= TextEditingController(text: '0');
     _totalFatController= TextEditingController(text: '0');
-    _totalServingController= TextEditingController(text: '100');
+    _totalServingController= TextEditingController(text: '100.0');
     _calorieController= TextEditingController(text: '0');
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
@@ -456,13 +457,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                     Navigator.pushAndRemoveUntil(
-                         context,
-                         MaterialPageRoute(
-                           builder: (context) => const MyFavoriteFoodsScreen(),
-                         ),
-                             (route) => false
-                     );
+                   showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                  });
                }else if(state is AddOrUpdateMyFavoriteErrorState){
                  _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
@@ -535,7 +530,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: int.parse(_totalServingController.text),
+        servingAmount: double.parse(_totalServingController.text),
         unit: SERVING_LABEL,
         recipe: _recipeController.text
       );
@@ -560,7 +555,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   }
 
    Widget groceryUnitDropDown(){
-     final dropDownList = _selectedAddIngredientOption == ADD_GROCERY_BY_SEARCH_LABEL ? _searchUnitOptions : manualUnitOptions;
+     final dropDownList = _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL ? _searchUnitOptions : manualUnitOptions;
      return  SizedBox(
        width: MACRO_DROP_DOWN_WIDTH,
        height: MACRO_DROP_DOWN_HEIGHT,
@@ -585,11 +580,11 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                    }
                  }
                  _selectedUnitIndex = selectedIndex;
-                 _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
-                 _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
-                 _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
-                 _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
-                 _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+                 _totalServingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
+                 _totalCalorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
+                 _totalProteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
+                 _totalCarbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
+                 _totalFatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
                });
 
              },
@@ -601,6 +596,9 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
    }
 
    Widget ingredientUnitDropDown(){
+    if(_foodType == GROCERY_LABEL){
+      return Container();
+    }
      final dropDownList = _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions;
      return  SizedBox(
        width: MACRO_DROP_DOWN_WIDTH,
@@ -1537,7 +1535,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
           onTap: (){
             setState(() {
               if(isTotal){
-                  _searchedGroceriesVisible = false;
+                _selectedGenericIngredient = grocery;
+                _searchedGroceriesVisible = false;
                   _searchUnitOptions = grocery.units[0];
                   _selectedUnitIndex = 0;
                   _groceryNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
@@ -1811,11 +1810,10 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     _totalCarbController.text = '0';
     _totalFatController.text = '0';
     _selectedUnitIndex= 0;
-    _searchUnitOptions= [];
     if(_foodType == MEAL_LABEL){
-      _totalServingController.text = '1';
+      _totalServingController.text = '1.0';
     }else{
-      _totalServingController.text = '100';
+      _totalServingController.text = '100.0';
     }
   }
 

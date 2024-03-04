@@ -19,7 +19,7 @@ class FoodRemote with _$FoodRemote{
     @Default('') String description,
     @Default('') String nationality,
     @Default('') String image,
-    @Default(0) int servingAmount,
+    @Default(0.0) double servingAmount,
     @Default('') String unit,
     @Default([]) List<String> ingredients,
     @Default([]) List<String> servingIngredientsCount,

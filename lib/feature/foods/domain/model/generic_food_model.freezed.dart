@@ -24,7 +24,7 @@ mixin _$GenericFood {
   String get description => throw _privateConstructorUsedError;
   String get nationality => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
-  List<int> get servingAmount => throw _privateConstructorUsedError;
+  List<double> get servingAmount => throw _privateConstructorUsedError;
   List<String> get unit => throw _privateConstructorUsedError;
   List<String> get ingredients => throw _privateConstructorUsedError;
   List<List<String>> get servingIngredientsCount =>
@@ -60,7 +60,7 @@ abstract class $GenericFoodCopyWith<$Res> {
       String description,
       String nationality,
       String image,
-      List<int> servingAmount,
+      List<double> servingAmount,
       List<String> unit,
       List<String> ingredients,
       List<List<String>> servingIngredientsCount,
@@ -148,7 +148,7 @@ class _$GenericFoodCopyWithImpl<$Res, $Val extends GenericFood>
       servingAmount: null == servingAmount
           ? _value.servingAmount
           : servingAmount // ignore: cast_nullable_to_non_nullable
-              as List<int>,
+              as List<double>,
       unit: null == unit
           ? _value.unit
           : unit // ignore: cast_nullable_to_non_nullable
@@ -222,7 +222,7 @@ abstract class _$$GenericFoodImplCopyWith<$Res>
       String description,
       String nationality,
       String image,
-      List<int> servingAmount,
+      List<double> servingAmount,
       List<String> unit,
       List<String> ingredients,
       List<List<String>> servingIngredientsCount,
@@ -308,7 +308,7 @@ class __$$GenericFoodImplCopyWithImpl<$Res>
       servingAmount: null == servingAmount
           ? _value._servingAmount
           : servingAmount // ignore: cast_nullable_to_non_nullable
-              as List<int>,
+              as List<double>,
       unit: null == unit
           ? _value._unit
           : unit // ignore: cast_nullable_to_non_nullable
@@ -377,7 +377,7 @@ class _$GenericFoodImpl implements _GenericFood {
       this.description = '',
       this.nationality = '',
       this.image = '',
-      final List<int> servingAmount = const [],
+      final List<double> servingAmount = const [],
       final List<String> unit = const [],
       final List<String> ingredients = const [],
       final List<List<String>> servingIngredientsCount = const [],
@@ -428,10 +428,10 @@ class _$GenericFoodImpl implements _GenericFood {
   @override
   @JsonKey()
   final String image;
-  final List<int> _servingAmount;
+  final List<double> _servingAmount;
   @override
   @JsonKey()
-  List<int> get servingAmount {
+  List<double> get servingAmount {
     if (_servingAmount is EqualUnmodifiableListView) return _servingAmount;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_servingAmount);
@@ -631,7 +631,7 @@ abstract class _GenericFood implements GenericFood {
       final String description,
       final String nationality,
       final String image,
-      final List<int> servingAmount,
+      final List<double> servingAmount,
       final List<String> unit,
       final List<String> ingredients,
       final List<List<String>> servingIngredientsCount,
@@ -663,7 +663,7 @@ abstract class _GenericFood implements GenericFood {
   @override
   String get image;
   @override
-  List<int> get servingAmount;
+  List<double> get servingAmount;
   @override
   List<String> get unit;
   @override

@@ -28,7 +28,7 @@ class FoodLocal{
   List<String> fat;
   List<String> diets;
   List<String> allergies;
-  int servingAmount;
+  double servingAmount;
   String unit;
 
 

@@ -913,7 +913,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
         newFood = Food(
             foodType: FoodType.meal,
             name: _foodNameController.text,
-            servingAmount: int.parse(_servingController.text),
+            servingAmount: double.parse(_servingController.text),
             unit: _unitController.text,
             calorie: [_calorieController.text],
             protein: [_proteinController.text],

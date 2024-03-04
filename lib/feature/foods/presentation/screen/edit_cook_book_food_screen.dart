@@ -547,7 +547,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
       newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: int.parse(_totalServingController.text),
+        servingAmount: double.parse(_totalServingController.text),
         unit: _totalUnitController.text,
         recipe: _recipeController.text
       );

@@ -209,10 +209,12 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
         where: '$NAME LIKE ? OR $BRAND_NAME LIKE ?',
         whereArgs: ['%$query%', '%$query%'],
       );
+
       list?.forEach((element) {
         final food = MyFoodLocal.fromJson(element);
         foods.add(food);
       });
+
     }on DatabaseException catch (e) {
       return Left(ExceptionFailure(e));
     }

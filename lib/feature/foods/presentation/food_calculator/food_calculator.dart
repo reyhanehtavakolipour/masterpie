@@ -18,7 +18,7 @@ class FoodCalculator{
       double protein = 0;
       double carb = 0;
       double fat = 0;
-      int servingAmount = food.servingAmount;
+      double servingAmount = food.servingAmount;
       String foodUnit= food.unit;
       double quantity = food.count;
 
@@ -30,15 +30,15 @@ class FoodCalculator{
 
         String serving = food.servingAmounts[0];
         if(food.servingAmounts[0].isEmpty){
-          serving = "0";
+          serving = "0.0";
         }
 
         int? intValue = int.tryParse(serving);
         if (intValue != null) {
-          servingAmount = int.parse(serving);
+          servingAmount = double.parse(serving);
         } else {
           double doubleValue = double.parse(serving);
-          servingAmount = doubleValue.toInt();
+          servingAmount = doubleValue;
         }
 
         foodUnit = food.units[0];

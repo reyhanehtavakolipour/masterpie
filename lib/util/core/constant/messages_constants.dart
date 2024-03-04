@@ -35,6 +35,7 @@ const HELLO_LABEL = 'Hello';
 const SUGGEST_FOOD_LABEL = 'Suggest Food';
 const LOG_FOODS_LABEL = 'Log Foods';
 const FOODS_COMBINATIONS_LABEL = 'Foods Combinations';
+const FOOD_ADDED_COOKBOOK_SUCCESS = 'Food added to your cookbook successfully';
 const ADD_TO_MY_FAVORTITE = 'Add To My Favorites';
 const MY_FAVORITE_FOOD_LABEL = 'My Favorite Foods';
 const MY_COOKBOOK_LABEL = 'My CookBook';

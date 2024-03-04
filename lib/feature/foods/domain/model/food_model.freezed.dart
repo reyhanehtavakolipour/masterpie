@@ -34,7 +34,7 @@ mixin _$Food {
   ///only for meals
   List<String> get ingredients => throw _privateConstructorUsedError;
   String get unit => throw _privateConstructorUsedError;
-  int get servingAmount => throw _privateConstructorUsedError;
+  double get servingAmount => throw _privateConstructorUsedError;
   String get recipe => throw _privateConstructorUsedError;
   String get nationality => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -70,7 +70,7 @@ abstract class $FoodCopyWith<$Res> {
       List<String> units,
       List<String> ingredients,
       String unit,
-      int servingAmount,
+      double servingAmount,
       String recipe,
       String nationality,
       String description,
@@ -176,7 +176,7 @@ class _$FoodCopyWithImpl<$Res, $Val extends Food>
       servingAmount: null == servingAmount
           ? _value.servingAmount
           : servingAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       recipe: null == recipe
           ? _value.recipe
           : recipe // ignore: cast_nullable_to_non_nullable
@@ -231,7 +231,7 @@ abstract class _$$FoodImplCopyWith<$Res> implements $FoodCopyWith<$Res> {
       List<String> units,
       List<String> ingredients,
       String unit,
-      int servingAmount,
+      double servingAmount,
       String recipe,
       String nationality,
       String description,
@@ -334,7 +334,7 @@ class __$$FoodImplCopyWithImpl<$Res>
       servingAmount: null == servingAmount
           ? _value.servingAmount
           : servingAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       recipe: null == recipe
           ? _value.recipe
           : recipe // ignore: cast_nullable_to_non_nullable
@@ -385,7 +385,7 @@ class _$FoodImpl implements _Food {
       final List<String> units = const [],
       final List<String> ingredients = const [],
       this.unit = '',
-      this.servingAmount = 0,
+      this.servingAmount = 0.0,
       this.recipe = '',
       this.nationality = '',
       this.description = '',
@@ -497,7 +497,7 @@ class _$FoodImpl implements _Food {
   final String unit;
   @override
   @JsonKey()
-  final int servingAmount;
+  final double servingAmount;
   @override
   @JsonKey()
   final String recipe;
@@ -633,7 +633,7 @@ abstract class _Food implements Food {
       final List<String> units,
       final List<String> ingredients,
       final String unit,
-      final int servingAmount,
+      final double servingAmount,
       final String recipe,
       final String nationality,
       final String description,
@@ -675,7 +675,7 @@ abstract class _Food implements Food {
   @override
   String get unit;
   @override
-  int get servingAmount;
+  double get servingAmount;
   @override
   String get recipe;
   @override

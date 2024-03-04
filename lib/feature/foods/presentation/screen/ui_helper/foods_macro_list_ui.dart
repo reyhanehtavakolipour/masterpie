@@ -226,7 +226,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                carb: [_carbController.text],
                protein: [_proteinController.text],
                calorie: [_calorieController.text],
-               servingAmount: int.parse(_servingController.text),
+               servingAmount: double.parse(_servingController.text),
                unit: _unitController.text
           );
         }

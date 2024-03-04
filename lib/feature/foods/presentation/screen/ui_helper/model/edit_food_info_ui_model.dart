@@ -12,7 +12,7 @@ class FoodInformation{
   final double totalProtein;
   final double totalCarb;
   final double totalFat;
-  final int servingQuantity;
+  final double servingQuantity;
   final bool isFoodAdded;
   final String foodUnit;
 
@@ -46,7 +46,7 @@ class TotalMacroDialogValues {
 }
 
 class ServingMacroDialogValues {
-  final int serving;
+  final double serving;
   final List<String> calorie;
   final List<String> protein;
   final List<String> carb;
