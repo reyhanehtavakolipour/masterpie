@@ -348,10 +348,10 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       }
 
 
-      _totalCalorieController = TextEditingController(text: '${calorie.toInt()}');
-      _totalProteinController = TextEditingController(text: '${protein.toInt()}');
-      _totalCarbController = TextEditingController(text: '${carb.toInt()}');
-      _totalFatController = TextEditingController(text: '${fat.toInt()}');
+      _totalCalorieController = TextEditingController(text: '$calorie');
+      _totalProteinController = TextEditingController(text: '$protein');
+      _totalCarbController = TextEditingController(text: '$carb');
+      _totalFatController = TextEditingController(text: '$fat');
     }
   }
 
@@ -660,8 +660,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _servingController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -706,8 +705,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _calorieController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -737,8 +735,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _proteinController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -775,8 +772,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _carbController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -806,8 +802,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _fatController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -866,8 +861,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                      inputFormatters: <TextInputFormatter>[
-                       FilteringTextInputFormatter.digitsOnly,
-                       FilteringTextInputFormatter.allow(numericRegExp),
+                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                      ],
                      decoration: const InputDecoration(
                        border: OutlineInputBorder(
@@ -923,8 +917,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalServingController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -969,8 +962,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalCalorieController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1000,8 +992,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalProteinController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1038,8 +1029,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalCarbController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1069,8 +1059,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalFatController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1111,8 +1100,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalServingController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1179,8 +1167,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalCalorieController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1211,8 +1198,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalProteinController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1250,8 +1236,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalCarbController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(
@@ -1282,8 +1267,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  controller: _totalFatController,
                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                  inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.digitsOnly,
-                   FilteringTextInputFormatter.allow(numericRegExp),
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
                  decoration: const InputDecoration(
                    border: OutlineInputBorder(

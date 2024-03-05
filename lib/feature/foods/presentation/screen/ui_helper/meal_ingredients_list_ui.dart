@@ -360,7 +360,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 controller: _servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
@@ -426,7 +425,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 controller: _calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
@@ -458,7 +456,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 controller: _proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
@@ -497,7 +494,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 controller: _carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
@@ -529,7 +525,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 controller: _fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
@@ -593,7 +588,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
                       FilteringTextInputFormatter.allow(numericRegExp),
                     ],
                     decoration: const InputDecoration(

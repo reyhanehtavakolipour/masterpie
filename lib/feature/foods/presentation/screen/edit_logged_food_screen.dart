@@ -593,10 +593,10 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       }
 
 
-      _totalCalorieController = TextEditingController(text: '${calorie.toInt()}');
-      _totalProteinController = TextEditingController(text: '${protein.toInt()}');
-      _totalCarbController = TextEditingController(text: '${carb.toInt()}');
-      _totalFatController = TextEditingController(text: '${fat.toInt()}');
+      _totalCalorieController = TextEditingController(text: '$calorie');
+      _totalProteinController = TextEditingController(text: '$protein');
+      _totalCarbController = TextEditingController(text: '$carb');
+      _totalFatController = TextEditingController(text: '$fat');
     }
   }
 
@@ -734,8 +734,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -799,8 +798,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -831,8 +829,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -870,8 +867,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -902,8 +898,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1309,8 +1304,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: _servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1355,8 +1349,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 controller: _calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1515,8 +1508,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                      FilteringTextInputFormatter.allow(numericRegExp),
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                     ],
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(

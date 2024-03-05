@@ -377,8 +377,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 controller: servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -441,8 +440,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 controller: calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -472,8 +470,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 controller: proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -510,8 +507,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 controller: carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -541,8 +537,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 controller: fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(

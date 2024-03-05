@@ -20,8 +20,17 @@ extension StringExtension on String {
 }
 
 
-final RegExp numericRegExp = RegExp(r'^\d*\.?\d*$'); // Regular expression to allow numbers
+final RegExp numericRegExp = RegExp(r'^\d+\.?\d{0,2}');
 
+String checkNumberType(num number) {
+  if (number is int) {
+    return 'int';
+  } else if (number is double) {
+    return 'double';
+  } else {
+    return '';
+  }
+}
 
 bool isValidEmail(String email) {
   final emailRegex = RegExp(

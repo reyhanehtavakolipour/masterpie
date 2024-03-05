@@ -78,6 +78,8 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
   String _foodType = GROCERY_LABEL;
   late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
+  Food _initialStateFood = Food();
+  double _previousCoefficient= 1.0;
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
 
 
@@ -111,11 +113,13 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
 
     _ingredientNameController.addListener(_onSearchIngredientChanged);
-    _totalServingController.addListener(_onTotalServingChanged);
 
     _groceriesBloc = context.read<GroceriesBloc>();
 
     init();
+
+    _totalServingController.addListener(_onTotalServingChanged);
+
   }
 
 
@@ -125,14 +129,40 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     });
     _debouncer.run(() {
       if(_foodType == MEAL_LABEL){
-        if(int.parse(_totalServingController.text) != newFood.servingAmount){
-          double coefficient = int.parse(_totalServingController.text)/newFood.servingAmount;
-          print('fdgod: $coefficient');
-        }
-      }else{
-        if(_totalServingController.text != newFood.servingAmounts[0]){
+        setState(() {
+          double coefficient = num.parse(_totalServingController.text)*_initialStateFood.servingAmount;
+          List<String> servingIngredientsCount = [];
+          List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+          currentServingIngredientsCount.forEach((element) {
+            servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+          });
 
-        }
+          newFood= newFood.copyWith(
+            servingIngredientsCount: servingIngredientsCount,
+            calorie: _initialStateFood.calorie,
+            protein: _initialStateFood.protein,
+            carb: _initialStateFood.carb,
+            fat: _initialStateFood.fat
+          );
+          _previousCoefficient= 1/coefficient;
+          calculateTotalMacros();
+        });
+      }else{
+        setState(() {
+          double count = num.parse(_totalServingController.text)*double.parse(_initialStateFood.servingAmounts[0]);
+          newFood= newFood.copyWith(
+              servingAmounts: [_totalServingController.text],
+              calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
+              protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
+              carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
+              fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
+          );
+
+          _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
+          _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
+          _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
+          _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
+        });
       }
     });
   }
@@ -307,9 +337,11 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
         _ingredientsExpansionState.add(false);
       });
+
     }
 
     newFood = widget.foodDetailArgumentModel.food!;
+    _initialStateFood= newFood;
   }
 
 
@@ -353,7 +385,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
   }
 
 
-
   void calculateTotalMacros(){
     if(_foodType == MEAL_LABEL){
       double calorie = 0;
@@ -382,10 +413,10 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       }
 
 
-      _totalCalorieController = TextEditingController(text: '${calorie.toInt()}');
-      _totalProteinController = TextEditingController(text: '${protein.toInt()}');
-      _totalCarbController = TextEditingController(text: '${carb.toInt()}');
-      _totalFatController = TextEditingController(text: '${fat.toInt()}');
+      _totalCalorieController = TextEditingController(text: '$calorie');
+      _totalProteinController = TextEditingController(text: '$protein');
+      _totalCarbController = TextEditingController(text: '$carb');
+      _totalFatController = TextEditingController(text: '$fat');
     }
   }
 
@@ -622,8 +653,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -688,8 +718,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -720,8 +749,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -759,8 +787,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -791,8 +818,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1165,8 +1191,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: _servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1211,8 +1236,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: _calorieController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1242,8 +1266,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: _proteinController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1280,8 +1303,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: _carbController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -1311,8 +1333,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 controller: _fatController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  FilteringTextInputFormatter.allow(numericRegExp),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(

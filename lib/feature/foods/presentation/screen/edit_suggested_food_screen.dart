@@ -540,10 +540,10 @@ class _EditSuggestedFoodScreenState extends State<EditSuggestedFoodScreen> {
       }
 
 
-      _totalCalorieController = TextEditingController(text: '${calorie.toInt()}');
-      _totalProteinController = TextEditingController(text: '${protein.toInt()}');
-      _totalCarbController = TextEditingController(text: '${carb.toInt()}');
-      _totalFatController = TextEditingController(text: '${fat.toInt()}');
+      _totalCalorieController = TextEditingController(text: '$calorie');
+      _totalProteinController = TextEditingController(text: '$protein');
+      _totalCarbController = TextEditingController(text: '$carb');
+      _totalFatController = TextEditingController(text: '$fat');
     }
   }
 
