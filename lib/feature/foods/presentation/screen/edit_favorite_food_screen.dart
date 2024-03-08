@@ -130,7 +130,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     _debouncer.run(() {
       if(_foodType == MEAL_LABEL){
         setState(() {
-          double coefficient = num.parse(_totalServingController.text)*_initialStateFood.servingAmount;
+          double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
           List<String> servingIngredientsCount = [];
           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
           currentServingIngredientsCount.forEach((element) {
@@ -149,7 +149,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
         });
       }else{
         setState(() {
-          double count = num.parse(_totalServingController.text)*double.parse(_initialStateFood.servingAmounts[0]);
+          double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
           newFood= newFood.copyWith(
               servingAmounts: [_totalServingController.text],
               calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
