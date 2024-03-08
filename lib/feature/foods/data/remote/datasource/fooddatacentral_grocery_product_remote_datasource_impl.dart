@@ -63,16 +63,17 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
 
 
           (element['servings']['serving'] as List).forEach((serving) {
-            calorie.add(serving['calories']);
-            protein.add(serving['protein']);
-            carb.add(serving['carbohydrate']);
-            fat.add(serving['fat']);
+            calorie.add(double.parse(serving['calories']).toString());
+            protein.add(double.parse(serving['protein']).toString());
+            carb.add(double.parse(serving['carbohydrate']).toString());
+            fat.add(double.parse(serving['fat']).toString());
             servingAmounts.add(double.parse(serving['number_of_units']).toStringAsFixed(2));
             units.add(serving['measurement_description']);
             servingIngredientsCount.add('1.0');
           });
 
           final product = GenericFoodRemote(
+            id: element['food_id'],
             name: element['food_name'],
             foodType: FoodTypeRemote.groceryProduct,
             calorie: [calorie],

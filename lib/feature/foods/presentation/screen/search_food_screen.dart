@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
-import 'package:masterpie/feature/foods/presentation/screen/search_foods_list_ui.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
+import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
@@ -28,7 +30,6 @@ import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
-import '../food_calculator/food_calculator.dart';
 
 
 
@@ -54,7 +55,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
 
   List<Food> _addedGroceries= [];
 
-  List<Food> _newGroceries= [];
+  List<GenericFood> _newGroceries= [];
 
   bool _backButtonCLicked = false;
 
@@ -83,30 +84,11 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
     );
   }
 
-  void checkIfGroceriesAddedBefore(List<Food> foods){
-    setState(() {
-      List<Food> groceries = [];
-      foods.forEach((element) {
-        List<Food> foodsExisted = _addedGroceries.where((addedGrocery) => element.id == addedGrocery.id).toList();
-        if(foodsExisted.isEmpty){
-          groceries.add(element);
-        }else{
-          for(int i = 0; i < _addedGroceries.length; i++){
-            if(_addedGroceries[i].id == element.id){
-              groceries.add(_addedGroceries[i]);
-            }
-          }
-        }
-      });
-      _newGroceries = groceries;
-    });
-  }
-
 
   void updateChangedGroceries(List<Food> foods) {
     setState(() {
 
-      _newGroceries = foods;
+      _newGroceries = toGenericFoods(foods);
 
       List<Food> groceries = [];
       foods.forEach((element) {
@@ -131,6 +113,24 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
       });
       _addedGroceries.addAll(groceries);
     });
+  }
+
+
+  List<GenericFood> toGenericFoods(List<Food> foods){
+    return foods.map((element) =>
+        GenericFood(
+            count: element.count,
+            units: [element.units],
+            servingAmounts: [element.servingAmounts],
+            calorie: [element.calorie],
+            protein: [element.protein],
+            carb: [element.carb],
+            fat: [element.fat],
+            foodType: element.foodType,
+          name: element.name,
+          id: element.id
+        )
+    ).toList();
   }
 
 
@@ -244,7 +244,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                         const SizedBox(height: 12,),
 
                         /// Groceries list
-                        SearchFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
+                        SearchGroceriesListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
                           onFavoriteButtonClicked: addToFavorites, foodsTypeRequested: const [FoodType.groceryProduct],
                           foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), macroEdition: true,),
                       ],
@@ -264,8 +264,10 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                           );
                         }else if(state is GroceriesLoadedState){
                           Future.delayed(Duration.zero,(){
-                            _groceriesBloc.add(const GroceriesEvent.onReset());
-                            // checkIfGroceriesAddedBefore(state.foods);
+                            setState(() {
+                              _newGroceries.addAll(state.foods);
+                              _groceriesBloc.add(const GroceriesEvent.onReset());
+                            });
                           });
 
                         }else if(state is GroceriesErrorState){

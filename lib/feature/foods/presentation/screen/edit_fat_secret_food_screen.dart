@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -27,17 +29,17 @@ import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 
 
 
-class EditFatSecretGroceryScreen extends StatefulWidget {
+class EditFatSecretFoodScreen extends StatefulWidget {
 
-  final FoodDetailArgumentModel foodDetailArgumentModel;
+  final GenericFoodDetailArgumentModel foodDetailArgumentModel;
 
-  const EditFatSecretGroceryScreen({super.key, required this.foodDetailArgumentModel});
+  const EditFatSecretFoodScreen({super.key, required this.foodDetailArgumentModel});
 
   @override
-  State<EditFatSecretGroceryScreen> createState() => _EditFatSecretGroceryScreenState();
+  State<EditFatSecretFoodScreen> createState() => _EditFatSecretFoodScreenState();
 }
 
-class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen> {
+class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
   /// for whole meal OR grocery,
    /// groceries: the first(the only item in the list) element is the value
@@ -52,12 +54,16 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
 
    late TextEditingController _groceryNameController;
 
-   Food newFood = Food();
+   int _selectedUnitIndex = 0;
+   List<String> _groceryUnitOptions = manualUnitOptions;
+
+   GenericFood newFood = GenericFood();
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
    late GetLoggedFoodsBloc _getLoggedFoodsBloc;
    late LogFoodsBloc _logFoodsBloc;
 
    bool _updatebuttonClicked= false;
+
 
   @override
   void initState() {
@@ -89,18 +95,33 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
    void logFoodsOfToday(List<Food> foodsLoggedBefore){
      List<Food> foods = [];
      foods.addAll(foodsLoggedBefore);
-     foods.add(newFood);
+     foods.add(fromGenericGrocery(newFood));
      _logFoodsBloc.add(
          LogFoodsEvent.onLogFoods(foods)
      );
    }
 
+   Food fromGenericGrocery(GenericFood food){
+     return Food(
+         id: food.id,
+         calorie: [food.calorie[0][_selectedUnitIndex]],
+         protein: [food.protein[0][_selectedUnitIndex]],
+         carb: [food.carb[0][_selectedUnitIndex]],
+         fat: [food.fat[0][_selectedUnitIndex]],
+         servingAmounts: [food.servingAmounts[0][_selectedUnitIndex]],
+         units: [food.units[0][_selectedUnitIndex]],
+         foodType: FoodType.groceryProduct,
+         count: food.count,
+         name: food.name
+     );
+   }
+
    void handleMealMacrosWithoutIngredient(){
      if(newFood.foodType == FoodType.meal && newFood.ingredients.isEmpty){
-       String calorie= newFood.calorie.isEmpty ? '0.0' : newFood.calorie[0];
-       String protein= newFood.protein.isEmpty ? '0.0' : newFood.protein[0];
-       String carb= newFood.carb.isEmpty ? '0.0' : newFood.carb[0];
-       String fat= newFood.fat.isEmpty ? '0.0' : newFood.fat[0];
+       String calorie= newFood.calorie.isEmpty ? '0.0' : newFood.calorie[0][0];
+       String protein= newFood.protein.isEmpty ? '0.0' : newFood.protein[0][0];
+       String carb= newFood.carb.isEmpty ? '0.0' : newFood.carb[0][0];
+       String fat= newFood.fat.isEmpty ? '0.0' : newFood.fat[0][0];
 
        _totalCalorieController = TextEditingController(text: calorie);
        _totalProteinController = TextEditingController(text: protein);
@@ -142,19 +163,6 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                    const Text('$FOOD_TYPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-                    /// food type
-                    CustomRadioListTile(
-                      options: [FoodType.groceryProduct.name],
-                      onSelectedOptionChanged: updateSelectedFoodType,
-                      selectedOption: FoodType.groceryProduct.name,
-                      orientation: HORIZONTAL_ORIENTATION,
-                      isEditable: false,
-                    ),
-
-                    const SizedBox(height: 12,),
 
                     newGrocery(),
 
@@ -249,13 +257,14 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
 
   void init(){
     _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-    _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
-    _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
-    _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
-    _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
-    _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
-    _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
+    _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0][0];
+    _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0][0];
+    _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0][0];
+    _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0][0];
+    _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0][0];
+    _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0][0];
     newFood = widget.foodDetailArgumentModel.food!;
+    _groceryUnitOptions= newFood.units[0];
   }
 
 
@@ -295,13 +304,7 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                   Navigator.pushAndRemoveUntil(
-                       context,
-                       MaterialPageRoute(
-                         builder: (context) => const SearchFoodScreen(),
-                       ),
-                           (route) => false
-                   );
+                   showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
                  });
                }else if(state is AddOrUpdateMyFavoriteErrorState){
                  _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
@@ -339,23 +342,81 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
 
 
   void requestOperationOnFood(BuildContext context){
+    if(newFood.foodType.name == GROCERY_LABEL){
       newFood = newFood.copyWith(
-        foodType: FoodType.groceryProduct,
-        name: _groceryNameController.text,
-        servingAmounts: [_totalServingController.text],
-        units: [_totalUnitController.text],
-        calorie: [_totalCalorieController.text],
-        protein: [_totalProteinController.text],
-        carb: [_totalCarbController.text],
-        fat: [_totalFatController.text]
+          foodType: FoodType.groceryProduct,
+          name: _groceryNameController.text,
+          servingAmounts: [[_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text]],
+          units: [[_totalUnitController.text]],
+          calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
+          protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
+          carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
+          fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]]
       );
-
+    }else{
+      // newFood = newFood.copyWith(
+      //     foodType: FoodType.meal,
+      //     name: _mealNameController.text,
+      //     servingAmount: double.parse(_totalServingController.text),
+      //     unit: _totalUnitController.text,
+      //     recipe: _recipeController.text
+      // );
+      //
+      // if(newFood.ingredients.isEmpty){
+      //   newFood= newFood.copyWith(
+      //       calorie: [_totalCalorieController.text],
+      //       protein: [_totalProteinController.text],
+      //       carb: [_totalCarbController.text],
+      //       fat: [_totalFatController.text]
+      //   );
+      // }
+    }
       _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
-          newFood,
+        AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(
+          fromGenericGrocery(newFood),
         ),
       );
   }
+
+   Widget groceryUnitDropDown(){
+     return  SizedBox(
+       width: MACRO_DROP_DOWN_WIDTH,
+       height: MACRO_DROP_DOWN_HEIGHT,
+       child: DropdownButtonHideUnderline(
+         child: ButtonTheme(
+           alignedDropdown: true,
+           child: DropdownButton(
+             isExpanded: true,
+             value: _groceryUnitOptions[_selectedUnitIndex],
+             items: _groceryUnitOptions.map((String item) {
+               return DropdownMenuItem<String>(
+                 value: item,
+                 child: Text(item, style: const TextStyle(fontSize: 12),),
+               );
+             }).toList(),
+             onChanged: (String? newValue){
+               setState(() {
+                 int selectedIndex = 0;
+                 for (int i = 0; i < _groceryUnitOptions.length; i++){
+                   if(newValue.toString() == _groceryUnitOptions[i]){
+                     selectedIndex = i;
+                   }
+                 }
+                 _selectedUnitIndex = selectedIndex;
+                 _totalServingController = TextEditingController(text: newFood.servingAmounts[0][_selectedUnitIndex].toString());
+                 _totalCalorieController = TextEditingController(text: newFood.calorie[0][_selectedUnitIndex].toString());
+                 _totalProteinController = TextEditingController(text: newFood.protein[0][_selectedUnitIndex].toString());
+                 _totalCarbController = TextEditingController(text: newFood.carb[0][_selectedUnitIndex].toString());
+                 _totalFatController = TextEditingController(text: newFood.fat[0][_selectedUnitIndex].toString());
+               });
+
+             },
+             // style: Theme.of(context).textTheme.title,
+           ),
+         ),
+       ),
+     );
+   }
 
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
       TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController, bool isTotal){
@@ -400,26 +461,9 @@ class _EditFatSecretGroceryScreenState extends State<EditFatSecretGroceryScreen>
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
             const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
+
+
+            groceryUnitDropDown()
 
           ],
         ),

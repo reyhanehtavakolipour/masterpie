@@ -157,7 +157,6 @@ class BaseRequest {
 }
 
 
-
 String generateRandomId() {
   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   final random = Random();

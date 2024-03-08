@@ -5,6 +5,7 @@ import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
+import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/core/response/failure.dart';
 import '../model/food_model.dart';
 import '../model/food_type.dart';
@@ -16,6 +17,9 @@ class AddToMyFavoriteUseCase{
 
   Future<Either<Failure, Food>> addToMyFavorites(Food food) async{
     food = checkFood(food);
+    food= food.copyWith(
+      id: generateRandomId()
+    );
     if(food.foodType == FoodType.meal){
       final addToMyFavoritesRemoteResponse = await repo.saveMyMealToRemote(food);
       if(addToMyFavoritesRemoteResponse.isRight()){

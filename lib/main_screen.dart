@@ -1156,12 +1156,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                               ),
                                               BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
                                                   builder: (context, state) {
+                                                    if(state is RemoveFromMyFavoriteLoadedState){
+                                                      Future.delayed(Duration.zero,(){
+                                                        _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
+                                                        requestMyFavoriteFoods();
+                                                        showSuccessToast(context, REMOVED_FROM_FAVORITE_SUCCESSFULLY);
+                                                      });
+                                                    }
                                                     return Container(height: 1,);
                                                   },
-                                                  listener: (context, state){
-                                                    if(state is RemoveFromMyFavoriteLoadedState){
-                                                      requestMyFavoriteFoods();
-                                                    }
+                                                  listener: (mcontext, state){
                                                   }
                                               ),
 

@@ -2,11 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masterpie/feature/foods/presentation/screen/edit_fat_secret_grocery_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/edit_food_information_dialog.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/edit_food_info_ui_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
+import 'package:masterpie/feature/foods/presentation/screen/edit_fat_secret_food_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
@@ -14,94 +13,38 @@ import '../../../../../util/design/size/app_widget_size.dart';
 import '../../../../../util/design/text/app_assets.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
-import '../food_calculator/food_calculator.dart';
 
 
 
-class SearchFoodsListUi extends StatefulWidget {
 
-  final FoodCalculator foodCalculator;
+class SearchGroceriesListUi extends StatefulWidget {
+
+  final GenericFoodCalculator foodCalculator;
   final Function(List<Food>) onFoodsChanged;
-  final List<Food> foods;
+  final List<GenericFood> foods;
   final Function(Food food, bool addToFavorite) onFavoriteButtonClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
-  const SearchFoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
+  const SearchGroceriesListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
     required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
   @override
-  State<SearchFoodsListUi> createState() => _SearchFoodsListUiState();
+  State<SearchGroceriesListUi> createState() => _SearchGroceriesListUiState();
 
-  static _SearchFoodsListUiState? of(BuildContext context) {
-    return context.findAncestorStateOfType<_SearchFoodsListUiState>();
+  static _SearchGroceriesListUiState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_SearchGroceriesListUiState>();
   }
 }
 
-class _SearchFoodsListUiState extends State<SearchFoodsListUi> {
+class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
 
 
-  List<Food> foodsChanged= [];
-
-
-  Food checkFoodParameters(Food food){
-    List<String> ingredients = [];
-    ingredients.addAll(food.ingredients);
-    ingredients.removeWhere((item) => item.isEmpty);
-
-
-    List<String> calorie = [];
-    calorie.addAll(food.calorie);
-    calorie.removeWhere((item) => item.isEmpty);
-
-
-    List<String> protein = [];
-    protein.addAll(food.protein);
-    protein.removeWhere((item) => item.isEmpty);
-
-
-    List<String> carb = [];
-    carb.addAll(food.carb);
-    carb.removeWhere((item) => item.isEmpty);
-
-
-    List<String> fat = [];
-    fat.addAll(food.fat);
-    fat.removeWhere((item) => item.isEmpty);
-
-
-    List<String> servingAmounts = [];
-    servingAmounts.addAll(food.servingAmounts);
-    servingAmounts.removeWhere((item) => item.isEmpty);
-
-    List<String> servingUnits = [];
-    servingUnits.addAll(food.units);
-    servingUnits.removeWhere((item) => item.isEmpty);
-
-
-    List<String> servingIngredientCounts = [];
-    servingIngredientCounts.addAll(food.servingIngredientsCount);
-    servingIngredientCounts.removeWhere((item) => item.isEmpty);
-
-
-    return food.copyWith(
-        ingredients: ingredients,
-        calorie:  calorie,
-        protein: protein,
-        carb: carb,
-        fat: fat,
-        servingAmounts: servingAmounts,
-        units: servingUnits,
-        servingIngredientsCount: servingIngredientCounts
-    );
-  }
-
+  List<GenericFood> foodsChanged= [];
 
 
 
@@ -112,30 +55,30 @@ class _SearchFoodsListUiState extends State<SearchFoodsListUi> {
             itemCount: widget.foods.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              Food food = widget.foods[index];
+              GenericFood food = widget.foods[index];
               if(!widget.foodsTypeRequested.contains(food.foodType)){
                 return const SizedBox.shrink();
               }
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
-              double quantity = foodInformation.quantity;
-              String calorie= foodInformation.calorie.toStringAsFixed(foodInformation.calorie.truncateToDouble() == foodInformation.calorie ? 0 : 2);
-              String protein= foodInformation.protein.toStringAsFixed(foodInformation.protein.truncateToDouble() == foodInformation.protein ? 0 : 2);
-              String carb= foodInformation.carb.toStringAsFixed(foodInformation.carb.truncateToDouble() == foodInformation.carb ? 0 : 2);
-              String fat= foodInformation.fat.toStringAsFixed(foodInformation.fat.truncateToDouble() == foodInformation.fat ? 0 : 2);
+              double quantity = foodInformation.count;
+              String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
+              String protein= foodInformation.protein[0][0].toStringAsFixed(foodInformation.protein[0][0].truncateToDouble() == foodInformation.protein[0][0] ? 0 : 2);
+              String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
+              String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
               bool isFoodAdded= foodInformation.isFoodAdded;
-              double servingQuantity= foodInformation.servingQuantity;
-              String foodUnit= foodInformation.foodUnit;
+              double servingQuantity= foodInformation.servingAmounts[0][0];
+              String foodUnit= foodInformation.units[0][0];
 
               return GestureDetector(
                 onTap: (){
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
-                      food: checkFoodParameters(food),
+                  GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(
+                      food: food,
                       macroEdition: widget.macroEdition
                     );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditFatSecretGroceryScreen(foodDetailArgumentModel: argumentModel,),
+                        builder: (context) => EditFatSecretFoodScreen(foodDetailArgumentModel: argumentModel,),
                       ),
                     );
                 },
@@ -213,9 +156,9 @@ class _SearchFoodsListUiState extends State<SearchFoodsListUi> {
                                 icon: const Icon(Icons.more_horiz),
                                 onSelected: (String result) {
                                   if(result == ADD_TO_MY_FAVORTITE){
-                                    widget.onFavoriteButtonClicked(food, true);
+                                    widget.onFavoriteButtonClicked(fromGenericFood(food), true);
                                   }else{
-                                    widget.onFavoriteButtonClicked(food, false);
+                                    widget.onFavoriteButtonClicked(fromGenericFood(food), false);
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
@@ -320,39 +263,31 @@ class _SearchFoodsListUiState extends State<SearchFoodsListUi> {
   }
 
 
-  void editMacrosClickListener(FoodType foodType, int servingQuantity, String foodUnit, double calorie, double protein, double carb, double fat, bool isFoodAdded, Food food){
-    showEditServingAndCalorieDialog(context, foodType, servingQuantity.toString(), foodUnit.toString(), calorie.toString(), protein.toString(), carb.toString(), fat.toString()).then((value){
-      if(isFoodAdded){
-        setState(() {
-          widget.foodCalculator.updateFoodsChangedAfterEditingServingMacro(food, value);
-          updateFoodsChanged();
-          insertOrUpdateMyFavoriteBasedOnServingMacrosChange(value.shouldSaveToFavorites, food, value);
-        });
-      }else{
-        setState(() {
-          widget.foodCalculator.updateFoodsChangedAfterEditingServingMacro(food, value);
-          updateFoodsChanged();
-          insertOrUpdateMyFavoriteBasedOnServingMacrosChange(value.shouldSaveToFavorites, food, value);
-        });
-      }
-    });
-  }
-
-
-  void insertOrUpdateMyFavoriteBasedOnServingMacrosChange(bool shouldSaveToFavorites, Food food, ServingMacroDialogValues value){
-      if(shouldSaveToFavorites){
-        final addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-        /// only favorite groceries can be updated from the list screen
-        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit], servingAmounts: [value.serving.toString()]);
-        addOrUpdateMyFavoriteBloc.add(
-          AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(updatedFood),
-        );
-      }
-  }
-
-
   void updateFoodsChanged(){
     foodsChanged = widget.foodCalculator.visibleFoods;
-    widget.onFoodsChanged(foodsChanged);
+
+    List<Food> foods= [];
+    foodsChanged.forEach((food) {
+      foods.add(fromGenericFood(food));
+    });
+
+    widget.onFoodsChanged(foods);
   }
+
+
+  Food fromGenericFood(GenericFood food){
+    return Food(
+        id: food.id,
+        calorie: food.calorie[0],
+        protein: food.protein[0],
+        carb: food.carb[0],
+        fat: food.fat[0],
+        servingAmounts: food.servingAmounts[0],
+        units: food.units[0],
+        foodType: FoodType.groceryProduct,
+        count: food.count,
+        name: food.name
+    );
+  }
+
 }

@@ -6,6 +6,7 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_favorite_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -272,10 +273,11 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
                           }else if(state is RemoveFromMyFavoriteLoadedState){
                             Future.delayed(Duration.zero,(){
                               _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
-                                Navigator.pushAndRemoveUntil(
+                              showSuccessToast(context, REMOVED_FROM_FAVORITE_SUCCESSFULLY);
+                              Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const MyFavoriteFoodsScreen(),
+                                    builder: (context) => const MainScreen(),
                                   ),
                                   (route) => false
                                 );

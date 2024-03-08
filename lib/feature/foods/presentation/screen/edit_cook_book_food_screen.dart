@@ -534,30 +534,30 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
   void requestOperationOnFood(BuildContext context){
     if(_foodType == GROCERY_LABEL){
       newFood = newFood.copyWith(
-        foodType: FoodType.groceryProduct,
-        name: _groceryNameController.text,
-        servingAmounts: [_totalServingController.text],
-        units: [_totalUnitController.text],
-        calorie: [_totalCalorieController.text],
-        protein: [_totalProteinController.text],
-        carb: [_totalCarbController.text],
-        fat: [_totalFatController.text]
+          foodType: FoodType.groceryProduct,
+          name: _groceryNameController.text,
+          servingAmounts: [_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text],
+          units: [_totalUnitController.text],
+          calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
+          protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
+          carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
+          fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
       );
     }else{
       newFood = newFood.copyWith(
-        foodType: FoodType.meal,
-        name: _mealNameController.text,
-        servingAmount: double.parse(_totalServingController.text),
-        unit: _totalUnitController.text,
-        recipe: _recipeController.text
+          foodType: FoodType.meal,
+          name: _mealNameController.text,
+          servingAmount: double.parse(_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text),
+          unit: _totalUnitController.text,
+          recipe: _recipeController.text
       );
 
       if(newFood.ingredients.isEmpty){
         newFood= newFood.copyWith(
-            calorie: [_totalCalorieController.text],
-            protein: [_totalProteinController.text],
-            carb: [_totalCarbController.text],
-            fat: [_totalFatController.text]
+            calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
+            protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
+            carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
+            fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
         );
       }
     }

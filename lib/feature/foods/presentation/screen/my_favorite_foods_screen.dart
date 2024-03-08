@@ -212,12 +212,12 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                     }
                 ),
                 BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                    builder: (context, state) {
+                    builder: (mcontext, state) {
                       return Container(height: 1,);
                     },
                     listener: (context, state){
                       if(state is RemoveFromMyFavoriteLoadedState){
-                        requestMyFavoriteFoods();
+                        showSuccessToast(context, REMOVED_FROM_FAVORITE_SUCCESSFULLY);
                       }
                     }
                 ),

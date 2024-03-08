@@ -59,7 +59,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newIngredients.add(favoriteFood.ingredients.toString());
           newServingIngredientsCount.add(favoriteFood.servingIngredientsCount.toString());
         });
-        newFoodId.add(generateRandomId());
+        newFoodId.add(mealRemote.id);
         newCalorie.add(mealRemote.calorie.toString());
         newProtein.add(mealRemote.protein.toString());
         newCarb.add(mealRemote.carb.toString());
@@ -196,6 +196,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> saveToMyFavoriteGrocery(FoodRemote grocery, String userId) async{
     try {
 
+
       final favoriteListResponse = await getMyFavoriteFoods('', userId);
 
       if(favoriteListResponse.isRight()){
@@ -233,8 +234,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
             newIngredients.add(favoriteFood.ingredients.toString());
             newServingIngredientsCount.add(favoriteFood.servingIngredientsCount.toString());
           });
-          String random = generateRandomId();
-          newFoodId.add(random);
+          // String random = generateRandomId();
+          newFoodId.add(grocery.id.toString());
           newCalorie.add(grocery.calorie.toString());
           newProtein.add(grocery.protein.toString());
           newCarb.add(grocery.carb.toString());
@@ -811,7 +812,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newTypes = [];
         List<String> newName = [];
         List<String> newServingIngredientsCount = [];
-
 
         list.forEach((favoriteFood) {
           if(favoriteFood.id != foodRemote.id){
