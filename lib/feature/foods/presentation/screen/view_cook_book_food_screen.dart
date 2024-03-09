@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_cook_book_food_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -303,7 +304,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MyFavoriteFoodsScreen(),
+                                  builder: (context) => const MyCookBookScreen(),
                                 ),
                                 (route) => false
                               );

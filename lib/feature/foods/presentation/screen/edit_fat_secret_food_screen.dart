@@ -392,11 +392,11 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
         AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(
             Food(
                 id: newFood.id,
-                calorie: [_totalCalorieController.text],
-                protein: [_totalProteinController.text],
-                carb: [_totalCarbController.text],
-                fat: [_totalFatController.text],
-                servingAmounts: [_totalServingController.text],
+                calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
+                protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
+                carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
+                fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text],
+                servingAmounts: [_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text],
                 units: [newFood.servingAmounts[0][_selectedUnitIndex]],
                 foodType: FoodType.groceryProduct,
                 count: newFood.count,

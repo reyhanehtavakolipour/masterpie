@@ -613,7 +613,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.groceryProduct,
           name: _groceryNameController.text,
-          servingAmounts: [_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text],
+          servingAmounts: [_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text],
           units: [_totalUnitController.text],
           calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
           protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
@@ -624,7 +624,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.meal,
           name: _mealNameController.text,
-          servingAmount: double.parse(_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text),
+          servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
           unit: _totalUnitController.text,
           recipe: _recipeController.text
       );

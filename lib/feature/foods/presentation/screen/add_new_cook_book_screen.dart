@@ -63,7 +63,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
    late TextEditingController _mealNameController;
    List<String> _addNewIngredientOptions= [];
-   String _selectedAddIngredientOption = '';
+   String _selectedAddIngredientOption = ADD_INGREDIENT_BY_SEARCH;
    late TextEditingController _ingredientServingCountController;
    late TextEditingController _recipeController;
    Color _mealNameBorderColor = DARK_PRIMARY_COLOR;
@@ -79,6 +79,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
   double _previousCoefficient= 1.0;
+   Food _initialStateFood = Food();
 
    late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
 
@@ -127,24 +128,25 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      });
      _debouncer.run(() {
        if(_foodType == MEAL_LABEL){
-         // setState(() {
-         //   double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-         //   List<String> servingIngredientsCount = [];
-         //   List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-         //   currentServingIngredientsCount.forEach((element) {
-         //     servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-         //   });
-         //
-         //   newFood= newFood.copyWith(
-         //       servingIngredientsCount: servingIngredientsCount,
-         //       calorie: _initialStateFood.calorie,
-         //       protein: _initialStateFood.protein,
-         //       carb: _initialStateFood.carb,
-         //       fat: _initialStateFood.fat
-         //   );
-         //   _previousCoefficient= 1/coefficient;
-         //   calculateTotalMacros();
-         // });
+         setState(() {
+           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+           List<String> servingIngredientsCount = [];
+           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+           currentServingIngredientsCount.forEach((element) {
+             servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+           });
+
+           newFood= newFood.copyWith(
+               servingIngredientsCount: servingIngredientsCount,
+               calorie: _initialStateFood.calorie,
+               protein: _initialStateFood.protein,
+               carb: _initialStateFood.carb,
+               fat: _initialStateFood.fat
+           );
+
+           _previousCoefficient= 1/coefficient;
+           calculateTotalMacros();
+         });
        }else{
          setState(() {
            double count = num.parse(_totalServingController.text)/double.parse(_selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex]);
@@ -580,7 +582,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.meal,
           name: _mealNameController.text,
-          servingAmount: double.parse(_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text),
+          servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
           unit: SERVING_LABEL,
           recipe: _recipeController.text
       );
@@ -680,6 +682,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                  _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
                  _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+                 _totalServingController.addListener(_onTotalServingChanged);
                });
 
              },
@@ -1789,6 +1792,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
            fat: []
          );
        }
+
        List<String> ingredients = List<String>.from(newFood.ingredients);
        ingredients.add(_ingredientNameController.text);
        List<String> servingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
@@ -1817,10 +1821,24 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
            calorie: ingredientsCalorie,
            protein: ingredientsProtein,
            carb: ingredientsCarb,
-           fat: ingredientsFat
+           fat: ingredientsFat,
        );
+
+       if(_foodType == MEAL_LABEL){
+         newFood= newFood.copyWith(
+           servingAmount: 1.0,
+           foodType: FoodType.meal,
+         );
+       }else{
+         newFood= newFood.copyWith(
+           foodType: FoodType.groceryProduct,
+         );
+       }
+
+       _initialStateFood= newFood;
        _selectedAddIngredientOption = '';
        _ingredientNameBorderColor = Colors.black;
+       _selectedUnitIndex= 0;
        _ingredientsExpansionState.add(false);
        calculateTotalMacros();
      });
@@ -1859,6 +1877,13 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       _foodType = type;
       resetTotalMacroAmounts();
       resetMacroAmounts();
+
+      if(_foodType == MEAL_LABEL){
+        _initialStateFood= Food(
+          servingAmount: 1.0
+        );
+      }
+
     });
   }
 
