@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../main_screen.dart';
@@ -49,6 +50,9 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    late TextEditingController _totalFatController;
    late TextEditingController _totalServingController;
    late TextEditingController _totalUnitController;
+   GenericFood _initialStateFood = GenericFood();
+   final _debouncer = Debouncer(milliseconds: 1000);
+   double _previousoefficient= 1.0;
 
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
@@ -82,7 +86,45 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
     _totalUnitController= TextEditingController(text: 'g');
     _groceryNameController= TextEditingController();
     init();
+    _totalServingController.addListener(_onTotalServingChanged);
   }
+
+
+   void _onTotalServingChanged() {
+     setState(() {
+
+     });
+     _debouncer.run(() {
+       if(newFood.foodType.name == MEAL_LABEL){
+         // setState(() {
+         //   double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+         //   List<String> servingIngredientsCount = [];
+         //   List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+         //   currentServingIngredientsCount.forEach((element) {
+         //     servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+         //   });
+         //
+         //   newFood= newFood.copyWith(
+         //       servingIngredientsCount: servingIngredientsCount,
+         //       calorie: _initialStateFood.calorie,
+         //       protein: _initialStateFood.protein,
+         //       carb: _initialStateFood.carb,
+         //       fat: _initialStateFood.fat
+         //   );
+         //   _previousCoefficient= 1/coefficient;
+         //   calculateTotalMacros();
+         // });
+       }else{
+         setState(() {
+           double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0][_selectedUnitIndex]);
+           _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0][_selectedUnitIndex]) * count}');
+           _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0][_selectedUnitIndex]) * count}');
+           _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0][_selectedUnitIndex]) * count}');
+           _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0][_selectedUnitIndex]) * count}');
+         });
+       }
+     });
+   }
 
 
    void requestLoggedFoods(){
@@ -95,24 +137,26 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    void logFoodsOfToday(List<Food> foodsLoggedBefore){
      List<Food> foods = [];
      foods.addAll(foodsLoggedBefore);
-     foods.add(fromGenericGrocery(newFood));
+     if(newFood.foodType.name == GROCERY_LABEL){
+       foods.add(
+         Food(
+             id: newFood.id,
+             calorie: [_totalCalorieController.text],
+             protein: [_totalProteinController.text],
+             carb: [_totalCarbController.text],
+             fat: [_totalFatController.text],
+             servingAmounts: [_totalServingController.text],
+             units: [newFood.servingAmounts[0][_selectedUnitIndex]],
+             foodType: FoodType.groceryProduct,
+             count: newFood.count,
+             name: _groceryNameController.text
+         )
+       );
+     }else{
+
+     }
      _logFoodsBloc.add(
          LogFoodsEvent.onLogFoods(foods)
-     );
-   }
-
-   Food fromGenericGrocery(GenericFood food){
-     return Food(
-         id: food.id,
-         calorie: [food.calorie[0][_selectedUnitIndex]],
-         protein: [food.protein[0][_selectedUnitIndex]],
-         carb: [food.carb[0][_selectedUnitIndex]],
-         fat: [food.fat[0][_selectedUnitIndex]],
-         servingAmounts: [food.servingAmounts[0][_selectedUnitIndex]],
-         units: [food.units[0][_selectedUnitIndex]],
-         foodType: FoodType.groceryProduct,
-         count: food.count,
-         name: food.name
      );
    }
 
@@ -265,6 +309,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
     _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0][0];
     newFood = widget.foodDetailArgumentModel.food!;
     _groceryUnitOptions= newFood.units[0];
+    _initialStateFood= newFood;
   }
 
 
@@ -343,39 +388,25 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
   void requestOperationOnFood(BuildContext context){
     if(newFood.foodType.name == GROCERY_LABEL){
-      newFood = newFood.copyWith(
-          foodType: FoodType.groceryProduct,
-          name: _groceryNameController.text,
-          servingAmounts: [[_totalServingController.text.isEmpty ? '0.0' : _totalServingController.text]],
-          units: [[_totalUnitController.text]],
-          calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
-          protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
-          carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
-          fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]]
-      );
-    }else{
-      // newFood = newFood.copyWith(
-      //     foodType: FoodType.meal,
-      //     name: _mealNameController.text,
-      //     servingAmount: double.parse(_totalServingController.text),
-      //     unit: _totalUnitController.text,
-      //     recipe: _recipeController.text
-      // );
-      //
-      // if(newFood.ingredients.isEmpty){
-      //   newFood= newFood.copyWith(
-      //       calorie: [_totalCalorieController.text],
-      //       protein: [_totalProteinController.text],
-      //       carb: [_totalCarbController.text],
-      //       fat: [_totalFatController.text]
-      //   );
-      // }
-    }
       _addOrUpdateMyFavoriteBloc.add(
         AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(
-          fromGenericGrocery(newFood),
+            Food(
+                id: newFood.id,
+                calorie: [_totalCalorieController.text],
+                protein: [_totalProteinController.text],
+                carb: [_totalCarbController.text],
+                fat: [_totalFatController.text],
+                servingAmounts: [_totalServingController.text],
+                units: [newFood.servingAmounts[0][_selectedUnitIndex]],
+                foodType: FoodType.groceryProduct,
+                count: newFood.count,
+                name: _groceryNameController.text
+            )
         ),
       );
+    }else{
+
+    }
   }
 
    Widget groceryUnitDropDown(){
@@ -403,11 +434,12 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                    }
                  }
                  _selectedUnitIndex = selectedIndex;
-                 _totalServingController = TextEditingController(text: newFood.servingAmounts[0][_selectedUnitIndex].toString());
-                 _totalCalorieController = TextEditingController(text: newFood.calorie[0][_selectedUnitIndex].toString());
-                 _totalProteinController = TextEditingController(text: newFood.protein[0][_selectedUnitIndex].toString());
-                 _totalCarbController = TextEditingController(text: newFood.carb[0][_selectedUnitIndex].toString());
-                 _totalFatController = TextEditingController(text: newFood.fat[0][_selectedUnitIndex].toString());
+                 _totalServingController = TextEditingController(text: _initialStateFood.servingAmounts[0][_selectedUnitIndex].toString());
+                 _totalCalorieController = TextEditingController(text: _initialStateFood.calorie[0][_selectedUnitIndex].toString());
+                 _totalProteinController = TextEditingController(text: _initialStateFood.protein[0][_selectedUnitIndex].toString());
+                 _totalCarbController = TextEditingController(text: _initialStateFood.carb[0][_selectedUnitIndex].toString());
+                 _totalFatController = TextEditingController(text: _initialStateFood.fat[0][_selectedUnitIndex].toString());
+                 _totalServingController.addListener(_onTotalServingChanged);
                });
 
              },

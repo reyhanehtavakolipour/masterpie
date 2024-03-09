@@ -78,7 +78,9 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   String _foodType = GROCERY_LABEL;
   late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
-  late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
+  double _previousCoefficient= 1.0;
+
+   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
 
 
    List<GenericFood> _suggestedGroceries= [];
@@ -113,7 +115,55 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     _groceryNameController.addListener(_onSearchGroceryChanged);
     
     _groceriesBloc = context.read<GroceriesBloc>();
+
+    _totalServingController.addListener(_onTotalServingChanged);
+
   }
+
+
+   void _onTotalServingChanged() {
+     setState(() {
+
+     });
+     _debouncer.run(() {
+       if(_foodType == MEAL_LABEL){
+         // setState(() {
+         //   double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+         //   List<String> servingIngredientsCount = [];
+         //   List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+         //   currentServingIngredientsCount.forEach((element) {
+         //     servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+         //   });
+         //
+         //   newFood= newFood.copyWith(
+         //       servingIngredientsCount: servingIngredientsCount,
+         //       calorie: _initialStateFood.calorie,
+         //       protein: _initialStateFood.protein,
+         //       carb: _initialStateFood.carb,
+         //       fat: _initialStateFood.fat
+         //   );
+         //   _previousCoefficient= 1/coefficient;
+         //   calculateTotalMacros();
+         // });
+       }else{
+         setState(() {
+           double count = num.parse(_totalServingController.text)/double.parse(_selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex]);
+           newFood= newFood.copyWith(
+               servingAmounts: [_totalServingController.text],
+               calorie: [(double.parse(_selectedGenericIngredient.calorie[0][_selectedUnitIndex]) * count).toString()],
+               protein: [(double.parse(_selectedGenericIngredient.protein[0][_selectedUnitIndex]) * count).toString()],
+               carb: [(double.parse(_selectedGenericIngredient.carb[0][_selectedUnitIndex]) * count).toString()],
+               fat: [(double.parse(_selectedGenericIngredient.fat[0][_selectedUnitIndex]) * count).toString()]
+           );
+
+           _totalCalorieController = TextEditingController(text: '${double.parse(_selectedGenericIngredient.calorie[0][_selectedUnitIndex]) * count}');
+           _totalProteinController = TextEditingController(text: '${double.parse(_selectedGenericIngredient.protein[0][_selectedUnitIndex]) * count}');
+           _totalCarbController = TextEditingController(text: '${double.parse(_selectedGenericIngredient.carb[0][_selectedUnitIndex]) * count}');
+           _totalFatController = TextEditingController(text: '${double.parse(_selectedGenericIngredient.fat[0][_selectedUnitIndex]) * count}');
+         });
+       }
+     });
+   }
 
 
    void _onSearchGroceryChanged() {
@@ -585,6 +635,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  _totalProteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                  _totalCarbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
                  _totalFatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+                 _totalServingController.addListener(_onTotalServingChanged);
                });
 
              },
@@ -1530,6 +1581,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                   _totalCarbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
                   _totalFatController = TextEditingController(text: grocery.fat[0][_selectedUnitIndex].toString());
                   _groceryNameController.addListener(_onSearchGroceryChanged);
+                 _totalServingController.addListener(_onTotalServingChanged);
               }else{
                 _selectedGenericIngredient = grocery;
                 _searchedGroceriesVisible = false;
