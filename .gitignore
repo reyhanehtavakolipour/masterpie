@@ -9,6 +9,7 @@
 .history
 .svn/
 .env
+ios/build/
 migrate_working_dir/
 
 
