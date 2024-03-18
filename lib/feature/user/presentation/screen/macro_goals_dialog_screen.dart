@@ -270,13 +270,9 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
                             ),
                             backgroundColor: MASTERPIE_YELLOW_COLOR
                         ),
-                        child: const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Text(LET_US_CALCULATE_IT_MESSAGE, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                        ),
+                        child: const Text(LET_US_CALCULATE_IT_MESSAGE, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
                       ),
                     ),
-
 
 
 
