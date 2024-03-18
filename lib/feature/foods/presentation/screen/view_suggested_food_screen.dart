@@ -311,10 +311,10 @@ class _ViewSuggestedFoodScreenState extends State<ViewSuggestedFoodScreen> {
         _foodType = GROCERY_LABEL;
         _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
         _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
-        _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
-        _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
-        _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
-        _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
+        _totalCalorieController.text = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
+        _totalProteinController.text = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
+        _totalCarbController.text = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
+        _totalFatController.text = double.parse(widget.foodDetailArgumentModel.food!.fat[0]).toStringAsFixed(2);
         _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
       }else{
         double calorie = 0;
@@ -352,10 +352,10 @@ class _ViewSuggestedFoodScreenState extends State<ViewSuggestedFoodScreen> {
         _foodType = MEAL_LABEL;
         _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
         _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount.toString();
-        _totalCalorieController.text = calorie.toString();
-        _totalProteinController.text = protein.toString();
-        _totalCarbController.text = carb.toString();
-        _totalFatController.text = fat.toString();
+        _totalCalorieController.text = calorie.toStringAsFixed(2);
+        _totalProteinController.text = protein.toStringAsFixed(2);
+        _totalCarbController.text = carb.toStringAsFixed(2);
+        _totalFatController.text = fat.toStringAsFixed(2);
         _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit;
         _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
         widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {

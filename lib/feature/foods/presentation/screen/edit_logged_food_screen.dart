@@ -362,6 +362,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                     /// total macros
                     macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
 
+                    const SizedBox(height: 36,),
 
                     buildBottomButton(context),
 

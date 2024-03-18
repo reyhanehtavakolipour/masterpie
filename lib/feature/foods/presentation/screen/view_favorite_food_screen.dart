@@ -309,10 +309,10 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
      if (widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct) {
        _foodName = widget.foodDetailArgumentModel.food!.name;
        _totalServing = '${widget.foodDetailArgumentModel.food!.servingAmounts[0]} ${widget.foodDetailArgumentModel.food!.units[0]}';
-       _totalCalorie = widget.foodDetailArgumentModel.food!.calorie[0];
-       _totalProtein = widget.foodDetailArgumentModel.food!.protein[0];
-       _totalCarb = widget.foodDetailArgumentModel.food!.carb[0];
-       _totalFat = widget.foodDetailArgumentModel.food!.fat[0];
+       _totalCalorie = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
+       _totalProtein = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
+       _totalCarb = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
+       _totalFat = double.parse(widget.foodDetailArgumentModel.food!.fat[0]).toStringAsFixed(2);
      } else {
        double calorie = 0;
        for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
@@ -365,10 +365,10 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
          _totalServing =
          '${widget.foodDetailArgumentModel.food!.servingAmount} ${widget
              .foodDetailArgumentModel.food!.unit}';
-         _totalCalorie = calorie.toString();
-         _totalProtein = protein.toString();
-         _totalCarb = carb.toString();
-         _totalFat = fat.toString();
+         _totalCalorie = calorie.toStringAsFixed(2);
+         _totalProtein = protein.toStringAsFixed(2);
+         _totalCarb = carb.toStringAsFixed(2);
+         _totalFat = fat.toStringAsFixed(2);
          _recipe = widget.foodDetailArgumentModel.food!.recipe;
          _ingredients = ingredients;
        }

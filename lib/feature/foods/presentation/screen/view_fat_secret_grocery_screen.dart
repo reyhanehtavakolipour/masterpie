@@ -242,14 +242,13 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
     );
   }
 
-
   void init(){
     _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
     _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
-    _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
-    _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
-    _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
-    _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
+    _totalCalorieController.text = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
+    _totalProteinController.text = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
+    _totalCarbController.text = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
+    _totalFatController.text = double.parse(widget.foodDetailArgumentModel.food!.fat[0]).toStringAsFixed(2);
     _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
     newFood = widget.foodDetailArgumentModel.food!;
   }
