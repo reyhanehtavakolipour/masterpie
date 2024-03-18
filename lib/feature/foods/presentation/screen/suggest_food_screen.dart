@@ -54,28 +54,26 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(SUGGEST_FOOD_LABEL, style: TextStyle(color: Colors.white)),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(SUGGEST_FOOD_LABEL, style: TextStyle(color: Colors.white)),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-            ],
           ),
-          body: Padding(
+          actions: [
+          ],
+        ),
+        body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Stack(
               children: [
@@ -289,7 +287,6 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
 
               ],
             )
-          ),
         ),
       ),
     );
