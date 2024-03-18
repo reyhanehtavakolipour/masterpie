@@ -7,7 +7,6 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_cook_book_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -118,250 +117,240 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
 @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
-                ),);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.white,),
-                onPressed: () {
-                  FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood,
-                      macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditCookBookFoodScreen(foodDetailArgumentModel: argumentModel,),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.white,),
-                onPressed: () {
-                  _showDeleteConfirmation(context);
-                },
-              ),
-            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit, color: Colors.white,),
+              onPressed: () {
+                FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood,
+                    macroEdition: widget.foodDetailArgumentModel.macroEdition);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditCookBookFoodScreen(foodDetailArgumentModel: argumentModel,),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.white,),
+              onPressed: () {
+                _showDeleteConfirmation(context);
+              },
+            ),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
 
 
-                    const Text('$NAME_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                  const Text('$NAME_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
-                    const SizedBox(height: 4,),
+                  const SizedBox(height: 4,),
 
-                    Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-
-
-
-                    Visibility(
-                      visible: widget.foodDetailArgumentModel.food!.foodType == FoodType.meal,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          const SizedBox(height: 16,),
-
-                          const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                          const SizedBox(height: 4,),
+                  Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
 
-                          Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      const SizedBox(height: 16,),
+
+                      const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                      const SizedBox(height: 4,),
 
 
-                          const SizedBox(height: 16,),
-
-                          const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                          const SizedBox(height: 4,),
+                      Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
 
 
-                          Text(_recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                      const SizedBox(height: 16,),
 
-                        ],
+                      const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                      const SizedBox(height: 4,),
+
+
+                      Text(_recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+                    ],
+                  ),
+
+
+
+                  const SizedBox(height: 32,),
+
+
+
+                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+
+                  const SizedBox(height: 16,),
+
+                  Row(
+                    children: [
+                      Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                      const SizedBox(width: 4,),
+                      Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16,),
+
+
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Row(
+                            children: [
+                              const Text('$CALORIE_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                              const SizedBox(width: 4,),
+                              Text(_totalCalorie, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                            ],
+                          )
                       ),
-                    ),
+                      Expanded(
+                          child: Row(
+                            children: [
+                              const Text('$PROTEIN_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                              const SizedBox(width: 4,),
+                              Text(_totalProtein, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                            ],
+                          )
+                      ),
+                    ],
+                  ),
+
+
+                  const SizedBox(height: 16,),
+
+
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Row(
+                            children: [
+                              const Text('$CARB_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                              const SizedBox(width: 4,),
+                              Text(_totalCarb, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                            ],
+                          )
+                      ),
+                      Expanded(
+                          child: Row(
+                            children: [
+                              const Text('$FAT_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                              const SizedBox(width: 4,),
+                              Text(_totalFat, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                            ],
+                          )
+                      ),
+                    ],
+                  ),
 
 
 
-                    const SizedBox(height: 32,),
+                  const SizedBox(height: 32,),
 
 
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                  /// button
+                  buildBottomButton(context),
 
-
-                    const SizedBox(height: 16,),
-
-                    Row(
-                      children: [
-                        Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                        const SizedBox(width: 4,),
-                        Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                      ],
-                    ),
-
-                    const SizedBox(height: 16,),
-
-
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Row(
-                              children: [
-                                const Text('$CALORIE_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                                const SizedBox(width: 4,),
-                                Text(_totalCalorie, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                              ],
-                            )
-                        ),
-                        Expanded(
-                            child: Row(
-                              children: [
-                                const Text('$PROTEIN_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                                const SizedBox(width: 4,),
-                                Text(_totalProtein, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-
-
-                    const SizedBox(height: 16,),
-
-
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Row(
-                              children: [
-                                const Text('$CARB_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                                const SizedBox(width: 4,),
-                                Text(_totalCarb, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                              ],
-                            )
-                        ),
-                        Expanded(
-                            child: Row(
-                              children: [
-                                const Text('$FAT_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                                const SizedBox(width: 4,),
-                                Text(_totalFat, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-
-
-
-                    const SizedBox(height: 32,),
-
-
-
-                   /// button
-                   buildBottomButton(context),
-
-                    BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                        builder: (mcontext, state) {
-                          if (state is RemoveFromMyFavoriteLoadingState) {
-                            return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                          }else if(state is RemoveFromMyFavoriteLoadedState){
-                            Future.delayed(Duration.zero,(){
+                  BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
+                      builder: (mcontext, state) {
+                        if (state is RemoveFromMyFavoriteLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is RemoveFromMyFavoriteLoadedState){
+                          Future.delayed(Duration.zero,(){
                             _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
-                              Navigator.pushAndRemoveUntil(
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const MyCookBookScreen(),
                                 ),
-                                (route) => false
-                              );
-                            });
-                          }else if(state is RemoveFromMyFavoriteErrorState){
-                            _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }else{
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
-                        }
-                    ),
-
-                    BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
-                        builder: (context, state) {
-                          if (state is MyFavoriteFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
+                                    (route) => false
                             );
-                          }else if(state is MyFavoriteFoodsLoadedState){
-                            Future.delayed(Duration.zero,(){
-                              _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                            });
-                          }else if(state is ImmediateSearchInFoodsLoadedState){
-                            Future.delayed(Duration.zero,(){
-                              _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                              setState(() {
-                                _favoriteId= state.favoriteId;
-                              });
-                            });
-                          }else if(state is MyFavoriteFoodsErrorState){
-                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
+                          });
+                        }else if(state is RemoveFromMyFavoriteErrorState){
+                          _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
                         }
-                    ),
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+                  BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                      builder: (context, state) {
+                        if (state is MyFavoriteFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is MyFavoriteFoodsLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                          });
+                        }else if(state is ImmediateSearchInFoodsLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                            setState(() {
+                              _favoriteId= state.favoriteId;
+                            });
+                          });
+                        }else if(state is MyFavoriteFoodsErrorState){
+                          _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
 
 
 
-                  ],
-                ),
-              )
-          ),
+                ],
+              ),
+            )
         ),
       ),
     );
@@ -370,14 +359,6 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
   void init(){
     searchFoodInFavorites(widget.foodDetailArgumentModel.food ?? Food());
-      if(widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct){
-        _foodName = widget.foodDetailArgumentModel.food!.name;
-        _totalServing = '${widget.foodDetailArgumentModel.food!.servingAmounts[0]} ${widget.foodDetailArgumentModel.food!.units[0]}';
-        _totalCalorie = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
-        _totalProtein = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
-        _totalCarb = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
-        _totalFat = double.parse(widget.foodDetailArgumentModel.food!.fat[0]).toStringAsFixed(2);
-      }else{
         double calorie = 0;
         for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
@@ -435,7 +416,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
         _totalFat = fat.toStringAsFixed(2);
         _recipe = widget.foodDetailArgumentModel.food!.recipe;
         _ingredients = ingredients;
-      }
+
 
       newFood = widget.foodDetailArgumentModel.food!;
   }

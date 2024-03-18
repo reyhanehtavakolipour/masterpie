@@ -181,76 +181,71 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text(UPDATE_LABEL, style: const TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-
-            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          actions: [
 
-                    /// meal name
-                    mealNameWidget(),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-
-                    /// add ingredient chips
-                    addIngredientChips(),
-
-                    const SizedBox(height: 8,),
-
-                    /// new ingredient
-                    newIngredient(),
-
-                    /// added ingredients
-                    addedIngredients(),
+                  /// meal name
+                  mealNameWidget(),
 
 
-                    /// recipe
-                    recipe(),
+                  /// add ingredient chips
+                  addIngredientChips(),
 
-                    const SizedBox(height: 16,),
+                  const SizedBox(height: 8,),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                  /// new ingredient
+                  newIngredient(),
 
-                    const SizedBox(height: 16,),
-
-                    /// total macros
-                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
-
-
-                    const SizedBox(height: 36,),
+                  /// added ingredients
+                  addedIngredients(),
 
 
-                    /// button
-                    buildBottomButton(context),
+                  /// recipe
+                  recipe(),
 
-                  ],
-                ),
-              )
-          ),
+                  const SizedBox(height: 16,),
+
+                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                  const SizedBox(height: 16,),
+
+                  /// total macros
+                  macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
+
+
+                  const SizedBox(height: 36,),
+
+
+                  /// button
+                  buildBottomButton(context),
+
+                ],
+              ),
+            )
         ),
       ),
     );

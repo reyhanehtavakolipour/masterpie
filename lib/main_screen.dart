@@ -929,7 +929,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           Expanded(
                                                             child: GestureDetector(
                                                               onTap: (){
-                                                                Navigator.pushReplacement(
+                                                                Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
                                                                     builder: (context) => const RequestFoodsPortionsScreen(),

@@ -177,122 +177,117 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-
-            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          actions: [
 
-                    newGrocery(),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    const SizedBox(height: 16,),
+                  newGrocery(),
 
-
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-                    const SizedBox(height: 16,),
-
-                    /// total macros
-                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
-
-                    const SizedBox(height: 36,),
-
-                   /// button
-                   buildBottomButton(context),
+                  const SizedBox(height: 16,),
 
 
-                    BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                        builder: (mcontext, state) {
+                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-                          if (state is GetLoggedFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is GetImmediateLoggedFoodsState){
-                            if(_updatebuttonClicked){
-                              _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                              Future.delayed(Duration.zero,(){
-                                logFoodsOfToday(state.loggedFoods.foods);
-                              });
-                            }
-                          }else if(state is GetLoggedFoodsErrorState){
+                  const SizedBox(height: 16,),
+
+                  /// total macros
+                  macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
+
+                  const SizedBox(height: 36,),
+
+                  /// button
+                  buildBottomButton(context),
+
+
+                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                      builder: (mcontext, state) {
+
+                        if (state is GetLoggedFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetImmediateLoggedFoodsState){
+                          if(_updatebuttonClicked){
                             _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
+                              logFoodsOfToday(state.loggedFoods.foods);
                             });
                           }
-                          return Container();
-                        },
-                        listener: (context, state){
-
+                        }else if(state is GetLoggedFoodsErrorState){
+                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
                         }
-                    ),
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
 
 
-                    BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                        builder: (mcontext, state) {
-                          if (state is LogFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is LogFoodsLoadedState){
-                            if(_updatebuttonClicked){
-                              _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                              Future.delayed(Duration.zero,(){
-                                _updatebuttonClicked= false;
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                  builder: (context) => const MainScreen(),
-                                ), (route) => false);
-                              });
-                            }
-                          }else if(state is LogFoodsErrorState){
+                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                      builder: (mcontext, state) {
+                        if (state is LogFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LogFoodsLoadedState){
+                          if(_updatebuttonClicked){
                             _logFoodsBloc.add(const LogFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
+                              _updatebuttonClicked= false;
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ), (route) => false);
                             });
                           }
-                          return Container();
-                        },
-                        listener: (context, state){
-
+                        }else if(state is LogFoodsErrorState){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
                         }
-                    ),
+                        return Container();
+                      },
+                      listener: (context, state){
 
-                  ],
-                ),
-              )
-          ),
+                      }
+                  ),
+
+                ],
+              ),
+            )
         ),
       ),
     );

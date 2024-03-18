@@ -114,129 +114,124 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
 @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-
-            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          actions: [
 
-                    const Text('$FOOD_TYPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    /// food type
-                    CustomRadioListTile(
-                      options: const [GROCERY_PRODUCTS_LABEL],
-                      onSelectedOptionChanged: updateSelectedFoodType,
-                      selectedOption: GROCERY_PRODUCTS_LABEL,
-                      orientation: HORIZONTAL_ORIENTATION,
-                      isEditable: false,
-                    ),
+                  const Text('$FOOD_TYPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                  /// food type
+                  CustomRadioListTile(
+                    options: const [GROCERY_PRODUCTS_LABEL],
+                    onSelectedOptionChanged: updateSelectedFoodType,
+                    selectedOption: GROCERY_PRODUCTS_LABEL,
+                    orientation: HORIZONTAL_ORIENTATION,
+                    isEditable: false,
+                  ),
 
 
-                    const SizedBox(height: 12,),
+                  const SizedBox(height: 12,),
 
-                    newGrocery(),
+                  newGrocery(),
 
-                    const SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-                    const SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
 
-                    /// total macros
-                    macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
+                  /// total macros
+                  macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController, true),
 
-                    const SizedBox(height: 36,),
+                  const SizedBox(height: 36,),
 
-                   /// button
-                   buildBottomButton(context),
+                  /// button
+                  buildBottomButton(context),
 
-                    BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                        builder: (mcontext, state) {
+                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                      builder: (mcontext, state) {
 
-                          if (state is GetLoggedFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is GetImmediateLoggedFoodsState){
-                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              logFoodsOfToday(state.loggedFoods.foods);
-                            });
-                          }else if(state is GetLoggedFoodsErrorState){
-                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
+                        if (state is GetLoggedFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetImmediateLoggedFoodsState){
+                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            logFoodsOfToday(state.loggedFoods.foods);
+                          });
+                        }else if(state is GetLoggedFoodsErrorState){
+                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
                         }
-                    ),
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
 
 
-                    BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                        builder: (mcontext, state) {
-                          if (state is LogFoodsLoadingState) {
-                            return const GFLoader(
-                              type: GFLoaderType.circle,
-                              loaderColorOne: DARK_PRIMARY_COLOR,
-                              loaderColorTwo: DARK_PRIMARY_COLOR,
-                              loaderColorThree: DARK_PRIMARY_COLOR,
-                            );
-                          }else if(state is LogFoodsLoadedState){
-                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ), (route) => false);
-                            });
-                          }else if(state is LogFoodsErrorState){
-                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              return showErrorToast(context, state.message);
-                            });
-                          }
-                          return Container();
-                        },
-                        listener: (context, state){
-
+                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                      builder: (mcontext, state) {
+                        if (state is LogFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LogFoodsLoadedState){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                              builder: (context) => const MainScreen(),
+                            ), (route) => false);
+                          });
+                        }else if(state is LogFoodsErrorState){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
                         }
-                    ),
+                        return Container();
+                      },
+                      listener: (context, state){
 
-                  ],
-                ),
-              )
-          ),
+                      }
+                  ),
+
+                ],
+              ),
+            )
         ),
       ),
     );

@@ -132,6 +132,7 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                       food: checkFoodParameters(food),
                       macroEdition: widget.macroEdition
                     );
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
