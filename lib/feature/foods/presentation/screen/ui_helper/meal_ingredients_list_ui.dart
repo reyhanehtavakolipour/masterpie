@@ -127,6 +127,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                                           width: 260,
                                           child: TextField(
                                             enabled: widget.isEditable,
+                                            onChanged: updatedIngredientMacroListener,
                                             controller: _ingredientNameController,
                                             decoration:  InputDecoration(
                                               hintText: CHEDDAR_CHEESE_LABEL,

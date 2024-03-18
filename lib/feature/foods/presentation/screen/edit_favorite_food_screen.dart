@@ -465,6 +465,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
           servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
+      _initialStateFood= newFood;
       calculateTotalMacros();
     });
   }
@@ -1492,19 +1493,19 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       if(_ingredientServingCountController.text.isEmpty){
         _ingredientServingCountController = TextEditingController(text: '1.0');
       }
-      servingIngredientsCount.add(_selectedGenericIngredient.servingIngredientsCount[0][_selectedNewIngredientUnitIndex]);
+      servingIngredientsCount.add(_ingredientServingCountController.text);
       List<String> ingredientsUnit = List<String>.from(newFood.units);
       ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedNewIngredientUnitIndex] : manualUnitOptions[_selectedNewIngredientUnitIndex]);
       List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-      ingredientsServingAmount.add(_selectedGenericIngredient.servingAmounts[0][_selectedNewIngredientUnitIndex]);
+      ingredientsServingAmount.add(_servingController.text);
       List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
-      ingredientsCalorie.add(_selectedGenericIngredient.calorie[0][_selectedNewIngredientUnitIndex]);
+      ingredientsCalorie.add(_calorieController.text);
       List<String> ingredientsProtein = List<String>.from(newFood.protein);
-      ingredientsProtein.add(_selectedGenericIngredient.protein[0][_selectedNewIngredientUnitIndex]);
+      ingredientsProtein.add(_proteinController.text);
       List<String> ingredientsCarb = List<String>.from(newFood.carb);
-      ingredientsCarb.add(_selectedGenericIngredient.carb[0][_selectedNewIngredientUnitIndex]);
+      ingredientsCarb.add(_carbController.text);
       List<String> ingredientsFat = List<String>.from(newFood.fat);
-      ingredientsFat.add(_selectedGenericIngredient.fat[0][_selectedNewIngredientUnitIndex]);
+      ingredientsFat.add(_fatController.text);
 
       newFood = newFood.copyWith(
           ingredients: ingredients,
