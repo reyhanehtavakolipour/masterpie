@@ -6,6 +6,7 @@ import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_fat_secret_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
@@ -272,22 +273,6 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
     });
 
     widget.onFoodsChanged(foods);
-  }
-
-
-  Food fromGenericFood(GenericFood food){
-    return Food(
-        id: food.id,
-        calorie: food.calorie[0],
-        protein: food.protein[0],
-        carb: food.carb[0],
-        fat: food.fat[0],
-        servingAmounts: food.servingAmounts[0],
-        units: food.units[0],
-        foodType: FoodType.groceryProduct,
-        count: food.count,
-        name: food.name
-    );
   }
 
 }

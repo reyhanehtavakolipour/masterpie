@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/add_new_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -54,6 +55,8 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   bool _logButtonCLicked = false;
 
+  bool _isAddedFoodBannerOpen= false;
+
   List<Food> _addedMyFavorites= [];
 
   List<Food> _newMyFavorites= [];
@@ -96,11 +99,14 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   Widget logFoodButton(){
     bool isAnyFoodAdded= false;
+    List<Food> foodsLog = [];
     _addedMyFavorites.forEach((element) {
       if(element.count > 0){
         isAnyFoodAdded= true;
+        foodsLog.add(element);
       }
     });
+
     return Visibility(
       visible: isAnyFoodAdded,
       child: Positioned(
@@ -111,23 +117,105 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
           children: [
 
             /// up arrow
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: LOG_FOOD_BTN_COLOR
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.arrow_drop_up,
-                  color: Colors.white,
-                ),
+            GestureDetector(
+              onTap: (){
+                if(_isAddedFoodBannerOpen){
+                  setState(() {
+                    _isAddedFoodBannerOpen= false;
+                  });
+                }else{
+                  setState(() {
+                    _isAddedFoodBannerOpen= true;
+                  });
+                }
+              },
+
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: !_isAddedFoodBannerOpen,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: LOG_FOOD_BTN_COLOR
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.arrow_drop_up,
+                          color: DARK_PRIMARY_COLOR,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Visibility(
+                    visible: _isAddedFoodBannerOpen,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: LOG_FOOD_BTN_COLOR
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                color: DARK_PRIMARY_COLOR,
+                              ),
+                            ),
+
+
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Wrap(
+                                  spacing: 8.0,
+                                  children: List.generate(
+                                    foodsLog.length,
+                                        (index) => LoggedFoodChipWidget(
+                                      text: foodsLog[index].name,
+                                      onRemove: () {
+                                        setState(() {
+
+                                          for(int i = 0; i < _newMyFavorites.length; i++){
+                                            if(_newMyFavorites[i].id == foodsLog[index].id){
+                                              _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
+                                            }
+                                          }
+
+
+                                          for(int i = 0; i < _addedMyFavorites.length; i++){
+                                            if(_addedMyFavorites[i].id == foodsLog[index].id){
+                                              _addedMyFavorites[i]= _addedMyFavorites[i].copyWith(count: 0);
+                                            }
+                                          }
+
+                                          updateChangedFavoriteFoods(_newMyFavorites);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      )
+                  )
+                ],
               ),
             ),
 
             /// log food button
-            SizedBox(
+            Container(
               width: double.infinity,
+              padding: const EdgeInsets.all(0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -140,7 +228,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                     requestLoggedFoods();
                   },
                   child: const Text(LOG_FOODS_LABEL,
-                    style: TextStyle( color: Colors.white, fontWeight: FontWeight.w600),)
+                    style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
               ),
             ),
           ],
@@ -152,227 +240,223 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(MY_COOKBOOK_LABEL, style: TextStyle(color: Colors.white),),
-          backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) => const MainScreen(),
-              ),);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white,),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddNewCookBookScreen(),
-                  ),
-                );
+        theme: ThemeData(fontFamily: MONTSERRAT_FONT,),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(MY_COOKBOOK_LABEL, style: TextStyle(color: Colors.white),),
+            backgroundColor: PRIMARY_COLOR,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
               },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
-          ],
-        ),
-        body:
-        Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child:Stack(
-              children: [
-                SingleChildScrollView(
-                  child:
-                  Column(
-                    children: [
-                      /// search bar
-                      Visibility(
-                        visible: false,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: SEARCH_BAR_HEIGHT,
-                                child: TextField(
-                                  controller: _searchController,
-                                  decoration: const InputDecoration(
-                                    hintText: CHEDDAR_CHEESE_LABEL,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white,),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddNewCookBookScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          body:
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child:Stack(
+                children: [
+                  SingleChildScrollView(
+                    child:
+                    Column(
+                      children: [
+                        /// search bar
+                        Visibility(
+                          visible: false,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: SEARCH_BAR_HEIGHT,
+                                  child: TextField(
+                                    controller: _searchController,
+                                    decoration: const InputDecoration(
+                                      hintText: CHEDDAR_CHEESE_LABEL,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 8,),
-                            GestureDetector(
-                              child: const CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.orange,
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.white,
+                              const SizedBox(width: 8,),
+                              GestureDetector(
+                                child: const CircleAvatar(
+                                  radius: 18,
+                                  backgroundColor: Colors.orange,
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              onTap: () {
-                                requestMyFavoriteFoods();
-                              },
-                            )
-                          ],
+                                onTap: () {
+                                  requestMyFavoriteFoods();
+                                },
+                              )
+                            ],
+                          ),
                         ),
-                      ),
 
 
 
 
-                      /// My favorite list
-                      MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
-                        onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                        foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
-                        macroEdition: true,),
+                        /// My favorite list
+                        MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
+                          onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                          macroEdition: true,),
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
 
-                logFoodButton(),
+                  logFoodButton(),
 
-                BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
-                    builder: (context, state) {
-                      if (state is MyFavoriteFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is MyFavoriteFoodsLoadedState){
-                        Future.delayed(Duration.zero,(){
+                  BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                      builder: (context, state) {
+                        if (state is MyFavoriteFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is MyFavoriteFoodsLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                            checkIfFavoriteFoodsAddedBefore(state.foods);
+                          });
+                        }else if(state is MyFavoriteFoodsErrorState){
                           _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                          checkIfFavoriteFoodsAddedBefore(state.foods);
-                        });
-                      }else if(state is MyFavoriteFoodsErrorState){
-                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
 
-                    }
-                ),
-                BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
-                    builder: (context, state) {
-                      return Container(height: 1,);
-                    },
-                    listener: (context, state){
-                      if(state is AddOrUpdateMyFavoriteLoadedState){
-                        requestMyFavoriteFoods();
-                      }else if(state is AddOrUpdateMyFavoriteErrorState){
-                        _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                            return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                      }
+                  ),
+                  BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+                      builder: (context, state) {
+                        return Container(height: 1,);
+                      },
+                      listener: (context, state){
+                        if(state is AddOrUpdateMyFavoriteLoadedState){
+                          requestMyFavoriteFoods();
+                        }else if(state is AddOrUpdateMyFavoriteErrorState){
+                          _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                              return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                            }
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                      }
+                  ),
+                  BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
+                      builder: (context, state) {
+                        return Container(height: 1,);
+                      },
+                      listener: (context, state){
+                        if(state is RemoveFromMyFavoriteLoadedState){
+                          requestMyFavoriteFoods();
+                        }
+                      }
+                  ),
+                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                      builder: (mcontext, state) {
+
+                        if (state is GetLoggedFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetLoggedFoodsLoadedState){
+                          if(_logButtonCLicked){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              logFoodsOfToday(state.loggedFoods.foods);
+                            });
                           }
-                          return showErrorToast(context, state.message);
-                        });
-                      }else{
-                      }
-                    }
-                ),
-                BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                    builder: (context, state) {
-                      return Container(height: 1,);
-                    },
-                    listener: (context, state){
-                      if(state is RemoveFromMyFavoriteLoadedState){
-                        requestMyFavoriteFoods();
-                      }
-                    }
-                ),
-                BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                    builder: (mcontext, state) {
-
-                      if (state is GetLoggedFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is GetLoggedFoodsLoadedState){
-                        if(_logButtonCLicked){
+                        }else if(state is GetLoggedFoodsErrorState){
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
-                            logFoodsOfToday(state.loggedFoods.foods);
+                            return showErrorToast(context, state.message);
                           });
                         }
-                      }else if(state is GetLoggedFoodsErrorState){
-                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
+                        return Container();
+                      },
+                      listener: (context, state){
+
                       }
-                      return Container();
-                    },
-                    listener: (context, state){
+                  ),
+                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                      builder: (mcontext, state) {
 
-                    }
-                ),
-                BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                    builder: (mcontext, state) {
-
-                      if (state is LogFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is LogFoodsLoadedState){
-                        if(_logButtonCLicked){
+                        if (state is LogFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LogFoodsLoadedState){
+                          if(_logButtonCLicked){
+                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              _logButtonCLicked = false;
+                              Navigator.pop(context);
+                            });
+                          }
+                        }else if(state is LogFoodsErrorState){
                           _logFoodsBloc.add(const LogFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
-                            _logButtonCLicked = false;
-                            Navigator.pushReplacement(context, MaterialPageRoute(
-                              builder: (context) => const MainScreen(),
-                            ),);
+                            return showErrorToast(context, state.message);
                           });
                         }
-                      }else if(state is LogFoodsErrorState){
-                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
+                        return Container();
+                      },
+                      listener: (context, state){
 
-                    }
-                ),
-              ],
-            )
+                      }
+                  ),
+                ],
+              )
+          ),
         ),
-      ),
-    );
+      );
   }
 
   void checkIfFavoriteFoodsAddedBefore(List<Food> foods){

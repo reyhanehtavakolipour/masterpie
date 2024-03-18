@@ -10,6 +10,8 @@ import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -55,9 +57,11 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
 
   List<Food> _addedGroceries= [];
 
+  bool _isAddedFoodBannerOpen= false;
+
   List<GenericFood> _newGroceries= [];
 
-  bool _backButtonCLicked = false;
+  bool _logButtonCLicked = false;
 
   final _debouncer = Debouncer(milliseconds: 1000);
 
@@ -143,241 +147,379 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return  PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          /// App bar
-              appBar: AppBar(
-                title: const Text(SEARCH_FOOD_LABEL, style: TextStyle(color: Colors.white)),
-                backgroundColor: PRIMARY_COLOR,
-                leading: GestureDetector(
-                  onTap: () {
-                    if(_addedGroceries.isEmpty){
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                        builder: (context) => const MainScreen(),
-                      ),);
-                    }else{
-                      _backButtonCLicked = true;
-                      requestLoggedFoods();
-                    }
-                  },
-                  child: const SizedBox(
-                    width: 48,
-                    height: double.infinity,
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 24,
+
+  Widget logFoodButton(){
+    bool isAnyFoodAdded= false;
+    List<Food> foodsLog = [];
+    _addedGroceries.forEach((element) {
+      if(element.count > 0){
+        isAnyFoodAdded= true;
+        foodsLog.add(element);
+      }
+    });
+
+    return Visibility(
+      visible: isAnyFoodAdded,
+      child: Positioned(
+        bottom: 16,
+        left: 16,
+        right: 16,
+        child: Column(
+          children: [
+
+            /// up arrow
+            GestureDetector(
+              onTap: (){
+                if(_isAddedFoodBannerOpen){
+                  setState(() {
+                    _isAddedFoodBannerOpen= false;
+                  });
+                }else{
+                  setState(() {
+                    _isAddedFoodBannerOpen= true;
+                  });
+                }
+              },
+
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: !_isAddedFoodBannerOpen,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: LOG_FOOD_BTN_COLOR
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.arrow_drop_up,
+                          color: DARK_PRIMARY_COLOR,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                actions: [
 
-                ],
-              ),
+                  Visibility(
+                      visible: _isAddedFoodBannerOpen,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: LOG_FOOD_BTN_COLOR
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                color: DARK_PRIMARY_COLOR,
+                              ),
+                            ),
 
 
-              body: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 12,),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Wrap(
+                                  spacing: 8.0,
+                                  children: List.generate(
+                                    foodsLog.length,
+                                        (index) => LoggedFoodChipWidget(
+                                      text: foodsLog[index].name,
+                                      onRemove: () {
+                                        setState(() {
 
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            children: [
-                              /// search bar
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: SEARCH_BAR_HEIGHT,
-                                      child: TextField(
-                                        controller: _searchController,
-                                        decoration: const InputDecoration(
-                                          hintText: CHEDDAR_CHEESE_LABEL,
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                          ),
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                        ),
-                                      ),
+                                          for(int i = 0; i < _newGroceries.length; i++){
+                                            if(_newGroceries[i].id == foodsLog[index].id){
+                                              _newGroceries[i]= _newGroceries[i].copyWith(count: 0);
+                                            }
+                                          }
+
+
+                                          for(int i = 0; i < _addedGroceries.length; i++){
+                                            if(_addedGroceries[i].id == foodsLog[index].id){
+                                              _addedGroceries[i]= _addedGroceries[i].copyWith(count: 0);
+                                            }
+                                          }
+
+
+                                          List<Food> foods= [];
+                                          _newGroceries.forEach((food) {
+                                            foods.add(fromGenericFood(food));
+                                          });
+
+                                          updateChangedGroceries(foods);
+                                        });
+                                      },
                                     ),
                                   ),
-                                  const SizedBox(width: 8,),
-                                  GestureDetector(
-                                    child: const CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: Colors.orange,
-                                      child: Icon(
-                                        Icons.search,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      requestFoodsList();
-                                    },
-                                  )
-                                ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+
+                          ],
                         ),
+                      )
+                  )
+                ],
+              ),
+            ),
+
+            /// log food button
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(0),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: LOG_FOOD_BTN_COLOR
+                  ),
+                  onPressed: () {
+                    _logButtonCLicked = true;
+                    requestLoggedFoods();
+                  },
+                  child: const Text(LOG_FOODS_LABEL,
+                    style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
 
-                        const SizedBox(height: 12,),
 
-                        /// Groceries list
-                        SearchGroceriesListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
-                          onFavoriteButtonClicked: addToFavorites, foodsTypeRequested: const [FoodType.groceryProduct],
-                          foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), macroEdition: true,),
+
+  @override
+  Widget build(BuildContext context) {
+    return  MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        /// App bar
+        appBar: AppBar(
+          title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const SizedBox(
+              width: 48,
+              height: double.infinity,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 24,
+              ),
+            ),
+          ),
+          actions: [
+
+          ],
+        ),
+
+
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12,),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      children: [
+                        /// search bar
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: SEARCH_BAR_HEIGHT,
+                                child: TextField(
+                                  controller: _searchController,
+                                  decoration: const InputDecoration(
+                                    hintText: CHEDDAR_CHEESE_LABEL,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            GestureDetector(
+                              child: const CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Colors.orange,
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                requestFoodsList();
+                              },
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
 
 
-                  BlocConsumer<GroceriesBloc, GroceriesState>(
-                      builder: (context, state) {
+                  const SizedBox(height: 12,),
 
-                        if (state is GroceriesLoadingState) {
-                          return const GFLoader(
-                            type: GFLoaderType.circle,
-                            loaderColorOne: DARK_PRIMARY_COLOR,
-                            loaderColorTwo: DARK_PRIMARY_COLOR,
-                            loaderColorThree: DARK_PRIMARY_COLOR,
-                          );
-                        }else if(state is GroceriesLoadedState){
-                          Future.delayed(Duration.zero,(){
-                            setState(() {
-                              _newGroceries.addAll(state.foods);
-                              _groceriesBloc.add(const GroceriesEvent.onReset());
-                            });
-                          });
-
-                        }else if(state is GroceriesErrorState){
-                          _groceriesBloc.add(const GroceriesEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
-                        return Container();
-                      },
-                      listener: (context, state){
-                      }
-                  ),
-
-                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                      builder: (mcontext, state) {
-
-                        if (state is GetLoggedFoodsLoadingState) {
-                          return const GFLoader(
-                            type: GFLoaderType.circle,
-                            loaderColorOne: DARK_PRIMARY_COLOR,
-                            loaderColorTwo: DARK_PRIMARY_COLOR,
-                            loaderColorThree: DARK_PRIMARY_COLOR,
-                          );
-                        }else if(state is GetLoggedFoodsLoadedState){
-                          if(_backButtonCLicked){
-                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              logFoodsOfToday(state.loggedFoods.foods);
-                            });
-                          }
-                        }else if(state is GetLoggedFoodsErrorState){
-                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
-                        return Container();
-                      },
-                      listener: (context, state){
-
-                      }
-                  ),
-
-                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                      builder: (mcontext, state) {
-
-                        if (state is LogFoodsLoadingState) {
-                          return const GFLoader(
-                            type: GFLoaderType.circle,
-                            loaderColorOne: DARK_PRIMARY_COLOR,
-                            loaderColorTwo: DARK_PRIMARY_COLOR,
-                            loaderColorThree: DARK_PRIMARY_COLOR,
-                          );
-                        }else if(state is LogFoodsLoadedState){
-                          if(_backButtonCLicked){
-                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              _backButtonCLicked = false;
-                              Navigator.pushReplacement(context, MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ),);
-                            });
-                          }
-                        }else if(state is LogFoodsErrorState){
-                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
-                        return Container();
-                      },
-                      listener: (context, state){
-
-                      }
-                  ),
-
-
-                  BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
-                      builder: (context, state) {
-                        return Container(height: 1,);
-                      },
-                      listener: (context, state){
-                        if(state is AddOrUpdateMyFavoriteLoadedState){
-                          requestFoodsList();
-                        }else if(state is AddOrUpdateMyFavoriteErrorState){
-                          _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                              return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
-                            }
-                            return showErrorToast(context, state.message);
-                          });
-                        }else{
-                        }
-                      }
-                  ),
-                  BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                      builder: (context, state) {
-                        return Container(height: 1,);
-                      },
-                      listener: (context, state){
-                        if(state is RemoveFromMyFavoriteLoadedState){
-                          requestFoodsList();
-                        }
-                      }
-                  ),
+                  /// Groceries list
+                  SearchGroceriesListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
+                    onFavoriteButtonClicked: addToFavorites, foodsTypeRequested: const [FoodType.groceryProduct],
+                    foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), macroEdition: true,),
                 ],
               ),
             ),
+
+            logFoodButton(),
+
+
+            BlocConsumer<GroceriesBloc, GroceriesState>(
+                builder: (context, state) {
+
+                  if (state is GroceriesLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is GroceriesLoadedState){
+                    Future.delayed(Duration.zero,(){
+                      setState(() {
+                        _newGroceries.addAll(state.foods);
+                        _groceriesBloc.add(const GroceriesEvent.onReset());
+                      });
+                    });
+
+                  }else if(state is GroceriesErrorState){
+                    _groceriesBloc.add(const GroceriesEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      return showErrorToast(context, state.message);
+                    });
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+                }
+            ),
+
+            BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                builder: (mcontext, state) {
+
+                  if (state is GetLoggedFoodsLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is GetLoggedFoodsLoadedState){
+                    if(_logButtonCLicked){
+                      _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        logFoodsOfToday(state.loggedFoods.foods);
+                      });
+                    }
+                  }else if(state is GetLoggedFoodsErrorState){
+                    _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      return showErrorToast(context, state.message);
+                    });
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
+
+            BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                builder: (mcontext, state) {
+
+                  if (state is LogFoodsLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is LogFoodsLoadedState){
+                    if(_logButtonCLicked){
+                      _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        _logButtonCLicked = false;
+                        Navigator.pop(context);
+                      });
+                    }
+                  }else if(state is LogFoodsErrorState){
+                    _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      return showErrorToast(context, state.message);
+                    });
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
+
+
+            BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+                builder: (context, state) {
+                  return Container(height: 1,);
+                },
+                listener: (context, state){
+                  if(state is AddOrUpdateMyFavoriteLoadedState){
+                    requestFoodsList();
+                  }else if(state is AddOrUpdateMyFavoriteErrorState){
+                    _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
+                        return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                      }
+                      return showErrorToast(context, state.message);
+                    });
+                  }else{
+                  }
+                }
+            ),
+            BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
+                builder: (context, state) {
+                  return Container(height: 1,);
+                },
+                listener: (context, state){
+                  if(state is RemoveFromMyFavoriteLoadedState){
+                    requestFoodsList();
+                  }
+                }
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -168,6 +168,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   void _handleTabSelection() {
     if(_tabController.index == 1){
       requestMyFavoriteFoodsImmediately();
+    }else if(_tabController.index == 2){
+      requestLoggedFoodsImmediately(_focusedDay);
     }
   }
 
@@ -179,6 +181,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
     _getLoggedFoodsBloc.add(
       GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
+    );
+  }
+
+  void requestLoggedFoodsImmediately(DateTime dateTime){
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+    _getLoggedFoodsBloc.add(
+        GetLoggedFoodsEvent.onGetImmediateLoggedFoods(formattedDate)
     );
   }
 
@@ -1026,7 +1035,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                  const Text(SEARCH_FOOD_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
+                                                                  const Text(SEARCH_GROCERY_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
 
                                                                 ],
                                                               ),
@@ -1318,7 +1327,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                         });
                                         return Container();
                                       }else if(state is GetImmediateLoggedFoodsState){
-
+                                        Future.delayed(Duration.zero,(){
+                                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                                          _macroEdition = state.loggedFoods.macroEdition;
+                                          updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
+                                        });
                                       }else if(state is GetLoggedFoodsErrorState){
                                         Future.delayed(Duration.zero,(){
                                           return showErrorToast(context, state.message);
@@ -1454,7 +1467,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void myCookBookClickListener() async{
-    await Navigator.pushReplacement(
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const MyCookBookScreen(),
@@ -1463,7 +1476,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void searchFoodClickListener() async{
-     await Navigator.pushReplacement(
+     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const SearchFoodScreen(),
