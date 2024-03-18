@@ -36,3 +36,6 @@ const Color PREMIUM_PLAN_COLOR = Color(0xFFFFC400);
 const Color SELECTED_PLAN_COLOR = Color(0XFFF1F8E9);
 
 const Color GREEN_COLOR = Color(0XFF1B5E20);
+
+
+const Color LOG_FOOD_BTN_COLOR = Color(0XFF415a77);

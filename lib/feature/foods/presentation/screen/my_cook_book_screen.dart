@@ -52,7 +52,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   late TextEditingController _searchController;
 
-  bool _backButtonCLicked = false;
+  bool _logButtonCLicked = false;
 
   List<Food> _addedMyFavorites= [];
 
@@ -93,45 +93,98 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(MY_COOKBOOK_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                _backButtonCLicked = true;
-                requestLoggedFoods();
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
+
+  Widget logFoodButton(){
+    bool isAnyFoodAdded= false;
+    _addedMyFavorites.forEach((element) {
+      if(element.count > 0){
+        isAnyFoodAdded= true;
+      }
+    });
+    return Visibility(
+      visible: isAnyFoodAdded,
+      child: Positioned(
+        bottom: 16,
+        left: 16,
+        right: 16,
+        child: Column(
+          children: [
+
+            /// up arrow
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: LOG_FOOD_BTN_COLOR
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.arrow_drop_up,
+                  color: Colors.white,
+                ),
               ),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add, color: Colors.white,),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddNewCookBookScreen(),
-                    ),
-                  );
-                },
+
+            /// log food button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: LOG_FOOD_BTN_COLOR
+                  ),
+                  onPressed: () {
+                    _logButtonCLicked = true;
+                    requestLoggedFoods();
+                  },
+                  child: const Text(LOG_FOODS_LABEL,
+                    style: TextStyle( color: Colors.white, fontWeight: FontWeight.w600),)
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(MY_COOKBOOK_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) => const MainScreen(),
+              ),);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
-          body:
-          Padding(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add, color: Colors.white,),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddNewCookBookScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        body:
+        Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child:Stack(
               children: [
@@ -188,8 +241,8 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
                       /// My favorite list
                       MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
-                          onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                        onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                        foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
                         macroEdition: true,),
 
                     ],
@@ -197,6 +250,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                 ),
 
 
+                logFoodButton(),
 
                 BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
                     builder: (context, state) {
@@ -264,7 +318,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetLoggedFoodsLoadedState){
-                        if(_backButtonCLicked){
+                        if(_logButtonCLicked){
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
@@ -293,10 +347,10 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is LogFoodsLoadedState){
-                        if(_backButtonCLicked){
+                        if(_logButtonCLicked){
                           _logFoodsBloc.add(const LogFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
-                            _backButtonCLicked = false;
+                            _logButtonCLicked = false;
                             Navigator.pushReplacement(context, MaterialPageRoute(
                               builder: (context) => const MainScreen(),
                             ),);
@@ -316,7 +370,6 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                 ),
               ],
             )
-          ),
         ),
       ),
     );
