@@ -970,7 +970,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
        visible: _selectedAddIngredientOption.isNotEmpty,
        child: Card(
            child: Padding(
-             padding: const EdgeInsets.all(8),
+             padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),
              child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
                children: [

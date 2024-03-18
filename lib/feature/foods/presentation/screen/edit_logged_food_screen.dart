@@ -1122,7 +1122,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       visible: _selectedAddIngredientOption.isNotEmpty && _foodType == MEAL_LABEL,
       child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

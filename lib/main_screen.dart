@@ -889,7 +889,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               },
                                                               child: Container(
                                                                 width: double.infinity,
-                                                                padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                                 decoration: BoxDecoration(
                                                                   borderRadius: BorderRadius.circular(BORDER_RADIUS,),
                                                                   color: CATEGORY_COLOR,
@@ -930,7 +929,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               },
                                                               child: Container(
                                                                 width: double.infinity,
-                                                                padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                                 decoration: BoxDecoration(
                                                                   borderRadius: BorderRadius.circular(BORDER_RADIUS,),
                                                                   color: CATEGORY_COLOR,
@@ -984,7 +982,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
-                                                              padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(BORDER_RADIUS,),
                                                                 color: CATEGORY_COLOR,
@@ -1017,7 +1014,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
-                                                              padding: const EdgeInsets.symmetric(vertical: CAT_VETICAL_PADDING, horizontal: CAT_HORIZONTAL_PADDING),
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(BORDER_RADIUS,),
                                                                 color: CATEGORY_COLOR,

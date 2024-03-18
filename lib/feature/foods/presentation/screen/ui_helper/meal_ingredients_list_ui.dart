@@ -88,7 +88,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                       borderRadius: BorderRadius.circular(BORDER_RADIUS),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
