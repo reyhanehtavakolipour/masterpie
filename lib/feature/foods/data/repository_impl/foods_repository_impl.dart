@@ -61,9 +61,9 @@ class FoodsRepositoryImpl extends FoodsRepository{
         GenericFoodRemote food = productsRemoteFromFoodDataCentral.asRight()[0];
         final userPlan= await userRepo.getUserPlanInRemote();
         if(userPlan.isRight()){
-          if(userPlan.asRight().subscriptionPlan!.plan != FREE_LABEL){
+          // if(userPlan.asRight().subscriptionPlan!.plan != FREE_LABEL){
             await saveUserSuggestedFoodInRemote(food.name, food.ingredients, '', '');
-          }
+          // }
         }
       }
       foods.addAll(mapper.fromGroceryProductsRemote(productsRemoteFromFoodDataCentral.asRight()));

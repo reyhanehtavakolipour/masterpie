@@ -513,19 +513,20 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.credit_card),
-                title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                onTap: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserPlanScreen(),
-                    ),
-                  );
-                },
-              ),
+              //todo uncomment when payment feature should be available
+              // ListTile(
+              //   leading: const Icon(Icons.credit_card),
+              //   title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+              //   onTap: () {
+              //     _scaffoldKey.currentState?.openEndDrawer();
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const UserPlanScreen(),
+              //       ),
+              //     );
+              //   },
+              // ),
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text(LOGOUT_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
