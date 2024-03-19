@@ -20,7 +20,8 @@ class CustomRadioListTile extends StatefulWidget {
 
   final bool isEditable;
 
-  CustomRadioListTile({required this.options, required this.onSelectedOptionChanged, required this.selectedOption, required this.orientation, required this.isEditable});
+  CustomRadioListTile({required this.options, required this.onSelectedOptionChanged, required this.selectedOption,
+    required this.orientation, required this.isEditable});
 
   @override
   _CustomRadioListTileState createState() => _CustomRadioListTileState();

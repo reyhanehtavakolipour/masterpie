@@ -61,6 +61,9 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   late TextEditingController _maxFatGoalController;
 
   String _foodType = '';
+  String _foodTypeRadioList1 = '';
+  String _foodTypeRadioList2 = '';
+
   late TextEditingController _calorieController;
   late TextEditingController _proteinController;
   late TextEditingController _carbController;
@@ -69,7 +72,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   late TextEditingController _foodNameController;
   final List<bool> _foodsExpansionState = [];
   Color _foodNameBorderColor = DARK_PRIMARY_COLOR;
-  bool _searchedGroceriesVisible = false;
+  bool _searchedFoodsVisible = false;
 
   List<Food> _foods = [];
   List<RangeValues> _foodsServingRanges= [];
@@ -91,11 +94,18 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
   List<GenericFood> _suggestedGroceries= [];
 
+  List<Food> _suggestedCookBooks= [];
+
+  List<Food> _suggestedFavorites= [];
+
+
   late SuggestPortionsBloc _suggestPortionsBloc;
 
   final _debouncer = Debouncer(milliseconds: 1000);
 
   GenericFood _selectedGenericGrocery = GenericFood();
+  Food _selectedFood = Food();
+
 
   int _selectedUnitIndex = 0;
   List<String> _searchUnitOptions = [];
@@ -149,7 +159,18 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             GroceriesEvent.onGetGroceries(_foodNameController.text,),
           );
           setState(() {
-            _searchedGroceriesVisible = true;
+            _searchedFoodsVisible = true;
+          });
+        }else if(_foodType == MY_FAVORITE_LABEL){
+          _myFavoriteFoodsBloc.add(
+            MyFavoriteFoodsEvent.onGetMyFavoriteFoods(
+              FoodType.all,
+              _foodNameController.text,
+            ),
+          );
+
+          setState(() {
+            _searchedFoodsVisible = true;
           });
         }else{
           _myFavoriteFoodsBloc.add(
@@ -160,14 +181,14 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
           );
 
           setState(() {
-            _searchedGroceriesVisible = true;
+            _searchedFoodsVisible = true;
           });
         }
       }
     });
   }
 
-  Widget groceryUnitDropDown(){
+  Widget foodUnitDropDown(){
     final dropDownList = _searchUnitOptions.isNotEmpty ? _searchUnitOptions : manualUnitOptions;
     return  SizedBox(
       width: MACRO_DROP_DOWN_WIDTH,
@@ -193,15 +214,18 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                   }
                 }
                 _selectedUnitIndex = selectedIndex;
-                _servingController = TextEditingController(text: _selectedGenericGrocery.servingAmounts[0][_selectedUnitIndex].toString());
-                _calorieController = TextEditingController(text: _selectedGenericGrocery.calorie[0][_selectedUnitIndex].toString());
-                _proteinController = TextEditingController(text: _selectedGenericGrocery.protein[0][_selectedUnitIndex].toString());
-                _carbController = TextEditingController(text: _selectedGenericGrocery.carb[0][_selectedUnitIndex].toString());
-                _fatController = TextEditingController(text: _selectedGenericGrocery.fat[0][_selectedUnitIndex].toString());
+
+                if(_foodType == GROCERY_LABEL && _selectedGenericGrocery.name.isNotEmpty){
+                  _servingController = TextEditingController(text: _selectedGenericGrocery.servingAmounts[0][_selectedUnitIndex].toString());
+                  _calorieController = TextEditingController(text: _selectedGenericGrocery.calorie[0][_selectedUnitIndex].toString());
+                  _proteinController = TextEditingController(text: _selectedGenericGrocery.protein[0][_selectedUnitIndex].toString());
+                  _carbController = TextEditingController(text: _selectedGenericGrocery.carb[0][_selectedUnitIndex].toString());
+                  _fatController = TextEditingController(text: _selectedGenericGrocery.fat[0][_selectedUnitIndex].toString());
+                }
+
               });
 
             },
-            // style: Theme.of(context).textTheme.title,
           ),
         ),
       ),
@@ -277,6 +301,29 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
       _maxFatGoalController.text = '${(6/5 * remainedFat).toInt()}';
 
     });
+  }
+
+
+  Widget foodTypesRadioList(){
+    return Column(
+      children: [
+        CustomRadioListTile(
+          options: const [GROCERY_LABEL, MY_COOKBOOK_LABEL],
+          onSelectedOptionChanged: updateSelectedFoodType,
+          selectedOption: _foodTypeRadioList1,
+          orientation: HORIZONTAL_ORIENTATION,
+          isEditable: true,
+        ),
+
+        CustomRadioListTile(
+          options: const [MY_FAVORITE_LABEL, MANUAL_LABEL],
+          onSelectedOptionChanged: updateSelectedFoodType,
+          selectedOption: _foodTypeRadioList2,
+          orientation: HORIZONTAL_ORIENTATION,
+          isEditable: true,
+        ),
+      ]
+    );
   }
 
 
@@ -362,13 +409,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                                           const SizedBox(height: 8,),
 
                                           /// food type
-                                          CustomRadioListTile(
-                                            options: const [GROCERY_LABEL, MEAL_LABEL],
-                                            onSelectedOptionChanged: updateSelectedFoodType,
-                                            selectedOption: _foodType,
-                                            orientation: HORIZONTAL_ORIENTATION,
-                                            isEditable: true,
-                                          ),
+                                          foodTypesRadioList()
 
                                         ],
                                       ),
@@ -377,8 +418,14 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                                     /// new grocery
                                     newGrocery(),
 
-                                    /// new meal
-                                    newMeal(),
+                                    /// new cookBook
+                                    newCookBook(),
+
+                                    /// new Favorite
+                                    newFavorite(),
+
+                                    /// new manual
+                                    newManualFood()
                                   ],
                                 ),
                               ),
@@ -750,6 +797,15 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
   void updateSelectedFoodType(String type){
     setState(() {
+
+      if(type == MY_COOKBOOK_LABEL || type == GROCERY_LABEL){
+        _foodTypeRadioList1= type;
+        _foodTypeRadioList2= '';
+      }else{
+        _foodTypeRadioList2= type;
+        _foodTypeRadioList1= '';
+      }
+
       _foodType = type;
       _isNewFoodOpen= true;
       resetMacroAmounts();
@@ -765,6 +821,9 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     _servingController.text = '0';
     _selectedUnitIndex= 0;
      _servingRangeValues = const RangeValues(SERVING_MIN_DEFAULT, SERVING_MAX_DEFAULT);
+     _selectedFood= Food();
+     _selectedGenericGrocery= GenericFood();
+     _searchUnitOptions= manualUnitOptions;
   }
 
   void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove){
@@ -806,6 +865,17 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     });
   }
 
+
+  void closeNewFood(){
+    setState(() {
+      _foodTypeRadioList1= '';
+      _foodTypeRadioList2= '';
+      _isNewFoodOpen = false;
+      _foodType= '';
+      resetMacroAmounts();
+    });
+  }
+
   Widget newGrocery(){
     return Visibility(
       visible: _foodType == GROCERY_LABEL && _isNewFoodOpen,
@@ -821,11 +891,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                       color: Colors.black,
                     ),
                     onTap: () {
-                      setState(() {
-                        _isNewFoodOpen = false;
-                        _foodType= '';
-                        resetMacroAmounts();
-                      });
+                      closeNewFood();
                     },
                   ),
                   const SizedBox(height: 12,),
@@ -890,9 +956,9 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     );
   }
 
-  Widget newMeal(){
+  Widget newCookBook(){
     return Visibility(
-      visible: _foodType == MEAL_LABEL && _isNewFoodOpen,
+      visible: _foodType == MY_COOKBOOK_LABEL && _isNewFoodOpen,
       child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8),
@@ -905,11 +971,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                     color: Colors.black,
                   ),
                   onTap: () {
-                    setState(() {
-                      _isNewFoodOpen = false;
-                      _foodType= '';
-                      resetMacroAmounts();
-                    });
+                    closeNewFood();
                   },
                 ),
                 const SizedBox(height: 12,),
@@ -935,14 +997,171 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: _foodNameBorderColor, width: 2),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    suggestedGroceriesBloc()
+                    suggestedCookBooksBloc()
+                  ],
+                ),
+
+                const SizedBox(height: 16,),
+
+                newFoodMacroAmountsWidgets(),
+
+                const SizedBox(height: 16,),
+
+
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(PRIMARY_COLOR),
+                        ),
+                        onPressed: () {
+                          addFoodClickListener();
+                        },
+                        child: const Text(ADD_LABEL, style: TextStyle( color: Colors.white),),
+                      ),
+                    ]
+                ),
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
+  Widget newFavorite(){
+    return Visibility(
+      visible: _foodType == MY_FAVORITE_LABEL && _isNewFoodOpen,
+      child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    closeNewFood();
+                  },
+                ),
+                const SizedBox(height: 12,),
+                Stack(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: SEARCH_BAR_HEIGHT,
+                            child: TextField(
+                              controller: _foodNameController,
+                              decoration:  InputDecoration(
+                                hintText: CHEDDAR_CHEESE_LABEL,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: _foodNameBorderColor),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: _foodNameBorderColor),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: _foodNameBorderColor, width: 2),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    suggestedFavoriteBloc()
+                  ],
+                ),
+
+                const SizedBox(height: 16,),
+
+                newFoodMacroAmountsWidgets(),
+
+                const SizedBox(height: 16,),
+
+
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(PRIMARY_COLOR),
+                        ),
+                        onPressed: () {
+                          addFoodClickListener();
+                        },
+                        child: const Text(ADD_LABEL, style: TextStyle( color: Colors.white),),
+                      ),
+                    ]
+                ),
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
+
+  Widget newManualFood(){
+    return Visibility(
+      visible: _foodType == MANUAL_LABEL && _isNewFoodOpen,
+      child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    closeNewFood();
+                  },
+                ),
+                const SizedBox(height: 12,),
+
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: SEARCH_BAR_HEIGHT,
+                        child: TextField(
+                          controller: _foodNameController,
+                          decoration:  InputDecoration(
+                            hintText: CHEDDAR_CHEESE_LABEL,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: _foodNameBorderColor),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: _foodNameBorderColor),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: _foodNameBorderColor, width: 2),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
 
@@ -994,7 +1213,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
       Food newFood = Food();
       if(_foodType == GROCERY_LABEL){
         newFood = Food(
-          foodType: FoodType.groceryProduct,
+          // foodType: FoodType.groceryProduct,
           name: _foodNameController.text,
           servingAmounts: [_servingController.text],
           units: [_searchUnitOptions[_selectedUnitIndex]],
@@ -1003,18 +1222,19 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
           carb: [_carbController.text],
           fat: [_fatController.text],
         );
-      }else{
-        newFood = Food(
-            foodType: FoodType.meal,
-            name: _foodNameController.text,
-            servingAmount: double.parse(_servingController.text),
-            unit: _searchUnitOptions[_selectedUnitIndex],
-            calorie: [_calorieController.text],
-            protein: [_proteinController.text],
-            carb: [_carbController.text],
-            fat: [_fatController.text]
-        );
       }
+      // else{
+      //   newFood = Food(
+      //       foodType: FoodType.meal,
+      //       name: _foodNameController.text,
+      //       servingAmount: double.parse(_servingController.text),
+      //       unit: _searchUnitOptions[_selectedUnitIndex],
+      //       calorie: [_calorieController.text],
+      //       protein: [_proteinController.text],
+      //       carb: [_carbController.text],
+      //       fat: [_fatController.text]
+      //   );
+      // }
       _foods.add(newFood);
       _foodNameBorderColor = Colors.black;
       _foodsExpansionState.add(false);
@@ -1028,7 +1248,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
   Widget suggestedGroceriesBloc(){
     return  Visibility(
-      visible: _searchedGroceriesVisible,
+      visible: _searchedFoodsVisible,
       child: Container(
           width: 300,
           height: 200,
@@ -1050,7 +1270,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                   ),
                   onTap: () {
                     setState(() {
-                      _searchedGroceriesVisible = false;
+                      _searchedFoodsVisible = false;
                     });
                   },
                 ),
@@ -1099,6 +1319,151 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   }
 
 
+  Widget suggestedCookBooksBloc(){
+    return  Visibility(
+      visible: _searchedFoodsVisible,
+      child: Container(
+          width: 300,
+          height: 200,
+          padding: const EdgeInsets.only(top: 4, right: 4),
+          decoration: BoxDecoration(
+            color: LIGHT_GREY_COLOR,
+            borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
+          ),
+          margin: const EdgeInsets.only(top: 36),
+          child: SingleChildScrollView(
+            physics: const ScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _searchedFoodsVisible = false;
+                    });
+                  },
+                ),
+
+
+                suggestedCookBookList(),
+
+
+                //todo update it with cookbook bloc
+                // BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                //     builder: (context, state) {
+                //       if (state is GroceriesLoadingState) {
+                //         return const Stack(
+                //           children: [
+                //             GFLoader(
+                //               type: GFLoaderType.circle,
+                //               loaderColorOne: DARK_PRIMARY_COLOR,
+                //               loaderColorTwo: DARK_PRIMARY_COLOR,
+                //               loaderColorThree: DARK_PRIMARY_COLOR,
+                //             ),
+                //           ],
+                //         );
+                //       }else if(state is MyFavoriteFoodsLoadedState){
+                //         Future.delayed(Duration.zero,(){
+                //           setState(() {
+                //             _suggestedFavorites.addAll(state.foods);
+                //             _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                //           });
+                //         });
+                //       }else if(state is MyFavoriteFoodsErrorState){
+                //         _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                //         Future.delayed(Duration.zero,(){
+                //           return showErrorToast(context, state.message);
+                //         });
+                //       }
+                //       return Container();
+                //     },
+                //     listener: (context, state){
+                //
+                //     }
+                // ),
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
+  Widget suggestedFavoriteBloc(){
+    return  Visibility(
+      visible: _searchedFoodsVisible,
+      child: Container(
+          width: 300,
+          height: 200,
+          padding: const EdgeInsets.only(top: 4, right: 4),
+          decoration: BoxDecoration(
+            color: LIGHT_GREY_COLOR,
+            borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
+          ),
+          margin: const EdgeInsets.only(top: 36),
+          child: SingleChildScrollView(
+            physics: const ScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _searchedFoodsVisible = false;
+                    });
+                  },
+                ),
+
+
+                suggestedFavoriteList(),
+
+
+                BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                    builder: (context, state) {
+                      if (state is GroceriesLoadingState) {
+                        return const Stack(
+                          children: [
+                            GFLoader(
+                              type: GFLoaderType.circle,
+                              loaderColorOne: DARK_PRIMARY_COLOR,
+                              loaderColorTwo: DARK_PRIMARY_COLOR,
+                              loaderColorThree: DARK_PRIMARY_COLOR,
+                            ),
+                          ],
+                        );
+                      }else if(state is MyFavoriteFoodsLoadedState){
+                        Future.delayed(Duration.zero,(){
+                          setState(() {
+                            _suggestedFavorites.addAll(state.foods);
+                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                          });
+                        });
+                      }else if(state is MyFavoriteFoodsErrorState){
+                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
   Widget suggestedGroceriesList(){
     return ListView.builder(
         shrinkWrap: true,
@@ -1120,7 +1485,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             onTap: (){
               setState(() {
                 _selectedGenericGrocery = grocery;
-                _searchedGroceriesVisible = false;
+                _searchedFoodsVisible = false;
                 _searchUnitOptions = grocery.units[0];
                 _selectedUnitIndex= 0;
                 _foodNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
@@ -1129,6 +1494,82 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                 _proteinController = TextEditingController(text: grocery.protein[0][_selectedUnitIndex].toString());
                 _carbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
                 _fatController = TextEditingController(text: grocery.fat[0][_selectedUnitIndex].toString());
+                _foodNameController.addListener(_onSearchFoodChanged);
+              });
+            },
+          );
+        }
+    );
+  }
+
+  Widget suggestedCookBookList(){
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _suggestedCookBooks.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index){
+          Food food = _suggestedCookBooks[index];
+          return GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text(food.name.capitalize(), style: const TextStyle(color: Colors.blueGrey, fontSize: 12),)
+                ),
+                const SizedBox(height: 8,),
+              ],
+            ),
+            onTap: (){
+              setState(() {
+                _selectedFood = food;
+                _searchedFoodsVisible = false;
+                _searchUnitOptions = [food.units[0]];
+                _selectedUnitIndex= 0;
+                _foodNameController= TextEditingController(text: food.name.replaceAll(',', ''));
+                _servingController = TextEditingController(text: food.servingAmounts[0][_selectedUnitIndex].toString());
+                _calorieController = TextEditingController(text: food.calorie[0][_selectedUnitIndex].toString());
+                _proteinController = TextEditingController(text: food.protein[0][_selectedUnitIndex].toString());
+                _carbController = TextEditingController(text: food.carb[0][_selectedUnitIndex].toString());
+                _fatController = TextEditingController(text: food.fat[0][_selectedUnitIndex].toString());
+                _foodNameController.addListener(_onSearchFoodChanged);
+              });
+            },
+          );
+        }
+    );
+  }
+
+  Widget suggestedFavoriteList(){
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _suggestedFavorites.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index){
+          Food food = _suggestedFavorites[index];
+          return GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text(food.name.capitalize(), style: const TextStyle(color: Colors.blueGrey, fontSize: 12),)
+                ),
+                const SizedBox(height: 8,),
+              ],
+            ),
+            onTap: (){
+              setState(() {
+                _selectedFood = food;
+                _searchedFoodsVisible = false;
+                _searchUnitOptions = [food.units[0]];
+                _selectedUnitIndex= 0;
+                _foodNameController= TextEditingController(text: food.name.replaceAll(',', ''));
+                _servingController = TextEditingController(text: food.servingAmounts[0][_selectedUnitIndex].toString());
+                _calorieController = TextEditingController(text: food.calorie[0][_selectedUnitIndex].toString());
+                _proteinController = TextEditingController(text: food.protein[0][_selectedUnitIndex].toString());
+                _carbController = TextEditingController(text: food.carb[0][_selectedUnitIndex].toString());
+                _fatController = TextEditingController(text: food.fat[0][_selectedUnitIndex].toString());
                 _foodNameController.addListener(_onSearchFoodChanged);
               });
             },
@@ -1183,7 +1624,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             const SizedBox(width: 4,),
 
 
-            groceryUnitDropDown(),
+            foodUnitDropDown(),
 
           ],
         ),
