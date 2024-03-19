@@ -104,7 +104,6 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   final _debouncer = Debouncer(milliseconds: 1000);
 
   GenericFood _selectedGenericGrocery = GenericFood();
-  Food _selectedFood = Food();
 
 
   int _selectedUnitIndex = 0;
@@ -152,8 +151,10 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
     });
     _debouncer.run(() {
-      _suggestedGroceries.clear();
       if(_foodNameController.text.isNotEmpty){
+        _suggestedGroceries.clear();
+        _suggestedCookBooks.clear();
+        _suggestedFavorites.clear();
         if(_foodType == GROCERY_LABEL){
           _groceriesBloc.add(
             GroceriesEvent.onGetGroceries(_foodNameController.text,),
@@ -225,7 +226,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
               });
 
-            },
+            }
           ),
         ),
       ),
@@ -821,7 +822,6 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     _servingController.text = '0';
     _selectedUnitIndex= 0;
      _servingRangeValues = const RangeValues(SERVING_MIN_DEFAULT, SERVING_MAX_DEFAULT);
-     _selectedFood= Food();
      _selectedGenericGrocery= GenericFood();
      _searchUnitOptions= manualUnitOptions;
   }
@@ -1211,30 +1211,15 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
     setState(() {
       Food newFood = Food();
-      if(_foodType == GROCERY_LABEL){
-        newFood = Food(
-          // foodType: FoodType.groceryProduct,
-          name: _foodNameController.text,
-          servingAmounts: [_servingController.text],
-          units: [_searchUnitOptions[_selectedUnitIndex]],
-          calorie: [_calorieController.text],
-          protein: [_proteinController.text],
-          carb: [_carbController.text],
-          fat: [_fatController.text],
-        );
-      }
-      // else{
-      //   newFood = Food(
-      //       foodType: FoodType.meal,
-      //       name: _foodNameController.text,
-      //       servingAmount: double.parse(_servingController.text),
-      //       unit: _searchUnitOptions[_selectedUnitIndex],
-      //       calorie: [_calorieController.text],
-      //       protein: [_proteinController.text],
-      //       carb: [_carbController.text],
-      //       fat: [_fatController.text]
-      //   );
-      // }
+      newFood = Food(
+        name: _foodNameController.text,
+        servingAmounts: [_servingController.text],
+        units: [_searchUnitOptions[_selectedUnitIndex]],
+        calorie: [_calorieController.text],
+        protein: [_proteinController.text],
+        carb: [_carbController.text],
+        fat: [_fatController.text],
+      );
       _foods.add(newFood);
       _foodNameBorderColor = Colors.black;
       _foodsExpansionState.add(false);
@@ -1242,6 +1227,8 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
       _isNewFoodOpen= false;
       resetMacroAmounts();
       _foodType= '';
+      _foodTypeRadioList1= '';
+      _foodTypeRadioList2= '';
     });
   }
 
@@ -1522,7 +1509,6 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             ),
             onTap: (){
               setState(() {
-                _selectedFood = food;
                 _searchedFoodsVisible = false;
                 _searchUnitOptions = [food.units[0]];
                 _selectedUnitIndex= 0;
@@ -1560,16 +1546,36 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             ),
             onTap: (){
               setState(() {
-                _selectedFood = food;
                 _searchedFoodsVisible = false;
-                _searchUnitOptions = [food.units[0]];
                 _selectedUnitIndex= 0;
                 _foodNameController= TextEditingController(text: food.name.replaceAll(',', ''));
-                _servingController = TextEditingController(text: food.servingAmounts[0][_selectedUnitIndex].toString());
-                _calorieController = TextEditingController(text: food.calorie[0][_selectedUnitIndex].toString());
-                _proteinController = TextEditingController(text: food.protein[0][_selectedUnitIndex].toString());
-                _carbController = TextEditingController(text: food.carb[0][_selectedUnitIndex].toString());
-                _fatController = TextEditingController(text: food.fat[0][_selectedUnitIndex].toString());
+                if(food.foodType == FoodType.groceryProduct){
+                  _searchUnitOptions = [food.units[0]];
+                  _servingController = TextEditingController(text: food.servingAmounts[0].toString());
+                  _calorieController = TextEditingController(text: food.calorie[0].toString());
+                  _proteinController = TextEditingController(text: food.protein[0].toString());
+                  _carbController = TextEditingController(text: food.carb[0].toString());
+                  _fatController = TextEditingController(text: food.fat[0].toString());
+                }else{
+                  _searchUnitOptions = [food.unit];
+                  _servingController = TextEditingController(text: food.servingAmount.toString());
+                  double calorie= 0.0;
+                  double protein= 0.0;
+                  double carb= 0.0;
+                  double fat= 0.0;
+
+                  for (int i = 0; i < food.ingredients.length; i++){
+                    double count= double.parse(food.servingIngredientsCount[i]);
+                    calorie= calorie + (double.parse(food.calorie[i]) * count);
+                    protein= protein + (double.parse(food.protein[i]) * count);
+                    carb= carb + (double.parse(food.carb[i]) * count);
+                    fat= fat + (double.parse(food.fat[i]) * count);
+                  }
+                  _calorieController = TextEditingController(text: calorie.toStringAsFixed(2));
+                  _proteinController = TextEditingController(text: protein.toStringAsFixed(2));
+                  _carbController = TextEditingController(text: carb.toStringAsFixed(2));
+                  _fatController = TextEditingController(text: fat.toStringAsFixed(2));
+                }
                 _foodNameController.addListener(_onSearchFoodChanged);
               });
             },
@@ -1597,6 +1603,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _servingController,
+                enabled: _foodType == MANUAL_LABEL,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,

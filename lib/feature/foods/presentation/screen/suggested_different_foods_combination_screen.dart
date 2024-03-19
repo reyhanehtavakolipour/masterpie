@@ -25,8 +25,6 @@ class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
   const SuggestedDifferentFoodsCombinationScreen({super.key, required this.suggestedPortionsList});
 
-  static const routeName = '/suggested_different_foods_combination-screen';
-
 
   @override
   State<SuggestedDifferentFoodsCombinationScreen> createState() => _SuggestedDifferentFoodsCombinationScreenState();
@@ -293,6 +291,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
     );
   }
+
 
   Widget foodsCombinationMacros(int index){
     return Row(

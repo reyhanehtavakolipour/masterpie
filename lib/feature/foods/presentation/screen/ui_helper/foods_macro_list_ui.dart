@@ -71,14 +71,8 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
             _servingRangeValues = widget.foodsServingRanges[index];
           }
 
-
-          if(widget.foods[index].foodType == FoodType.groceryProduct){
-            _unitController = TextEditingController(text: widget.foods[index].units[0]);
+           _unitController = TextEditingController(text: widget.foods[index].units[0]);
             _servingController = TextEditingController(text: widget.foods[index].servingAmounts[0]);
-          }else{
-            _unitController = TextEditingController(text: widget.foods[index].unit);
-            _servingController = TextEditingController(text: widget.foods[index].servingAmount.toString());
-          }
 
           return SizedBox(
             width: double.infinity,
@@ -205,31 +199,17 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
             break;
           }
         }
+
         Food updatedFood = Food();
-        FoodType type = widget.foods[index].foodType;
-        if(type == FoodType.groceryProduct){
-           updatedFood = Food(
-              name: _foodNameController.text,
-              foodType: type,
-              fat: [_fatController.text],
-              carb: [_carbController.text],
-              protein: [_proteinController.text],
-              calorie: [_calorieController.text],
-              servingAmounts: [_servingController.text],
-              units: [_unitController.text]
-          );
-        }else{
-           updatedFood = Food(
-               name: _foodNameController.text,
-               foodType: type,
-               fat: [_fatController.text],
-               carb: [_carbController.text],
-               protein: [_proteinController.text],
-               calorie: [_calorieController.text],
-               servingAmount: double.parse(_servingController.text),
-               unit: _unitController.text
-          );
-        }
+         updatedFood = Food(
+            name: _foodNameController.text,
+            fat: [_fatController.text],
+            carb: [_carbController.text],
+            protein: [_proteinController.text],
+            calorie: [_calorieController.text],
+            servingAmounts: [_servingController.text],
+            units: [_unitController.text]
+        );
         List<Food> foods = List<Food>.from(widget.foods);
         foods[index] = updatedFood;
         List<RangeValues> servingRanges = List<RangeValues>.from(widget.foodsServingRanges);
@@ -256,6 +236,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
+                enabled: false,
                 onChanged: updatedFoodMacroListener,
                 controller: _servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -290,6 +271,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 style: const TextStyle(fontSize: 11),
                 onChanged: updatedFoodMacroListener,
                 controller: _unitController,
+                enabled: false,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),

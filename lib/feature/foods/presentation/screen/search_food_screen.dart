@@ -284,7 +284,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                     _logButtonCLicked = true;
                     requestLoggedFoods();
                   },
-                  child: const Text(LOG_FOODS_LABEL,
+                  child: const Text(SUBMIT_LOG_FOODS_LABEL,
                     style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
               ),
             ),
