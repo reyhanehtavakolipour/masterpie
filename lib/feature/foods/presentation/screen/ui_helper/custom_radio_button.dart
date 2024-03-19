@@ -34,6 +34,7 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
   @override
   Widget build(BuildContext context) {
 
+    selectedOptionIndex= -1;
     for (int i = 0; i < widget.options.length; i++) {
       if(widget.options[i] == widget.selectedOption){
         selectedOptionIndex = i;
