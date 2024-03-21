@@ -17,8 +17,8 @@ import '../../../../util/design/toast/app_toast.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
+import '../bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
+import '../bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 
@@ -75,7 +75,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   double _previousCoefficient= 1.0;
    Food _initialStateFood = Food();
 
-   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
+   late AddOrUpdateMyCookBookBloc _addOrUpdateMyCookBookBloc;
 
 
    List<GenericFood> _suggestedGroceries= [];
@@ -84,9 +84,9 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
   @override
   void initState() {
     super.initState();
-    _addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-    _addOrUpdateMyFavoriteBloc.add(
-      const AddOrUpdateMyFavoriteEvent.onReset(),
+    _addOrUpdateMyCookBookBloc = context.read<AddOrUpdateMyCookBookBloc>();
+    _addOrUpdateMyCookBookBloc.add(
+      const AddOrUpdateMyCookBookEvent.onReset(),
     );
     _mealNameController= TextEditingController();
     _totalCalorieController= TextEditingController(text: '0');
@@ -415,13 +415,13 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                onPressed: () {
                  bottomButtonClickListener(context);
                },
-               child: const Text(ADD_TO_MY_FAVORTITE,
+               child: const Text(ADD_TO_MY_COOK_BOOK,
                  style: TextStyle( color: Colors.white),)
            ),
          ),
-         BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+         BlocConsumer<AddOrUpdateMyCookBookBloc, AddOrUpdateMyCookBookState>(
              builder: (mcontext, state) {
-               if (state is AddOrUpdateMyFavoriteLoadingState) {
+               if (state is AddOrUpdateMyCookBookLoadingState) {
                  return const Stack(
                    children: [
                      GFLoader(
@@ -432,16 +432,16 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                      ),
                    ],
                  );
-               }else if(state is AddOrUpdateMyFavoriteLoadedState){
+               }else if(state is AddOrUpdateMyCookBookLoadedState){
                  Future.delayed(Duration.zero,(){
-                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                  });
-               }else if(state is AddOrUpdateMyFavoriteErrorState){
-                 _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+               }else if(state is AddOrUpdateMyCookBookErrorState){
+                 _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                  Future.delayed(Duration.zero,(){
-                   if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                   if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){
+                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_COOKBOOK_FOOD);
                    }
                    return showErrorToast(context, state.message);
                  });
@@ -497,8 +497,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       );
     }
 
-    _addOrUpdateMyFavoriteBloc.add(
-    AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+    _addOrUpdateMyCookBookBloc.add(
+    AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
         newFood
     ),
   );

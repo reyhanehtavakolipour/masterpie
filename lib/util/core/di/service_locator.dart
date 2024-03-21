@@ -3,6 +3,9 @@
 
 
 import 'package:get_it/get_it.dart';
+import 'package:masterpie/feature/foods/domain/usecase/add_to_my_cook_book_usecase.dart';
+import 'package:masterpie/feature/foods/domain/usecase/get_my_cook_book_foods_usecase.dart';
+import 'package:masterpie/feature/foods/domain/usecase/remove_from_my_cook_book_usecase.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource_impl.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_local_datasource.dart';
@@ -105,9 +108,15 @@ Future<void> setUpServiceLocator() async{
 
   serviceLocator.registerFactory<AddToMyFavoriteUseCase>(() => AddToMyFavoriteUseCase());
 
+  serviceLocator.registerFactory<AddToMyCookBookUseCase>(() => AddToMyCookBookUseCase());
+
   serviceLocator.registerFactory<GetMyFavoriteFoodsUseCase>(() => GetMyFavoriteFoodsUseCase());
 
+  serviceLocator.registerFactory<GetMyCookBookFoodsUseCase>(() => GetMyCookBookFoodsUseCase());
+
   serviceLocator.registerFactory<RemoveFromMyFavoriteUseCase>(() => RemoveFromMyFavoriteUseCase());
+
+  serviceLocator.registerFactory<RemoveFromMyCookBookUseCase>(() => RemoveFromMyCookBookUseCase());
 
   serviceLocator.registerFactory<SuggestFoodsPortionsUseCase>(() => SuggestFoodsPortionsUseCase());
 

@@ -11,9 +11,6 @@ import '../model/my_food_local_model.dart';
 
 abstract class FoodLocalDataSource{
 
-  // food = meal + groceryProduct
-
-
 
   //source: table Food
   Future<Either<Failure, Success>> saveFoods(List<FoodLocal> foodsLocal);
@@ -30,6 +27,8 @@ abstract class FoodLocalDataSource{
   //source: table MyFood
   Future<Either<Failure, List<MyFoodLocal>>> getMyFoods(String query);
 
+  Future<Either<Failure, List<MyFoodLocal>>> getMyCookBookFoods(String query);
+
   Future<Either<Failure, Success>> saveMyFood(MyFoodLocal myFoodLocal, String myId);
 
   Future<Either<Failure, Success>> removeMyFood(MyFoodLocal myFoodLocal);
@@ -37,6 +36,17 @@ abstract class FoodLocalDataSource{
   Future<Either<Failure, Success>> updateMyFood(MyFoodLocal myFoodLocal);
 
   Future<Either<Failure, Success>> saveMyFoods(List<MyFoodLocal> myFoodsLocal);
+
+
+  Future<Either<Failure, Success>> saveMyCookBookFood(MyFoodLocal myFoodLocal, String myId);
+
+  Future<Either<Failure, Success>> removeMyCookBookFood(MyFoodLocal myFoodLocal);
+
+  Future<Either<Failure, Success>> updateMyCookBookFood(MyFoodLocal myFoodLocal);
+
+  Future<Either<Failure, Success>> saveMyCookBookFoods(List<MyFoodLocal> myFoodsLocal);
+
+
 
   Future<Either<Failure, Success>> saveMyMeals(List<MyFoodLocal> myFoodsLocal);
 
@@ -48,8 +58,12 @@ abstract class FoodLocalDataSource{
 
   Future<Either<Failure, bool>> isItInMyFavorites(String id);
 
+  Future<Either<Failure, bool>> isItInMyCookBook(String id);
+
+
   Future<Either<Failure, String>> isFoodInMyFavorites(MyFoodLocal foodLocal);
 
+  Future<Either<Failure, String>> isFoodInMyCookBook(MyFoodLocal foodLocal);
 
 
 

@@ -19,9 +19,12 @@ class UserPlanRemote with _$UserPlanRemote{
     @Default('') String cancelReason,
     @Default(null) SubscriptionPlanRemote? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
+    @Default(0) int cookBookFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,
     @Default(0) int foodPortionRequestsLeft,
     @Default(0) int favoriteFoodsCreatedCount,
+    @Default(0) int cookBookFoodsCreatedCount,
+
   })= _UserPlanRemote;
 
 }

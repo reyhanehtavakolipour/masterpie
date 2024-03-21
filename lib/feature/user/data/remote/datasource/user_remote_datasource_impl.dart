@@ -331,6 +331,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
           'food_portion_left_request': freeSubscription.foodPortionRequestsLimit,
           'favorite_food_left': freeSubscription.favoriteFoodLimit,
+          'cook_book_left': freeSubscription.cookBookFoodLimit,
           'plan_updated_at': timestamp.toString(),
           'plan_interval': freeSubscription.intervals[0],
           'macro_edition': false,
@@ -450,6 +451,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         if (currentDate.isAfter(currentPeriodEnd) && (userPlan[0]['cancel_at_period_end'] ?? true) && userPlan[0]['plan_name'] != FREE_LABEL) {
 
           int favoriteLeft = 0;
+          int cookBookLeft = 0;
           int suggestFoodLeft = 0;
           int foodPortionLeft = 0;
 
@@ -464,6 +466,12 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
             }else{
               favoriteLeft = freeSubscription.favoriteFoodLimit - ((userPlan[0]['favorites_created_count'] ?? 0) as int);
             }
+
+            if(userPlan[0]['cook_book_created_count'] >= freeSubscription.cookBookFoodLimit){
+              cookBookLeft = 0;
+            }else{
+              cookBookLeft = freeSubscription.cookBookFoodLimit - ((userPlan[0]['cook_book_created_count'] ?? 0) as int);
+            }
           }
 
           final updates = {
@@ -471,6 +479,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
             'suggest_food_left_request' : suggestFoodLeft,
             'food_portion_left_request' : foodPortionLeft,
             'favorite_food_left' :  favoriteLeft,
+            'cook_book_left': cookBookLeft,
             'macro_edition' : false
           };
 
@@ -496,6 +505,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
               'suggest_food_left_request' : suggestFoodLeft,
               'food_portion_left_request' : foodPortionLeft,
               'favorite_food_left' :  10000,
+              'cook_book_left' : 10000,
               'yearly_next_requests_update_date' : nextRequestUpdateDate,
               'macro_edition' : true
             };
@@ -592,6 +602,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           ids: [element['plan_id'] ?? ''],
           macroEdition: element['macro_edition'] ?? false,
           favoriteFoodLimit: element['favorite_food_limit'] ?? 0,
+          cookBookFoodLimit: element['cook_book_limit'] ?? 0,
           suggestFoodRequestsLimit: element['suggest_food_limit'] ?? 0,
           foodPortionRequestsLimit: element['food_portion_limit'] ?? 0
         );
@@ -639,7 +650,9 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
         favoriteFoodLeft: data[0]['favorite_food_left'] ?? 0,
-        favoriteFoodsCreatedCount: data[0]['favorites_created_count'] ?? 0
+        favoriteFoodsCreatedCount: data[0]['favorites_created_count'] ?? 0,
+        cookBookFoodLeft: data[0]['cook_book_left'] ?? 0,
+        cookBookFoodsCreatedCount: data[0]['cook_book_created_count'] ?? 0
       );
 
       return Right(userSubscriptionPlanRemote);
@@ -673,6 +686,48 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       final supabase = Supabase.instance.client;
       final updates = {
         'favorites_created_count': count,
+      };
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateCookBookCreatedCount(String userId, int count) async{
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'cook_book_created_count': count,
+      };
+      final data = await supabase
+          .from(USER_PLAN_TABLE)
+          .update(updates)
+          .eq('id', userId);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateCookBookRequestsLeft(String userId, int requestsLeft) async{
+    try{
+      final supabase = Supabase.instance.client;
+      final updates = {
+        'cook_book_left': requestsLeft,
       };
       final data = await supabase
           .from(USER_PLAN_TABLE)

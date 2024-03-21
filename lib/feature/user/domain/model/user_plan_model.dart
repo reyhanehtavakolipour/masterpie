@@ -19,9 +19,11 @@ class UserPlan with _$UserPlan{
     @Default(false) bool macroEdition,
     @Default(null) SubscriptionPlan? subscriptionPlan,
     @Default(0) int favoriteFoodLeft,
+    @Default(0) int cookBookFoodLeft,
     @Default(0) int suggestFoodRequestsLeft,
     @Default(0) int foodPortionRequestsLeft,
     @Default(0) int favoriteFoodsCreatedCount,
+    @Default(0) int cookBookFoodsCreatedCount,
   })= _UserPlan;
 
 }

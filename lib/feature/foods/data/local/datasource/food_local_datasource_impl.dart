@@ -455,5 +455,134 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     return Right(favoriteId);
   }
 
+  @override
+  Future<Either<Failure, List<MyFoodLocal>>> getMyCookBookFoods(String query) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    List<MyFoodLocal> foods = [];
+    try{
+      final list = await db?.query(
+        TABLE_MY_COOKBOOK,
+        where: '$NAME LIKE ? OR $BRAND_NAME LIKE ?',
+        whereArgs: ['%$query%', '%$query%'],
+      );
+
+      list?.forEach((element) {
+        final food = MyFoodLocal.fromJson(element);
+        foods.add(food);
+      });
+
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+    return Right(foods);
+  }
+
+  @override
+  Future<Either<Failure, Success>> removeMyCookBookFood(MyFoodLocal myFoodLocal) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db?.delete(TABLE_MY_COOKBOOK, where: 'foodId = ?', whereArgs: [myFoodLocal.foodId],);
+    }on DatabaseException catch (e) {
+    safePrint('SQL_Error_remove_fav_Food: $e');
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMyCookBookFood(MyFoodLocal myFoodLocal, String myId) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      myFoodLocal.myId = myId;
+      await db!.insert(TABLE_MY_COOKBOOK , myFoodLocal.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+    }on DatabaseException catch (e) {
+    safePrint('SQL_Error_myFood: $e');
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMyCookBookFoods(List<MyFoodLocal> myFoodsLocal) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try {
+
+      await db?.delete(TABLE_MY_COOKBOOK);
+
+    Batch? batch = db?.batch();
+
+    for (MyFoodLocal foodLocal in myFoodsLocal) {
+    batch?.insert(TABLE_MY_FOOD, foodLocal.toJson());
+    }
+    await batch?.commit(noResult: true);
+    } on DatabaseException catch (e) {
+    safePrint('SQL_Error_my_foods: $e');
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateMyCookBookFood(MyFoodLocal myFoodLocal) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db!.update(
+    TABLE_MY_COOKBOOK,
+    myFoodLocal.toJson(),
+    where: 'foodId = ?',
+    whereArgs: [myFoodLocal.foodId],
+    );
+    }on DatabaseException catch (e) {
+    safePrint('SQL_Error_update_myFood: $e');
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, bool>> isItInMyCookBook(String id) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      List<MyFoodLocal> foods = [];
+      final list = await db?.query(TABLE_MY_COOKBOOK, where: 'foodId = ?', whereArgs: [id]);
+      list?.forEach((element) {
+        final food = MyFoodLocal.fromJson(element);
+        foods.add(food);
+      });
+      if(foods.isEmpty){
+        return const Right(false);
+      }
+    }on DatabaseException catch (e) {
+      safePrint('SQL_Error_Exist: $e');
+      return Left(ExceptionFailure(e));
+    }
+    return const Right(true);
+  }
+
+  @override
+  Future<Either<Failure, String>> isFoodInMyCookBook(MyFoodLocal foodLocal) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    String favoriteId = '';
+    try{
+
+      final list = await db?.query(TABLE_MY_COOKBOOK,
+          where: '$FOOD_TYPE = ? AND $MY_ID = ? AND $NAME = ? AND $SERVING_AMOUNTS = ? AND $UNITS = ? AND $RECIPE = ? AND $INGREDIENTS = ?'
+              ' AND $SERVING_INGREDIENTS_COUNT = ? AND $SERVING_AMOUNT = ? AND $FOOD_UNIT = ? AND $CALORIE = ? AND $PROTEIN = ? AND $CARB = ? AND $FAT = ?',
+          whereArgs: [getFoodType(foodLocal.toJson()['foodTypeLocal']).name.toString(), foodLocal.toJson()['myId'].toString(), foodLocal.toJson()['name'].toString(),
+            foodLocal.toJson()['servingAmounts'].toString(), foodLocal.toJson()['units'].toString(), foodLocal.toJson()['recipe'].toString(), foodLocal.toJson()['ingredients'].toString(),
+            foodLocal.toJson()['servingIngredientsCount'].toString(),foodLocal.toJson()['servingAmount'].toString(), foodLocal.toJson()['unit'].toString(), foodLocal.toJson()['calorie'].toString(),
+            foodLocal.toJson()['protein'].toString(), foodLocal.toJson()['carb'].toString(), foodLocal.toJson()['fat'].toString(),
+          ]);
+
+      if((list ?? []).isNotEmpty){
+        final food = MyFoodLocal.fromJson(list![0]);
+        favoriteId= food.foodId;
+      }
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+    return Right(favoriteId);
+  }
+
 
 }

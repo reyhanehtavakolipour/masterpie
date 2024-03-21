@@ -47,6 +47,11 @@ abstract class UserRemoteDataSource{
 
   Future<Either<Failure, Success>> updateFavoritesCreatedCount(String userId, int count);
 
+  Future<Either<Failure, Success>> updateCookBookRequestsLeft(String userId, int requestsLeft);
+
+
+  Future<Either<Failure, Success>> updateCookBookCreatedCount(String userId, int count);
+
 
   Future<Either<Failure, Success>> updateSuggestFoodRequestsLeft(String userId, int requestsLeft);
 

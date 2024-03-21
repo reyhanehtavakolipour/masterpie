@@ -26,8 +26,9 @@ import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
+import '../bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
+import '../bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
 import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
 import '../food_calculator/food_calculator.dart';
@@ -45,7 +46,7 @@ class MyCookBookScreen extends StatefulWidget {
 
 class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
-  late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
+  late MyCookBookFoodsBloc _myCookBookFoodsBloc;
   late AddOrUpdateMyFavoriteBloc _addToMyFavoriteBloc;
   late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
@@ -57,9 +58,9 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   bool _isAddedFoodBannerOpen= false;
 
-  List<Food> _addedMyFavorites= [];
+  List<Food> _addedMyCookBookFoods= [];
 
-  List<Food> _newMyFavorites= [];
+  List<Food> _newMyCookBookFoods= [];
 
 
   final _debouncer = Debouncer(milliseconds: 1000);
@@ -67,14 +68,14 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   @override
   void initState() {
     super.initState();
-    _myFavoriteFoodsBloc = context.read<MyFavoriteFoodsBloc>();
+    _myCookBookFoodsBloc = context.read<MyCookBookFoodsBloc>();
     _addToMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
     _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _searchController = TextEditingController();
 
-     requestMyFavoriteFoods();
+     requestMyCookBookFoods();
 
     _searchController.addListener(_onSearchChanged);
 
@@ -85,7 +86,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
     });
     _debouncer.run(() {
-      requestMyFavoriteFoods();
+      requestMyCookBookFoods();
     });
   }
 
@@ -100,7 +101,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   Widget logFoodButton(){
     bool isAnyFoodAdded= false;
     List<Food> foodsLog = [];
-    _addedMyFavorites.forEach((element) {
+    _addedMyCookBookFoods.forEach((element) {
       if(element.count > 0){
         isAnyFoodAdded= true;
         foodsLog.add(element);
@@ -182,20 +183,20 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                                       onRemove: () {
                                         setState(() {
 
-                                          for(int i = 0; i < _newMyFavorites.length; i++){
-                                            if(_newMyFavorites[i].id == foodsLog[index].id){
-                                              _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
+                                          for(int i = 0; i < _newMyCookBookFoods.length; i++){
+                                            if(_newMyCookBookFoods[i].id == foodsLog[index].id){
+                                              _newMyCookBookFoods[i]= _newMyCookBookFoods[i].copyWith(count: 0);
                                             }
                                           }
 
 
-                                          for(int i = 0; i < _addedMyFavorites.length; i++){
-                                            if(_addedMyFavorites[i].id == foodsLog[index].id){
-                                              _addedMyFavorites[i]= _addedMyFavorites[i].copyWith(count: 0);
+                                          for(int i = 0; i < _addedMyCookBookFoods.length; i++){
+                                            if(_addedMyCookBookFoods[i].id == foodsLog[index].id){
+                                              _addedMyCookBookFoods[i]= _addedMyCookBookFoods[i].copyWith(count: 0);
                                             }
                                           }
 
-                                          updateChangedFavoriteFoods(_newMyFavorites);
+                                          updateChangedCookBookFoods(_newMyCookBookFoods);
                                         });
                                       },
                                     ),
@@ -315,7 +316,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                                   ),
                                 ),
                                 onTap: () {
-                                  requestMyFavoriteFoods();
+                                  requestMyCookBookFoods();
                                 },
                               )
                             ],
@@ -326,7 +327,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
 
                         /// My favorite list
-                        MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
+                        MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyCookBookFoods), foods: _newMyCookBookFoods, onFoodsChanged: updateChangedCookBookFoods,
                           onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
                           foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
                           macroEdition: true,),
@@ -338,22 +339,22 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
                   logFoodButton(),
 
-                  BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
+                  BlocConsumer<MyCookBookFoodsBloc, MyCookBookFoodsState>(
                       builder: (context, state) {
-                        if (state is MyFavoriteFoodsLoadingState) {
+                        if (state is MyCookBookFoodsLoadingState) {
                           return const GFLoader(
                             type: GFLoaderType.circle,
                             loaderColorOne: DARK_PRIMARY_COLOR,
                             loaderColorTwo: DARK_PRIMARY_COLOR,
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
-                        }else if(state is MyFavoriteFoodsLoadedState){
+                        }else if(state is MyCookBookFoodsLoadedState){
                           Future.delayed(Duration.zero,(){
-                            _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                            checkIfFavoriteFoodsAddedBefore(state.foods);
+                            _myCookBookFoodsBloc.add(const MyCookBookFoodsEvent.onReset());
+                            checkIfCookBookFoodsAddedBefore(state.foods);
                           });
-                        }else if(state is MyFavoriteFoodsErrorState){
-                          _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                        }else if(state is MyCookBookFoodsErrorState){
+                          _myCookBookFoodsBloc.add(const MyCookBookFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
@@ -370,7 +371,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                       },
                       listener: (context, state){
                         if(state is AddOrUpdateMyFavoriteLoadedState){
-                          requestMyFavoriteFoods();
+                          requestMyCookBookFoods();
                         }else if(state is AddOrUpdateMyFavoriteErrorState){
                           _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                           Future.delayed(Duration.zero,(){
@@ -389,7 +390,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                       },
                       listener: (context, state){
                         if(state is RemoveFromMyFavoriteLoadedState){
-                          requestMyFavoriteFoods();
+                          requestMyCookBookFoods();
                         }
                       }
                   ),
@@ -459,22 +460,22 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
       );
   }
 
-  void checkIfFavoriteFoodsAddedBefore(List<Food> foods){
+  void checkIfCookBookFoodsAddedBefore(List<Food> foods){
     setState(() {
-      List<Food> favorites = [];
+      List<Food> cookBookFoods = [];
       foods.forEach((element) {
-        List<Food> foodsExisted = _addedMyFavorites.where((addedFavorite) => element.id == addedFavorite.id).toList();
+        List<Food> foodsExisted = _addedMyCookBookFoods.where((addedCookBookFood) => element.id == addedCookBookFood.id).toList();
         if(foodsExisted.isEmpty){
-          favorites.add(element);
+          cookBookFoods.add(element);
         }else{
-          for(int i = 0; i < _addedMyFavorites.length; i++){
-            if(_addedMyFavorites[i].id == element.id){
-              favorites.add(_addedMyFavorites[i]);
+          for(int i = 0; i < _addedMyCookBookFoods.length; i++){
+            if(_addedMyCookBookFoods[i].id == element.id){
+              cookBookFoods.add(_addedMyCookBookFoods[i]);
             }
           }
         }
       });
-      _newMyFavorites = favorites;
+      _newMyCookBookFoods = cookBookFoods;
     });
   }
 
@@ -482,27 +483,27 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
     List<Food> foods = [];
 
     foods.addAll(foodsLoggedBefore);
-    foods.addAll(_addedMyFavorites);
+    foods.addAll(_addedMyCookBookFoods);
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
     );
   }
 
-  void updateChangedFavoriteFoods(List<Food> foods) {
+  void updateChangedCookBookFoods(List<Food> foods) {
     setState(() {
 
-      _newMyFavorites = foods;
+      _newMyCookBookFoods = foods;
 
-      List<Food> myFavorites = [];
-      _newMyFavorites.forEach((element) {
-        List<Food> foodsExisted = _addedMyFavorites.where((addedFavorite) => element.id == addedFavorite.id).toList();
+      List<Food> myCookBookFoods = [];
+      _newMyCookBookFoods.forEach((element) {
+        List<Food> foodsExisted = _addedMyCookBookFoods.where((addedCookBookFood) => element.id == addedCookBookFood.id).toList();
         if(foodsExisted.isEmpty && element.count > 0){
-          myFavorites.add(element);
+          myCookBookFoods.add(element);
         }else{
-          for(int i = 0; i < _addedMyFavorites.length; i++){
-            if(_addedMyFavorites[i].id == element.id){
-              _addedMyFavorites[i] = _addedMyFavorites[i].copyWith(
+          for(int i = 0; i < _addedMyCookBookFoods.length; i++){
+            if(_addedMyCookBookFoods[i].id == element.id){
+              _addedMyCookBookFoods[i] = _addedMyCookBookFoods[i].copyWith(
                   count: element.count,
                   units: element.units,
                   servingAmounts: element.servingAmounts,
@@ -517,7 +518,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
           }
         }
       });
-      _addedMyFavorites.addAll(myFavorites);
+      _addedMyCookBookFoods.addAll(myCookBookFoods);
     });
   }
 
@@ -538,10 +539,9 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
     }
   }
 
-  void requestMyFavoriteFoods(){
-    _myFavoriteFoodsBloc.add(
-      MyFavoriteFoodsEvent.onGetMyFavoriteFoods(
-          FoodType.all,
+  void requestMyCookBookFoods(){
+    _myCookBookFoodsBloc.add(
+      MyCookBookFoodsEvent.onGetMyCookBookFoods(
           _searchController.text
       ),
     );

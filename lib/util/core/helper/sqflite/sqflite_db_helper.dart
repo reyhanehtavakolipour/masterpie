@@ -79,10 +79,6 @@ class DatabaseHelper {
         ')');
 
 
-    /**
-     * This table is not needed for first version and it doesn't have any functionality in the app.
-     * might be needed in future. otherwise delete it
-     */
     await db.execute('CREATE TABLE IF NOT EXISTS $TABLE_FOOD '
         '($FOOD_ID TEXT PRIMARY KEY,'
         ' $FOOD_TYPE TEXT,'
@@ -131,6 +127,32 @@ class DatabaseHelper {
         ')');
 
     await db.execute('CREATE TABLE IF NOT EXISTS $TABLE_MY_FOOD '
+        '($FOOD_ID TEXT PRIMARY KEY,'
+        ' $MY_ID TEXT,'
+        ' $FOOD_TYPE TEXT,'
+        ' $BARCODE TEXT,'
+        ' $NAME TEXT,'
+        ' $BRAND_NAME TEXT,'
+        ' $DESCRIPTION TEXT,'
+        ' $NATIONALITY TEXT,'
+        ' $IMAGE TEXT,'
+        ' $SERVING_AMOUNTS TEXT,'
+        ' $UNITS TEXT,'
+        ' $RECIPE TEXT,'
+        ' $INGREDIENTS TEXT,'
+        ' $SERVING_INGREDIENTS_COUNT TEXT,'
+        ' $SERVING_AMOUNT INTEGER,'
+        ' $DIET TEXT,'
+        ' $ALLERGIES TEXT,'
+        ' $FOOD_UNIT TEXT,'
+        ' $CALORIE TEXT,'
+        ' $PROTEIN TEXT,'
+        ' $CARB TEXT,'
+        ' $FAT TEXT'
+        ')');
+
+
+    await db.execute('CREATE TABLE IF NOT EXISTS $TABLE_MY_COOKBOOK '
         '($FOOD_ID TEXT PRIMARY KEY,'
         ' $MY_ID TEXT,'
         ' $FOOD_TYPE TEXT,'

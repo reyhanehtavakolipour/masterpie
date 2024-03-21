@@ -27,6 +27,7 @@ const ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED= 'free user, not allowed to use 
 const ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT= 'paid user, suggest foods over than limit';
 const ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT= 'paid user, foods portion recommender over than limit';
 const ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED= 'free user, not allowed to create a new favorite anymore';
+const ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED= 'free user, not allowed to create a new meal to cookbook anymore';
 
 
 class FoodsRepositoryImpl extends FoodsRepository{
@@ -511,6 +512,137 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final foodLocal = mapper.toMyFoodLocal(food, userId);
     return await foodLocalDataSource.isFoodInMyFavorites(foodLocal);
+  }
+
+  @override
+  Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromLocalDb(String query) async{
+    List<Food> foods = [];
+    final mealsLocal = await foodLocalDataSource.getMyCookBookFoods(query);
+    if(mealsLocal.isRight()){
+      foods.addAll(mapper.fromMyMealsLocal(mealsLocal.asRight()));
+    }
+    return Right(foods);
+  }
+
+  @override
+  Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromRemote(String query) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    List<Food> foods = [];
+    final myFoodsRemoteResponse = await masterPieFoodRemoteDataSource.getMyCookBookFoods(query, userId);
+    if(myFoodsRemoteResponse.isRight()){
+      foods.addAll(mapper.fromFoodsRemote(myFoodsRemoteResponse.asRight()));
+    }
+    return Right(foods);
+  }
+
+  @override
+  Future<Either<Failure, Success>> removeMealFromMyCookBookInLocalDb(Food meal) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final removeMealResponse= await foodLocalDataSource.removeMyCookBookFood(mapper.toMyMealLocal(meal, userId));
+    if(removeMealResponse.isRight()){
+      return Right(removeMealResponse.asRight());
+    }
+    return Left(removeMealResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> removeMealFromMyCookBookInRemote(Food food) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final removeMealResponse= await masterPieFoodRemoteDataSource.removeFoodFromMyCookBook(mapper.toMealRemote(food), userId);
+    if(removeMealResponse.isRight()){
+      await userRepo.updateCookBooksCreatedCountInRemote(false);
+      final userPlanResponse= await userRepo.getUserPlanInRemote();
+      if(userPlanResponse.isRight()) {
+        if (userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL) {
+          await userRepo.updateCookBookRequestsLeftInRemote(false);
+        }
+      }
+      return Right(removeMealResponse.asRight());
+    }
+    return Left(removeMealResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealToMyCookBookRemote(Food food) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final userPlanResponse= await userRepo.getUserPlanInRemote();
+    if(userPlanResponse.isRight()){
+      await userRepo.updateCookBooksCreatedCountInRemote(true);
+      if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
+        if(userPlanResponse.asRight().favoriteFoodLeft > 0){
+          final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyCookBookMeals(mapper.toMealRemote(food), userId);
+          if(saveMyFoodsResponse.isRight()){
+            userRepo.updateCookBookRequestsLeftInRemote(true);
+            return const Right(Success());
+          }
+          return Left(saveMyFoodsResponse.asLeft());
+        }else{
+          return const Left(FailureResponse(ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED));
+        }
+      }
+      final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
+      if(saveMyFoodsResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(saveMyFoodsResponse.asLeft());
+    }
+    return const Left(FailureResponse(ERROR_TRY_AGAIN));
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMyCookBookFoodsToLocalDb(List<Food> foods) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final saveMealsResponse= await foodLocalDataSource.saveMyCookBookFoods(mapper.toMyMealsLocal(foods, userId));
+    if(saveMealsResponse.isRight()){
+      return Right(saveMealsResponse.asRight());
+    }
+    return Left(saveMealsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMyCookBookMealToLocalDb(Food meal) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final saveMealResponse= await foodLocalDataSource.saveMyCookBookFood(mapper.toMyMealLocal(meal, userId), userId);
+    if(saveMealResponse.isRight()){
+      return Right(saveMealResponse.asRight());
+    }
+    return Left(saveMealResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateMyCookBookMealInLocalDb(Food meal) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final saveMealResponse= await foodLocalDataSource.updateMyCookBookFood(mapper.toMyMealLocal(meal, userId));
+    if(saveMealResponse.isRight()){
+      return Right(saveMealResponse.asRight());
+    }
+    return Left(saveMealResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateMyCookBookMealInRemote(Food meal) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final mealUpdateResponse= await masterPieFoodRemoteDataSource.updateMyCookBookMeal(mapper.toMealRemote(meal), userId);
+    if(mealUpdateResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(mealUpdateResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, bool>> isItInMyCookBookInLocalDb(String id) async{
+    final isIsInMyFoodsResponse= await foodLocalDataSource.isItInMyCookBook(id);
+    if(isIsInMyFoodsResponse.isRight()){
+      return Right(isIsInMyFoodsResponse.asRight());
+    }
+    return Left(isIsInMyFoodsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, String>> isFoodInMyCookBookLocalDb(Food food) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final foodLocal = mapper.toMyFoodLocal(food, userId);
+    return await foodLocalDataSource.isFoodInMyCookBook(foodLocal);
   }
 
 

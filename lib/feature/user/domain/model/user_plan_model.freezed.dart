@@ -28,9 +28,11 @@ mixin _$UserPlan {
   bool get macroEdition => throw _privateConstructorUsedError;
   SubscriptionPlan? get subscriptionPlan => throw _privateConstructorUsedError;
   int get favoriteFoodLeft => throw _privateConstructorUsedError;
+  int get cookBookFoodLeft => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLeft => throw _privateConstructorUsedError;
   int get foodPortionRequestsLeft => throw _privateConstructorUsedError;
   int get favoriteFoodsCreatedCount => throw _privateConstructorUsedError;
+  int get cookBookFoodsCreatedCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserPlanCopyWith<UserPlan> get copyWith =>
@@ -55,9 +57,11 @@ abstract class $UserPlanCopyWith<$Res> {
       bool macroEdition,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
+      int cookBookFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft,
-      int favoriteFoodsCreatedCount});
+      int favoriteFoodsCreatedCount,
+      int cookBookFoodsCreatedCount});
 
   $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
 }
@@ -87,9 +91,11 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
     Object? macroEdition = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
+    Object? cookBookFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
     Object? favoriteFoodsCreatedCount = null,
+    Object? cookBookFoodsCreatedCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -140,6 +146,10 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
           ? _value.favoriteFoodLeft
           : favoriteFoodLeft // ignore: cast_nullable_to_non_nullable
               as int,
+      cookBookFoodLeft: null == cookBookFoodLeft
+          ? _value.cookBookFoodLeft
+          : cookBookFoodLeft // ignore: cast_nullable_to_non_nullable
+              as int,
       suggestFoodRequestsLeft: null == suggestFoodRequestsLeft
           ? _value.suggestFoodRequestsLeft
           : suggestFoodRequestsLeft // ignore: cast_nullable_to_non_nullable
@@ -151,6 +161,10 @@ class _$UserPlanCopyWithImpl<$Res, $Val extends UserPlan>
       favoriteFoodsCreatedCount: null == favoriteFoodsCreatedCount
           ? _value.favoriteFoodsCreatedCount
           : favoriteFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      cookBookFoodsCreatedCount: null == cookBookFoodsCreatedCount
+          ? _value.cookBookFoodsCreatedCount
+          : cookBookFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -189,9 +203,11 @@ abstract class _$$UserPlanImplCopyWith<$Res>
       bool macroEdition,
       SubscriptionPlan? subscriptionPlan,
       int favoriteFoodLeft,
+      int cookBookFoodLeft,
       int suggestFoodRequestsLeft,
       int foodPortionRequestsLeft,
-      int favoriteFoodsCreatedCount});
+      int favoriteFoodsCreatedCount,
+      int cookBookFoodsCreatedCount});
 
   @override
   $SubscriptionPlanCopyWith<$Res>? get subscriptionPlan;
@@ -220,9 +236,11 @@ class __$$UserPlanImplCopyWithImpl<$Res>
     Object? macroEdition = null,
     Object? subscriptionPlan = freezed,
     Object? favoriteFoodLeft = null,
+    Object? cookBookFoodLeft = null,
     Object? suggestFoodRequestsLeft = null,
     Object? foodPortionRequestsLeft = null,
     Object? favoriteFoodsCreatedCount = null,
+    Object? cookBookFoodsCreatedCount = null,
   }) {
     return _then(_$UserPlanImpl(
       id: null == id
@@ -273,6 +291,10 @@ class __$$UserPlanImplCopyWithImpl<$Res>
           ? _value.favoriteFoodLeft
           : favoriteFoodLeft // ignore: cast_nullable_to_non_nullable
               as int,
+      cookBookFoodLeft: null == cookBookFoodLeft
+          ? _value.cookBookFoodLeft
+          : cookBookFoodLeft // ignore: cast_nullable_to_non_nullable
+              as int,
       suggestFoodRequestsLeft: null == suggestFoodRequestsLeft
           ? _value.suggestFoodRequestsLeft
           : suggestFoodRequestsLeft // ignore: cast_nullable_to_non_nullable
@@ -284,6 +306,10 @@ class __$$UserPlanImplCopyWithImpl<$Res>
       favoriteFoodsCreatedCount: null == favoriteFoodsCreatedCount
           ? _value.favoriteFoodsCreatedCount
           : favoriteFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      cookBookFoodsCreatedCount: null == cookBookFoodsCreatedCount
+          ? _value.cookBookFoodsCreatedCount
+          : cookBookFoodsCreatedCount // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -305,9 +331,11 @@ class _$UserPlanImpl implements _UserPlan {
       this.macroEdition = false,
       this.subscriptionPlan = null,
       this.favoriteFoodLeft = 0,
+      this.cookBookFoodLeft = 0,
       this.suggestFoodRequestsLeft = 0,
       this.foodPortionRequestsLeft = 0,
-      this.favoriteFoodsCreatedCount = 0});
+      this.favoriteFoodsCreatedCount = 0,
+      this.cookBookFoodsCreatedCount = 0});
 
   @override
   @JsonKey()
@@ -347,6 +375,9 @@ class _$UserPlanImpl implements _UserPlan {
   final int favoriteFoodLeft;
   @override
   @JsonKey()
+  final int cookBookFoodLeft;
+  @override
+  @JsonKey()
   final int suggestFoodRequestsLeft;
   @override
   @JsonKey()
@@ -354,10 +385,13 @@ class _$UserPlanImpl implements _UserPlan {
   @override
   @JsonKey()
   final int favoriteFoodsCreatedCount;
+  @override
+  @JsonKey()
+  final int cookBookFoodsCreatedCount;
 
   @override
   String toString() {
-    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, macroEdition: $macroEdition, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft, favoriteFoodsCreatedCount: $favoriteFoodsCreatedCount)';
+    return 'UserPlan(id: $id, isAutoPaymentOn: $isAutoPaymentOn, customerId: $customerId, subscriptionId: $subscriptionId, interval: $interval, endsAt: $endsAt, updatedAt: $updatedAt, cancelReason: $cancelReason, cancelAtPeriodEnd: $cancelAtPeriodEnd, macroEdition: $macroEdition, subscriptionPlan: $subscriptionPlan, favoriteFoodLeft: $favoriteFoodLeft, cookBookFoodLeft: $cookBookFoodLeft, suggestFoodRequestsLeft: $suggestFoodRequestsLeft, foodPortionRequestsLeft: $foodPortionRequestsLeft, favoriteFoodsCreatedCount: $favoriteFoodsCreatedCount, cookBookFoodsCreatedCount: $cookBookFoodsCreatedCount)';
   }
 
   @override
@@ -387,6 +421,8 @@ class _$UserPlanImpl implements _UserPlan {
                 other.subscriptionPlan == subscriptionPlan) &&
             (identical(other.favoriteFoodLeft, favoriteFoodLeft) ||
                 other.favoriteFoodLeft == favoriteFoodLeft) &&
+            (identical(other.cookBookFoodLeft, cookBookFoodLeft) ||
+                other.cookBookFoodLeft == cookBookFoodLeft) &&
             (identical(
                     other.suggestFoodRequestsLeft, suggestFoodRequestsLeft) ||
                 other.suggestFoodRequestsLeft == suggestFoodRequestsLeft) &&
@@ -395,7 +431,10 @@ class _$UserPlanImpl implements _UserPlan {
                 other.foodPortionRequestsLeft == foodPortionRequestsLeft) &&
             (identical(other.favoriteFoodsCreatedCount,
                     favoriteFoodsCreatedCount) ||
-                other.favoriteFoodsCreatedCount == favoriteFoodsCreatedCount));
+                other.favoriteFoodsCreatedCount == favoriteFoodsCreatedCount) &&
+            (identical(other.cookBookFoodsCreatedCount,
+                    cookBookFoodsCreatedCount) ||
+                other.cookBookFoodsCreatedCount == cookBookFoodsCreatedCount));
   }
 
   @override
@@ -413,9 +452,11 @@ class _$UserPlanImpl implements _UserPlan {
       macroEdition,
       subscriptionPlan,
       favoriteFoodLeft,
+      cookBookFoodLeft,
       suggestFoodRequestsLeft,
       foodPortionRequestsLeft,
-      favoriteFoodsCreatedCount);
+      favoriteFoodsCreatedCount,
+      cookBookFoodsCreatedCount);
 
   @JsonKey(ignore: true)
   @override
@@ -438,9 +479,11 @@ abstract class _UserPlan implements UserPlan {
       final bool macroEdition,
       final SubscriptionPlan? subscriptionPlan,
       final int favoriteFoodLeft,
+      final int cookBookFoodLeft,
       final int suggestFoodRequestsLeft,
       final int foodPortionRequestsLeft,
-      final int favoriteFoodsCreatedCount}) = _$UserPlanImpl;
+      final int favoriteFoodsCreatedCount,
+      final int cookBookFoodsCreatedCount}) = _$UserPlanImpl;
 
   @override
   String get id;
@@ -467,11 +510,15 @@ abstract class _UserPlan implements UserPlan {
   @override
   int get favoriteFoodLeft;
   @override
+  int get cookBookFoodLeft;
+  @override
   int get suggestFoodRequestsLeft;
   @override
   int get foodPortionRequestsLeft;
   @override
   int get favoriteFoodsCreatedCount;
+  @override
+  int get cookBookFoodsCreatedCount;
   @override
   @JsonKey(ignore: true)
   _$$UserPlanImplCopyWith<_$UserPlanImpl> get copyWith =>

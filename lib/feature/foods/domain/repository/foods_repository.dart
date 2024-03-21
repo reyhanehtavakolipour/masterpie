@@ -13,18 +13,13 @@ import '../model/suggested_foods_portion_model.dart';
 abstract class FoodsRepository{
 
 
-  //source: Foods Data
-  // case 3
   Future<Either<Failure, List<GenericFood>>> getGroceryProductsFromRemote(String query);
 
-
-  //source: supabase
-
-  //case 1 and case 2
   Future<Either<Failure, List<Food>>> getMyFoodsFromRemote(String query);
 
+  Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromRemote(String query);
 
-  //cloud
+
   Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction);
 
@@ -36,7 +31,13 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, Success>> saveMyMealToRemote(Food food);
 
+  Future<Either<Failure, Success>> saveMealToMyCookBookRemote(Food food);
+
+
   Future<Either<Failure, Success>> removeMealFromMyFavoritesInRemote(Food food);
+
+  Future<Either<Failure, Success>> removeMealFromMyCookBookInRemote(Food food);
+
 
   Future<Either<Failure, List<Food>>> logFoodsInRemote(List<Food> foods);
 
@@ -44,6 +45,8 @@ abstract class FoodsRepository{
 
 
   Future<Either<Failure, Success>> updateMyFavoriteMealInRemote(Food meal);
+
+  Future<Either<Failure, Success>> updateMyCookBookMealInRemote(Food meal);
 
 
   Future<Either<Failure, Success>> updateMyFavoriteGroceryInRemote(Food grocery);
@@ -66,16 +69,28 @@ abstract class FoodsRepository{
   //case 4 and case 6
   Future<Either<Failure, List<Food>>> getMyMealsFromLocalDb(String query);
 
+
   //case 3 and case 5
   Future<Either<Failure, List<Food>>> getMyGroceryProductsFromLocalDb(String query);
 
   Future<Either<Failure, List<Food>>> getMyFoodsFromLocalDb(String query);
 
+  Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromLocalDb(String query);
+
+
   Future<Either<Failure, Success>> saveMyMealToLocalDb(Food meal);
+
+  Future<Either<Failure, Success>> saveMyCookBookMealToLocalDb(Food meal);
+
 
   Future<Either<Failure, Success>> removeMealFromMyFavoritesInLocalDb(Food meal);
 
   Future<Either<Failure, Success>> updateMyMealInLocalDb(Food meal);
+
+
+  Future<Either<Failure, Success>> removeMealFromMyCookBookInLocalDb(Food meal);
+
+  Future<Either<Failure, Success>> updateMyCookBookMealInLocalDb(Food meal);
 
   Future<Either<Failure, Success>> saveMyGroceryToLocalDb(Food grocery);
 
@@ -89,21 +104,23 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, Success>> saveMyFoodsToLocalDb(List<Food> foods);
 
+  Future<Either<Failure, Success>> saveMyCookBookFoodsToLocalDb(List<Food> foods);
+
+
   Future<Either<Failure, bool>> isItInMyFavoritesLocalDb(String id);
+
+  Future<Either<Failure, bool>> isItInMyCookBookInLocalDb(String id);
+
 
   Future<Either<Failure, String>> isFoodInMyFavoritesLocalDb(Food food);
 
+  Future<Either<Failure, String>> isFoodInMyCookBookLocalDb(Food food);
 
-
-
-
-  // source: table InternationalMeal
   Future<Either<Failure, Success>> saveInternationalMealsToLocalDb(List<Food> meals);
 
   Future<Either<Failure, List<Food>>> getInternationalMealsFromLocalDb(String query);
 
 
-  // source: table Food
 
   Future<Either<Failure, Success>> saveGroceryProductsToLocalDb(List<Food> foods);
 

@@ -12,6 +12,7 @@ class SubscriptionPlan with _$SubscriptionPlan{
     @Default([]) List<double> prices,
     @Default(false) bool macroEdition,
     @Default(0) int favoriteFoodLimit,
+    @Default(0) int cookBookFoodLimit,
     @Default(0) int suggestFoodRequestsLimit,
     @Default(0) int foodPortionRequestsLimit,
   })= _SubscriptionPlan;

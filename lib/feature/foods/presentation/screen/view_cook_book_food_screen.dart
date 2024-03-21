@@ -14,7 +14,6 @@ import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
-import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
 import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';

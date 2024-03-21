@@ -17,14 +17,22 @@ abstract class MasterPieFoodRemoteDataSource{
 
   Future<Either<Failure, Success>> saveToMyFavoriteMeals(FoodRemote mealRemote, String userId);
 
+  Future<Either<Failure, Success>> saveToMyCookBookMeals(FoodRemote mealRemote, String userId);
+
 
   Future<Either<Failure, Success>> updateMyFavoriteMeal(FoodRemote meal, String userId);
+
+  Future<Either<Failure, Success>> updateMyCookBookMeal(FoodRemote meal, String userId);
 
 
   Future<Either<Failure, Success>> updateMyFavoriteGrocery(FoodRemote grocery, String userId);
 
 
   Future<Either<Failure, List<FoodRemote>>> getMyFavoriteFoods(String query, String userId);
+
+
+  Future<Either<Failure, List<FoodRemote>>> getMyCookBookFoods(String query, String userId);
+
 
 
   Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
@@ -37,6 +45,9 @@ abstract class MasterPieFoodRemoteDataSource{
 
 
   Future<Either<Failure, Success>> removeFoodFromMyFavorites(FoodRemote foodRemote, String userId);
+
+  Future<Either<Failure, Success>> removeFoodFromMyCookBook(FoodRemote foodRemote, String userId);
+
 
 
   Future<Either<Failure, Success>> saveUserSuggestedFood(String foodName, List<String> ingredients, String diet, String nationality, String userId);

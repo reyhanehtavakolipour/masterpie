@@ -19,8 +19,8 @@ import '../../../../util/design/toast/app_toast.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
+import '../bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
+import '../bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 
@@ -78,7 +78,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
    late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
-  late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
+  late AddOrUpdateMyCookBookBloc _addOrUpdateMyCookBookBloc;
 
 
    List<GenericFood> _suggestedGroceries= [];
@@ -87,9 +87,9 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
   @override
   void initState() {
     super.initState();
-    _addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-    _addOrUpdateMyFavoriteBloc.add(
-      const AddOrUpdateMyFavoriteEvent.onReset(),
+    _addOrUpdateMyCookBookBloc = context.read<AddOrUpdateMyCookBookBloc>();
+    _addOrUpdateMyCookBookBloc.add(
+      const AddOrUpdateMyCookBookEvent.onReset(),
     );
     _mealNameController= TextEditingController();
     _totalCalorieController= TextEditingController(text: '0');
@@ -455,13 +455,13 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                onPressed: () {
                  bottomButtonClickListener(context);
                },
-               child: const Text(UPDATE_FAVORITE_LABEL,
+               child: const Text(UPDATE_COOKBOOK_LABEL,
                  style: TextStyle( color: Colors.white),)
            ),
          ),
-         BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+         BlocConsumer<AddOrUpdateMyCookBookBloc, AddOrUpdateMyCookBookState>(
              builder: (mcontext, state) {
-               if (state is AddOrUpdateMyFavoriteLoadingState) {
+               if (state is AddOrUpdateMyCookBookLoadingState) {
                  return const Stack(
                    children: [
                      GFLoader(
@@ -472,9 +472,9 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                      ),
                    ],
                  );
-               }else if(state is AddOrUpdateMyFavoriteLoadedState){
+               }else if(state is AddOrUpdateMyCookBookLoadedState){
                  Future.delayed(Duration.zero,(){
-                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    Navigator.pushAndRemoveUntil(
                        context,
                        MaterialPageRoute(
@@ -483,11 +483,11 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                            (route) => false
                    );
                  });
-               }else if(state is AddOrUpdateMyFavoriteErrorState){
-                 _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+               }else if(state is AddOrUpdateMyCookBookErrorState){
+                 _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                  Future.delayed(Duration.zero,(){
-                   if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                   if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){
+                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_COOKBOOK_FOOD);
                    }
                    return showErrorToast(context, state.message);
                  });
@@ -545,8 +545,8 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
 
     if(widget.foodDetailArgumentModel.macroEdition){
-      _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onUpdateMyFavorite(
+      _addOrUpdateMyCookBookBloc.add(
+        AddOrUpdateMyCookBookEvent.onUpdateMyCookBook(
           newFood,
         ),
       );

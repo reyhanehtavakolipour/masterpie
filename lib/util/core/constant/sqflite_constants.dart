@@ -5,6 +5,8 @@ const String TABLE_FOOD = "food";
 const String TABLE_PROFILE = "profile";
 const String TABLE_INTERNATIONAL_MEAL = "internationalMeal";
 const String TABLE_MY_FOOD = "myFood";
+const String TABLE_MY_COOKBOOK = "myCookBook";
+
 const String TABLE_LOGGED_FOODS = 'loggedFoods';
 const String ID = "id";
 const String FOOD_ID = "foodId";

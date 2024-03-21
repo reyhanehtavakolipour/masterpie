@@ -22,6 +22,7 @@ mixin _$SubscriptionPlanRemote {
   List<double> get prices => throw _privateConstructorUsedError;
   bool get macroEdition => throw _privateConstructorUsedError;
   int get favoriteFoodLimit => throw _privateConstructorUsedError;
+  int get cookBookFoodLimit => throw _privateConstructorUsedError;
   int get suggestFoodRequestsLimit => throw _privateConstructorUsedError;
   int get foodPortionRequestsLimit => throw _privateConstructorUsedError;
 
@@ -43,6 +44,7 @@ abstract class $SubscriptionPlanRemoteCopyWith<$Res> {
       List<double> prices,
       bool macroEdition,
       int favoriteFoodLimit,
+      int cookBookFoodLimit,
       int suggestFoodRequestsLimit,
       int foodPortionRequestsLimit});
 }
@@ -67,6 +69,7 @@ class _$SubscriptionPlanRemoteCopyWithImpl<$Res,
     Object? prices = null,
     Object? macroEdition = null,
     Object? favoriteFoodLimit = null,
+    Object? cookBookFoodLimit = null,
     Object? suggestFoodRequestsLimit = null,
     Object? foodPortionRequestsLimit = null,
   }) {
@@ -94,6 +97,10 @@ class _$SubscriptionPlanRemoteCopyWithImpl<$Res,
       favoriteFoodLimit: null == favoriteFoodLimit
           ? _value.favoriteFoodLimit
           : favoriteFoodLimit // ignore: cast_nullable_to_non_nullable
+              as int,
+      cookBookFoodLimit: null == cookBookFoodLimit
+          ? _value.cookBookFoodLimit
+          : cookBookFoodLimit // ignore: cast_nullable_to_non_nullable
               as int,
       suggestFoodRequestsLimit: null == suggestFoodRequestsLimit
           ? _value.suggestFoodRequestsLimit
@@ -123,6 +130,7 @@ abstract class _$$SubscriptionPlanRemoteImplCopyWith<$Res>
       List<double> prices,
       bool macroEdition,
       int favoriteFoodLimit,
+      int cookBookFoodLimit,
       int suggestFoodRequestsLimit,
       int foodPortionRequestsLimit});
 }
@@ -146,6 +154,7 @@ class __$$SubscriptionPlanRemoteImplCopyWithImpl<$Res>
     Object? prices = null,
     Object? macroEdition = null,
     Object? favoriteFoodLimit = null,
+    Object? cookBookFoodLimit = null,
     Object? suggestFoodRequestsLimit = null,
     Object? foodPortionRequestsLimit = null,
   }) {
@@ -174,6 +183,10 @@ class __$$SubscriptionPlanRemoteImplCopyWithImpl<$Res>
           ? _value.favoriteFoodLimit
           : favoriteFoodLimit // ignore: cast_nullable_to_non_nullable
               as int,
+      cookBookFoodLimit: null == cookBookFoodLimit
+          ? _value.cookBookFoodLimit
+          : cookBookFoodLimit // ignore: cast_nullable_to_non_nullable
+              as int,
       suggestFoodRequestsLimit: null == suggestFoodRequestsLimit
           ? _value.suggestFoodRequestsLimit
           : suggestFoodRequestsLimit // ignore: cast_nullable_to_non_nullable
@@ -196,6 +209,7 @@ class _$SubscriptionPlanRemoteImpl implements _SubscriptionPlanRemote {
       final List<double> prices = const [],
       this.macroEdition = false,
       this.favoriteFoodLimit = 0,
+      this.cookBookFoodLimit = 0,
       this.suggestFoodRequestsLimit = 0,
       this.foodPortionRequestsLimit = 0})
       : _ids = ids,
@@ -240,6 +254,9 @@ class _$SubscriptionPlanRemoteImpl implements _SubscriptionPlanRemote {
   final int favoriteFoodLimit;
   @override
   @JsonKey()
+  final int cookBookFoodLimit;
+  @override
+  @JsonKey()
   final int suggestFoodRequestsLimit;
   @override
   @JsonKey()
@@ -247,7 +264,7 @@ class _$SubscriptionPlanRemoteImpl implements _SubscriptionPlanRemote {
 
   @override
   String toString() {
-    return 'SubscriptionPlanRemote(ids: $ids, plan: $plan, intervals: $intervals, prices: $prices, macroEdition: $macroEdition, favoriteFoodLimit: $favoriteFoodLimit, suggestFoodRequestsLimit: $suggestFoodRequestsLimit, foodPortionRequestsLimit: $foodPortionRequestsLimit)';
+    return 'SubscriptionPlanRemote(ids: $ids, plan: $plan, intervals: $intervals, prices: $prices, macroEdition: $macroEdition, favoriteFoodLimit: $favoriteFoodLimit, cookBookFoodLimit: $cookBookFoodLimit, suggestFoodRequestsLimit: $suggestFoodRequestsLimit, foodPortionRequestsLimit: $foodPortionRequestsLimit)';
   }
 
   @override
@@ -264,6 +281,8 @@ class _$SubscriptionPlanRemoteImpl implements _SubscriptionPlanRemote {
                 other.macroEdition == macroEdition) &&
             (identical(other.favoriteFoodLimit, favoriteFoodLimit) ||
                 other.favoriteFoodLimit == favoriteFoodLimit) &&
+            (identical(other.cookBookFoodLimit, cookBookFoodLimit) ||
+                other.cookBookFoodLimit == cookBookFoodLimit) &&
             (identical(
                     other.suggestFoodRequestsLimit, suggestFoodRequestsLimit) ||
                 other.suggestFoodRequestsLimit == suggestFoodRequestsLimit) &&
@@ -281,6 +300,7 @@ class _$SubscriptionPlanRemoteImpl implements _SubscriptionPlanRemote {
       const DeepCollectionEquality().hash(_prices),
       macroEdition,
       favoriteFoodLimit,
+      cookBookFoodLimit,
       suggestFoodRequestsLimit,
       foodPortionRequestsLimit);
 
@@ -300,6 +320,7 @@ abstract class _SubscriptionPlanRemote implements SubscriptionPlanRemote {
       final List<double> prices,
       final bool macroEdition,
       final int favoriteFoodLimit,
+      final int cookBookFoodLimit,
       final int suggestFoodRequestsLimit,
       final int foodPortionRequestsLimit}) = _$SubscriptionPlanRemoteImpl;
 
@@ -315,6 +336,8 @@ abstract class _SubscriptionPlanRemote implements SubscriptionPlanRemote {
   bool get macroEdition;
   @override
   int get favoriteFoodLimit;
+  @override
+  int get cookBookFoodLimit;
   @override
   int get suggestFoodRequestsLimit;
   @override

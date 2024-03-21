@@ -30,8 +30,12 @@ abstract class UserRepository{
 
   Future<Either<Failure, Success>> updateFavoriteRequestsLeftInRemote(bool isAdded);
 
+  Future<Either<Failure, Success>> updateCookBookRequestsLeftInRemote(bool isAdded);
+
 
   Future<Either<Failure, Success>> updateFavoritesCreatedCountInRemote(bool isAdded);
+
+  Future<Either<Failure, Success>> updateCookBooksCreatedCountInRemote(bool isAdded);
 
 
   Future<Either<Failure, Success>> updateSuggestFoodRequestsLeftInRemote();

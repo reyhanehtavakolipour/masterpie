@@ -26,6 +26,8 @@ import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
+import '../bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
+import '../bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
 import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
 import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 import '../bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
@@ -78,6 +80,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   List<RangeValues> _foodsServingRanges= [];
   late GroceriesBloc _groceriesBloc;
   late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
+  late MyCookBookFoodsBloc _myCookBookFoodsBloc;
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
 
   RangeValues _servingRangeValues = const RangeValues(SERVING_MIN_DEFAULT, SERVING_MAX_DEFAULT);
@@ -130,6 +133,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
     _groceriesBloc = context.read<GroceriesBloc>();
     _suggestPortionsBloc = context.read<SuggestPortionsBloc>();
     _myFavoriteFoodsBloc = context.read<MyFavoriteFoodsBloc>();
+    _myCookBookFoodsBloc = context.read<MyCookBookFoodsBloc>();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
 
     _foodNameController.addListener(_onSearchFoodChanged);
@@ -174,9 +178,8 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
             _searchedFoodsVisible = true;
           });
         }else{
-          _myFavoriteFoodsBloc.add(
-            MyFavoriteFoodsEvent.onGetMyFavoriteFoods(
-              FoodType.all,
+          _myCookBookFoodsBloc.add(
+            MyCookBookFoodsEvent.onGetMyCookBookFoods(
               _foodNameController.text,
             ),
           );
@@ -1339,39 +1342,39 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
                 suggestedCookBookList(),
 
 
-                //todo update it with cookbook bloc
-                // BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
-                //     builder: (context, state) {
-                //       if (state is GroceriesLoadingState) {
-                //         return const Stack(
-                //           children: [
-                //             GFLoader(
-                //               type: GFLoaderType.circle,
-                //               loaderColorOne: DARK_PRIMARY_COLOR,
-                //               loaderColorTwo: DARK_PRIMARY_COLOR,
-                //               loaderColorThree: DARK_PRIMARY_COLOR,
-                //             ),
-                //           ],
-                //         );
-                //       }else if(state is MyFavoriteFoodsLoadedState){
-                //         Future.delayed(Duration.zero,(){
-                //           setState(() {
-                //             _suggestedFavorites.addAll(state.foods);
-                //             _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                //           });
-                //         });
-                //       }else if(state is MyFavoriteFoodsErrorState){
-                //         _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                //         Future.delayed(Duration.zero,(){
-                //           return showErrorToast(context, state.message);
-                //         });
-                //       }
-                //       return Container();
-                //     },
-                //     listener: (context, state){
-                //
-                //     }
-                // ),
+
+                BlocConsumer<MyCookBookFoodsBloc, MyCookBookFoodsState>(
+                    builder: (mcontext, state) {
+                      if (state is MyCookBookFoodsLoadingState) {
+                        return const Stack(
+                          children: [
+                            GFLoader(
+                              type: GFLoaderType.circle,
+                              loaderColorOne: DARK_PRIMARY_COLOR,
+                              loaderColorTwo: DARK_PRIMARY_COLOR,
+                              loaderColorThree: DARK_PRIMARY_COLOR,
+                            ),
+                          ],
+                        );
+                      }else if(state is MyCookBookFoodsLoadedState){
+                        Future.delayed(Duration.zero,(){
+                          setState(() {
+                            _suggestedCookBooks.addAll(state.foods);
+                            _myCookBookFoodsBloc.add(const MyCookBookFoodsEvent.onReset());
+                          });
+                        });
+                      }else if(state is MyCookBookFoodsErrorState){
+                        _myCookBookFoodsBloc.add(const MyCookBookFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
               ],
             ),
           )
@@ -1414,7 +1417,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
 
                 BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
                     builder: (context, state) {
-                      if (state is GroceriesLoadingState) {
+                      if (state is MyFavoriteFoodsLoadingState) {
                         return const Stack(
                           children: [
                             GFLoader(

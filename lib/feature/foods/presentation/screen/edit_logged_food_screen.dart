@@ -29,7 +29,6 @@ import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 
 
 class EditLoggedFoodScreen extends StatefulWidget {

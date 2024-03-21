@@ -15,6 +15,7 @@ const FOOD_DATA_CENTRAL_API = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const CALCULATE_MACRO_GOAL_API = 'CALCULATE_MACRO_GOAL_API';
 const PROFILE_REMOTE_TABLE = 'profile';
 const MY_FAVORITE_REMOTE_TABLE = 'user_favourite_food';
+const MY_COOKBOOK_REMOTE_TABLE = 'user_cook_book';
 const USER_SUGGESTED_FOOD_REMOTE_TABLE = 'user_suggested_food';
 const USER_LOGGED_FOOD_REMOTE_TABLE = 'logged_foods';
 const USER_PLAN_TABLE = 'user_plan';

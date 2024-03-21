@@ -1142,4 +1142,301 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
     }
   }
 
+  @override
+  Future<Either<Failure, List<FoodRemote>>> getMyCookBookFoods(String query, String userId) async{
+    try {
+
+      final supabase = Supabase.instance.client;
+      final data = await supabase
+          .from(MY_COOKBOOK_REMOTE_TABLE)
+          .select<List<dynamic>>()
+          .eq('id', userId);
+
+
+      if(data.isEmpty){
+        return const Right([]);
+      }
+
+      // favorite list is empty
+      if(data[0]['name'] == null){
+        return const Right([]);
+      }
+
+      final foodId = (data[0]['foodId'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final name = (data[0]['name'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final recipe = (data[0]['recipe'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final servingAmount = (data[0]['servingAmount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final servingUnit = (data[0]['servingUnit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final foodType = (data[0]['type'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final servingAmounts = buildListOfLists(data[0]['servingAmounts']);
+      final servingUnits = buildListOfLists(data[0]['servingUnits']);
+      final servingIngredientsCount = buildListOfLists(data[0]['servingIngredientsCount']);
+      final ingredients = buildListOfLists(data[0]['ingredients']);
+      final calorie = buildListOfLists(data[0]['calorie']);
+      final protein = buildListOfLists(data[0]['protein']);
+      final carb = buildListOfLists(data[0]['carb']);
+      final fat = buildListOfLists(data[0]['fat']);
+
+
+
+
+
+      List<FoodRemote> foods = [];
+      for (int i = 0; i < name.length; i++) {
+        FoodRemote foodRemote = FoodRemote(
+          id: foodId[i],
+          name: name[i],
+          calorie: calorie[i],
+          protein: protein[i],
+          carb: carb[i],
+          fat: fat[i],
+          ingredients: ingredients[i],
+          servingIngredientsCount: servingIngredientsCount[i],
+          servingAmounts: servingAmounts[i],
+          units: servingUnits[i],
+          servingAmount: double.parse(servingAmount[i]),
+          recipe: recipe[i],
+          unit: servingUnit[i],
+        );
+        foods.add(foodRemote);
+      }
+
+      return Right(foods);
+
+    } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveToMyCookBookMeals(FoodRemote mealRemote, String userId) async{
+    try {
+      final favoriteListResponse = await getMyFavoriteFoods('', userId);
+      if(favoriteListResponse.isRight()){
+        final list = favoriteListResponse.asRight();
+
+        List<String> newFoodId = [];
+        List<String> newCalorie = [];
+        List<String> newProtein = [];
+        List<String> newCarb = [];
+        List<String> newFat = [];
+        List<String> newServingAmounts = [];
+        List<String> newServingUnits = [];
+        List<String> newServingAmount = [];
+        List<String> newServingUnit = [];
+        List<String> newRecipe = [];
+        List<String> newIngredients = [];
+        List<String> newName = [];
+        List<String> newServingIngredientsCount = [];
+
+
+        list.forEach((favoriteFood) {
+          newFoodId.add(favoriteFood.id.toString());
+          newCalorie.add(favoriteFood.calorie.toString());
+          newProtein.add(favoriteFood.protein.toString());
+          newCarb.add(favoriteFood.carb.toString());
+          newFat.add(favoriteFood.fat.toString());
+          newServingAmounts.add(favoriteFood.servingAmounts.toString());
+          newServingUnits.add(favoriteFood.units.toString());
+          newName.add(favoriteFood.name.toString());
+          newServingAmount.add(favoriteFood.servingAmount.toString());
+          newServingUnit.add(favoriteFood.unit.toString());
+          newRecipe.add(favoriteFood.recipe.toString());
+          newIngredients.add(favoriteFood.ingredients.toString());
+          newServingIngredientsCount.add(favoriteFood.servingIngredientsCount.toString());
+        });
+        newFoodId.add(mealRemote.id);
+        newCalorie.add(mealRemote.calorie.toString());
+        newProtein.add(mealRemote.protein.toString());
+        newCarb.add(mealRemote.carb.toString());
+        newFat.add(mealRemote.fat.toString());
+        newServingAmounts.add(mealRemote.servingAmounts.toString());
+        newServingUnits.add(mealRemote.units.toString());
+        newName.add(mealRemote.name.toString());
+        newServingAmount.add(mealRemote.servingAmount.toString());
+        newServingUnit.add(mealRemote.unit.toString());
+        newRecipe.add(mealRemote.recipe.toString());
+        newIngredients.add(mealRemote.ingredients.toString());
+        newServingIngredientsCount.add(mealRemote.servingIngredientsCount.toString());
+
+
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['id'] = userId;
+        data['foodId'] = newFoodId;
+        data['name'] = newName;
+        data['servingAmounts'] = newServingAmounts;
+        data['servingUnits'] = newServingUnits;
+        data['calorie'] = newCalorie;
+        data['protein'] = newProtein;
+        data['carb'] = newCarb;
+        data['fat'] = newFat;
+        data['servingAmount'] = newServingAmount;
+        data['servingUnit'] = newServingUnit;
+        data['ingredients'] = newIngredients;
+        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['recipe'] = newRecipe;
+
+
+        final supabase = Supabase.instance.client;
+        await supabase.from(MY_COOKBOOK_REMOTE_TABLE).upsert(data);
+        return const Right(Success());
+      }
+      return Left(favoriteListResponse.asLeft());
+    } on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateMyCookBookMeal(FoodRemote meal, String userId) async{
+    try{
+
+      final favoriteListResponse = await getMyFavoriteFoods('', userId);
+
+      if(favoriteListResponse.isRight()){
+        final list = favoriteListResponse.asRight();
+
+        List<String> newFoodId = [];
+        List<String> newCalorie = [];
+        List<String> newProtein = [];
+        List<String> newCarb = [];
+        List<String> newFat = [];
+        List<String> newServingAmounts = [];
+        List<String> newServingUnits = [];
+        List<String> newServingAmount = [];
+        List<String> newServingUnit = [];
+        List<String> newRecipe = [];
+        List<String> newIngredients = [];
+        List<String> newName = [];
+        List<String> newServingIngredientsCount = [];
+
+
+        list.forEach((favoriteFood) {
+          FoodRemote foodRemote = FoodRemote();
+          if(favoriteFood.id == meal.id){
+            foodRemote = meal;
+          }else{
+            foodRemote = favoriteFood;
+          }
+
+          newFoodId.add(foodRemote.id);
+          newCalorie.add(foodRemote.calorie.toString());
+          newProtein.add(foodRemote.protein.toString());
+          newCarb.add(foodRemote.carb.toString());
+          newFat.add(foodRemote.fat.toString());
+          newServingAmounts.add(foodRemote.servingAmounts.toString());
+          newServingUnits.add(foodRemote.units.toString());
+          newName.add(foodRemote.name.toString());
+          newServingAmount.add(foodRemote.servingAmount.toString());
+          newServingUnit.add(foodRemote.unit.toString());
+          newRecipe.add(foodRemote.recipe.toString());
+          newIngredients.add(foodRemote.ingredients.toString());
+          newServingIngredientsCount.add(foodRemote.servingIngredientsCount.toString());
+        });
+
+
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['id'] = userId;
+        data['foodId'] = newFoodId;
+        data['name'] = newName;
+        data['servingAmounts'] = newServingAmounts;
+        data['servingUnits'] = newServingUnits;
+        data['calorie'] = newCalorie;
+        data['protein'] = newProtein;
+        data['carb'] = newCarb;
+        data['fat'] = newFat;
+        data['servingAmount'] = newServingAmount;
+        data['servingUnit'] = newServingUnit;
+        data['ingredients'] = newIngredients;
+        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['recipe'] = newRecipe;
+
+
+        final supabase = Supabase.instance.client;
+        await supabase.from(MY_COOKBOOK_REMOTE_TABLE).update(data).eq('id', userId);
+        return const Right(Success());
+      }
+      return Left(favoriteListResponse.asLeft());
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> removeFoodFromMyCookBook(FoodRemote foodRemote, String userId) async{
+    try{
+      final favoriteListResponse = await getMyFavoriteFoods('', userId);
+
+
+      if(favoriteListResponse.isRight()){
+        final list = favoriteListResponse.asRight();
+
+        List<String> newFoodId = [];
+        List<String> newCalorie = [];
+        List<String> newProtein = [];
+        List<String> newCarb = [];
+        List<String> newFat = [];
+        List<String> newServingAmounts = [];
+        List<String> newServingUnits = [];
+        List<String> newServingAmount = [];
+        List<String> newServingUnit = [];
+        List<String> newRecipe = [];
+        List<String> newIngredients = [];
+        List<String> newName = [];
+        List<String> newServingIngredientsCount = [];
+
+        list.forEach((favoriteFood) {
+          if(favoriteFood.id != foodRemote.id){
+            newFoodId.add(favoriteFood.id);
+            newCalorie.add(favoriteFood.calorie.toString());
+            newProtein.add(favoriteFood.protein.toString());
+            newCarb.add(favoriteFood.carb.toString());
+            newFat.add(favoriteFood.fat.toString());
+            newServingAmounts.add(favoriteFood.servingAmounts.toString());
+            newServingUnits.add(favoriteFood.units.toString());
+            newName.add(favoriteFood.name.toString());
+            newServingAmount.add(favoriteFood.servingAmount.toString());
+            newServingUnit.add(favoriteFood.unit.toString());
+            newRecipe.add(favoriteFood.recipe.toString());
+            newIngredients.add(favoriteFood.ingredients.toString());
+            newServingIngredientsCount.add(favoriteFood.servingIngredientsCount.toString());
+          }
+        });
+
+
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['id'] = userId;
+        data['foodId'] = newFoodId;
+        data['name'] = newName;
+        data['servingAmounts'] = newServingAmounts;
+        data['servingUnits'] = newServingUnits;
+        data['calorie'] = newCalorie;
+        data['protein'] = newProtein;
+        data['carb'] = newCarb;
+        data['fat'] = newFat;
+        data['servingAmount'] = newServingAmount;
+        data['servingUnit'] = newServingUnit;
+        data['ingredients'] = newIngredients;
+        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['recipe'] = newRecipe;
+
+
+        final supabase = Supabase.instance.client;
+        await supabase.from(MY_COOKBOOK_REMOTE_TABLE).update(data).eq('id', userId);
+        return const Right(Success());
+      }
+      return Left(favoriteListResponse.asLeft());
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
 }
