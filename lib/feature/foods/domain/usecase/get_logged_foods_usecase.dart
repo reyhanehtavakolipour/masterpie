@@ -42,7 +42,7 @@ class GetLoggedFoodsUseCase{
 
       return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: userPlan.asRight().subscriptionPlan!.macroEdition));
     }
-    return Left(getFailure(foodsLocalDb.asLeft()));
+    return Left(getFailure(profileResponse.asLeft()));
   }
 
 

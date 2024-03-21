@@ -356,7 +356,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child: TextField(
-                enabled: widget.isEditable,
+                enabled: false,
                 onChanged: updatedIngredientMacroListener,
                 controller: _servingController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -387,7 +387,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
               child:  TextField(
-                enabled: widget.isEditable,
+                enabled: false,
                 onChanged: updatedIngredientMacroListener,
                 controller: _unitController,
                 decoration: const InputDecoration(

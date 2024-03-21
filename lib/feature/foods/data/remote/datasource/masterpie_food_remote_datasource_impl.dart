@@ -1167,7 +1167,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       final recipe = (data[0]['recipe'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingAmount = (data[0]['servingAmount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingUnit = (data[0]['servingUnit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final foodType = (data[0]['type'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingAmounts = buildListOfLists(data[0]['servingAmounts']);
       final servingUnits = buildListOfLists(data[0]['servingUnits']);
       final servingIngredientsCount = buildListOfLists(data[0]['servingIngredientsCount']);
@@ -1213,9 +1212,9 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, Success>> saveToMyCookBookMeals(FoodRemote mealRemote, String userId) async{
     try {
-      final favoriteListResponse = await getMyFavoriteFoods('', userId);
-      if(favoriteListResponse.isRight()){
-        final list = favoriteListResponse.asRight();
+      final cookBookListResponse = await getMyCookBookFoods('', userId);
+      if(cookBookListResponse.isRight()){
+        final list = cookBookListResponse.asRight();
 
         List<String> newFoodId = [];
         List<String> newCalorie = [];
@@ -1283,8 +1282,9 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         await supabase.from(MY_COOKBOOK_REMOTE_TABLE).upsert(data);
         return const Right(Success());
       }
-      return Left(favoriteListResponse.asLeft());
+      return Left(cookBookListResponse.asLeft());
     } on PostgrestException catch (error) {
+
       return Left(ExceptionFailure(error));
     } catch (error) {
       return Left(ExceptionFailure(error));

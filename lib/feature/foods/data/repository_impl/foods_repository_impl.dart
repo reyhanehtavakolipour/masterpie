@@ -567,11 +567,11 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
-      await userRepo.updateCookBooksCreatedCountInRemote(true);
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
-        if(userPlanResponse.asRight().favoriteFoodLeft > 0){
+        if(userPlanResponse.asRight().cookBookFoodLeft > 0){
           final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyCookBookMeals(mapper.toMealRemote(food), userId);
           if(saveMyFoodsResponse.isRight()){
+            await userRepo.updateCookBooksCreatedCountInRemote(true);
             userRepo.updateCookBookRequestsLeftInRemote(true);
             return const Right(Success());
           }
@@ -582,6 +582,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
       }
       final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
       if(saveMyFoodsResponse.isRight()){
+        await userRepo.updateCookBooksCreatedCountInRemote(true);
         return const Right(Success());
       }
       return Left(saveMyFoodsResponse.asLeft());
