@@ -580,7 +580,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
           return const Left(FailureResponse(ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED));
         }
       }
-      final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyFavoriteMeals(mapper.toMealRemote(food), userId);
+      final saveMyFoodsResponse= await masterPieFoodRemoteDataSource.saveToMyCookBookMeals(mapper.toMealRemote(food), userId);
       if(saveMyFoodsResponse.isRight()){
         await userRepo.updateCookBooksCreatedCountInRemote(true);
         return const Right(Success());

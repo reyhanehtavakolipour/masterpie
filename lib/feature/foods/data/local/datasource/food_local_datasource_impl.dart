@@ -512,7 +512,7 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     Batch? batch = db?.batch();
 
     for (MyFoodLocal foodLocal in myFoodsLocal) {
-    batch?.insert(TABLE_MY_FOOD, foodLocal.toJson());
+    batch?.insert(TABLE_MY_COOKBOOK, foodLocal.toJson());
     }
     await batch?.commit(noResult: true);
     } on DatabaseException catch (e) {
@@ -521,6 +521,7 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     }
     return const Right(Success());
   }
+
 
   @override
   Future<Either<Failure, Success>> updateMyCookBookFood(MyFoodLocal myFoodLocal) async{

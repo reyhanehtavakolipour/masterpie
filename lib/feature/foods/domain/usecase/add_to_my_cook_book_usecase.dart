@@ -22,7 +22,7 @@ class AddToMyCookBookUseCase{
     );
       final addToMyCookBookRemoteResponse = await repo.saveMealToMyCookBookRemote(food);
       if(addToMyCookBookRemoteResponse.isRight()){
-        await repo.saveMyMealToLocalDb(food);
+        await repo.saveMyCookBookMealToLocalDb(food);
         return Right(food);
       }
       return Left(getFailure(addToMyCookBookRemoteResponse.asLeft()));
@@ -33,7 +33,7 @@ class AddToMyCookBookUseCase{
     food = checkFood(food);
     final updateCookBookRemoteResponse = await repo.updateMyCookBookMealInRemote(food);
     if(updateCookBookRemoteResponse.isRight()){
-    await repo.updateMyMealInLocalDb(food);
+    await repo.updateMyCookBookMealInLocalDb(food);
     return Right(food);
     }
     return Left(getFailure(updateCookBookRemoteResponse.asLeft()));

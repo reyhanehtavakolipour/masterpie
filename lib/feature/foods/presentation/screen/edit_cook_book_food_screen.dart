@@ -126,7 +126,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      });
      _debouncer.run(() {
        setState(() {
-         double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+         double coefficient = num.parse(_totalServingController.text.isEmpty ? widget.foodDetailArgumentModel.food!.servingAmount.toString() : _totalServingController.text)/_initialStateFood.servingAmount;
          List<String> servingIngredientsCount = [];
          List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
          currentServingIngredientsCount.forEach((element) {
@@ -529,7 +529,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
+        servingAmount: double.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text),
         unit: _totalUnitController.text,
         recipe: _recipeController.text
     );
@@ -610,6 +610,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
               child: TextField(
                 style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
                 controller: unitController,
+                enabled: false,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),

@@ -1295,10 +1295,10 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> updateMyCookBookMeal(FoodRemote meal, String userId) async{
     try{
 
-      final favoriteListResponse = await getMyFavoriteFoods('', userId);
+      final cookBookListResponse = await getMyCookBookFoods('', userId);
 
-      if(favoriteListResponse.isRight()){
-        final list = favoriteListResponse.asRight();
+      if(cookBookListResponse.isRight()){
+        final list = cookBookListResponse.asRight();
 
         List<String> newFoodId = [];
         List<String> newCalorie = [];
@@ -1315,12 +1315,12 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newServingIngredientsCount = [];
 
 
-        list.forEach((favoriteFood) {
+        list.forEach((cookBookFood) {
           FoodRemote foodRemote = FoodRemote();
-          if(favoriteFood.id == meal.id){
+          if(cookBookFood.id == meal.id){
             foodRemote = meal;
           }else{
-            foodRemote = favoriteFood;
+            foodRemote = cookBookFood;
           }
 
           newFoodId.add(foodRemote.id);
@@ -1360,7 +1360,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         await supabase.from(MY_COOKBOOK_REMOTE_TABLE).update(data).eq('id', userId);
         return const Right(Success());
       }
-      return Left(favoriteListResponse.asLeft());
+      return Left(cookBookListResponse.asLeft());
     }on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
     } catch (error) {

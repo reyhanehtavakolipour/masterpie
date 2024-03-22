@@ -51,6 +51,7 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
 
 
   Food checkFoodParameters(Food food){
+
     List<String> ingredients = [];
     ingredients.addAll(food.ingredients);
     ingredients.removeWhere((item) => item.isEmpty);
@@ -132,6 +133,7 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                       food: checkFoodParameters(food),
                       macroEdition: widget.macroEdition
                     );
+
 
                     Navigator.push(
                       context,

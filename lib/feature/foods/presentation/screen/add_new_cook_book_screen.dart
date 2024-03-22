@@ -191,71 +191,66 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
+          backgroundColor: PRIMARY_COLOR,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24,
             ),
-            actions: [
-
-            ],
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          actions: [
 
-                    mealNameWidget(),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    const SizedBox(height: 16,),
+                  mealNameWidget(),
 
-                    /// add ingredient chips
-                    addIngredientChips(),
+                  const SizedBox(height: 16,),
 
-                    const SizedBox(height: 8,),
+                  /// add ingredient chips
+                  addIngredientChips(),
 
-                    /// new ingredient
-                    newIngredient(),
+                  const SizedBox(height: 8,),
 
-                    /// added ingredients
-                    addedIngredients(),
+                  /// new ingredient
+                  newIngredient(),
 
-                    recipe(),
+                  /// added ingredients
+                  addedIngredients(),
 
-                    const SizedBox(height: 16,),
+                  recipe(),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                  const SizedBox(height: 16,),
 
-                    const SizedBox(height: 16,),
+                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                  const SizedBox(height: 16,),
 
 
-                    macroAmountsMeal(),
+                  macroAmountsMeal(),
 
-                    const SizedBox(height: 36,),
+                  const SizedBox(height: 36,),
 
-                   /// button
-                   buildBottomButton(context),
-                  ],
-                ),
-              )
-          ),
+                  /// button
+                  buildBottomButton(context),
+                ],
+              ),
+            )
         ),
       ),
     );

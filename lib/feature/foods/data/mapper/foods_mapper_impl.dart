@@ -408,7 +408,7 @@ class FoodsMapperImpl extends FoodsMapper{
           image: food.image,
           servingAmounts: food.servingAmounts,
           ingredients: food.ingredients,
-          servingIngredientsCount: [],
+          servingIngredientsCount: food.servingIngredientsCount,
           units: food.units,
           recipe: food.recipe,
           calorie: food.calorie,
@@ -418,7 +418,7 @@ class FoodsMapperImpl extends FoodsMapper{
           diets: food.diets,
           allergies: food.allergies,
           servingAmount: food.servingAmount,
-          unit: food.unit
+          unit: food.unit,
         )
     ).toList();
   }
