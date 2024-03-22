@@ -334,7 +334,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           'cook_book_left': freeSubscription.cookBookFoodLimit,
           'plan_updated_at': timestamp.toString(),
           'plan_interval': freeSubscription.intervals[0],
-          'macro_edition': false,
+          'macro_edition': true,
         };
 
 

@@ -18,8 +18,8 @@ import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.da
 import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
 import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
-import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
-import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
+import '../bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
+import '../bloc/remove_from_cook_book_bloc/state_event/remove_from_cook_book_state_event.dart';
 import 'my_favorite_foods_screen.dart';
 
 
@@ -45,7 +45,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
   String _foodName= '';
   String _recipe= '';
 
-  late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
+  late RemoveFromMyCookBookBloc _removeFromMyCookBookBloc;
   Food newFood = Food();
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
   late MyFavoriteFoodsBloc _myFavoriteFoodsBloc;
@@ -56,9 +56,9 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
   void initState() {
     super.initState();
     _addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-    _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
+    _removeFromMyCookBookBloc = context.read<RemoveFromMyCookBookBloc>();
     _myFavoriteFoodsBloc = context.read<MyFavoriteFoodsBloc>();
-    _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset(),);
+    _removeFromMyCookBookBloc.add(const RemoveFromMyCookBookEvent.onReset(),);
     _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset(),);
 
     init();
@@ -94,8 +94,8 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
                onPressed: () {
                  Navigator.of(context).pop();
-                 _removeFromMyFavoriteBloc.add(
-                   RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
+                 _removeFromMyCookBookBloc.add(
+                   RemoveFromMyCookBookEvent.onRemoveFromMyCookBook(
                        newFood
                    ),
                  );
@@ -278,18 +278,18 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                   /// button
                   buildBottomButton(context),
 
-                  BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
+                  BlocConsumer<RemoveFromMyCookBookBloc, RemoveFromMyCookBookState>(
                       builder: (mcontext, state) {
-                        if (state is RemoveFromMyFavoriteLoadingState) {
+                        if (state is RemoveFromMyCookBookLoadingState) {
                           return const GFLoader(
                             type: GFLoaderType.circle,
                             loaderColorOne: DARK_PRIMARY_COLOR,
                             loaderColorTwo: DARK_PRIMARY_COLOR,
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
-                        }else if(state is RemoveFromMyFavoriteLoadedState){
+                        }else if(state is RemoveFromMyCookBookLoadedState){
                           Future.delayed(Duration.zero,(){
-                            _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
+                            _removeFromMyCookBookBloc.add(const RemoveFromMyCookBookEvent.onReset());
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
@@ -298,8 +298,8 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                                     (route) => false
                             );
                           });
-                        }else if(state is RemoveFromMyFavoriteErrorState){
-                          _removeFromMyFavoriteBloc.add(const RemoveFromMyFavoriteEvent.onReset());
+                        }else if(state is RemoveFromMyCookBookErrorState){
+                          _removeFromMyCookBookBloc.add(const RemoveFromMyCookBookEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
                           });
@@ -463,13 +463,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                   Navigator.pushAndRemoveUntil(
-                       context,
-                       MaterialPageRoute(
-                         builder: (context) => const MyFavoriteFoodsScreen(),
-                       ),
-                           (route) => false
-                   );
+                   showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
                  });
                }else if(state is AddOrUpdateMyFavoriteErrorState){
                  _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
@@ -498,19 +492,11 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
-    if(_favoriteId.isNotEmpty){
-      _removeFromMyFavoriteBloc.add(
-        RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
-          newFood.copyWith(id: _favoriteId),
-        ),
-      );
-    }else{
-      _addOrUpdateMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-          newFood,
-        ),
-      );
-    }
+    _addOrUpdateMyFavoriteBloc.add(
+      AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+        newFood,
+      ),
+    );
   }
 
 }

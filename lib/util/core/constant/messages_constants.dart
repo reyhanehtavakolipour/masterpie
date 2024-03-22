@@ -200,6 +200,7 @@ const LOGOUT_LABLE  = 'Logout';
 const LOGOUT_QUESTION_MSG = 'Are you sure you want to logout?';
 const LOG_FOOD_LABEL  = 'Log Food';
 const REMOVE_FROM_FAVORITE_LABEL  = 'Remove From Favorite';
+const REMOVE_FROM_COOKBOOK_LABEL  = 'Remove From CookBook';
 const REMOVED_FROM_FAVORITE_SUCCESSFULLY  = 'Food removed from your favorite successfully';
 const UPDATE_LOG_LABEL  = 'Update Log';
 const UPDATE_FAVORITE_AND_LOGGED_FOOD_CONTENT  = 'Would you like to update this food in your favorites as well?';

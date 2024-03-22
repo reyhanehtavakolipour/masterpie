@@ -2,9 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/edit_food_information_dialog.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/edit_food_info_ui_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/view_cook_book_food_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
@@ -14,8 +11,6 @@ import '../../../../../util/design/size/app_widget_size.dart';
 import '../../../../../util/design/text/app_assets.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import '../food_calculator/food_calculator.dart';
 
 
@@ -25,14 +20,14 @@ class MyCookBookFoodsListUi extends StatefulWidget {
   final FoodCalculator foodCalculator;
   final Function(List<Food>) onFoodsChanged;
   final List<Food> foods;
-  final Function(Food food, bool addToFavorite) onFavoriteButtonClicked;
+  final Function(Food food) onRemoveButtonClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
   const MyCookBookFoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
+    required this.onRemoveButtonClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
@@ -211,23 +206,19 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                             children: [
 
 
-                              /// more icon: add/remove favorite
+                              /// more icon: add/remove cookbook
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_horiz),
                                 onSelected: (String result) {
-                                  if(result == ADD_TO_MY_FAVORTITE){
-                                    widget.onFavoriteButtonClicked(food, true);
-                                  }else{
-                                    widget.onFavoriteButtonClicked(food, false);
-                                  }
+                                  widget.onRemoveButtonClicked(food);
                                 },
                                 itemBuilder: (BuildContext context) =>
                                 <PopupMenuEntry<String>>[
-                                  PopupMenuItem<String>(
-                                    value: widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE,
+                                  const PopupMenuItem<String>(
+                                    value: REMOVE_FROM_COOKBOOK_LABEL,
                                     child: ListTile(
-                                      leading: widget.foodIcon.icon == Icons.favorite ? const Icon(Icons.delete) : const Icon(Icons.favorite),
-                                      title: Text(widget.foodIcon.icon == Icons.favorite ? REMOVE_FROM_FAVORITE_LABEL : ADD_TO_MY_FAVORTITE, style: const TextStyle(fontFamily: MONTSERRAT_FONT),),
+                                      leading: Icon(Icons.delete),
+                                      title: Text(REMOVE_FROM_COOKBOOK_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT),),
                                     ),
                                   ),
                                 ],
@@ -240,7 +231,6 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                                 child: GestureDetector(
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    // margin: const EdgeInsets.only(bottom: 16, right: 12),
                                     decoration: BoxDecoration(
                                       color: DARK_PRIMARY_COLOR,
                                       borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
@@ -320,37 +310,6 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
               );
             },
           );
-  }
-
-
-  void editMacrosClickListener(FoodType foodType, int servingQuantity, String foodUnit, double calorie, double protein, double carb, double fat, bool isFoodAdded, Food food){
-    showEditServingAndCalorieDialog(context, foodType, servingQuantity.toString(), foodUnit.toString(), calorie.toString(), protein.toString(), carb.toString(), fat.toString()).then((value){
-      if(isFoodAdded){
-        setState(() {
-          widget.foodCalculator.updateFoodsChangedAfterEditingServingMacro(food, value);
-          updateFoodsChanged();
-          insertOrUpdateMyFavoriteBasedOnServingMacrosChange(value.shouldSaveToFavorites, food, value);
-        });
-      }else{
-        setState(() {
-          widget.foodCalculator.updateFoodsChangedAfterEditingServingMacro(food, value);
-          updateFoodsChanged();
-          insertOrUpdateMyFavoriteBasedOnServingMacrosChange(value.shouldSaveToFavorites, food, value);
-        });
-      }
-    });
-  }
-
-
-  void insertOrUpdateMyFavoriteBasedOnServingMacrosChange(bool shouldSaveToFavorites, Food food, ServingMacroDialogValues value){
-      if(shouldSaveToFavorites){
-        final addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-        /// only favorite groceries can be updated from the list screen
-        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit], servingAmounts: [value.serving.toString()]);
-        addOrUpdateMyFavoriteBloc.add(
-          AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(updatedFood),
-        );
-      }
   }
 
 

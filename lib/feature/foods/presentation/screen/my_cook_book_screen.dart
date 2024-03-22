@@ -13,24 +13,19 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_foo
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
-import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 import '../bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
 import '../bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
-import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
-import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
+import '../bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
+import '../bloc/remove_from_cook_book_bloc/state_event/remove_from_cook_book_state_event.dart';
 import '../food_calculator/food_calculator.dart';
 
 class MyCookBookScreen extends StatefulWidget {
@@ -47,8 +42,7 @@ class MyCookBookScreen extends StatefulWidget {
 class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
   late MyCookBookFoodsBloc _myCookBookFoodsBloc;
-  late AddOrUpdateMyFavoriteBloc _addToMyFavoriteBloc;
-  late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
+  late RemoveFromMyCookBookBloc _removeFromMyCookBookBloc;
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
 
@@ -69,8 +63,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   void initState() {
     super.initState();
     _myCookBookFoodsBloc = context.read<MyCookBookFoodsBloc>();
-    _addToMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
-    _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
+    _removeFromMyCookBookBloc = context.read<RemoveFromMyCookBookBloc>();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _searchController = TextEditingController();
@@ -326,10 +319,10 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
 
 
-                        /// My favorite list
+                        /// My CookBook list
                         MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyCookBookFoods), foods: _newMyCookBookFoods, onFoodsChanged: updateChangedCookBookFoods,
-                          onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
+                          onRemoveButtonClicked: removeCookBook, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.food_bank, color: MASTERPIE_ORANGE_COLOR,),
                           macroEdition: true,),
 
                       ],
@@ -365,31 +358,12 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
                       }
                   ),
-                  BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
+                  BlocConsumer<RemoveFromMyCookBookBloc, RemoveFromMyCookBookState>(
                       builder: (context, state) {
                         return Container(height: 1,);
                       },
                       listener: (context, state){
-                        if(state is AddOrUpdateMyFavoriteLoadedState){
-                          requestMyCookBookFoods();
-                        }else if(state is AddOrUpdateMyFavoriteErrorState){
-                          _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                              return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
-                            }
-                            return showErrorToast(context, state.message);
-                          });
-                        }else{
-                        }
-                      }
-                  ),
-                  BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                      builder: (context, state) {
-                        return Container(height: 1,);
-                      },
-                      listener: (context, state){
-                        if(state is RemoveFromMyFavoriteLoadedState){
+                        if(state is RemoveFromMyCookBookLoadedState){
                           requestMyCookBookFoods();
                         }
                       }
@@ -438,7 +412,9 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                             _logFoodsBloc.add(const LogFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
                               _logButtonCLicked = false;
-                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ), (route) => false);
                             });
                           }
                         }else if(state is LogFoodsErrorState){
@@ -523,20 +499,12 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   }
 
 
-  void addOrRemoveFavorite(Food food, bool addToFavorite){
-    if(addToFavorite){
-      _addToMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-            food
-        ),
-      );
-    }else{
-      _removeFromMyFavoriteBloc.add(
-        RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
-            food
-        ),
-      );
-    }
+  void removeCookBook(Food food){
+    _removeFromMyCookBookBloc.add(
+      RemoveFromMyCookBookEvent.onRemoveFromMyCookBook(
+          food
+      ),
+    );
   }
 
   void requestMyCookBookFoods(){

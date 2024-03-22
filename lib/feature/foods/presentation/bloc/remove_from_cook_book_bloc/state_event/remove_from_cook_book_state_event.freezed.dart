@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RemoveFromMyCookBookEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Food food) onRemoveFromMyFavorite,
+    required TResult Function(Food food) onRemoveFromMyCookBook,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Food food)? onRemoveFromMyFavorite,
+    TResult? Function(Food food)? onRemoveFromMyCookBook,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Food food)? onRemoveFromMyFavorite,
+    TResult Function(Food food)? onRemoveFromMyCookBook,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
@@ -38,19 +38,19 @@ mixin _$RemoveFromMyCookBookEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RemoveFoodFromMyCookBook value)
-        onRemoveFromMyFavorite,
+        onRemoveFromMyCookBook,
     required TResult Function(Reset value) onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult? Function(Reset value)? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) =>
@@ -130,7 +130,7 @@ class _$RemoveFoodFromMyCookBookImpl implements RemoveFoodFromMyCookBook {
 
   @override
   String toString() {
-    return 'RemoveFromMyCookBookEvent.onRemoveFromMyFavorite(food: $food)';
+    return 'RemoveFromMyCookBookEvent.onRemoveFromMyCookBook(food: $food)';
   }
 
   @override
@@ -154,30 +154,30 @@ class _$RemoveFoodFromMyCookBookImpl implements RemoveFoodFromMyCookBook {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Food food) onRemoveFromMyFavorite,
+    required TResult Function(Food food) onRemoveFromMyCookBook,
     required TResult Function() onReset,
   }) {
-    return onRemoveFromMyFavorite(food);
+    return onRemoveFromMyCookBook(food);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Food food)? onRemoveFromMyFavorite,
+    TResult? Function(Food food)? onRemoveFromMyCookBook,
     TResult? Function()? onReset,
   }) {
-    return onRemoveFromMyFavorite?.call(food);
+    return onRemoveFromMyCookBook?.call(food);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Food food)? onRemoveFromMyFavorite,
+    TResult Function(Food food)? onRemoveFromMyCookBook,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
-    if (onRemoveFromMyFavorite != null) {
-      return onRemoveFromMyFavorite(food);
+    if (onRemoveFromMyCookBook != null) {
+      return onRemoveFromMyCookBook(food);
     }
     return orElse();
   }
@@ -186,30 +186,30 @@ class _$RemoveFoodFromMyCookBookImpl implements RemoveFoodFromMyCookBook {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RemoveFoodFromMyCookBook value)
-        onRemoveFromMyFavorite,
+        onRemoveFromMyCookBook,
     required TResult Function(Reset value) onReset,
   }) {
-    return onRemoveFromMyFavorite(this);
+    return onRemoveFromMyCookBook(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult? Function(Reset value)? onReset,
   }) {
-    return onRemoveFromMyFavorite?.call(this);
+    return onRemoveFromMyCookBook?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
-    if (onRemoveFromMyFavorite != null) {
-      return onRemoveFromMyFavorite(this);
+    if (onRemoveFromMyCookBook != null) {
+      return onRemoveFromMyCookBook(this);
     }
     return orElse();
   }
@@ -263,7 +263,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Food food) onRemoveFromMyFavorite,
+    required TResult Function(Food food) onRemoveFromMyCookBook,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -272,7 +272,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Food food)? onRemoveFromMyFavorite,
+    TResult? Function(Food food)? onRemoveFromMyCookBook,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -281,7 +281,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Food food)? onRemoveFromMyFavorite,
+    TResult Function(Food food)? onRemoveFromMyCookBook,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -295,7 +295,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(RemoveFoodFromMyCookBook value)
-        onRemoveFromMyFavorite,
+        onRemoveFromMyCookBook,
     required TResult Function(Reset value) onReset,
   }) {
     return onReset(this);
@@ -304,7 +304,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult? Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult? Function(Reset value)? onReset,
   }) {
     return onReset?.call(this);
@@ -313,7 +313,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyFavorite,
+    TResult Function(RemoveFoodFromMyCookBook value)? onRemoveFromMyCookBook,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {

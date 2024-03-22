@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -431,6 +433,9 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
+                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                     builder: (context) => const MyCookBookScreen(),
+                   ), (route) => false);
                  });
                }else if(state is AddOrUpdateMyCookBookErrorState){
                  _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());

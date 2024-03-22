@@ -1371,7 +1371,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   @override
   Future<Either<Failure, Success>> removeFoodFromMyCookBook(FoodRemote foodRemote, String userId) async{
     try{
-      final favoriteListResponse = await getMyFavoriteFoods('', userId);
+      final favoriteListResponse = await getMyCookBookFoods('', userId);
 
 
       if(favoriteListResponse.isRight()){

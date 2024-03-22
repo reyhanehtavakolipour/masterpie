@@ -10,7 +10,7 @@ part 'remove_from_cook_book_state_event.freezed.dart';
 @freezed
 abstract class RemoveFromMyCookBookEvent with _$RemoveFromMyCookBookEvent {
 
-  const factory RemoveFromMyCookBookEvent.onRemoveFromMyFavorite(Food food) = RemoveFoodFromMyCookBook;
+  const factory RemoveFromMyCookBookEvent.onRemoveFromMyCookBook(Food food) = RemoveFoodFromMyCookBook;
 
   const factory RemoveFromMyCookBookEvent.onReset() = Reset;
 
