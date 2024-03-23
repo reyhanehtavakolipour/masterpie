@@ -9,6 +9,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -129,7 +130,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     _debouncer.run(() {
       if(_foodType == MEAL_LABEL){
         setState(() {
-          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
             double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
             List<String> servingIngredientsCount = [];
             List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
@@ -527,6 +528,9 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                   showSuccessToast(context, FAVORITE_UPDATED_SUCCESSFULLY);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                    builder: (context) => const MainScreen(),
+                  ), (route) => false);
                 });
               }else if(state is AddOrUpdateMyFavoriteErrorState){
                 _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());

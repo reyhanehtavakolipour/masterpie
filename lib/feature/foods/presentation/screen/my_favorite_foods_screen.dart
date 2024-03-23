@@ -93,6 +93,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return PopScope(

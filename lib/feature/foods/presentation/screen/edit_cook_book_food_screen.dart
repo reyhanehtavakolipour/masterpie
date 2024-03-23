@@ -126,7 +126,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      });
      _debouncer.run(() {
        setState(() {
-         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) != 0){
+         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
            double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
            List<String> servingIngredientsCount = [];
            List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);

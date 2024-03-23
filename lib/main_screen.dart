@@ -32,6 +32,7 @@ import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
 import 'feature/foods/presentation/screen/search_food_screen.dart';
 import 'feature/foods/presentation/screen/suggest_food_screen.dart';
+import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -102,6 +103,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   int _proteinGoal= 0;
   int _carbGoal = 0;
   int _fatGoal= 0;
+
+  bool _isAddedFoodBannerOpen= false;
+
 
   @override
   void initState() {
@@ -199,7 +203,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       deleteFoodsWithZeroCount(foods);
       calculateTotalTakenMacros();
     });
-    logFoodsOfToday();
+    logFoodsOfToday(false);
   }
 
 
@@ -1109,6 +1113,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                 ),
                                               ),
 
+                                              logFavoriteFoodButton(),
+
                                               BlocConsumer<MyFavoriteFoodsBloc, MyFavoriteFoodsState>(
                                                   builder: (context, state) {
                                                     if (state is MyFavoriteFoodsLoadingState) {
@@ -1347,7 +1353,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                 BlocConsumer<LogFoodsBloc, LogFoodsState>(
                                     builder: (mcontext, state) {
-
                                       if (state is LogFoodsLoadingState) {
                                         return const GFLoader(
                                           type: GFLoaderType.circle,
@@ -1356,8 +1361,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                           loaderColorThree: DARK_PRIMARY_COLOR,
                                         );
                                       }else if(state is LogFoodsLoadedState){
+                                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
                                         Future.delayed(Duration.zero,(){
-                                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                                          showSuccessToast(context, LOG_UPDATED_SUCCESSFULLY);
+                                          setState(() {
+                                            _addedMyFavorites.clear();
+                                            for(int i = 0; i < _newMyFavorites.length; i++){
+                                              if(_newMyFavorites[i].count > 0){
+                                                _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
+                                              }
+                                            }
+                                          });
                                         });
                                       }else if(state is LogFoodsErrorState){
                                         Future.delayed(Duration.zero,(){
@@ -1414,6 +1428,147 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       ),
     );
   }
+
+  Widget logFavoriteFoodButton(){
+    bool isAnyFoodAdded= false;
+    List<Food> foodsLog = [];
+    _addedMyFavorites.forEach((element) {
+      if(element.count > 0){
+        isAnyFoodAdded= true;
+        foodsLog.add(element);
+      }
+    });
+
+    return Visibility(
+      visible: isAnyFoodAdded,
+      child: Positioned(
+        bottom: 16,
+        left: 16,
+        right: 16,
+        child: Column(
+          children: [
+
+            /// up arrow
+            GestureDetector(
+              onTap: (){
+                if(_isAddedFoodBannerOpen){
+                  setState(() {
+                    _isAddedFoodBannerOpen= false;
+                  });
+                }else{
+                  setState(() {
+                    _isAddedFoodBannerOpen= true;
+                  });
+                }
+              },
+
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: !_isAddedFoodBannerOpen,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: LOG_FOOD_BTN_COLOR
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.arrow_drop_up,
+                          color: DARK_PRIMARY_COLOR,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Visibility(
+                      visible: _isAddedFoodBannerOpen,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: LOG_FOOD_BTN_COLOR
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                color: DARK_PRIMARY_COLOR,
+                              ),
+                            ),
+
+
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Wrap(
+                                  spacing: 8.0,
+                                  children: List.generate(
+                                    foodsLog.length,
+                                        (index) => LoggedFoodChipWidget(
+                                      text: foodsLog[index].name,
+                                      onRemove: () {
+                                        setState(() {
+
+                                          for(int i = 0; i < _newMyFavorites.length; i++){
+                                            if(_newMyFavorites[i].id == foodsLog[index].id){
+                                              _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
+                                            }
+                                          }
+
+
+                                          for(int i = 0; i < _addedMyFavorites.length; i++){
+                                            if(_addedMyFavorites[i].id == foodsLog[index].id){
+                                              _addedMyFavorites[i]= _addedMyFavorites[i].copyWith(count: 0);
+                                            }
+                                          }
+
+                                          updateChangedFavoriteFoods(_newMyFavorites);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      )
+                  )
+                ],
+              ),
+            ),
+
+            /// log food button
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(0),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: LOG_FOOD_BTN_COLOR
+                  ),
+                  onPressed: () {
+                    logFoodsOfToday(true);
+                  },
+                  child: const Text(SUBMIT_LOG_FOODS_LABEL,
+                    style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
 
   void checkIfFavoriteFoodsAddedBefore(List<Food> foods){
     setState(() {
@@ -1509,12 +1664,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   }
 
-  void logFoodsOfToday(){
+  void logFoodsOfToday(bool isSubmitLogFavoriteButtonClicked){
     List<Food> foods = [];
 
     foods.addAll(_foods);
-    foods.addAll(_addedMyFavorites);
 
+    if(isSubmitLogFavoriteButtonClicked){
+      foods.addAll(_addedMyFavorites);
+    }
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
