@@ -126,22 +126,24 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      });
      _debouncer.run(() {
        setState(() {
-         double coefficient = num.parse(_totalServingController.text.isEmpty ? widget.foodDetailArgumentModel.food!.servingAmount.toString() : _totalServingController.text)/_initialStateFood.servingAmount;
-         List<String> servingIngredientsCount = [];
-         List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-         currentServingIngredientsCount.forEach((element) {
-           servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-         });
+         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) != 0){
+           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+           List<String> servingIngredientsCount = [];
+           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+           currentServingIngredientsCount.forEach((element) {
+             servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+           });
 
-         newFood= newFood.copyWith(
-             servingIngredientsCount: servingIngredientsCount,
-             calorie: _initialStateFood.calorie,
-             protein: _initialStateFood.protein,
-             carb: _initialStateFood.carb,
-             fat: _initialStateFood.fat
-         );
-         _previousCoefficient= 1/coefficient;
-         calculateTotalMacros();
+           newFood= newFood.copyWith(
+               servingIngredientsCount: servingIngredientsCount,
+               calorie: _initialStateFood.calorie,
+               protein: _initialStateFood.protein,
+               carb: _initialStateFood.carb,
+               fat: _initialStateFood.fat
+           );
+           _previousCoefficient= 1/coefficient;
+           calculateTotalMacros();
+         }
        });
      });
    }
@@ -512,11 +514,25 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
        return;
      }
 
+     if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+       setState(() {
+         showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+       });
+       return;
+     }
+
+
+     bool isAnyIngredientEmpty= false;
      newFood.ingredients.forEach((element) {
        if(element.isEmpty){
          showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+         isAnyIngredientEmpty= true;
        }
      });
+
+     if(isAnyIngredientEmpty){
+       return;
+     }
 
      setState(() {
        _mealNameBorderColor = Colors.black;

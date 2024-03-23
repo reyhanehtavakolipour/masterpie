@@ -6,8 +6,6 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/search_food_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';

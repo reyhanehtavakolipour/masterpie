@@ -119,27 +119,28 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
    void _onTotalServingChanged() {
      setState(() {
-
      });
      _debouncer.run(() {
        setState(() {
-         double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-         List<String> servingIngredientsCount = [];
-         List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-         currentServingIngredientsCount.forEach((element) {
-           servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-         });
+         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) != 0){
+           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+           List<String> servingIngredientsCount = [];
+           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+           currentServingIngredientsCount.forEach((element) {
+             servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+           });
 
-         newFood= newFood.copyWith(
-             servingIngredientsCount: servingIngredientsCount,
-             calorie: _initialStateFood.calorie,
-             protein: _initialStateFood.protein,
-             carb: _initialStateFood.carb,
-             fat: _initialStateFood.fat
-         );
+           newFood= newFood.copyWith(
+               servingIngredientsCount: servingIngredientsCount,
+               calorie: _initialStateFood.calorie,
+               protein: _initialStateFood.protein,
+               carb: _initialStateFood.carb,
+               fat: _initialStateFood.fat
+           );
 
-         _previousCoefficient= 1/coefficient;
-         calculateTotalMacros();
+           _previousCoefficient= 1/coefficient;
+           calculateTotalMacros();
+         }
        });
      });
    }
@@ -462,15 +463,29 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      if(_mealNameController.text.isEmpty){
        setState(() {
          _mealNameBorderColor = Colors.red;
+         showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
        });
        return;
      }
 
+     if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+       setState(() {
+         showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+       });
+       return;
+     }
+
+     bool isAnyIngredientEmpty= false;
      newFood.ingredients.forEach((element) {
        if(element.isEmpty){
          showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+         isAnyIngredientEmpty= true;
        }
      });
+
+     if(isAnyIngredientEmpty){
+       return;
+     }
 
      setState(() {
        _mealNameBorderColor = Colors.black;

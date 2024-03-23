@@ -134,38 +134,42 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     _debouncer.run(() {
       if(_foodType == MEAL_LABEL){
         setState(() {
-          double coefficient = num.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text)/_initialStateFood.servingAmount;
-          List<String> servingIngredientsCount = [];
-          List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-          currentServingIngredientsCount.forEach((element) {
-            servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-          });
+          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+            double coefficient = num.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text)/_initialStateFood.servingAmount;
+            List<String> servingIngredientsCount = [];
+            List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+            currentServingIngredientsCount.forEach((element) {
+              servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+            });
 
-          newFood= newFood.copyWith(
-              servingIngredientsCount: servingIngredientsCount,
-              calorie: _initialStateFood.calorie,
-              protein: _initialStateFood.protein,
-              carb: _initialStateFood.carb,
-              fat: _initialStateFood.fat
-          );
-          _previousCoefficient= 1/coefficient;
-          calculateTotalMacros();
+            newFood= newFood.copyWith(
+                servingIngredientsCount: servingIngredientsCount,
+                calorie: _initialStateFood.calorie,
+                protein: _initialStateFood.protein,
+                carb: _initialStateFood.carb,
+                fat: _initialStateFood.fat
+            );
+            _previousCoefficient= 1/coefficient;
+            calculateTotalMacros();
+          }
         });
       }else{
         setState(() {
-          double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
-          newFood= newFood.copyWith(
-              servingAmounts: [_totalServingController.text],
-              calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
-              protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
-              carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
-              fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
-          );
+          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+            double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
+            newFood= newFood.copyWith(
+                servingAmounts: [_totalServingController.text],
+                calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
+                protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
+                carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
+                fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
+            );
 
-          _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
-          _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
-          _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
-          _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
+            _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
+            _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
+            _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
+            _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
+          }
         });
       }
     });
@@ -286,14 +290,30 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     if(_groceryNameController.text.isEmpty && _foodType == GROCERY_LABEL){
       setState(() {
         _ingredientNameBorderColor = Colors.red;
+        showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
       });
       return;
     }
-    if(_mealNameController.text.isEmpty && _foodType == MEAL_LABEL){
-      setState(() {
-        _mealNameBorderColor = Colors.red;
+    if( _foodType == MEAL_LABEL){
+      if(_mealNameController.text.isEmpty ){
+        setState(() {
+          _mealNameBorderColor = Colors.red;
+          showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
+        });
+        return;
+      }
+
+      bool isAnyIngredientEmpty= false;
+      newFood.ingredients.forEach((element) {
+        if(element.isEmpty){
+          showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+          isAnyIngredientEmpty= true;
+        }
       });
-      return;
+
+      if(isAnyIngredientEmpty){
+        return;
+      }
     }
     setState(() {
       _ingredientNameBorderColor = Colors.black;

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
@@ -130,38 +129,42 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     _debouncer.run(() {
       if(_foodType == MEAL_LABEL){
         setState(() {
-          double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-          List<String> servingIngredientsCount = [];
-          List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-          currentServingIngredientsCount.forEach((element) {
-            servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-          });
+          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+            double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
+            List<String> servingIngredientsCount = [];
+            List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
+            currentServingIngredientsCount.forEach((element) {
+              servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
+            });
 
-          newFood= newFood.copyWith(
-            servingIngredientsCount: servingIngredientsCount,
-            calorie: _initialStateFood.calorie,
-            protein: _initialStateFood.protein,
-            carb: _initialStateFood.carb,
-            fat: _initialStateFood.fat
-          );
-          _previousCoefficient= 1/coefficient;
-          calculateTotalMacros();
+            newFood= newFood.copyWith(
+                servingIngredientsCount: servingIngredientsCount,
+                calorie: _initialStateFood.calorie,
+                protein: _initialStateFood.protein,
+                carb: _initialStateFood.carb,
+                fat: _initialStateFood.fat
+            );
+            _previousCoefficient= 1/coefficient;
+            calculateTotalMacros();
+          }
         });
       }else{
         setState(() {
-          double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
-          newFood= newFood.copyWith(
-              servingAmounts: [_totalServingController.text],
-              calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
-              protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
-              carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
-              fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
-          );
+          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+            double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
+            newFood= newFood.copyWith(
+                servingAmounts: [_totalServingController.text],
+                calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
+                protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
+                carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
+                fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
+            );
 
-          _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
-          _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
-          _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
-          _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
+            _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
+            _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
+            _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
+            _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
+          }
         });
       }
     });
@@ -551,15 +554,29 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       if(_mealNameController.text.isEmpty){
         setState(() {
           _mealNameBorderColor = Colors.red;
+          showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
         });
         return;
       }
 
+      if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+        setState(() {
+          showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+        });
+        return;
+      }
+
+      bool isAnyIngredientEmpty= false;
       newFood.ingredients.forEach((element) {
         if(element.isEmpty){
           showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+          isAnyIngredientEmpty= true;
         }
       });
+
+      if(isAnyIngredientEmpty){
+        return;
+      }
 
       setState(() {
         _mealNameBorderColor = Colors.black;
@@ -569,6 +586,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       if(_groceryNameController.text.isEmpty){
         setState(() {
           _ingredientNameBorderColor = Colors.red;
+          showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
         });
         return;
       }
