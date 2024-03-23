@@ -400,6 +400,56 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _totalTakenFats = double.parse(_totalTakenFats.toStringAsFixed(1));
 
 
+    Color calorieProgressColor= PROGRESS_MACRO_COLOR;
+    Color proteinProgressColor= PROGRESS_MACRO_COLOR;
+    Color carbProgressColor= PROGRESS_MACRO_COLOR;
+    Color fatProgressColor= PROGRESS_MACRO_COLOR;
+
+
+    if(_totalTakenCalories == 0.0 && _calorieGoal == 0){
+      calorieProgressColor= Colors.grey;
+    }else{
+      if(caloriePercent > 0.5 && caloriePercent < 0.8){
+        calorieProgressColor= Colors.yellow;
+      }else if(caloriePercent >= 0.8){
+        calorieProgressColor= RED_ERROR_COLOR;
+      }
+    }
+
+
+    if(_totalTakenProteins == 0.0 && _proteinGoal == 0){
+      proteinProgressColor= Colors.grey;
+    }else{
+      if(proteinPercent > 0.5 && proteinPercent < 0.8){
+        proteinProgressColor= Colors.yellow;
+      }else if(proteinPercent >= 0.8){
+        proteinProgressColor= RED_ERROR_COLOR;
+      }
+    }
+
+
+    if(_totalTakenCarbs == 0.0 && _carbGoal == 0){
+      carbProgressColor= Colors.grey;
+    }else{
+      if(carbPercent > 0.5 && carbPercent < 0.8){
+        carbProgressColor= Colors.yellow;
+      }else if(carbPercent >= 0.8){
+        carbProgressColor= RED_ERROR_COLOR;
+      }
+    }
+
+
+    if(_totalTakenFats == 0.0 && _fatGoal == 0){
+      fatProgressColor= Colors.grey;
+    }else{
+      if(fatPercent > 0.5 && fatPercent < 0.8){
+        fatProgressColor= Colors.yellow;
+      }else if(fatPercent >= 0.8){
+        fatProgressColor= RED_ERROR_COLOR;
+      }
+    }
+
+
     GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
     return MaterialApp(
@@ -597,7 +647,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
 
-
                         /// calorie and protein row
                         Expanded(
                           child: Row(
@@ -630,7 +679,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       ),
                                       circularStrokeCap: CircularStrokeCap.butt,
                                       backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                      progressColor: (_totalTakenCalories == 0.0 && _calorieGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      progressColor: calorieProgressColor,
                                       footer: Column(
                                         children: [
                                           Container(
@@ -686,7 +735,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       ),
                                       circularStrokeCap: CircularStrokeCap.butt,
                                       backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                      progressColor: (_totalTakenProteins == 0.0 && _proteinGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      progressColor: proteinProgressColor,
                                       footer: Column(
                                         children: [
                                           Container(
@@ -751,7 +800,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       ),
                                       circularStrokeCap: CircularStrokeCap.butt,
                                       backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                      progressColor: (_totalTakenCarbs == 0.0 && _carbGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      progressColor: carbProgressColor,
                                       footer: Column(
                                         children: [
                                           Container(
@@ -809,7 +858,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       ),
                                       circularStrokeCap: CircularStrokeCap.butt,
                                       backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                      progressColor: (_totalTakenFats == 0.0 && _fatGoal == 0) ? Colors.grey : PROGRESS_MACRO_COLOR,
+                                      progressColor: fatProgressColor,
                                       footer: Column(
                                         children: [
                                           Container(
