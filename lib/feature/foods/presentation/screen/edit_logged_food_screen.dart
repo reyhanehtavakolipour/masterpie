@@ -287,6 +287,12 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
   }
 
   void bottomButtonClickListener(BuildContext context){
+    if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+      setState(() {
+        showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+      });
+      return;
+    }
     if(_groceryNameController.text.isEmpty && _foodType == GROCERY_LABEL){
       setState(() {
         _ingredientNameBorderColor = Colors.red;

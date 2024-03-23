@@ -93,7 +93,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
      });
      _debouncer.run(() {
-       if(newFood.foodType.name == MEAL_LABEL){
+       if(newFood.foodType == FoodType.meal){
          // setState(() {
          //   double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
          //   List<String> servingIngredientsCount = [];
@@ -114,11 +114,13 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
          // });
        }else{
          setState(() {
-           double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0][_selectedUnitIndex]);
-           _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0][_selectedUnitIndex]) * count}');
-           _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0][_selectedUnitIndex]) * count}');
-           _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0][_selectedUnitIndex]) * count}');
-           _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0][_selectedUnitIndex]) * count}');
+           if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
+             double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0][_selectedUnitIndex]);
+             _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0][_selectedUnitIndex]) * count}');
+             _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0][_selectedUnitIndex]) * count}');
+             _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0][_selectedUnitIndex]) * count}');
+             _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0][_selectedUnitIndex]) * count}');
+           }
          });
        }
      });
@@ -135,7 +137,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    void logFoodsOfToday(List<Food> foodsLoggedBefore){
      List<Food> foods = [];
      foods.addAll(foodsLoggedBefore);
-     if(newFood.foodType.name == GROCERY_LABEL){
+     if(newFood.foodType == FoodType.groceryProduct){
        foods.add(
          Food(
              id: newFood.id,
@@ -366,9 +368,30 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-       if(_groceryNameController.text.isEmpty){
+       if(newFood.foodType == FoodType.groceryProduct){
+         if(_groceryNameController.text.isEmpty){
+           setState(() {
+             _ingredientNameBorderColor = Colors.red;
+             showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
+           });
+           return;
+         }
+       }else{
+         bool isAnyIngredientEmpty= false;
+         newFood.ingredients.forEach((element) {
+           if(element.isEmpty){
+             showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+             isAnyIngredientEmpty= true;
+           }
+         });
+
+         if(isAnyIngredientEmpty){
+           return;
+         }
+       }
+       if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
          setState(() {
-           _ingredientNameBorderColor = Colors.red;
+           showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
          });
          return;
        }
@@ -380,7 +403,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
-    if(newFood.foodType.name == GROCERY_LABEL){
+    if(newFood.foodType == FoodType.groceryProduct){
       _addOrUpdateMyFavoriteBloc.add(
         AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(
             Food(
@@ -390,7 +413,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                 carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
                 fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text],
                 servingAmounts: [_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text],
-                units: [newFood.servingAmounts[0][_selectedUnitIndex]],
+                units: [newFood.units[0][_selectedUnitIndex]],
                 foodType: FoodType.groceryProduct,
                 count: newFood.count,
                 name: _groceryNameController.text
