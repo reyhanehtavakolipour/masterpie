@@ -4,19 +4,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_favorite_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
+import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
+import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
+import '../bloc/log_foods_bloc/log_foods_bloc.dart';
+import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
-import 'my_favorite_foods_screen.dart';
 
 
 
@@ -44,10 +49,17 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
   late RemoveFromMyFavoriteBloc _removeFromMyFavoriteBloc;
   Food newFood = Food();
 
+  late TextEditingController _foodCountController;
+  late GetLoggedFoodsBloc _getLoggedFoodsBloc;
+  late LogFoodsBloc _logFoodsBloc;
+
   @override
   void initState() {
     super.initState();
     _removeFromMyFavoriteBloc = context.read<RemoveFromMyFavoriteBloc>();
+    _foodCountController= TextEditingController(text: '1.0');
+    _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
+    _logFoodsBloc = context.read<LogFoodsBloc>();
     _removeFromMyFavoriteBloc.add(
       const RemoveFromMyFavoriteEvent.onReset(),
     );
@@ -257,9 +269,69 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
 
 
 
-                    const SizedBox(height: 32,),
+                    const SizedBox(height: 48,),
 
 
+
+                    foodCount(),
+
+                    const SizedBox(height: 16,),
+
+                    buildLogFoodButton(context),
+
+                    BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                        builder: (mcontext, state) {
+                          if (state is GetLoggedFoodsLoadingState) {
+                            return const GFLoader(
+                              type: GFLoaderType.circle,
+                              loaderColorOne: DARK_PRIMARY_COLOR,
+                              loaderColorTwo: DARK_PRIMARY_COLOR,
+                              loaderColorThree: DARK_PRIMARY_COLOR,
+                            );
+                          }else if(state is GetLoggedFoodsLoadedState){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              logFoodsOfToday(state.loggedFoods.foods);
+                            });
+                          }else if(state is GetLoggedFoodsErrorState){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              return showErrorToast(context, state.message);
+                            });
+                          }
+                          return Container();
+                        },
+                        listener: (context, state){
+
+                        }
+                    ),
+                    BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                        builder: (mcontext, state) {
+
+                          if (state is LogFoodsLoadingState) {
+                            return const GFLoader(
+                              type: GFLoaderType.circle,
+                              loaderColorOne: DARK_PRIMARY_COLOR,
+                              loaderColorTwo: DARK_PRIMARY_COLOR,
+                              loaderColorThree: DARK_PRIMARY_COLOR,
+                            );
+                          }else if(state is LogFoodsLoadedState){
+                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                            });
+                          }else if(state is LogFoodsErrorState){
+                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                            Future.delayed(Duration.zero,(){
+                              return showErrorToast(context, state.message);
+                            });
+                          }
+                          return Container();
+                        },
+                        listener: (context, state){
+
+                        }
+                    ),
 
                     BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
                         builder: (mcontext, state) {
@@ -303,7 +375,6 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
       ),
     );
   }
-
 
    void init() {
      if (widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct) {
@@ -378,5 +449,130 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
 
 
 
-   }
+  Widget buildLogFoodButton(BuildContext context){
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 24),
+          width: double.infinity,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: DARK_PRIMARY_COLOR
+              ),
+              onPressed: () {
+                if(_foodCountController.text.isEmpty){
+                  showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                }else{
+                  requestLoggedFoods();
+                }
+              },
+              child: const Text(LOG_FOOD_LABEL,
+                style: TextStyle( color: Colors.white),)
+          ),
+        ),
+      ],
+    );
+  }
+
+  void requestLoggedFoods(){
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    _getLoggedFoodsBloc.add(
+        GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
+    );
+  }
+
+
+  Widget foodCount(){
+    return  Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+        const SizedBox(width: 16,),
+        GestureDetector(
+          child: const CircleAvatar(
+            radius: 14,
+            backgroundColor: DARK_PRIMARY_COLOR,
+            child: Icon(
+              Icons.remove,
+              color: Colors.white,
+            ),
+          ),
+          onTap: (){
+            setState(() {
+              if(double.parse(_foodCountController.text) >= STEP_AMOUNT){
+                _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) - STEP_AMOUNT).toString());
+              }
+            });
+          },
+
+        ),
+        Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: SizedBox(
+              width: 60,
+              height: MACRO_HEIGHT,
+              child: TextField(
+                controller: _foodCountController,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                ),
+              ),
+            )
+        ),
+        GestureDetector(
+          child: const CircleAvatar(
+            radius: 14,
+            backgroundColor: DARK_PRIMARY_COLOR,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+          onTap: (){
+            setState(() {
+              _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) + STEP_AMOUNT).toString());
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  void logFoodsOfToday(List<Food> foodsLoggedBefore){
+    List<Food> foods = [];
+
+    foods.addAll(foodsLoggedBefore);
+
+    newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
+
+    foods.add(newFood);
+
+    _logFoodsBloc.add(
+        LogFoodsEvent.onLogFoods(foods)
+    );
+  }
+
+
+
+
+}
 

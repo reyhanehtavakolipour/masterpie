@@ -218,29 +218,39 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _foods.removeWhere((element) => element.count == 0);
   }
 
+
   void calculateTotalTakenMacros(){
     _totalTakenCalories= 0;
     _totalTakenProteins= 0;
     _totalTakenCarbs= 0;
     _totalTakenFats= 0;
+
     _foods.forEach((element) {
       double calorie= 0;
       double protein= 0;
       double carb= 0;
       double fat= 0;
-
-      element.calorie.forEach((cal) {
-        calorie= calorie + double.parse(cal);
-      });
-      element.protein.forEach((prot) {
-        protein= protein + double.parse(prot);
-      });
-      element.carb.forEach((car) {
-        carb= carb + double.parse(car);
-      });
-      element.fat.forEach((fats) {
-        fat= fat + double.parse(fats);
-      });
+      if(element.foodType == FoodType.groceryProduct){
+        element.calorie.forEach((cal) {
+          calorie= calorie + double.parse(cal);
+        });
+        element.protein.forEach((prot) {
+          protein= protein + double.parse(prot);
+        });
+        element.carb.forEach((car) {
+          carb= carb + double.parse(car);
+        });
+        element.fat.forEach((fats) {
+          fat= fat + double.parse(fats);
+        });
+      }else{
+        for(int i = 0; i < element.servingIngredientsCount.length; i++){
+          calorie= calorie + (double.parse(element.calorie[i]) * num.parse(element.servingIngredientsCount[i]));
+          protein= protein + (double.parse(element.protein[i]) * num.parse(element.servingIngredientsCount[i]));
+          carb= carb + (double.parse(element.carb[i]) * num.parse(element.servingIngredientsCount[i]));
+          fat= fat + (double.parse(element.fat[i]) * num.parse(element.servingIngredientsCount[i]));
+        }
+      }
       double foodCalorie= calorie * element.count;
       double foodProtein= protein * element.count;
       double foodCarb= carb * element.count;

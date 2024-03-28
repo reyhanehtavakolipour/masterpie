@@ -45,6 +45,7 @@ const ADD_TO_MY_COOK_BOOK = 'Add To My CookBook';
 const MY_FAVORITE_FOOD_LABEL = 'My Favorite Foods';
 const MY_COOKBOOK_LABEL = 'My CookBook';
 const FOOD_DETAIL_LABEL= 'Food Detail';
+const ERROR_FOOD_COUNT_EMPTY= 'Serving count can\'t be empty';
 const ADD_NEW_LABEL= 'Add New';
 const UPDATE_LABEL= 'Update';
 const UPDATE_FAVORITE_LABEL= 'Update Favorite';
