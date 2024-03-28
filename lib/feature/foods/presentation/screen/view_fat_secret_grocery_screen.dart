@@ -249,7 +249,6 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
   }
 
 
-
   Widget buildBottomButton(BuildContext context){
      return Column(
        children: [

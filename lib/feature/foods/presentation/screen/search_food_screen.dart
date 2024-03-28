@@ -13,7 +13,6 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -30,8 +29,7 @@ import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
-import '../bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
-import '../bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
+
 
 
 
@@ -80,7 +78,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
 
   }
 
-  void addToFavorites(Food food, bool isAddToFavorite){
+  void addToFavorites(Food food){
     _addToMyFavoriteBloc.add(
       AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
           food
@@ -410,11 +408,11 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                   }else if(state is GroceriesLoadedState){
                     Future.delayed(Duration.zero,(){
                       setState(() {
+                        _newGroceries= [];
                         _newGroceries.addAll(state.foods);
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                       });
                     });
-
                   }else if(state is GroceriesErrorState){
                     _groceriesBloc.add(const GroceriesEvent.onReset());
                     Future.delayed(Duration.zero,(){
@@ -490,12 +488,12 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
 
 
             BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
-                builder: (context, state) {
-                  return Container(height: 1,);
-                },
-                listener: (context, state){
+                builder: (mcontext, state) {
                   if(state is AddOrUpdateMyFavoriteLoadedState){
-                    requestFoodsList();
+                    _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
+                    });
                   }else if(state is AddOrUpdateMyFavoriteErrorState){
                     _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                     Future.delayed(Duration.zero,(){
@@ -506,16 +504,9 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                     });
                   }else{
                   }
-                }
-            ),
-            BlocConsumer<RemoveFromMyFavoriteBloc, RemoveFromMyFavoriteState>(
-                builder: (context, state) {
-                  return Container(height: 1,);
+                  return Container();
                 },
                 listener: (context, state){
-                  if(state is RemoveFromMyFavoriteLoadedState){
-                    requestFoodsList();
-                  }
                 }
             ),
           ],

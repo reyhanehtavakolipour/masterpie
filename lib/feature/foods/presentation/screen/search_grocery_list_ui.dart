@@ -23,7 +23,7 @@ class SearchGroceriesListUi extends StatefulWidget {
   final GenericFoodCalculator foodCalculator;
   final Function(List<Food>) onFoodsChanged;
   final List<GenericFood> foods;
-  final Function(Food food, bool addToFavorite) onFavoriteButtonClicked;
+  final Function(Food food) onFavoriteButtonClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
@@ -156,11 +156,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_horiz),
                                 onSelected: (String result) {
-                                  if(result == ADD_TO_MY_FAVORTITE){
-                                    widget.onFavoriteButtonClicked(fromGenericFood(food), true);
-                                  }else{
-                                    widget.onFavoriteButtonClicked(fromGenericFood(food), false);
-                                  }
+                                    widget.onFavoriteButtonClicked(fromGenericFood(food));
                                 },
                                 itemBuilder: (BuildContext context) =>
                                 <PopupMenuEntry<String>>[

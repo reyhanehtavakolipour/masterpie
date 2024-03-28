@@ -56,6 +56,9 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
    late TextEditingController _groceryNameController;
 
+   late TextEditingController _foodCountController;
+
+
    int _selectedUnitIndex = 0;
    List<String> _groceryUnitOptions = manualUnitOptions;
 
@@ -64,7 +67,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    late GetLoggedFoodsBloc _getLoggedFoodsBloc;
    late LogFoodsBloc _logFoodsBloc;
 
-   bool _updatebuttonClicked= false;
+   bool _logButtonClicked= false;
 
 
   @override
@@ -73,6 +76,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
     _addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
+    _foodCountController= TextEditingController(text: '1.0');
     _addOrUpdateMyFavoriteBloc.add(
       const AddOrUpdateMyFavoriteEvent.onReset(),
     );
@@ -146,10 +150,10 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
              carb: [_totalCarbController.text],
              fat: [_totalFatController.text],
              servingAmounts: [_totalServingController.text],
-             units: [newFood.servingAmounts[0][_selectedUnitIndex]],
+             units: [_groceryUnitOptions[_selectedUnitIndex]],
              foodType: FoodType.groceryProduct,
-             count: newFood.count,
-             name: _groceryNameController.text
+             name: _groceryNameController.text,
+             count: num.parse(_foodCountController.text).toDouble()
          )
        );
      }else{
@@ -222,9 +226,20 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                   buildBottomButton(context),
 
 
+
+                  const SizedBox(height: 48,),
+
+
+
+                  foodCount(),
+
+                  const SizedBox(height: 16,),
+
+                  buildLogFoodButton(context),
+
+
                   BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
                       builder: (mcontext, state) {
-
                         if (state is GetLoggedFoodsLoadingState) {
                           return const GFLoader(
                             type: GFLoaderType.circle,
@@ -233,13 +248,16 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
-                          if(_updatebuttonClicked){
-                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              logFoodsOfToday(state.loggedFoods.foods);
-                            });
-                          }
+                          Future.delayed(Duration.zero,(){
+                            if(_logButtonClicked){
+                              setState(() {
+                                _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                                logFoodsOfToday(state.loggedFoods.foods);
+                              });
+                            }
+                          });
                         }else if(state is GetLoggedFoodsErrorState){
+                          _logButtonClicked= false;
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -252,9 +270,9 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                       }
                   ),
 
-
                   BlocConsumer<LogFoodsBloc, LogFoodsState>(
                       builder: (mcontext, state) {
+
                         if (state is LogFoodsLoadingState) {
                           return const GFLoader(
                             type: GFLoaderType.circle,
@@ -263,16 +281,15 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is LogFoodsLoadedState){
-                          if(_updatebuttonClicked){
-                            _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                            Future.delayed(Duration.zero,(){
-                              _updatebuttonClicked= false;
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ), (route) => false);
-                            });
-                          }
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            if(_logButtonClicked){
+                              showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                              _logButtonClicked= false;
+                            }
+                          });
                         }else if(state is LogFoodsErrorState){
+                          _logButtonClicked= false;
                           _logFoodsBloc.add(const LogFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -284,7 +301,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
                       }
                   ),
-
                 ],
               ),
             )
@@ -306,9 +322,110 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
     _groceryUnitOptions= newFood.units[0];
     _initialStateFood= newFood;
   }
+   Widget buildLogFoodButton(BuildContext context){
+     return Column(
+       children: [
+         Container(
+           padding: const EdgeInsets.only(bottom: 24),
+           width: double.infinity,
+           child: ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   backgroundColor: DARK_PRIMARY_COLOR
+               ),
+               onPressed: () {
+                 if(_foodCountController.text.isEmpty){
+                   showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                 }else{
+                   _logButtonClicked= true;
+                   requestLoggedFoods();
+                 }
+               },
+               child: const Text(LOG_FOOD_LABEL,
+                 style: TextStyle( color: Colors.white),)
+           ),
+         ),
+       ],
+     );
+   }
 
 
-  Widget buildBottomButton(BuildContext context){
+   Widget foodCount(){
+     return  Row(
+       mainAxisAlignment: MainAxisAlignment.start,
+       children: [
+         const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+         const SizedBox(width: 16,),
+         GestureDetector(
+           child: const CircleAvatar(
+             radius: 14,
+             backgroundColor: DARK_PRIMARY_COLOR,
+             child: Icon(
+               Icons.remove,
+               color: Colors.white,
+             ),
+           ),
+           onTap: (){
+             setState(() {
+               if(double.parse(_foodCountController.text) >= STEP_AMOUNT){
+                 _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) - STEP_AMOUNT).toString());
+               }
+             });
+           },
+
+         ),
+         Container(
+             margin: const EdgeInsets.symmetric(horizontal: 4),
+             child: SizedBox(
+               width: 60,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _foodCountController,
+                 textAlign: TextAlign.center,
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+               ),
+             )
+         ),
+         GestureDetector(
+           child: const CircleAvatar(
+             radius: 14,
+             backgroundColor: DARK_PRIMARY_COLOR,
+             child: Icon(
+               Icons.add,
+               color: Colors.white,
+             ),
+           ),
+           onTap: (){
+             setState(() {
+               _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) + STEP_AMOUNT).toString());
+             });
+           },
+         ),
+       ],
+     );
+   }
+
+
+   Widget buildBottomButton(BuildContext context){
      return Column(
        children: [
          Container(

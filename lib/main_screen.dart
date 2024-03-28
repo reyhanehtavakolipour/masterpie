@@ -1430,6 +1430,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                 _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
                                               }
                                             }
+                                            requestLoggedFoodsImmediately(_focusedDay);
                                           });
                                         });
                                       }else if(state is LogFoodsErrorState){
