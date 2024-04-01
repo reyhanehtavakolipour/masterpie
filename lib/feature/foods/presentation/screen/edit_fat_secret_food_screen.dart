@@ -183,6 +183,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
     handleMealMacrosWithoutIngredient();
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),

@@ -199,6 +199,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       canPop: false,
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
               title: const Text(PAYMENT_LABEL, style: TextStyle(color: Colors.white,),),

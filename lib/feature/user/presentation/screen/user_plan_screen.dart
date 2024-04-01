@@ -91,6 +91,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       canPop: false,
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: const Text(YOUR_PLAN_LABEL, style: TextStyle(color: Colors.white,),),

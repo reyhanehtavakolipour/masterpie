@@ -114,6 +114,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       },
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(

@@ -101,6 +101,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
       canPop: false,
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: const Text(FOODS_COMBINATIONS_LABEL, style: TextStyle(color: Colors.white)),

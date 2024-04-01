@@ -102,6 +102,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
       },
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Padding(
             padding: const EdgeInsets.symmetric(vertical: 1),
             child:Stack(

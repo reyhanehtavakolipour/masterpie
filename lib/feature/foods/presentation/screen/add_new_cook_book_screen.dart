@@ -196,6 +196,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     handleMealMacrosWithoutIngredient();
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),

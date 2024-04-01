@@ -103,6 +103,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

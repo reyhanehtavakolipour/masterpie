@@ -67,6 +67,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       canPop: false,
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: const Text(PROFILE_LABEL, style: TextStyle(color: Colors.white,),),

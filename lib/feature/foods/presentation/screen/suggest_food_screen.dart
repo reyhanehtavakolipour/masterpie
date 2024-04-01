@@ -56,6 +56,7 @@ class _SuggestFoodScreenState extends State<SuggestFoodScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(SUGGEST_FOOD_LABEL, style: TextStyle(color: Colors.white)),

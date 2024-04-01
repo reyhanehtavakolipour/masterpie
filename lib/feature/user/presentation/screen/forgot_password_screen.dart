@@ -48,6 +48,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>{
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(RESET_PASS_LABEL, style: TextStyle(color: Colors.white,),),

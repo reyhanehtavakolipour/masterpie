@@ -81,6 +81,7 @@ class _SignInScreenState extends State<SignInScreen>{
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
           child: Padding(

@@ -464,6 +464,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         backgroundColor: TOP_PART_MAIN_SCREE_COLOR,

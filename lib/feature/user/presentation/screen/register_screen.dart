@@ -21,7 +21,6 @@ import '../bloc/register_bloc/state_event/register_state_event.dart';
 
 class RegisterScreen extends StatefulWidget {
 
-  static const routeName = '/register-screen';
 
 
   const RegisterScreen({Key? key}) : super(key: key);
@@ -69,6 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
           child: Padding(

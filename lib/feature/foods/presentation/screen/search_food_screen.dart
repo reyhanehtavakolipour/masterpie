@@ -299,6 +299,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         /// App bar
         appBar: AppBar(

@@ -51,6 +51,7 @@ class _LandingScreenState extends State<LandingScreen>{
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: Center(

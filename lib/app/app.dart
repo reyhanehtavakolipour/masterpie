@@ -101,6 +101,7 @@ class App extends StatelessWidget {
         ],
         child: MaterialApp(
           initialRoute: '/',
+          debugShowCheckedModeBanner: false,
           routes: {
             LandingScreen.routeName: (context) => const MainScreen(),
           },

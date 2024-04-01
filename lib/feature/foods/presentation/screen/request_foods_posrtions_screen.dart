@@ -335,6 +335,7 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(HOW_MUCH_TO_EAT, style: TextStyle(color: Colors.white)),

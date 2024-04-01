@@ -185,6 +185,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     handleMealMacrosWithoutIngredient();
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
