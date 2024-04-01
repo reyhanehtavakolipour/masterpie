@@ -988,17 +988,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           const SizedBox(width: 8,),
 
                                                           /**
-                                                           * request foods portion
+                                                           * search food
                                                            */
                                                           Expanded(
                                                             child: GestureDetector(
                                                               onTap: (){
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder: (context) => const RequestFoodsPortionsScreen(),
-                                                                  ),
-                                                                );
+                                                                searchFoodClickListener();
                                                               },
                                                               child: Container(
                                                                 width: double.infinity,
@@ -1009,14 +1004,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
-                                                                    Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                    Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                    const Text(HOW_MUCH_TO_EAT,
-                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
-                                                                    )
-
+                                                                    const Text(SEARCH_GROCERY_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
 
                                                                   ],
                                                                 ),
@@ -1078,12 +1071,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         const SizedBox(width: 8,),
 
                                                         /**
-                                                         * search food
+                                                         * request foods portion
                                                          */
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: (){
-                                                              searchFoodClickListener();
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => const RequestFoodsPortionsScreen(),
+                                                                ),
+                                                              );
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
@@ -1094,18 +1092,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-
-                                                                  Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+                                                                  Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                  const Text(SEARCH_GROCERY_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
+                                                                  const Text(HOW_MUCH_TO_EAT,
+                                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
+                                                                  )
+
 
                                                                 ],
                                                               ),
                                                             ),
                                                           ),
                                                         ),
+
                                                       ],
                                                     ),
                                                   )

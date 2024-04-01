@@ -22,9 +22,21 @@ class TopRecommendation {
   TopRecommendation({required this.accuracy, required this.portion, required this.macro});
 
   factory TopRecommendation.fromJson(Map<String, dynamic> json) {
+    List<dynamic> macroList = json['portion'];
+    List<double> convertedPortion = macroList.map((item) {
+      if (item is int) {
+        return item.toDouble();
+      } else if (item is double) {
+        return item;
+      } else {
+        throw const FormatException('Invalid type in portion list');
+      }
+    }).toList();
+
+
     return TopRecommendation(
       accuracy: json['accuracy'],
-      portion: List<double>.from(json['portion']),
+      portion: convertedPortion,
       macro: List<double>.from(json['macro']),
     );
   }

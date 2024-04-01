@@ -757,32 +757,31 @@ class _RequestFoodsPortionsScreenState extends State<RequestFoodsPortionsScreen>
               if(_selectedRestrictionOption != -1 && _selectedRestrictionOption != 0){
                 switch(_selectedRestrictionOption){
                   case 1:
-                    restriction= ['1', 'min'];
+                    restriction= ['0', 'min'];
                     break;
                   case 2:
-                    restriction= ['1', 'max'];
+                    restriction= ['0', 'max'];
                     break;
                   case 3:
-                    restriction= ['2', 'min'];
+                    restriction= ['1', 'min'];
                     break;
                   case 4:
-                    restriction= ['2', 'max'];
+                    restriction= ['1', 'max'];
                     break;
                   case 5:
-                    restriction= ['3', 'min'];
+                    restriction= ['2', 'min'];
                     break;
                   case 6:
-                    restriction= ['3', 'max'];
+                    restriction= ['2', 'max'];
                     break;
                   case 7:
-                    restriction= ['4', 'min'];
+                    restriction= ['3', 'min'];
                     break;
                   case 8:
-                    restriction= ['4', 'max'];
+                    restriction= ['3', 'max'];
                     break;
                 }
               }
-
               _suggestPortionsBloc.add(
                   SuggestFoodsPortionEvent.onSuggestFoodsPortion(
                       _foods,
