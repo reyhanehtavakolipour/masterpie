@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
@@ -12,7 +13,6 @@ import '../../../../../util/design/color/app_colors.dart';
 import '../../../../../util/design/size/app_widget_size.dart';
 import '../../../../../util/design/text/app_assets.dart';
 import '../../domain/model/food_model.dart';
-import 'edit_grocery_macro_wizard_screen.dart';
 
 
 
@@ -22,11 +22,12 @@ class SearchGroceriesListUiForMacroWizard extends StatefulWidget {
   final GenericFoodCalculator foodCalculator;
   final List<GenericFood> foods;
   final Function(Food food) onAddButtonClicked;
+  final Function(GenericFood food) onGroceryClicked;
   final Color foodBackGroundColor;
   final Icon foodIcon;
 
-  const SearchGroceriesListUiForMacroWizard({super.key,required this.foodCalculator, required this.foods,
-    required this.onAddButtonClicked, required this.foodBackGroundColor, required this.foodIcon});
+  const SearchGroceriesListUiForMacroWizard({super.key, required this.foodCalculator, required this.foods,
+    required this.onAddButtonClicked, required this.onGroceryClicked, required this.foodBackGroundColor, required this.foodIcon});
 
 
   @override
@@ -38,7 +39,6 @@ class SearchGroceriesListUiForMacroWizard extends StatefulWidget {
 }
 
 class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesListUiForMacroWizard> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,16 +58,7 @@ class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesLis
 
               return GestureDetector(
                 onTap: (){
-                  GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(
-                      food: food,
-                      macroEdition: true
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditGroceryForMacroWizardScreen(foodDetailArgumentModel: argumentModel,),
-                      ),
-                    );
+                  widget.onGroceryClicked(food);
                 },
                 child: Card(
                   color: widget.foodBackGroundColor,

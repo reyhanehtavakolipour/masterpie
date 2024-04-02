@@ -60,6 +60,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.foods.length,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index){
           String foodName = widget.foods[index].name;
           if(widget.foodsExpansionState[index] ){

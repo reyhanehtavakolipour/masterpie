@@ -1,38 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
-import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
-import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
-import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
-import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
-import '../bloc/log_foods_bloc/log_foods_bloc.dart';
-import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
+
 
 
 
 class EditGroceryForMacroWizardScreen extends StatefulWidget {
 
-  final GenericFoodDetailArgumentModel foodDetailArgumentModel;
+  final GenericGroceryDetailForMacroWizardArgumentModel genericGroceryDetailForMacroWizardArgumentModel;
 
-  const EditGroceryForMacroWizardScreen({super.key, required this.foodDetailArgumentModel});
+  const EditGroceryForMacroWizardScreen({super.key, required this.genericGroceryDetailForMacroWizardArgumentModel});
 
   @override
   State<EditGroceryForMacroWizardScreen> createState() => _EditGroceryForMacroWizardScreenState();
@@ -176,14 +165,14 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
 
 
   void init(){
-    _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-    _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0][0];
-    _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0][0];
-    _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0][0];
-    _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0][0];
-    _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0][0];
-    _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0][0];
-    newFood = widget.foodDetailArgumentModel.food!;
+    _groceryNameController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.name;
+    _totalServingController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingAmounts[0][0];
+    _totalCalorieController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[0][0];
+    _totalProteinController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[0][0];
+    _totalCarbController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[0][0];
+    _totalFatController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat[0][0];
+    _totalUnitController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.units[0][0];
+    newFood = widget.genericGroceryDetailForMacroWizardArgumentModel.food!;
     _groceryUnitOptions= newFood.units[0];
     _initialStateFood= newFood;
   }
@@ -201,10 +190,39 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
+                 if(_groceryNameController.text.isEmpty){
+                   showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
+                 }
+                 else if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
                    showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
-                   //todo
+                   List<Food> foods= [];
+                   foods.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.foods);
+                   foods.add(
+                     Food(
+                       id: newFood.id,
+                       calorie: [_totalCalorieController.text],
+                       protein: [_totalProteinController.text],
+                       carb: [_totalCarbController.text],
+                       fat: [_totalFatController.text],
+                       servingAmounts: [_totalServingController.text],
+                       units: [_groceryUnitOptions[_selectedUnitIndex]],
+                       foodType: FoodType.groceryProduct,
+                       name: _groceryNameController.text,
+                     )
+                   );
+
+                   List<RangeValues> rangeValues= [];
+                   rangeValues.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.servingRanges);
+                   rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
+
+                   RequestWizardArgumentModel model= RequestWizardArgumentModel(
+                     restriction: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.restriction,
+                     macroGoalRanges: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroGoalRanges,
+                     servingRanges: rangeValues,
+                     foods: foods,
+                   );
+                   Navigator.pop(context, model);
                  }
                },
                child: const Text(ADD_FOOD_LABEL,
