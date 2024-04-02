@@ -64,6 +64,8 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
   int _selectedRestrictionOption= -1;
 
 
+  late RequestWizardArgumentModel _requestWizardArgumentModel;
+
   @override
   void initState() {
     super.initState();
@@ -76,6 +78,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
     _maxCarbGoalController= TextEditingController(text: '0');
     _maxFatGoalController= TextEditingController(text: '0');
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
+    _requestWizardArgumentModel= RequestWizardArgumentModel();
     requestLoggedFoods();
   }
 
@@ -487,7 +490,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
                 }
               }
 
-              RequestWizardArgumentModel argumentModel = RequestWizardArgumentModel(
+              _requestWizardArgumentModel = _requestWizardArgumentModel.copyWith(
                   restriction: restriction,
                 macroGoalRanges: macroGoalsRange
               );
@@ -495,11 +498,12 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
 
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => RequestMacroWizardStepTwoScreen(requestWizardArgumentModel: argumentModel,),
-                ),
-              );
-
+                MaterialPageRoute(builder: (context) => RequestMacroWizardStepTwoScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
+              ).then((result) {
+                setState(() {
+                  _requestWizardArgumentModel= result;
+                });
+              });
             },
 
             child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white),),

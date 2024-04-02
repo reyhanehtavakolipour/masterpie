@@ -1010,7 +1010,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                    const Text(SEARCH_GROCERY_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
+                                                                    const Text(SEARCH_FOOD_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
 
                                                                   ],
                                                                 ),

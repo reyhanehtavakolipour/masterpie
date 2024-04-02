@@ -25,10 +25,10 @@ import '../bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
 
 class RequestMacroWizardStepTwoScreen extends StatefulWidget {
 
-  final RequestWizardArgumentModel requestWizardArgumentModel;
+   final RequestWizardArgumentModel requestWizardArgumentModel;
 
 
-  const RequestMacroWizardStepTwoScreen({super.key, required this.requestWizardArgumentModel});
+   const RequestMacroWizardStepTwoScreen({super.key, required this.requestWizardArgumentModel});
 
   @override
   State<RequestMacroWizardStepTwoScreen> createState() => _RequestMacroWizardStepTwoScreenState();
@@ -36,19 +36,23 @@ class RequestMacroWizardStepTwoScreen extends StatefulWidget {
 
 class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStepTwoScreen> {
 
+  late RequestWizardArgumentModel _requestWizardArgumentModel;
 
   final List<bool> _foodsExpansionState = [];
 
-  List<Food> _foods = [];
-  List<RangeValues> _foodsServingRanges= [];
-
   late SuggestPortionsBloc _suggestPortionsBloc;
+
 
   @override
   void initState() {
     super.initState();
     _suggestPortionsBloc = context.read<SuggestPortionsBloc>();
     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+    _requestWizardArgumentModel= widget.requestWizardArgumentModel;
+    _requestWizardArgumentModel.foods.forEach((element) {
+      _foodsExpansionState.add(false);
+    });
+
   }
 
   Widget addFoodOptions(){
@@ -68,10 +72,16 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const SearchGroceryMacroWizardScreen(),
-                      ),
-                    );
+                      MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
+                    ).then((result) {
+                      setState(() {
+                        _requestWizardArgumentModel= result;
+                        _requestWizardArgumentModel.foods.forEach((element) {
+                          _foodsExpansionState.add(false);
+                        });
+                      });
+                    });
+
                   },
                   child: const Text(SEARCH_GROCERY_LABEL, style: TextStyle( color: Colors.white),),
                 ),
@@ -161,7 +171,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
           backgroundColor: PRIMARY_COLOR,
           leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, _requestWizardArgumentModel);
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -274,7 +284,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
             ),
             onPressed: () {
               List<List<double>> servings = [];
-              _foodsServingRanges.forEach((element) {
+              _requestWizardArgumentModel.servingRanges.forEach((element) {
                 List<double> list = [];
                 list.add(element.start);
                 list.add(element.end);
@@ -283,7 +293,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
               _suggestPortionsBloc.add(
                   SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                      _foods,
+                      _requestWizardArgumentModel.foods,
                       servings,
                       widget.requestWizardArgumentModel.macroGoalRanges,
                       widget.requestWizardArgumentModel.restriction
@@ -312,15 +322,15 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
   Widget addedFoods(){
     return Visibility(
-        visible: _foods.isNotEmpty,
+        visible: _requestWizardArgumentModel.foods.isNotEmpty,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16,),
             const Text('$FOODS_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
             const SizedBox(height: 16,),
-            FoodsMacroListUi(foods: _foods, foodsExpansionState: _foodsExpansionState,
-              onExpansionStateChanged: updateFoodsExpansionStateListUi, onFoodsUpdated: updateUiAfterFoodsUpdated, foodsServingRanges: _foodsServingRanges,
+            FoodsMacroListUi(foods: _requestWizardArgumentModel.foods, foodsExpansionState: _foodsExpansionState,
+              onExpansionStateChanged: updateFoodsExpansionStateListUi, onFoodsUpdated: updateUiAfterFoodsUpdated, foodsServingRanges: _requestWizardArgumentModel.servingRanges,
             )
           ],
         )
@@ -329,8 +339,10 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
   void updateUiAfterFoodsUpdated(List<Food> foods, List<RangeValues> ranges){
     setState(() {
-      _foods = foods;
-      _foodsServingRanges = ranges;
+      _requestWizardArgumentModel= _requestWizardArgumentModel.copyWith(
+        foods: foods,
+        servingRanges: ranges
+      );
     });
   }
 

@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RequestWizardArgumentModel {
   List<List<double>> get macroGoalRanges => throw _privateConstructorUsedError;
   List<String> get restriction => throw _privateConstructorUsedError;
+  List<Food> get foods => throw _privateConstructorUsedError;
+  List<RangeValues> get servingRanges => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RequestWizardArgumentModelCopyWith<RequestWizardArgumentModel>
@@ -31,7 +33,11 @@ abstract class $RequestWizardArgumentModelCopyWith<$Res> {
       _$RequestWizardArgumentModelCopyWithImpl<$Res,
           RequestWizardArgumentModel>;
   @useResult
-  $Res call({List<List<double>> macroGoalRanges, List<String> restriction});
+  $Res call(
+      {List<List<double>> macroGoalRanges,
+      List<String> restriction,
+      List<Food> foods,
+      List<RangeValues> servingRanges});
 }
 
 /// @nodoc
@@ -50,6 +56,8 @@ class _$RequestWizardArgumentModelCopyWithImpl<$Res,
   $Res call({
     Object? macroGoalRanges = null,
     Object? restriction = null,
+    Object? foods = null,
+    Object? servingRanges = null,
   }) {
     return _then(_value.copyWith(
       macroGoalRanges: null == macroGoalRanges
@@ -60,6 +68,14 @@ class _$RequestWizardArgumentModelCopyWithImpl<$Res,
           ? _value.restriction
           : restriction // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      foods: null == foods
+          ? _value.foods
+          : foods // ignore: cast_nullable_to_non_nullable
+              as List<Food>,
+      servingRanges: null == servingRanges
+          ? _value.servingRanges
+          : servingRanges // ignore: cast_nullable_to_non_nullable
+              as List<RangeValues>,
     ) as $Val);
   }
 }
@@ -73,7 +89,11 @@ abstract class _$$RequestWizardArgumentModelImplCopyWith<$Res>
       __$$RequestWizardArgumentModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<List<double>> macroGoalRanges, List<String> restriction});
+  $Res call(
+      {List<List<double>> macroGoalRanges,
+      List<String> restriction,
+      List<Food> foods,
+      List<RangeValues> servingRanges});
 }
 
 /// @nodoc
@@ -91,6 +111,8 @@ class __$$RequestWizardArgumentModelImplCopyWithImpl<$Res>
   $Res call({
     Object? macroGoalRanges = null,
     Object? restriction = null,
+    Object? foods = null,
+    Object? servingRanges = null,
   }) {
     return _then(_$RequestWizardArgumentModelImpl(
       macroGoalRanges: null == macroGoalRanges
@@ -101,6 +123,14 @@ class __$$RequestWizardArgumentModelImplCopyWithImpl<$Res>
           ? _value._restriction
           : restriction // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      foods: null == foods
+          ? _value._foods
+          : foods // ignore: cast_nullable_to_non_nullable
+              as List<Food>,
+      servingRanges: null == servingRanges
+          ? _value._servingRanges
+          : servingRanges // ignore: cast_nullable_to_non_nullable
+              as List<RangeValues>,
     ));
   }
 }
@@ -110,9 +140,13 @@ class __$$RequestWizardArgumentModelImplCopyWithImpl<$Res>
 class _$RequestWizardArgumentModelImpl implements _RequestWizardArgumentModel {
   _$RequestWizardArgumentModelImpl(
       {final List<List<double>> macroGoalRanges = const [],
-      final List<String> restriction = const []})
+      final List<String> restriction = const [],
+      final List<Food> foods = const [],
+      final List<RangeValues> servingRanges = const []})
       : _macroGoalRanges = macroGoalRanges,
-        _restriction = restriction;
+        _restriction = restriction,
+        _foods = foods,
+        _servingRanges = servingRanges;
 
   final List<List<double>> _macroGoalRanges;
   @override
@@ -132,9 +166,27 @@ class _$RequestWizardArgumentModelImpl implements _RequestWizardArgumentModel {
     return EqualUnmodifiableListView(_restriction);
   }
 
+  final List<Food> _foods;
+  @override
+  @JsonKey()
+  List<Food> get foods {
+    if (_foods is EqualUnmodifiableListView) return _foods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_foods);
+  }
+
+  final List<RangeValues> _servingRanges;
+  @override
+  @JsonKey()
+  List<RangeValues> get servingRanges {
+    if (_servingRanges is EqualUnmodifiableListView) return _servingRanges;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_servingRanges);
+  }
+
   @override
   String toString() {
-    return 'RequestWizardArgumentModel(macroGoalRanges: $macroGoalRanges, restriction: $restriction)';
+    return 'RequestWizardArgumentModel(macroGoalRanges: $macroGoalRanges, restriction: $restriction, foods: $foods, servingRanges: $servingRanges)';
   }
 
   @override
@@ -145,14 +197,19 @@ class _$RequestWizardArgumentModelImpl implements _RequestWizardArgumentModel {
             const DeepCollectionEquality()
                 .equals(other._macroGoalRanges, _macroGoalRanges) &&
             const DeepCollectionEquality()
-                .equals(other._restriction, _restriction));
+                .equals(other._restriction, _restriction) &&
+            const DeepCollectionEquality().equals(other._foods, _foods) &&
+            const DeepCollectionEquality()
+                .equals(other._servingRanges, _servingRanges));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_macroGoalRanges),
-      const DeepCollectionEquality().hash(_restriction));
+      const DeepCollectionEquality().hash(_restriction),
+      const DeepCollectionEquality().hash(_foods),
+      const DeepCollectionEquality().hash(_servingRanges));
 
   @JsonKey(ignore: true)
   @override
@@ -165,13 +222,20 @@ class _$RequestWizardArgumentModelImpl implements _RequestWizardArgumentModel {
 abstract class _RequestWizardArgumentModel
     implements RequestWizardArgumentModel {
   factory _RequestWizardArgumentModel(
-      {final List<List<double>> macroGoalRanges,
-      final List<String> restriction}) = _$RequestWizardArgumentModelImpl;
+          {final List<List<double>> macroGoalRanges,
+          final List<String> restriction,
+          final List<Food> foods,
+          final List<RangeValues> servingRanges}) =
+      _$RequestWizardArgumentModelImpl;
 
   @override
   List<List<double>> get macroGoalRanges;
   @override
   List<String> get restriction;
+  @override
+  List<Food> get foods;
+  @override
+  List<RangeValues> get servingRanges;
   @override
   @JsonKey(ignore: true)
   _$$RequestWizardArgumentModelImplCopyWith<_$RequestWizardArgumentModelImpl>

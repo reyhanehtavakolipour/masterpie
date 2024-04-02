@@ -303,7 +303,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
       home: Scaffold(
         /// App bar
         appBar: AppBar(
-          title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
+          title: const Text(SEARCH_FOOD_LABEL, style: TextStyle(color: Colors.white)),
           backgroundColor: PRIMARY_COLOR,
           leading: GestureDetector(
             onTap: () {
