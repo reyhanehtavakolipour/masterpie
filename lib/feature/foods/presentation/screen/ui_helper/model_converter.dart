@@ -16,3 +16,26 @@ Food fromGenericFood(GenericFood food){
       name: food.name
   );
 }
+
+
+GenericFood toGenericFood(Food food){
+  return GenericFood(
+      id: food.id,
+      calorie: [food.calorie],
+      protein: [food.protein],
+      carb: [food.carb],
+      fat: [food.fat],
+      servingAmounts: [food.servingAmounts],
+      units: [food.units],
+      foodType: FoodType.groceryProduct,
+      count: food.count,
+      name: food.name
+  );
+}
+
+
+List<GenericFood> toGenericFoods(List<Food> foods) {
+  return foods.map((food) =>
+      toGenericFood(food)
+  ).toList();
+}

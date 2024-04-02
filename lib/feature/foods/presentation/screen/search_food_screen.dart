@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
@@ -62,6 +63,9 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   bool _logButtonCLicked = false;
 
   final _debouncer = Debouncer(milliseconds: 1000);
+
+
+  String _foodType= GROCERY_LABEL;
 
 
   @override
@@ -338,6 +342,18 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
+
+
+                        ///food type
+                        CustomRadioListTile(
+                          options: const [GROCERY_LABEL, RECIPE_LABEL],
+                          onSelectedOptionChanged: updateSelectedFoodType,
+                          selectedOption: _foodType,
+                          orientation: HORIZONTAL_ORIENTATION,
+                          isEditable: true,
+                        ),
+
+
                         /// search bar
                         Row(
                           children: [
@@ -517,9 +533,19 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   }
 
   void requestFoodsList(){
-    _groceriesBloc.add(
-      GroceriesEvent.onGetGroceries(_searchController.text),
-    );
+    if(_foodType == GROCERY_LABEL){
+      _groceriesBloc.add(
+        GroceriesEvent.onGetGroceries(_searchController.text),
+      );
+    }else{
+      //todo search recipe
+    }
+  }
+
+  void updateSelectedFoodType(String type){
+    setState(() {
+      _foodType= type;
+    });
   }
 
   void logFoodsOfToday(List<Food> foodsLoggedBefore){

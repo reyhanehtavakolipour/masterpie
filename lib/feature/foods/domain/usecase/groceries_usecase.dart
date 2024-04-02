@@ -3,13 +3,15 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
+import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/response/failure.dart';
-import '../model/food_model.dart';
 import '../repository/foods_repository.dart';
+
 
 
 class GroceriesUseCase{
@@ -18,11 +20,28 @@ class GroceriesUseCase{
 
 
   Future<Either<Failure, List<GenericFood>>> getGroceries(String query) async{
-    final foodsResponseRemote = await repo.getGroceryProductsFromRemote(query);
-    if(foodsResponseRemote.isRight()){
-      return Right(foodsResponseRemote.asRight());
+    List<GenericFood> foods= [];
+    final favoriteResponseRemote = await repo.getMyGroceryProductsFromLocalDb(query);
+    final fatSecretResponseRemote = await repo.getGroceryProductsFromRemote(query);
+
+    if(favoriteResponseRemote.isRight()){
+      foods.addAll(toGenericFoods(favoriteResponseRemote.asRight()));
     }
-    return Left(getFailure(foodsResponseRemote.asLeft()));
+
+    if(fatSecretResponseRemote.isRight()){
+      foods.addAll(fatSecretResponseRemote.asRight());
+    }
+
+    if(fatSecretResponseRemote.isRight() || favoriteResponseRemote.isRight()){
+      return Right(foods);
+    }
+    Failure failure= const FailureResponse(ERROR_TRY_AGAIN);
+    if(favoriteResponseRemote.isLeft()){
+      failure= favoriteResponseRemote.asLeft();
+    }else{
+      failure= fatSecretResponseRemote.asLeft();
+    }
+    return Left(getFailure(failure));
   }
 
 
