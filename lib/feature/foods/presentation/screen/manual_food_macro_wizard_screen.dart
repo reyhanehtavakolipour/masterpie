@@ -350,7 +350,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     );
   }
 
-
   Widget requestPortionsButton(){
     return Container(
             padding: const EdgeInsets.only(bottom: 24),
