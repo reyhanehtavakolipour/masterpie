@@ -29,7 +29,7 @@ import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/state_event/re
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_list_ui.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
-import 'feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
+import 'feature/foods/presentation/screen/request_macro_wizard_step1_screen.dart';
 import 'feature/foods/presentation/screen/search_food_screen.dart';
 import 'feature/foods/presentation/screen/suggest_food_screen.dart';
 import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
@@ -1080,7 +1080,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                  builder: (context) => const RequestFoodsPortionsScreen(),
+                                                                  builder: (context) => const RequestMacroWizardStepOneScreen(),
                                                                 ),
                                                               );
                                                             },

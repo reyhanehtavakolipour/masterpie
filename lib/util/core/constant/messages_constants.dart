@@ -1,5 +1,5 @@
 
-import '../../../feature/foods/presentation/screen/request_foods_posrtions_screen.dart';
+import '../../../feature/foods/presentation/screen/request_macro_wizard_step1_screen.dart';
 
 const ERROR_TRY_AGAIN = 'Try again later';
 const ERROR_EXCEPTION = 'exception happened';
@@ -56,9 +56,11 @@ const ERROR_EMPTY_MACRO_SEARCH = 'all macros are empty. please click on search i
 const CLICK_FAB_TO_START = 'To initiate macro tracking for the day, please click on the "+" button';
 const EMPTY_FAVORITE_LABEL = 'Your favorite list is empty';
 const SEARCH_GROCERY_LABEL = 'Search Food';
+const SEARCH_RECIPE_LABEL = 'Search Recipe';
 const SERVING_LABEL = 'serving';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
 const REQUEST_PORTIONS_LABEL  = 'Calculate Portions';
+const NEXT_LABEL  = 'Next';
 const EDIT_LABEL = 'Edit';
 const CANCEL = 'cancel';
 const ADD_LABEL = 'Add';

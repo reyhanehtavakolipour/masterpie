@@ -5,6 +5,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
@@ -98,5 +99,6 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
     }
 
   }
+
 
 }
