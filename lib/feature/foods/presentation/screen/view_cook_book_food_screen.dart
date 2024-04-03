@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/edit_cook_book_food_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -26,7 +27,6 @@ import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
 import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
 import '../bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
 import '../bloc/remove_from_cook_book_bloc/state_event/remove_from_cook_book_state_event.dart';
-import 'my_favorite_foods_screen.dart';
 
 
 class ViewCookBookFoodScreen extends StatefulWidget {
@@ -62,6 +62,8 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
+
+  bool _removeBtnClicked= false;
 
   @override
   void initState() {
@@ -114,6 +116,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
                onPressed: () {
                  Navigator.of(context).pop();
+                 _removeBtnClicked= true;
                  _removeFromMyCookBookBloc.add(
                    RemoveFromMyCookBookEvent.onRemoveFromMyCookBook(
                        newFood
@@ -376,13 +379,9 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                         }else if(state is RemoveFromMyCookBookLoadedState){
                           Future.delayed(Duration.zero,(){
                             _removeFromMyCookBookBloc.add(const RemoveFromMyCookBookEvent.onReset());
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MyCookBookScreen(),
-                                ),
-                                    (route) => false
-                            );
+                            if(_removeBtnClicked){
+                              Navigator.pop(context, newFood);
+                            }
                           });
                         }else if(state is RemoveFromMyCookBookErrorState){
                           _removeFromMyCookBookBloc.add(const RemoveFromMyCookBookEvent.onReset());
@@ -505,7 +504,6 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
       newFood = widget.foodDetailArgumentModel.food!;
   }
-
 
   Widget buildLogFoodButton(BuildContext context){
     return Column(

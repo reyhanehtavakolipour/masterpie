@@ -10,6 +10,8 @@ import 'package:masterpie/feature/foods/presentation/screen/add_new_cook_book_sc
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/view_cook_book_food_screen.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -230,6 +232,79 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
       ),
     );
   }
+  Food checkFoodParameters(Food food){
+
+    List<String> ingredients = [];
+    ingredients.addAll(food.ingredients);
+    ingredients.removeWhere((item) => item.isEmpty);
+
+
+    List<String> calorie = [];
+    calorie.addAll(food.calorie);
+    calorie.removeWhere((item) => item.isEmpty);
+
+
+    List<String> protein = [];
+    protein.addAll(food.protein);
+    protein.removeWhere((item) => item.isEmpty);
+
+
+    List<String> carb = [];
+    carb.addAll(food.carb);
+    carb.removeWhere((item) => item.isEmpty);
+
+
+    List<String> fat = [];
+    fat.addAll(food.fat);
+    fat.removeWhere((item) => item.isEmpty);
+
+
+    List<String> servingAmounts = [];
+    servingAmounts.addAll(food.servingAmounts);
+    servingAmounts.removeWhere((item) => item.isEmpty);
+
+    List<String> servingUnits = [];
+    servingUnits.addAll(food.units);
+    servingUnits.removeWhere((item) => item.isEmpty);
+
+
+    List<String> servingIngredientCounts = [];
+    servingIngredientCounts.addAll(food.servingIngredientsCount);
+    servingIngredientCounts.removeWhere((item) => item.isEmpty);
+
+
+    return food.copyWith(
+        ingredients: ingredients,
+        calorie:  calorie,
+        protein: protein,
+        carb: carb,
+        fat: fat,
+        servingAmounts: servingAmounts,
+        units: servingUnits,
+        servingIngredientsCount: servingIngredientCounts
+    );
+  }
+
+
+
+  void onCookBookClicked(Food food){
+    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
+        food: checkFoodParameters(food),
+        macroEdition: true
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewCookBookFoodScreen(foodDetailArgumentModel: argumentModel,),
+      ),
+    ).then((result) {
+      setState(() {
+        _newMyCookBookFoods.remove(result);
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,9 +317,13 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
               onTap: () {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
-                ), (route) => false);
+                // Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainScreen(),
+                  ), (route) => false
+                );
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -261,7 +340,12 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                     MaterialPageRoute(
                       builder: (context) => const AddNewCookBookScreen(),
                     ),
-                  );
+                  ).then((result) {
+                    setState(() {
+                      _newMyCookBookFoods.add(result);
+                      requestMyCookBookFoods();
+                    });
+                  });
                 },
               ),
             ],
@@ -324,7 +408,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
 
                         /// My CookBook list
                         MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyCookBookFoods), foods: _newMyCookBookFoods, onFoodsChanged: updateChangedCookBookFoods,
-                          onRemoveButtonClicked: removeCookBook, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                          onRemoveButtonClicked: removeCookBook, onCookBookClicked: onCookBookClicked, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
                           foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.food_bank, color: MASTERPIE_ORANGE_COLOR,),
                           macroEdition: true,),
 
@@ -415,9 +499,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                             _logFoodsBloc.add(const LogFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
                               _logButtonCLicked = false;
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ), (route) => false);
+                              Navigator.pop(context);
                             });
                           }
                         }else if(state is LogFoodsErrorState){

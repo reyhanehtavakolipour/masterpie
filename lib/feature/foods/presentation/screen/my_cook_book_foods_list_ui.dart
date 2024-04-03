@@ -21,13 +21,14 @@ class MyCookBookFoodsListUi extends StatefulWidget {
   final Function(List<Food>) onFoodsChanged;
   final List<Food> foods;
   final Function(Food food) onRemoveButtonClicked;
+  final Function(Food food) onCookBookClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
   const MyCookBookFoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onRemoveButtonClicked, required this.foodsTypeRequested,
+    required this.onRemoveButtonClicked, required this.onCookBookClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
@@ -43,62 +44,6 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
 
 
   List<Food> foodsChanged= [];
-
-
-  Food checkFoodParameters(Food food){
-
-    List<String> ingredients = [];
-    ingredients.addAll(food.ingredients);
-    ingredients.removeWhere((item) => item.isEmpty);
-
-
-    List<String> calorie = [];
-    calorie.addAll(food.calorie);
-    calorie.removeWhere((item) => item.isEmpty);
-
-
-    List<String> protein = [];
-    protein.addAll(food.protein);
-    protein.removeWhere((item) => item.isEmpty);
-
-
-    List<String> carb = [];
-    carb.addAll(food.carb);
-    carb.removeWhere((item) => item.isEmpty);
-
-
-    List<String> fat = [];
-    fat.addAll(food.fat);
-    fat.removeWhere((item) => item.isEmpty);
-
-
-    List<String> servingAmounts = [];
-    servingAmounts.addAll(food.servingAmounts);
-    servingAmounts.removeWhere((item) => item.isEmpty);
-
-    List<String> servingUnits = [];
-    servingUnits.addAll(food.units);
-    servingUnits.removeWhere((item) => item.isEmpty);
-
-
-    List<String> servingIngredientCounts = [];
-    servingIngredientCounts.addAll(food.servingIngredientsCount);
-    servingIngredientCounts.removeWhere((item) => item.isEmpty);
-
-
-    return food.copyWith(
-        ingredients: ingredients,
-        calorie:  calorie,
-        protein: protein,
-        carb: carb,
-        fat: fat,
-        servingAmounts: servingAmounts,
-        units: servingUnits,
-        servingIngredientsCount: servingIngredientCounts
-    );
-  }
-
-
 
 
   @override
@@ -124,18 +69,7 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
 
               return GestureDetector(
                 onTap: (){
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
-                      food: checkFoodParameters(food),
-                      macroEdition: widget.macroEdition
-                    );
-
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewCookBookFoodScreen(foodDetailArgumentModel: argumentModel,),
-                      ),
-                    );
+                  widget.onCookBookClicked(food);
                 },
                 child: Card(
                   color: widget.foodBackGroundColor,

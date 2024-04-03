@@ -221,6 +221,7 @@ const ERROR_MAX_PROTEIN = 'Protein can\'t be more than $MAX_PROTEIN.';
 const ERROR_MAX_CARB = 'Carb can\'t be more than $MAX_CARB.';
 const ERROR_MAX_FAT = 'Fat can\'t be more than $MAX_FAT.';
 const ERROR_ADD_FOOD = 'Please add at least one food';
+const ERROR_ADD_INGREDIENT = 'Please add at least one ingredient';
 const ERROR_NO_GOAL = 'Please provide a minimum or maximum value for a macro';
 const CALORIE_RANGE_LABEL = 'calorie range';
 const PROTEIN_RANGE_LABEL = 'protein range';
