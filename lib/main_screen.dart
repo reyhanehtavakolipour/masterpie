@@ -34,6 +34,7 @@ import 'feature/foods/presentation/screen/suggest_food_screen.dart';
 import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'feature/foods/presentation/screen/view_favorite_food_screen.dart';
+import 'feature/foods/presentation/screen/view_logged_food_screen.dart';
 import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -153,6 +154,19 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         ),
       );
     }
+  }
+
+  void onLoggedFoodClicked(Food food){
+    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
+        food: checkFoodParameters(food),
+        macroEdition: true
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewLoggedFoodScreen(foodDetailArgumentModel: argumentModel,),
+      ),
+    );
   }
 
   void removeFavorite(Food food){
@@ -1415,7 +1429,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                       Visibility(
                                                           visible: _foods.isNotEmpty,
                                                           child: LoggedFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
-                                                            onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
+                                                            onFavoriteButtonClicked: addOrRemoveFavorite, onLoggedFoodClicked: onLoggedFoodClicked, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
                                                             foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
                                                            macroEdition: _macroEdition,)
                                                       ),

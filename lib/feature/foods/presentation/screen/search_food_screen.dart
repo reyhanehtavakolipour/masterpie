@@ -12,6 +12,7 @@ import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -30,6 +31,7 @@ import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
+import 'edit_fat_secret_food_screen.dart';
 
 
 
@@ -86,6 +88,20 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
     _addToMyFavoriteBloc.add(
       AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
           food
+      ),
+    );
+  }
+
+
+  void onGroceryClicked(GenericFood food){
+    GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(
+        food: food,
+        macroEdition: true
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditFatSecretFoodScreen(foodDetailArgumentModel: argumentModel,),
       ),
     );
   }
@@ -398,12 +414,11 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                     ),
                   ),
 
-
                   const SizedBox(height: 12,),
 
                   /// Groceries list
                   SearchGroceriesListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries, onFoodsChanged: updateChangedGroceries,
-                    onFavoriteButtonClicked: addToFavorites, foodsTypeRequested: const [FoodType.groceryProduct],
+                    onFavoriteButtonClicked: addToFavorites, onGroceryClicked: onGroceryClicked, foodsTypeRequested: const [FoodType.groceryProduct],
                     foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,), macroEdition: true,),
                 ],
               ),

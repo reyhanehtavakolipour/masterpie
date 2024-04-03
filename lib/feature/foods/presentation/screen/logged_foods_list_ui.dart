@@ -26,13 +26,14 @@ class LoggedFoodsListUi extends StatefulWidget {
   final Function(List<Food>) onFoodsChanged;
   final List<Food> foods;
   final Function(Food food, bool addToFavorite) onFavoriteButtonClicked;
+  final Function(Food food) onLoggedFoodClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
   const LoggedFoodsListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
+    required this.onFavoriteButtonClicked, required this.onLoggedFoodClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
@@ -136,16 +137,7 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
 
               return GestureDetector(
                 onTap: (){
-                    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
-                      food: checkFoodParameters(food),
-                      macroEdition: widget.macroEdition
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewLoggedFoodScreen(foodDetailArgumentModel: argumentModel,),
-                      ),
-                    );
+                  widget.onLoggedFoodClicked(food);
                 },
                 child: Card(
                   color: widget.foodBackGroundColor,

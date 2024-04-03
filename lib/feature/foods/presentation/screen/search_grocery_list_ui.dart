@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
-import 'package:masterpie/feature/foods/presentation/screen/edit_fat_secret_food_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
@@ -24,13 +22,14 @@ class SearchGroceriesListUi extends StatefulWidget {
   final Function(List<Food>) onFoodsChanged;
   final List<GenericFood> foods;
   final Function(Food food) onFavoriteButtonClicked;
+  final Function(GenericFood food) onGroceryClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
   const SearchGroceriesListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onFavoriteButtonClicked, required this.foodsTypeRequested,
+    required this.onFavoriteButtonClicked, required this.onGroceryClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
@@ -72,16 +71,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
 
               return GestureDetector(
                 onTap: (){
-                  GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(
-                      food: food,
-                      macroEdition: widget.macroEdition
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditFatSecretFoodScreen(foodDetailArgumentModel: argumentModel,),
-                      ),
-                    );
+                  widget.onGroceryClicked(food);
                 },
                 child: Card(
                   color: widget.foodBackGroundColor,
