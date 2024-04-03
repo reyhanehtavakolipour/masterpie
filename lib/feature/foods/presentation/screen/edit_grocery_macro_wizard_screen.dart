@@ -222,6 +222,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
                      servingRanges: rangeValues,
                      foods: foods,
                    );
+                   showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);
                    Navigator.pop(context, model);
                  }
                },

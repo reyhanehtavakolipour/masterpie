@@ -216,6 +216,7 @@ const UPDATE_LOG_LABEL  = 'Update Log';
 const UPDATE_FAVORITE_AND_LOGGED_FOOD_CONTENT  = 'Would you like to update this food in your favorites as well?';
 const ONLY_UPDATE_LOGGED_LABEL  = 'No. Only update the logged food';
 const FOOD_ADDED_TO_FAVORITE_MSG  = 'Food added to your favorites';
+const FOOD_ADDED_TO_WIZARD_MSG  = 'Food added';
 const ERROR_MAX_CALORIE = 'Calorie can\'t be more than $MAX_CALORIES.';
 const ERROR_MAX_PROTEIN = 'Protein can\'t be more than $MAX_PROTEIN.';
 const ERROR_MAX_CARB = 'Carb can\'t be more than $MAX_CARB.';

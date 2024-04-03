@@ -317,13 +317,16 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
               onTap: () {
-                // Navigator.pop(context);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainScreen(),
-                  ), (route) => false
-                );
+                if (Navigator.of(context).canPop()){
+                  Navigator.pop(context);
+                }else{
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ), (route) => false
+                  );
+                }
               },
               child: const Icon(
                 Icons.arrow_back_ios,

@@ -145,9 +145,18 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ManualFoodMacroWizardScreen(),
+                        builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
                       ),
-                    );
+                    ).then((result) {
+                      setState(() {
+                        if(result != null){
+                          _requestWizardArgumentModel= result;
+                          _requestWizardArgumentModel.foods.forEach((element) {
+                            _foodsExpansionState.add(false);
+                          });
+                        }
+                      });
+                    });
                   },
                   child: const Text(MANUAL_LABEL, style: TextStyle( color: Colors.white),),
                 ),
@@ -283,6 +292,10 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
+              if(_requestWizardArgumentModel.foods.isEmpty){
+                showErrorToast(context, ERROR_ADD_FOOD);
+                return;
+              }
               List<List<double>> servings = [];
               _requestWizardArgumentModel.servingRanges.forEach((element) {
                 List<double> list = [];
