@@ -20,7 +20,7 @@ import 'calculate_user_macro_goal_screen.dart';
 class MacroGoalsPopup extends StatefulWidget {
 
   final Function(List<String>) onMacroGoalUpdated;
-
+  final Function() onCalculateMacroClicked;
 
   final String calorie;
   final String protein;
@@ -29,7 +29,8 @@ class MacroGoalsPopup extends StatefulWidget {
 
 
 
-  const MacroGoalsPopup({super.key, required this.calorie, required this.protein, required this.carb, required this.fat, required this.onMacroGoalUpdated});
+  const MacroGoalsPopup({super.key, required this.calorie, required this.protein, required this.carb,
+    required this.fat, required this.onMacroGoalUpdated, required this.onCalculateMacroClicked});
 
   @override
   State<MacroGoalsPopup> createState() => _MacroGoalsPopupState();
@@ -257,12 +258,7 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
                       child: ElevatedButton(
                         onPressed: (){
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CalculateUserMacroGoalScreen(),
-                            ),
-                          );
+                          widget.onCalculateMacroClicked();
                         },
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

@@ -44,7 +44,6 @@ import 'feature/user/presentation/screen/calculate_user_macro_goal_screen.dart';
 import 'feature/user/presentation/screen/macro_goals_dialog_screen.dart';
 import 'feature/user/presentation/screen/signin_screen.dart';
 import 'feature/user/presentation/screen/user_info_screen.dart';
-import 'feature/user/presentation/screen/user_plan_screen.dart';
 import 'util/design/helper_functions/helper_functions_design.dart';
 import 'util/design/toast/app_toast.dart';
 import 'feature/foods/domain/model/food_type.dart';
@@ -57,9 +56,8 @@ class MainScreen extends StatefulWidget {
 
   static const routeName = '/main-screen';
 
-  final List<String>? dailyMacroGoal;
 
-  const MainScreen({Key? key, this.dailyMacroGoal}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
 @override
 State<MainScreen> createState() => _MainScreenState();
@@ -129,7 +127,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     requestMyFavoriteFoods();
 
-    setMacroGoals();
     requestProfile();
   }
 
@@ -383,45 +380,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       context: context,
       builder: (BuildContext context) {
         return MacroGoalsPopup(calorie: _calorieGoal.toString(), protein: _proteinGoal.toString(),
-          carb: _carbGoal.toString(), fat: _fatGoal.toString(), onMacroGoalUpdated: onUpdatedGoalMacrosFromDialog,);
+          carb: _carbGoal.toString(), fat: _fatGoal.toString(), onMacroGoalUpdated: onUpdatedGoalMacrosFromDialog, onCalculateMacroClicked: onCalculateMacroClicked,);
       },
     );
   }
 
-  void setMacroGoals() {
-    setState(() {
-      if(widget.dailyMacroGoal != null){
-        List<String> macros = widget.dailyMacroGoal!;
-
-        String calorie = macros[0];
-        if(calorie.isEmpty){
-          calorie = '0';
-        }
-
-        String protein = macros[1];
-        if(protein.isEmpty){
-          protein = '0';
-        }
-
-        String carb = macros[2];
-        if(carb.isEmpty){
-          carb = '0';
-        }
-
-        String fat = macros[3];
-        if(fat.isEmpty){
-          fat = '0';
-        }
-
-        _calorieGoal = int.parse(calorie);
-        _proteinGoal = int.parse(protein);
-        _carbGoal = int.parse(carb);
-        _fatGoal = int.parse(fat);
-      }
+  void onCalculateMacroClicked(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CalculateUserMacroGoalScreen(),
+      ),
+    ).then((result) {
+      setMacroGoals(result);
     });
-
   }
-
 
   void showContactPage() async{
     final Uri url = Uri.parse('https://www.masterpieapp.com/contact-10');
@@ -663,12 +636,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 title: const Text(MACRO_GOAL_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CalculateUserMacroGoalScreen(),
-                    ),
-                  );
+                  onCalculateMacroClicked();
                 },
               ),
               //todo uncomment when payment feature should be available
@@ -1818,6 +1786,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       _fatGoal = profile.dailyMacroGoal[3].isEmpty ? 0 : int.parse(profile.dailyMacroGoal[3]);
     });
 
+  }
+
+
+  void setMacroGoals(List<String> dailyMacroGoal){
+    setState(() {
+      _calorieGoal = dailyMacroGoal[0].isEmpty ? 0 : int.parse(dailyMacroGoal[0]);
+      _proteinGoal = dailyMacroGoal[1].isEmpty ? 0 : int.parse(dailyMacroGoal[1]);
+      _carbGoal = dailyMacroGoal[2].isEmpty ? 0 : int.parse(dailyMacroGoal[2]);
+      _fatGoal = dailyMacroGoal[3].isEmpty ? 0 : int.parse(dailyMacroGoal[3]);
+    });
   }
 
   void logFoodsOfToday(bool isSubmitLogFavoriteButtonClicked){

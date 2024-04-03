@@ -104,241 +104,238 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text(MACRO_GOAL_LABEL, style: TextStyle(color: Colors.white,),),
-            backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
-              onTap: () {
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MainScreen(dailyMacroGoal: _dailyMacroGoal),
+    return PopScope(
+      canPop: false,
+        child: MaterialApp(
+          theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                title: const Text(MACRO_GOAL_LABEL, style: TextStyle(color: Colors.white,),),
+                backgroundColor: PRIMARY_COLOR,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context, _dailyMacroGoal);
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 24,
                   ),
-                );
-
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-            actions: [
-
-            ],
-          ),
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-
-
-                    const SizedBox(height: 24.0),
-
-
-                    /// Gender Dropdown
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: buildGenderDropdown()
-                    ),
-
-
-                    const SizedBox(height: 24.0),
-
-
-
-                    /// Weight and Unit Row
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                              child: buildWeightUnitDropdown()
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-
-                    const SizedBox(height: 24.0),
-
-
-
-                    /// age and goal weight Row
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                              child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-
-                    const SizedBox(height: 24.0),
-
-
-
-                    /// Height and Unit Row
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
-                          ),
-                          const SizedBox(width: 32.0),
-                          Expanded(
-                              child: buildHeightUnitDropdown()
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-
-
-                    const SizedBox(height: 24.0),
-
-
-
-                    /// activity level
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(ACTIVITY_LEVEL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                    ),
-                    const SizedBox(height: 4.0),
-                    buildActivityLevelDropdown(),
-
-
-                    const SizedBox(height: 24.0),
-
-
-
-                    /// weekly weight change
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(WEEKLY_WEIGHT_CHANGE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                    ),
-                    const SizedBox(height: 4.0),
-                    buildLoseWeightAmountPerDayDropdown(),
-
-                    const SizedBox(height: 32.0),
-
-                    /// calculate button
-                    buildCalculateButton(),
-
-
-                    const SizedBox(height: 16.0),
-
-
-
-                    const Center(
-                      child: Text(
-                        OR_LABEL,
-                        style: TextStyle(
-                            fontSize: 13.0,
-                            color: DARK_PRIMARY_COLOR,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-
-
-                    const SizedBox(height: 16.0),
-
-
-                    /// set macros manually button
-                    buildSetMacrosManuallyButton(),
-
-
-                  ],
                 ),
+                actions: [
+
+                ],
               ),
+              body: Stack(
+                children: [
+                  SingleChildScrollView(
 
-              BlocConsumer<GetProfileBloc, GetProfileState>(
-                  builder: (mcontext, state) {
-                    if (state is GetProfileLoadingState) {
-                      return const GFLoader(
-                        type: GFLoaderType.circle,
-                        loaderColorOne: DARK_PRIMARY_COLOR,
-                        loaderColorTwo: DARK_PRIMARY_COLOR,
-                        loaderColorThree: DARK_PRIMARY_COLOR,
-                      );
-                    }else if(state is GetProfileLoadedState){
-                      Future.delayed(Duration.zero,(){
-                        fulfillWidgets(state.profile);
-                      });
-                    }else if(state is GetProfileErrorState){
-                      _getProfileBloc.add(const GetProfileEvent.onReset());
-                      Future.delayed(Duration.zero,(){
-                        return showErrorToast(context, state.message);
-                      });
-                    }else{
-                    }
-                    return Container();
-                  },
-                  listener: (context, state){
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
 
-                  }
-              ),
 
-              BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
-                  builder: (mcontext, state) {
-                    if (state is UpdateProfileLoadingState) {
-                      return const GFLoader(
-                        type: GFLoaderType.circle,
-                        loaderColorOne: DARK_PRIMARY_COLOR,
-                        loaderColorTwo: DARK_PRIMARY_COLOR,
-                        loaderColorThree: DARK_PRIMARY_COLOR,
-                      );
-                    }else if(state is MacroGoalsCalculatedState){
-                      Future.delayed(Duration.zero,(){
-                        setState(() {
+                        const SizedBox(height: 24.0),
+
+
+                        /// Gender Dropdown
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: buildGenderDropdown()
+                        ),
+
+
+                        const SizedBox(height: 24.0),
+
+
+
+                        /// Weight and Unit Row
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
+                              ),
+                              const SizedBox(width: 16.0),
+                              Expanded(
+                                  child: buildWeightUnitDropdown()
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+
+                        const SizedBox(height: 24.0),
+
+
+
+                        /// age and goal weight Row
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
+                              ),
+                              const SizedBox(width: 16.0),
+                              Expanded(
+                                  child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+
+                        const SizedBox(height: 24.0),
+
+
+
+                        /// Height and Unit Row
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
+                              ),
+                              const SizedBox(width: 32.0),
+                              Expanded(
+                                  child: buildHeightUnitDropdown()
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+
+
+                        const SizedBox(height: 24.0),
+
+
+
+                        /// activity level
+                        const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(ACTIVITY_LEVEL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                        ),
+                        const SizedBox(height: 4.0),
+                        buildActivityLevelDropdown(),
+
+
+                        const SizedBox(height: 24.0),
+
+
+
+                        /// weekly weight change
+                        const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(WEEKLY_WEIGHT_CHANGE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                        ),
+                        const SizedBox(height: 4.0),
+                        buildLoseWeightAmountPerDayDropdown(),
+
+                        const SizedBox(height: 32.0),
+
+                        /// calculate button
+                        buildCalculateButton(),
+
+
+                        const SizedBox(height: 16.0),
+
+
+
+                        const Center(
+                          child: Text(
+                            OR_LABEL,
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                color: DARK_PRIMARY_COLOR,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 16.0),
+
+
+                        /// set macros manually button
+                        buildSetMacrosManuallyButton(),
+
+
+                      ],
+                    ),
+                  ),
+
+                  BlocConsumer<GetProfileBloc, GetProfileState>(
+                      builder: (mcontext, state) {
+                        if (state is GetProfileLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetProfileLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            fulfillWidgets(state.profile);
+                          });
+                        }else if(state is GetProfileErrorState){
+                          _getProfileBloc.add(const GetProfileEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+                  BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
+                      builder: (mcontext, state) {
+                        if (state is UpdateProfileLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is MacroGoalsCalculatedState){
+                          Future.delayed(Duration.zero,(){
+                            setState(() {
+                              _updateProfileBloc.add(const UpdateProfileEvent.onReset());
+                              showMacroGoalsPopup(context, state.dailyGoals, false);
+                            });
+
+                          });
+                        }else if(state is UpdateProfileErrorState){
                           _updateProfileBloc.add(const UpdateProfileEvent.onReset());
-                          showMacroGoalsPopup(context, state.dailyGoals, false);
-                        });
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
 
-                      });
-                    }else if(state is UpdateProfileErrorState){
-                      _updateProfileBloc.add(const UpdateProfileEvent.onReset());
-                      Future.delayed(Duration.zero,(){
-                        return showErrorToast(context, state.message);
-                      });
-                    }else{
-                    }
-                    return Container();
-                  },
-                  listener: (context, state){
-
-                  }
-              ),
-            ],
-          )
-      ),
+                      }
+                  ),
+                ],
+              )
+          ),
+        )
     );
   }
 
