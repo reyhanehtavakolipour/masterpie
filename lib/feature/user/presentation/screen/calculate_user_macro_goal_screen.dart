@@ -20,8 +20,6 @@ import 'calculated_macro_goals_dialog_screen.dart';
 
 class CalculateUserMacroGoalScreen extends StatefulWidget {
 
-  static const routeName = '/calculate-user-macro-goals-screen';
-
 
   const CalculateUserMacroGoalScreen({super.key});
 
@@ -108,16 +106,12 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked : (didPop){
-      },
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
             title: const Text(MACRO_GOAL_LABEL, style: TextStyle(color: Colors.white,),),
             backgroundColor: PRIMARY_COLOR,
             leading: GestureDetector(
@@ -130,7 +124,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                   ),
                 );
 
-                },
+              },
               child: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
@@ -344,7 +338,6 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
               ),
             ],
           )
-        ),
       ),
     );
   }

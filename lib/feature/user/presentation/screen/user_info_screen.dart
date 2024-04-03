@@ -63,12 +63,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
           appBar: AppBar(
             title: const Text(PROFILE_LABEL, style: TextStyle(color: Colors.white,),),
             backgroundColor: PRIMARY_COLOR,
@@ -192,7 +190,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               ),
             ],
           )
-        ),
       ),
     );
   }

@@ -87,12 +87,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
           appBar: AppBar(
             title: const Text(YOUR_PLAN_LABEL, style: TextStyle(color: Colors.white,),),
             backgroundColor: PRIMARY_COLOR,
@@ -239,7 +237,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               ),
 
 
-             continueButton(),
+              continueButton(),
 
               BlocConsumer<UserPlanBloc, UserPlanState>(
                   builder: (mcontext, state) {
@@ -312,7 +310,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               )
             ],
           )
-        ),
       ),
     );
   }
