@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:masterpie/feature/foods/domain/usecase/add_to_my_cook_book_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/get_my_cook_book_foods_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/remove_from_my_cook_book_usecase.dart';
+import 'package:masterpie/feature/foods/domain/usecase/search_recipe_usecase.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource_impl.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_local_datasource.dart';
@@ -22,8 +23,8 @@ import '../../../feature/foods/data/local/datasource/food_local_datasource.dart'
 import '../../../feature/foods/data/local/datasource/food_local_datasource_impl.dart';
 import '../../../feature/foods/data/mapper/foods_mapper.dart';
 import '../../../feature/foods/data/mapper/foods_mapper_impl.dart';
-import '../../../feature/foods/data/remote/datasource/fooddatacentral_grocery_product_remote_datasource.dart';
-import '../../../feature/foods/data/remote/datasource/fooddatacentral_grocery_product_remote_datasource_impl.dart';
+import '../../../feature/foods/data/remote/datasource/fat_secret_food_remote_datasource.dart';
+import '../../../feature/foods/data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import '../../../feature/foods/data/remote/datasource/masterpie_food_remote_datasource.dart';
 import '../../../feature/foods/data/remote/datasource/masterpie_food_remote_datasource_impl.dart';
 import '../../../feature/foods/data/remote/datasource/openai_food_remote_datasource.dart';
@@ -126,13 +127,15 @@ Future<void> setUpServiceLocator() async{
 
   serviceLocator.registerFactory<GetLoggedFoodsUseCase>(() => GetLoggedFoodsUseCase());
 
+  serviceLocator.registerFactory<RecipesUseCase>(() => RecipesUseCase());
+
 
   //repositories
   serviceLocator.registerFactory<FoodsRepository>(() => FoodsRepositoryImpl());
 
   //datasource
-  serviceLocator.registerFactory<GroceryProductRemoteDataSource>(
-          () => GroceryProductRemoteDataSourceImpl());
+  serviceLocator.registerFactory<FatSecretRemoteDataSource>(
+          () => FatSecretFoodRemoteDataSourceImpl());
   serviceLocator.registerFactory<MasterPieFoodRemoteDataSource>(
           () => MasterPieFoodRemoteDataSourceImpl());
   serviceLocator.registerFactory<FoodLocalDataSource>(

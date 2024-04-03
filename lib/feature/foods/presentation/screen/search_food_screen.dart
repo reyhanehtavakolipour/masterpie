@@ -67,9 +67,6 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   final _debouncer = Debouncer(milliseconds: 1000);
 
 
-  String _foodType= GROCERY_LABEL;
-
-
   @override
   void initState() {
     super.initState();
@@ -323,7 +320,7 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
       home: Scaffold(
         /// App bar
         appBar: AppBar(
-          title: const Text(SEARCH_FOOD_LABEL, style: TextStyle(color: Colors.white)),
+          title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
           backgroundColor: PRIMARY_COLOR,
           leading: GestureDetector(
             onTap: () {
@@ -358,17 +355,6 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
-
-
-                        ///food type
-                        CustomRadioListTile(
-                          options: const [GROCERY_LABEL, RECIPE_LABEL],
-                          onSelectedOptionChanged: updateSelectedFoodType,
-                          selectedOption: _foodType,
-                          orientation: HORIZONTAL_ORIENTATION,
-                          isEditable: true,
-                        ),
-
 
                         /// search bar
                         Row(
@@ -548,19 +534,9 @@ class _SearchFoodScreenState extends State<SearchFoodScreen> {
   }
 
   void requestFoodsList(){
-    if(_foodType == GROCERY_LABEL){
-      _groceriesBloc.add(
-        GroceriesEvent.onGetGroceries(_searchController.text),
-      );
-    }else{
-      //todo search recipe
-    }
-  }
-
-  void updateSelectedFoodType(String type){
-    setState(() {
-      _foodType= type;
-    });
+    _groceriesBloc.add(
+      GroceriesEvent.onGetGroceries(_searchController.text),
+    );
   }
 
   void logFoodsOfToday(List<Food> foodsLoggedBefore){

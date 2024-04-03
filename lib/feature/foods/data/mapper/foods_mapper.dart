@@ -32,6 +32,8 @@ abstract class FoodsMapper{
 
   List<GenericFood> fromGroceryProductsRemote(List<GenericFoodRemote> productsRemote);
 
+  List<GenericFood> fromRecipesRemote(List<GenericFoodRemote> productsRemote);
+
   List<FoodLocal> toGroceryProductsLocal(List<Food> foods);
 
   List<MyFoodLocal> toMyGroceryProductsLocal(List<Food> foods, String userId);

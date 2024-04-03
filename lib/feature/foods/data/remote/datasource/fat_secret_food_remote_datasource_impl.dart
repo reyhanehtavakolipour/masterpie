@@ -10,14 +10,14 @@ import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
 import '../model/food_remote_model.dart';
-import 'fooddatacentral_grocery_product_remote_datasource.dart';
+import 'fat_secret_food_remote_datasource.dart';
 
 
-class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
+class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
 
   @override
-  Future<Either<Failure, List<GenericFoodRemote>>> getGroceryProductsFromFoodDataCentral(String query) async{
+  Future<Either<Failure, List<GenericFoodRemote>>> getGroceries(String query) async{
 
     final productsRemote = <GenericFoodRemote>[];
 
@@ -98,6 +98,12 @@ class GroceryProductRemoteDataSourceImpl extends GroceryProductRemoteDataSource{
       return Left(ExceptionFailure(e));
     }
 
+  }
+
+  @override
+  Future<Either<Failure, List<GenericFoodRemote>>> getRecipes(String query) {
+    // TODO: implement getRecipes
+    throw UnimplementedError();
   }
 
 

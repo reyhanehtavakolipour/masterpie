@@ -428,7 +428,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               onPressed: () {
                 addFoodClickListener(context);
               },
-              child: const Text(ADD_TO_MY_COOK_BOOK,
+              child: const Text(ADD_FOOD_LABEL,
                 style: TextStyle( color: Colors.white),)
           ),
         ),

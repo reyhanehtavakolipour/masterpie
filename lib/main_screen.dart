@@ -1050,12 +1050,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           const SizedBox(width: 8,),
 
                                                           /**
-                                                           * search food
+                                                           * macro wizard
                                                            */
                                                           Expanded(
                                                             child: GestureDetector(
                                                               onTap: (){
-                                                                searchFoodClickListener();
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => const RequestMacroWizardStepOneScreen(),
+                                                                  ),
+                                                                );
                                                               },
                                                               child: Container(
                                                                 width: double.infinity,
@@ -1066,12 +1071,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
-
-                                                                    Image.asset(SEARCH_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+                                                                    Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                     const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                    const Text(SEARCH_FOOD_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
+                                                                    const Text(HOW_MUCH_TO_EAT,
+                                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
+                                                                    )
+
 
                                                                   ],
                                                                 ),
@@ -1095,18 +1102,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                   Expanded(
                                                     child: Row(
                                                       children: [
+
                                                         /**
-                                                         * suggest foods
+                                                         * search groceries
                                                          */
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: (){
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) => const SuggestFoodScreen(),
-                                                                ),
-                                                              );
+                                                              searchGroceriesClickListener();
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
@@ -1117,11 +1120,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(SUGGEST_FOOD_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                  Image.asset(SEARCH_GROCERY_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                  const Text(SUGGEST_FOOD_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
+                                                                  const Text(SEARCH_GROCERY_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
 
                                                                 ],
                                                               ),
@@ -1129,21 +1133,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                           ),
                                                         ),
 
-
                                                         const SizedBox(width: 8,),
 
+
                                                         /**
-                                                         * request foods portion
+                                                         * search recipes
                                                          */
                                                         Expanded(
                                                           child: GestureDetector(
                                                             onTap: (){
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) => const RequestMacroWizardStepOneScreen(),
-                                                                ),
-                                                              );
+                                                              searchRecipesClickListener();
                                                             },
                                                             child: Container(
                                                               width: double.infinity,
@@ -1154,14 +1153,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  Image.asset(HOW_MUCH_EAT_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
+
+                                                                  Image.asset(SEARCH_RECIPE_PATH, width: SIZE_IMAGE_CAT, height: SIZE_IMAGE_CAT, color: DARK_PRIMARY_COLOR,),
 
                                                                   const SizedBox(height: CAT_LABEL_TOP_MARGIN,),
 
-                                                                  const Text(HOW_MUCH_TO_EAT,
-                                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR)
-                                                                  )
-
+                                                                  const Text(SEARCH_RECIPES_LABEL, style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_CATS_LABEL, color: MACRO_COLOR))
 
                                                                 ],
                                                               ),
@@ -1408,7 +1405,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         child: FloatingActionButton(
                                                           backgroundColor: PRIMARY_COLOR,
                                                           onPressed: () {
-                                                            searchFoodClickListener();
+                                                            searchGroceriesClickListener();
                                                           },
                                                           child: const Icon(Icons.add, color: Colors.white,),
                                                         ),
@@ -1755,8 +1752,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     );
   }
 
-  void searchFoodClickListener() async{
+  void searchGroceriesClickListener() async{
      await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SearchFoodScreen(),
+      ),
+    );
+  }
+
+
+  void searchRecipesClickListener() async{
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const SearchFoodScreen(),

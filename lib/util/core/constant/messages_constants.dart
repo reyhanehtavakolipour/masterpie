@@ -59,6 +59,7 @@ const EMPTY_FAVORITE_LABEL = 'Your favorite list is empty';
 const SEARCH_FOOD_LABEL = 'Search Food';
 const SEARCH_GROCERY_LABEL = 'Search Grocery';
 const SEARCH_RECIPE_LABEL = 'Search Recipe';
+const SEARCH_RECIPES_LABEL = 'Search Recipes';
 const SERVING_LABEL = 'serving';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
 const REQUEST_PORTIONS_LABEL  = 'Calculate Portions';

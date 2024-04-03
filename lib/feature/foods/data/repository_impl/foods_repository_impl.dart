@@ -16,7 +16,7 @@ import '../../domain/model/suggested_foods_portion_model.dart';
 import '../../domain/repository/foods_repository.dart';
 import '../local/datasource/food_local_datasource.dart';
 import '../mapper/foods_mapper.dart';
-import '../remote/datasource/fooddatacentral_grocery_product_remote_datasource.dart';
+import '../remote/datasource/fat_secret_food_remote_datasource.dart';
 import '../remote/datasource/masterpie_food_remote_datasource.dart';
 import '../remote/datasource/openai_food_remote_datasource.dart';
 import '../remote/model/food_remote_model.dart';
@@ -35,7 +35,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   final foodLocalDataSource = serviceLocator<FoodLocalDataSource>();
   final openAIFoodRemoteDataSource = serviceLocator<OpenAIFoodRemoteDataSource>();
   final masterPieFoodRemoteDataSource = serviceLocator<MasterPieFoodRemoteDataSource>();
-  final productRemoteDataSource = serviceLocator<GroceryProductRemoteDataSource>();
+  final productRemoteDataSource = serviceLocator<FatSecretRemoteDataSource>();
   final userHiveDataSource = serviceLocator<UserHiveDataSource>();
   final mapper = serviceLocator<FoodsMapper>();
   final userRepo = serviceLocator<UserRepository>();
@@ -56,7 +56,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, List<GenericFood>>> getGroceryProductsFromRemote(String query) async{
     List<GenericFood> foods = [];
-    final productsRemoteFromFoodDataCentral = await productRemoteDataSource.getGroceryProductsFromFoodDataCentral(query);
+    final productsRemoteFromFoodDataCentral = await productRemoteDataSource.getGroceries(query);
     if(productsRemoteFromFoodDataCentral.isRight()){
       if(productsRemoteFromFoodDataCentral.asRight().isNotEmpty){
         GenericFoodRemote food = productsRemoteFromFoodDataCentral.asRight()[0];
@@ -644,6 +644,26 @@ class FoodsRepositoryImpl extends FoodsRepository{
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     final foodLocal = mapper.toMyFoodLocal(food, userId);
     return await foodLocalDataSource.isFoodInMyCookBook(foodLocal);
+  }
+
+  @override
+  Future<Either<Failure, List<GenericFood>>> getRecipesFromRemote(String query) async{
+    List<GenericFood> foods = [];
+    final productsRemoteFromFatSecret = await productRemoteDataSource.getGroceries(query);
+    if(productsRemoteFromFatSecret.isRight()){
+      if(productsRemoteFromFatSecret.asRight().isNotEmpty){
+        GenericFoodRemote food = productsRemoteFromFatSecret.asRight()[0];
+        final userPlan= await userRepo.getUserPlanInRemote();
+        if(userPlan.isRight()){
+          // if(userPlan.asRight().subscriptionPlan!.plan != FREE_LABEL){
+          await saveUserSuggestedFoodInRemote(food.name, food.ingredients, '', '');
+          // }
+        }
+      }
+      foods.addAll(mapper.fromRecipesRemote(productsRemoteFromFatSecret.asRight()));
+    }
+
+    return Right(foods);
   }
 
 
