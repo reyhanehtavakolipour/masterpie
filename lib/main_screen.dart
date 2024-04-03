@@ -28,11 +28,12 @@ import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/remove_from_my
 import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/state_event/remove_from_favorite_state_event.dart';
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_list_ui.dart';
-import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'feature/foods/presentation/screen/request_macro_wizard_step1_screen.dart';
 import 'feature/foods/presentation/screen/search_food_screen.dart';
 import 'feature/foods/presentation/screen/suggest_food_screen.dart';
 import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
+import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'feature/foods/presentation/screen/view_favorite_food_screen.dart';
 import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -152,6 +153,84 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         ),
       );
     }
+  }
+
+  void removeFavorite(Food food){
+    _removeFromMyFavoriteBloc.add(
+      RemoveFromMyFavoriteEvent.onRemoveFromMyFavorite(
+          food
+      ),
+    );
+  }
+
+  Food checkFoodParameters(Food food){
+    List<String> ingredients = [];
+    ingredients.addAll(food.ingredients);
+    ingredients.removeWhere((item) => item.isEmpty);
+
+
+    List<String> calorie = [];
+    calorie.addAll(food.calorie);
+    calorie.removeWhere((item) => item.isEmpty);
+
+
+    List<String> protein = [];
+    protein.addAll(food.protein);
+    protein.removeWhere((item) => item.isEmpty);
+
+
+    List<String> carb = [];
+    carb.addAll(food.carb);
+    carb.removeWhere((item) => item.isEmpty);
+
+
+    List<String> fat = [];
+    fat.addAll(food.fat);
+    fat.removeWhere((item) => item.isEmpty);
+
+
+    List<String> servingAmounts = [];
+    servingAmounts.addAll(food.servingAmounts);
+    servingAmounts.removeWhere((item) => item.isEmpty);
+
+    List<String> servingUnits = [];
+    servingUnits.addAll(food.units);
+    servingUnits.removeWhere((item) => item.isEmpty);
+
+
+    List<String> servingIngredientCounts = [];
+    servingIngredientCounts.addAll(food.servingIngredientsCount);
+    servingIngredientCounts.removeWhere((item) => item.isEmpty);
+
+
+    return food.copyWith(
+        ingredients: ingredients,
+        calorie:  calorie,
+        protein: protein,
+        carb: carb,
+        fat: fat,
+        servingAmounts: servingAmounts,
+        units: servingUnits,
+        servingIngredientsCount: servingIngredientCounts
+    );
+  }
+
+
+  void onFavoriteFoodClicked(Food food){
+    FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(
+        food: checkFoodParameters(food),
+        macroEdition: true
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewFavoriteFoodScreen(foodDetailArgumentModel: argumentModel,),
+      ),
+    ).then((result) {
+      setState(() {
+        _newMyFavorites.remove(result);
+      });
+    });
   }
 
   void requestMyFavoriteFoods(){
@@ -1167,7 +1246,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                 child: Column(
                                                   children: [
                                                     MyFavoritesFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyFavorites), foods: _newMyFavorites, onFoodsChanged: updateChangedFavoriteFoods,
-                                                      onFavoriteButtonClicked: addOrRemoveFavorite, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
+                                                      onRemoveButtonClicked: removeFavorite, onFavoriteFoodClicked: onFavoriteFoodClicked, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
                                                       foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.favorite, color: RED_ERROR_COLOR,),
                                                       macroEdition: true,),
                                                   ],
@@ -1374,6 +1453,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                             Column(
                               children: [
+
 
                                 const SizedBox(height: 16,),
 
