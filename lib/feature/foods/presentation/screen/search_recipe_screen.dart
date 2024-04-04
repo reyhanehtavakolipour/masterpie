@@ -15,6 +15,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
+import 'package:masterpie/feature/foods/presentation/screen/view_recipe_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -93,12 +94,12 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
         food: food,
         macroEdition: true
     );
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => EditFatSecretFoodScreen(foodDetailArgumentModel: argumentModel,),
-    //   ),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewRecipeScreen(foodDetailArgumentModel: argumentModel,),
+      ),
+    );
   }
 
 

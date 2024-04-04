@@ -32,12 +32,12 @@ class GetRecipeUseCase{
       final ingredientResponse = await repo.getGroceryFromRemote(ingredientId);
       if(ingredientResponse.isRight()){
         ingredients.add(ingredientResponse.asRight().name);
-        calorie.add([ingredientResponse.asRight().calorie[0][0]]);
-        protein.add([ingredientResponse.asRight().protein[0][0]]);
-        carb.add([ingredientResponse.asRight().carb[0][0]]);
-        fat.add([ingredientResponse.asRight().fat[0][0]]);
-        servingAmounts.add([ingredientResponse.asRight().servingAmounts[0][0]]);
-        units.add([ingredientResponse.asRight().units[0][0]]);
+        calorie.add(ingredientResponse.asRight().calorie[0]);
+        protein.add(ingredientResponse.asRight().protein[0]);
+        carb.add(ingredientResponse.asRight().carb[0]);
+        fat.add(ingredientResponse.asRight().fat[0]);
+        servingAmounts.add(ingredientResponse.asRight().servingAmounts[0]);
+        units.add(ingredientResponse.asRight().units[0]);
       }
     });
 
