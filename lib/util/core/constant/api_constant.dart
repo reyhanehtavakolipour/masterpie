@@ -28,3 +28,5 @@ const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.n
 const GOOGLE_CLOUD_KEY = 'GOOGLE_CLOUD_KEY';
 
 const RESET_PASSWORD_URL = 'https://masterpieapp.com/reset-password';
+
+const FAT_SECRET_URL = 'https://platform.fatsecret.com/rest/server.api';

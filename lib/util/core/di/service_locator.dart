@@ -35,6 +35,7 @@ import '../../../feature/foods/domain/usecase/add_to_my_favorite_usecase.dart';
 import '../../../feature/foods/domain/usecase/get_international_meals_usecase.dart';
 import '../../../feature/foods/domain/usecase/get_logged_foods_usecase.dart';
 import '../../../feature/foods/domain/usecase/get_my_favorite_foods_usecase.dart';
+import '../../../feature/foods/domain/usecase/get_recipe_usecase.dart';
 import '../../../feature/foods/domain/usecase/groceries_usecase.dart';
 import '../../../feature/foods/domain/usecase/log_foods_usecase.dart';
 import '../../../feature/foods/domain/usecase/remove_from_my_favorite_usecase.dart';
@@ -129,6 +130,7 @@ Future<void> setUpServiceLocator() async{
 
   serviceLocator.registerFactory<RecipesUseCase>(() => RecipesUseCase());
 
+  serviceLocator.registerFactory<GetRecipeUseCase>(() => GetRecipeUseCase());
 
   //repositories
   serviceLocator.registerFactory<FoodsRepository>(() => FoodsRepositoryImpl());

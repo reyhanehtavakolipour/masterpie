@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_recipe_bloc/get_recipe_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
-import 'package:masterpie/feature/foods/presentation/bloc/recipe_bloc/recipes_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
@@ -15,6 +15,7 @@ import '../feature/foods/presentation/bloc/groceries_bloc/groceries_bloc.dart';
 import '../feature/foods/presentation/bloc/international_meals_bloc/international_meals_bloc.dart';
 import '../feature/foods/presentation/bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../feature/foods/presentation/bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
+import '../feature/foods/presentation/bloc/recipes_bloc/recipes_bloc.dart';
 import '../feature/foods/presentation/bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../feature/foods/presentation/bloc/suggest_food_bloc/suggest_food_bloc.dart';
 import '../feature/foods/presentation/bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
@@ -101,6 +102,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => RecipesBloc(),
+          ),
+          BlocProvider(
+            create: (_) => GetRecipeBloc(),
           ),
         ],
         child: MaterialApp(

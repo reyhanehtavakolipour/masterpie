@@ -36,17 +36,17 @@ import 'edit_fat_secret_food_screen.dart';
 
 
 
-class SearchFoodScreen extends StatefulWidget {
+class SearchGroceryScreen extends StatefulWidget {
 
-  const SearchFoodScreen({super.key});
+  const SearchGroceryScreen({super.key});
 
 
   @override
-  State<SearchFoodScreen> createState() => _SearchFoodScreenState();
+  State<SearchGroceryScreen> createState() => _SearchGroceryScreenState();
 }
 
 
-class _SearchFoodScreenState extends State<SearchFoodScreen> {
+class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
 
 
   late TextEditingController _searchController;

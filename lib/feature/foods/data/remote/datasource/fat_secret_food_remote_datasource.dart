@@ -14,5 +14,8 @@ abstract class FatSecretRemoteDataSource{
 
   Future<Either<Failure, List<GenericFoodRemote>>> getRecipes(String query);
 
+  Future<Either<Failure, GenericFoodRemote>> getGrocery(String groceryId);
+
+  Future<Either<Failure, String>> getGroceryId(String barcode);
 
 }

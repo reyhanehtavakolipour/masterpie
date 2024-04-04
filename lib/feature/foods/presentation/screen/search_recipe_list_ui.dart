@@ -16,32 +16,32 @@ import '../../domain/model/food_type.dart';
 
 
 
-class SearchGroceriesListUi extends StatefulWidget {
+class SearchRecipesListUi extends StatefulWidget {
 
   final GenericFoodCalculator foodCalculator;
   final Function(List<Food>) onFoodsChanged;
   final List<GenericFood> foods;
-  final Function(Food food) onFavoriteButtonClicked;
-  final Function(GenericFood food) onGroceryClicked;
+  final Function(Food food) onAddToCookBookButtonClicked;
+  final Function(GenericFood food) onRecipeClicked;
   final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
   final bool macroEdition;
 
-  const SearchGroceriesListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onFavoriteButtonClicked, required this.onGroceryClicked, required this.foodsTypeRequested,
+  const SearchRecipesListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
+    required this.onAddToCookBookButtonClicked, required this.onRecipeClicked, required this.foodsTypeRequested,
   required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
 
 
   @override
-  State<SearchGroceriesListUi> createState() => _SearchGroceriesListUiState();
+  State<SearchRecipesListUi> createState() => _SearchRecipesListUiState();
 
-  static _SearchGroceriesListUiState? of(BuildContext context) {
-    return context.findAncestorStateOfType<_SearchGroceriesListUiState>();
+  static _SearchRecipesListUiState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_SearchRecipesListUiState>();
   }
 }
 
-class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
+class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
 
 
   List<GenericFood> foodsChanged= [];
@@ -66,12 +66,12 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
               String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
               String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
               bool isFoodAdded= foodInformation.isFoodAdded;
-              double servingQuantity= foodInformation.servingAmounts[0][0];
+              int servingQuantity= foodInformation.servingAmounts[0][0].toInt();
               String foodUnit= foodInformation.units[0][0];
 
               return GestureDetector(
                 onTap: (){
-                  widget.onGroceryClicked(food);
+                  widget.onRecipeClicked(food);
                 },
                 child: Card(
                   color: widget.foodBackGroundColor,
@@ -112,7 +112,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
 
                                 /// calorie
                                 GestureDetector(
-                                  child: Text('$calorie cal',
+                                  child: Text('$servingQuantity serving, $calorie cal',
                                     style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 12,
@@ -142,19 +142,19 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                             children: [
 
 
-                              /// more icon: add/remove favorite
+                              /// more icon: add/remove cookbook
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_horiz),
                                 onSelected: (String result) {
-                                    widget.onFavoriteButtonClicked(fromGenericFood(food));
+                                    widget.onAddToCookBookButtonClicked(fromGenericFood(food));
                                 },
                                 itemBuilder: (BuildContext context) =>
                                 <PopupMenuEntry<String>>[
                                   const PopupMenuItem<String>(
-                                    value: ADD_TO_MY_FAVORTITE,
+                                    value: ADD_TO_MY_COOK_BOOK,
                                     child: ListTile(
-                                      leading: Icon(Icons.favorite),
-                                      title: Text( ADD_TO_MY_FAVORTITE, style: TextStyle(fontFamily: MONTSERRAT_FONT),),
+                                      leading: Icon(Icons.fastfood_rounded),
+                                      title: Text(ADD_TO_MY_COOK_BOOK, style: TextStyle(fontFamily: MONTSERRAT_FONT),),
                                     ),
                                   ),
                                 ],

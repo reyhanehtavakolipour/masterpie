@@ -8,6 +8,7 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
@@ -29,7 +30,7 @@ import 'feature/foods/presentation/bloc/remove_from_favorite_bloc/state_event/re
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_list_ui.dart';
 import 'feature/foods/presentation/screen/request_macro_wizard_step1_screen.dart';
-import 'feature/foods/presentation/screen/search_food_screen.dart';
+import 'feature/foods/presentation/screen/search_grocery_screen.dart';
 import 'feature/foods/presentation/screen/suggest_food_screen.dart';
 import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
@@ -1756,7 +1757,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
      await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SearchFoodScreen(),
+        builder: (context) => const SearchGroceryScreen(),
       ),
     );
   }
@@ -1766,7 +1767,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SearchFoodScreen(),
+        builder: (context) => const SearchRecipeScreen(),
       ),
     );
   }

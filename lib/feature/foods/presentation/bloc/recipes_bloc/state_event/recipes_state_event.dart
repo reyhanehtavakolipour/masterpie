@@ -11,7 +11,7 @@ part 'recipes_state_event.freezed.dart';
 @freezed
 abstract class RecipesEvent with _$RecipesEvent {
 
-  const factory RecipesEvent.onGetGroceries(String query) = GetRecipesEvent;
+  const factory RecipesEvent.onGetRecipes(String query) = GetRecipesEvent;
   const factory RecipesEvent.onReset() = Reset;
 
 }

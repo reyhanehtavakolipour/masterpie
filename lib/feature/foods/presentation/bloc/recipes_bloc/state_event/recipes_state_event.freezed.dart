@@ -18,38 +18,38 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RecipesEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String query) onGetGroceries,
+    required TResult Function(String query) onGetRecipes,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String query)? onGetRecipes,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String query)? onGetGroceries,
+    TResult Function(String query)? onGetRecipes,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(GetRecipesEvent value) onGetGroceries,
+    required TResult Function(GetRecipesEvent value) onGetRecipes,
     required TResult Function(Reset value) onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetRecipesEvent value)? onGetGroceries,
+    TResult? Function(GetRecipesEvent value)? onGetRecipes,
     TResult? Function(Reset value)? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetRecipesEvent value)? onGetGroceries,
+    TResult Function(GetRecipesEvent value)? onGetRecipes,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) =>
@@ -115,7 +115,7 @@ class _$GetRecipesEventImpl implements GetRecipesEvent {
 
   @override
   String toString() {
-    return 'RecipesEvent.onGetGroceries(query: $query)';
+    return 'RecipesEvent.onGetRecipes(query: $query)';
   }
 
   @override
@@ -139,30 +139,30 @@ class _$GetRecipesEventImpl implements GetRecipesEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String query) onGetGroceries,
+    required TResult Function(String query) onGetRecipes,
     required TResult Function() onReset,
   }) {
-    return onGetGroceries(query);
+    return onGetRecipes(query);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String query)? onGetRecipes,
     TResult? Function()? onReset,
   }) {
-    return onGetGroceries?.call(query);
+    return onGetRecipes?.call(query);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String query)? onGetGroceries,
+    TResult Function(String query)? onGetRecipes,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
-    if (onGetGroceries != null) {
-      return onGetGroceries(query);
+    if (onGetRecipes != null) {
+      return onGetRecipes(query);
     }
     return orElse();
   }
@@ -170,30 +170,30 @@ class _$GetRecipesEventImpl implements GetRecipesEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(GetRecipesEvent value) onGetGroceries,
+    required TResult Function(GetRecipesEvent value) onGetRecipes,
     required TResult Function(Reset value) onReset,
   }) {
-    return onGetGroceries(this);
+    return onGetRecipes(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetRecipesEvent value)? onGetGroceries,
+    TResult? Function(GetRecipesEvent value)? onGetRecipes,
     TResult? Function(Reset value)? onReset,
   }) {
-    return onGetGroceries?.call(this);
+    return onGetRecipes?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetRecipesEvent value)? onGetGroceries,
+    TResult Function(GetRecipesEvent value)? onGetRecipes,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
-    if (onGetGroceries != null) {
-      return onGetGroceries(this);
+    if (onGetRecipes != null) {
+      return onGetRecipes(this);
     }
     return orElse();
   }
@@ -246,7 +246,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String query) onGetGroceries,
+    required TResult Function(String query) onGetRecipes,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -255,7 +255,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String query)? onGetRecipes,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -264,7 +264,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String query)? onGetGroceries,
+    TResult Function(String query)? onGetRecipes,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -277,7 +277,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(GetRecipesEvent value) onGetGroceries,
+    required TResult Function(GetRecipesEvent value) onGetRecipes,
     required TResult Function(Reset value) onReset,
   }) {
     return onReset(this);
@@ -286,7 +286,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GetRecipesEvent value)? onGetGroceries,
+    TResult? Function(GetRecipesEvent value)? onGetRecipes,
     TResult? Function(Reset value)? onReset,
   }) {
     return onReset?.call(this);
@@ -295,7 +295,7 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(GetRecipesEvent value)? onGetGroceries,
+    TResult Function(GetRecipesEvent value)? onGetRecipes,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {

@@ -98,6 +98,7 @@ const LOWCARB_LABEL= 'Low Carb';
 const VEGAN_LABEL= 'Vegan';
 const CONTAINS_LABEL= 'Includes';
 const CHEDDAR_CHEESE_LABEL= 'cheddar cheese...';
+const PASTA_LABEL= 'pasta alfredo...';
 const ALLERGIC_LABEL= 'Without any';
 const NUTS_LABEL= 'nuts...';
 const NATIONALITIES_LABEL= 'Country';

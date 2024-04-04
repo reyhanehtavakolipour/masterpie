@@ -2,8 +2,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/domain/usecase/search_recipe_usecase.dart';
-import 'package:masterpie/feature/foods/presentation/bloc/recipe_bloc/state_event/recipes_state_event.dart';
-
+import 'package:masterpie/feature/foods/presentation/bloc/recipes_bloc/state_event/recipes_state_event.dart';
 import '../../../../../util/core/di/service_locator.dart';
 
 

@@ -649,7 +649,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, List<GenericFood>>> getRecipesFromRemote(String query) async{
     List<GenericFood> foods = [];
-    final productsRemoteFromFatSecret = await productRemoteDataSource.getGroceries(query);
+    final productsRemoteFromFatSecret = await productRemoteDataSource.getRecipes(query);
     if(productsRemoteFromFatSecret.isRight()){
       if(productsRemoteFromFatSecret.asRight().isNotEmpty){
         GenericFoodRemote food = productsRemoteFromFatSecret.asRight()[0];
@@ -666,6 +666,23 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return Right(foods);
   }
 
+  @override
+  Future<Either<Failure, GenericFood>> getGroceryFromRemote(String groceryId) async{
+    final groceryResponse= await productRemoteDataSource.getGrocery(groceryId);
+    if(groceryResponse.isRight()){
+      return Right(mapper.fromGenericFoodRemote(groceryResponse.asRight()));
+    }
+    return Left(groceryResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, String>> getGroceryIdFromRemote(String barcode) async{
+    final groceryResponse= await productRemoteDataSource.getGroceryId(barcode);
+    if(groceryResponse.isRight()){
+      return Right(groceryResponse.asRight());
+    }
+    return Left(groceryResponse.asLeft());
+  }
 
 
 
