@@ -264,7 +264,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
 
                                           List<Food> foods= [];
                                           _newGroceries.forEach((food) {
-                                            foods.add(fromGenericFood(food));
+                                            foods.add(fromGenericGrocery(food));
                                           });
 
                                           updateChangedGroceries(foods);

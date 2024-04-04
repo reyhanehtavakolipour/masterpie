@@ -139,7 +139,7 @@ class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesLis
                                   child: const Text(ADD_FOOD_LABEL, style: TextStyle(color: Colors.white, fontFamily: MONTSERRAT_FONT, fontWeight: FontWeight.bold, fontSize: 10),),
                                 ),
                                 onTap: (){
-                                  widget.onAddButtonClicked(fromGenericFood(food));
+                                  widget.onAddButtonClicked(fromGenericGrocery(food));
                                 },
                               ),
 

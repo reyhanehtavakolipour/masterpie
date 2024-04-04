@@ -246,8 +246,8 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 
 
-                        ///add to favorite button
-                        buildAddToFavoritesButton(context),
+                        ///add to cookbook button
+                        buildAddToCookBookButton(context),
 
                         const SizedBox(height: 16,),
 
@@ -258,62 +258,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
                         ///log food button
                         buildLogFoodButton(context),
-
-
-                        BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                            builder: (mcontext, state) {
-                              if (state is GetLoggedFoodsLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is GetLoggedFoodsLoadedState){
-                                _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  logFoodsOfToday(state.loggedFoods.foods);
-                                });
-                              }else if(state is GetLoggedFoodsErrorState){
-                                _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-                        BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                            builder: (mcontext, state) {
-
-                              if (state is LogFoodsLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is LogFoodsLoadedState){
-                                _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  showSuccessToast(context, LOGGED_SUCCESSFULLY);
-                                });
-                              }else if(state is LogFoodsErrorState){
-                                _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
                       ],
                     ),
                   ),
@@ -337,6 +281,61 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                         });
                       }else if(state is GetRecipeErrorState){
                         _getRecipeBloc.add(const GetRecipeEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
+
+
+                BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                    builder: (mcontext, state) {
+                      if (state is GetLoggedFoodsLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is GetLoggedFoodsLoadedState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          logFoodsOfToday(state.loggedFoods.foods);
+                        });
+                      }else if(state is GetLoggedFoodsErrorState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
+                BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                    builder: (mcontext, state) {
+
+                      if (state is LogFoodsLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is LogFoodsLoadedState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                        });
+                      }else if(state is LogFoodsErrorState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
                         });
@@ -528,14 +527,14 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
 
-    foods.add(fromGenericFood(newFood));
+    foods.add(fromGenericRecipe(newFood));
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
     );
   }
 
-  Widget buildAddToFavoritesButton(BuildContext context){
+  Widget buildAddToCookBookButton(BuildContext context){
     return Column(
       children: [
         Container(
@@ -549,7 +548,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                   backgroundColor: DARK_PRIMARY_COLOR
               ),
               onPressed: () {
-                addToFavoriteClickListener(context);
+                addToCookBookClickListener(context);
               },
               child: const Text(ADD_TO_MY_COOK_BOOK,
                 style: TextStyle( color: Colors.white),)
@@ -571,13 +570,13 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
               }else if(state is AddOrUpdateMyCookBookLoadedState){
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
-                  showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
+                  showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                 });
               }else if(state is AddOrUpdateMyCookBookErrorState){
                 _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                 Future.delayed(Duration.zero,(){
-                  if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){
-                    return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FAVORITE_FOOD);
+                  if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){
+                    return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_COOKBOOK_FOOD);
                   }
                   return showErrorToast(context, state.message);
                 });
@@ -594,10 +593,10 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
 
-  void addToFavoriteClickListener(BuildContext context){
+  void addToCookBookClickListener(BuildContext context){
     _addOrUpdateMyCookBookBloc.add(
       AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-        fromGenericFood(newFood),
+        fromGenericRecipe(newFood),
       ),
     );
   }

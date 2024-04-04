@@ -146,7 +146,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_horiz),
                                 onSelected: (String result) {
-                                    widget.onFavoriteButtonClicked(fromGenericFood(food));
+                                    widget.onFavoriteButtonClicked(fromGenericGrocery(food));
                                 },
                                 itemBuilder: (BuildContext context) =>
                                 <PopupMenuEntry<String>>[
@@ -255,7 +255,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
 
     List<Food> foods= [];
     foodsChanged.forEach((food) {
-      foods.add(fromGenericFood(food));
+      foods.add(fromGenericGrocery(food));
     });
 
     widget.onFoodsChanged(foods);
