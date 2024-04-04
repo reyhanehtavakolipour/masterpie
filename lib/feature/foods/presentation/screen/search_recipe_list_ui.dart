@@ -19,18 +19,13 @@ import '../../domain/model/food_type.dart';
 class SearchRecipesListUi extends StatefulWidget {
 
   final GenericFoodCalculator foodCalculator;
-  final Function(List<Food>) onFoodsChanged;
   final List<GenericFood> foods;
-  final Function(Food food) onAddToCookBookButtonClicked;
   final Function(GenericFood food) onRecipeClicked;
-  final List<FoodType> foodsTypeRequested;
   final Color foodBackGroundColor;
   final Icon foodIcon;
-  final bool macroEdition;
 
-  const SearchRecipesListUi({super.key,required this.foodCalculator, required this.foods, required this.onFoodsChanged,
-    required this.onAddToCookBookButtonClicked, required this.onRecipeClicked, required this.foodsTypeRequested,
-  required this.foodBackGroundColor, required this.foodIcon, required this.macroEdition});
+  const SearchRecipesListUi({super.key,required this.foodCalculator, required this.foods,
+  required this.onRecipeClicked, required this.foodBackGroundColor, required this.foodIcon});
 
 
   @override
@@ -56,9 +51,6 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               GenericFood food = widget.foods[index];
-              if(!widget.foodsTypeRequested.contains(food.foodType)){
-                return const SizedBox.shrink();
-              }
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
               double quantity = foodInformation.count;
               String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
@@ -132,114 +124,6 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
                             ),
                           ),
                       ),
-
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-
-
-                              /// more icon: add/remove cookbook
-                              PopupMenuButton<String>(
-                                icon: const Icon(Icons.more_horiz),
-                                onSelected: (String result) {
-                                    widget.onAddToCookBookButtonClicked(fromGenericFood(food));
-                                },
-                                itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                                  const PopupMenuItem<String>(
-                                    value: ADD_TO_MY_COOK_BOOK,
-                                    child: ListTile(
-                                      leading: Icon(Icons.fastfood_rounded),
-                                      title: Text(ADD_TO_MY_COOK_BOOK, style: TextStyle(fontFamily: MONTSERRAT_FONT),),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-
-                              /// plus button when no serving is added
-                              Visibility(
-                                visible: !isFoodAdded,
-                                child: GestureDetector(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    // margin: const EdgeInsets.only(bottom: 16, right: 12),
-                                    decoration: BoxDecoration(
-                                      color: DARK_PRIMARY_COLOR,
-                                      borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
-                                    ),
-                                    child: const Text(LOG_FOOD_LABEL, style: TextStyle(color: Colors.white, fontFamily: MONTSERRAT_FONT, fontWeight: FontWeight.bold, fontSize: 10),),
-                                  ),
-                                  onTap: (){
-                                    setState(() {
-                                      widget.foodCalculator.addFoodByOne(food);
-                                      updateFoodsChanged();
-                                    });
-                                  },
-                                ),
-                              ),
-
-                              /// plus button when at least one serving is added
-                              Visibility(
-                                visible: isFoodAdded,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                                  margin: const EdgeInsets.only(bottom: 16, right: 12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      GestureDetector(
-                                        child: const CircleAvatar(
-                                          radius: 14,
-                                          backgroundColor: DARK_PRIMARY_COLOR,
-                                          child: Icon(
-                                            Icons.remove,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        onTap: (){
-                                          setState(() {
-                                            widget.foodCalculator.removeFoodByOne(food);
-                                            updateFoodsChanged();
-                                          });
-                                        },
-
-                                      ),
-                                      Container(
-                                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                                          child: Text('$quantity', style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold))
-                                      ),
-                                      GestureDetector(
-                                        child: const CircleAvatar(
-                                          radius: 14,
-                                          backgroundColor: DARK_PRIMARY_COLOR,
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        onTap: (){
-                                          setState(() {
-                                            widget.foodCalculator.addFoodByOne(food);
-                                            updateFoodsChanged();
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 24,)
-                            ],
-                          ),
-                        ),
-                      ),
-
                     ],
 
                   ),
@@ -250,15 +134,5 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
   }
 
 
-  void updateFoodsChanged(){
-    foodsChanged = widget.foodCalculator.visibleFoods;
-
-    List<Food> foods= [];
-    foodsChanged.forEach((food) {
-      foods.add(fromGenericFood(food));
-    });
-
-    widget.onFoodsChanged(foods);
-  }
 
 }
