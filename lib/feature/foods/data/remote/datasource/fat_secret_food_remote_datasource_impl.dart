@@ -140,60 +140,22 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
           final recipe= (element as dynamic);
 
-          Map<String, dynamic> recipeParams = {
-            'recipe_id': recipe['recipe_id'],
-            'format': 'json',
-            'method': 'recipe.get.v2',
-          };
-
-
-
-          /// second api to get recipe detail
-          final recipeDetailResponse= await request.postParams(FAT_SECRET_URL, params: recipeParams);
-          if(recipeDetailResponse.statusCode == SUCCESS_API_CODE){
-
-
-            final servingNumber= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
-
-
-            // ingredients ids
-            List<String> ingredients = [];
-            List<List<String>> servingIngredientsCount = [];
-            (recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List).forEach((ingredient) {
-              ingredients.add(ingredient['food_id']);
-              servingIngredientsCount.add([ingredient['number_of_units']]);
-            });
-
-
-            String recipeInstruction = '';
-            final recipeDirection= recipeDetailResponse.data['recipe']['directions']['direction'] as List;
-            for (int i = 0; i < recipeDirection.length; i++){
-              recipeInstruction= '${i+1}- ${recipeDirection[i]['direction_description']}\n';
-            }
-
-
-            (recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List).forEach((ingredient) {
-              ingredients.add(ingredient['food_id']);
-            });
 
           final product = GenericFoodRemote(
                 id: element['recipe_id'],
                 name: element['recipe_name'],
                 foodType: FoodTypeRemote.groceryProduct,
-                calorie: [[(double.parse(recipe['recipe_nutrition']['calories'].toString()) * servingNumber).toString()]],
+                calorie: [[(double.parse(recipe['recipe_nutrition']['calories'].toString())).toString()]],
                 protein: [['0.0']],
                 carb: [['0.0']],
                 fat: [['0.0']],
-                recipe: recipeInstruction,
-                ingredients: ingredients,
-                servingIngredientsCount: servingIngredientsCount,
-                servingAmount: [servingNumber],
-                unit: ['serving']
+                unit: ['serving'],
+                units: [['serving']],
+            servingAmounts: [['1.0']],
+            servingIngredientsCount: [['1.0']]
             );
             productsRemote.add(product);
 
-
-          }
         });
 
         return Right(productsRemote);
@@ -208,7 +170,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, GenericFoodRemote>> getGrocery(String groceryId) async{
+  Future<Either<Failure, GenericFoodRemote>> getRecipe(String recipeId) async{
 
     try {
 
@@ -223,40 +185,121 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
       final NetworkRequest request = await NetworkRequest.createFatSecret(token);
 
-      Map<String, dynamic> params = {
-        'method': 'food.get.v4',
-        'food_id': groceryId,
+
+      List<String> ingredients = [];
+      List<List<String>> servingIngredientsCount = [];
+      List<List<String>> calorie = [];
+      List<List<String>> protein = [];
+      List<List<String>> carb = [];
+      List<List<String>> fat = [];
+      List<List<String>> servingAmounts = [];
+      List<List<String>> units = [];
+      String recipeInstruction = '';
+
+
+      /// first api to get recipe detail
+
+
+      Map<String, dynamic> recipeParams = {
+        'recipe_id': recipeId,
         'format': 'json',
+        'method': 'recipe.get.v2',
       };
 
-      final response= await request.postParams(FAT_SECRET_URL, params: params);
+      final recipeDetailResponse= await request.postParams(FAT_SECRET_URL, params: recipeParams);
+      if(recipeDetailResponse.statusCode == SUCCESS_API_CODE){
 
-      if(response.statusCode == SUCCESS_API_CODE){
 
-        final data = response.data;
+        final mealServingNumber= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
 
-        final serving= data['food']['servings']['serving'] as List;
 
-        final grocery= GenericFoodRemote(
-          foodType: FoodTypeRemote.groceryProduct,
-          id: groceryId,
-          name: data['food']['food_name'],
-          servingAmounts: [[serving[0]['number_of_units']]],
-          units: [[serving[0]['measurement_description']]],
-          calorie: [[serving[0]['calories']]],
-          protein: [[serving[0]['protein']]],
-          carb: [[serving[0]['carbohydrate']]],
-          fat: [[serving[0]['fat']]],
-        );
 
-        print('gfdgss: $grocery');
-        return Right(grocery);
+        final recipeDirection= recipeDetailResponse.data['recipe']['directions']['direction'] as List;
+        for (int i = 0; i < recipeDirection.length; i++){
+          recipeInstruction= '$recipeInstruction ${i+1}- ${recipeDirection[i]['direction_description']}\n';
+        }
+
+
+        await Future.forEach((recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List), (ingredient) async {
+          ingredients.add(ingredient['food_name']);
+          final ingredientNumberOfUnit= double.parse(ingredient['number_of_units']);
+          double servingIngredientCount = double.parse((ingredientNumberOfUnit/mealServingNumber).toStringAsFixed(2));
+          servingIngredientsCount.add([servingIngredientCount.toString()]);
+
+
+          /// calling second api to get ingredient detail
+
+          Map<String, dynamic> params = {
+            'method': 'food.get.v4',
+            'food_id': ingredient['food_id'],
+            'format': 'json',
+          };
+
+          final response= await request.postParams(FAT_SECRET_URL, params: params);
+
+          if(response.statusCode == SUCCESS_API_CODE){
+
+            final data = response.data;
+
+            final serving= data['food']['servings']['serving'] as List;
+
+
+            List<String> ingredientCalorie= [];
+            List<String> ingredientProtein= [];
+            List<String> ingredientCarb= [];
+            List<String> ingredientFat= [];
+            List<String> ingredientServingAmounts= [];
+            List<String> ingredientUnits= [];
+            serving.forEach((element) {
+              ingredientCalorie.add(element['calories'].toString());
+              ingredientProtein.add(element['protein'].toString());
+              ingredientCarb.add(element['carbohydrate'].toString());
+              ingredientFat.add(element['fat'].toString());
+              ingredientServingAmounts.add(element['number_of_units'].toString());
+
+              if(element['measurement_description'] == 'serving'){
+                ingredientUnits.add(element['serving_description'].toString());
+              }else{
+                ingredientUnits.add(element['measurement_description'].toString());
+              }
+            });
+            calorie.add(ingredientCalorie);
+            protein.add(ingredientProtein);
+            carb.add(ingredientCarb);
+            fat.add(ingredientFat);
+            servingAmounts.add(ingredientServingAmounts);
+            units.add(ingredientUnits);
+
+          }else{
+            return  Left(RemoteFailure(response.statusCode, response.data['message']));
+          }
+        });
       }else{
-        return  Left(RemoteFailure(response.statusCode, response.data['message']));
+        return  Left(RemoteFailure(recipeDetailResponse.statusCode, recipeDetailResponse.data['message']));
       }
 
+
+      final product = GenericFoodRemote(
+          id: recipeId,
+          name: recipeDetailResponse.data['recipe']['recipe_name'],
+          foodType: FoodTypeRemote.meal,
+          calorie: calorie,
+          protein: protein,
+          carb: carb,
+          fat: fat,
+          recipe: recipeInstruction,
+          ingredients: ingredients,
+          servingIngredientsCount: servingIngredientsCount,
+          servingAmount: [1.0],
+          servingAmounts: servingAmounts,
+          unit: ['serving'],
+          units: units
+      );
+
+
+      return Right(product);
+
     } catch (e) {
-      print('gfdgss1: $e');
       return Left(ExceptionFailure(e));
     }
 

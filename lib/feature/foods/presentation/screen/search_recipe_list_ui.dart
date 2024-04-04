@@ -112,7 +112,7 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
 
                                 /// calorie
                                 GestureDetector(
-                                  child: Text('$servingQuantity serving, $calorie cal',
+                                  child: Text('$calorie cal',
                                     style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 12,

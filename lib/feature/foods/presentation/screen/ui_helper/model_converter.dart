@@ -13,7 +13,12 @@ Food fromGenericFood(GenericFood food){
       units: food.units[0],
       foodType: FoodType.groceryProduct,
       count: food.count,
-      name: food.name
+      name: food.name,
+    ingredients: food.ingredients,
+    servingAmount: food.servingAmount[0],
+    unit: food.unit[0],
+    recipe: food.recipe,
+    servingIngredientsCount: food.servingIngredientsCount[0]
   );
 }
 

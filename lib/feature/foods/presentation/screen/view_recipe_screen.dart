@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
-import 'package:masterpie/feature/foods/presentation/screen/edit_cook_book_food_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_recipe_bloc/get_recipe_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_recipe_bloc/state_event/get_recipe_state_event.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -36,6 +38,7 @@ class ViewRecipeScreen extends StatefulWidget {
 
 class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
+  bool _isRecipeLoaded= false;
 
   String _totalCalorie= '';
   String _totalProtein= '';
@@ -48,28 +51,32 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
   late TextEditingController _foodCountController;
 
-  Food newFood = Food();
+  GenericFood newFood = GenericFood();
   late AddOrUpdateMyCookBookBloc _addOrUpdateMyCookBookBloc;
+  late GetRecipeBloc _getRecipeBloc;
 
 
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
 
-  bool _removeBtnClicked= false;
-
   @override
   void initState() {
     super.initState();
     _addOrUpdateMyCookBookBloc = context.read<AddOrUpdateMyCookBookBloc>();
+    _getRecipeBloc = context.read<GetRecipeBloc>();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _foodCountController= TextEditingController(text: '1.0');
     _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset(),);
 
-    init();
+    getRecipe();
   }
 
-
+  void getRecipe(){
+    _getRecipeBloc.add(
+        GetRecipeEvent.onGetRecipe(widget.foodDetailArgumentModel.food!)
+    );
+  }
 
   void requestLoggedFoods(){
     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -115,195 +122,233 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         ),
         body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            child: Stack(
+              children: [
+
+                Visibility(
+                  visible: _isRecipeLoaded,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
 
 
-                  const Text('$NAME_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                        const Text('$NAME_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
-                  const SizedBox(height: 4,),
+                        const SizedBox(height: 4,),
 
-                  Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-
-
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      const SizedBox(height: 16,),
-
-                      const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                      const SizedBox(height: 4,),
+                        Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
 
-                      Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            const SizedBox(height: 16,),
+
+                            const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                            const SizedBox(height: 4,),
 
 
-                      const SizedBox(height: 16,),
-
-                      const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                      const SizedBox(height: 4,),
+                            Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
 
 
-                      Text(_recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                            const SizedBox(height: 16,),
 
-                    ],
+                            const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                            const SizedBox(height: 4,),
+
+
+                            Text(_recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+                          ],
+                        ),
+
+
+
+                        const SizedBox(height: 32,),
+
+
+
+                        const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+
+                        const SizedBox(height: 16,),
+
+                        Row(
+                          children: [
+                            Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                            const SizedBox(width: 4,),
+                            Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16,),
+
+
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text('$CALORIE_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                    const SizedBox(width: 4,),
+                                    Text(_totalCalorie, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                                  ],
+                                )
+                            ),
+                            Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text('$PROTEIN_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                    const SizedBox(width: 4,),
+                                    Text(_totalProtein, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                                  ],
+                                )
+                            ),
+                          ],
+                        ),
+
+
+                        const SizedBox(height: 16,),
+
+
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text('$CARB_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                    const SizedBox(width: 4,),
+                                    Text(_totalCarb, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                                  ],
+                                )
+                            ),
+                            Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text('$FAT_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                                    const SizedBox(width: 4,),
+                                    Text(_totalFat, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                                  ],
+                                )
+                            ),
+                          ],
+                        ),
+
+
+
+                        const SizedBox(height: 32,),
+
+
+
+                        ///add to favorite button
+                        buildAddToFavoritesButton(context),
+
+                        const SizedBox(height: 16,),
+
+
+                        foodCount(),
+
+                        const SizedBox(height: 16,),
+
+                        ///log food button
+                        buildLogFoodButton(context),
+
+
+                        BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                            builder: (mcontext, state) {
+                              if (state is GetLoggedFoodsLoadingState) {
+                                return const GFLoader(
+                                  type: GFLoaderType.circle,
+                                  loaderColorOne: DARK_PRIMARY_COLOR,
+                                  loaderColorTwo: DARK_PRIMARY_COLOR,
+                                  loaderColorThree: DARK_PRIMARY_COLOR,
+                                );
+                              }else if(state is GetLoggedFoodsLoadedState){
+                                _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                                Future.delayed(Duration.zero,(){
+                                  logFoodsOfToday(state.loggedFoods.foods);
+                                });
+                              }else if(state is GetLoggedFoodsErrorState){
+                                _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                                Future.delayed(Duration.zero,(){
+                                  return showErrorToast(context, state.message);
+                                });
+                              }
+                              return Container();
+                            },
+                            listener: (context, state){
+
+                            }
+                        ),
+                        BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                            builder: (mcontext, state) {
+
+                              if (state is LogFoodsLoadingState) {
+                                return const GFLoader(
+                                  type: GFLoaderType.circle,
+                                  loaderColorOne: DARK_PRIMARY_COLOR,
+                                  loaderColorTwo: DARK_PRIMARY_COLOR,
+                                  loaderColorThree: DARK_PRIMARY_COLOR,
+                                );
+                              }else if(state is LogFoodsLoadedState){
+                                _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                                Future.delayed(Duration.zero,(){
+                                  showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                                });
+                              }else if(state is LogFoodsErrorState){
+                                _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                                Future.delayed(Duration.zero,(){
+                                  return showErrorToast(context, state.message);
+                                });
+                              }
+                              return Container();
+                            },
+                            listener: (context, state){
+
+                            }
+                        ),
+
+                      ],
+                    ),
                   ),
+                ),
 
 
-
-                  const SizedBox(height: 32,),
-
-
-
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-
-                  const SizedBox(height: 16,),
-
-                  Row(
-                    children: [
-                      Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                      const SizedBox(width: 4,),
-                      Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16,),
-
-
-                  Row(
-                    children: [
-                      Expanded(
-                          child: Row(
-                            children: [
-                              const Text('$CALORIE_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                              const SizedBox(width: 4,),
-                              Text(_totalCalorie, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                            ],
-                          )
-                      ),
-                      Expanded(
-                          child: Row(
-                            children: [
-                              const Text('$PROTEIN_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                              const SizedBox(width: 4,),
-                              Text(_totalProtein, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                            ],
-                          )
-                      ),
-                    ],
-                  ),
-
-
-                  const SizedBox(height: 16,),
-
-
-                  Row(
-                    children: [
-                      Expanded(
-                          child: Row(
-                            children: [
-                              const Text('$CARB_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                              const SizedBox(width: 4,),
-                              Text(_totalCarb, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                            ],
-                          )
-                      ),
-                      Expanded(
-                          child: Row(
-                            children: [
-                              const Text('$FAT_LABEL:', style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                              const SizedBox(width: 4,),
-                              Text(_totalFat, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                            ],
-                          )
-                      ),
-                    ],
-                  ),
-
-
-
-                  const SizedBox(height: 32,),
-
-
-
-                  ///add to favorite button
-                  buildAddToFavoritesButton(context),
-
-                  const SizedBox(height: 16,),
-
-
-                  foodCount(),
-
-                  const SizedBox(height: 16,),
-
-                  ///log food button
-                  buildLogFoodButton(context),
-
-
-                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                      builder: (mcontext, state) {
-                        if (state is GetLoggedFoodsLoadingState) {
-                          return const GFLoader(
-                            type: GFLoaderType.circle,
-                            loaderColorOne: DARK_PRIMARY_COLOR,
-                            loaderColorTwo: DARK_PRIMARY_COLOR,
-                            loaderColorThree: DARK_PRIMARY_COLOR,
-                          );
-                        }else if(state is GetLoggedFoodsLoadedState){
-                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            logFoodsOfToday(state.loggedFoods.foods);
-                          });
-                        }else if(state is GetLoggedFoodsErrorState){
-                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
-                        return Container();
-                      },
-                      listener: (context, state){
-
+                BlocConsumer<GetRecipeBloc, GetRecipeState>(
+                    builder: (mcontext, state) {
+                      if (state is GetRecipeLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is GetRecipeLoadedState){
+                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          _isRecipeLoaded= true;
+                          fillUi(state.food);
+                        });
+                      }else if(state is GetRecipeErrorState){
+                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
                       }
-                  ),
-                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                      builder: (mcontext, state) {
+                      return Container();
+                    },
+                    listener: (context, state){
 
-                        if (state is LogFoodsLoadingState) {
-                          return const GFLoader(
-                            type: GFLoaderType.circle,
-                            loaderColorOne: DARK_PRIMARY_COLOR,
-                            loaderColorTwo: DARK_PRIMARY_COLOR,
-                            loaderColorThree: DARK_PRIMARY_COLOR,
-                          );
-                        }else if(state is LogFoodsLoadedState){
-                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            showSuccessToast(context, LOGGED_SUCCESSFULLY);
-                          });
-                        }else if(state is LogFoodsErrorState){
-                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
-                        return Container();
-                      },
-                      listener: (context, state){
+                    }
+                ),
 
-                      }
-                  ),
-
-                ],
-              ),
+              ],
             )
         ),
       ),
@@ -311,67 +356,68 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
 
-  void init(){
-        double calorie = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            double servingCount = double.parse(
-                widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i]) * servingCount;
-          }
+  void fillUi(GenericFood genericFood){
+
+    setState(() {
+      double calorie = 0;
+      for (int i = 0; i < genericFood.calorie.length; i++) {
+        if (i < genericFood.servingIngredientsCount.length) {
+          double servingCount = double.parse(
+              genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+          calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
         }
+      }
 
-        double protein = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i]) * servingCount;
-          }
+      double protein = 0;
+      for (int i = 0; i < genericFood.protein.length; i++) {
+        if (i < genericFood.servingIngredientsCount.length) {
+          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+          protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
         }
+      }
 
-        double carb = 0;
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i]) * servingCount;
-          }
+      double carb = 0;
+      for (int i = 0; i < genericFood.carb.length; i++) {
+        if (i < genericFood.servingIngredientsCount.length) {
+          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+          carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
         }
+      }
 
 
-        double fat = 0;
-        for (int i = 0; i <
-            widget.foodDetailArgumentModel.food!.fat.length; i++) {
-          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-            fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i]) * servingCount;
-          }
+      double fat = 0;
+      for (int i = 0; i <
+          genericFood.fat.length; i++) {
+        if (i < genericFood.servingIngredientsCount.length) {
+          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+          fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
         }
+      }
 
 
-        String ingredients = '';
-        for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
-          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-                * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])}'
-                ' ${widget.foodDetailArgumentModel.food!.units[i]} '
-                '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
-            ingredients = ingredients + ingredient;
-          }
+      String ingredients = '';
+      for (int i = 0; i < genericFood.ingredients.length; i++) {
+        if (i < genericFood.servingIngredientsCount.length) {
+          String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])
+              * double.parse(genericFood.servingAmounts[i].isEmpty ? '0' : genericFood.servingAmounts[i][0])} x'
+              ' (${genericFood.units[i][0]}) '
+              '${genericFood.ingredients[i]},\n';
+          ingredients = ingredients + ingredient;
         }
+      }
 
-        _foodName = widget.foodDetailArgumentModel.food!.name;
-        _totalServing =
-        '${widget.foodDetailArgumentModel.food!.servingAmount} ${widget
-            .foodDetailArgumentModel.food!.unit}';
-        _totalCalorie = calorie.toStringAsFixed(2);
-        _totalProtein = protein.toStringAsFixed(2);
-        _totalCarb = carb.toStringAsFixed(2);
-        _totalFat = fat.toStringAsFixed(2);
-        _recipe = widget.foodDetailArgumentModel.food!.recipe;
-        _ingredients = ingredients;
+      _foodName = genericFood.name;
+      _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
+      _totalCalorie = calorie.toStringAsFixed(2);
+      _totalProtein = protein.toStringAsFixed(2);
+      _totalCarb = carb.toStringAsFixed(2);
+      _totalFat = fat.toStringAsFixed(2);
+      _recipe = genericFood.recipe;
+      _ingredients = ingredients;
 
 
-      newFood = widget.foodDetailArgumentModel.food!;
+      newFood = genericFood;
+    });
   }
 
   Widget buildLogFoodButton(BuildContext context){
@@ -482,7 +528,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
 
-    foods.add(newFood);
+    foods.add(fromGenericFood(newFood));
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
@@ -551,7 +597,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   void addToFavoriteClickListener(BuildContext context){
     _addOrUpdateMyCookBookBloc.add(
       AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-        newFood,
+        fromGenericFood(newFood),
       ),
     );
   }
