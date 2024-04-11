@@ -111,12 +111,12 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
               onPressed: () {
                 GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(food: newFood,
                     macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EditRecipeScreen(foodDetailArgumentModel: argumentModel,),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditRecipeScreen(foodDetailArgumentModel: argumentModel,),
+                  ),
+                );
               },
             ),
           ],
