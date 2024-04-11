@@ -24,6 +24,7 @@ import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
+import 'edit_recipe_screen.dart';
 
 
 class ViewRecipeScreen extends StatefulWidget {
@@ -108,12 +109,12 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.white,),
               onPressed: () {
-                // FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood,
-                //     macroEdition: widget.foodDetailArgumentModel.macroEdition);
+                GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(food: newFood,
+                    macroEdition: widget.foodDetailArgumentModel.macroEdition);
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
-                //     builder: (context) => EditCookBookFoodScreen(foodDetailArgumentModel: argumentModel,),
+                //     builder: (context) => EditRecipeScreen(foodDetailArgumentModel: argumentModel,),
                 //   ),
                 // );
               },

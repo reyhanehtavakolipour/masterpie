@@ -160,7 +160,6 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

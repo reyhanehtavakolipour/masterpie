@@ -341,8 +341,12 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       Map<String, dynamic> foodsPortionRemoteBody = {
         'foods': foodsBodyValue,
         'macroLimitsRange': macroLimits,
-        'restriction': restriction.isEmpty ? [] : [int.parse(restriction[0]), restriction[1]]
+        'restriction': restriction.isEmpty ? [] : [int.parse(restriction[0]), restriction[1]],
+        'isPercentageBased': false,
+        'calorieLimitPercentageBased' : [],
+        'macroPercentage': []
       };
+
 
       final response= await request.post(FOODS_PORTION_API, data: foodsPortionRemoteBody);
 
