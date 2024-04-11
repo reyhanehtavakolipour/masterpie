@@ -60,6 +60,9 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
 
+  bool _logFoodButtonCLicked= false;
+
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +83,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
   void requestLoggedFoods(){
+    _logFoodButtonCLicked= true;
     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     _getLoggedFoodsBloc.add(
         GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
@@ -306,7 +310,10 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                       }else if(state is GetLoggedFoodsLoadedState){
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
-                          logFoodsOfToday(state.loggedFoods.foods);
+                          if(_logFoodButtonCLicked){
+                            _logFoodButtonCLicked= false;
+                            logFoodsOfToday(state.loggedFoods.foods);
+                          }
                         });
                       }else if(state is GetLoggedFoodsErrorState){
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());

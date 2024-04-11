@@ -526,7 +526,7 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
             Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 child: SizedBox(
-                  width: 60,
+                  width: 70,
                   height: MACRO_HEIGHT,
                   child: TextField(
                     controller: _ingredientServingCountController,

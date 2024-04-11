@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
@@ -13,6 +14,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/gene
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -24,8 +26,12 @@ import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
+import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
+import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
+import '../bloc/log_foods_bloc/log_foods_bloc.dart';
+import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 
 
 
@@ -66,6 +72,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    late TextEditingController _unitController;
    final List<bool> _ingredientsExpansionState = [];
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
+   late TextEditingController _foodCountController;
 
    late TextEditingController _mealNameController;
    List<String> _addNewIngredientOptions= [];
@@ -77,7 +84,8 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    double _previousCoefficient= 1.0;
 
    bool _searchedGroceriesVisible = false;
-
+   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
+   late LogFoodsBloc _logFoodsBloc;
 
    List<int> _selectedIngredientsUnitIndexList= [];
    List<String> _selectedIngredientsUnit= [];
@@ -110,13 +118,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
     _servingController= TextEditingController(text: '0');
+    _foodCountController= TextEditingController(text: '1.0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
     _groceryNameController= TextEditingController();
     _recipeController= TextEditingController();
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
-
+    _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
+    _logFoodsBloc = context.read<LogFoodsBloc>();
     _ingredientNameController.addListener(_onSearchIngredientChanged);
 
     _groceriesBloc = context.read<GroceriesBloc>();
@@ -134,22 +144,22 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      _debouncer.run(() {
        setState(() {
          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-           // double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-           // List<String> servingIngredientsCount = [];
-           // List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-           // currentServingIngredientsCount.forEach((element) {
-           //   servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-           // });
+           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount[0];
+           List<List<String>> servingIngredientsCount = [];
+           List<List<String>> currentServingIngredientsCount = List<List<String>>.from(newFood.servingIngredientsCount);
+           currentServingIngredientsCount.forEach((element) {
+             servingIngredientsCount.add([(double.parse(element[0])*_previousCoefficient*coefficient).toString()]);
+           });
 
-           // newFood= newFood.copyWith(
-           //     servingIngredientsCount: servingIngredientsCount,
-           //     calorie: _initialStateFood.calorie,
-           //     protein: _initialStateFood.protein,
-           //     carb: _initialStateFood.carb,
-           //     fat: _initialStateFood.fat
-           // );
-           // _previousCoefficient= 1/coefficient;
-           // calculateTotalMacros();
+           newFood= newFood.copyWith(
+               servingIngredientsCount: servingIngredientsCount,
+               calorie: _initialStateFood.calorie,
+               protein: _initialStateFood.protein,
+               carb: _initialStateFood.carb,
+               fat: _initialStateFood.fat
+           );
+           _previousCoefficient= 1/coefficient;
+           calculateTotalMacros();
          }
        });
      });
@@ -172,6 +182,19 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      });
    }
 
+   void logFoodsOfToday(List<Food> foodsLoggedBefore){
+     List<Food> foods = [];
+
+     foods.addAll(foodsLoggedBefore);
+
+     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
+
+     foods.add(fromGenericRecipe(newFood));
+
+     _logFoodsBloc.add(
+         LogFoodsEvent.onLogFoods(foods)
+     );
+   }
 
 @override
   Widget build(BuildContext context) {
@@ -198,55 +221,238 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         ),
         body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                  /// meal name
-                  mealNameWidget(),
-
-
-                  /// add ingredient chips
-                  addIngredientChips(),
-
-                  const SizedBox(height: 8,),
-
-                  /// new ingredient
-                  newIngredient(),
-
-                  /// added ingredients
-                  addedIngredients(),
+                      /// meal name
+                      mealNameWidget(),
 
 
-                  /// recipe
-                  recipe(),
+                      /// add ingredient chips
+                      addIngredientChips(),
 
-                  const SizedBox(height: 16,),
+                      const SizedBox(height: 8,),
 
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                      /// new ingredient
+                      newIngredient(),
 
-                  const SizedBox(height: 16,),
-
-                  /// total macros
-                  macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
-
-
-                  const SizedBox(height: 36,),
+                      /// added ingredients
+                      addedIngredients(),
 
 
-                  /// button
-                  buildBottomButton(context),
+                      /// recipe
+                      recipe(),
 
-                ],
-              ),
+                      const SizedBox(height: 16,),
+
+                      const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                      const SizedBox(height: 16,),
+
+                      /// total macros
+                      macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
+
+
+                      const SizedBox(height: 36,),
+
+
+                      /// add to cookbook button
+                      buildAddToCookBookButton(context),
+
+                      const SizedBox(height: 16,),
+
+
+                      foodCount(),
+
+                      const SizedBox(height: 16,),
+
+                      ///log food button
+                      buildLogFoodButton(context),
+
+                    ],
+                  ),
+                ),
+
+                BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                    builder: (mcontext, state) {
+                      if (state is GetLoggedFoodsLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is GetLoggedFoodsLoadedState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          logFoodsOfToday(state.loggedFoods.foods);
+                        });
+                      }else if(state is GetLoggedFoodsErrorState){
+                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
+                BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                    builder: (mcontext, state) {
+
+                      if (state is LogFoodsLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is LogFoodsLoadedState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                                  (route) => false
+                          );
+                        });
+                      }else if(state is LogFoodsErrorState){
+                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
+                ),
+              ],
             )
         ),
       ),
     );
   }
 
-  void init(){
+   void requestLoggedFoods(){
+     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+     _getLoggedFoodsBloc.add(
+         GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
+     );
+   }
+
+   Widget buildLogFoodButton(BuildContext context){
+     return Column(
+       children: [
+         Container(
+           padding: const EdgeInsets.only(bottom: 24),
+           width: double.infinity,
+           child: ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   backgroundColor: DARK_PRIMARY_COLOR
+               ),
+               onPressed: () {
+                 if(_foodCountController.text.isEmpty){
+                   showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                 }else{
+                   requestLoggedFoods();
+                 }
+               },
+               child: const Text(LOG_FOOD_LABEL,
+                 style: TextStyle( color: Colors.white),)
+           ),
+         ),
+       ],
+     );
+   }
+
+   Widget foodCount(){
+     return  Row(
+       mainAxisAlignment: MainAxisAlignment.start,
+       children: [
+         const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+         const SizedBox(width: 16,),
+         GestureDetector(
+           child: const CircleAvatar(
+             radius: 14,
+             backgroundColor: DARK_PRIMARY_COLOR,
+             child: Icon(
+               Icons.remove,
+               color: Colors.white,
+             ),
+           ),
+           onTap: (){
+             setState(() {
+               if(double.parse(_foodCountController.text) >= STEP_AMOUNT){
+                 _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) - STEP_AMOUNT).toString());
+               }
+             });
+           },
+
+         ),
+         Container(
+             margin: const EdgeInsets.symmetric(horizontal: 4),
+             child: SizedBox(
+               width: 60,
+               height: MACRO_HEIGHT,
+               child: TextField(
+                 controller: _foodCountController,
+                 textAlign: TextAlign.center,
+                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 inputFormatters: <TextInputFormatter>[
+                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                 ],
+                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR),
+                   ),
+                   enabledBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR),
+                   ),
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                   ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                 ),
+               ),
+             )
+         ),
+         GestureDetector(
+           child: const CircleAvatar(
+             radius: 14,
+             backgroundColor: DARK_PRIMARY_COLOR,
+             child: Icon(
+               Icons.add,
+               color: Colors.white,
+             ),
+           ),
+           onTap: (){
+             setState(() {
+               _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) + STEP_AMOUNT).toString());
+             });
+           },
+         ),
+       ],
+     );
+   }
+
+
+   void init(){
       double calorie = 0;
       for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
         if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
@@ -447,7 +653,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   }
 
 
-  Widget buildBottomButton(BuildContext context){
+  Widget buildAddToCookBookButton(BuildContext context){
      return  Column(
        children: [
          Container(
@@ -461,7 +667,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 bottomButtonClickListener(context);
+                 AddToCookBookButtonClickListener(context);
                },
                child: const Text(ADD_TO_MY_COOK_BOOK,
                  style: TextStyle( color: Colors.white),)
@@ -483,13 +689,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                }else if(state is AddOrUpdateMyCookBookLoadedState){
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
-                   Navigator.pushAndRemoveUntil(
-                       context,
-                       MaterialPageRoute(
-                         builder: (context) => const MyCookBookScreen(),
-                       ),
-                           (route) => false
-                   );
+                   showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                  });
                }else if(state is AddOrUpdateMyCookBookErrorState){
                  _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
@@ -512,7 +712,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   }
 
 
-  void bottomButtonClickListener(BuildContext context){
+  void AddToCookBookButtonClickListener(BuildContext context){
      if(_mealNameController.text.isEmpty){
        setState(() {
          _mealNameBorderColor = Colors.red;
