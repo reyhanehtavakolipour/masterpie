@@ -535,7 +535,11 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
 
-    foods.add(fromGenericRecipe(newFood));
+    List<int> unitIndexesList= [];
+    newFood.ingredients.forEach((element) {
+      unitIndexesList.add(0);
+    });
+    foods.add(fromGenericRecipe(newFood, unitIndexesList));
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
@@ -602,9 +606,13 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 
   void addToCookBookClickListener(BuildContext context){
+    List<int> unitIndexesList= [];
+    newFood.ingredients.forEach((element) {
+      unitIndexesList.add(0);
+    });
     _addOrUpdateMyCookBookBloc.add(
       AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-        fromGenericRecipe(newFood),
+        fromGenericRecipe(newFood, unitIndexesList),
       ),
     );
   }

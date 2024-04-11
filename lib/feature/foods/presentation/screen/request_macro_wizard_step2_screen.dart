@@ -99,9 +99,16 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SearchRecipeMacroWizardScreen(),
+                        builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
                       ),
-                    );
+                    ).then((result) {
+                      setState(() {
+                        _requestWizardArgumentModel= result;
+                        _requestWizardArgumentModel.foods.forEach((element) {
+                          _foodsExpansionState.add(false);
+                        });
+                      });
+                    });
                   },
                   child: const Text(SEARCH_RECIPE_LABEL, style: TextStyle( color: Colors.white),),
                 ),

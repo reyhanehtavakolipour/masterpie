@@ -4,48 +4,41 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
-import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
-import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
-import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
-import '../bloc/log_foods_bloc/log_foods_bloc.dart';
-import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 
 
 
-class EditRecipeScreen extends StatefulWidget {
 
-  final GenericFoodDetailArgumentModel foodDetailArgumentModel;
+class EditRecipeMacroWizardScreen extends StatefulWidget {
 
-  const EditRecipeScreen({super.key, required this.foodDetailArgumentModel});
+  final GenericGroceryDetailForMacroWizardArgumentModel genericGroceryDetailForMacroWizardArgumentModel;
+
+  const EditRecipeMacroWizardScreen({super.key, required this.genericGroceryDetailForMacroWizardArgumentModel});
 
   @override
-  State<EditRecipeScreen> createState() => _EditRecipeScreenState();
+  State<EditRecipeMacroWizardScreen> createState() => _EditRecipeMacroWizardScreenState();
 }
 
-class _EditRecipeScreenState extends State<EditRecipeScreen> {
+class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScreen> {
 
    late TextEditingController _totalCalorieController;
    late TextEditingController _totalProteinController;
@@ -53,6 +46,9 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    late TextEditingController _totalFatController;
    late TextEditingController _totalServingController;
    late TextEditingController _totalUnitController;
+
+   late TextEditingController _minServingController;
+   late TextEditingController _maxServingController;
 
    GenericFood _selectedGenericIngredient = GenericFood();
    int _selectedUnitIndex = 0;
@@ -72,7 +68,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    late TextEditingController _unitController;
    final List<bool> _ingredientsExpansionState = [];
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
-   late TextEditingController _foodCountController;
 
    late TextEditingController _mealNameController;
    List<String> _addNewIngredientOptions= [];
@@ -84,8 +79,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    double _previousCoefficient= 1.0;
 
    bool _searchedGroceriesVisible = false;
-   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
-   late LogFoodsBloc _logFoodsBloc;
 
    List<int> _selectedIngredientsUnitIndexList= [];
    List<String> _selectedIngredientsUnit= [];
@@ -117,16 +110,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
+    _minServingController= TextEditingController(text: '0.5');
+    _maxServingController= TextEditingController(text: '5.0');
     _servingController= TextEditingController(text: '0');
-    _foodCountController= TextEditingController(text: '1.0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
     _groceryNameController= TextEditingController();
     _recipeController= TextEditingController();
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
-    _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
-    _logFoodsBloc = context.read<LogFoodsBloc>();
     _ingredientNameController.addListener(_onSearchIngredientChanged);
 
     _groceriesBloc = context.read<GroceriesBloc>();
@@ -182,19 +174,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      });
    }
 
-   void logFoodsOfToday(List<Food> foodsLoggedBefore){
-     List<Food> foods = [];
-
-     foods.addAll(foodsLoggedBefore);
-
-     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
-
-     foods.add(fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList));
-
-     _logFoodsBloc.add(
-         LogFoodsEvent.onLogFoods(foods)
-     );
-   }
 
 @override
   Widget build(BuildContext context) {
@@ -259,83 +238,14 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
                       const SizedBox(height: 36,),
 
-
-                      /// add to cookbook button
-                      buildAddToCookBookButton(context),
+                      foodServingRange(),
 
                       const SizedBox(height: 16,),
 
-
-                      foodCount(),
-
-                      const SizedBox(height: 16,),
-
-                      ///log food button
-                      buildLogFoodButton(context),
+                      buildAddFoodButton(context),
 
                     ],
                   ),
-                ),
-
-                BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                    builder: (mcontext, state) {
-                      if (state is GetLoggedFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is GetLoggedFoodsLoadedState){
-                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          logFoodsOfToday(state.loggedFoods.foods);
-                        });
-                      }else if(state is GetLoggedFoodsErrorState){
-                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
-
-                    }
-                ),
-                BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                    builder: (mcontext, state) {
-
-                      if (state is LogFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is LogFoodsLoadedState){
-                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          showSuccessToast(context, LOGGED_SUCCESSFULLY);
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ),
-                                  (route) => false
-                          );
-                        });
-                      }else if(state is LogFoodsErrorState){
-                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
-
-                    }
                 ),
               ],
             )
@@ -344,14 +254,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     );
   }
 
-   void requestLoggedFoods(){
-     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-     _getLoggedFoodsBloc.add(
-         GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
-     );
-   }
-
-   Widget buildLogFoodButton(BuildContext context){
+   Widget buildAddFoodButton(BuildContext context){
      return Column(
        children: [
          Container(
@@ -365,13 +268,33 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(_foodCountController.text.isEmpty){
-                   showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                 if(_groceryNameController.text.isEmpty){
+                   showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
+                 }
+                 else if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
+                   showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
-                   requestLoggedFoods();
+                   List<Food> foods= [];
+                   foods.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.foods);
+                   foods.add(
+                       fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList)
+                   );
+
+                   List<RangeValues> rangeValues= [];
+                   rangeValues.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.servingRanges);
+                   rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
+
+                   RequestWizardArgumentModel model= RequestWizardArgumentModel(
+                     restriction: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.restriction,
+                     macroGoalRanges: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroGoalRanges,
+                     servingRanges: rangeValues,
+                     foods: foods,
+                   );
+                   showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);
+                   Navigator.pop(context, model);
                  }
                },
-               child: const Text(LOG_FOOD_LABEL,
+               child: const Text(ADD_FOOD_LABEL,
                  style: TextStyle( color: Colors.white),)
            ),
          ),
@@ -379,74 +302,86 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      );
    }
 
-   Widget foodCount(){
-     return  Row(
-       mainAxisAlignment: MainAxisAlignment.start,
+
+
+   Widget foodServingRange(){
+     return Column(
+       crossAxisAlignment: CrossAxisAlignment.start,
        children: [
-         const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+         const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-         const SizedBox(width: 16,),
-         GestureDetector(
-           child: const CircleAvatar(
-             radius: 14,
-             backgroundColor: DARK_PRIMARY_COLOR,
-             child: Icon(
-               Icons.remove,
-               color: Colors.white,
-             ),
-           ),
-           onTap: (){
-             setState(() {
-               if(double.parse(_foodCountController.text) >= STEP_AMOUNT){
-                 _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) - STEP_AMOUNT).toString());
-               }
-             });
-           },
+         const SizedBox(height: 16,),
 
-         ),
-         Container(
-             margin: const EdgeInsets.symmetric(horizontal: 4),
-             child: SizedBox(
-               width: 60,
-               height: MACRO_HEIGHT,
-               child: TextField(
-                 controller: _foodCountController,
-                 textAlign: TextAlign.center,
-                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                 inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                 ],
-                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(
-                     borderSide: BorderSide(color: PRIMARY_COLOR),
+         Row(
+           mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             ///min
+             const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+             Container(
+                 margin: const EdgeInsets.symmetric(horizontal: 4),
+                 child: SizedBox(
+                   width: 60,
+                   height: MACRO_HEIGHT,
+                   child: TextField(
+                     controller: _minServingController,
+                     textAlign: TextAlign.center,
+                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     inputFormatters: <TextInputFormatter>[
+                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                     ],
+                     decoration: const InputDecoration(
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       enabledBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       focusedBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                       ),
+                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                     ),
                    ),
-                   enabledBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: PRIMARY_COLOR),
-                   ),
-                   focusedBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                 ),
-               ),
-             )
-         ),
-         GestureDetector(
-           child: const CircleAvatar(
-             radius: 14,
-             backgroundColor: DARK_PRIMARY_COLOR,
-             child: Icon(
-               Icons.add,
-               color: Colors.white,
+                 )
              ),
-           ),
-           onTap: (){
-             setState(() {
-               _foodCountController = TextEditingController(text: (double.parse(_foodCountController.text) + STEP_AMOUNT).toString());
-             });
-           },
-         ),
+
+
+             const SizedBox(width: 8,),
+
+             ///max
+             const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+             Container(
+                 margin: const EdgeInsets.symmetric(horizontal: 4),
+                 child: SizedBox(
+                   width: 60,
+                   height: MACRO_HEIGHT,
+                   child: TextField(
+                     controller: _maxServingController,
+                     textAlign: TextAlign.center,
+                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     inputFormatters: <TextInputFormatter>[
+                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                     ],
+                     decoration: const InputDecoration(
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       enabledBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR),
+                       ),
+                       focusedBorder: OutlineInputBorder(
+                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                       ),
+                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                     ),
+                   ),
+                 )
+             ),
+
+           ],
+         )
        ],
      );
    }
@@ -454,52 +389,52 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
    void init(){
       double calorie = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie.length; i++) {
+        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
           _selectedIngredientsUnitIndexList.add(0);
-          _selectedIngredientsUnit.add(widget.foodDetailArgumentModel.food!.units[i][0]);
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i][0])*servingCount;
+          _selectedIngredientsUnit.add(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.units[i][0]);
+          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
+          calorie = calorie + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[i][0])*servingCount;
         }
       }
 
       double protein = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i][0])*servingCount;
+      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein.length; i++) {
+        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
+          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
+          protein = protein + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[i][0])*servingCount;
         }
       }
 
       double carb = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i][0])*servingCount;
+      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb.length; i++) {
+        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
+          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
+          carb = carb + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[i][0])*servingCount;
         }
       }
 
 
       double fat = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i][0])*servingCount;
+      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat.length; i++) {
+        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
+          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
+          fat = fat + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat[i][0])*servingCount;
         }
       }
-      _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
-      _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount[0].toString();
+      _mealNameController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.name;
+      _totalServingController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingAmount[0].toString();
       _totalCalorieController.text = calorie.toString();
       _totalProteinController.text = protein.toString();
       _totalCarbController.text = carb.toString();
       _totalFatController.text = fat.toString();
-      _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit[0];
-      _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
-      widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
+      _totalUnitController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.unit[0];
+      _recipeController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.recipe;
+      widget.genericGroceryDetailForMacroWizardArgumentModel.food!.ingredients.forEach((element) {
         _ingredientsExpansionState.add(false);
       });
 
-    newFood = widget.foodDetailArgumentModel.food!;
+    newFood = widget.genericGroceryDetailForMacroWizardArgumentModel.food!;
     _initialStateFood= newFood;
   }
 
@@ -652,120 +587,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      });
   }
 
-
-  Widget buildAddToCookBookButton(BuildContext context){
-     return  Column(
-       children: [
-         Container(
-           padding: const EdgeInsets.only(bottom: 24),
-           width: double.infinity,
-           child: ElevatedButton(
-               style: ElevatedButton.styleFrom(
-                   shape: RoundedRectangleBorder(
-                     borderRadius: BorderRadius.circular(8),
-                   ),
-                   backgroundColor: DARK_PRIMARY_COLOR
-               ),
-               onPressed: () {
-                 addToCookBookButtonClickListener(context);
-               },
-               child: const Text(ADD_TO_MY_COOK_BOOK,
-                 style: TextStyle( color: Colors.white),)
-           ),
-         ),
-         BlocConsumer<AddOrUpdateMyCookBookBloc, AddOrUpdateMyCookBookState>(
-             builder: (mcontext, state) {
-               if (state is AddOrUpdateMyCookBookLoadingState) {
-                 return const Stack(
-                   children: [
-                     GFLoader(
-                       type: GFLoaderType.circle,
-                       loaderColorOne: DARK_PRIMARY_COLOR,
-                       loaderColorTwo: DARK_PRIMARY_COLOR,
-                       loaderColorThree: DARK_PRIMARY_COLOR,
-                     ),
-                   ],
-                 );
-               }else if(state is AddOrUpdateMyCookBookLoadedState){
-                 Future.delayed(Duration.zero,(){
-                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
-                   showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
-                 });
-               }else if(state is AddOrUpdateMyCookBookErrorState){
-                 _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
-                 Future.delayed(Duration.zero,(){
-                   if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){
-                     return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_COOKBOOK_FOOD);
-                   }
-                   return showErrorToast(context, state.message);
-                 });
-               }else{
-               }
-               return Container();
-             },
-             listener: (context, state){
-
-             }
-         ),
-       ],
-     );
-  }
-
-
-  void addToCookBookButtonClickListener(BuildContext context){
-     if(_mealNameController.text.isEmpty){
-       setState(() {
-         _mealNameBorderColor = Colors.red;
-       });
-       return;
-     }
-
-     if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-       setState(() {
-         showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
-       });
-       return;
-     }
-
-
-     bool isAnyIngredientEmpty= false;
-     newFood.ingredients.forEach((element) {
-       if(element.isEmpty){
-         showErrorToast(context, ERROR_ENTER_FOOD_NAME);
-         isAnyIngredientEmpty= true;
-       }
-     });
-
-     if(isAnyIngredientEmpty){
-       return;
-     }
-
-     setState(() {
-       _mealNameBorderColor = Colors.black;
-     });
-     requestOperationOnFood(context);
-  }
-
-
-  void requestOperationOnFood(BuildContext context){
-    newFood = newFood.copyWith(
-        foodType: FoodType.meal,
-        name: _mealNameController.text,
-        servingAmount: [double.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text)],
-        unit: [_totalUnitController.text],
-        recipe: _recipeController.text
-    );
-
-    if(widget.foodDetailArgumentModel.macroEdition){
-      _addOrUpdateMyCookBookBloc.add(
-        AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-          fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList),
-        ),
-      );
-      return;
-    }
-    showUpgradePopupForFreeUsers(context, UPGRADE_MSG_MACRO_EDITION);
-  }
 
   Widget macroAmountsWidgets(TextEditingController servingController,TextEditingController calorieController,
       TextEditingController proteinController,TextEditingController carbController,TextEditingController fatController, TextEditingController unitController){

@@ -18,7 +18,7 @@ Food fromGenericGrocery(GenericFood food){
 }
 
 
-Food fromGenericRecipe(GenericFood food){
+Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
 
   List<String> calorie= [];
   List<String> protein= [];
@@ -30,12 +30,12 @@ Food fromGenericRecipe(GenericFood food){
 
 
   for (int i = 0; i < food.ingredients.length; i++){
-    calorie.add(food.calorie[i][0]);
-    protein.add(food.protein[i][0]);
-    carb.add(food.carb[i][0]);
-    fat.add(food.fat[i][0]);
-    servingAmounts.add(food.servingAmounts[i][0]);
-    units.add(food.units[i][0]);
+    calorie.add(food.calorie[i][selectedUnitIndexList[i]]);
+    protein.add(food.protein[i][selectedUnitIndexList[i]]);
+    carb.add(food.carb[i][selectedUnitIndexList[i]]);
+    fat.add(food.fat[i][selectedUnitIndexList[i]]);
+    servingAmounts.add(food.servingAmounts[i][selectedUnitIndexList[i]]);
+    units.add(food.units[i][selectedUnitIndexList[i]]);
     servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
   }
 
