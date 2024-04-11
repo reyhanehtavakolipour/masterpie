@@ -74,7 +74,7 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
             _fatController.text = widget.meal.fat[index][widget.selectedIngredientsUnitIndexList[index]];
             _servingController.text = widget.meal.servingAmounts[index][widget.selectedIngredientsUnitIndexList[index]];
             _ingredientNameController.text = widget.meal.ingredients[index];
-            _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index][widget.selectedIngredientsUnitIndexList[index]];
+            _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index][0];
           }
 
           return SizedBox(
@@ -206,15 +206,24 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
               );
             }).toList(),
             onChanged: (String? newValue){
-              int selectedIndex = 0;
-              for (int i = 0; i < dropDownList.length; i++){
-                if(newValue.toString() == dropDownList[i]){
-                  selectedIndex = i;
+              setState(() {
+                int selectedIndex = 0;
+                for (int i = 0; i < dropDownList.length; i++){
+                  if(newValue.toString() == dropDownList[i]){
+                    selectedIndex = i;
+                  }
                 }
-              }
-              List<int> selectedUnitList = widget.selectedIngredientsUnitIndexList;
-              selectedUnitList[ingredientIndex]= selectedIndex;
-              widget.onIngredientUpdated(widget.meal, selectedUnitList);
+                List<int> selectedUnitList = widget.selectedIngredientsUnitIndexList;
+                selectedUnitList[ingredientIndex]= selectedIndex;
+                widget.onIngredientUpdated(widget.meal, selectedUnitList);
+
+                _servingController = TextEditingController(text: widget.meal.servingAmounts[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
+                _calorieController = TextEditingController(text: widget.meal.calorie[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
+                _proteinController = TextEditingController(text: widget.meal.protein[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
+                _carbController = TextEditingController(text: widget.meal.carb[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
+                _fatController = TextEditingController(text: widget.meal.fat[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
+
+              });
             },
             // style: Theme.of(context).textTheme.title,
           ),
@@ -222,7 +231,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
       ),
     );
   }
-
 
 
   void removeIngredientButtonClickListener(int index){

@@ -341,7 +341,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     for (int i = 0; i < newFood.calorie.length; i++) {
       if (i < newFood.servingIngredientsCount.length) {
         double servingCount = double.parse(
-            newFood.servingIngredientsCount[i].isEmpty ? '0' : newFood.servingIngredientsCount[i][_selectedIngredientsUnitIndexList[i]]);
+            newFood.servingIngredientsCount[i][0].isEmpty ? '0' : newFood.servingIngredientsCount[i][0]);
         calorie = calorie + double.parse(newFood.calorie[i].isEmpty ? '0' : newFood.calorie[i][_selectedIngredientsUnitIndexList[i]]) * servingCount;
       }
     }
@@ -349,7 +349,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     double protein = 0;
     for (int i = 0; i < newFood.protein.length; i++) {
       if (i < newFood.servingIngredientsCount.length) {
-        double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '0' : newFood.servingIngredientsCount[i][_selectedIngredientsUnitIndexList[i]]);
+        double servingCount = double.parse(newFood.servingIngredientsCount[i][0].isEmpty ? '0' : newFood.servingIngredientsCount[i][0]);
         protein = protein + double.parse(newFood.protein[i].isEmpty ? '0' : newFood.protein[i][_selectedIngredientsUnitIndexList[i]]) * servingCount;
       }
     }
@@ -357,7 +357,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     double carb = 0;
     for (int i = 0; i < newFood.carb.length; i++) {
       if (i < newFood.servingIngredientsCount.length) {
-        double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '0' : newFood.servingIngredientsCount[i][_selectedIngredientsUnitIndexList[i]]);
+        double servingCount = double.parse(newFood.servingIngredientsCount[i][0].isEmpty ? '0' : newFood.servingIngredientsCount[i][0]);
         carb = carb + double.parse(newFood.carb[i].isEmpty ? '0' : newFood.carb[i][_selectedIngredientsUnitIndexList[i]]) * servingCount;
       }
     }
@@ -367,7 +367,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     for (int i = 0; i <
         newFood.fat.length; i++) {
       if (i < newFood.servingIngredientsCount.length) {
-        double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '0' : newFood.servingIngredientsCount[i][_selectedIngredientsUnitIndexList[i]]);
+        double servingCount = double.parse(newFood.servingIngredientsCount[i][0].isEmpty ? '0' : newFood.servingIngredientsCount[i][0]);
         fat = fat + double.parse(newFood.fat[i].isEmpty ? '0' : newFood.fat[i][_selectedIngredientsUnitIndexList[i]]) * servingCount;
       }
     }
@@ -1417,7 +1417,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
        ingredientsCarb.add([_carbController.text]);
        List<List<String>> ingredientsFat = List<List<String>>.from(newFood.fat);
        ingredientsFat.add([_fatController.text]);
-
+       _selectedIngredientsUnitIndexList.add(0);
        newFood = newFood.copyWith(
            ingredients: ingredients,
            servingIngredientsCount: servingIngredientsCount,
