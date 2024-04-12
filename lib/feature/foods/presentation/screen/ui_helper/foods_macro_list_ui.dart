@@ -8,10 +8,11 @@ import '../../../../../util/design/size/app_widget_size.dart';
 import '../../../domain/model/food_model.dart';
 import '../../../domain/model/food_type.dart';
 import '../../../domain/model/food_unit.dart';
+import 'debouncer.dart';
 
 class FoodsMacroListUi extends StatefulWidget {
 
-  final Function(int index, bool state, bool isRemove) onExpansionStateChanged;
+  final Function(int index, bool state, bool isRemove, RangeValues rangeValues) onExpansionStateChanged;
   final Function(List<Food> foods, List<RangeValues> servingRanges) onFoodsUpdated;
   final List<Food> foods;
   final List<bool> foodsExpansionState;
@@ -34,11 +35,12 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   late TextEditingController _servingController;
   late TextEditingController _foodNameController;
   late TextEditingController _unitController;
+  final _debouncer = Debouncer(milliseconds: 1000);
 
   Color _foodNameBorderColor = DARK_PRIMARY_COLOR;
 
-  RangeValues _servingRangeValues = const RangeValues(SERVING_MIN_DEFAULT, SERVING_MAX_DEFAULT);
-
+  late TextEditingController _minServingController;
+  late TextEditingController _maxServingController;
 
   @override
   void initState() {
@@ -48,10 +50,11 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
     _servingController= TextEditingController(text: '0');
+    _minServingController= TextEditingController(text: '0.5');
+    _maxServingController= TextEditingController(text: '5.0');
     _foodNameController= TextEditingController(text: '');
     _unitController= TextEditingController(text: GRAM_LABEL);
   }
-
 
 
   @override
@@ -63,17 +66,72 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index){
           String foodName = widget.foods[index].name;
+
+
+
           if(widget.foodsExpansionState[index] ){
-            _calorieController= TextEditingController(text: widget.foods[index].calorie[0]);
-            _proteinController= TextEditingController(text: widget.foods[index].protein[0]);
-            _carbController= TextEditingController(text: widget.foods[index].carb[0]);
-            _fatController= TextEditingController(text: widget.foods[index].fat[0]);
+            _minServingController.text= widget.foodsServingRanges[index].start.toString();
+            _maxServingController.text= widget.foodsServingRanges[index].end.toString();
+            if(widget.foods[index].foodType == FoodType.groceryProduct){
+              _calorieController= TextEditingController(text: widget.foods[index].calorie[0]);
+              _proteinController= TextEditingController(text: widget.foods[index].protein[0]);
+              _carbController= TextEditingController(text: widget.foods[index].carb[0]);
+              _fatController= TextEditingController(text: widget.foods[index].fat[0]);
+              _unitController = TextEditingController(text: widget.foods[index].units[0]);
+              _servingController = TextEditingController(text: widget.foods[index].servingAmounts[0]);
+            }else{
+
+
+              double calorie = 0;
+              for (int i = 0; i < widget.foods[index].calorie.length; i++) {
+                if (i < widget.foods[index].servingIngredientsCount.length) {
+                  double servingCount = double.parse(
+                      widget.foods[index].servingIngredientsCount[i].isEmpty ? '0' : widget.foods[index].servingIngredientsCount[i]);
+                  calorie = calorie + double.parse(widget.foods[index].calorie[i].isEmpty ? '0' : widget.foods[index].calorie[i]) * servingCount;
+                }
+              }
+
+              double protein = 0;
+              for (int i = 0; i < widget.foods[index].protein.length; i++) {
+                if (i < widget.foods[index].servingIngredientsCount.length) {
+                  double servingCount = double.parse(widget.foods[index].servingIngredientsCount[i].isEmpty ? '0' : widget.foods[index].servingIngredientsCount[i]);
+                  protein = protein + double.parse(widget.foods[index].protein[i].isEmpty ? '0' : widget.foods[index].protein[i]) * servingCount;
+                }
+              }
+
+              double carb = 0;
+              for (int i = 0; i < widget.foods[index].carb.length; i++) {
+                if (i < widget.foods[index].servingIngredientsCount.length) {
+                  double servingCount = double.parse(widget.foods[index].servingIngredientsCount[i].isEmpty ? '0' : widget.foods[index].servingIngredientsCount[i]);
+                  carb = carb + double.parse(widget.foods[index].carb[i].isEmpty ? '0' : widget.foods[index].carb[i]) * servingCount;
+                }
+              }
+
+
+              double fat = 0;
+              for (int i = 0; i <
+                  widget.foods[index].fat.length; i++) {
+                if (i < widget.foods[index].servingIngredientsCount.length) {
+                  double servingCount = double.parse(widget.foods[index].servingIngredientsCount[i].isEmpty ? '0' : widget.foods[index].servingIngredientsCount[i]);
+                  fat = fat + double.parse(widget.foods[index].fat[i].isEmpty ? '0' : widget.foods[index].fat[i]) * servingCount;
+                }
+              }
+
+
+              _calorieController= TextEditingController(text: calorie.toString());
+              _proteinController= TextEditingController(text: protein.toString());
+              _carbController= TextEditingController(text: carb.toString());
+              _fatController= TextEditingController(text: fat.toString());
+              _unitController = TextEditingController(text: SERVING_LABEL);
+              _servingController = TextEditingController(text: widget.foods[index].servingAmount.toString());
+
+            }
+
+
+
             _foodNameController= TextEditingController(text: widget.foods[index].name);
-            _servingRangeValues = widget.foodsServingRanges[index];
           }
 
-           _unitController = TextEditingController(text: widget.foods[index].units[0]);
-            _servingController = TextEditingController(text: widget.foods[index].servingAmounts[0]);
 
           return SizedBox(
             width: double.infinity,
@@ -121,6 +179,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                                   child: TextField(
                                     onChanged: updatedFoodMacroListener,
                                     controller: _foodNameController,
+                                    enabled: false,
                                     decoration:  InputDecoration(
                                       hintText: CHEDDAR_CHEESE_LABEL,
                                       border: OutlineInputBorder(
@@ -168,7 +227,9 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               ),
               onTap: (){
                 setState(() {
-                  widget.onExpansionStateChanged(index, !widget.foodsExpansionState[index], false);
+                  widget.onExpansionStateChanged(index, !widget.foodsExpansionState[index], false,
+                      RangeValues(double.parse(_minServingController.text.isEmpty ? '0.5' : _minServingController.text),
+                          double.parse(_maxServingController.text.isEmpty ? '5.0' : _maxServingController.text)));
                 });
               },
             )
@@ -180,7 +241,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
   void removeFoodButtonClickListener(int index){
     setState(() {
-      widget.onExpansionStateChanged(index, !widget.foodsExpansionState[index], true);
+      widget.onExpansionStateChanged(index, !widget.foodsExpansionState[index], true, RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
       List<Food> foods = List<Food>.from(widget.foods);
       foods.removeAt(index);
       List<RangeValues> servingRanges = List<RangeValues>.from(widget.foodsServingRanges);
@@ -214,7 +275,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
         List<Food> foods = List<Food>.from(widget.foods);
         foods[index] = updatedFood;
         List<RangeValues> servingRanges = List<RangeValues>.from(widget.foodsServingRanges);
-        servingRanges[index] = _servingRangeValues;
+        servingRanges[index] = RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text));
         _foodNameBorderColor = Colors.black;
         widget.onFoodsUpdated(foods, servingRanges);
       });
@@ -306,6 +367,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               child: TextField(
                 onChanged: updatedFoodMacroListener,
                 controller: _calorieController,
+                enabled: false,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -337,6 +399,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               child: TextField(
                 onChanged: updatedFoodMacroListener,
                 controller: _proteinController,
+                enabled: false,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -375,6 +438,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               child: TextField(
                 onChanged: updatedFoodMacroListener,
                 controller: _carbController,
+                enabled: false,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -406,6 +470,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               child: TextField(
                 onChanged: updatedFoodMacroListener,
                 controller: _fatController,
+                enabled: false,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
@@ -437,43 +502,92 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
           children: [
             const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
             const SizedBox(height: 12,),
-            servingRange(index)
+            foodServingRange(index)
           ],
         ),
       ],
     );
   }
 
+  Widget foodServingRange(int index){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-  Widget servingRange(int index){
-    return Container(
-      margin: const EdgeInsets.only(left: 8),
-      child: Row(
-        children: [
-          SizedBox(
-              width: 30,
-              child: Text(_servingRangeValues.start.toStringAsFixed(1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),)
-          ),
-          RangeSlider(
-            values: widget.foodsServingRanges[index],
-            min: SERVING_MIN,
-            max: SERVING_MAX,
-            activeColor: DARK_PRIMARY_COLOR, // Set the active color here
-            inactiveColor: Colors.grey,
-            divisions: SERVING_DEVISION,
-            onChanged: (values) {
-              setState(() {
-                _servingRangeValues = values;
-                updatedFoodMacroListener('');
-              });
-            },
-          ),
-          SizedBox(
-              width: 30,
-              child: Text(_servingRangeValues.end.toStringAsFixed(1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),)
-          ),
-        ],
-      ),
+        const SizedBox(height: 16,),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ///min
+            const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: SizedBox(
+                  width: 60,
+                  height: MACRO_HEIGHT,
+                  child: TextField(
+                    controller: _minServingController,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    ),
+                  ),
+                )
+            ),
+
+
+            const SizedBox(width: 8,),
+
+            ///max
+            const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: SizedBox(
+                  width: 60,
+                  height: MACRO_HEIGHT,
+                  child: TextField(
+                    controller: _maxServingController,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    ),
+                  ),
+                )
+            ),
+
+          ],
+        )
+      ],
     );
   }
 

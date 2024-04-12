@@ -112,6 +112,7 @@ const FILTER_LABEL= 'Filter';
 const ALL_LABEL= 'All';
 const MY_FAVORITE_LABEL= 'My Favorite';
 const MANUAL_LABEL= 'Manual';
+const CREATE_MANUAL_LABEL= 'Create Manual';
 const HISTORY_LABEL= 'History';
 const NOTHING_FOUND= 'Nothing Found!';
 const CREATE_NOW_LABEL= 'Unable to find it? Please add it now, and you can access it in the future!';

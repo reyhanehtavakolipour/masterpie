@@ -22,6 +22,8 @@ import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
 import '../bloc/add_or_update_my_cook_book_bloc/state_event/add_or_update_my_cook_book_state_event.dart';
+import '../bloc/get_recipe_bloc/get_recipe_bloc.dart';
+import '../bloc/get_recipe_bloc/state_event/get_recipe_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 
@@ -64,7 +66,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    late TextEditingController _fatController;
    late TextEditingController _servingController;
    late TextEditingController _ingredientNameController;
-   late TextEditingController _groceryNameController;
    late TextEditingController _unitController;
    final List<bool> _ingredientsExpansionState = [];
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
@@ -75,6 +76,8 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    late TextEditingController _ingredientServingCountController;
    late TextEditingController _recipeController;
    Color _mealNameBorderColor = DARK_PRIMARY_COLOR;
+
+   bool _isRecipeLoaded= false;
 
    double _previousCoefficient= 1.0;
 
@@ -91,6 +94,8 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    List<GenericFood> _suggestedGroceries= [];
 
+   late GetRecipeBloc _getRecipeBloc;
+
 
   @override
   void initState() {
@@ -99,6 +104,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
     _addOrUpdateMyCookBookBloc.add(
       const AddOrUpdateMyCookBookEvent.onReset(),
     );
+    _getRecipeBloc = context.read<GetRecipeBloc>();
     _mealNameController= TextEditingController();
     _totalCalorieController= TextEditingController(text: '0');
     _totalProteinController= TextEditingController(text: '0');
@@ -116,17 +122,23 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
-    _groceryNameController= TextEditingController();
     _recipeController= TextEditingController();
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
     _ingredientNameController.addListener(_onSearchIngredientChanged);
 
     _groceriesBloc = context.read<GroceriesBloc>();
 
-    init();
+    getRecipe();
 
     _totalServingController.addListener(_onTotalServingChanged);
   }
+
+
+   void getRecipe(){
+     _getRecipeBloc.add(
+         GetRecipeEvent.onGetRecipe(widget.genericGroceryDetailForMacroWizardArgumentModel.food!)
+     );
+   }
 
 
    void _onTotalServingChanged() {
@@ -202,50 +214,81 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Stack(
               children: [
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                Visibility(
+                  visible: _isRecipeLoaded,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      /// meal name
-                      mealNameWidget(),
-
-
-                      /// add ingredient chips
-                      addIngredientChips(),
-
-                      const SizedBox(height: 8,),
-
-                      /// new ingredient
-                      newIngredient(),
-
-                      /// added ingredients
-                      addedIngredients(),
+                        /// meal name
+                        mealNameWidget(),
 
 
-                      /// recipe
-                      recipe(),
+                        /// add ingredient chips
+                        addIngredientChips(),
 
-                      const SizedBox(height: 16,),
+                        const SizedBox(height: 8,),
 
-                      const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                        /// new ingredient
+                        newIngredient(),
 
-                      const SizedBox(height: 16,),
-
-                      /// total macros
-                      macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
+                        /// added ingredients
+                        addedIngredients(),
 
 
-                      const SizedBox(height: 36,),
+                        /// recipe
+                        recipe(),
 
-                      foodServingRange(),
+                        const SizedBox(height: 16,),
 
-                      const SizedBox(height: 16,),
+                        const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-                      buildAddFoodButton(context),
+                        const SizedBox(height: 16,),
 
-                    ],
+                        /// total macros
+                        macroAmountsWidgets(_totalServingController, _totalCalorieController, _totalProteinController, _totalCarbController, _totalFatController, _totalUnitController),
+
+
+                        const SizedBox(height: 36,),
+
+                        foodServingRange(),
+
+                        const SizedBox(height: 16,),
+
+                        buildAddFoodButton(context),
+
+                      ],
+                    ),
                   ),
+                ),
+
+                BlocConsumer<GetRecipeBloc, GetRecipeState>(
+                    builder: (mcontext, state) {
+                      if (state is GetRecipeLoadingState) {
+                        return const GFLoader(
+                          type: GFLoaderType.circle,
+                          loaderColorOne: DARK_PRIMARY_COLOR,
+                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                          loaderColorThree: DARK_PRIMARY_COLOR,
+                        );
+                      }else if(state is GetRecipeLoadedState){
+                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          _isRecipeLoaded= true;
+                          fillUi(state.food);
+                        });
+                      }else if(state is GetRecipeErrorState){
+                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
+                      }
+                      return Container();
+                    },
+                    listener: (context, state){
+
+                    }
                 ),
               ],
             )
@@ -253,6 +296,71 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
       ),
     );
   }
+
+
+   void fillUi(GenericFood genericFood){
+
+     setState(() {
+       double calorie = 0;
+       for (int i = 0; i < genericFood.calorie.length; i++) {
+         if (i < genericFood.servingIngredientsCount.length) {
+           double servingCount = double.parse(
+               genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+           calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+         }
+       }
+
+       double protein = 0;
+       for (int i = 0; i < genericFood.protein.length; i++) {
+         if (i < genericFood.servingIngredientsCount.length) {
+           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+           protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+         }
+       }
+
+       double carb = 0;
+       for (int i = 0; i < genericFood.carb.length; i++) {
+         if (i < genericFood.servingIngredientsCount.length) {
+           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+           carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+         }
+       }
+
+
+       double fat = 0;
+       for (int i = 0; i <
+           genericFood.fat.length; i++) {
+         if (i < genericFood.servingIngredientsCount.length) {
+           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+           fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+         }
+       }
+
+
+
+
+       _mealNameController.text = genericFood.name;
+       _totalServingController.text = '${genericFood.servingAmount[0]}';
+       _totalCalorieController.text = calorie.toStringAsFixed(2);
+       _totalProteinController.text = protein.toStringAsFixed(2);
+       _totalCarbController.text = carb.toStringAsFixed(2);
+       _totalFatController.text = fat.toStringAsFixed(2);
+       _totalUnitController.text = SERVING_LABEL;
+
+       _recipeController.text = genericFood.recipe;
+       genericFood.ingredients.forEach((element) {
+         _ingredientsExpansionState.add(false);
+         _selectedIngredientsUnitIndexList.add(0);
+       });
+
+
+       newFood = genericFood;
+       _initialStateFood= newFood;
+
+
+     });
+   }
+
 
    Widget buildAddFoodButton(BuildContext context){
      return Column(
@@ -268,14 +376,12 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(_groceryNameController.text.isEmpty){
-                   showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
-                 }
-                 else if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
+                 if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
                    showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
                    List<Food> foods= [];
                    foods.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.foods);
+                   newFood= newFood.copyWith(name: _mealNameController.text);
                    foods.add(
                        fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList)
                    );
@@ -385,59 +491,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
        ],
      );
    }
-
-
-   void init(){
-      double calorie = 0;
-      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie.length; i++) {
-        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
-          _selectedIngredientsUnitIndexList.add(0);
-          _selectedIngredientsUnit.add(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.units[i][0]);
-          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
-          calorie = calorie + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[i][0])*servingCount;
-        }
-      }
-
-      double protein = 0;
-      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein.length; i++) {
-        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
-          protein = protein + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[i][0])*servingCount;
-        }
-      }
-
-      double carb = 0;
-      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb.length; i++) {
-        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
-          carb = carb + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[i][0])*servingCount;
-        }
-      }
-
-
-      double fat = 0;
-      for (int i = 0; i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat.length; i++) {
-        if(i < widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingIngredientsCount[i][0]);
-          fat = fat + double.parse(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat[i].isEmpty ? '0' : widget.genericGroceryDetailForMacroWizardArgumentModel.food!.fat[i][0])*servingCount;
-        }
-      }
-      _mealNameController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.name;
-      _totalServingController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingAmount[0].toString();
-      _totalCalorieController.text = calorie.toString();
-      _totalProteinController.text = protein.toString();
-      _totalCarbController.text = carb.toString();
-      _totalFatController.text = fat.toString();
-      _totalUnitController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.unit[0];
-      _recipeController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.recipe;
-      widget.genericGroceryDetailForMacroWizardArgumentModel.food!.ingredients.forEach((element) {
-        _ingredientsExpansionState.add(false);
-      });
-
-    newFood = widget.genericGroceryDetailForMacroWizardArgumentModel.food!;
-    _initialStateFood= newFood;
-  }
-
 
   Widget recipe(){
     return Container(
@@ -1472,7 +1525,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
   void resetTotalMacroAmounts(){
-    _groceryNameController.text = '';
     _totalCalorieController.text = '0';
     _totalProteinController.text = '0';
     _totalCarbController.text = '0';

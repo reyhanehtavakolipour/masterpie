@@ -418,7 +418,7 @@ class _SuggestFoodMacroWizardScreenState extends State<SuggestFoodMacroWizardScr
      _searchUnitOptions= manualUnitOptions;
   }
 
-  void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove){
+  void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove, RangeValues rangeValues){
     setState(() {
       if(isRemove){
         _foodsExpansionState.removeAt(index);

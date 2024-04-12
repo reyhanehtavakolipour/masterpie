@@ -120,26 +120,26 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
         Row(
           children: [
-            Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SuggestFoodMacroWizardScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(SUGGEST_FOOD_LABEL, style: TextStyle( color: Colors.white),),
-                ),
-            ),
-            const SizedBox(width: 4,),
+            // Expanded(
+            //     child: ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           backgroundColor: DARK_PRIMARY_COLOR
+            //       ),
+            //       onPressed: () {
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => const SuggestFoodMacroWizardScreen(),
+            //           ),
+            //         );
+            //       },
+            //       child: const Text(SUGGEST_FOOD_LABEL, style: TextStyle( color: Colors.white),),
+            //     ),
+            // ),
+            // const SizedBox(width: 4,),
             Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -165,7 +165,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                       });
                     });
                   },
-                  child: const Text(MANUAL_LABEL, style: TextStyle( color: Colors.white),),
+                  child: const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: Colors.white),),
                 ),
             ),
           ],
@@ -325,7 +325,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
       );
   }
 
-  void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove){
+  void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove, RangeValues rangeValues){
     setState(() {
       if(isRemove){
         _foodsExpansionState.removeAt(index);
@@ -334,8 +334,14 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
           for (int i = 0; i < _foodsExpansionState.length; i++) {
             _foodsExpansionState[i] = false;
           }
+        }else{
+          List<RangeValues> servingRanges = List<RangeValues>.from(_requestWizardArgumentModel.servingRanges);
+          servingRanges[index] = rangeValues;
+          _requestWizardArgumentModel= _requestWizardArgumentModel.copyWith(servingRanges: servingRanges);
         }
         _foodsExpansionState[index] = state;
+
+
       }
     });
   }
