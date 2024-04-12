@@ -5,12 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/suggested_different_foods_combination_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -18,18 +17,10 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
-import '../bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
-import '../bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
-import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
-import '../bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
-import '../bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
-
 
 
 class ManualFoodMacroWizardScreen extends StatefulWidget {
@@ -51,7 +42,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   late TextEditingController _totalFatController;
   late TextEditingController _totalServingController;
 
-
   final _debouncer = Debouncer(milliseconds: 1000);
 
   late TextEditingController _calorieController;
@@ -63,8 +53,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   late TextEditingController _groceryNameController;
   int _selectedUnitIndex = 0;
   List<String> _searchUnitOptions = manualUnitOptions;
-
-
   late TextEditingController _minServingController;
   late TextEditingController _maxServingController;
 
@@ -108,12 +96,12 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
     _servingController= TextEditingController(text: '0');
+    _minServingController= TextEditingController(text: '0.5');
+    _maxServingController= TextEditingController(text: '5.0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _ingredientNameController= TextEditingController();
     _groceryNameController= TextEditingController();
     _recipeController= TextEditingController();
-    _minServingController= TextEditingController(text: '0.5');
-    _maxServingController= TextEditingController(text: '5.0');
     _addNewIngredientOptions = [ADD_INGREDIENT_BY_SEARCH, ADD_INGREDIENT_MANUALLY];
 
     _ingredientNameController.addListener(_onSearchIngredientChanged);
@@ -257,15 +245,14 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
 
                   macroAmountsMeal(),
 
+
                   const SizedBox(height: 36,),
 
                   foodServingRange(),
 
-                  const SizedBox(height: 36,),
+                  const SizedBox(height: 16,),
 
-
-                  /// button
-                  addFoodButton(context),
+                  buildAddFoodButton(context),
                 ],
               ),
             )
@@ -411,9 +398,8 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     });
   }
 
-
-  Widget addFoodButton(BuildContext context){
-    return  Column(
+  Widget buildAddFoodButton(BuildContext context){
+    return Column(
       children: [
         Container(
           padding: const EdgeInsets.only(bottom: 24),
@@ -426,7 +412,30 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                   backgroundColor: DARK_PRIMARY_COLOR
               ),
               onPressed: () {
-                addFoodClickListener(context);
+                if(_mealNameController.text.isEmpty){
+                  showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
+                }
+                else if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
+                  showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
+                }else{
+                  List<Food> foods= [];
+                  foods.addAll(widget.requestWizardArgumentModel.foods);
+                  newFood= newFood.copyWith(name: _mealNameController.text);
+                  foods.add(newFood);
+
+                  List<RangeValues> rangeValues= [];
+                  rangeValues.addAll(widget.requestWizardArgumentModel.servingRanges);
+                  rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
+
+                  RequestWizardArgumentModel model= RequestWizardArgumentModel(
+                    restriction: widget.requestWizardArgumentModel.restriction,
+                    macroGoalRanges: widget.requestWizardArgumentModel!.macroGoalRanges,
+                    servingRanges: rangeValues,
+                    foods: foods,
+                  );
+                  showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);
+                  Navigator.pop(context, model);
+                }
               },
               child: const Text(ADD_FOOD_LABEL,
                 style: TextStyle( color: Colors.white),)
@@ -436,87 +445,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     );
   }
 
-
-  void addFoodClickListener(BuildContext context){
-    if(_mealNameController.text.isEmpty){
-      setState(() {
-        _mealNameBorderColor = Colors.red;
-        showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
-      });
-      return;
-    }
-
-    if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-      setState(() {
-        showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
-      });
-      return;
-    }
-
-    bool isAnyIngredientEmpty= false;
-    newFood.ingredients.forEach((element) {
-      if(element.isEmpty){
-        showErrorToast(context, ERROR_ENTER_FOOD_NAME);
-        isAnyIngredientEmpty= true;
-      }
-    });
-
-    if(isAnyIngredientEmpty){
-      return;
-    }
-
-
-    if(newFood.ingredients.isEmpty){
-      showErrorToast(context, ERROR_ADD_INGREDIENT);
-      return;
-    }
-
-    if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
-      showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
-      return;
-    }
-
-    setState(() {
-      _mealNameBorderColor = Colors.black;
-    });
-
-
-    List<Food> foods= [];
-    foods.addAll(widget.requestWizardArgumentModel.foods);
-
-
-    newFood = newFood.copyWith(
-        foodType: FoodType.meal,
-        name: _mealNameController.text,
-        servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
-        unit: SERVING_LABEL,
-        recipe: _recipeController.text
-    );
-
-    if(newFood.ingredients.isEmpty){
-      newFood= newFood.copyWith(
-          calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
-          protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
-          carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
-          fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
-      );
-    }
-
-    foods.add(newFood);
-
-    List<RangeValues> rangeValues= [];
-    rangeValues.addAll(widget.requestWizardArgumentModel.servingRanges);
-    rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
-
-    RequestWizardArgumentModel model= RequestWizardArgumentModel(
-      restriction: widget.requestWizardArgumentModel.restriction,
-      macroGoalRanges: widget.requestWizardArgumentModel.macroGoalRanges,
-      servingRanges: rangeValues,
-      foods: foods,
-    );
-    Navigator.pop(context, model);
-
-  }
 
 
   Widget foodServingRange(){
@@ -600,8 +528,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
       ],
     );
   }
-
-
 
   Widget ingredientUnitDropDown(){
     final dropDownList = _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions;
@@ -1498,6 +1424,5 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _selectedUnitIndex= 0;
     _totalServingController.text = '1.0';
   }
-
 
 }

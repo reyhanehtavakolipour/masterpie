@@ -497,14 +497,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
         const SizedBox(height: 48,),
 
         /// how many serving?
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            const SizedBox(height: 12,),
-            foodServingRange(index)
-          ],
-        ),
+        foodServingRange(index)
       ],
     );
   }
