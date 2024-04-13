@@ -215,13 +215,14 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         }
 
 
+        final numberOfServing= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
 
         await Future.forEach((recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List), (ingredient) async {
         // (recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List).forEach((ingredient)  {
           ingredients.add(ingredient['food_name']);
           final ingredientNumberOfUnit= double.parse(ingredient['number_of_units']);
           final servingId= double.parse(ingredient['serving_id']);
-          double servingIngredientCount = double.parse((ingredientNumberOfUnit).toStringAsFixed(2));
+          double servingIngredientCount = double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2));
           servingIngredientsCount.add([servingIngredientCount.toString()]);
 
 

@@ -111,6 +111,7 @@ const SUGGEST_ME= 'Suggest Me';
 const FILTER_LABEL= 'Filter';
 const ALL_LABEL= 'All';
 const MY_FAVORITE_LABEL= 'My Favorite';
+const PER_SERVING_LABEL= 'per serving';
 const MANUAL_LABEL= 'Manual';
 const CREATE_MANUAL_LABEL= 'Create Manual';
 const HISTORY_LABEL= 'History';

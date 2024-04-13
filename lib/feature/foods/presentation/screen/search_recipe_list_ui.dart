@@ -52,14 +52,7 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
             itemBuilder: (context, index) {
               GenericFood food = widget.foods[index];
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
-              double quantity = foodInformation.count;
               String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
-              String protein= foodInformation.protein[0][0].toStringAsFixed(foodInformation.protein[0][0].truncateToDouble() == foodInformation.protein[0][0] ? 0 : 2);
-              String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
-              String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
-              bool isFoodAdded= foodInformation.isFoodAdded;
-              int servingQuantity= foodInformation.servingAmounts[0][0].toInt();
-              String foodUnit= foodInformation.units[0][0];
 
               return GestureDetector(
                 onTap: (){
@@ -103,19 +96,13 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
 
 
                                 /// calorie
-                                GestureDetector(
-                                  child: Text('$calorie cal',
-                                    style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontFamily: MONTSERRAT_FONT,
-                                        fontWeight: FontWeight.w600
-                                    ),
+                                Text('$calorie cal $PER_SERVING_LABEL',
+                                  style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontFamily: MONTSERRAT_FONT,
+                                      fontWeight: FontWeight.w600
                                   ),
-                                  onTap: (){
-                                    // editMacrosClickListener(food.foodType, servingQuantity, foodUnit, double.parse(calorie), double.parse(protein),
-                                    //     double.parse(carb), double.parse(fat), isFoodAdded, food);
-                                  },
                                 ),
 
                                 const SizedBox(height: 24,),

@@ -106,19 +106,13 @@ class _SearchRecipesMacroWizardListUiState extends State<SearchRecipesMacroWizar
 
 
                                 /// calorie
-                                GestureDetector(
-                                  child: Text('$calorie cal',
-                                    style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontFamily: MONTSERRAT_FONT,
-                                        fontWeight: FontWeight.w600
-                                    ),
+                                Text('$calorie cal $PER_SERVING_LABEL',
+                                  style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontFamily: MONTSERRAT_FONT,
+                                      fontWeight: FontWeight.w600
                                   ),
-                                  onTap: (){
-                                    // editMacrosClickListener(food.foodType, servingQuantity, foodUnit, double.parse(calorie), double.parse(protein),
-                                    //     double.parse(carb), double.parse(fat), isFoodAdded, food);
-                                  },
                                 ),
 
                                 const SizedBox(height: 24,),

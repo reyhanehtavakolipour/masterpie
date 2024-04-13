@@ -77,9 +77,14 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
   void getRecipe(){
-    _getRecipeBloc.add(
-        GetRecipeEvent.onGetRecipe(widget.foodDetailArgumentModel.food!)
-    );
+    if(widget.foodDetailArgumentModel.food!.isFromFatSecret){
+      _getRecipeBloc.add(
+          GetRecipeEvent.onGetRecipe(widget.foodDetailArgumentModel.food!)
+      );
+    }else{
+      _isRecipeLoaded= true;
+      fillUi(widget.foodDetailArgumentModel.food!);
+    }
   }
 
   void requestLoggedFoods(){
