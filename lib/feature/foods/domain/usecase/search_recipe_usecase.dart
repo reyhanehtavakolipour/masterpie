@@ -2,6 +2,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
@@ -26,15 +27,36 @@ class RecipesUseCase{
     final fatSecretResponseRemote = await repo.getRecipesFromRemote(query);
 
     if(favoriteResponseRemote.isRight()){
-      foods.addAll(toGenericFoods(favoriteResponseRemote.asRight()));
+      final meals= toGenericFoods(favoriteResponseRemote.asRight());
+      List<GenericFood> list= [];
+      for (int i = 0; i < meals.length; i++){
+        list.add(
+          meals[i].copyWith(isFromFatSecret: false, foodType: FoodType.meal)
+        );
+      }
+      foods.addAll(list);
     }
 
     if(cookBookResponseRemote.isRight()){
-      foods.addAll(toGenericFoods(cookBookResponseRemote.asRight()));
+      final meals= toGenericFoods(cookBookResponseRemote.asRight());
+      List<GenericFood> list= [];
+      for (int i = 0; i < meals.length; i++){
+        list.add(
+            meals[i].copyWith(isFromFatSecret: false, foodType: FoodType.meal)
+        );
+      }
+      foods.addAll(list);
     }
 
     if(fatSecretResponseRemote.isRight()){
-      foods.addAll(fatSecretResponseRemote.asRight());
+      final meals= fatSecretResponseRemote.asRight();
+      List<GenericFood> list= [];
+      for (int i = 0; i < meals.length; i++){
+        list.add(
+            meals[i].copyWith(isFromFatSecret: true, foodType: FoodType.meal)
+        );
+      }
+      foods.addAll(list);
     }
 
     if(fatSecretResponseRemote.isRight() || favoriteResponseRemote.isRight() || cookBookResponseRemote.isRight()){

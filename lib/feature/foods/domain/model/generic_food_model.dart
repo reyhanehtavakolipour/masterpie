@@ -32,6 +32,7 @@ class GenericFood with _$GenericFood{
     @Default([]) List<String> diets,
     @Default([]) List<String> allergies,
     @Default(0.0) double count,
+    @Default(true) bool isFromFatSecret,
   })= _GenericFood;
 
 }

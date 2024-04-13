@@ -10,6 +10,7 @@ import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/response/failure.dart';
+import '../model/food_type.dart';
 import '../repository/foods_repository.dart';
 
 
@@ -25,7 +26,14 @@ class GroceriesUseCase{
     final fatSecretResponseRemote = await repo.getGroceryProductsFromRemote(query);
 
     if(favoriteResponseRemote.isRight()){
-      foods.addAll(toGenericFoods(favoriteResponseRemote.asRight()));
+      final groceries= toGenericFoods(favoriteResponseRemote.asRight());
+      List<GenericFood> list= [];
+      for (int i = 0; i < groceries.length; i++){
+        list.add(
+            groceries[i].copyWith(foodType: FoodType.groceryProduct)
+        );
+      }
+      foods.addAll(list);
     }
 
     if(fatSecretResponseRemote.isRight()){

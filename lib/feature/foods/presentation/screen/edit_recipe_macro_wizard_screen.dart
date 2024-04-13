@@ -12,6 +12,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/requ
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -135,9 +136,15 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
    void getRecipe(){
-     _getRecipeBloc.add(
-         GetRecipeEvent.onGetRecipe(widget.genericGroceryDetailForMacroWizardArgumentModel.food!)
-     );
+
+    if(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.isFromFatSecret){
+      _getRecipeBloc.add(
+          GetRecipeEvent.onGetRecipe(widget.genericGroceryDetailForMacroWizardArgumentModel.food!)
+      );
+    }else{
+      _isRecipeLoaded= true;
+      fillUi(widget.genericGroceryDetailForMacroWizardArgumentModel.food!);
+    }
    }
 
 
@@ -310,6 +317,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
          }
        }
 
+
        double protein = 0;
        for (int i = 0; i < genericFood.protein.length; i++) {
          if (i < genericFood.servingIngredientsCount.length) {
@@ -381,7 +389,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                  }else{
                    List<Food> foods= [];
                    foods.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.foods);
-                   newFood= newFood.copyWith(name: _mealNameController.text);
+                   newFood= newFood.copyWith(name: _mealNameController.text, servingAmount: [double.parse(_totalServingController.text)]);
                    foods.add(
                        fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList)
                    );

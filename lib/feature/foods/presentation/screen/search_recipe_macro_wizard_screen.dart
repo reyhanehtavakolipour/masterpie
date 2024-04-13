@@ -9,9 +9,9 @@ import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_macro_wizard_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -67,7 +67,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
   }
 
   void onRecipeClicked(GenericFood food){
-    GenericFood meal= food.copyWith(servingAmount: [1]);
+    GenericFood meal= food;
     GenericGroceryDetailForMacroWizardArgumentModel argumentModel = GenericGroceryDetailForMacroWizardArgumentModel(
         requestWizardArgumentModel: _requestWizardArgumentModel,
         food: meal
@@ -79,7 +79,9 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
       ),
     ).then((result) {
       setState(() {
-        _requestWizardArgumentModel= result;
+        if(result != null){
+          _requestWizardArgumentModel= result;
+        }
       });
     });
   }

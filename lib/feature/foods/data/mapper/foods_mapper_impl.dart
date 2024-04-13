@@ -473,7 +473,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit
+        unit: food.unit,
     );
   }
 

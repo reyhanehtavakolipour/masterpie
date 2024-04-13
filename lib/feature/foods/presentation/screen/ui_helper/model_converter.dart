@@ -61,16 +61,44 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
 
 
 GenericFood toGenericFood(Food food){
+
+  List<List<String>> calorie= [];
+  List<List<String>> protein= [];
+  List<List<String>> carb= [];
+  List<List<String>> fat= [];
+  List<List<String>> servingAmounts= [];
+  List<List<String>> units= [];
+  List<List<String>> servingIngredientsCount= [];
+
+
+  print('sdfsgs: $food');
+  for (int i = 0; i < food.calorie.length; i++){
+    calorie.add([food.calorie[i]]);
+    protein.add([food.protein[i]]);
+    carb.add([food.carb[i]]);
+    fat.add([food.fat[i]]);
+    servingAmounts.add([food.servingAmounts[i]]);
+    units.add([food.units[i]]);
+    servingIngredientsCount.add(food.foodType == FoodType.meal ? [food.servingIngredientsCount[i]] : []);
+  }
+
+
+
+
   return GenericFood(
       id: food.id,
-      calorie: [food.calorie],
-      protein: [food.protein],
-      carb: [food.carb],
-      fat: [food.fat],
-      servingAmounts: [food.servingAmounts],
-      units: [food.units],
-      foodType: FoodType.groceryProduct,
+      calorie: calorie,
+      protein: protein,
+      carb: carb,
+      fat: fat,
+      servingAmounts: servingAmounts,
+      units: units,
       count: food.count,
+      servingIngredientsCount: servingIngredientsCount,
+      ingredients: food.ingredients,
+      servingAmount: [food.servingAmount],
+      recipe: food.recipe,
+      unit: [food.unit],
       name: food.name
   );
 }

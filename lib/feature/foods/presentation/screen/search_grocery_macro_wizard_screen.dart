@@ -62,7 +62,9 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
     });
     _debouncer.run(() {
-      requestFoodsList();
+      if(_searchController.text.isNotEmpty){
+        requestFoodsList();
+      }
     });
   }
 

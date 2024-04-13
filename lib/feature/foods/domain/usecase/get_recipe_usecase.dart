@@ -16,7 +16,7 @@ class GetRecipeUseCase{
 
 
   Future<Either<Failure, GenericFood>> getRecipe(GenericFood genericFood) async{
-    final recipeResponse = await repo.getGroceryFromRemote(genericFood.id);
+    final recipeResponse = await repo.getRecipeFromRemote(genericFood.id);
     if(recipeResponse.isLeft()){
       return Left(recipeResponse.asLeft());
     }

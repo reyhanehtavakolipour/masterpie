@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
@@ -49,12 +47,8 @@ class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesLis
             itemBuilder: (context, index) {
               GenericFood food = widget.foods[index];
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
-              double quantity = foodInformation.count;
               String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
-              String protein= foodInformation.protein[0][0].toStringAsFixed(foodInformation.protein[0][0].truncateToDouble() == foodInformation.protein[0][0] ? 0 : 2);
-              String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
-              String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
-              String foodUnit= foodInformation.units[0][0];
+
 
               return GestureDetector(
                 onTap: (){

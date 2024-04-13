@@ -52,15 +52,17 @@ class _SearchRecipesMacroWizardListUiState extends State<SearchRecipesMacroWizar
             shrinkWrap: true,
             itemBuilder: (context, index) {
               GenericFood food = widget.foods[index];
+              food= food.copyWith(foodType: FoodType.meal);
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
-              double quantity = foodInformation.count;
-              String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
-              String protein= foodInformation.protein[0][0].toStringAsFixed(foodInformation.protein[0][0].truncateToDouble() == foodInformation.protein[0][0] ? 0 : 2);
-              String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
-              String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
-              bool isFoodAdded= foodInformation.isFoodAdded;
-              int servingQuantity= foodInformation.servingAmounts[0][0].toInt();
-              String foodUnit= foodInformation.units[0][0];
+
+
+
+              double totalCalorie= 0.0;
+              foodInformation.calorie.forEach((element) {
+                totalCalorie= totalCalorie + element[0];
+              });
+
+              String calorie= totalCalorie.toString();
 
               return GestureDetector(
                 onTap: (){

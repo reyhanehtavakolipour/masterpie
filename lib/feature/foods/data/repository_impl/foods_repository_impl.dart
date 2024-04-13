@@ -667,7 +667,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, GenericFood>> getGroceryFromRemote(String recipeId) async{
+  Future<Either<Failure, GenericFood>> getRecipeFromRemote(String recipeId) async{
     final groceryResponse= await productRemoteDataSource.getRecipe(recipeId);
     if(groceryResponse.isRight()){
       return Right(mapper.fromGenericFoodRemote(groceryResponse.asRight()));
