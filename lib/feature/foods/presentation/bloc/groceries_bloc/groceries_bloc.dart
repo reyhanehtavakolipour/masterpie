@@ -37,6 +37,26 @@ class GroceriesBloc extends Bloc<GroceriesEvent, GroceriesState> {
           }
         }
     );
+
+
+
+    on<GetGroceryWithBarcodeEvent>(
+            (event, emit) async {
+          final useCase= serviceLocator<GroceriesUseCase>();
+            emit(const GroceriesState.loading());
+
+            var result = await useCase.getGroceryWithBarcode(event.barcodeId,);
+            result.fold(
+                  (failure) {
+                emit(GroceriesState.error(failure.message));
+              },
+                  (data) {
+                emit(GroceriesState.loaded(foods: data));
+              },
+            );
+        }
+    );
+
   }
 
 

@@ -52,5 +52,15 @@ class GroceriesUseCase{
     return Left(getFailure(failure));
   }
 
+  Future<Either<Failure, List<GenericFood>>> getGroceryWithBarcode(String barcodeId) async{
+    final fatSecretResponseRemote = await repo.getGroceryWithBarcodeFromRemote(barcodeId);
+
+    if(fatSecretResponseRemote.isRight()){
+      return Right([fatSecretResponseRemote.asRight()]);
+    }
+
+    return Left(getFailure(fatSecretResponseRemote.asLeft()));
+  }
+
 
 }

@@ -12,6 +12,7 @@ part 'groceries_state_event.freezed.dart';
 abstract class GroceriesEvent with _$GroceriesEvent {
 
   const factory GroceriesEvent.onGetGroceries(String query) = GetGroceriesEvent;
+  const factory GroceriesEvent.onGetGroceryWithBarcode(String barcodeId) = GetGroceryWithBarcodeEvent;
   const factory GroceriesEvent.onReset() = Reset;
 
 }

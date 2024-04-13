@@ -19,7 +19,7 @@ Future<Either<Failure, oauth2.Client>> authFatSecret() async{
   const identifier = 'c75c4c004d3e4823965e117075ce07f8';
   const secret = 'b122d44d5a02433c8be4d6abe65fa3e5';
 
-  final scopes = ['premier'];
+  final scopes = ['premier', 'barcode'];
 
   try {
     final client = await oauth2.clientCredentialsGrant(

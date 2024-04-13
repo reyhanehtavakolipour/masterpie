@@ -218,7 +218,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
         await Future.forEach((recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List), (ingredient) async {
         // (recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List).forEach((ingredient)  {
-          print('sdfsds: ${ingredient['food_name']}');
           ingredients.add(ingredient['food_name']);
           final ingredientNumberOfUnit= double.parse(ingredient['number_of_units']);
           final servingId= double.parse(ingredient['serving_id']);
@@ -289,7 +288,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             carb.add(ingredientCarb);
             fat.add(ingredientFat);
             servingAmounts.add(ingredientServingAmounts);
-            print('dfgfhs: $ingredientUnits');
             units.add(ingredientUnits);
 
           }else{
@@ -328,9 +326,91 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, String>> getGroceryId(String barcode) {
-    // TODO: implement getGroceryId
-    throw UnimplementedError();
+  Future<Either<Failure, GenericFoodRemote>> getGroceryWithBarcode(String barcode) async{
+    try {
+
+      final clientResponse = await authFatSecret();
+
+      if(clientResponse.isLeft()){
+        return const Left(FailureResponse('oauth2 failed'));
+      }
+
+      String token = clientResponse.asRight().credentials.accessToken;
+      print('Successfully authenticated!: $token');
+
+      final NetworkRequest request = await NetworkRequest.createFatSecret(token);
+
+      Map<String, dynamic> params = {
+        'method': 'food.find_id_for_barcode',
+        'barcode': barcode,
+        'format': 'json',
+      };
+
+      final response= await request.postParams(FAT_SECRET_URL, params: params);
+
+      if(response.statusCode == SUCCESS_API_CODE){
+
+        final data = response.data;
+
+        final groceryId = data['food_id']['value'];
+
+        Map<String, dynamic> params = {
+          'method': 'food.get.v4',
+          'food_id': groceryId,
+          'format': 'json',
+        };
+
+        final detailResponse= await request.postParams(FAT_SECRET_URL, params: params);
+
+        if(detailResponse.statusCode == SUCCESS_API_CODE){
+          final data = detailResponse.data;
+
+          final serving= data['food']['servings']['serving'] as List;
+
+          List<String> ingredientCalorie= [];
+          List<String> ingredientProtein= [];
+          List<String> ingredientCarb= [];
+          List<String> ingredientFat= [];
+          List<String> ingredientServingAmounts= [];
+          List<String> ingredientUnits= [];
+
+
+          serving.forEach((element) {
+            ingredientCalorie.add(element['calories'].toString());
+            ingredientProtein.add(element['protein'].toString());
+            ingredientCarb.add(element['carbohydrate'].toString());
+            ingredientFat.add(element['fat'].toString());
+            ingredientServingAmounts.add(element['number_of_units'].toString());
+
+            if(element['measurement_description'] == 'serving'){
+              ingredientUnits.add(element['serving_description'].toString());
+            }else{
+              ingredientUnits.add(element['measurement_description'].toString());
+            }
+          });
+
+          return Right(GenericFoodRemote(
+            id: data['food']['food_id'],
+            name: data['food']['food_name'],
+            calorie: [ingredientCalorie],
+            protein: [ingredientProtein],
+            carb: [ingredientCarb],
+            fat: [ingredientFat],
+            servingAmounts: [ingredientServingAmounts],
+            units: [ingredientUnits]
+          ));
+
+        }else{
+          return  Left(RemoteFailure(detailResponse.statusCode, detailResponse.data['message']));
+        };
+      }else{
+        return  Left(RemoteFailure(response.statusCode, response.data['message']));
+      }
+
+    } catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+
   }
 
 

@@ -19,18 +19,21 @@ mixin _$GroceriesEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String query) onGetGroceries,
+    required TResult Function(String barcodeId) onGetGroceryWithBarcode,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String query)? onGetGroceries,
+    TResult Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
@@ -38,18 +41,23 @@ mixin _$GroceriesEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetGroceriesEvent value) onGetGroceries,
+    required TResult Function(GetGroceryWithBarcodeEvent value)
+        onGetGroceryWithBarcode,
     required TResult Function(Reset value) onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult? Function(GetGroceryWithBarcodeEvent value)?
+        onGetGroceryWithBarcode,
     TResult? Function(Reset value)? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult Function(GetGroceryWithBarcodeEvent value)? onGetGroceryWithBarcode,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) =>
@@ -140,6 +148,7 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String query) onGetGroceries,
+    required TResult Function(String barcodeId) onGetGroceryWithBarcode,
     required TResult Function() onReset,
   }) {
     return onGetGroceries(query);
@@ -149,6 +158,7 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult? Function()? onReset,
   }) {
     return onGetGroceries?.call(query);
@@ -158,6 +168,7 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String query)? onGetGroceries,
+    TResult Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -171,6 +182,8 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetGroceriesEvent value) onGetGroceries,
+    required TResult Function(GetGroceryWithBarcodeEvent value)
+        onGetGroceryWithBarcode,
     required TResult Function(Reset value) onReset,
   }) {
     return onGetGroceries(this);
@@ -180,6 +193,8 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult? Function(GetGroceryWithBarcodeEvent value)?
+        onGetGroceryWithBarcode,
     TResult? Function(Reset value)? onReset,
   }) {
     return onGetGroceries?.call(this);
@@ -189,6 +204,7 @@ class _$GetGroceriesEventImpl implements GetGroceriesEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult Function(GetGroceryWithBarcodeEvent value)? onGetGroceryWithBarcode,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -206,6 +222,152 @@ abstract class GetGroceriesEvent implements GroceriesEvent {
   @JsonKey(ignore: true)
   _$$GetGroceriesEventImplCopyWith<_$GetGroceriesEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GetGroceryWithBarcodeEventImplCopyWith<$Res> {
+  factory _$$GetGroceryWithBarcodeEventImplCopyWith(
+          _$GetGroceryWithBarcodeEventImpl value,
+          $Res Function(_$GetGroceryWithBarcodeEventImpl) then) =
+      __$$GetGroceryWithBarcodeEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String barcodeId});
+}
+
+/// @nodoc
+class __$$GetGroceryWithBarcodeEventImplCopyWithImpl<$Res>
+    extends _$GroceriesEventCopyWithImpl<$Res, _$GetGroceryWithBarcodeEventImpl>
+    implements _$$GetGroceryWithBarcodeEventImplCopyWith<$Res> {
+  __$$GetGroceryWithBarcodeEventImplCopyWithImpl(
+      _$GetGroceryWithBarcodeEventImpl _value,
+      $Res Function(_$GetGroceryWithBarcodeEventImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? barcodeId = null,
+  }) {
+    return _then(_$GetGroceryWithBarcodeEventImpl(
+      null == barcodeId
+          ? _value.barcodeId
+          : barcodeId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$GetGroceryWithBarcodeEventImpl implements GetGroceryWithBarcodeEvent {
+  const _$GetGroceryWithBarcodeEventImpl(this.barcodeId);
+
+  @override
+  final String barcodeId;
+
+  @override
+  String toString() {
+    return 'GroceriesEvent.onGetGroceryWithBarcode(barcodeId: $barcodeId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetGroceryWithBarcodeEventImpl &&
+            (identical(other.barcodeId, barcodeId) ||
+                other.barcodeId == barcodeId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, barcodeId);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetGroceryWithBarcodeEventImplCopyWith<_$GetGroceryWithBarcodeEventImpl>
+      get copyWith => __$$GetGroceryWithBarcodeEventImplCopyWithImpl<
+          _$GetGroceryWithBarcodeEventImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String query) onGetGroceries,
+    required TResult Function(String barcodeId) onGetGroceryWithBarcode,
+    required TResult Function() onReset,
+  }) {
+    return onGetGroceryWithBarcode(barcodeId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String barcodeId)? onGetGroceryWithBarcode,
+    TResult? Function()? onReset,
+  }) {
+    return onGetGroceryWithBarcode?.call(barcodeId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String query)? onGetGroceries,
+    TResult Function(String barcodeId)? onGetGroceryWithBarcode,
+    TResult Function()? onReset,
+    required TResult orElse(),
+  }) {
+    if (onGetGroceryWithBarcode != null) {
+      return onGetGroceryWithBarcode(barcodeId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetGroceriesEvent value) onGetGroceries,
+    required TResult Function(GetGroceryWithBarcodeEvent value)
+        onGetGroceryWithBarcode,
+    required TResult Function(Reset value) onReset,
+  }) {
+    return onGetGroceryWithBarcode(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult? Function(GetGroceryWithBarcodeEvent value)?
+        onGetGroceryWithBarcode,
+    TResult? Function(Reset value)? onReset,
+  }) {
+    return onGetGroceryWithBarcode?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult Function(GetGroceryWithBarcodeEvent value)? onGetGroceryWithBarcode,
+    TResult Function(Reset value)? onReset,
+    required TResult orElse(),
+  }) {
+    if (onGetGroceryWithBarcode != null) {
+      return onGetGroceryWithBarcode(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GetGroceryWithBarcodeEvent implements GroceriesEvent {
+  const factory GetGroceryWithBarcodeEvent(final String barcodeId) =
+      _$GetGroceryWithBarcodeEventImpl;
+
+  String get barcodeId;
+  @JsonKey(ignore: true)
+  _$$GetGroceryWithBarcodeEventImplCopyWith<_$GetGroceryWithBarcodeEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -247,6 +409,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String query) onGetGroceries,
+    required TResult Function(String barcodeId) onGetGroceryWithBarcode,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -256,6 +419,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String query)? onGetGroceries,
+    TResult? Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -265,6 +429,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String query)? onGetGroceries,
+    TResult Function(String barcodeId)? onGetGroceryWithBarcode,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -278,6 +443,8 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetGroceriesEvent value) onGetGroceries,
+    required TResult Function(GetGroceryWithBarcodeEvent value)
+        onGetGroceryWithBarcode,
     required TResult Function(Reset value) onReset,
   }) {
     return onReset(this);
@@ -287,6 +454,8 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult? Function(GetGroceryWithBarcodeEvent value)?
+        onGetGroceryWithBarcode,
     TResult? Function(Reset value)? onReset,
   }) {
     return onReset?.call(this);
@@ -296,6 +465,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetGroceriesEvent value)? onGetGroceries,
+    TResult Function(GetGroceryWithBarcodeEvent value)? onGetGroceryWithBarcode,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {

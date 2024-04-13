@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
@@ -382,16 +384,19 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                             ),
                             const SizedBox(width: 8,),
                             GestureDetector(
-                              child: const CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.orange,
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.white,
+                              child: Container(
+                                margin: const EdgeInsets.all(8),
+                                child: const CircleAvatar(
+                                  radius: 18,
+                                  backgroundColor: Colors.orange,
+                                  child: Icon(
+                                    Icons.document_scanner,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               onTap: () {
-                                requestFoodsList();
+                                 scanBarcodeNormal();
                               },
                             )
                           ],
@@ -530,6 +535,30 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
           ],
         ),
       ),
+    );
+  }
+
+
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      requestGroceryWithBarcode(barcodeScanRes);
+    });
+  }
+
+
+  void requestGroceryWithBarcode(String barcodeId){
+    _groceriesBloc.add(
+      GroceriesEvent.onGetGroceryWithBarcode(barcodeId),
     );
   }
 

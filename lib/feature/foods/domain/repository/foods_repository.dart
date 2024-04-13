@@ -19,7 +19,7 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, GenericFood>> getRecipeFromRemote(String recipeId);
 
-  Future<Either<Failure, String>> getGroceryIdFromRemote(String barcode);
+  Future<Either<Failure, GenericFood>> getGroceryWithBarcodeFromRemote(String barcode);
 
   Future<Either<Failure, List<Food>>> getMyFoodsFromRemote(String query);
 
