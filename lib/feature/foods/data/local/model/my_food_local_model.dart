@@ -51,7 +51,7 @@ class MyFoodLocal{
     required this.diets,
     required this.allergies,
     required this.servingAmount,
-    required this.unit
+    required this.unit,
   });
 
 
@@ -77,7 +77,7 @@ class MyFoodLocal{
         fat: (parsedJson['fat'] as String).split(';'),
         diets: (parsedJson['diets'] as String).split(';'),
         allergies: (parsedJson['allergies'] as String).split(';'),
-        servingAmount: double.parse(parsedJson['servingAmount'].toString()),
+    servingAmount: double.parse(parsedJson['servingAmount'].toString()),
         unit: parsedJson['unit']);
   }
 

@@ -371,61 +371,61 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   void fillUi(GenericFood genericFood){
 
     setState(() {
-      double calorie = 0;
-      for (int i = 0; i < genericFood.calorie.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(
-              genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+        double calorie = 0;
+        for (int i = 0; i < genericFood.calorie.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(
+                genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+          }
         }
-      }
 
-      double protein = 0;
-      for (int i = 0; i < genericFood.protein.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+        double protein = 0;
+        for (int i = 0; i < genericFood.protein.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+          }
         }
-      }
 
-      double carb = 0;
-      for (int i = 0; i < genericFood.carb.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+        double carb = 0;
+        for (int i = 0; i < genericFood.carb.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+          }
         }
-      }
 
 
-      double fat = 0;
-      for (int i = 0; i <
-          genericFood.fat.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+        double fat = 0;
+        for (int i = 0; i <
+            genericFood.fat.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+          }
         }
-      }
 
 
-      String ingredients = '';
-      for (int i = 0; i < genericFood.ingredients.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])
-              * double.parse(genericFood.servingAmounts[i].isEmpty ? '0' : genericFood.servingAmounts[i][0])} x'
-              ' (${genericFood.units[i][0]}) '
-              '${genericFood.ingredients[i]},\n';
-          ingredients = ingredients + ingredient;
+        String ingredients = '';
+        for (int i = 0; i < genericFood.ingredients.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])
+                * double.parse(genericFood.servingAmounts[i].isEmpty ? '0' : genericFood.servingAmounts[i][0])} x'
+                ' (${genericFood.units[i][0]}) '
+                '${genericFood.ingredients[i]},\n';
+            ingredients = ingredients + ingredient;
+          }
         }
-      }
 
-      _foodName = genericFood.name;
-      _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
-      _totalCalorie = calorie.toStringAsFixed(2);
-      _totalProtein = protein.toStringAsFixed(2);
-      _totalCarb = carb.toStringAsFixed(2);
-      _totalFat = fat.toStringAsFixed(2);
-      _recipe = genericFood.recipe;
-      _ingredients = ingredients;
+        _foodName = genericFood.name;
+        _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
+        _totalCalorie = calorie.toStringAsFixed(2);
+        _totalProtein = protein.toStringAsFixed(2);
+        _totalCarb = carb.toStringAsFixed(2);
+        _totalFat = fat.toStringAsFixed(2);
+        _recipe = genericFood.recipe;
+        _ingredients = ingredients;
 
 
       newFood = genericFood;

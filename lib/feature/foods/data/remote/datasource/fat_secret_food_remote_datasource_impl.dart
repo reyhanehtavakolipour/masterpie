@@ -1,5 +1,8 @@
 
 
+import 'dart:convert';
+
+import 'package:dart_openai/dart_openai.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
@@ -185,7 +188,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
       final NetworkRequest request = await NetworkRequest.createFatSecret(token);
 
-
       List<String> ingredients = [];
       List<List<String>> servingIngredientsCount = [];
       List<List<String>> calorie = [];
@@ -253,7 +255,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
             /// add the serving unit used in recipe, first
             serving.forEach((element) {
-              if(element['serving_id'] == servingId){
+              if(double.parse(element['serving_id'].toString()) == servingId){
                 ingredientCalorie.add(element['calories'].toString());
                 ingredientProtein.add(element['protein'].toString());
                 ingredientCarb.add(element['carbohydrate'].toString());
@@ -267,6 +269,75 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
                 }
               }
             });
+
+
+
+
+            // means the serving of the ingredient doesn't exist in grocery detail, in this case ask chat gpt
+            if(ingredientCalorie.isEmpty){
+
+
+              String promptMessage = 'what is the calorie and macro of a ${ingredient['ingredient_description']}. just give the answer without any explanation.'
+                  ' put them in an array in this order: [calorie, protein, carb, fat]';
+
+              final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
+
+              OpenAI.apiKey = openAIKey;
+
+              print('show_prompt: $promptMessage');
+
+              final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+                content: [
+                  OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                    "return any message you are given as JSON object with the key of meals.",
+                  ),
+                ],
+                role: OpenAIChatMessageRole.assistant,
+              );
+
+              // the user message that will be sent to the request.
+              final userMessage = OpenAIChatCompletionChoiceMessageModel(
+                content: [
+                  OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                    promptMessage,
+                  ),
+                ],
+                role: OpenAIChatMessageRole.user,
+              );
+
+              final requestMessages = [systemMessage, userMessage,];
+              OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+                model: "gpt-3.5-turbo-1106",
+                responseFormat: {"type": "json_object"},
+                // seed: 6,
+                messages: requestMessages,
+                temperature: 1.2,
+                maxTokens: 1024,
+                // toolChoice: "auto",
+              );
+
+
+              printWrapped('MACRO_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
+
+
+              Map<String, dynamic> jsonMap = json.decode(chatCompletion.choices.first.message.content?.first.text ?? '');
+
+              List<String> macro = (jsonMap['meals'] as List<dynamic>).map((value) => value.toString()).toList();
+
+              if(macro.isEmpty){
+                macro= ['0.0', '0.0', '0.0', '0.0'];
+              }
+
+
+              ingredientCalorie.add(macro[0].toString());
+              ingredientProtein.add(macro[1].toString());
+              ingredientCarb.add(macro[2].toString());
+              ingredientFat.add(macro[3].toString());
+              ingredientServingAmounts.add(ingredient['number_of_units'].toString());
+              ingredientUnits.add(ingredient['measurement_description'].toString());
+
+            }
+
 
             serving.forEach((element) {
               if(element['serving_id'] != servingId){
@@ -282,8 +353,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
                   ingredientUnits.add(element['measurement_description'].toString());
                 }
               }
-
             });
+
+
             calorie.add(ingredientCalorie);
             protein.add(ingredientProtein);
             carb.add(ingredientCarb);
@@ -300,31 +372,31 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       }
 
 
-      final product = GenericFoodRemote(
-          id: recipeId,
-          name: recipeDetailResponse.data['recipe']['recipe_name'],
-          foodType: FoodTypeRemote.meal,
-          calorie: calorie,
-          protein: protein,
-          carb: carb,
-          fat: fat,
-          recipe: recipeInstruction,
-          ingredients: ingredients,
-          servingIngredientsCount: servingIngredientsCount,
-          servingAmount: [double.parse(recipeDetailResponse.data['recipe']['number_of_servings'])],
-          servingAmounts: servingAmounts,
-          unit: ['serving'],
-          units: units
-      );
+      return Right(
+          GenericFoodRemote(
+              id: recipeId,
+              name: recipeDetailResponse.data['recipe']['recipe_name'],
+              foodType: FoodTypeRemote.meal,
+              calorie: calorie,
+              protein: protein,
+              carb: carb,
+              fat: fat,
+              recipe: recipeInstruction,
+              ingredients: ingredients,
+              servingIngredientsCount: servingIngredientsCount,
+              servingAmount: [double.parse(recipeDetailResponse.data['recipe']['number_of_servings'])],
+              servingAmounts: servingAmounts,
+              unit: ['serving'],
+              units: units
+          ));
 
-
-      return Right(product);
 
     } catch (e) {
       return Left(ExceptionFailure(e));
     }
 
   }
+
 
   @override
   Future<Either<Failure, GenericFoodRemote>> getGroceryWithBarcode(String barcode) async{

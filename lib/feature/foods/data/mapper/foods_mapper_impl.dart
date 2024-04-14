@@ -50,7 +50,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: [],
             allergies: [],
             servingAmount: 0,
-            unit: '',
+          unit: '',
         )
     ).toList();
   }
@@ -78,7 +78,7 @@ class FoodsMapperImpl extends FoodsMapper{
           diets: mealRemote.diets,
           allergies: mealRemote.allergies,
           servingAmount: mealRemote.servingAmount,
-          unit: mealRemote.unit
+            unit: mealRemote.unit
         )
     ).toList();
   }
@@ -137,7 +137,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: [],
             allergies: [],
             servingAmount: 0,
-            unit: '',
+          unit: '',
         )
     ).toList();
   }
@@ -165,7 +165,7 @@ class FoodsMapperImpl extends FoodsMapper{
       diets: mealRemote.diets,
       allergies: mealRemote.allergies,
       servingAmount: mealRemote.servingAmount,
-      unit: mealRemote.unit
+        unit: mealRemote.unit
     );
   }
 
@@ -193,7 +193,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit,
+      unit: food.unit,
     );
   }
 
@@ -247,7 +247,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit,
+      unit: food.unit,
     );
   }
 
@@ -388,7 +388,7 @@ class FoodsMapperImpl extends FoodsMapper{
           diets: [],
           allergies: [],
           servingAmount: 0,
-          unit: ''
+            unit: ''
         )
     ).toList();
   }
@@ -473,7 +473,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit,
+      unit: food.unit,
     );
   }
 
@@ -501,7 +501,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,
-            unit: food.unit,
+          unit: food.unit,
         )
     ).toList();
   }
@@ -556,7 +556,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,
-            unit: food.unit,
+          unit: food.unit,
         )
     ).toList();
   }
@@ -611,7 +611,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit,
+      unit: food.unit,
     );
   }
 
@@ -680,7 +680,7 @@ class FoodsMapperImpl extends FoodsMapper{
           allergies: food.allergies,
           servingAmount: food.servingAmount,
           unit: food.unit,
-          count: food.count
+            count: food.count
         )
     ).toList();
   }
@@ -710,7 +710,7 @@ class FoodsMapperImpl extends FoodsMapper{
             allergies: food.allergies,
             servingAmount: food.servingAmount,
             unit: food.unit,
-            count: double.parse(food.count),
+          count: double.parse(food.count),
         )
     ).toList();
   }
@@ -786,7 +786,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: [],
             allergies: [],
             servingAmount: productRemote.servingAmount,
-            unit: productRemote.unit
+            unit: productRemote.unit,
         )
     ).toList();
   }
@@ -814,7 +814,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: [],
         allergies: [],
         servingAmount: productRemote.servingAmount,
-        unit: productRemote.unit
+        unit: productRemote.unit,
     );
   }
 
