@@ -317,37 +317,37 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
         ///  serving + unit
         Row(
           children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: false,
-                onChanged: updatedIngredientMacroListener,
-                controller: _servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
-            const SizedBox(width: 28,),
+            // const SizedBox(
+            //     width: MACRO_TITLE_WIDTH,
+            //     child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+            // ),
+            // const SizedBox(width: 4,),
+            // SizedBox(
+            //   width: MACRO_WIDTH,
+            //   height: MACRO_HEIGHT,
+            //   child: TextField(
+            //     enabled: false,
+            //     onChanged: updatedIngredientMacroListener,
+            //     controller: _servingController,
+            //     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            //     inputFormatters: <TextInputFormatter>[
+            //       FilteringTextInputFormatter.allow(numericRegExp),
+            //     ],
+            //     decoration: const InputDecoration(
+            //       border: OutlineInputBorder(
+            //         borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //         borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+            //       ),
+            //       focusedBorder: OutlineInputBorder(
+            //         borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+            //       ),
+            //       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(width: 28,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
