@@ -478,6 +478,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyCookBookLoadedState){
+                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    Navigator.pushAndRemoveUntil(
@@ -489,6 +490,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                    );
                  });
                }else if(state is AddOrUpdateMyCookBookErrorState){
+                 FocusScope.of(context).unfocus();
                  _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                  Future.delayed(Duration.zero,(){
                    if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){

@@ -1060,6 +1060,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
+                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);
@@ -1067,6 +1068,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                           });
                         });
                       }else if(state is GroceriesErrorState){
+                        FocusScope.of(context).unfocus();
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);

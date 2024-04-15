@@ -528,6 +528,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   ],
                 );
               }else if(state is AddOrUpdateMyFavoriteLoadedState){
+                FocusScope.of(context).unfocus();
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                   showSuccessToast(context, FAVORITE_UPDATED_SUCCESSFULLY);
@@ -536,6 +537,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   ), (route) => false);
                 });
               }else if(state is AddOrUpdateMyFavoriteErrorState){
+                FocusScope.of(context).unfocus();
                 _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                 Future.delayed(Duration.zero,(){
                   if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){

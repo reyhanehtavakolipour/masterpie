@@ -469,6 +469,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetLoggedFoodsLoadedState){
+                          FocusScope.of(context).unfocus();
                           if(_logButtonCLicked){
                             _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){
@@ -476,6 +477,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                             });
                           }
                         }else if(state is GetLoggedFoodsErrorState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);

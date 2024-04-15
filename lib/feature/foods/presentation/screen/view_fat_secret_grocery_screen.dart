@@ -183,11 +183,13 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
                           });
                         }else if(state is GetLoggedFoodsErrorState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -284,6 +286,7 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
                    ],
                  );
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
+                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                  _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                  Navigator.pushAndRemoveUntil(
@@ -295,6 +298,7 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
                    );
                  });
                }else if(state is AddOrUpdateMyFavoriteErrorState){
+                 FocusScope.of(context).unfocus();
                  _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                  Future.delayed(Duration.zero,(){
                    if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){

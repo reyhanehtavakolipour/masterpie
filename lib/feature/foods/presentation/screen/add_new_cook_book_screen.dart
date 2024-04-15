@@ -433,12 +433,14 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyCookBookLoadedState){
+                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                    Navigator.pop(context, newFood);
                  });
                }else if(state is AddOrUpdateMyCookBookErrorState){
+                 FocusScope.of(context).unfocus();
                  _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                  Future.delayed(Duration.zero,(){
                    if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){

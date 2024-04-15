@@ -386,11 +386,13 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
                      ],
                    );
                  }else if(state is AddOrUpdateMyFavoriteLoadedState){
+                   FocusScope.of(context).unfocus();
                    Future.delayed(Duration.zero,(){
                      _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                      showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);
                    });
                  }else if(state is AddOrUpdateMyFavoriteErrorState){
+                   FocusScope.of(context).unfocus();
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                    Future.delayed(Duration.zero,(){
                      if(state.message == ERROR_FREE_USER_FAVORITE_FOOD_NOT_ALLOWED){

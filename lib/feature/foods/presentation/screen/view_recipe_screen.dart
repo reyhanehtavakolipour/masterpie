@@ -313,6 +313,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetLoggedFoodsLoadedState){
+                        FocusScope.of(context).unfocus();
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           if(_logFoodButtonCLicked){
@@ -321,6 +322,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                           }
                         });
                       }else if(state is GetLoggedFoodsErrorState){
+                        FocusScope.of(context).unfocus();
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
@@ -585,11 +587,13 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                   ],
                 );
               }else if(state is AddOrUpdateMyCookBookLoadedState){
+                FocusScope.of(context).unfocus();
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                   showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
                 });
               }else if(state is AddOrUpdateMyCookBookErrorState){
+                FocusScope.of(context).unfocus();
                 _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                 Future.delayed(Duration.zero,(){
                   if(state.message == ERROR_FREE_USER_COOKBOOK_FOOD_NOT_ALLOWED){

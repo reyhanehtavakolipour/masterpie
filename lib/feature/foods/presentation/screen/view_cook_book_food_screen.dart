@@ -323,11 +323,13 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetLoggedFoodsLoadedState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
                           });
                         }else if(state is GetLoggedFoodsErrorState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -568,7 +570,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
                 controller: _foodCountController,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
