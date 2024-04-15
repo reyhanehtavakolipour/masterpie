@@ -1,19 +1,14 @@
 
 
-import 'dart:convert';
 
-import 'package:dart_openai/dart_openai.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:masterpie/util/core/helper/print.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
-import '../model/food_remote_model.dart';
 import 'fat_secret_food_remote_datasource.dart';
 
 
@@ -271,76 +266,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             });
 
 
-
-
-            // means the serving of the ingredient doesn't exist in grocery detail, in this case ask chat gpt
-            if(ingredientCalorie.isEmpty){
-
-
-              String promptMessage = 'what is the calorie and macro of a ${ingredient['ingredient_description']}. just give the answer without any explanation.'
-                  ' put them in an array in this order: [calorie, protein, carb, fat]';
-
-              final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
-
-              OpenAI.apiKey = openAIKey;
-
-              print('show_prompt: $promptMessage');
-
-              final systemMessage = OpenAIChatCompletionChoiceMessageModel(
-                content: [
-                  OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                    "return any message you are given as JSON object with the key of meals.",
-                  ),
-                ],
-                role: OpenAIChatMessageRole.assistant,
-              );
-
-              // the user message that will be sent to the request.
-              final userMessage = OpenAIChatCompletionChoiceMessageModel(
-                content: [
-                  OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                    promptMessage,
-                  ),
-                ],
-                role: OpenAIChatMessageRole.user,
-              );
-
-              final requestMessages = [systemMessage, userMessage,];
-              OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-                model: "gpt-3.5-turbo-1106",
-                responseFormat: {"type": "json_object"},
-                // seed: 6,
-                messages: requestMessages,
-                temperature: 1.2,
-                maxTokens: 1024,
-                // toolChoice: "auto",
-              );
-
-
-              printWrapped('MACRO_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
-
-
-              Map<String, dynamic> jsonMap = json.decode(chatCompletion.choices.first.message.content?.first.text ?? '');
-
-              List<String> macro = (jsonMap['meals'] as List<dynamic>).map((value) => value.toString()).toList();
-
-              if(macro.isEmpty){
-                macro= ['0.0', '0.0', '0.0', '0.0'];
-              }
-
-
-              ingredientCalorie.add(macro[0].toString());
-              ingredientProtein.add(macro[1].toString());
-              ingredientCarb.add(macro[2].toString());
-              ingredientFat.add(macro[3].toString());
-              ingredientServingAmounts.add(ingredient['number_of_units'].toString());
-              ingredientUnits.add(ingredient['measurement_description'].toString());
-
-            }
-
-
             serving.forEach((element) {
-              if(element['serving_id'] != servingId){
+              if(element['serving_id'] != servingId && !ingredientUnits.contains(element['measurement_description']) &&
+                  !ingredientUnits.contains(element['serving_description'])){
                 ingredientCalorie.add(element['calories'].toString());
                 ingredientProtein.add(element['protein'].toString());
                 ingredientCarb.add(element['carbohydrate'].toString());
@@ -355,13 +283,14 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
               }
             });
 
-
             calorie.add(ingredientCalorie);
             protein.add(ingredientProtein);
             carb.add(ingredientCarb);
             fat.add(ingredientFat);
             servingAmounts.add(ingredientServingAmounts);
             units.add(ingredientUnits);
+
+
 
           }else{
             return Left(RemoteFailure(response.statusCode, response.data['message']));
@@ -370,6 +299,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       }else{
         return  Left(RemoteFailure(recipeDetailResponse.statusCode, recipeDetailResponse.data['message']));
       }
+
 
 
       return Right(
