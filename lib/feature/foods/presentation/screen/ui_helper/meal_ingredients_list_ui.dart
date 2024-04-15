@@ -62,7 +62,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-
+        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.meal.ingredients.length,

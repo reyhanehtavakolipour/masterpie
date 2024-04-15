@@ -207,6 +207,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
         body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: SingleChildScrollView(
+              physics: const ScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

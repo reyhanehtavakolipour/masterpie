@@ -224,6 +224,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                 Visibility(
                   visible: _isRecipeLoaded,
                   child: SingleChildScrollView(
+                    physics: const ScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

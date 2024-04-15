@@ -224,6 +224,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
             child: Stack(
               children: [
                 SingleChildScrollView(
+                  physics: const ScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
