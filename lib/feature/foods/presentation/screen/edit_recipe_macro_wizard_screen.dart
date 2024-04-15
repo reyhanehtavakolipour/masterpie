@@ -281,12 +281,14 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetRecipeLoadedState){
+                        FocusScope.of(context).unfocus();
                         _getRecipeBloc.add(const GetRecipeEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           _isRecipeLoaded= true;
                           fillUi(state.food);
                         });
                       }else if(state is GetRecipeErrorState){
+                        FocusScope.of(context).unfocus();
                         _getRecipeBloc.add(const GetRecipeEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
@@ -441,7 +443,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                      controller: _minServingController,
                      textAlign: TextAlign.center,
                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                      inputFormatters: <TextInputFormatter>[
                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                      ],
@@ -475,7 +477,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                      controller: _maxServingController,
                      textAlign: TextAlign.center,
                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                      inputFormatters: <TextInputFormatter>[
                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                      ],
@@ -992,6 +994,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
+                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);
@@ -999,6 +1002,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                           });
                         });
                       }else if(state is GroceriesErrorState){
+                        FocusScope.of(context).unfocus();
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);
@@ -1179,7 +1183,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _servingController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1224,7 +1228,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _calorieController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1254,7 +1258,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _proteinController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1291,7 +1295,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _carbController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1321,7 +1325,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _fatController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1380,7 +1384,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                      controller: _ingredientServingCountController,
                      textAlign: TextAlign.center,
                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                      inputFormatters: <TextInputFormatter>[
                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                      ],

@@ -198,7 +198,6 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
             ),
 
 
-
             BlocConsumer<RecipesBloc, RecipesState>(
                 builder: (context, state) {
 
@@ -210,6 +209,7 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
                   }else if(state is RecipesLoadedState){
+                    FocusScope.of(context).unfocus();
                     Future.delayed(Duration.zero,(){
                       setState(() {
                         _newRecipes= [];
@@ -218,6 +218,7 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
                       });
                     });
                   }else if(state is RecipesErrorState){
+                    FocusScope.of(context).unfocus();
                     _recipeBloc.add(const RecipesEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       return showErrorToast(context, state.message);

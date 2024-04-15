@@ -365,6 +365,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                 height: RECIPE_HEIGHT,
                 child: TextField(
                   controller: _recipeController,
+                  textInputAction: TextInputAction.done,
                   maxLines: null,
                   expands: true,
                   textAlign: TextAlign.start,
@@ -670,7 +671,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -735,7 +736,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -766,7 +767,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -804,7 +805,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -835,7 +836,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -992,6 +993,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
+                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);
@@ -999,6 +1001,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                           });
                         });
                       }else if(state is GroceriesErrorState){
+                        FocusScope.of(context).unfocus();
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);

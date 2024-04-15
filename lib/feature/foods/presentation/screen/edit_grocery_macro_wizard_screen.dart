@@ -376,7 +376,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -422,7 +422,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -452,7 +452,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -489,7 +489,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -519,7 +519,7 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],

@@ -225,6 +225,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
                   }else if(state is RecipesLoadedState){
+                    FocusScope.of(context).unfocus();
                     Future.delayed(Duration.zero,(){
                       setState(() {
                         _newRecipes= [];
@@ -233,6 +234,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
                       });
                     });
                   }else if(state is RecipesErrorState){
+                    FocusScope.of(context).unfocus();
                     _recipeBloc.add(const RecipesEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       return showErrorToast(context, state.message);

@@ -275,6 +275,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                 controller: _recipeController,
                 maxLines: null,
                 expands: true,
+                textInputAction: TextInputAction.done,
                 textAlign: TextAlign.start,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
@@ -842,7 +843,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                height: MACRO_HEIGHT,
                child: TextField(
                  controller: _totalServingController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                  inputFormatters: <TextInputFormatter>[
                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                  ],
@@ -1159,6 +1160,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
+                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);
@@ -1166,6 +1168,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                           });
                         });
                       }else if(state is GroceriesErrorState){
+                        FocusScope.of(context).unfocus();
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);

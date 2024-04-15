@@ -429,6 +429,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
                   }else if(state is GroceriesLoadedState){
+                    FocusScope.of(context).unfocus();
                     Future.delayed(Duration.zero,(){
                       setState(() {
                         _newGroceries= [];
@@ -437,6 +438,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       });
                     });
                   }else if(state is GroceriesErrorState){
+                    FocusScope.of(context).unfocus();
                     _groceriesBloc.add(const GroceriesEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       return showErrorToast(context, state.message);

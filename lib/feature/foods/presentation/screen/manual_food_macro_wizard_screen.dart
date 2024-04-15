@@ -277,6 +277,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                 maxLines: null,
                 expands: true,
                 textAlign: TextAlign.start,
+                textInputAction: TextInputAction.done,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -469,7 +470,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                     controller: _minServingController,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                     ],
@@ -503,7 +504,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                     controller: _maxServingController,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                     ],
@@ -846,7 +847,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _totalServingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -913,7 +914,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               child: TextField(
                 enabled: false,
                 controller: _totalCalorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -944,7 +945,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               child: TextField(
                 enabled: false,
                 controller: _totalProteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -982,7 +983,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               child: TextField(
                 enabled: false,
                 controller: _totalCarbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -1013,7 +1014,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
               child: TextField(
                 enabled: false,
                 controller: _totalFatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -1163,6 +1164,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
+                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);
@@ -1170,6 +1172,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                           });
                         });
                       }else if(state is GroceriesErrorState){
+                        FocusScope.of(context).unfocus();
                         _groceriesBloc.add(const GroceriesEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           return showErrorToast(context, state.message);

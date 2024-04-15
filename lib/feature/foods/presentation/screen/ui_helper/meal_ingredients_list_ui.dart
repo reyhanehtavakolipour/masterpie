@@ -424,7 +424,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 enabled: widget.isEditable,
                 onChanged: updatedIngredientMacroListener,
                 controller: _calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
@@ -455,7 +455,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 enabled: widget.isEditable,
                 onChanged: updatedIngredientMacroListener,
                 controller: _proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
@@ -493,7 +493,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 enabled: widget.isEditable,
                 onChanged: updatedIngredientMacroListener,
                 controller: _carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
@@ -524,7 +524,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 enabled: widget.isEditable,
                 onChanged: updatedIngredientMacroListener,
                 controller: _fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
@@ -587,7 +587,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                     onChanged: updatedIngredientMacroListener,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(numericRegExp),
                     ],

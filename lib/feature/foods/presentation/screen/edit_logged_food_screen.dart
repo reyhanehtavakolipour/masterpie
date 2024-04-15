@@ -406,11 +406,13 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
                           });
                         }else if(state is GetLoggedFoodsErrorState){
+                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -512,6 +514,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 height: RECIPE_HEIGHT,
                 child: TextField(
                   controller: _recipeController,
+                  textInputAction: TextInputAction.done,
                   maxLines: null,
                   expands: true,
                   textAlign: TextAlign.start,
@@ -702,7 +705,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -767,7 +770,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -798,7 +801,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -836,7 +839,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -867,7 +870,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               child: TextField(
                 enabled: isEditable,
                 controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],

@@ -524,7 +524,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _minCalorieGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -568,7 +568,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _maxCalorieGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -608,7 +608,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _minProteinGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -644,7 +644,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _maxProteinGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -683,7 +683,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _minCarbGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -720,7 +720,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _maxCarbGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -759,7 +759,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _minFatGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -795,7 +795,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: _maxFatGoalController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),

@@ -249,6 +249,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
+                          FocusScope.of(context).unfocus();
                           Future.delayed(Duration.zero,(){
                             if(_logButtonClicked){
                               setState(() {
@@ -258,6 +259,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                             }
                           });
                         }else if(state is GetLoggedFoodsErrorState){
+                          FocusScope.of(context).unfocus();
                           _logButtonClicked= false;
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
@@ -602,7 +604,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -648,7 +650,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -678,7 +680,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -715,7 +717,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -745,7 +747,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
               height: MACRO_HEIGHT,
               child: TextField(
                 controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],

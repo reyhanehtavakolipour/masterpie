@@ -301,7 +301,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 enabled: false,
                 onChanged: updatedFoodMacroListener,
                 controller: _servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -368,7 +368,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 onChanged: updatedFoodMacroListener,
                 controller: _calorieController,
                 enabled: false,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -400,7 +400,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 onChanged: updatedFoodMacroListener,
                 controller: _proteinController,
                 enabled: false,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -439,7 +439,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 onChanged: updatedFoodMacroListener,
                 controller: _carbController,
                 enabled: false,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
@@ -471,7 +471,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 onChanged: updatedFoodMacroListener,
                 controller: _fatController,
                 enabled: false,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                   FilteringTextInputFormatter.allow(numericRegExp),
