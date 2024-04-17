@@ -3,7 +3,9 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/data/remote/model/food_json_converter.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../util/core/constant/api_constant.dart';
@@ -387,22 +389,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, List<FoodRemote>>> logFoods(List<FoodRemote> foods, String date, String userId) async{
     try {
 
-        List<String> newCalorie = [];
-        List<String> newProtein = [];
-        List<String> newCarb = [];
-        List<String> newFat = [];
-        List<String> newServingAmounts = [];
-        List<String> newServingUnits = [];
-        List<String> newServingAmount = [];
-        List<String> newServingUnit = [];
-        List<String> newRecipe = [];
-        List<String> newIngredients = [];
-        List<String> newTypes = [];
-        List<String> newName = [];
-        List<String> newCount = [];
-        List<String> newServingIngredientsCount = [];
-
-
         List<FoodRemote> newFoods = [];
         foods.forEach((newFood) {
           if(foods.where((item) =>
@@ -461,50 +447,12 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           }
         });
 
-        newFoods.forEach((food) {
-          newCalorie.add('$date:${food.calorie.toString()}');
-          newProtein.add('$date:${food.protein.toString()}');
-          newCarb.add('$date:${food.carb.toString()}');
-          newFat.add('$date:${food.fat.toString()}');
-          newServingAmounts.add('$date:${food.servingAmounts.toString()}');
-          newServingUnits.add('$date:${food.units.toString()}');
-          newName.add('$date:${food.name.toString()}');
-          newCount.add('$date:${food.count.toString()}');
-          newTypes.add('$date:${food.foodTypeRemote.name.toString()}');
-          if(food.foodTypeRemote == FoodTypeRemote.meal){
-            newServingAmount.add('$date:${food.servingAmount.toString()}');
-            newServingUnit.add('$date:${food.unit}');
-            newRecipe.add('$date:${food.recipe}');
-            newIngredients.add('$date:${food.ingredients.toString()}');
-            newServingIngredientsCount.add('$date:${food.servingIngredientsCount.toString()}');
-          }else{
-            newServingAmount.add('$date:-1');
-            newServingUnit.add('$date:-1');
-            newRecipe.add('$date:-1');
-            newIngredients.add('$date:-1');
-            newServingIngredientsCount.add('$date:-1');
-          }
-        });
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['id'] = userId;
+        data['today_logs'] = toFoodsJson(newFoods, date);
 
-          final Map<String, dynamic> data = <String, dynamic>{};
-          data['id'] = userId;
-          data['name'] = newName;
-          data['count'] = newCount;
-          data['type'] = newTypes;
-          data['servingAmounts'] = newServingAmounts;
-          data['servingUnits'] = newServingUnits;
-          data['calorie'] = newCalorie;
-          data['protein'] = newProtein;
-          data['carb'] = newCarb;
-          data['fat'] = newFat;
-          data['servingAmount'] = newServingAmount;
-          data['servingUnit'] = newServingUnit;
-          data['ingredients'] = newIngredients;
-          data['servingIngredientsCount'] = newServingIngredientsCount;
-          data['recipe'] = newRecipe;
-
-          final supabase = Supabase.instance.client;
-          await supabase.from(USER_LOGGED_FOOD_REMOTE_TABLE).upsert(data);
+        final supabase = Supabase.instance.client;
+        await supabase.from(USER_LOGGED_FOOD_REMOTE_TABLE).upsert(data);
 
         return Right(newFoods);
 
@@ -557,233 +505,12 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           .eq('id', userId);
 
 
-      if(data.isEmpty || data[0]['name'] == null){
-        return const Right([]);
+      List<FoodRemote> foods= [];
+
+      if(data[0]['today_logs']['date'] == date){
+        foods= fromFoodsJson(data[0]['today_logs'] as Map<String, dynamic>);
       }
 
-      List<String> name= [];
-      List<String> count= [];
-      List<String> recipe = [];
-      List<String> servingAmount = [];
-      List<String> servingUnit = [];
-      List<String> foodType = [];
-      List<List<String>> servingAmounts = [];
-      List<List<String>> servingUnits = [];
-      List<List<String>> servingIngredientsCount = [];
-      List<List<String>> ingredients = [];
-      List<List<String>> calorie = [];
-      List<List<String>> protein = [];
-      List<List<String>> carb = [];
-      List<List<String>> fat = [];
-
-
-      ///name
-      final namesResponse = (data[0]['name'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      namesResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          name.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-
-
-      ///count
-      final countResponse = (data[0]['count'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      countResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          count.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-
-      ///recipe
-      final recipeResponse = (data[0]['recipe'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      recipeResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          recipe.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-
-
-      ///servingAmount
-      final servingAmountResponse = (data[0]['servingAmount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      servingAmountResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          servingAmount.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-      ///servingUnit
-      final servingUnitResponse = (data[0]['servingUnit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      servingUnitResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          servingUnit.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-
-      ///type
-      final typeResponse = (data[0]['type'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      typeResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          foodType.add(parts[1].replaceAll(']', ''));
-        }
-      });
-
-
-      ///servingAmounts
-      final servingAmountsResponse = (data[0]['servingAmounts'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      servingAmountsResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          String input= parts[1];
-          input = input.substring(1, input.length - 1);
-          List<String> fractions = input.split(', ');
-          List<String> result = fractions.map(parseFraction).toList();
-          servingAmounts.add(result);
-        }
-      });
-
-
-
-      ///servingUnits
-      final servingUnitsResponse = (data[0]['servingUnits'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      servingUnitsResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          List<String> resultList = parts[1]
-              .replaceAll('[', '')
-              .replaceAll(']', '')
-              .split(', ');
-          List<String> result = resultList.map((element) => element.toString()).toList();
-          servingUnits.add(result);
-        }
-      });
-
-      ///servingIngredientsCount
-      final servingIngredientsCountResponse = (data[0]['servingIngredientsCount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      servingIngredientsCountResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          if(parts[1].contains('[')){
-            // it's a meal
-            List<dynamic> resultList = json.decode(parts[1]);
-            List<String> result = resultList.map((element) => element.toString()).toList();
-            servingIngredientsCount.add(result);
-          }else{
-            //it's a grocery
-            servingIngredientsCount.add([parts[1].replaceAll(']', '')]);
-          }
-        }
-      });
-
-      ///ingredients
-      final ingredientsResponse = (data[0]['ingredients'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      ingredientsResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          if(parts[1].contains('[')){
-            String input= parts[1];
-            input = input.substring(1, input.length - 1);
-            List<String> ingredients1 = input.split(', ');
-            String groceries = '[${ingredients1.map((ingredient) => '"$ingredient"').join(', ')}]';
-            List<dynamic> resultList = json.decode(groceries);
-            List<String> result = resultList.map((element) => element.toString()).toList();
-            ingredients.add(result);
-          }else{
-            //it's a grocery
-            ingredients.add([parts[1].replaceAll(']', '')]);
-          }
-        }
-      });
-
-
-      ///calorie
-      final calorieResponse = (data[0]['calorie'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      calorieResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          List<dynamic> resultList = json.decode(parts[1]);
-          List<String> result = resultList.map((element) => element.toString()).toList();
-          calorie.add(result);
-        }
-      });
-
-      ///protein
-      final proteinResponse = (data[0]['protein'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      proteinResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          List<dynamic> resultList = json.decode(parts[1]);
-          List<String> result = resultList.map((element) => element.toString()).toList();
-          protein.add(result);
-        }
-      });
-
-      ///carb
-      final carbResponse = (data[0]['carb'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      carbResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          List<dynamic> resultList = json.decode(parts[1]);
-          List<String> result = resultList.map((element) => element.toString()).toList();
-          carb.add(result);
-        }
-      });
-
-      ///fat
-      final fatResponse = (data[0]['fat'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      fatResponse.forEach((element) {
-        List<String> parts = element.split(':');
-        String responseDate = parts[0].replaceAll('[', '');
-        if(responseDate == date){
-          List<dynamic> resultList = json.decode(parts[1]);
-          List<String> result = resultList.map((element) => element.toString()).toList();
-          fat.add(result);
-        }
-      });
-
-
-      List<FoodRemote> foods = [];
-      for (int i = 0; i < name.length; i++) {
-        FoodRemote foodRemote = FoodRemote(
-          name: name[i],
-          count: double.parse(count[i]),
-          calorie: calorie[i],
-          protein: protein[i],
-          carb: carb[i],
-          fat: fat[i],
-          ingredients: ingredients[i],
-          servingIngredientsCount: servingIngredientsCount[i],
-          servingAmounts: servingAmounts[i],
-          units: servingUnits[i],
-          servingAmount: double.parse(servingAmount[i]),
-          foodTypeRemote: foodType[i] ==  'groceryProduct' ? FoodTypeRemote.groceryProduct : FoodTypeRemote.meal,
-          recipe: recipe[i],
-          unit: servingUnit[i],
-        );
-        foods.add(foodRemote);
-      }
       return Right(foods);
 
     } on PostgrestException catch (error) {
@@ -1024,6 +751,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
     }
   }
 
+
   @override
   Future<Either<Failure, Success>> saveUserSuggestedFood(String foodName, List<String> ingredients, String diet, String nationality, String userId) async{
     try {
@@ -1166,22 +894,19 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         return const Right([]);
       }
 
-      final foodId = (data[0]['foodId'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final foodId = (data[0]['food_id'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final name = (data[0]['name'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final recipe = (data[0]['recipe'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final servingAmount = (data[0]['servingAmount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final servingUnit = (data[0]['servingUnit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final servingAmounts = buildListOfLists(data[0]['servingAmounts']);
-      final servingUnits = buildListOfLists(data[0]['servingUnits']);
-      final servingIngredientsCount = buildListOfLists(data[0]['servingIngredientsCount']);
+      final servingAmount = (data[0]['serving_amount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final servingUnit = (data[0]['unit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
+      final servingAmounts = buildListOfLists(data[0]['serving_amounts']);
+      final servingUnits = buildListOfLists(data[0]['units']);
+      final servingIngredientsCount = buildListOfLists(data[0]['serving_ingredients_count']);
       final ingredients = buildListOfLists(data[0]['ingredients']);
       final calorie = buildListOfLists(data[0]['calorie']);
       final protein = buildListOfLists(data[0]['protein']);
       final carb = buildListOfLists(data[0]['carb']);
       final fat = buildListOfLists(data[0]['fat']);
-
-
-
 
 
       List<FoodRemote> foods = [];
@@ -1205,6 +930,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       }
 
       return Right(foods);
+
 
     } on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
@@ -1267,18 +993,18 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
         final Map<String, dynamic> data = <String, dynamic>{};
         data['id'] = userId;
-        data['foodId'] = newFoodId;
+        data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['servingAmounts'] = newServingAmounts;
-        data['servingUnits'] = newServingUnits;
+        data['serving_amounts'] = newServingAmounts;
+        data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
         data['carb'] = newCarb;
         data['fat'] = newFat;
-        data['servingAmount'] = newServingAmount;
-        data['servingUnit'] = newServingUnit;
+        data['serving_amount'] = newServingAmount;
+        data['unit'] = newServingUnit;
         data['ingredients'] = newIngredients;
-        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['serving_ingredients_count'] = newServingIngredientsCount;
         data['recipe'] = newRecipe;
 
 
@@ -1345,20 +1071,19 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
         final Map<String, dynamic> data = <String, dynamic>{};
         data['id'] = userId;
-        data['foodId'] = newFoodId;
+        data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['servingAmounts'] = newServingAmounts;
-        data['servingUnits'] = newServingUnits;
+        data['serving_amounts'] = newServingAmounts;
+        data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
         data['carb'] = newCarb;
         data['fat'] = newFat;
-        data['servingAmount'] = newServingAmount;
-        data['servingUnit'] = newServingUnit;
+        data['serving_amount'] = newServingAmount;
+        data['unit'] = newServingUnit;
         data['ingredients'] = newIngredients;
-        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['serving_ingredients_count'] = newServingIngredientsCount;
         data['recipe'] = newRecipe;
-
 
         final supabase = Supabase.instance.client;
         await supabase.from(MY_COOKBOOK_REMOTE_TABLE).update(data).eq('id', userId);
@@ -1416,18 +1141,18 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
         final Map<String, dynamic> data = <String, dynamic>{};
         data['id'] = userId;
-        data['foodId'] = newFoodId;
+        data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['servingAmounts'] = newServingAmounts;
-        data['servingUnits'] = newServingUnits;
+        data['serving_amounts'] = newServingAmounts;
+        data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
         data['carb'] = newCarb;
         data['fat'] = newFat;
-        data['servingAmount'] = newServingAmount;
-        data['servingUnit'] = newServingUnit;
+        data['serving_amount'] = newServingAmount;
+        data['unit'] = newServingUnit;
         data['ingredients'] = newIngredients;
-        data['servingIngredientsCount'] = newServingIngredientsCount;
+        data['serving_ingredients_count'] = newServingIngredientsCount;
         data['recipe'] = newRecipe;
 
 
