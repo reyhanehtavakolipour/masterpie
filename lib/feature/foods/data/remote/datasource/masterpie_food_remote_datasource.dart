@@ -36,7 +36,7 @@ abstract class MasterPieFoodRemoteDataSource{
 
 
   Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
-      List<List<double>> macroGoalsRange, List<String> restriction);
+      List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
   Future<Either<Failure, List<FoodRemote>>> logFoods(List<FoodRemote> foods, String date, String userId);
 

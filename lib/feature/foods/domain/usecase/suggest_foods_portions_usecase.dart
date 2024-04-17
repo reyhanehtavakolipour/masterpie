@@ -17,9 +17,11 @@ class SuggestFoodsPortionsUseCase{
       List<Food> foods,
       List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange,
-      List<String> restriction
+      List<String> restriction,
+      String macroGoalType,
+      List<double> macroPercentage
       ) async{
-      final suggestedFoodsResponseRemote = await repo.suggestFoodsPortionsFromRemote(foods, servingRanges, macroGoalsRange, restriction);
+      final suggestedFoodsResponseRemote = await repo.suggestFoodsPortionsFromRemote(foods, servingRanges, macroGoalsRange, restriction, macroGoalType, macroPercentage);
       if(suggestedFoodsResponseRemote.isRight()){
           return Right(suggestedFoodsResponseRemote.asRight());
       }

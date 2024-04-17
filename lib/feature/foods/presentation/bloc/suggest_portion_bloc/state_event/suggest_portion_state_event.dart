@@ -19,7 +19,9 @@ abstract class SuggestFoodsPortionEvent with _$SuggestFoodsPortionEvent {
       List<Food> foods,
       List<List<double>> servingsRange,
       List<List<double>> macroGoalsRange,
-      List<String> restriction
+      List<String> restriction,
+      String macroGoalType,
+      List<double> macroPercentage
       ) = SuggestPortionsEvent;
 
 }

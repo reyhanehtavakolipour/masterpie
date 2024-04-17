@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_json_converter.dart';
+import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -286,7 +287,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
   @override
   Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
-      List<List<double>> macroGoalsRange, List<String> restriction) async{
+      List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
@@ -339,14 +340,13 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       }
 
 
-
       Map<String, dynamic> foodsPortionRemoteBody = {
         'foods': foodsBodyValue,
         'macroLimitsRange': macroLimits,
         'restriction': restriction.isEmpty ? [] : [int.parse(restriction[0]), restriction[1]],
-        'isPercentageBased': false,
-        'calorieLimitPercentageBased' : [],
-        'macroPercentage': []
+        'isPercentageBased': macroGoalType == BY_PERCENTAGE_LABEL,
+        'calorieLimitPercentageBased' : macroLimits[0],
+        'macroPercentage': macroPercentage
       };
 
 

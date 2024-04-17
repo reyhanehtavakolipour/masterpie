@@ -404,6 +404,8 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                    RequestWizardArgumentModel model= RequestWizardArgumentModel(
                      restriction: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.restriction,
                      macroGoalRanges: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroGoalRanges,
+                     macroPercentage: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroPercentage,
+                     goalType: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.goalType,
                      servingRanges: rangeValues,
                      foods: foods,
                    );

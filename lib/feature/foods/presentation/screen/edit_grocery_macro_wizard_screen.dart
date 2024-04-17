@@ -220,6 +220,8 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
                      restriction: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.restriction,
                      macroGoalRanges: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroGoalRanges,
                      servingRanges: rangeValues,
+                     macroPercentage: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroPercentage,
+                     goalType: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.goalType,
                      foods: foods,
                    );
                    showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);

@@ -23,23 +23,35 @@ mixin _$SuggestFoodsPortionEvent {
             List<Food> foods,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
-            List<String> restriction)
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)
         onSuggestFoodsPortion,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onReset,
-    TResult? Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult? Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onReset,
-    TResult Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
     required TResult orElse(),
   }) =>
@@ -127,7 +139,9 @@ class _$ResetImpl implements Reset {
             List<Food> foods,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
-            List<String> restriction)
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)
         onSuggestFoodsPortion,
   }) {
     return onReset();
@@ -137,8 +151,13 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onReset,
-    TResult? Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult? Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
   }) {
     return onReset?.call();
@@ -148,8 +167,13 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onReset,
-    TResult Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
     required TResult orElse(),
   }) {
@@ -205,7 +229,9 @@ abstract class _$$SuggestPortionsEventImplCopyWith<$Res> {
       {List<Food> foods,
       List<List<double>> servingsRange,
       List<List<double>> macroGoalsRange,
-      List<String> restriction});
+      List<String> restriction,
+      String macroGoalType,
+      List<double> macroPercentage});
 }
 
 /// @nodoc
@@ -224,6 +250,8 @@ class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
     Object? servingsRange = null,
     Object? macroGoalsRange = null,
     Object? restriction = null,
+    Object? macroGoalType = null,
+    Object? macroPercentage = null,
   }) {
     return _then(_$SuggestPortionsEventImpl(
       null == foods
@@ -242,6 +270,14 @@ class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
           ? _value._restriction
           : restriction // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      null == macroGoalType
+          ? _value.macroGoalType
+          : macroGoalType // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == macroPercentage
+          ? _value._macroPercentage
+          : macroPercentage // ignore: cast_nullable_to_non_nullable
+              as List<double>,
     ));
   }
 }
@@ -253,11 +289,14 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
       final List<Food> foods,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
-      final List<String> restriction)
+      final List<String> restriction,
+      this.macroGoalType,
+      final List<double> macroPercentage)
       : _foods = foods,
         _servingsRange = servingsRange,
         _macroGoalsRange = macroGoalsRange,
-        _restriction = restriction;
+        _restriction = restriction,
+        _macroPercentage = macroPercentage;
 
   final List<Food> _foods;
   @override
@@ -292,8 +331,18 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
   }
 
   @override
+  final String macroGoalType;
+  final List<double> _macroPercentage;
+  @override
+  List<double> get macroPercentage {
+    if (_macroPercentage is EqualUnmodifiableListView) return _macroPercentage;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_macroPercentage);
+  }
+
+  @override
   String toString() {
-    return 'SuggestFoodsPortionEvent.onSuggestFoodsPortion(foods: $foods, servingsRange: $servingsRange, macroGoalsRange: $macroGoalsRange, restriction: $restriction)';
+    return 'SuggestFoodsPortionEvent.onSuggestFoodsPortion(foods: $foods, servingsRange: $servingsRange, macroGoalsRange: $macroGoalsRange, restriction: $restriction, macroGoalType: $macroGoalType, macroPercentage: $macroPercentage)';
   }
 
   @override
@@ -307,7 +356,11 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
             const DeepCollectionEquality()
                 .equals(other._macroGoalsRange, _macroGoalsRange) &&
             const DeepCollectionEquality()
-                .equals(other._restriction, _restriction));
+                .equals(other._restriction, _restriction) &&
+            (identical(other.macroGoalType, macroGoalType) ||
+                other.macroGoalType == macroGoalType) &&
+            const DeepCollectionEquality()
+                .equals(other._macroPercentage, _macroPercentage));
   }
 
   @override
@@ -316,7 +369,9 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
       const DeepCollectionEquality().hash(_foods),
       const DeepCollectionEquality().hash(_servingsRange),
       const DeepCollectionEquality().hash(_macroGoalsRange),
-      const DeepCollectionEquality().hash(_restriction));
+      const DeepCollectionEquality().hash(_restriction),
+      macroGoalType,
+      const DeepCollectionEquality().hash(_macroPercentage));
 
   @JsonKey(ignore: true)
   @override
@@ -334,37 +389,49 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
             List<Food> foods,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
-            List<String> restriction)
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)
         onSuggestFoodsPortion,
   }) {
-    return onSuggestFoodsPortion(
-        foods, servingsRange, macroGoalsRange, restriction);
+    return onSuggestFoodsPortion(foods, servingsRange, macroGoalsRange,
+        restriction, macroGoalType, macroPercentage);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onReset,
-    TResult? Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult? Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
   }) {
-    return onSuggestFoodsPortion?.call(
-        foods, servingsRange, macroGoalsRange, restriction);
+    return onSuggestFoodsPortion?.call(foods, servingsRange, macroGoalsRange,
+        restriction, macroGoalType, macroPercentage);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onReset,
-    TResult Function(List<Food> foods, List<List<double>> servingsRange,
-            List<List<double>> macroGoalsRange, List<String> restriction)?
+    TResult Function(
+            List<Food> foods,
+            List<List<double>> servingsRange,
+            List<List<double>> macroGoalsRange,
+            List<String> restriction,
+            String macroGoalType,
+            List<double> macroPercentage)?
         onSuggestFoodsPortion,
     required TResult orElse(),
   }) {
     if (onSuggestFoodsPortion != null) {
-      return onSuggestFoodsPortion(
-          foods, servingsRange, macroGoalsRange, restriction);
+      return onSuggestFoodsPortion(foods, servingsRange, macroGoalsRange,
+          restriction, macroGoalType, macroPercentage);
     }
     return orElse();
   }
@@ -406,12 +473,16 @@ abstract class SuggestPortionsEvent implements SuggestFoodsPortionEvent {
       final List<Food> foods,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
-      final List<String> restriction) = _$SuggestPortionsEventImpl;
+      final List<String> restriction,
+      final String macroGoalType,
+      final List<double> macroPercentage) = _$SuggestPortionsEventImpl;
 
   List<Food> get foods;
   List<List<double>> get servingsRange;
   List<List<double>> get macroGoalsRange;
   List<String> get restriction;
+  String get macroGoalType;
+  List<double> get macroPercentage;
   @JsonKey(ignore: true)
   _$$SuggestPortionsEventImplCopyWith<_$SuggestPortionsEventImpl>
       get copyWith => throw _privateConstructorUsedError;

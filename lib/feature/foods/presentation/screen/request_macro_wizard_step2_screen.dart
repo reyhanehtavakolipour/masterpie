@@ -316,7 +316,9 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                       _requestWizardArgumentModel.foods,
                       servings,
                       widget.requestWizardArgumentModel.macroGoalRanges,
-                      widget.requestWizardArgumentModel.restriction
+                      widget.requestWizardArgumentModel.restriction,
+                      widget.requestWizardArgumentModel.goalType,
+                      widget.requestWizardArgumentModel.macroPercentage
                   )
               );
             },

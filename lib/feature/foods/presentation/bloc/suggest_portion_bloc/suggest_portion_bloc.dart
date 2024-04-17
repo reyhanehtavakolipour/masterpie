@@ -23,7 +23,9 @@ class SuggestPortionsBloc extends Bloc<SuggestFoodsPortionEvent, SuggestFoodsPor
         event.foods,
         event.servingsRange,
         event.macroGoalsRange,
-        event.restriction
+        event.restriction,
+        event.macroGoalType,
+        event.macroPercentage
       );
       result.fold(
             (failure) {

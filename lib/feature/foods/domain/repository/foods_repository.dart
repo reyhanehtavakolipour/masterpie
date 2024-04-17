@@ -27,7 +27,7 @@ abstract class FoodsRepository{
 
 
   Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
-      List<List<double>> macroGoalsRange, List<String> restriction);
+      List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
 
 

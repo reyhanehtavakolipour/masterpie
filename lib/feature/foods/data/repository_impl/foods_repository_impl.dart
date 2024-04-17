@@ -390,14 +390,14 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
-      List<List<double>> macroGoalsRange, List<String> restriction) async{
+      List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     await userRepo.checkSubscriptionInRemote();
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
         if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
           final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
-              macroGoalsRange, restriction);
+              macroGoalsRange, restriction, macroGoalType, macroPercentage);
           if(suggestedFoodsPortionResponse.isRight()){
             userRepo.updateFoodsPortionRequestsLeftInRemote();
             return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
@@ -409,7 +409,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
       }
       if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
         final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
-            macroGoalsRange, restriction);
+            macroGoalsRange, restriction, macroGoalType, macroPercentage);
         if(suggestedFoodsPortionResponse.isRight()){
           userRepo.updateFoodsPortionRequestsLeftInRemote();
           return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));

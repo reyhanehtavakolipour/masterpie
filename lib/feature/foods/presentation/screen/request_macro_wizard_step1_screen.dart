@@ -6,6 +6,7 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/request_macro_wizard_step2_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -44,6 +45,12 @@ class RequestMacroWizardStepOneScreen extends StatefulWidget {
 class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStepOneScreen> {
 
 
+  late TextEditingController _proteinPercentageController;
+  late TextEditingController _carbPercentageController;
+  late TextEditingController _fatPercentageController;
+
+
+
   late TextEditingController _minCalorieGoalController;
   late TextEditingController _minProteinGoalController;
   late TextEditingController _minCarbGoalController;
@@ -64,11 +71,16 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
   int _selectedRestrictionOption= -1;
 
 
+  String _macroGoalInputType= BY_AMOUNT_LABEL;
+
   late RequestWizardArgumentModel _requestWizardArgumentModel;
 
   @override
   void initState() {
     super.initState();
+    _proteinPercentageController= TextEditingController(text: '30');
+    _carbPercentageController= TextEditingController(text: '40');
+    _fatPercentageController= TextEditingController(text: '30');
     _minCalorieGoalController= TextEditingController(text: '0');
     _minProteinGoalController= TextEditingController(text: '0');
     _minCarbGoalController= TextEditingController(text: '0');
@@ -180,6 +192,13 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
   }
 
 
+  void updateMacroGoalInputUi(String type){
+    setState(() {
+      _macroGoalInputType= type;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -240,13 +259,62 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
 
                                     const SizedBox(height: 8,),
 
-                                    calorieGoalRangeWidgets(),
 
-                                    proteinGoalRangeWidgets(),
+                                    CustomRadioListTile(
+                                      options: const [BY_PERCENTAGE_LABEL, BY_AMOUNT_LABEL],
+                                      onSelectedOptionChanged: updateMacroGoalInputUi,
+                                      selectedOption: _macroGoalInputType,
+                                      orientation: HORIZONTAL_ORIENTATION,
+                                      isEditable: true,
+                                    ),
 
-                                    carbGoalRangeWidgets(),
+                                    const SizedBox(height: 8,),
 
-                                    fatGoalRangeWidgets()
+
+                                    Visibility(
+                                      visible: _macroGoalInputType == BY_AMOUNT_LABEL,
+                                        child: Column(
+                                          children: [
+                                            calorieGoalRangeWidgets(),
+
+                                            proteinGoalRangeWidgets(),
+
+                                            carbGoalRangeWidgets(),
+
+                                            fatGoalRangeWidgets()
+                                          ],
+                                        )
+                                    ),
+
+
+                                    Visibility(
+                                        visible: _macroGoalInputType == BY_PERCENTAGE_LABEL,
+                                        child: Column(
+                                          children: [
+
+                                            fatPercentageWidget(),
+
+                                            const SizedBox(height: 12,),
+
+                                            carbPercentageWidget(),
+
+                                            const SizedBox(height: 12,),
+
+                                            proteinPercentageWidget(),
+
+
+                                            const SizedBox(height: 12,),
+
+                                           minCalorieGoalWidgets(),
+
+                                            const SizedBox(height: 12,),
+
+                                            maxCalorieGoalWidgets(),
+
+                                          ],
+                                        )
+                                    ),
+
 
                                   ],
                                 ),
@@ -443,34 +511,60 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               double maxFat= _maxFatGoalController.text.isEmpty ? 0.0 : double.parse(_maxFatGoalController.text);
 
 
-              if(minCalorie == 0.0 && maxCalorie == 0.0 &&
-                minProtein == 0.0 && maxProtein == 0.0 &&
-                minCarb == 0.0 && maxCarb == 0.0 &&
-                minFat == 0.0 && maxFat == 0.0){
-                showErrorToast(context, ERROR_NO_GOAL);
-                return;
-              }
+              double proteinPercentage= _proteinPercentageController.text.isEmpty ? 0.0 : double.parse(_proteinPercentageController.text);
+              double carbPercentage= _carbPercentageController.text.isEmpty ? 0.0 : double.parse(_carbPercentageController.text);
+              double fatPercentage= _fatPercentageController.text.isEmpty ? 0.0 : double.parse(_fatPercentageController.text);
+
+              /// validate inputs
+              if(_macroGoalInputType == BY_AMOUNT_LABEL){
+                if(minCalorie == 0.0 && maxCalorie == 0.0 &&
+                    minProtein == 0.0 && maxProtein == 0.0 &&
+                    minCarb == 0.0 && maxCarb == 0.0 &&
+                    minFat == 0.0 && maxFat == 0.0){
+                  showErrorToast(context, ERROR_NO_GOAL);
+                  return;
+                }
 
 
-              if(minCalorie >= MAX_CALORIES || maxCalorie >= MAX_CALORIES){
-                showErrorToast(context, ERROR_MAX_CALORIE);
-                return;
+                if(minCalorie >= MAX_CALORIES || maxCalorie >= MAX_CALORIES){
+                  showErrorToast(context, ERROR_MAX_CALORIE);
+                  return;
+                }
+
+                if(minProtein >= MAX_PROTEIN || maxProtein >= MAX_PROTEIN ){
+                  showErrorToast(context, ERROR_MAX_PROTEIN);
+                  return;
+                }
+
+                if(minCarb >= MAX_CARB|| maxCarb >= MAX_CARB){
+                  showErrorToast(context, ERROR_MAX_CARB);
+                  return;
+                }
+
+                if(minFat >= MAX_FAT || maxFat >= MAX_FAT){
+                  showErrorToast(context, ERROR_MAX_FAT);
+                  return;
+                }
+              }else{
+
+                if(minCalorie == 0.0 && maxCalorie == 0.0){
+                  showErrorToast(context, ERROR_NO_GOAL_CALORIE);
+                  return;
+                }
+
+                if(minCalorie >= MAX_CALORIES || maxCalorie >= MAX_CALORIES){
+                  showErrorToast(context, ERROR_MAX_CALORIE);
+                  return;
+                }
+
+
+                if(proteinPercentage + carbPercentage + fatPercentage != 100.0){
+                  showErrorToast(context, ERROR_MACRO_PERCENTAGE);
+                  return;
+                }
+
               }
 
-              if(minProtein >= MAX_PROTEIN || maxProtein >= MAX_PROTEIN ){
-                showErrorToast(context, ERROR_MAX_PROTEIN);
-                return;
-              }
-
-              if(minCarb >= MAX_CARB|| maxCarb >= MAX_CARB){
-                showErrorToast(context, ERROR_MAX_CARB);
-                return;
-              }
-
-              if(minFat >= MAX_FAT || maxFat >= MAX_FAT){
-                showErrorToast(context, ERROR_MAX_FAT);
-                return;
-              }
 
               if(maxCalorie == 0){
                 maxCalorie= MAX_CALORIES.toDouble();
@@ -491,6 +585,11 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               macroGoalsRange.add(maxProtein > minProtein ? [minProtein, maxProtein] : [maxProtein, minProtein]);
               macroGoalsRange.add(maxCarb > minCarb ? [minCarb, maxCarb] : [maxCarb, minCarb]);
               macroGoalsRange.add(maxFat > minFat ? [minFat, maxFat] : [maxFat, minFat]);
+
+
+
+              List<double> macroGoalPercentage= [proteinPercentage, carbPercentage, fatPercentage];
+
 
               List<String> restriction= [];
               if(_selectedRestrictionOption != -1 && _selectedRestrictionOption != 0){
@@ -524,7 +623,9 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
 
               _requestWizardArgumentModel = _requestWizardArgumentModel.copyWith(
                   restriction: restriction,
-                macroGoalRanges: macroGoalsRange
+                macroGoalRanges: macroGoalsRange,
+                goalType: _macroGoalInputType,
+                macroPercentage: macroGoalPercentage
               );
 
 
@@ -533,7 +634,9 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
                 MaterialPageRoute(builder: (context) => RequestMacroWizardStepTwoScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
               ).then((result) {
                 setState(() {
-                  _requestWizardArgumentModel= result;
+                  if(result != null){
+                    _requestWizardArgumentModel= result;
+                  }
                 });
               });
             },
@@ -543,6 +646,230 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
       );
   }
 
+
+
+  Widget proteinPercentageWidget(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Align(
+            alignment: Alignment.center,
+            child: Text(PROTEIN_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+        ),
+        const SizedBox(width: 8,),
+        SizedBox(
+          width: MACRO_WIDTH,
+          height: MACRO_HEIGHT,
+          child: TextField(
+            controller: _proteinPercentageController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+              FilteringTextInputFormatter.allow(numericRegExp),
+            ],
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 8,),
+
+        const Text('%',)
+      ],
+    );
+  }
+
+  Widget carbPercentageWidget(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Align(
+        alignment: Alignment.center,
+        child: Text(CARB_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+      ),
+        const SizedBox(width: 8,),
+        SizedBox(
+          width: MACRO_WIDTH,
+          height: MACRO_HEIGHT,
+          child: TextField(
+            controller: _carbPercentageController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+              FilteringTextInputFormatter.allow(numericRegExp),
+            ],
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 8,),
+
+        const Text('%',)
+      ],
+    );
+  }
+
+  Widget fatPercentageWidget(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Align(
+            alignment: Alignment.center,
+            child: Text(FAT_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+        ),
+        const SizedBox(width: 8,),
+        SizedBox(
+          width: MACRO_WIDTH,
+          height: MACRO_HEIGHT,
+          child: TextField(
+            controller: _fatPercentageController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+              FilteringTextInputFormatter.allow(numericRegExp),
+            ],
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 8,),
+
+        const Text('%',)
+      ],
+    );
+  }
+
+  Widget minCalorieGoalWidgets(){
+    return Column(
+      children: [
+        /// min calorie
+        const SizedBox(height: 12,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+
+            const Text(
+              MIN_CALORIE_LABEL,
+              style: TextStyle(
+                color: DARK_PRIMARY_COLOR,
+                fontWeight: FontWeight.bold,
+                fontSize: FONT_HEADER,
+              ),
+            ),
+
+            const SizedBox(width: 8,),
+
+            SizedBox(
+              width: MACRO_WIDTH,
+              height: MACRO_HEIGHT,
+              child: TextField(
+                controller: _minCalorieGoalController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.allow(numericRegExp),
+                ],
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget maxCalorieGoalWidgets(){
+    return Column(
+      children: [
+        /// calorie
+        const SizedBox(height: 12,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              MAX_CALORIE_LABEL,
+              style: TextStyle(
+                color: DARK_PRIMARY_COLOR,
+                fontWeight: FontWeight.bold,
+                fontSize: FONT_HEADER,
+              ),
+            ),
+            const SizedBox(width: 8,),
+
+
+            SizedBox(
+              width: MACRO_WIDTH,
+              height: MACRO_HEIGHT,
+              child: TextField(
+                controller: _maxCalorieGoalController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.allow(numericRegExp),
+                ],
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                ),
+              ),
+            ),
+
+          ],
+        ),
+      ],
+    );
+  }
 
   Widget calorieGoalRangeWidgets(){
     return Column(
@@ -666,7 +993,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               width: MACRO_SIZE_WIDTH,
               child: Align(
                 alignment: Alignment.center,
-                  child: Text('$PROTEIN_RANGE_LABEL', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+                  child: Text(PROTEIN_RANGE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
             ),
 

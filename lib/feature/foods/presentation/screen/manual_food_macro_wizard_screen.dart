@@ -430,7 +430,9 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
 
                   RequestWizardArgumentModel model= RequestWizardArgumentModel(
                     restriction: widget.requestWizardArgumentModel.restriction,
-                    macroGoalRanges: widget.requestWizardArgumentModel!.macroGoalRanges,
+                    macroGoalRanges: widget.requestWizardArgumentModel.macroGoalRanges,
+                    macroPercentage: widget.requestWizardArgumentModel.macroPercentage,
+                    goalType: widget.requestWizardArgumentModel.goalType,
                     servingRanges: rangeValues,
                     foods: foods,
                   );
