@@ -419,6 +419,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  style: TextStyle( color: Colors.white),)
            ),
          ),
+
+
          BlocConsumer<AddOrUpdateMyCookBookBloc, AddOrUpdateMyCookBookState>(
              builder: (mcontext, state) {
                if (state is AddOrUpdateMyCookBookLoadingState) {
@@ -1305,6 +1307,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                          suggestedGroceriesBloc()
                        ],
                      ),
+
+                     fatSecretAttribute(),
 
                      const SizedBox(height: 16,),
 

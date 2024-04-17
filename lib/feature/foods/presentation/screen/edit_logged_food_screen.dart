@@ -1232,6 +1232,9 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                   ],
                 ),
 
+                fatSecretAttribute(),
+
+
                 const SizedBox(height: 16,),
 
 

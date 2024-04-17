@@ -10,6 +10,7 @@ import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
+import 'package:masterpie/util/core/constant/api_constant.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
@@ -398,19 +399,20 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
   void showContactPage() async{
-    final Uri url = Uri.parse('https://www.masterpieapp.com/contact-10');
+    final Uri url = Uri.parse(CONTACT_MASTERPIE);
     await launchUrl(url);
   }
 
   void showPrivacy() async{
-    final Uri url = Uri.parse('https://www.masterpieapp.com/general-clean');
+    final Uri url = Uri.parse(PRIVACY_MASTERPIE);
     await launchUrl(url);
   }
 
   void showCredits() async{
-    final Uri url = Uri.parse('https://www.masterpieapp.com/credits');
+    final Uri url = Uri.parse(CREDIT_MASTERPIE);
     await launchUrl(url);
   }
+
 
   @override
   Widget build(BuildContext context) {

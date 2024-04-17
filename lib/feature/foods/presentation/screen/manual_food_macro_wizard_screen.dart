@@ -1308,6 +1308,8 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                   ],
                 ),
 
+                fatSecretAttribute(),
+
                 const SizedBox(height: 16,),
 
 

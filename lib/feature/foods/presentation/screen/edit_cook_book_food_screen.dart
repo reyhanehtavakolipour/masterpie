@@ -1061,6 +1061,9 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                    ],
                  ),
 
+                 fatSecretAttribute(),
+
+
                  const SizedBox(height: 16,),
 
 

@@ -1137,6 +1137,9 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                    ],
                  ),
 
+                 fatSecretAttribute(),
+
+
                  const SizedBox(height: 16,),
 
 

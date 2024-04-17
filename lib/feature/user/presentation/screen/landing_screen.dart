@@ -5,10 +5,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../domain/model/user_credentials_model.dart';
 import '../bloc/get_user_credentials_bloc/get_user_credentials_bloc.dart';
@@ -71,7 +73,16 @@ class _LandingScreenState extends State<LandingScreen>{
 
                   const SizedBox(height: 4,),
 
-                  const Text(MOTTO_MASTERPIE_LABEL, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11, fontStyle: FontStyle.italic),),
+                  InkWell(
+                    onTap: () => launchURL(FAT_SECRET_ATTRIBUTE),
+                    child: const Text(
+                      FAT_SECRET_LABEL,
+                      style: TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(height: 20,),
 
@@ -91,7 +102,6 @@ class _LandingScreenState extends State<LandingScreen>{
                           children: [
                             _featureTextWidget(CUSTOMIZABLE_FEATURE_LABEL),
                             _featureTextWidget(PORTION_SUGGESTION_LABEL),
-                            _featureTextWidget(MACRO_TRACKING_LABEL),
                           ],
                         ),
                       ),
@@ -102,10 +112,13 @@ class _LandingScreenState extends State<LandingScreen>{
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _featureTextWidget(INTERNATIONAL_MEAL_LABEL),
                             _featureTextWidget(CREATE_FOOD_LABEL),
-                            _featureTextWidget(USER_FRIENDLY_LABEL),
+                            _featureTextWidget(MACRO_TRACKING_LABEL),
+
                           ],
+
+
+
                         ),
                       )
                     ],
@@ -113,68 +126,32 @@ class _LandingScreenState extends State<LandingScreen>{
 
                   const SizedBox(height: 32,),
 
-                  Row(
-                    children: [
 
-
-                      /// sign in button
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignInScreen(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: MASTERPIE_YELLOW_COLOR,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignInScreen(),
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              SIGNIN_LABEL,
-                              style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PRIMARY_COLOR,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-
-
-                      const SizedBox(width: 16,),
-
-
-                      /// register button
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterScreen(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              REGISTER_LABEL,
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          GET_STARTED_LABEL,
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
 
                   BlocConsumer<GetUserCredentialsBloc, GetUserCredentialsState>(
@@ -211,6 +188,8 @@ class _LandingScreenState extends State<LandingScreen>{
       );
     }
   }
+
+
 
   Widget _featureTextWidget(String featureText) {
     return Container(

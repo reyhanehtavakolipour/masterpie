@@ -30,3 +30,12 @@ const GOOGLE_CLOUD_KEY = 'GOOGLE_CLOUD_KEY';
 const RESET_PASSWORD_URL = 'https://masterpieapp.com/reset-password';
 
 const FAT_SECRET_URL = 'https://platform.fatsecret.com/rest/server.api';
+
+const FAT_SECRET_ATTRIBUTE= 'https://www.fatsecret.com';
+
+
+const PRIVACY_MASTERPIE= 'https://www.masterpieapp.com/general-clean';
+
+const CREDIT_MASTERPIE= 'https://www.masterpieapp.com/credits';
+
+const CONTACT_MASTERPIE= 'https://www.masterpieapp.com/contact-10';

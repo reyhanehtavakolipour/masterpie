@@ -12,6 +12,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/gene
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
@@ -157,6 +158,9 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
                             )
                           ],
                         ),
+
+                        fatSecretAttribute(),
+
                       ],
                     ),
                   ),

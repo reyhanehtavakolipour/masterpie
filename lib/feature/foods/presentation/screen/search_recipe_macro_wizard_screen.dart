@@ -14,6 +14,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/requ
 import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
@@ -198,6 +199,10 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
                             )
                           ],
                         ),
+
+                        fatSecretAttribute(),
+
+
                       ],
                     ),
                   ),

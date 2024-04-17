@@ -1167,6 +1167,9 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   ],
                 ),
 
+                fatSecretAttribute(),
+
+
                 const SizedBox(height: 16,),
 
 

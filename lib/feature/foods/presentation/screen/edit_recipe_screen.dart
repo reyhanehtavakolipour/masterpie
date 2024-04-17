@@ -1258,6 +1258,9 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                    ],
                  ),
 
+                 fatSecretAttribute(),
+
+
                  const SizedBox(height: 16,),
 
 

@@ -3,8 +3,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../feature/user/presentation/screen/user_plan_screen.dart';
+import '../../core/constant/api_constant.dart';
 import '../../core/constant/messages_constants.dart';
 import '../color/app_colors.dart';
 import '../size/app_widget_size.dart';
@@ -151,5 +153,32 @@ Future<void> showOVerLimitPaidUsers(BuildContext context, String message) async 
         ],
       );
     },
+  );
+}
+
+
+Future<void> launchURL(String url) async {
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+  }
+}
+
+
+Widget fatSecretAttribute(){
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      InkWell(
+        onTap: () => launchURL(FAT_SECRET_ATTRIBUTE),
+        child: const Text(
+          FAT_SECRET_LABEL,
+          style: TextStyle(
+              color: Colors.black,
+              decoration: TextDecoration.underline,
+              fontSize: 10
+          ),
+        ),
+      ),
+    ],
   );
 }
