@@ -204,9 +204,11 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       };
 
 
+
       final macroGoalApi= await FlutterConfig.get(CALCULATE_MACRO_GOAL_API);
 
       final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
+
 
       if(response.statusCode == SUCCESS_API_CODE){
         List<String> macroGoal = [

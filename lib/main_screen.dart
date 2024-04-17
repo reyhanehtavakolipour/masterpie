@@ -265,9 +265,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     if(_tabController.index == 1){
       requestMyFavoriteFoodsImmediately();
     }else if(_tabController.index == 2){
-      requestLoggedFoodsImmediately(_focusedDay);
+      requestLoggedFoodsImmediately(DateTime.now());
     }
   }
+
 
   void requestProfile(){
     _getProfileBloc.add(const GetProfileEvent.onGetProfile());
@@ -1189,7 +1190,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                     }else if(state is GetProfileLoadedState){
                                                       _getProfileBloc.add(const GetProfileEvent.onReset());
                                                       Future.delayed(Duration.zero,(){
-                                                        requestLoggedFoods(_focusedDay);
+                                                        requestLoggedFoods(DateTime.now());
                                                         setMacros(state.profile);
                                                       });
                                                     }else if(state is GetProfileErrorState){
@@ -1494,7 +1495,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                 _newMyFavorites[i]= _newMyFavorites[i].copyWith(count: 0);
                                               }
                                             }
-                                            requestLoggedFoodsImmediately(_focusedDay);
+                                            requestLoggedFoodsImmediately(DateTime.now());
                                           });
                                         });
                                       }else if(state is LogFoodsErrorState){

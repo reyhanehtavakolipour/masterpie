@@ -52,6 +52,11 @@ const UPDATE_LABEL= 'Update';
 const UPDATE_FAVORITE_LABEL= 'Update Favorite';
 const UPDATE_COOKBOOK_LABEL= 'Update CookBook';
 const HOW_MUCH_TO_EAT= 'Macro Diet Wizard';
+const FOOD_PORTION_INFO= '- Enter your macro goals. These are the range amounts of calorie, protein, carbs, and fats you want to eat each day.\n\n'
+    '- If you have a strict requirement for one particular macro, ensuring it doesn\'t fall below or exceed a specific amount, select it on this page.\n\n'
+    '- On the next page, add all the foods you want to eat. Be sure to include everything you plan to have in your meals.\n\n'
+    '- Boom! We will calculate the portion sizes of each food based on your macro goals. Now you know exactly how much of each food to eat to reach your targets. Enjoy your meal planning!';
+
 const SEARCH_LABEL = 'Search...';
 const ERROR_EMPTY_MACRO_SEARCH = 'all macros are empty. please click on search icon to prefill the macros automatically';
 const CLICK_FAB_TO_START = 'To initiate macro tracking for the day, please click on the "+" button';

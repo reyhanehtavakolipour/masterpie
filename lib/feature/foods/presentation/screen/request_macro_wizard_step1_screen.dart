@@ -160,6 +160,26 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
     });
   }
 
+  void _showInformationPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text(HOW_MUCH_TO_EAT, style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(FOOD_PORTION_INFO, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal)),
+              ],
+            ),
+          )
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -180,6 +200,19 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
             ),
           ),
           actions: [
+            GestureDetector(
+              onTap: (){
+                _showInformationPopup(context);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: const Icon(
+                  Icons.info,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ),
           ],
         ),
         body: Padding(
