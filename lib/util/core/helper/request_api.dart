@@ -15,10 +15,9 @@ import '../response/failure.dart';
 
 Future<Either<Failure, oauth2.Client>> authFatSecret() async{
 
-  final authorizationEndpoint = Uri.parse('https://oauth.fatsecret.com/connect/token');
-  const identifier = 'c75c4c004d3e4823965e117075ce07f8';
-  const secret = 'b122d44d5a02433c8be4d6abe65fa3e5';
-
+  final authorizationEndpoint = Uri.parse(FAT_SECRET_AUTH_URL);
+  final identifier= await FlutterConfig.get(FAT_SECRET_IDENTIFIER);
+  final secret= await FlutterConfig.get(FAT_SECRET_SECRET_KEY);
   final scopes = ['premier', 'barcode'];
 
   try {

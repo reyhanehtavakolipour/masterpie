@@ -9,6 +9,8 @@ const FOOD_DATA_CENTRAL_KEY = 'FOOD_DATA_CENTRAL_KEY';
 const OPENAI_API_KEY = 'OPENAI_API_KEY';
 const SUPABASE_COMPANY_URL = 'SUPABASE_COMPANY_URL';
 const SUPABSE_PUBLIC_ANON_KEY = 'SUPABSE_PUBLIC_ANON_KEY';
+const FAT_SECRET_IDENTIFIER = 'FAT_SECRET_IDENTIFIER';
+const FAT_SECRET_SECRET_KEY = 'FAT_SECRET_SECRET_KEY';
 const WEB_CLIENT_ID = 'WEB_CLIENT_ID';
 const IOS_CLIENT_ID = 'IOS_CLIENT_ID';
 const FOOD_DATA_CENTRAL_API = 'https://api.nal.usda.gov/fdc/v1/foods/search';
@@ -23,6 +25,9 @@ const PLANS_TABLE = 'plans';
 
 
 const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.net/portionRecommendation';
+
+
+const FAT_SECRET_AUTH_URL = 'https://oauth.fatsecret.com/connect/token';
 
 
 const GOOGLE_CLOUD_KEY = 'GOOGLE_CLOUD_KEY';
