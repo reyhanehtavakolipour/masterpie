@@ -31,6 +31,7 @@ Map<String, dynamic> toFoodsJson(List<FoodRemote> foodsRemote, String date) {
 }
 
 
+
 FoodRemote fromFoodJson(Map<String, dynamic> food) {
   return FoodRemote(
     name: food['name'],
