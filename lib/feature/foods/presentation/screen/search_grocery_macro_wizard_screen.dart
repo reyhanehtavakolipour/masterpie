@@ -74,140 +74,146 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        /// App bar
-        appBar: AppBar(
-          title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
-          backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context, _requestWizardArgumentModel);
-            },
-            child: const SizedBox(
-              width: 48,
-              height: double.infinity,
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
+    return  PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop){
+        // Navigator.pop(context, _requestWizardArgumentModel);
+      },
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          /// App bar
+          appBar: AppBar(
+            title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
+            backgroundColor: PRIMARY_COLOR,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context, _requestWizardArgumentModel);
+              },
+              child: const SizedBox(
+                width: 48,
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
             ),
+            actions: [
+
+            ],
           ),
-          actions: [
-
-          ],
-        ),
 
 
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12,),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 12,),
 
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        /// search bar
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: SEARCH_BAR_HEIGHT,
-                                child: TextField(
-                                  controller: _searchController,
-                                  decoration: const InputDecoration(
-                                    hintText: CHEDDAR_CHEESE_LABEL,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        children: [
+                          /// search bar
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: SEARCH_BAR_HEIGHT,
+                                  child: TextField(
+                                    controller: _searchController,
+                                    decoration: const InputDecoration(
+                                      hintText: CHEDDAR_CHEESE_LABEL,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 8,),
-                            GestureDetector(
-                              child: Container(
-                                margin: const EdgeInsets.all(8),
-                                child: const CircleAvatar(
-                                  radius: 18,
-                                  backgroundColor: Colors.orange,
-                                  child: Icon(
-                                    Icons.document_scanner,
-                                    color: Colors.white,
+                              const SizedBox(width: 8,),
+                              GestureDetector(
+                                child: Container(
+                                  margin: const EdgeInsets.all(8),
+                                  child: const CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: Colors.orange,
+                                    child: Icon(
+                                      Icons.document_scanner,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              onTap: () {
-                                scanBarcodeNormal();
-                              },
-                            )
-                          ],
-                        ),
+                                onTap: () {
+                                  scanBarcodeNormal();
+                                },
+                              )
+                            ],
+                          ),
 
-                        fatSecretAttribute(),
+                          fatSecretAttribute(),
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
 
-                  const SizedBox(height: 12,),
+                    const SizedBox(height: 12,),
 
-                  /// Groceries list
-                  SearchGroceriesListUiForMacroWizard(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries,
-                    onAddButtonClicked: onAddButtonClicked, onGroceryClicked: onGroceryClicked,
-                    foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),),
-                ],
+                    /// Groceries list
+                    SearchGroceriesListUiForMacroWizard(foodCalculator: GenericFoodCalculator(visibleFoods: _newGroceries), foods: _newGroceries,
+                      onAddButtonClicked: onAddButtonClicked, onGroceryClicked: onGroceryClicked,
+                      foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),),
+                  ],
+                ),
               ),
-            ),
 
-            BlocConsumer<GroceriesBloc, GroceriesState>(
-                builder: (context, state) {
+              BlocConsumer<GroceriesBloc, GroceriesState>(
+                  builder: (context, state) {
 
-                  if (state is GroceriesLoadingState) {
-                    return const GFLoader(
-                      type: GFLoaderType.circle,
-                      loaderColorOne: DARK_PRIMARY_COLOR,
-                      loaderColorTwo: DARK_PRIMARY_COLOR,
-                      loaderColorThree: DARK_PRIMARY_COLOR,
-                    );
-                  }else if(state is GroceriesLoadedState){
-                    FocusScope.of(context).unfocus();
-                    Future.delayed(Duration.zero,(){
-                      setState(() {
-                        _newGroceries= [];
-                        _newGroceries.addAll(state.foods);
-                        _groceriesBloc.add(const GroceriesEvent.onReset());
+                    if (state is GroceriesLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
+                      );
+                    }else if(state is GroceriesLoadedState){
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(Duration.zero,(){
+                        setState(() {
+                          _newGroceries= [];
+                          _newGroceries.addAll(state.foods);
+                          _groceriesBloc.add(const GroceriesEvent.onReset());
+                        });
                       });
-                    });
-                  }else if(state is GroceriesErrorState){
-                    FocusScope.of(context).unfocus();
-                    _groceriesBloc.add(const GroceriesEvent.onReset());
-                    Future.delayed(Duration.zero,(){
-                      return showErrorToast(context, state.message);
-                    });
+                    }else if(state is GroceriesErrorState){
+                      FocusScope.of(context).unfocus();
+                      _groceriesBloc.add(const GroceriesEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        return showErrorToast(context, state.message);
+                      });
+                    }
+                    return Container();
+                  },
+                  listener: (context, state){
                   }
-                  return Container();
-                },
-                listener: (context, state){
-                }
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

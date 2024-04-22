@@ -252,9 +252,9 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 
 
-                        const SizedBox(height: 12,),
-                        Text('ignore this(test): ${(double.parse(_totalCalorie.isEmpty ? '0.0' : _totalCalorie)/(newFood.servingAmount.isEmpty ? 1.0: newFood.servingAmount[0])).toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 14, color: Colors.red, fontWeight: FontWeight.normal),),
+                        // const SizedBox(height: 12,),
+                        // Text('ignore this(test): ${(double.parse(_totalCalorie.isEmpty ? '0.0' : _totalCalorie)/(newFood.servingAmount.isEmpty ? 1.0: newFood.servingAmount[0])).toStringAsFixed(2)}',
+                        // style: const TextStyle(fontSize: 14, color: Colors.red, fontWeight: FontWeight.normal),),
 
 
                         const SizedBox(height: 32,),

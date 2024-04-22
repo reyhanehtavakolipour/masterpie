@@ -117,140 +117,146 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        /// App bar
-        appBar: AppBar(
-          title: const Text(SEARCH_RECIPE_LABEL, style: TextStyle(color: Colors.white)),
-          backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context, _requestWizardArgumentModel);
-            },
-            child: const SizedBox(
-              width: 48,
-              height: double.infinity,
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
+    return  PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop){
+        // Navigator.pop(context, _requestWizardArgumentModel);
+      },
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          /// App bar
+          appBar: AppBar(
+            title: const Text(SEARCH_RECIPE_LABEL, style: TextStyle(color: Colors.white)),
+            backgroundColor: PRIMARY_COLOR,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context, _requestWizardArgumentModel);
+              },
+              child: const SizedBox(
+                width: 48,
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
             ),
+            actions: [
+
+            ],
           ),
-          actions: [
-
-          ],
-        ),
 
 
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12,),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 12,),
 
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        children: [
 
-                        /// search bar
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: SEARCH_BAR_HEIGHT,
-                                child: TextField(
-                                  controller: _searchController,
-                                  decoration: const InputDecoration(
-                                    hintText: PASTA_LABEL,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                          /// search bar
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: SEARCH_BAR_HEIGHT,
+                                  child: TextField(
+                                    controller: _searchController,
+                                    decoration: const InputDecoration(
+                                      hintText: PASTA_LABEL,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 8,),
-                            GestureDetector(
-                              child: const CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.orange,
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.white,
+                              const SizedBox(width: 8,),
+                              GestureDetector(
+                                child: const CircleAvatar(
+                                  radius: 18,
+                                  backgroundColor: Colors.orange,
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              onTap: () {
-                                requestFoodsList();
-                              },
-                            )
-                          ],
-                        ),
+                                onTap: () {
+                                  requestFoodsList();
+                                },
+                              )
+                            ],
+                          ),
 
-                        fatSecretAttribute(),
+                          fatSecretAttribute(),
 
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 12,),
+                    const SizedBox(height: 12,),
 
-                  /// recipes list
-                  SearchRecipesMacroWizardListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newRecipes), foods: _newRecipes,
-                      onAddButtonClicked: onAddButtonClicked, onRecipeClicked: onRecipeClicked,
-                      foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,)),
-                ],
+                    /// recipes list
+                    SearchRecipesMacroWizardListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newRecipes), foods: _newRecipes,
+                        onAddButtonClicked: onAddButtonClicked, onRecipeClicked: onRecipeClicked,
+                        foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,)),
+                  ],
+                ),
               ),
-            ),
 
 
 
-            BlocConsumer<RecipesBloc, RecipesState>(
-                builder: (context, state) {
+              BlocConsumer<RecipesBloc, RecipesState>(
+                  builder: (context, state) {
 
-                  if (state is RecipesLoadingState) {
-                    return const GFLoader(
-                      type: GFLoaderType.circle,
-                      loaderColorOne: DARK_PRIMARY_COLOR,
-                      loaderColorTwo: DARK_PRIMARY_COLOR,
-                      loaderColorThree: DARK_PRIMARY_COLOR,
-                    );
-                  }else if(state is RecipesLoadedState){
-                    FocusScope.of(context).unfocus();
-                    Future.delayed(Duration.zero,(){
-                      setState(() {
-                        _newRecipes= [];
-                        _newRecipes.addAll(state.foods);
-                        _recipeBloc.add(const RecipesEvent.onReset());
+                    if (state is RecipesLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
+                      );
+                    }else if(state is RecipesLoadedState){
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(Duration.zero,(){
+                        setState(() {
+                          _newRecipes= [];
+                          _newRecipes.addAll(state.foods);
+                          _recipeBloc.add(const RecipesEvent.onReset());
+                        });
                       });
-                    });
-                  }else if(state is RecipesErrorState){
-                    FocusScope.of(context).unfocus();
-                    _recipeBloc.add(const RecipesEvent.onReset());
-                    Future.delayed(Duration.zero,(){
-                      return showErrorToast(context, state.message);
-                    });
+                    }else if(state is RecipesErrorState){
+                      FocusScope.of(context).unfocus();
+                      _recipeBloc.add(const RecipesEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        return showErrorToast(context, state.message);
+                      });
+                    }
+                    return Container();
+                  },
+                  listener: (context, state){
                   }
-                  return Container();
-                },
-                listener: (context, state){
-                }
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

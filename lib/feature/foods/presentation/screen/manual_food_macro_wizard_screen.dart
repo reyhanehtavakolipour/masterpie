@@ -191,71 +191,77 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   @override
   Widget build(BuildContext context) {
     handleMealMacrosWithoutIngredient();
-    return MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
-          backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-          actions: [
-
-          ],
-        ),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  mealNameWidget(),
-
-                  const SizedBox(height: 16,),
-
-                  /// add ingredient chips
-                  addIngredientChips(),
-
-                  const SizedBox(height: 8,),
-
-                  /// new ingredient
-                  newIngredient(),
-
-                  /// added ingredients
-                  addedIngredients(),
-
-                  recipe(),
-
-                  const SizedBox(height: 16,),
-
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-                  const SizedBox(height: 16,),
-
-
-                  macroAmountsMeal(),
-
-
-                  const SizedBox(height: 36,),
-
-                  foodServingRange(),
-
-                  const SizedBox(height: 16,),
-
-                  buildAddFoodButton(context),
-                ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop){
+        // Navigator.pop(context, _requestWizardArgumentModel);
+      },
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
+            backgroundColor: PRIMARY_COLOR,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 24,
               ),
-            )
+            ),
+            actions: [
+
+            ],
+          ),
+          body: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    mealNameWidget(),
+
+                    const SizedBox(height: 16,),
+
+                    /// add ingredient chips
+                    addIngredientChips(),
+
+                    const SizedBox(height: 8,),
+
+                    /// new ingredient
+                    newIngredient(),
+
+                    /// added ingredients
+                    addedIngredients(),
+
+                    recipe(),
+
+                    const SizedBox(height: 16,),
+
+                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                    const SizedBox(height: 16,),
+
+
+                    macroAmountsMeal(),
+
+
+                    const SizedBox(height: 36,),
+
+                    foodServingRange(),
+
+                    const SizedBox(height: 16,),
+
+                    buildAddFoodButton(context),
+                  ],
+                ),
+              )
+          ),
         ),
       ),
     );

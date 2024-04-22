@@ -504,6 +504,9 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           .select<List<dynamic>>()
           .eq('id', userId);
 
+      if(data[0]['today_logs'] == null){
+        return const Right([]);
+      }
 
       List<FoodRemote> foods= [];
 

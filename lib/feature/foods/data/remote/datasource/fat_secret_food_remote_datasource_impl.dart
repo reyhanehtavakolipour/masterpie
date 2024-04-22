@@ -253,7 +253,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
               double  ingCount = double.parse(ingredient['number_of_units'].toString());
              final element= serving[0];
               if(element['measurement_description'] != 'serving'){
-                final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2)));
+                // final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2))/1);
+                final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2))/numberOfServing);
                 servingIngredientsCount.add([count.toString()]);
                 ingredientCalorie.add((double.parse(element['calories'].toString())).toStringAsFixed(1));
                 ingredientProtein.add((double.parse(element['protein'].toString())).toStringAsFixed(1));
@@ -262,9 +263,11 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
                 ingredientServingAmounts.add('1.0');
                 ingredientUnits.add(element['measurement_description'].toString());
               }else{
-                double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+                // double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+                double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/numberOfServing).toStringAsFixed(2)));
                 servingIngredientsCount.add([servingIngredientCount.toString()]);
               }
+
 
             }else{
               final count= double.parse(ingServingData[0]['number_of_units'].toString());
@@ -280,7 +283,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
                 ingredientUnits.add(ingServingData[0]['measurement_description'].toString());
               }
 
-              double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+              // double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+              double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/numberOfServing).toStringAsFixed(2)));
               servingIngredientsCount.add([servingIngredientCount.toString()]);
             }
 
@@ -333,7 +337,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
               recipe: recipeInstruction,
               ingredients: ingredients,
               servingIngredientsCount: servingIngredientsCount,
-              servingAmount: [double.parse(recipeDetailResponse.data['recipe']['number_of_servings'])],
+              // servingAmount: [double.parse(recipeDetailResponse.data['recipe']['number_of_servings'])],
+              servingAmount: [1],
               servingAmounts: servingAmounts,
               unit: ['serving'],
               units: units
