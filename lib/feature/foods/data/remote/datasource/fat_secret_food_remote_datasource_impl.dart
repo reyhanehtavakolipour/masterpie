@@ -7,6 +7,7 @@ import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_mo
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../../util/core/constant/api_constant.dart';
+import '../../../../../util/core/helper/helper.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
 import 'fat_secret_food_remote_datasource.dart';
@@ -215,13 +216,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         final numberOfServing= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
 
         await Future.forEach((recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List), (ingredient) async {
-        // (recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List).forEach((ingredient)  {
           ingredients.add(ingredient['food_name']);
           final ingredientNumberOfUnit= double.parse(ingredient['number_of_units']);
           final servingId= double.parse(ingredient['serving_id']);
-          double servingIngredientCount = double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2));
-          servingIngredientsCount.add([servingIngredientCount.toString()]);
-
 
           /// calling second api to get ingredient detail
 
@@ -248,32 +245,54 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             List<String> ingredientUnits= [];
 
             /// add the serving unit used in recipe, first
-            serving.forEach((element) {
-              if(double.parse(element['serving_id'].toString()) == servingId){
-                final count= double.parse(element['number_of_units'].toString());
-                ingredientCalorie.add((double.parse(element['calories'].toString())/count).toString());
-                ingredientProtein.add((double.parse(element['protein'].toString())/count).toString());
-                ingredientCarb.add((double.parse(element['carbohydrate'].toString())/count).toString());
-                ingredientFat.add((double.parse(element['fat'].toString())/count).toString());
-                ingredientServingAmounts.add('1.0');
+            final ingServingData= serving.where((element) => double.parse(element['serving_id'].toString()) == servingId).toList();
 
-                if(element['measurement_description'] == 'serving'){
-                  ingredientUnits.add(element['serving_description'].toString());
-                }else{
-                  ingredientUnits.add(element['measurement_description'].toString());
-                }
+            if(ingServingData.isEmpty){
+
+              final ingUnit = ingredient['measurement_description'];
+              double  ingCount = double.parse(ingredient['number_of_units'].toString());
+             final element= serving[0];
+              if(element['measurement_description'] != 'serving'){
+                final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2)));
+                servingIngredientsCount.add([count.toString()]);
+                ingredientCalorie.add((double.parse(element['calories'].toString())).toStringAsFixed(1));
+                ingredientProtein.add((double.parse(element['protein'].toString())).toStringAsFixed(1));
+                ingredientCarb.add((double.parse(element['carbohydrate'].toString())).toStringAsFixed(1));
+                ingredientFat.add((double.parse(element['fat'].toString())).toStringAsFixed(1));
+                ingredientServingAmounts.add('1.0');
+                ingredientUnits.add(element['measurement_description'].toString());
+              }else{
+                double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+                servingIngredientsCount.add([servingIngredientCount.toString()]);
               }
-            });
+
+            }else{
+              final count= double.parse(ingServingData[0]['number_of_units'].toString());
+              ingredientCalorie.add((double.parse(ingServingData[0]['calories'].toString())/count).toStringAsFixed(1));
+              ingredientProtein.add((double.parse(ingServingData[0]['protein'].toString())/count).toStringAsFixed(1));
+              ingredientCarb.add((double.parse(ingServingData[0]['carbohydrate'].toString())/count).toStringAsFixed(1));
+              ingredientFat.add((double.parse(ingServingData[0]['fat'].toString())/count).toStringAsFixed(1));
+              ingredientServingAmounts.add('1.0');
+
+              if(ingServingData[0]['measurement_description'] == 'serving'){
+                ingredientUnits.add(ingServingData[0]['serving_description'].toString());
+              }else{
+                ingredientUnits.add(ingServingData[0]['measurement_description'].toString());
+              }
+
+              double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
+              servingIngredientsCount.add([servingIngredientCount.toString()]);
+            }
 
 
             serving.forEach((element) {
               if(element['serving_id'] != servingId && !ingredientUnits.contains(element['measurement_description']) &&
                   !ingredientUnits.contains(element['serving_description'])){
                 final count= double.parse(element['number_of_units'].toString());
-                ingredientCalorie.add((double.parse(element['calories'].toString())/count).toString());
-                ingredientProtein.add((double.parse(element['protein'].toString())/count).toString());
-                ingredientCarb.add((double.parse(element['carbohydrate'].toString())/count).toString());
-                ingredientFat.add((double.parse(element['fat'].toString())/count).toString());
+                ingredientCalorie.add((double.parse(element['calories'].toString())/count).toStringAsFixed(1));
+                ingredientProtein.add((double.parse(element['protein'].toString())/count).toStringAsFixed(1));
+                ingredientCarb.add((double.parse(element['carbohydrate'].toString())/count).toStringAsFixed(1));
+                ingredientFat.add((double.parse(element['fat'].toString())/count).toStringAsFixed(1));
                 ingredientServingAmounts.add('1.0');
 
                 if(element['measurement_description'] == 'serving'){
@@ -300,7 +319,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       }else{
         return  Left(RemoteFailure(recipeDetailResponse.statusCode, recipeDetailResponse.data['message']));
       }
-
 
 
       return Right(
