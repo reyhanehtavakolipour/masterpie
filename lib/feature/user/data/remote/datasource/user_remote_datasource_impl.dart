@@ -745,4 +745,25 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteProfile(String userId) async{
+    try{
+
+      final supabase = Supabase.instance.client;
+
+      final data = await supabase
+          .from(PROFILE_REMOTE_TABLE)
+          .delete()
+          .eq('id', userId);
+
+
+      return const Right(true);
+
+    }on PostgrestException catch (error) {
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      return Left(ExceptionFailure(error));
+    }
+  }
+
 }

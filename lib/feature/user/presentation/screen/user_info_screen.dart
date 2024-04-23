@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -15,8 +16,6 @@ import '../bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
 
 class UserInfoScreen extends StatefulWidget {
-
-  static const routeName = '/user-info-screen';
 
 
   const UserInfoScreen({super.key});
@@ -129,6 +128,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
                   buildSaveButton(),
 
+                  const SizedBox(height: 16,),
+
+                  buildDeleteAccountButton()
+
                 ],
               ),
 
@@ -149,6 +152,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       _getProfileBloc.add(const GetProfileEvent.onReset());
                       Future.delayed(Duration.zero,(){
                         return showErrorToast(context, state.message);
+                      });
+                    }else if(state is ProfileDeletedState){
+                      _getProfileBloc.add(const GetProfileEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        showSuccessToast(context, DELETE_ACCOUNT_SUCCESS_MSG);
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                          builder: (context) => const SignInScreen(),
+                        ), (route) => false);
                       });
                     }else{
                     }
@@ -224,6 +235,66 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       ),
     );
   }
+
+
+  Widget buildDeleteAccountButton(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: (){
+          showDeleteAccountDialog(context);
+        },
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            backgroundColor: RED_ERROR_COLOR
+        ),
+        child: const Padding(
+            padding: EdgeInsets.all(12),
+            child: Text(DELETE_ACCOUNT_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+        ),
+      ),
+    );
+  }
+
+
+  void showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(DELETE_LABEL, style: TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(DELETE_ACCOUNT_MSG, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+              ),
+              child: const Text(YES_LABEL, style: TextStyle(fontSize: 14, color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteAccount();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void _deleteAccount(){
+    _getProfileBloc.add(const GetProfileEvent.onDeleteProfile());
+  }
+
+
 
   Widget buildNameTextField({
     required String hintText,

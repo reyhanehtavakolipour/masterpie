@@ -45,9 +45,24 @@ class GetProfileUseCase{
     if(idResponse.isLeft()){
       return const Left(ExceptionFailure('user not found'));
     }
+
+    if(idResponse.asRight().isEmpty){
+      return Right(Profile(id: ''));
+    }
+
     final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight());
     if(profileResponse.isRight()){
       await repo.upsertProfileInLocal(profileResponse.asRight());
+      return  Right(profileResponse.asRight());
+    }
+
+    return Left(getFailure(profileResponse.asLeft()));
+  }
+
+
+  Future<Either<Failure, bool>> deleteProfile() async{
+    final profileResponse = await repo.deleteProfileInRemote();
+    if(profileResponse.isRight()){
       return  Right(profileResponse.asRight());
     }
 

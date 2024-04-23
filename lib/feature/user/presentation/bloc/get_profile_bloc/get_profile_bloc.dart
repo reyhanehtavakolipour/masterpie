@@ -28,11 +28,35 @@ class GetProfileBloc extends Bloc<GetProfileEvent, GetProfileState> {
                 emit(GetProfileState.error(failure.message));
               },
                   (data) {
-                emit(GetProfileState.loaded(data));
+                  if(data.id.isEmpty){
+                    emit(const GetProfileState.userNotFound());
+                  }else{
+                    emit(GetProfileState.loaded(data));
+                  }
               },
             );
         }
     );
+
+
+    on<DeleteProfile>(
+            (event, emit) async {
+          final useCase= serviceLocator<GetProfileUseCase>();
+          emit(const GetProfileState.loading());
+
+
+          var result = await useCase.deleteProfile();
+          result.fold(
+                (failure) {
+              emit(GetProfileState.error(failure.message));
+            },
+                (data) {
+              emit(GetProfileState.profileDeleted(data));
+            },
+          );
+        }
+    );
+
   }
 
 

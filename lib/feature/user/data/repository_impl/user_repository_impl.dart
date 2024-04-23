@@ -500,6 +500,17 @@ class UserRepositoryImpl extends UserRepository{
     return Left(planResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteProfileInRemote() async{
+    final userId = await getUserIdFromHive();
+    final profileResponse = await userRemoteDataSource.deleteProfile(userId.asRight());
+    if(profileResponse.isRight()){
+      userHiveDataSource.putString(KEY_USER_ID, '');
+      return Right(profileResponse.asRight());
+    }
+    return Left(profileResponse.asLeft());
+  }
+
 
 
 }

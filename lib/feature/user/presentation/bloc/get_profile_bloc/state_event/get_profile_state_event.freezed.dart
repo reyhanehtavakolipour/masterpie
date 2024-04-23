@@ -19,18 +19,21 @@ mixin _$GetProfileEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() onGetProfile,
+    required TResult Function() onDeleteProfile,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onGetProfile,
+    TResult? Function()? onDeleteProfile,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onGetProfile,
+    TResult Function()? onDeleteProfile,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
@@ -38,18 +41,21 @@ mixin _$GetProfileEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfile value) onGetProfile,
+    required TResult Function(DeleteProfile value) onDeleteProfile,
     required TResult Function(Reset value) onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfile value)? onGetProfile,
+    TResult? Function(DeleteProfile value)? onDeleteProfile,
     TResult? Function(Reset value)? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfile value)? onGetProfile,
+    TResult Function(DeleteProfile value)? onDeleteProfile,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) =>
@@ -113,6 +119,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() onGetProfile,
+    required TResult Function() onDeleteProfile,
     required TResult Function() onReset,
   }) {
     return onGetProfile();
@@ -122,6 +129,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onGetProfile,
+    TResult? Function()? onDeleteProfile,
     TResult? Function()? onReset,
   }) {
     return onGetProfile?.call();
@@ -131,6 +139,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onGetProfile,
+    TResult Function()? onDeleteProfile,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -144,6 +153,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfile value) onGetProfile,
+    required TResult Function(DeleteProfile value) onDeleteProfile,
     required TResult Function(Reset value) onReset,
   }) {
     return onGetProfile(this);
@@ -153,6 +163,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfile value)? onGetProfile,
+    TResult? Function(DeleteProfile value)? onDeleteProfile,
     TResult? Function(Reset value)? onReset,
   }) {
     return onGetProfile?.call(this);
@@ -162,6 +173,7 @@ class _$GetProfileImpl implements GetProfile {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfile value)? onGetProfile,
+    TResult Function(DeleteProfile value)? onDeleteProfile,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -174,6 +186,114 @@ class _$GetProfileImpl implements GetProfile {
 
 abstract class GetProfile implements GetProfileEvent {
   const factory GetProfile() = _$GetProfileImpl;
+}
+
+/// @nodoc
+abstract class _$$DeleteProfileImplCopyWith<$Res> {
+  factory _$$DeleteProfileImplCopyWith(
+          _$DeleteProfileImpl value, $Res Function(_$DeleteProfileImpl) then) =
+      __$$DeleteProfileImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$DeleteProfileImplCopyWithImpl<$Res>
+    extends _$GetProfileEventCopyWithImpl<$Res, _$DeleteProfileImpl>
+    implements _$$DeleteProfileImplCopyWith<$Res> {
+  __$$DeleteProfileImplCopyWithImpl(
+      _$DeleteProfileImpl _value, $Res Function(_$DeleteProfileImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$DeleteProfileImpl implements DeleteProfile {
+  const _$DeleteProfileImpl();
+
+  @override
+  String toString() {
+    return 'GetProfileEvent.onDeleteProfile()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$DeleteProfileImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() onGetProfile,
+    required TResult Function() onDeleteProfile,
+    required TResult Function() onReset,
+  }) {
+    return onDeleteProfile();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? onGetProfile,
+    TResult? Function()? onDeleteProfile,
+    TResult? Function()? onReset,
+  }) {
+    return onDeleteProfile?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? onGetProfile,
+    TResult Function()? onDeleteProfile,
+    TResult Function()? onReset,
+    required TResult orElse(),
+  }) {
+    if (onDeleteProfile != null) {
+      return onDeleteProfile();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetProfile value) onGetProfile,
+    required TResult Function(DeleteProfile value) onDeleteProfile,
+    required TResult Function(Reset value) onReset,
+  }) {
+    return onDeleteProfile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetProfile value)? onGetProfile,
+    TResult? Function(DeleteProfile value)? onDeleteProfile,
+    TResult? Function(Reset value)? onReset,
+  }) {
+    return onDeleteProfile?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetProfile value)? onGetProfile,
+    TResult Function(DeleteProfile value)? onDeleteProfile,
+    TResult Function(Reset value)? onReset,
+    required TResult orElse(),
+  }) {
+    if (onDeleteProfile != null) {
+      return onDeleteProfile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DeleteProfile implements GetProfileEvent {
+  const factory DeleteProfile() = _$DeleteProfileImpl;
 }
 
 /// @nodoc
@@ -215,6 +335,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() onGetProfile,
+    required TResult Function() onDeleteProfile,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -224,6 +345,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? onGetProfile,
+    TResult? Function()? onDeleteProfile,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -233,6 +355,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? onGetProfile,
+    TResult Function()? onDeleteProfile,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -246,6 +369,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfile value) onGetProfile,
+    required TResult Function(DeleteProfile value) onDeleteProfile,
     required TResult Function(Reset value) onReset,
   }) {
     return onReset(this);
@@ -255,6 +379,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfile value)? onGetProfile,
+    TResult? Function(DeleteProfile value)? onDeleteProfile,
     TResult? Function(Reset value)? onReset,
   }) {
     return onReset?.call(this);
@@ -264,6 +389,7 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfile value)? onGetProfile,
+    TResult Function(DeleteProfile value)? onDeleteProfile,
     TResult Function(Reset value)? onReset,
     required TResult orElse(),
   }) {
@@ -284,24 +410,30 @@ mixin _$GetProfileState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function() userNotFound,
     required TResult Function(String message) error,
     required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function()? userNotFound,
     TResult? Function(String message)? error,
     TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function()? userNotFound,
     TResult Function(String message)? error,
     TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -309,24 +441,30 @@ mixin _$GetProfileState {
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileInitialState value) initial,
     required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
     required TResult Function(GetProfileErrorState value) error,
     required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileInitialState value)? initial,
     TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
     TResult? Function(GetProfileErrorState value)? error,
     TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileInitialState value)? initial,
     TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
     TResult Function(GetProfileErrorState value)? error,
     TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -393,8 +531,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function() userNotFound,
     required TResult Function(String message) error,
     required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
   }) {
     return initial();
   }
@@ -404,8 +544,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function()? userNotFound,
     TResult? Function(String message)? error,
     TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
   }) {
     return initial?.call();
   }
@@ -415,8 +557,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function()? userNotFound,
     TResult Function(String message)? error,
     TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -430,8 +574,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileInitialState value) initial,
     required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
     required TResult Function(GetProfileErrorState value) error,
     required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
   }) {
     return initial(this);
   }
@@ -441,8 +587,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileInitialState value)? initial,
     TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
     TResult? Function(GetProfileErrorState value)? error,
     TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
   }) {
     return initial?.call(this);
   }
@@ -452,8 +600,10 @@ class _$GetProfileInitialStateImpl implements GetProfileInitialState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileInitialState value)? initial,
     TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
     TResult Function(GetProfileErrorState value)? error,
     TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -510,8 +660,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function() userNotFound,
     required TResult Function(String message) error,
     required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
   }) {
     return loading();
   }
@@ -521,8 +673,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function()? userNotFound,
     TResult? Function(String message)? error,
     TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
   }) {
     return loading?.call();
   }
@@ -532,8 +686,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function()? userNotFound,
     TResult Function(String message)? error,
     TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -547,8 +703,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileInitialState value) initial,
     required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
     required TResult Function(GetProfileErrorState value) error,
     required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
   }) {
     return loading(this);
   }
@@ -558,8 +716,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileInitialState value)? initial,
     TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
     TResult? Function(GetProfileErrorState value)? error,
     TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
   }) {
     return loading?.call(this);
   }
@@ -569,8 +729,10 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileInitialState value)? initial,
     TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
     TResult Function(GetProfileErrorState value)? error,
     TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -582,6 +744,132 @@ class _$GetProfileLoadingStateImpl implements GetProfileLoadingState {
 
 abstract class GetProfileLoadingState implements GetProfileState {
   const factory GetProfileLoadingState() = _$GetProfileLoadingStateImpl;
+}
+
+/// @nodoc
+abstract class _$$UserNotFoundStateImplCopyWith<$Res> {
+  factory _$$UserNotFoundStateImplCopyWith(_$UserNotFoundStateImpl value,
+          $Res Function(_$UserNotFoundStateImpl) then) =
+      __$$UserNotFoundStateImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UserNotFoundStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$UserNotFoundStateImpl>
+    implements _$$UserNotFoundStateImplCopyWith<$Res> {
+  __$$UserNotFoundStateImplCopyWithImpl(_$UserNotFoundStateImpl _value,
+      $Res Function(_$UserNotFoundStateImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$UserNotFoundStateImpl implements UserNotFoundState {
+  const _$UserNotFoundStateImpl();
+
+  @override
+  String toString() {
+    return 'GetProfileState.userNotFound()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UserNotFoundStateImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() userNotFound,
+    required TResult Function(String message) error,
+    required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
+  }) {
+    return userNotFound();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? userNotFound,
+    TResult? Function(String message)? error,
+    TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
+  }) {
+    return userNotFound?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? userNotFound,
+    TResult Function(String message)? error,
+    TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
+    required TResult orElse(),
+  }) {
+    if (userNotFound != null) {
+      return userNotFound();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetProfileInitialState value) initial,
+    required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
+    required TResult Function(GetProfileErrorState value) error,
+    required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
+  }) {
+    return userNotFound(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetProfileInitialState value)? initial,
+    TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
+    TResult? Function(GetProfileErrorState value)? error,
+    TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
+  }) {
+    return userNotFound?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetProfileInitialState value)? initial,
+    TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
+    TResult Function(GetProfileErrorState value)? error,
+    TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
+    required TResult orElse(),
+  }) {
+    if (userNotFound != null) {
+      return userNotFound(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UserNotFoundState implements GetProfileState {
+  const factory UserNotFoundState() = _$UserNotFoundStateImpl;
 }
 
 /// @nodoc
@@ -652,8 +940,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function() userNotFound,
     required TResult Function(String message) error,
     required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
   }) {
     return error(message);
   }
@@ -663,8 +953,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function()? userNotFound,
     TResult? Function(String message)? error,
     TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
   }) {
     return error?.call(message);
   }
@@ -674,8 +966,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function()? userNotFound,
     TResult Function(String message)? error,
     TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -689,8 +983,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileInitialState value) initial,
     required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
     required TResult Function(GetProfileErrorState value) error,
     required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
   }) {
     return error(this);
   }
@@ -700,8 +996,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileInitialState value)? initial,
     TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
     TResult? Function(GetProfileErrorState value)? error,
     TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
   }) {
     return error?.call(this);
   }
@@ -711,8 +1009,10 @@ class _$GetProfileErrorStateImpl implements GetProfileErrorState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileInitialState value)? initial,
     TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
     TResult Function(GetProfileErrorState value)? error,
     TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -810,8 +1110,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function() userNotFound,
     required TResult Function(String message) error,
     required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
   }) {
     return loaded(profile);
   }
@@ -821,8 +1123,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function()? userNotFound,
     TResult? Function(String message)? error,
     TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
   }) {
     return loaded?.call(profile);
   }
@@ -832,8 +1136,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function()? userNotFound,
     TResult Function(String message)? error,
     TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -847,8 +1153,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult map<TResult extends Object?>({
     required TResult Function(GetProfileInitialState value) initial,
     required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
     required TResult Function(GetProfileErrorState value) error,
     required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
   }) {
     return loaded(this);
   }
@@ -858,8 +1166,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetProfileInitialState value)? initial,
     TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
     TResult? Function(GetProfileErrorState value)? error,
     TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
   }) {
     return loaded?.call(this);
   }
@@ -869,8 +1179,10 @@ class _$GetProfileLoadedStateImpl implements GetProfileLoadedState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetProfileInitialState value)? initial,
     TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
     TResult Function(GetProfileErrorState value)? error,
     TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -888,4 +1200,164 @@ abstract class GetProfileLoadedState implements GetProfileState {
   @JsonKey(ignore: true)
   _$$GetProfileLoadedStateImplCopyWith<_$GetProfileLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ProfileDeletedStateImplCopyWith<$Res> {
+  factory _$$ProfileDeletedStateImplCopyWith(_$ProfileDeletedStateImpl value,
+          $Res Function(_$ProfileDeletedStateImpl) then) =
+      __$$ProfileDeletedStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool isDeleted});
+}
+
+/// @nodoc
+class __$$ProfileDeletedStateImplCopyWithImpl<$Res>
+    extends _$GetProfileStateCopyWithImpl<$Res, _$ProfileDeletedStateImpl>
+    implements _$$ProfileDeletedStateImplCopyWith<$Res> {
+  __$$ProfileDeletedStateImplCopyWithImpl(_$ProfileDeletedStateImpl _value,
+      $Res Function(_$ProfileDeletedStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isDeleted = null,
+  }) {
+    return _then(_$ProfileDeletedStateImpl(
+      null == isDeleted
+          ? _value.isDeleted
+          : isDeleted // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ProfileDeletedStateImpl implements ProfileDeletedState {
+  const _$ProfileDeletedStateImpl(this.isDeleted);
+
+  @override
+  final bool isDeleted;
+
+  @override
+  String toString() {
+    return 'GetProfileState.profileDeleted(isDeleted: $isDeleted)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProfileDeletedStateImpl &&
+            (identical(other.isDeleted, isDeleted) ||
+                other.isDeleted == isDeleted));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, isDeleted);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProfileDeletedStateImplCopyWith<_$ProfileDeletedStateImpl> get copyWith =>
+      __$$ProfileDeletedStateImplCopyWithImpl<_$ProfileDeletedStateImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() userNotFound,
+    required TResult Function(String message) error,
+    required TResult Function(Profile profile) loaded,
+    required TResult Function(bool isDeleted) profileDeleted,
+  }) {
+    return profileDeleted(isDeleted);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? userNotFound,
+    TResult? Function(String message)? error,
+    TResult? Function(Profile profile)? loaded,
+    TResult? Function(bool isDeleted)? profileDeleted,
+  }) {
+    return profileDeleted?.call(isDeleted);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? userNotFound,
+    TResult Function(String message)? error,
+    TResult Function(Profile profile)? loaded,
+    TResult Function(bool isDeleted)? profileDeleted,
+    required TResult orElse(),
+  }) {
+    if (profileDeleted != null) {
+      return profileDeleted(isDeleted);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetProfileInitialState value) initial,
+    required TResult Function(GetProfileLoadingState value) loading,
+    required TResult Function(UserNotFoundState value) userNotFound,
+    required TResult Function(GetProfileErrorState value) error,
+    required TResult Function(GetProfileLoadedState value) loaded,
+    required TResult Function(ProfileDeletedState value) profileDeleted,
+  }) {
+    return profileDeleted(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetProfileInitialState value)? initial,
+    TResult? Function(GetProfileLoadingState value)? loading,
+    TResult? Function(UserNotFoundState value)? userNotFound,
+    TResult? Function(GetProfileErrorState value)? error,
+    TResult? Function(GetProfileLoadedState value)? loaded,
+    TResult? Function(ProfileDeletedState value)? profileDeleted,
+  }) {
+    return profileDeleted?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetProfileInitialState value)? initial,
+    TResult Function(GetProfileLoadingState value)? loading,
+    TResult Function(UserNotFoundState value)? userNotFound,
+    TResult Function(GetProfileErrorState value)? error,
+    TResult Function(GetProfileLoadedState value)? loaded,
+    TResult Function(ProfileDeletedState value)? profileDeleted,
+    required TResult orElse(),
+  }) {
+    if (profileDeleted != null) {
+      return profileDeleted(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ProfileDeletedState implements GetProfileState {
+  const factory ProfileDeletedState(final bool isDeleted) =
+      _$ProfileDeletedStateImpl;
+
+  bool get isDeleted;
+  @JsonKey(ignore: true)
+  _$$ProfileDeletedStateImplCopyWith<_$ProfileDeletedStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

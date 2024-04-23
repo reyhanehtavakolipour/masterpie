@@ -67,6 +67,8 @@ abstract class UserRepository{
 
   Future<Either<Failure, Profile>> getProfileFromRemote(String email);
 
+  Future<Either<Failure, bool>> deleteProfileInRemote();
+
   Future<Either<Failure, Success>> forgotPasswordInRemote(String email);
 
   Future<Either<Failure, String>> getEmailFromHive();

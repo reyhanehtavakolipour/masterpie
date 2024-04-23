@@ -67,6 +67,7 @@ abstract class UserRemoteDataSource{
 
   Future<Either<Failure, UserPlanRemote>> getUserPlan(String userId);
 
+  Future<Either<Failure, bool>> deleteProfile(String userId);
 
   Future<Either<Failure, List<SubscriptionPlanRemote>>> getSubscriptionPlans();
 

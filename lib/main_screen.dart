@@ -1193,6 +1193,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         requestLoggedFoods(DateTime.now());
                                                         setMacros(state.profile);
                                                       });
+                                                    }else if(state is UserNotFoundState){
+                                                      _getProfileBloc.add(const GetProfileEvent.onReset());
+                                                      Future.delayed(Duration.zero,(){
+                                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                                          builder: (context) => const SignInScreen(),
+                                                        ), (route) => false);
+                                                      });
                                                     }else if(state is GetProfileErrorState){
                                                       _getProfileBloc.add(const GetProfileEvent.onReset());
 
