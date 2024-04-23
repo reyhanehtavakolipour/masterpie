@@ -229,6 +229,7 @@ const UPDATE_LOG_LABEL  = 'Update Log';
 const UPDATE_FAVORITE_AND_LOGGED_FOOD_CONTENT  = 'Would you like to update this food in your favorites as well?';
 const ONLY_UPDATE_LOGGED_LABEL  = 'No. Only update the logged food';
 const FOOD_ADDED_TO_FAVORITE_MSG  = 'Food added to your favorites';
+const PRIVACY_AGREEMENT_CHECKBOX_MSG  = 'I agree to the "Privacy Policy"';
 const FOOD_ADDED_TO_WIZARD_MSG  = 'Food added';
 const ERROR_MACRO_PERCENTAGE = 'The sum of the protein, carb and fat percentage must equal 100%';
 const ERROR_MAX_CALORIE = 'Calorie can\'t be more than $MAX_CALORIES.';

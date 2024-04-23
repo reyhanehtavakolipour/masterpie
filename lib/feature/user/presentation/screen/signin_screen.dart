@@ -24,8 +24,6 @@ import '../bloc/login_bloc/state_event/login_state_event.dart';
 
 class SignInScreen extends StatefulWidget {
 
-  static const routeName = '/signin-screen';
-
   final UserCredentials? userCredentials;
 
   const SignInScreen({Key? key, this.userCredentials}) : super(key: key);

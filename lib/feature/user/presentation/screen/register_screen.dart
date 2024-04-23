@@ -4,16 +4,22 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/user/presentation/screen/profile_after_registration_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../main_screen.dart';
+import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../bloc/login_bloc/login_bloc.dart';
+import '../bloc/login_bloc/state_event/login_state_event.dart';
 import '../bloc/register_bloc/register_bloc.dart';
 import '../bloc/register_bloc/state_event/register_state_event.dart';
 
@@ -35,6 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
   bool _isPasswordVisible = false;
 
 
+  late LoginBloc _loginBloc;
+
   final _passwordController = TextEditingController();
 
   final _confirmPasswordController = TextEditingController();
@@ -47,6 +55,10 @@ class _RegisterScreenState extends State<RegisterScreen>{
 
   Color _emailBorderColor = DARK_PRIMARY_COLOR;
 
+
+  Color _privacyCheckBoxBorderColor = DARK_PRIMARY_COLOR;
+
+
   Color _passwordBorderColor = DARK_PRIMARY_COLOR;
 
   Color _confirmPasswordBorderColor = DARK_PRIMARY_COLOR;
@@ -54,12 +66,16 @@ class _RegisterScreenState extends State<RegisterScreen>{
   bool _emailSent = false;
 
 
+  bool _isPrivacyChecked= false;
+
   @override
   void initState() {
     super.initState();
     _emailSent = false;
     _registerBloc = context.read<RegisterBloc>();
     _registerBloc.add(const RegisterEvent.onReset());
+    _loginBloc = context.read<LoginBloc>();
+    _loginBloc.add(const LoginEvent.onReset());
   }
 
   @override
@@ -79,21 +95,39 @@ class _RegisterScreenState extends State<RegisterScreen>{
                 children: [
 
                   const Text(REGISTER_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 36),),
-          
+
                   const SizedBox(height: 64,),
-          
+
                   buildEmailField(),
                   const SizedBox(height: 16),
                   buildPasswordField(hintText: PASSWORD_LABEL, controller: _passwordController, borderColor: _passwordBorderColor),
                   const SizedBox(height: 16),
                   buildPasswordField(hintText: CONFIRM_PASSWORD_LABEL, controller: _confirmPasswordController, borderColor: _confirmPasswordBorderColor),
+
+                  const SizedBox(height: 20,),
+
+
+
+
+
+                  privacyPolicyCheckBox(),
+
+
                   const SizedBox(height: 48),
                   buildRegisterButton(text: REGISTER_LABEL),
+
+
+                  const SizedBox(height: 16),
+                  const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
+                  const SizedBox(height: 16),
+                  buildGoogleSignInButton(),
+
+
                   const SizedBox(height: 20),
                   buildLoginRow(),
-          
+
                   const SizedBox(height: 18),
-          
+
                   BlocConsumer<RegisterBloc, RegisterState>(
                       builder: (mcontext, state) {
                         if (state is RegisterLoadingState) {
@@ -129,7 +163,51 @@ class _RegisterScreenState extends State<RegisterScreen>{
                         return Container();
                       },
                       listener: (context, state){
-          
+
+                      }
+                  ),
+
+
+                  BlocConsumer<LoginBloc, LoginState>(
+                      builder: (mcontext, state) {
+                        if (state is LoginLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LoginLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _loginBloc.add(const LoginEvent.onReset());
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is RegisterWithGoogleLoadedState){
+                          _loginBloc.add(const LoginEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileAfterRegistrationScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is LoginErrorState){
+                          _loginBloc.add(const LoginEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
                       }
                   ),
 
@@ -169,6 +247,45 @@ class _RegisterScreenState extends State<RegisterScreen>{
           ),
         ),
       ],
+    );
+  }
+
+
+  Widget buildGoogleSignInButton() {
+    return roundedGoogleContainer(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            GOOGLE_PATH,
+            height: 24,
+            width: 24,
+          ),
+          const SizedBox(width: 10),
+          const Text(SIGN_IN_WITH_GOOGLE, style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),),
+        ],
+      ),
+    );
+  }
+
+  void signInrWithGoogleClickListener(){
+    _loginBloc.add(
+      const LoginEvent.onLoginWithGoogle(),
+    );
+  }
+
+  Widget roundedGoogleContainer({required Widget child}) {
+    return ElevatedButton(
+      onPressed: (){
+        signInrWithGoogleClickListener();
+      },
+      style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          backgroundColor: DARK_PRIMARY_COLOR
+      ),
+      child: child,
     );
   }
 
@@ -227,6 +344,51 @@ class _RegisterScreenState extends State<RegisterScreen>{
     );
   }
 
+
+
+  Widget privacyPolicyCheckBox(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 20,
+          child: Checkbox(
+            checkColor: Colors.white,
+            side: BorderSide(color: _privacyCheckBoxBorderColor),
+            activeColor: DARK_PRIMARY_COLOR,
+            value: _isPrivacyChecked,
+            onChanged: (newValue) {
+              setState(() {
+                _isPrivacyChecked = newValue!;
+                _privacyCheckBoxBorderColor= DARK_PRIMARY_COLOR;
+              });
+            },
+          ),
+        ),
+
+         const SizedBox(width: 12,),
+          Expanded(
+           child: GestureDetector(
+             onTap: (){
+               showPrivacy();
+             },
+             child: const Text(
+              PRIVACY_AGREEMENT_CHECKBOX_MSG,
+              style: TextStyle(fontSize: 13.0, color: DARK_PRIMARY_COLOR,
+                decoration: TextDecoration.underline,
+              ),
+             ),
+           ),
+         ),
+      ],
+    );
+  }
+
+
+  void showPrivacy() async{
+    final Uri url = Uri.parse(PRIVACY_MASTERPIE);
+    await launchUrl(url);
+  }
 
 
 
@@ -314,6 +476,14 @@ class _RegisterScreenState extends State<RegisterScreen>{
       return;
     }
 
+
+    ///privacy not agreed
+    if(!_isPrivacyChecked){
+      setState(() {
+        _privacyCheckBoxBorderColor = Colors.red;
+      });
+      return;
+    }
 
 
     _registerBloc.add(
