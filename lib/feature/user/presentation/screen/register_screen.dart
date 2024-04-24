@@ -306,6 +306,29 @@ class _RegisterScreenState extends State<RegisterScreen>{
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: _emailBorderColor, width: 2),
         ),
+        suffixIcon: IconButton(
+          icon: const Icon(
+            Icons.info_outline,
+            size: 18,
+            color: DARK_PRIMARY_COLOR,
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PopScope(
+                  onPopInvoked: (bool pop) async {
+
+                  },
+                  child: const AlertDialog(
+                    title: Text(INFO_LABLE, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),),
+                    content: Text(INFO_PRIVATE_EMAIL, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: DARK_PRIMARY_COLOR)),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -331,6 +354,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
         ),
         suffixIcon: IconButton(
           icon: Icon(
+            size: 18,
             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
             color: DARK_PRIMARY_COLOR,
           ),
