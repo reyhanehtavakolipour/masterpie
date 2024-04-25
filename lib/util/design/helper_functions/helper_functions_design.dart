@@ -4,6 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
+import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../feature/user/presentation/screen/user_plan_screen.dart';
@@ -190,12 +191,12 @@ void showRegisterDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text(REGISTER_LABEL, style: TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+        title: const Text(SIGNIN_LABEL, style: TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(REGISTER_MSG, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+            Text(LOGIN_MSG, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
           ],
         ),
         actions: [
@@ -203,13 +204,13 @@ void showRegisterDialog(BuildContext context) {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
             ),
-            child: const Text(REGISTER_LABEL, style: TextStyle(fontSize: 14, color: Colors.white)),
+            child: const Text(SIGNIN_LABEL, style: TextStyle(fontSize: 14, color: Colors.white)),
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RegisterScreen(),
+                  builder: (context) => const SignInScreen(),
                 ),
               );
             },

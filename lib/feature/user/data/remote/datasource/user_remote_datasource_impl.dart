@@ -107,7 +107,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           .eq('id', user?.id ?? '');
 
 
-      print('ohsfds: ${userPlanData}');
 
       if(userPlanData.isNotEmpty){
         if(userPlanData[0]['plan_name'] == null){
