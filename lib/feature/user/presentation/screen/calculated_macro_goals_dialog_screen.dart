@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
@@ -71,23 +73,27 @@ class _CalculatedMacroGoalsPopupState extends State<CalculatedMacroGoalsPopup> {
   }
 
   void updateProfile(){
-    _updateProfileBloc.add(
-        UpdateProfileEvent.onUpdateMacroGoalsAndInputs(
-          widget.gender,
-          widget.weight,
-          widget.height,
-          widget.weightUnit,
-          widget.heightUnit,
-          widget.goalWeight,
-          widget.age,
-          widget.activityLevel,
-          widget.weightChangeWeekly,
-          _calorieController.text,
-          _proteinController.text,
-          _carbController.text,
-          _fatController.text
-        )
-    );
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      _updateProfileBloc.add(
+          UpdateProfileEvent.onUpdateMacroGoalsAndInputs(
+              widget.gender,
+              widget.weight,
+              widget.height,
+              widget.weightUnit,
+              widget.heightUnit,
+              widget.goalWeight,
+              widget.age,
+              widget.activityLevel,
+              widget.weightChangeWeekly,
+              _calorieController.text,
+              _proteinController.text,
+              _carbController.text,
+              _fatController.text
+          )
+      );
+    }else{
+      showRegisterDialog(context);
+    }
   }
 
   @override

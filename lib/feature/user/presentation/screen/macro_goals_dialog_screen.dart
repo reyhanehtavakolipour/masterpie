@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
@@ -26,6 +28,7 @@ class MacroGoalsPopup extends StatefulWidget {
   final String protein;
   final String carb;
   final String fat;
+
 
 
 
@@ -61,14 +64,18 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
   }
 
   void updateProfile(){
-    _updateProfileBloc.add(
-        UpdateProfileEvent.onUpdateDailyMacroGoal(
-          _calorieController.text,
-          _proteinController.text,
-          _carbController.text,
-          _fatController.text
-        )
-    );
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      _updateProfileBloc.add(
+          UpdateProfileEvent.onUpdateDailyMacroGoal(
+              _calorieController.text,
+              _proteinController.text,
+              _carbController.text,
+              _fatController.text
+          )
+      );
+    }else{
+      showRegisterDialog(context);
+    }
   }
 
   @override

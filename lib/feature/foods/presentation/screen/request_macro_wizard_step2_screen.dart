@@ -11,6 +11,7 @@ import 'package:masterpie/feature/foods/presentation/screen/suggest_food_macro_w
 import 'package:masterpie/feature/foods/presentation/screen/suggested_different_foods_combination_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -299,28 +300,33 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
-              if(_requestWizardArgumentModel.foods.isEmpty){
-                showErrorToast(context, ERROR_ADD_FOOD);
-                return;
-              }
-              List<List<double>> servings = [];
-              _requestWizardArgumentModel.servingRanges.forEach((element) {
-                List<double> list = [];
-                list.add(element.start);
-                list.add(element.end);
-                servings.add(list);
-              });
 
-              _suggestPortionsBloc.add(
-                  SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                      _requestWizardArgumentModel.foods,
-                      servings,
-                      widget.requestWizardArgumentModel.macroGoalRanges,
-                      widget.requestWizardArgumentModel.restriction,
-                      widget.requestWizardArgumentModel.goalType,
-                      widget.requestWizardArgumentModel.macroPercentage
-                  )
-              );
+              if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                if(_requestWizardArgumentModel.foods.isEmpty){
+                  showErrorToast(context, ERROR_ADD_FOOD);
+                  return;
+                }
+                List<List<double>> servings = [];
+                _requestWizardArgumentModel.servingRanges.forEach((element) {
+                  List<double> list = [];
+                  list.add(element.start);
+                  list.add(element.end);
+                  servings.add(list);
+                });
+
+                _suggestPortionsBloc.add(
+                    SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                        _requestWizardArgumentModel.foods,
+                        servings,
+                        widget.requestWizardArgumentModel.macroGoalRanges,
+                        widget.requestWizardArgumentModel.restriction,
+                        widget.requestWizardArgumentModel.goalType,
+                        widget.requestWizardArgumentModel.macroPercentage
+                    )
+                );
+              }else{
+                showRegisterDialog(context);
+              }
             },
             child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: Colors.white),),
         ),

@@ -339,11 +339,15 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(_foodCountController.text.isEmpty){
-                   showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                 if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                   if(_foodCountController.text.isEmpty){
+                     showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
+                   }else{
+                     _logButtonClicked= true;
+                     requestLoggedFoods();
+                   }
                  }else{
-                   _logButtonClicked= true;
-                   requestLoggedFoods();
+                   showRegisterDialog(context);
                  }
                },
                child: const Text(LOG_FOOD_LABEL,
@@ -490,37 +494,42 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-       if(newFood.foodType == FoodType.groceryProduct){
-         if(_groceryNameController.text.isEmpty){
-           setState(() {
-             _ingredientNameBorderColor = Colors.red;
-             showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
-           });
-           return;
-         }
-       }else{
-         bool isAnyIngredientEmpty= false;
-         newFood.ingredients.forEach((element) {
-           if(element.isEmpty){
-             showErrorToast(context, ERROR_ENTER_FOOD_NAME);
-             isAnyIngredientEmpty= true;
-           }
-         });
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      if(newFood.foodType == FoodType.groceryProduct){
+        if(_groceryNameController.text.isEmpty){
+          setState(() {
+            _ingredientNameBorderColor = Colors.red;
+            showErrorToast(context, ERROR_GROCERY_NAME_EMPTY);
+          });
+          return;
+        }
+      }else{
+        bool isAnyIngredientEmpty= false;
+        newFood.ingredients.forEach((element) {
+          if(element.isEmpty){
+            showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+            isAnyIngredientEmpty= true;
+          }
+        });
 
-         if(isAnyIngredientEmpty){
-           return;
-         }
-       }
-       if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-         setState(() {
-           showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
-         });
-         return;
-       }
-       setState(() {
-         _ingredientNameBorderColor = Colors.black;
-       });
-       requestOperationOnFood(context);
+        if(isAnyIngredientEmpty){
+          return;
+        }
+      }
+      if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+        setState(() {
+          showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+        });
+        return;
+      }
+      setState(() {
+        _ingredientNameBorderColor = Colors.black;
+      });
+      requestOperationOnFood(context);
+    }else{
+      showRegisterDialog(context);
+    }
+
   }
 
 

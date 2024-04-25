@@ -17,12 +17,12 @@ class RegisterUseCase{
   Future<Either<Failure, String>> registerWithCredentials(String email, String password) async{
     final registerResponseRemote = await repo.registerUserWithCredentialInRemote(email, password);
     if(registerResponseRemote.isRight()){
-      await repo.saveUserEmailInHive(email);
-      await repo.saveUserPasswordInHive(password);
-      await repo.saveUserIdInHive(registerResponseRemote.getOrElse(() => ''));
+      await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight(), email: email));
       final loginResponseRemote = await repo.loginUserWithCredentialInRemote(email, password);
       if(loginResponseRemote.isRight()){
-        await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight(), email: email));
+        await repo.saveUserEmailInHive(email);
+        await repo.saveUserPasswordInHive(password);
+        await repo.saveUserIdInHive(registerResponseRemote.getOrElse(() => ''));
         await repo.setUserSubscriptionPlanAfterRegisterInRemote();
         return  Right(email);
       }

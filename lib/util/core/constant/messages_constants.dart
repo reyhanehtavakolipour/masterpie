@@ -224,6 +224,7 @@ const LOGOUT_LABLE  = 'Logout';
 const INFO_LABLE  = 'Info';
 const INFO_PRIVATE_EMAIL  = 'We request your email solely for login purposes. Your email address remains private and is not shared publicly. Additionally, we do not utilize your email address for advertising endeavors.';
 const LOGOUT_QUESTION_MSG = 'Are you sure you want to logout?';
+const REGISTER_MSG = 'In order to use this feature, you need to create an account.';
 const DELETE_ACCOUNT_MSG = 'Are you sure you want to delete your account?';
 const DELETE_ACCOUNT_SUCCESS_MSG = 'Your account deleted successfully';
 const LOG_FOOD_LABEL  = 'Log Food';

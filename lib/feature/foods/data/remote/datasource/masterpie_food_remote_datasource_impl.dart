@@ -289,6 +289,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
+
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
 

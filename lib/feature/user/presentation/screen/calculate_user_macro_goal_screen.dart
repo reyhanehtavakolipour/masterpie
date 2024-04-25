@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -61,7 +62,9 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     super.initState();
     _getProfileBloc = context.read<GetProfileBloc>();
     _updateProfileBloc = context.read<UpdateProfileBloc>();
-    getProfile();
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      getProfile();
+    }
   }
 
 
@@ -386,7 +389,9 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
         onPressed: (){
-          if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
+          if(UserRegistrationStatus.userAccountId.isEmpty){
+            showRegisterDialog(context);
+          }else if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
               _ageController.text.isEmpty || _heightController.text.isEmpty){
             showErrorToast(context, FILL_ALL_ERROR);
           }else{

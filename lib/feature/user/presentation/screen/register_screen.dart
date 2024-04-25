@@ -117,13 +117,13 @@ class _RegisterScreenState extends State<RegisterScreen>{
                   buildRegisterButton(text: REGISTER_LABEL),
 
 
-                  const SizedBox(height: 16),
-                  const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
-                  const SizedBox(height: 16),
-                  buildGoogleSignInButton(),
-
-
-                  const SizedBox(height: 20),
+                  // const SizedBox(height: 16),
+                  // const Center(child: Text(OR_LABEL, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)),
+                  // const SizedBox(height: 16),
+                  // buildGoogleSignInButton(),
+                  //
+                  //
+                  // const SizedBox(height: 20),
                   buildLoginRow(),
 
                   const SizedBox(height: 18),

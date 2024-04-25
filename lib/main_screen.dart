@@ -1,4 +1,5 @@
 
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,11 @@ import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
+import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/util/core/constant/api_constant.dart';
+import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
+import 'package:masterpie/util/core/di/service_locator.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
@@ -37,6 +41,7 @@ import 'feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart
 import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'feature/foods/presentation/screen/view_favorite_food_screen.dart';
 import 'feature/foods/presentation/screen/view_logged_food_screen.dart';
+import 'feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -65,7 +70,9 @@ class MainScreen extends StatefulWidget {
 State<MainScreen> createState() => _MainScreenState();
 }
 
-
+class UserRegistrationStatus {
+  static  String userAccountId = "";
+}
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
 
@@ -127,9 +134,22 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
 
-    requestMyFavoriteFoods();
 
-    requestProfile();
+    checkIfUserHasAccount();
+
+  }
+
+
+
+  void checkIfUserHasAccount() async {
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    UserRegistrationStatus.userAccountId= userId;
+
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      requestMyFavoriteFoods();
+      requestProfile();
+    }
   }
 
   @override
@@ -383,7 +403,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       context: context,
       builder: (BuildContext context) {
         return MacroGoalsPopup(calorie: _calorieGoal.toString(), protein: _proteinGoal.toString(),
-          carb: _carbGoal.toString(), fat: _fatGoal.toString(), onMacroGoalUpdated: onUpdatedGoalMacrosFromDialog, onCalculateMacroClicked: onCalculateMacroClicked,);
+          carb: _carbGoal.toString(), fat: _fatGoal.toString(), onMacroGoalUpdated: onUpdatedGoalMacrosFromDialog,
+          onCalculateMacroClicked: onCalculateMacroClicked);
       },
     );
   }
@@ -622,18 +643,37 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-              ListTile(
-                leading: const Icon(Icons.account_box),
-                title: const Text(PROFILE_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                onTap: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserInfoScreen(),
-                    ),
-                  );
-                },
+              Visibility(
+                visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+                child: ListTile(
+                  leading: const Icon(Icons.account_box),
+                  title: const Text(PROFILE_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserInfoScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Visibility(
+                visible: UserRegistrationStatus.userAccountId.isEmpty,
+                child: ListTile(
+                  leading: const Icon(Icons.app_registration),
+                  title: const Text(REGISTER_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterScreen(),
+                      ),
+                    );
+                  },
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.accessibility),
@@ -657,13 +697,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               //     );
               //   },
               // ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text(LOGOUT_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                onTap: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
-                  showLogoutDialog(context);
-                },
+              Visibility(
+                visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+                child: ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text(LOGOUT_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                    showLogoutDialog(context);
+                  },
+                ),
               ),
 
               const Divider(),
@@ -1194,26 +1237,30 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         setMacros(state.profile);
                                                       });
                                                     }else if(state is UserNotFoundState){
-                                                      _getProfileBloc.add(const GetProfileEvent.onReset());
-                                                      Future.delayed(Duration.zero,(){
-                                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                                          builder: (context) => const SignInScreen(),
-                                                        ), (route) => false);
-                                                      });
+                                                      if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                                                        _getProfileBloc.add(const GetProfileEvent.onReset());
+                                                        Future.delayed(Duration.zero,(){
+                                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                                                            builder: (context) => const SignInScreen(),
+                                                          ), (route) => false);
+                                                        });
+                                                      }
                                                     }else if(state is GetProfileErrorState){
-                                                      _getProfileBloc.add(const GetProfileEvent.onReset());
+                                                      if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                                                        _getProfileBloc.add(const GetProfileEvent.onReset());
 
-                                                      Future.delayed(Duration.zero,(){
-                                                        if(state.message == 'email not found'){
-                                                          return Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => const LandingScreen(),
-                                                            ),
-                                                          );
-                                                        }
-                                                        return showErrorToast(context, state.message);
-                                                      });
+                                                        Future.delayed(Duration.zero,(){
+                                                          if(state.message == 'email not found'){
+                                                            return Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => const LandingScreen(),
+                                                              ),
+                                                            );
+                                                          }
+                                                          return showErrorToast(context, state.message);
+                                                        });
+                                                      }
                                                     }else{
                                                     }
                                                     return Container();
@@ -1266,10 +1313,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         checkIfFavoriteFoodsAddedBefore(state.foods);
                                                       });
                                                     }else if(state is MyFavoriteFoodsErrorState){
-                                                      _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                                                      Future.delayed(Duration.zero,(){
-                                                        return showErrorToast(context, state.message);
-                                                      });
+                                                      if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                                                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                                                        Future.delayed(Duration.zero,(){
+                                                          return showErrorToast(context, state.message);
+                                                        });
+                                                      }
                                                     }
                                                     return Container();
                                                   },
@@ -1471,9 +1520,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
                                         });
                                       }else if(state is GetLoggedFoodsErrorState){
-                                        Future.delayed(Duration.zero,(){
-                                          return showErrorToast(context, state.message);
-                                        });
+                                        if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                                          Future.delayed(Duration.zero,(){
+                                            return showErrorToast(context, state.message);
+                                          });
+                                        }
                                       }
                                       return Container();
                                     },

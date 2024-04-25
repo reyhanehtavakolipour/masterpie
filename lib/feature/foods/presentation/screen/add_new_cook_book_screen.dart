@@ -9,6 +9,7 @@ import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -464,43 +465,47 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-     if(_mealNameController.text.isEmpty){
-       setState(() {
-         _mealNameBorderColor = Colors.red;
-         showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
-       });
-       return;
-     }
+    if(UserRegistrationStatus.userAccountId.isEmpty){
+      showRegisterDialog(context);
+    }else{
+      if(_mealNameController.text.isEmpty){
+        setState(() {
+          _mealNameBorderColor = Colors.red;
+          showErrorToast(context, ERROR_MEAL_NAME_EMPTY);
+        });
+        return;
+      }
 
-     if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-       setState(() {
-         showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
-       });
-       return;
-     }
+      if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
+        setState(() {
+          showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
+        });
+        return;
+      }
 
-     bool isAnyIngredientEmpty= false;
-     newFood.ingredients.forEach((element) {
-       if(element.isEmpty){
-         showErrorToast(context, ERROR_ENTER_FOOD_NAME);
-         isAnyIngredientEmpty= true;
-       }
-     });
+      bool isAnyIngredientEmpty= false;
+      newFood.ingredients.forEach((element) {
+        if(element.isEmpty){
+          showErrorToast(context, ERROR_ENTER_FOOD_NAME);
+          isAnyIngredientEmpty= true;
+        }
+      });
 
-     if(isAnyIngredientEmpty){
-       return;
-     }
+      if(isAnyIngredientEmpty){
+        return;
+      }
 
 
-     if(newFood.ingredients.isEmpty){
-       showErrorToast(context, ERROR_ADD_INGREDIENT);
-       return;
-     }
+      if(newFood.ingredients.isEmpty){
+        showErrorToast(context, ERROR_ADD_INGREDIENT);
+        return;
+      }
 
-     setState(() {
-       _mealNameBorderColor = Colors.black;
-     });
-     requestOperationOnFood(context);
+      setState(() {
+        _mealNameBorderColor = Colors.black;
+      });
+      requestOperationOnFood(context);
+    }
   }
 
 

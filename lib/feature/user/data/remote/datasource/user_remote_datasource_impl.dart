@@ -97,6 +97,27 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         password: password,
       );
       final User? user = res.user;
+
+
+
+
+      final userPlanData = await supabase
+          .from(USER_PLAN_TABLE)
+          .select<List<dynamic>>()
+          .eq('id', user?.id ?? '');
+
+
+      print('ohsfds: ${userPlanData}');
+
+      if(userPlanData.isNotEmpty){
+        if(userPlanData[0]['plan_name'] == null){
+          setUserSubscriptionPlanAfterRegister(user?.id ?? '');
+        }else if(userPlanData[0]['plan_name'].toString().isEmpty){
+          setUserSubscriptionPlanAfterRegister(user?.id ?? '');
+        }
+      }
+
+
       return  Right(user?.id ?? '');
     }on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));

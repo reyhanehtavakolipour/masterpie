@@ -320,16 +320,20 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
 
 
   void bottomButtonClickListener(BuildContext context){
-       if(_groceryNameController.text.isEmpty){
-         setState(() {
-           _ingredientNameBorderColor = Colors.red;
-         });
-         return;
-       }
-       setState(() {
-         _ingredientNameBorderColor = Colors.black;
-       });
-       requestOperationOnFood(context);
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      if(_groceryNameController.text.isEmpty){
+        setState(() {
+          _ingredientNameBorderColor = Colors.red;
+        });
+        return;
+      }
+      setState(() {
+        _ingredientNameBorderColor = Colors.black;
+      });
+      requestOperationOnFood(context);
+    }else{
+      showRegisterDialog(context);
+    }
   }
 
 

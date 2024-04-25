@@ -16,6 +16,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
+import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -85,11 +86,15 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
   }
 
   void addToFavorites(Food food){
-    _addToMyFavoriteBloc.add(
-      AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-          food
-      ),
-    );
+    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      _addToMyFavoriteBloc.add(
+        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+            food
+        ),
+      );
+    }else{
+      showRegisterDialog(context);
+    }
   }
 
 
@@ -302,8 +307,12 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       backgroundColor: LOG_FOOD_BTN_COLOR
                   ),
                   onPressed: () {
-                    _logButtonCLicked = true;
-                    requestLoggedFoods();
+                    if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                      _logButtonCLicked = true;
+                      requestLoggedFoods();
+                    }else{
+                      showRegisterDialog(context);
+                    }
                   },
                   child: const Text(SUBMIT_LOG_FOODS_LABEL,
                     style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
