@@ -33,7 +33,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
 
-  bool _isAutoPaymentOn= true;
+  bool _isAutoPaymentOn= false;
 
 
   final _userHiveDataSource = serviceLocator<UserHiveDataSource>();
@@ -63,9 +63,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initPlanTypeOptions(){
     _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];
     _selectedInterval = MONTHLY_PLAN_LABEL.capitalize();
-    _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
-    final subs = widget.newPlanInfo.subscriptionPlans.where((element) => !element.plan.contains('one-time')).toList();
-    _priceId= subs[0].ids[0];
+    // _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
+    _amount= widget.newPlanInfo.subscriptionPlans[0].prices[1];
+    final subs = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
+    // _priceId= subs[0].ids[0];
+    _priceId = subs[0].ids[1];
+
   }
 
   void handlePayButtonState(){
@@ -274,51 +277,73 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ),
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
 
-                            CustomRadioListTile(
-                              options: _intervalOptions,
-                              onSelectedOptionChanged: updateSelectedPlanType,
-                              selectedOption: _selectedInterval,
-                              orientation: HORIZONTAL_ORIENTATION,
-                              isEditable: true,
+
+                            Text(
+                              '${_amount*12} \$',
+                              style: const TextStyle(
+                                fontSize: 56,
+                                color: Colors.green,
+                              ),
                             ),
 
 
-                            const SizedBox(height: 24,),
-
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: _isAutoPaymentOn,
-                                        activeColor: DARK_PRIMARY_COLOR,
-                                        checkColor: Colors.white,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isAutoPaymentOn = value ?? false;
-                                            updateSelectedPlanType(_selectedInterval);
-                                          });
-                                        },
-                                      ),
-                                      const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
-                                    ],
-                                  ),
-                                ),
-
-                                Expanded(
-                                  child: Text(
-                                    '$_amount \$',
-                                    style: const TextStyle(
-                                      fontSize: 56,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            const Text(
+                              FOR_ONE_YEAR_LABBEL,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.lightGreen,
+                                fontWeight: FontWeight.bold
+                              ),
                             ),
+
+
+
+                            // CustomRadioListTile(
+                            //   options: _intervalOptions,
+                            //   onSelectedOptionChanged: updateSelectedPlanType,
+                            //   selectedOption: _selectedInterval,
+                            //   orientation: HORIZONTAL_ORIENTATION,
+                            //   isEditable: true,
+                            // ),
+                            //
+                            //
+                            // const SizedBox(height: 24,),
+
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child: Row(
+                            //         children: [
+                            //           Checkbox(
+                            //             value: _isAutoPaymentOn,
+                            //             activeColor: DARK_PRIMARY_COLOR,
+                            //             checkColor: Colors.white,
+                            //             onChanged: (value) {
+                            //               setState(() {
+                            //                 _isAutoPaymentOn = value ?? false;
+                            //                 updateSelectedPlanType(_selectedInterval);
+                            //               });
+                            //             },
+                            //           ),
+                            //           const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //
+                            //     Expanded(
+                            //       child: Text(
+                            //         '$_amount \$',
+                            //         style: const TextStyle(
+                            //           fontSize: 56,
+                            //           color: Colors.green,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
 
                           ],
                         ),
@@ -451,6 +476,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ],
                       ),
 
+
+                      //cookbook food access
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 14.0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 8,
+                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '$COOKBOOK_FOOD_ACCESS:',
+                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 8,),
+
+                          const Text(
+                            UNLIMITED_LABEL,
+                            style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                          ),
+
+                        ],
+                      ),
+
                       //food portion
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -481,91 +545,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(width: 8,),
 
                           Text(
-                            widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString(),
+                            '${widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString()}/mo (${widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit*12} yearly)',
                             style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                           ),
 
                         ],
                       ),
-
-
-                      //suggest food
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '$SUGGEST_FOOD_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 8,),
-
-                          Text(
-                            widget.newPlanInfo.subscriptionPlans[0].suggestFoodRequestsLimit.toString(),
-                            style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                          ),
-
-                        ],
-                      ),
-
-
-                      //macro adjustment
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 14.0),
-                                    child: Icon(
-                                      Icons.circle,
-                                      size: 8,
-                                      color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '$MACRO_ADJUSTMENT_ACCESS:',
-                                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(width: 8,),
-
-                          const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-                        ],
-
-                      ),
-
-
 
 
                       const SizedBox(height: 48,),
+
 
 
 

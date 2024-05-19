@@ -51,6 +51,7 @@ import 'feature/user/presentation/screen/calculate_user_macro_goal_screen.dart';
 import 'feature/user/presentation/screen/macro_goals_dialog_screen.dart';
 import 'feature/user/presentation/screen/signin_screen.dart';
 import 'feature/user/presentation/screen/user_info_screen.dart';
+import 'feature/user/presentation/screen/user_plan_screen.dart';
 import 'util/design/helper_functions/helper_functions_design.dart';
 import 'util/design/toast/app_toast.dart';
 import 'feature/foods/domain/model/food_type.dart';
@@ -678,20 +679,19 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   onCalculateMacroClicked();
                 },
               ),
-              //todo uncomment when payment feature should be available
-              // ListTile(
-              //   leading: const Icon(Icons.credit_card),
-              //   title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-              //   onTap: () {
-              //     _scaffoldKey.currentState?.openEndDrawer();
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const UserPlanScreen(),
-              //       ),
-              //     );
-              //   },
-              // ),
+              ListTile(
+                leading: const Icon(Icons.credit_card),
+                title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserPlanScreen(),
+                    ),
+                  );
+                },
+              ),
               Visibility(
                 visible: UserRegistrationStatus.userAccountId.isNotEmpty,
                 child: ListTile(

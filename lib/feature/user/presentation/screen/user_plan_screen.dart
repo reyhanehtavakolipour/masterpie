@@ -150,27 +150,17 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           const SizedBox(height: 6,),
 
+                          /// cookbook left
+                          Text(
+                            '$NEW_COOKBOOK_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.cookBookFoodLeft}',
+                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+                          ),
+
+                          const SizedBox(height: 6,),
+
                           /// food portion left
                           Text(
                             '$FOOD_PORTION_LEFT: ${_userPlan.foodPortionRequestsLeft}',
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
-                          ),
-
-
-                          const SizedBox(height: 6,),
-
-                          /// suggest food
-                          Text(
-                            '$SUGGEST_FOOD_LEFT: ${_userPlan.suggestFoodRequestsLeft}',
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
-                          ),
-
-
-                          const SizedBox(height: 6,),
-
-                          /// macro edition access
-                          Text(
-                            '$MACRO_EDITION_ACCESS: ${_userPlan.macroEdition ? YES_LABEL : NO_LABEL}',
                             style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                           ),
 
@@ -211,7 +201,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                           const SizedBox(height: 8,),
 
                           /// basic plan
-                          basicPlan(),
+                          // basicPlan(),
 
 
                           const SizedBox(height: 8,),
@@ -739,6 +729,30 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               ),
             ),
 
+
+            //favorite access
+            RichText(
+              text: TextSpan(
+                children: [
+                  const WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 14.0),
+                      child: Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                      ),
+                    ),
+                  ),
+                  TextSpan(
+                    text: '${_subscriptions[0].cookBookFoodLimit} $COOKBOOK_FOOD_INFO_FREE_PLAN',
+                    style: const TextStyle(fontSize: 14, color: RED_ERROR_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+
             //food portion
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -770,77 +784,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                 const Icon(Icons.clear, color: RED_ERROR_COLOR, size: 18,)
 
-
-              ],
-            ),
-
-
-            //suggest food
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$SUGGEST_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                const Icon(Icons.clear, color: RED_ERROR_COLOR, size: 18,)
-
-
-              ],
-            ),
-
-
-            //macro adjustment
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$MACRO_ADJUSTMENT_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                const Icon(Icons.close, color: RED_ERROR_COLOR, size: 18,)
 
               ],
             ),
@@ -1030,6 +973,43 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               ],
             ),
 
+            //cookbook food access
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 14.0),
+                          child: Icon(
+                            Icons.circle,
+                            size: 8,
+                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '$COOKBOOK_FOOD_ACCESS:',
+                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 8,),
+
+                const Text(
+                  UNLIMITED_LABEL,
+                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                ),
+
+              ],
+            ),
+
             //food portion
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -1067,80 +1047,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               ],
             ),
 
-
-            //suggest food
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$SUGGEST_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Text(
-                  '${subs[0].suggestFoodRequestsLimit}',
-                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
-            ),
-
-
-            //macro adjustment
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$MACRO_ADJUSTMENT_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-              ],
-
-            ),
           ],
         ),
       ),
@@ -1191,22 +1097,30 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               child: Column(
                 children: [
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      const SizedBox(width: 1,),
-                      const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
-                    ],
-                  ),
-                  const SizedBox(height: 4,),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                  //     const SizedBox(width: 1,),
+                  //     const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 4,),
+                  //
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
+                  //     const SizedBox(width: 1,),
+                  //     const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                  //   ],
+                  // ),
+
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      const SizedBox(width: 1,),
-                      const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
+                      Text('${subs[0].prices[1]*12}\$/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
                     ],
                   ),
                 ],
@@ -1327,6 +1241,43 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
               ],
             ),
 
+            //cookbook food access
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 14.0),
+                          child: Icon(
+                            Icons.circle,
+                            size: 8,
+                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '$COOKBOOK_FOOD_ACCESS:',
+                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 8,),
+
+                const Text(
+                  UNLIMITED_LABEL,
+                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                ),
+
+              ],
+            ),
+
             //food portion
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -1357,84 +1308,13 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${subs[0].foodPortionRequestsLimit}',
+                  '${subs[0].foodPortionRequestsLimit}/mo (${subs[0].foodPortionRequestsLimit * 12} yearly)',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 
               ],
             ),
 
-
-            //suggest food
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$SUGGEST_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Text(
-                  '${subs[0].suggestFoodRequestsLimit}',
-                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
-            ),
-
-
-            //macro adjustment
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$MACRO_ADJUSTMENT_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-              ],
-            ),
           ],
         ),
       ),
