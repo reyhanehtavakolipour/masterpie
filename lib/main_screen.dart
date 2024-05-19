@@ -344,18 +344,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       double carb= 0;
       double fat= 0;
       if(element.foodType == FoodType.groceryProduct){
-        element.calorie.forEach((cal) {
-          calorie= calorie + double.parse(cal);
-        });
-        element.protein.forEach((prot) {
-          protein= protein + double.parse(prot);
-        });
-        element.carb.forEach((car) {
-          carb= carb + double.parse(car);
-        });
-        element.fat.forEach((fats) {
-          fat= fat + double.parse(fats);
-        });
+
+        calorie= double.parse(element.calorie[0]);
+        protein= double.parse(element.protein[0]);
+        carb= double.parse(element.carb[0]);
+        fat= double.parse(element.fat[0]);
+
       }else{
         for(int i = 0; i < element.servingIngredientsCount.length; i++){
           calorie= calorie + (double.parse(element.calorie[i]) * num.parse(element.servingIngredientsCount[i]));
@@ -364,6 +358,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           fat= fat + (double.parse(element.fat[i]) * num.parse(element.servingIngredientsCount[i]));
         }
       }
+
       double foodCalorie= calorie * element.count;
       double foodProtein= protein * element.count;
       double foodCarb= carb * element.count;

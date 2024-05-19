@@ -74,8 +74,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
   late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
-  double _previousCoefficient= 1.0;
-   Food _initialStateFood = Food();
 
    late AddOrUpdateMyCookBookBloc _addOrUpdateMyCookBookBloc;
 
@@ -112,39 +110,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     
     _groceriesBloc = context.read<GroceriesBloc>();
 
-    _totalServingController.addListener(_onTotalServingChanged);
-
   }
-
-
-   void _onTotalServingChanged() {
-     setState(() {
-     });
-     _debouncer.run(() {
-       setState(() {
-         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-           List<String> servingIngredientsCount = [];
-           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-           currentServingIngredientsCount.forEach((element) {
-             servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-           });
-
-           newFood= newFood.copyWith(
-               servingIngredientsCount: servingIngredientsCount,
-               calorie: _initialStateFood.calorie,
-               protein: _initialStateFood.protein,
-               carb: _initialStateFood.carb,
-               fat: _initialStateFood.fat
-           );
-
-           _previousCoefficient= 1/coefficient;
-           calculateTotalMacros();
-         }
-       });
-     });
-   }
-
 
    void _onSearchGroceryChanged() {
      setState(() {
@@ -379,7 +345,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
           servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
-      _initialStateFood= newFood;
       calculateTotalMacros();
     });
   }
@@ -510,10 +475,20 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
+
+    double servingAmount= double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text);
+
+    List<String> servingIngredientsCounts= [];
+    for (int i = 0; i < newFood.ingredients.length; i++) {
+      double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i])/servingAmount;
+      servingIngredientsCounts.add(servingCount.toStringAsFixed(2));
+    }
+
     newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
+        servingAmount: 1.0,
+        servingIngredientsCount: servingIngredientsCounts,
         unit: SERVING_LABEL,
         recipe: _recipeController.text
     );
@@ -566,7 +541,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                  _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
                  _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
-                 _totalServingController.addListener(_onTotalServingChanged);
                });
 
              },
@@ -838,73 +812,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
    Widget macroAmountsMeal(){
      return Column(
+       crossAxisAlignment: CrossAxisAlignment.start,
        children: [
-         ///  serving + unit
-         Row(
-           children: [
-             const SizedBox(
-                 width: MACRO_TITLE_WIDTH,
-                 child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-             ),
-             const SizedBox(width: 4,),
-             SizedBox(
-               width: MACRO_WIDTH,
-               height: MACRO_HEIGHT,
-               child: TextField(
-                 controller: _totalServingController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                 inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                 ],
-                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   enabledBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   focusedBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                 ),
-                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
-               ),
-             ),
-             const SizedBox(width: 20,),
-             const SizedBox(
-                 width: MACRO_TITLE_WIDTH,
-                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-             ),
-             const SizedBox(width: 4,),
-
-
-             SizedBox(
-               width: MACRO_WIDTH,
-               height: MACRO_HEIGHT,
-               child: TextField(
-                 controller: TextEditingController(text: SERVING_LABEL),
-                 enabled: false,
-                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   enabledBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   focusedBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                 ),
-                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13),
-               ),
-             ),
-
-           ],
-         ),
-         const SizedBox(height: 4,),
-
          /// total calorie + protein
          Row(
            children: [
@@ -1040,6 +949,36 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
              ),
            ],
          ),
+
+
+         const SizedBox(height: 32,),
+
+         const Text(SERVINGS_RECIPE_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),),
+         const SizedBox(height: 8,),
+         SizedBox(
+           height: MACRO_HEIGHT,
+           child: TextField(
+             controller: _totalServingController,
+             keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+             inputFormatters: <TextInputFormatter>[
+               FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+             ],
+             decoration: const InputDecoration(
+               border: OutlineInputBorder(
+                 borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+               ),
+               enabledBorder: OutlineInputBorder(
+                 borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+               ),
+               focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+               ),
+               contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+             ),
+             style: const TextStyle(color: DARK_PRIMARY_COLOR),
+           ),
+         ),
+
        ],
      );
    }
@@ -1403,7 +1342,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
        );
 
 
-       _initialStateFood= newFood;
        _selectedAddIngredientOption = '';
        _ingredientNameBorderColor = Colors.black;
        _selectedUnitIndex= 0;

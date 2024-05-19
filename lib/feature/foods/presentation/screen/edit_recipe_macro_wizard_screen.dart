@@ -59,7 +59,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    final _debouncer = Debouncer(milliseconds: 1000);
 
-   GenericFood _initialStateFood = GenericFood();
 
    late TextEditingController _calorieController;
    late TextEditingController _proteinController;
@@ -80,7 +79,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    bool _isRecipeLoaded= false;
 
-   double _previousCoefficient= 1.0;
 
    bool _searchedGroceriesVisible = false;
 
@@ -131,7 +129,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
     getRecipe();
 
-    _totalServingController.addListener(_onTotalServingChanged);
   }
 
 
@@ -148,33 +145,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    }
 
 
-   void _onTotalServingChanged() {
-     setState(() {
-
-     });
-     _debouncer.run(() {
-       setState(() {
-         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount[0];
-           List<List<String>> servingIngredientsCount = [];
-           List<List<String>> currentServingIngredientsCount = List<List<String>>.from(newFood.servingIngredientsCount);
-           currentServingIngredientsCount.forEach((element) {
-             servingIngredientsCount.add([(double.parse(element[0])*_previousCoefficient*coefficient).toString()]);
-           });
-
-           newFood= newFood.copyWith(
-               servingIngredientsCount: servingIngredientsCount,
-               calorie: _initialStateFood.calorie,
-               protein: _initialStateFood.protein,
-               carb: _initialStateFood.carb,
-               fat: _initialStateFood.fat
-           );
-           _previousCoefficient= 1/coefficient;
-           calculateTotalMacros();
-         }
-       });
-     });
-   }
 
    void _onSearchIngredientChanged() {
      setState(() {
@@ -250,7 +220,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
                         const SizedBox(height: 16,),
 
-                        const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                        const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
                         const SizedBox(height: 16,),
 
@@ -366,7 +336,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
        newFood = genericFood;
-       _initialStateFood= newFood;
 
 
      });
@@ -631,7 +600,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
           servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
-      _initialStateFood= newFood;
       _selectedIngredientsUnitIndexList= selectedUnitIndexList;
       calculateTotalMacros();
     });
@@ -665,69 +633,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
     return Column(
       children: [
-        ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                enabled: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
-
-          ],
-        ),
-        const SizedBox(height: 4,),
 
         /// total calorie + protein
         Row(
@@ -1520,7 +1425,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
            carb: ingredientsCarb,
            fat: ingredientsFat
        );
-       _initialStateFood= newFood;
        _selectedAddIngredientOption = '';
        _ingredientNameBorderColor = Colors.black;
        _ingredientsExpansionState.add(false);

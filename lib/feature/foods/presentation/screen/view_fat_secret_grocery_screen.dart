@@ -160,7 +160,7 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
 
                   const SizedBox(height: 16,),
 
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                  const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
                   const SizedBox(height: 16,),
 

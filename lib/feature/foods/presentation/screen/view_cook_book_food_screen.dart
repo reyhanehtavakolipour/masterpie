@@ -46,7 +46,6 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
   String _totalProtein= '';
   String _totalCarb= '';
   String _totalFat= '';
-  String _totalServing= '';
   String _ingredients= '';
   String _foodName= '';
   String _recipe= '';
@@ -227,18 +226,8 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
 
 
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                  const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
-
-                  const SizedBox(height: 16,),
-
-                  Row(
-                    children: [
-                      Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                      const SizedBox(width: 4,),
-                      Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                    ],
-                  ),
 
                   const SizedBox(height: 16,),
 
@@ -445,7 +434,9 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
 
   void init(){
     searchFoodInFavorites(widget.foodDetailArgumentModel.food ?? Food());
-        double calorie = 0;
+
+
+    double calorie = 0;
         for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
             double servingCount = double.parse(
@@ -453,6 +444,7 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
             calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i]) * servingCount;
           }
         }
+
 
         double protein = 0;
         for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
@@ -480,22 +472,18 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
           }
         }
 
-
         String ingredients = '';
         for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
             String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-                * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])}'
-                ' ${widget.foodDetailArgumentModel.food!.units[i]} '
+                * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])} x'
+                ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
                 '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
             ingredients = ingredients + ingredient;
           }
         }
 
         _foodName = widget.foodDetailArgumentModel.food!.name;
-        _totalServing =
-        '${widget.foodDetailArgumentModel.food!.servingAmount} ${widget
-            .foodDetailArgumentModel.food!.unit}';
         _totalCalorie = calorie.toStringAsFixed(2);
         _totalProtein = protein.toStringAsFixed(2);
         _totalCarb = carb.toStringAsFixed(2);

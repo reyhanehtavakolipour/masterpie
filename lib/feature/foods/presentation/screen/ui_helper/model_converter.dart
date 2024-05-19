@@ -5,12 +5,12 @@ import '../../../domain/model/generic_food_model.dart';
 Food fromGenericGrocery(GenericFood food){
   return Food(
       id: food.id,
-      calorie: food.calorie[0],
-      protein: food.protein[0],
-      carb: food.carb[0],
-      fat: food.fat[0],
-      servingAmounts: food.servingAmounts[0],
-      units: food.units[0],
+      calorie: [food.calorie[0][0]],
+      protein: [food.protein[0][0]],
+      carb: [food.carb[0][0]],
+      fat: [food.fat[0][0]],
+      servingAmounts: [food.servingAmounts[0][0]],
+      units: [food.units[0][0]],
       foodType: FoodType.groceryProduct,
       count: food.count,
       name: food.name,
@@ -38,6 +38,7 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
     units.add(food.units[i][selectedUnitIndexList[i]]);
     servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
   }
+
 
 
   return Food(

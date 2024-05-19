@@ -216,7 +216,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
 
                     /// recipes list
                     SearchRecipesMacroWizardListUi(foodCalculator: GenericFoodCalculator(visibleFoods: _newRecipes), foods: _newRecipes,
-                        onAddButtonClicked: onAddButtonClicked, onRecipeClicked: onRecipeClicked,
+                         onRecipeClicked: onRecipeClicked,
                         foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,)),
                   ],
                 ),
@@ -262,24 +262,6 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
     );
   }
 
-
-  void onAddButtonClicked(Food food){
-    List<Food> foods = [];
-    foods.addAll(_requestWizardArgumentModel.foods);
-    foods.add(food);
-
-    List<RangeValues> servingRanges = [];
-    servingRanges.addAll(_requestWizardArgumentModel.servingRanges);
-    servingRanges.add(const RangeValues(0.5, 5.0));
-
-    RequestWizardArgumentModel argumentModel= _requestWizardArgumentModel.copyWith(
-        foods: foods,
-        servingRanges: servingRanges
-    );
-
-    Navigator.pop(context, argumentModel);
-
-  }
 
   void requestFoodsList(){
     _recipeBloc.add(

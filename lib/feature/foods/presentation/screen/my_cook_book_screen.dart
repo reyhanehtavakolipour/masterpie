@@ -529,13 +529,13 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   void checkIfCookBookFoodsAddedBefore(List<Food> foods){
     setState(() {
       List<Food> cookBookFoods = [];
-      foods.forEach((element) {
-        List<Food> foodsExisted = _addedMyCookBookFoods.where((addedCookBookFood) => element.id == addedCookBookFood.id).toList();
+      foods.forEach((food) {
+        List<Food> foodsExisted = _addedMyCookBookFoods.where((addedCookBookFood) => food.id == addedCookBookFood.id).toList();
         if(foodsExisted.isEmpty){
-          cookBookFoods.add(element);
+          cookBookFoods.add(food);
         }else{
           for(int i = 0; i < _addedMyCookBookFoods.length; i++){
-            if(_addedMyCookBookFoods[i].id == element.id){
+            if(_addedMyCookBookFoods[i].id == food.id){
               cookBookFoods.add(_addedMyCookBookFoods[i]);
             }
           }

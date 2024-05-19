@@ -8,25 +8,16 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/request_macro_wizard_step2_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../domain/model/food_type.dart';
 import '../../domain/model/logged_foods_model.dart';
 import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
-import '../bloc/groceries_bloc/groceries_bloc.dart';
-import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
-import '../bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
-import '../bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
-import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
-import '../bloc/my_favorite_foods/state_event/my_favorite_foods_state_event.dart';
-import '../bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
-import '../bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
+
 
 
 const int MAX_CALORIES = 10000;
@@ -159,15 +150,16 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
         remainedFat = 0;
       }
 
-      _minCalorieGoalController.text = '${(4/5 * remainedCalorie).toInt()}';
-      _minProteinGoalController.text = '${(4/5 * remainedProtein).toInt()}';
-      _minCarbGoalController.text = '${(4/5 * remainedCarb).toInt()}';
-      _minFatGoalController.text = '${(4/5 * remainedFat).toInt()}';
+      _minCalorieGoalController.text = '${(9/10 * remainedCalorie).toInt()}';
+      _minProteinGoalController.text = '${(9/10 * remainedProtein).toInt()}';
+      _minCarbGoalController.text = '${(9/10 * remainedCarb).toInt()}';
+      _minFatGoalController.text = '${(9/10 * remainedFat).toInt()}';
 
-      _maxCalorieGoalController.text = '${(6/5 * remainedCalorie).toInt()}';
-      _maxProteinGoalController.text = '${(6/5 * remainedProtein).toInt()}';
-      _maxCarbGoalController.text = '${(6/5 * remainedCarb).toInt()}';
-      _maxFatGoalController.text = '${(6/5 * remainedFat).toInt()}';
+      _maxCalorieGoalController.text = '${(1.1 * remainedCalorie).toInt()}';
+      _maxProteinGoalController.text = '${(1.1 * remainedProtein).toInt()}';
+      _maxCarbGoalController.text = '${(1.1 * remainedCarb).toInt()}';
+      _maxFatGoalController.text = '${(1.1 * remainedFat).toInt()}';
+
 
     });
   }

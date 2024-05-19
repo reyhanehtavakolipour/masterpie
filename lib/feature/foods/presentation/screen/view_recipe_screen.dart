@@ -185,18 +185,8 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 
 
-                        const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                        const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
-
-                        const SizedBox(height: 16,),
-
-                        Row(
-                          children: [
-                            Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                            const SizedBox(width: 4,),
-                            Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                          ],
-                        ),
 
                         const SizedBox(height: 16,),
 
@@ -545,23 +535,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
     );
   }
 
-  void logFoodsOfToday(List<Food> foodsLoggedBefore){
-    List<Food> foods = [];
 
-    foods.addAll(foodsLoggedBefore);
-
-    newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
-
-    List<int> unitIndexesList= [];
-    newFood.ingredients.forEach((element) {
-      unitIndexesList.add(0);
-    });
-    foods.add(fromGenericRecipe(newFood, unitIndexesList));
-
-    _logFoodsBloc.add(
-        LogFoodsEvent.onLogFoods(foods)
-    );
-  }
 
   Widget buildAddToCookBookButton(BuildContext context){
     return Column(
@@ -623,13 +597,33 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
     );
   }
 
+  void logFoodsOfToday(List<Food> foodsLoggedBefore){
+    List<Food> foods = [];
+
+    foods.addAll(foodsLoggedBefore);
+
+    newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
+
+    List<int> unitIndexesList= [];
+    newFood.ingredients.forEach((element) {
+      unitIndexesList.add(0);
+    });
+    foods.add(fromGenericRecipe(newFood, unitIndexesList));
+
+    _logFoodsBloc.add(
+        LogFoodsEvent.onLogFoods(foods)
+    );
+  }
 
   void addToCookBookClickListener(BuildContext context){
     if(UserRegistrationStatus.userAccountId.isNotEmpty){
+      newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
+
       List<int> unitIndexesList= [];
       newFood.ingredients.forEach((element) {
         unitIndexesList.add(0);
       });
+
       _addOrUpdateMyCookBookBloc.add(
         AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
           fromGenericRecipe(newFood, unitIndexesList),

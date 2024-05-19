@@ -52,7 +52,14 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
             itemBuilder: (context, index) {
               GenericFood food = widget.foods[index];
               final foodInformation= widget.foodCalculator.initFoodListBuilder(food);
-              String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
+              // String calorie= foodInformation.calorie[0][0].toStringAsFixed(foodInformation.calorie[0][0].truncateToDouble() == foodInformation.calorie[0][0] ? 0 : 2);
+
+
+              double calorie= 0;
+              foodInformation.calorie.forEach((element) {
+                calorie= calorie + element[0];
+              });
+
 
               return GestureDetector(
                 onTap: (){

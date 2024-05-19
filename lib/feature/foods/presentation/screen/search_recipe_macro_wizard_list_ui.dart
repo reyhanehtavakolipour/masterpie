@@ -20,12 +20,11 @@ class SearchRecipesMacroWizardListUi extends StatefulWidget {
 
   final GenericFoodCalculator foodCalculator;
   final List<GenericFood> foods;
-  final Function(Food food) onAddButtonClicked;
   final Function(GenericFood food) onRecipeClicked;
   final Color foodBackGroundColor;
   final Icon foodIcon;
 
-  const SearchRecipesMacroWizardListUi({super.key,required this.foodCalculator, required this.foods, required this.onAddButtonClicked,
+  const SearchRecipesMacroWizardListUi({super.key,required this.foodCalculator, required this.foods,
   required this.onRecipeClicked, required this.foodBackGroundColor, required this.foodIcon});
 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -78,8 +79,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
   String _foodType = GROCERY_LABEL;
   late GroceriesBloc _groceriesBloc;
   Food newFood = Food();
-  Food _initialStateFood = Food();
-  double _previousCoefficient= 1.0;
+
   late AddOrUpdateMyFavoriteBloc _addOrUpdateMyFavoriteBloc;
 
 
@@ -118,59 +118,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
     init();
 
-    _totalServingController.addListener(_onTotalServingChanged);
-
   }
-
-
-  void _onTotalServingChanged() {
-    setState(() {
-
-    });
-    _debouncer.run(() {
-      if(_foodType == MEAL_LABEL){
-        setState(() {
-          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-            double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-            List<String> servingIngredientsCount = [];
-            List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-            currentServingIngredientsCount.forEach((element) {
-              servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-            });
-
-            newFood= newFood.copyWith(
-                servingIngredientsCount: servingIngredientsCount,
-                calorie: _initialStateFood.calorie,
-                protein: _initialStateFood.protein,
-                carb: _initialStateFood.carb,
-                fat: _initialStateFood.fat
-            );
-            _previousCoefficient= 1/coefficient;
-            calculateTotalMacros();
-          }
-        });
-      }else{
-        setState(() {
-          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-            double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
-            newFood= newFood.copyWith(
-                servingAmounts: [_totalServingController.text],
-                calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
-                protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
-                carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
-                fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
-            );
-
-            _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
-            _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
-            _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
-            _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
-          }
-        });
-      }
-    });
-  }
-
 
 
   void _onSearchIngredientChanged() {
@@ -266,7 +214,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
 
                     const SizedBox(height: 16,),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                    const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
                     const SizedBox(height: 16,),
 
@@ -347,7 +295,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     }
 
     newFood = widget.foodDetailArgumentModel.food!;
-    _initialStateFood= newFood;
   }
 
 
@@ -472,7 +419,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
           servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
-      _initialStateFood= newFood;
       calculateTotalMacros();
     });
   }
@@ -661,66 +607,69 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
     return Column(
       children: [
         ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
+        Visibility(
+          visible: newFood.foodType == FoodType.groceryProduct,
+          child: Row(
+            children: [
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                enabled: _foodType == GROCERY_LABEL ? true : false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: MACRO_WIDTH,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  controller: servingController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
                 ),
               ),
-            ),
+              const SizedBox(width: 20,),
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+              ),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: 70,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
+                  controller: unitController,
+                  enabled: _foodType == GROCERY_LABEL ? true : false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
+                ),
+              ),
 
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 4,),
 

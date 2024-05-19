@@ -51,8 +51,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
    final _debouncer = Debouncer(milliseconds: 1000);
 
-   Food _initialStateFood = Food();
-
    late TextEditingController _calorieController;
    late TextEditingController _proteinController;
    late TextEditingController _carbController;
@@ -71,7 +69,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
    late TextEditingController _recipeController;
    Color _mealNameBorderColor = DARK_PRIMARY_COLOR;
 
-   double _previousCoefficient= 1.0;
 
    bool _searchedGroceriesVisible = false;
 
@@ -115,38 +112,8 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     _groceriesBloc = context.read<GroceriesBloc>();
 
     init();
-
-    _totalServingController.addListener(_onTotalServingChanged);
   }
 
-
-   void _onTotalServingChanged() {
-     setState(() {
-
-     });
-     _debouncer.run(() {
-       setState(() {
-         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
-           List<String> servingIngredientsCount = [];
-           List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-           currentServingIngredientsCount.forEach((element) {
-             servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-           });
-
-           newFood= newFood.copyWith(
-               servingIngredientsCount: servingIngredientsCount,
-               calorie: _initialStateFood.calorie,
-               protein: _initialStateFood.protein,
-               carb: _initialStateFood.carb,
-               fat: _initialStateFood.fat
-           );
-           _previousCoefficient= 1/coefficient;
-           calculateTotalMacros();
-         }
-       });
-     });
-   }
 
    void _onSearchIngredientChanged() {
      setState(() {
@@ -301,7 +268,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
       });
 
     newFood = widget.foodDetailArgumentModel.food!;
-    _initialStateFood= newFood;
   }
 
 
@@ -422,7 +388,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
           servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
-      _initialStateFood= newFood;
       calculateTotalMacros();
     });
   }
@@ -547,11 +512,21 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
+
+    double servingAmount= double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text);
+
+    List<String> servingIngredientsCounts= [];
+    for (int i = 0; i < newFood.ingredients.length; i++) {
+      double servingCount = double.parse(newFood.servingIngredientsCount[i].isEmpty ? '1' : newFood.servingIngredientsCount[i])/servingAmount;
+      servingIngredientsCounts.add(servingCount.toStringAsFixed(2));
+    }
+
     newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: double.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text),
-        unit: _totalUnitController.text,
+        servingAmount: 1.0,
+        servingIngredientsCount: servingIngredientsCounts,
+        unit: SERVING_LABEL,
         recipe: _recipeController.text
     );
 
@@ -586,71 +561,8 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                enabled: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
-
-          ],
-        ),
-        const SizedBox(height: 4,),
-
         /// total calorie + protein
         Row(
           children: [
@@ -785,6 +697,36 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
               ),
             ),
           ],
+        ),
+
+
+        const SizedBox(height: 32,),
+
+        const Text(SERVINGS_RECIPE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),),
+
+        const SizedBox(height: 8,),
+        SizedBox(
+          height: MACRO_HEIGHT,
+          child: TextField(
+            controller: servingController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+            ],
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            ),
+            style: const TextStyle(color: DARK_PRIMARY_COLOR),
+          ),
         ),
       ],
     );
@@ -1442,7 +1384,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
            carb: ingredientsCarb,
            fat: ingredientsFat
        );
-       _initialStateFood= newFood;
        _selectedAddIngredientOption = '';
        _ingredientNameBorderColor = Colors.black;
        _ingredientsExpansionState.add(false);

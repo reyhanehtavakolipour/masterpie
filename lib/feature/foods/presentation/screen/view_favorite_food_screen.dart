@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -198,17 +199,20 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
 
 
 
-                  const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                  const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
 
                   const SizedBox(height: 16,),
 
-                  Row(
-                    children: [
-                      Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                      const SizedBox(width: 4,),
-                      Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-                    ],
+                  Visibility(
+                    visible: newFood.foodType == FoodType.groceryProduct,
+                    child: Row(
+                      children: [
+                        Text('${SERVING_LABEL.capitalize()}:', style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                        const SizedBox(width: 4,),
+                        Text(_totalServing, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 16,),
@@ -419,8 +423,8 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
        for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
            String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-               * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])}'
-               ' ${widget.foodDetailArgumentModel.food!.units[i]} '
+               * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])} x'
+               ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
                '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
            ingredients = ingredients + ingredient;
          }
