@@ -243,7 +243,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
 
                     const SizedBox(height: 16,),
 
-                    const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                    const Text('$TOTAL_MACRO_PER_SERVING_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
                     const SizedBox(height: 16,),
 
@@ -842,71 +842,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   Widget macroAmountsMeal(){
     return Column(
       children: [
-        ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: _totalServingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-
-
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: TextEditingController(text: SERVING_LABEL),
-                enabled: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13),
-              ),
-            ),
-
-          ],
-        ),
-        const SizedBox(height: 4,),
 
         /// total calorie + protein
         Row(
