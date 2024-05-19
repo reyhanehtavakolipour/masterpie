@@ -407,7 +407,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
-                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
@@ -1064,7 +1063,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);

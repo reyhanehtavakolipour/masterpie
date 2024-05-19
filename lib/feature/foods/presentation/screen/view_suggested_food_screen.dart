@@ -242,7 +242,6 @@ class _ViewSuggestedFoodScreenState extends State<ViewSuggestedFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
-                          FocusScope.of(context).unfocus();
                           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             logFoodsOfToday(state.loggedFoods.foods);
@@ -467,7 +466,6 @@ class _ViewSuggestedFoodScreenState extends State<ViewSuggestedFoodScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
-                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);

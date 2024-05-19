@@ -309,7 +309,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetLoggedFoodsLoadedState){
-                        FocusScope.of(context).unfocus();
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           if(_logFoodButtonCLicked){
@@ -571,7 +570,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                   ],
                 );
               }else if(state is AddOrUpdateMyCookBookLoadedState){
-                FocusScope.of(context).unfocus();
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                   showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);

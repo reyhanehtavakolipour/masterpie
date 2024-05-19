@@ -1172,7 +1172,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);

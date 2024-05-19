@@ -251,7 +251,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetRecipeLoadedState){
-                        FocusScope.of(context).unfocus();
                         _getRecipeBloc.add(const GetRecipeEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           _isRecipeLoaded= true;
@@ -901,7 +900,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);

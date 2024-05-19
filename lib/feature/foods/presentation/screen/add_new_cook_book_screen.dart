@@ -401,7 +401,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyCookBookLoadedState){
-                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
@@ -1108,7 +1107,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);

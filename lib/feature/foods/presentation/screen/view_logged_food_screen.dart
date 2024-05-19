@@ -390,7 +390,6 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
                      ],
                    );
                  }else if(state is AddOrUpdateMyFavoriteLoadedState){
-                   FocusScope.of(context).unfocus();
                    Future.delayed(Duration.zero,(){
                      _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                      showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);

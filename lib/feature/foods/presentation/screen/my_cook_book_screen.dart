@@ -469,7 +469,6 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetLoggedFoodsLoadedState){
-                          FocusScope.of(context).unfocus();
                           if(_logButtonCLicked){
                             _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                             Future.delayed(Duration.zero,(){

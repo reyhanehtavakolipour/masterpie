@@ -444,7 +444,6 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
                   }else if(state is GroceriesLoadedState){
-                    FocusScope.of(context).unfocus();
                     Future.delayed(Duration.zero,(){
                       setState(() {
                         _newGroceries= [];
@@ -476,7 +475,6 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
                   }else if(state is GetLoggedFoodsLoadedState){
-                    FocusScope.of(context).unfocus();
                     if(_logButtonCLicked){
                       _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                       Future.delayed(Duration.zero,(){
@@ -532,7 +530,6 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
             BlocConsumer<AddOrUpdateMyFavoriteBloc, AddOrUpdateMyFavoriteState>(
                 builder: (mcontext, state) {
                   if(state is AddOrUpdateMyFavoriteLoadedState){
-                    FocusScope.of(context).unfocus();
                     _addToMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);

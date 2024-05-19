@@ -474,7 +474,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   ],
                 );
               }else if(state is AddOrUpdateMyFavoriteLoadedState){
-                FocusScope.of(context).unfocus();
                 Future.delayed(Duration.zero,(){
                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                   showSuccessToast(context, FAVORITE_UPDATED_SUCCESSFULLY);
@@ -944,7 +943,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                           ],
                         );
                       }else if(state is GroceriesLoadedState){
-                        FocusScope.of(context).unfocus();
                         Future.delayed(Duration.zero,(){
                           setState(() {
                             _suggestedGroceries.addAll(state.foods);

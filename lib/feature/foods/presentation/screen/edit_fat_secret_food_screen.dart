@@ -249,7 +249,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                             loaderColorThree: DARK_PRIMARY_COLOR,
                           );
                         }else if(state is GetImmediateLoggedFoodsState){
-                          FocusScope.of(context).unfocus();
                           Future.delayed(Duration.zero,(){
                             if(_logButtonClicked){
                               setState(() {
@@ -466,7 +465,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyFavoriteLoadedState){
-                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_TO_FAVORITE_MSG);

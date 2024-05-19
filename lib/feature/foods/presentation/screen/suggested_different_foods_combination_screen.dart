@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/food_type.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -68,22 +70,30 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         Food food = foods[j];
         double portion = foods[j].count;
 
-        food.calorie.forEach((element) {
-          calorie = calorie + (portion * double.parse(element));
-        });
+        if(food.foodType == FoodType.groceryProduct){
+          food.calorie.forEach((element) {
+            calorie = calorie + (portion * double.parse(element));
+          });
 
-        food.protein.forEach((element) {
-          protein = protein + (portion * double.parse(element));
-        });
+          food.protein.forEach((element) {
+            protein = protein + (portion * double.parse(element));
+          });
 
-        food.carb.forEach((element) {
-          carb = carb + (portion * double.parse(element));
-        });
+          food.carb.forEach((element) {
+            carb = carb + (portion * double.parse(element));
+          });
 
-        food.fat.forEach((element) {
-          fat = fat + (portion * double.parse(element));
-        });
-
+          food.fat.forEach((element) {
+            fat = fat + (portion * double.parse(element));
+          });
+        }else{
+          for(int i = 0; i < food.servingIngredientsCount.length; i++){
+            calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+          }
+        }
       }
 
       macros.add(calorie);

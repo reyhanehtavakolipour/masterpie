@@ -288,7 +288,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is GetLoggedFoodsLoadedState){
-                        FocusScope.of(context).unfocus();
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           logFoodsOfToday(state.loggedFoods.foods);
@@ -317,7 +316,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is LogFoodsLoadedState){
-                        FocusScope.of(context).unfocus();
                         _logFoodsBloc.add(const LogFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
                           showSuccessToast(context, LOGGED_SUCCESSFULLY);
@@ -697,7 +695,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                    ],
                  );
                }else if(state is AddOrUpdateMyCookBookLoadedState){
-                 FocusScope.of(context).unfocus();
                  Future.delayed(Duration.zero,(){
                    _addOrUpdateMyCookBookBloc.add(const AddOrUpdateMyCookBookEvent.onReset());
                    showSuccessToast(context, FOOD_ADDED_COOKBOOK_SUCCESS);
