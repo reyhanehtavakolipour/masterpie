@@ -1,24 +1,34 @@
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:intl/intl.dart';
-import 'package:masterpie/feature/user/domain/model/subscription_plan_model.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
-import 'package:masterpie/util/core/helper/print.dart';
+import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:masterpie/util/design/toast/app_toast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../../util/core/constant/hive_constants.dart';
+import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
+import '../../../../util/core/helper/helper.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
-import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
+import 'dart:io' show Platform;
+
+
+
+const List<String> _kProductIds = <String>[
+  'premium.yearly.non.renewable'
+];
+
+
 
 class PaymentScreen extends StatefulWidget {
 
@@ -31,170 +41,135 @@ class PaymentScreen extends StatefulWidget {
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
+
+
 class _PaymentScreenState extends State<PaymentScreen> {
 
-  bool _isAutoPaymentOn= false;
-
-
-  final _userHiveDataSource = serviceLocator<UserHiveDataSource>();
-
-  List<String> _intervalOptions= [];
-
-  String _selectedInterval= '';
 
   double _amount = 0;
 
 
-  bool _payBtnEnabled = true;
-
-  String _priceId= '';
-
   bool _loaderVisible= false;
+
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  List<ProductDetails> _products = <ProductDetails>[];
+
 
 
   @override
   void initState() {
+    initStoreInfo();
     super.initState();
     initPlanTypeOptions();
-    handlePayButtonState();
   }
 
+  Future<void> initStoreInfo() async {
 
-  void initPlanTypeOptions(){
-    _intervalOptions= [(MONTHLY_PLAN_LABEL.capitalize()), (ANNUAL_PLAN_LABEL.capitalize())];
-    _selectedInterval = MONTHLY_PLAN_LABEL.capitalize();
-    // _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
-    _amount= widget.newPlanInfo.subscriptionPlans[0].prices[1];
-    final subs = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
-    // _priceId= subs[0].ids[0];
-    _priceId = subs[0].ids[1];
-
-  }
-
-  void handlePayButtonState(){
-    if(widget.newPlanInfo.currentPlanName != FREE_LABEL &&  widget.newPlanInfo.currentPlanName != DIETITIAN_LABEL
-        && widget.newPlanInfo.customerId.isNotEmpty && widget.newPlanInfo.updatedAt.isNotEmpty && widget.newPlanInfo.cancelAtPeriodEnd){
-      int endsAtMillisecondsSinceEpoch = 0;
-      DateTime endsAtDate = DateTime(endsAtMillisecondsSinceEpoch);
-      endsAtMillisecondsSinceEpoch = int.parse(widget.newPlanInfo.endsAt) * 1000;
-      endsAtDate= DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
-
-      DateTime now = DateTime.now();
-      if(!endsAtDate.isBefore(now)){
-        // disable pay button
-        setState(() {
-          _payBtnEnabled = false;
+    final Stream<List<PurchaseDetails>> purchaseUpdated =
+        _inAppPurchase.purchaseStream;
+    _subscription =
+        purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
+          _listenToPurchaseUpdated(purchaseDetailsList);
+        }, onDone: () {
+          _subscription.cancel();
+        }, onError: (Object error) {
+          showErrorToast(context, ERROR_LABEL);
         });
+
+
+    final ProductDetailsResponse productDetailResponse =
+    await _inAppPurchase.queryProductDetails(_kProductIds.toSet());
+    if(productDetailResponse.error == null){
+      _products = productDetailResponse.productDetails;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isIOS) {
+      final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
+      _inAppPurchase
+          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+      iosPlatformAddition.setDelegate(null);
+    }
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> _listenToPurchaseUpdated(
+      List<PurchaseDetails> purchaseDetailsList) async {
+    for (final PurchaseDetails purchaseDetails in purchaseDetailsList) {
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        if(mounted){
+          setState(() {
+            _loaderVisible= true;
+          });
+        }
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.error) {
+          showErrorToast(context, PAYMENT_FAILED_MSG);
+          if(mounted){
+            setState(() {
+              _loaderVisible= false;
+            });
+          }
+        } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+          await deliverProduct(purchaseDetails);
+        }else{
+          if(mounted){
+            setState(() {
+              _loaderVisible= false;
+            });
+          }
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await _inAppPurchase.completePurchase(purchaseDetails);
+        }
       }
     }
   }
 
-  Future<void> _showOptionsForChangingSubscription(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(PAYMENT_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(USER_OPTIONS_FOR_SUBSCRIBED_USERS_DIALOG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-              ],
-            ),
-          ),
-          actions: <Widget>[
+  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
+    int timestamp = DateTime.now().millisecondsSinceEpoch;
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextButton(
-                  child: const Text(UPDATE_SUBSCRIPTION_RIGHT_AWAY_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    pay();
-                  },
-                ),
-                TextButton(
-                  child: const Text(CANCEL_AUTO_RENEWAL_SUBSCRIPTION_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    cancelAutoRenewal();
-                  },
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
+    DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
 
+    String newNextUpdateDate = calculateNextDate(currentDate, 1, 'month').millisecondsSinceEpoch.toString();
 
-  Future<void> _showErrorForPaymentRequest(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // User must tap a button to close the dialog
-      builder: (BuildContext context) {
-        return SizedBox(
-          width: double.infinity,
-          child: AlertDialog(
-            title: const Text(PAYMENT_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-            content: const SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(ALREADY_ON_PAYMENT_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Ok', style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+    String endsAt = calculateNextDate(currentDate, 1, 'year').millisecondsSinceEpoch.toString();
 
+    final updates = {
+      'suggest_food_left_request' : widget.newPlanInfo.subscriptionPlans[1].suggestFoodRequestsLimit,
+      'food_portion_left_request' : widget.newPlanInfo.subscriptionPlans[1].foodPortionRequestsLimit,
+      'favorite_food_left' :  10000,
+      'cook_book_left' : 10000,
+      'next_update_date' : newNextUpdateDate,
+      'current_period_end': endsAt,
+      'plan_name' : PREMIUM_LABEL
+    };
 
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    String userId= await userHiveDataSource.getString(KEY_USER_ID);
 
-  void cancelAutoRenewal() async{
+    final supabase = Supabase.instance.client;
+
+    final data = await supabase
+        .from(USER_PLAN_TABLE)
+        .update(updates)
+        .eq('id', userId);
+
 
     setState(() {
-      _loaderVisible = true;
+      showSuccessToast(context, PAYMENT_SUCCEED_MSG);
+      _loaderVisible= false;
+      Navigator.pop(context);
     });
-    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-    String supabaseId = await userHiveDataSource.getString(KEY_USER_ID);
-    final response = await Supabase.instance.client.functions
-        .invoke('cancel_subscription', body: {
-      'sub_id': widget.newPlanInfo.subscriptionId,
-      'supabase_id': supabaseId
-    });
-
-    if(response.status == 200){
-      if(mounted){
-        setState(() {
-          _loaderVisible = false;
-        });
-        showSuccessToast(context, CANCEL_SUBSCRIPTION_SUCCESS_MSG);
-        Navigator.pop(context);
-      }
-    }else{
-      if(mounted){
-        setState(() {
-          _loaderVisible = false;
-        });
-        showErrorToast(context, CANCEL_SUBSCRIPTION_FAILED_MSG);
-      }
-    }
-
   }
 
+  void initPlanTypeOptions(){
+    _amount= widget.newPlanInfo.subscriptionPlans[1].prices[1];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +241,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       const SizedBox(height: 16,),
 
 
-                      //price-auto payment checkbox - interval
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                         decoration: BoxDecoration(
@@ -282,7 +256,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
                             Text(
-                              '${_amount*12} \$',
+                              '${(_amount*12).toInt()}\$',
                               style: const TextStyle(
                                 fontSize: 56,
                                 color: Colors.green,
@@ -298,53 +272,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 fontWeight: FontWeight.bold
                               ),
                             ),
-
-
-
-                            // CustomRadioListTile(
-                            //   options: _intervalOptions,
-                            //   onSelectedOptionChanged: updateSelectedPlanType,
-                            //   selectedOption: _selectedInterval,
-                            //   orientation: HORIZONTAL_ORIENTATION,
-                            //   isEditable: true,
-                            // ),
-                            //
-                            //
-                            // const SizedBox(height: 24,),
-
-                            // Row(
-                            //   children: [
-                            //     Expanded(
-                            //       child: Row(
-                            //         children: [
-                            //           Checkbox(
-                            //             value: _isAutoPaymentOn,
-                            //             activeColor: DARK_PRIMARY_COLOR,
-                            //             checkColor: Colors.white,
-                            //             onChanged: (value) {
-                            //               setState(() {
-                            //                 _isAutoPaymentOn = value ?? false;
-                            //                 updateSelectedPlanType(_selectedInterval);
-                            //               });
-                            //             },
-                            //           ),
-                            //           const Text(AUTO_RENEWAL_LABEL, style: TextStyle(fontSize: 13),),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //
-                            //     Expanded(
-                            //       child: Text(
-                            //         '$_amount \$',
-                            //         style: const TextStyle(
-                            //           fontSize: 56,
-                            //           color: Colors.green,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-
                           ],
                         ),
                       ),
@@ -545,7 +472,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           const SizedBox(width: 8,),
 
                           Text(
-                            '${widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit.toString()}/mo (${widget.newPlanInfo.subscriptionPlans[0].foodPortionRequestsLimit*12} yearly)',
+                            '${widget.newPlanInfo.subscriptionPlans[1].foodPortionRequestsLimit.toString()}/mo (${widget.newPlanInfo.subscriptionPlans[1].foodPortionRequestsLimit*12} yearly)',
                             style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                           ),
 
@@ -580,64 +507,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 
-  void updateSelectedPlanType(String interval){
-    setState(() {
-      _selectedInterval= interval;
-      if(interval.toLowerCase().contains(MONTHLY_PLAN_LABEL.toLowerCase())){
-        List<SubscriptionPlan> list= [];
-        if(_isAutoPaymentOn){
-          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-          if(basics.isEmpty){
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == PREMIUM_LABEL).toList();
-          }else{
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == BASIC_LABEL).toList();
-          }
-          _priceId = list[0].ids[0];
-        }else{
-          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-          if(basics.isEmpty){
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
-          }else{
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
-          }
-          _priceId = list[0].ids[0];
-        }
-        _amount= widget.newPlanInfo.subscriptionPlans[0].prices[0];
-      }else if(interval.toLowerCase().contains(ANNUAL_PLAN_LABEL.toLowerCase())){
-        List<SubscriptionPlan> list= [];
-        if(_isAutoPaymentOn){
-          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-          if(basics.isEmpty){
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == PREMIUM_LABEL).toList();
-          }else{
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan == BASIC_LABEL).toList();
-          }
-          _priceId = list[0].ids[1];
-        }else{
-          final basics = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-          if(basics.isEmpty){
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
-          }else{
-            list = widget.newPlanInfo.subscriptionPlans.where((element) => element.plan.contains('one-time')).toList();
-          }
-          _priceId = list[0].ids[1];
-        }
-        _amount= widget.newPlanInfo.subscriptionPlans[0].prices[1] * 12;
-      }
-    });
-  }
-
-
   Widget buildPayButton(BuildContext context){
     return ElevatedButton(
       onPressed:(){
-        payButtonClickListener(context);
+        pay(context);
       },
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          backgroundColor: _payBtnEnabled ? MASTERPIE_YELLOW_COLOR : LIGHT_GREY_COLOR
+          backgroundColor: MASTERPIE_YELLOW_COLOR
       ),
       child: const Padding(
           padding: EdgeInsets.all(12),
@@ -646,64 +525,30 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  Future<void> pay(BuildContext context) async {
+    if(_products.isEmpty){
+      showErrorToast(context, ERROR_TRY_AGAIN);
+      return;
+    }
 
-  void payButtonClickListener(BuildContext context){
-    if(widget.newPlanInfo.subscriptionId.isNotEmpty && widget.newPlanInfo.endsAt.isNotEmpty && !widget.newPlanInfo.cancelAtPeriodEnd){
-      _showOptionsForChangingSubscription(context);
-    }else if(!_payBtnEnabled){
-      _showErrorForPaymentRequest(context);
-    }else{
-      pay();
+    late PurchaseParam purchaseParam;
+
+
+    if (Platform.isAndroid) {
+      purchaseParam = GooglePlayPurchaseParam(
+          productDetails: _products[0],
+          changeSubscriptionParam: null);
+    } else {
+      purchaseParam = PurchaseParam(
+        productDetails: _products[0],
+      );
+    }
+
+    if(await _inAppPurchase.isAvailable()){
+      _inAppPurchase.buyNonConsumable(
+          purchaseParam: purchaseParam);
     }
   }
-
-
-  void pay() async{
-    setState(() {
-      _loaderVisible = true;
-    });
-    String email = await _userHiveDataSource.getString(KEY_EMAIL);
-    String customerId = widget.newPlanInfo.customerId;
-
-    FunctionResponse response;
-    if(customerId.isNotEmpty){
-      response = await Supabase.instance.client.functions
-          .invoke('create_checkout_session', body: {
-        'customer_id': customerId,
-        'customer_email': '',
-        'price_id': _priceId,
-        'mode': _isAutoPaymentOn ? 'subscription' : 'payment'
-      });
-    }else{
-      response = await Supabase.instance.client.functions
-          .invoke('create_checkout_session', body: {
-        'customer_id': '',
-        'customer_email': email,
-        'price_id': _priceId,
-        'mode': _isAutoPaymentOn ? 'subscription' : 'payment'
-      });
-    }
-
-    if(response.status == 200){
-      final Uri url = Uri.parse('${response.data['url']}');
-      await launchUrl(url);
-
-      if(mounted){
-        setState(() {
-          _loaderVisible = false;
-        });
-        Navigator.pop(context);
-      }
-    }else{
-      if(mounted){
-        setState(() {
-          _loaderVisible = false;
-        });
-        showErrorToast(context, ERROR_TRY_AGAIN);
-      }
-    }
-  }
-
 
 }
 

@@ -13,6 +13,7 @@ class UserPlanRemote with _$UserPlanRemote{
     @Default('') String subscriptionId,
     @Default('') String interval,
     @Default('') String endsAt,
+    @Default('') String nextUpdateDate,
     @Default('') String updatedAt,
     @Default(true) bool cancelAtPeriodEnd,
     @Default(false) bool macroEdition,

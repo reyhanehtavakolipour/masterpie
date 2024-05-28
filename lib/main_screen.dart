@@ -11,7 +11,6 @@ import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/landing_screen.dart';
-import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/util/core/constant/api_constant.dart';
 import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
@@ -659,13 +658,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 visible: UserRegistrationStatus.userAccountId.isEmpty,
                 child: ListTile(
                   leading: const Icon(Icons.app_registration),
-                  title: const Text(REGISTER_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  title: const Text(SIGNIN_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
                   onTap: () {
                     _scaffoldKey.currentState?.openEndDrawer();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RegisterScreen(),
+                        builder: (context) => const SignInScreen(),
                       ),
                     );
                   },

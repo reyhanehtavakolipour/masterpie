@@ -13,6 +13,7 @@ class UserPlan with _$UserPlan{
     @Default('') String subscriptionId,
     @Default('') String interval,
     @Default('') String endsAt,
+    @Default('') String nextUpdateDate,
     @Default('') String updatedAt,
     @Default('') String cancelReason,
     @Default(true) bool cancelAtPeriodEnd,

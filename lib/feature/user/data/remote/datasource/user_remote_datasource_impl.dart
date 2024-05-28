@@ -5,9 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:masterpie/feature/user/data/remote/model/subscription_plan_remote_model.dart';
 import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
+import '../../../../../util/core/helper/helper.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
 import '../../../../../util/core/response/success.dart';
@@ -348,6 +350,10 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         
         final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
 
+        DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+        String newNextUpdateDate = calculateNextDate(currentDate, 1, 'month').millisecondsSinceEpoch.toString();
+
         final updates = {
           'plan_name': freeSubscription.plan,
           'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
@@ -355,8 +361,9 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           'favorite_food_left': freeSubscription.favoriteFoodLimit,
           'cook_book_left': freeSubscription.cookBookFoodLimit,
           'plan_updated_at': timestamp.toString(),
+          'next_update_date' : newNextUpdateDate,
           'plan_interval': freeSubscription.intervals[0],
-          'macro_edition': true,
+          'current_period_end': ''
         };
 
 
@@ -457,87 +464,107 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
 
       if(userPlan.isNotEmpty){
 
-        if(userPlan[0]['current_period_end'] == null){
-          return const Right(Success());
-        }
-
         int currentTime = DateTime.now().millisecondsSinceEpoch;
 
         DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(currentTime);
-        DateTime currentPeriodEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['current_period_end']) * 1000);
-        DateTime yearlyNextRequestUpdate = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['yearly_next_requests_update_date'] ?? '0') * 1000);
+
+        DateTime currentPeriodEnd = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['current_period_end']));
+
+
+        DateTime nextUpdateDate = DateTime.fromMillisecondsSinceEpoch(int.parse(userPlan[0]['next_update_date'] ?? '0'));
 
         final subscriptions = await getSubscriptionPlans();
 
-
-        if (currentDate.isAfter(currentPeriodEnd) && (userPlan[0]['cancel_at_period_end'] ?? true) && userPlan[0]['plan_name'] != FREE_LABEL) {
+        // if one month is past from previous update
+        if(currentDate.isAfter(nextUpdateDate) && subscriptions.isRight()){
 
           int favoriteLeft = 0;
           int cookBookLeft = 0;
           int suggestFoodLeft = 0;
           int foodPortionLeft = 0;
 
-          if(subscriptions.isRight()){
+          String newNextUpdateDate = calculateNextDate(nextUpdateDate, 1, 'month').millisecondsSinceEpoch.toString();
 
-            final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
-            suggestFoodLeft = freeSubscription.suggestFoodRequestsLimit;
-            foodPortionLeft = freeSubscription.foodPortionRequestsLimit;
 
-            if(userPlan[0]['favorites_created_count'] >= freeSubscription.favoriteFoodLimit){
-              favoriteLeft = 0;
-            }else{
-              favoriteLeft = freeSubscription.favoriteFoodLimit - ((userPlan[0]['favorites_created_count'] ?? 0) as int);
+          if(userPlan[0]['plan_name'] == FREE_LABEL){
+
+            // free plan
+              final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
+
+              suggestFoodLeft = freeSubscription.suggestFoodRequestsLimit;
+              foodPortionLeft = freeSubscription.foodPortionRequestsLimit;
+
+              final updates = {
+                'plan_name': FREE_LABEL,
+                'suggest_food_left_request' : suggestFoodLeft,
+                'food_portion_left_request' : foodPortionLeft,
+                'next_update_date' : newNextUpdateDate,
+              };
+
+              final data = await supabase
+                  .from(USER_PLAN_TABLE)
+                  .update(updates)
+                  .eq('id', userId);
+
+            }else if(!currentDate.isAfter(currentPeriodEnd)){
+
+            // premium plan which has not expired yet
+              final yearlySubscription = subscriptions.asRight().firstWhere((element) => element.plan == userPlan[0]['plan_name']);
+
+              suggestFoodLeft = yearlySubscription.suggestFoodRequestsLimit;
+              foodPortionLeft = yearlySubscription.foodPortionRequestsLimit;
+
+
+              final updates = {
+                'suggest_food_left_request' : suggestFoodLeft,
+                'food_portion_left_request' : foodPortionLeft,
+                'favorite_food_left' :  10000,
+                'cook_book_left' : 10000,
+                'next_update_date' : newNextUpdateDate,
+              };
+
+              final data = await supabase
+                  .from(USER_PLAN_TABLE)
+                  .update(updates)
+                  .eq('id', userId);
+
+            }else if(currentDate.isAfter(currentPeriodEnd)){
+              // premium plan which has expired and should switch to free plan
+
+              final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
+              suggestFoodLeft = freeSubscription.suggestFoodRequestsLimit;
+              foodPortionLeft = freeSubscription.foodPortionRequestsLimit;
+
+              if(userPlan[0]['favorites_created_count'] >= freeSubscription.favoriteFoodLimit){
+                favoriteLeft = 0;
+              }else{
+                favoriteLeft = freeSubscription.favoriteFoodLimit - ((userPlan[0]['favorites_created_count'] ?? 0) as int);
+              }
+
+              if(userPlan[0]['cook_book_created_count'] >= freeSubscription.cookBookFoodLimit){
+                cookBookLeft = 0;
+              }else{
+                cookBookLeft = freeSubscription.cookBookFoodLimit - ((userPlan[0]['cook_book_created_count'] ?? 0) as int);
+              }
+
+
+              final updates = {
+                'plan_name': FREE_LABEL,
+                'suggest_food_left_request' : suggestFoodLeft,
+                'food_portion_left_request' : foodPortionLeft,
+                'favorite_food_left' :  favoriteLeft,
+                'next_update_date' : newNextUpdateDate,
+                'cook_book_left': cookBookLeft,
+                'current_period_end': ''
+              };
+
+              final data = await supabase
+                  .from(USER_PLAN_TABLE)
+                  .update(updates)
+                  .eq('id', userId);
+
             }
 
-            if(userPlan[0]['cook_book_created_count'] >= freeSubscription.cookBookFoodLimit){
-              cookBookLeft = 0;
-            }else{
-              cookBookLeft = freeSubscription.cookBookFoodLimit - ((userPlan[0]['cook_book_created_count'] ?? 0) as int);
-            }
-          }
-
-          final updates = {
-            'plan_name': FREE_LABEL,
-            'suggest_food_left_request' : suggestFoodLeft,
-            'food_portion_left_request' : foodPortionLeft,
-            'favorite_food_left' :  favoriteLeft,
-            'cook_book_left': cookBookLeft,
-            'macro_edition' : false
-          };
-
-          final data = await supabase
-              .from(USER_PLAN_TABLE)
-              .update(updates)
-              .eq('id', userId);
-
-        }else if(currentDate.isAfter(yearlyNextRequestUpdate) && userPlan[0]['plan_interval'] == 'yearly'){
-
-          int suggestFoodLeft = 0;
-          int foodPortionLeft = 0;
-
-          if(subscriptions.isRight()){
-
-            final yearlySubscription = subscriptions.asRight().firstWhere((element) => element.plan == userPlan[0]['plan_name']);
-            suggestFoodLeft = yearlySubscription.suggestFoodRequestsLimit;
-            foodPortionLeft = yearlySubscription.foodPortionRequestsLimit;
-
-            String nextRequestUpdateDate = calculateNextDate(yearlyNextRequestUpdate, 1, 'month').millisecondsSinceEpoch.toString();
-
-            final updates = {
-              'suggest_food_left_request' : suggestFoodLeft,
-              'food_portion_left_request' : foodPortionLeft,
-              'favorite_food_left' :  10000,
-              'cook_book_left' : 10000,
-              'yearly_next_requests_update_date' : nextRequestUpdateDate,
-              'macro_edition' : true
-            };
-
-            final data = await supabase
-                .from(USER_PLAN_TABLE)
-                .update(updates)
-                .eq('id', userId);
-
-          }
         }
       }
 
@@ -548,63 +575,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   }
 
 
-  DateTime calculateNextDate(DateTime inputDate, int interval, String intervalType) {
-    if (interval <= 0) {
-      return DateTime.now();
-    }
-    DateTime resultDate;
-
-    switch (intervalType) {
-      case 'month':
-        resultDate = DateTime.utc(
-          inputDate.year,
-          inputDate.month + interval,
-          inputDate.day,
-          inputDate.hour,
-          inputDate.minute,
-          inputDate.second,
-          inputDate.millisecond,
-          inputDate.microsecond,
-        );
-        break;
-      case 'year':
-        resultDate = DateTime.utc(
-          inputDate.year + interval,
-          inputDate.month,
-          inputDate.day,
-          inputDate.hour,
-          inputDate.minute,
-          inputDate.second,
-          inputDate.millisecond,
-          inputDate.microsecond,
-        );
-        break;
-      default:
-        return DateTime.now();
-    }
-
-    while (resultDate.month != (inputDate.month + interval) % 12) {
-      resultDate = resultDate.subtract(const Duration(days: 1));
-    }
-
-    if (inputDate.month == 2 && inputDate.day == 29 && !isLeapYear(resultDate.year)) {
-      resultDate = DateTime.utc(resultDate.year, 2, 28);
-    }
-
-    return resultDate;
-  }
-
-  bool isLeapYear(int year) {
-    if (year % 4 != 0) {
-      return false;
-    } else if (year % 100 != 0) {
-      return true;
-    } else if (year % 400 != 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
 
   @override
@@ -622,7 +592,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           prices: [double.parse((element['price'] ?? '0').toString())],
           intervals: [element['interval'] ?? ''],
           ids: [element['plan_id'] ?? ''],
-          macroEdition: element['macro_edition'] ?? false,
           favoriteFoodLimit: element['favorite_food_limit'] ?? 0,
           cookBookFoodLimit: element['cook_book_limit'] ?? 0,
           suggestFoodRequestsLimit: element['suggest_food_limit'] ?? 0,
@@ -630,7 +599,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         );
         subscriptionPlans.add(plan);
       });
-
 
 
       return Right(subscriptionPlans);
@@ -659,16 +627,10 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           ids: [userId],
           plan: data[0]['plan_name'] ?? FREE_LABEL,
           intervals: [data[0]['plan_interval'] ?? ''],
-          macroEdition: data[0]['macro_edition'] ?? false
         ),
-        customerId: data[0]['customer_id'] ?? '',
         interval: data[0]['plan_interval'] ?? '',
-        cancelReason: data[0]['cancel_reason'] ?? '',
-        cancelAtPeriodEnd: data[0]['cancel_at_period_end'] ?? true,
+        nextUpdateDate: data[0]['next_update_date'] ?? '',
         endsAt: data[0]['current_period_end'] ?? '',
-        updatedAt: data[0]['plan_updated_at'] ?? '',
-        macroEdition: data[0]['macro_edition'] ?? false,
-        subscriptionId: data[0]['subscription_id'] ?? '',
         suggestFoodRequestsLeft: data[0]['suggest_food_left_request'] ?? 0,
         foodPortionRequestsLeft: data[0]['food_portion_left_request'] ?? 0,
         favoriteFoodLeft: data[0]['favorite_food_left'] ?? 0,
@@ -680,6 +642,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       return Right(userSubscriptionPlanRemote);
 
     } on PostgrestException catch (error) {
+
       return Left(ExceptionFailure(error));
     } catch (error) {
       return Left(ExceptionFailure(error));

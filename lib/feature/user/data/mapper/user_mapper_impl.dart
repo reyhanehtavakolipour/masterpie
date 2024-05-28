@@ -136,6 +136,7 @@ class UserMapperImpl extends UserMapper{
         interval: userPlanRemote.interval,
         cancelReason: userPlanRemote.cancelReason,
         endsAt: userPlanRemote.endsAt,
+        nextUpdateDate: userPlanRemote.nextUpdateDate,
         macroEdition: userPlanRemote.macroEdition,
         cancelAtPeriodEnd: userPlanRemote.cancelAtPeriodEnd,
         updatedAt: userPlanRemote.updatedAt,

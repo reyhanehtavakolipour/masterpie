@@ -88,8 +88,14 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.stripe:stripe-android:17.1.1'
     implementation 'com.google.android.material:material:1.11.0'
+
+    def billing_version = "7.0.0"
+
+    implementation "com.android.billingclient:billing:$billing_version"
+
+    implementation "com.android.billingclient:billing-ktx:$billing_version"
+
 }
 
 

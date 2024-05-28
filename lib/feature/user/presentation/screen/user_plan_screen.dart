@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -11,17 +12,14 @@ import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_
 import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
-import 'package:masterpie/util/core/constant/hive_constants.dart';
+import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../../util/core/constant/api_constant.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
-import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
 import '../bloc/user_plan_bloc/state_event/plan_state_event.dart';
 
 
@@ -36,7 +34,6 @@ class UserPlanScreen extends StatefulWidget {
 
 class _UserPlanScreenState extends State<UserPlanScreen> {
 
-
   late UserPlanBloc _userPlanBloc;
   late GetSubscriptionPlansBloc _getSubscriptionPlansBloc;
 
@@ -50,6 +47,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   bool _loaderVisible= false;
 
+
   @override
   void initState() {
     super.initState();
@@ -60,8 +58,11 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     getSubscriptionPlans();
   }
 
+  void getPlan() async{
+    if(UserRegistrationStatus.userAccountId.isEmpty){
+      return;
+    }
 
-  void getPlan(){
     _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
   }
 
@@ -71,19 +72,139 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   }
 
 
-  void updatePlan(){
-
-  }
-
-
   String getUserPlanName(){
-    if(_userPlan.subscriptionPlan!.plan == 'basic one-time' || _userPlan.subscriptionPlan!.plan == 'basic'){
-      return BASIC_LABEL;
-    }else if(_userPlan.subscriptionPlan!.plan == 'premium one-time' || _userPlan.subscriptionPlan!.plan == 'premium'){
+    if(_userPlan.subscriptionPlan!.plan == 'premium one-time'){
       return PREMIUM_LABEL;
     }
     return _userPlan.subscriptionPlan!.plan;
   }
+
+
+  void navigateLoginScreen(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignInScreen(),
+      ),
+    );
+  }
+
+
+  Widget userPlanIfUserHasLoggedIn(){
+
+    String renewAtString= '';
+
+    if(UserRegistrationStatus.userAccountId.isNotEmpty && _userPlan.nextUpdateDate.isNotEmpty){
+      // macro diet wizard renew at
+      int endsAtMillisecondsSinceEpoch = 0;
+      DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
+      endsAtMillisecondsSinceEpoch = int.parse(_userPlan.nextUpdateDate);
+      renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+      renewAtString= DateFormat('MMMM d, y').format(renewAt);
+    }
+
+    return Visibility(
+      visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        color: DARK_PRIMARY_COLOR,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            const SizedBox(height: 16,),
+
+            ///plan
+            Text(
+              getUserPlanName().capitalize(),
+              style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
+            ),
+
+            const SizedBox(height: 4,),
+
+            paymentDetail(),
+
+            const SizedBox(height: 24,),
+
+            /// favorites left
+            Text(
+              '$NEW_FAVORITES_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.favoriteFoodLeft}',
+              style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+            ),
+
+            const SizedBox(height: 6,),
+
+            /// cookbook left
+            Text(
+              '$NEW_COOKBOOK_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.cookBookFoodLeft}',
+              style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+            ),
+
+            const SizedBox(height: 6,),
+
+            /// food portion left
+            Text(
+              '$FOOD_PORTION_LEFT: ${_userPlan.foodPortionRequestsLeft}',
+              style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+            ),
+
+            const SizedBox(height: 16,),
+
+            Text(
+              '$MACRO_DIET_RENEWS_AT\n$renewAtString',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.lightGreen),
+            ),
+
+            const SizedBox(height: 20,),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget userPlanIfUserHasNotLoggedIn(){
+    return Visibility(
+        visible: UserRegistrationStatus.userAccountId.isEmpty,
+        child: Container(
+            padding: const EdgeInsets.all(16),
+            color: LIGHT_GREY_COLOR,
+            child: Column(
+              children: [
+                const Text(
+                  NOT_LOGGED_IN_MESSAGE,
+                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600,),
+                ),
+
+                const SizedBox(height: 16,),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed:(){
+                      navigateLoginScreen();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        backgroundColor: DARK_PRIMARY_COLOR
+                    ),
+                    child: const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Text(SIGNIN_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                    ),
+                  ),
+                )
+
+              ],
+            )
+        )
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,63 +236,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
 
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                      color: DARK_PRIMARY_COLOR,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
 
-                          const SizedBox(height: 16,),
+                    userPlanIfUserHasNotLoggedIn(),
 
-                          ///plan
-                          Text(
-                            getUserPlanName().capitalize(),
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
-                          ),
-
-                          const SizedBox(height: 4,),
-
-                          subscriptionDetail(),
-
-                          paymentDetail(),
-
-                          cancelReason(),
-
-
-
-                          const SizedBox(height: 24,),
-
-                          /// favorites left
-                          Text(
-                            '$NEW_FAVORITES_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.favoriteFoodLeft}',
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
-                          ),
-
-                          const SizedBox(height: 6,),
-
-                          /// cookbook left
-                          Text(
-                            '$NEW_COOKBOOK_LEFT: ${_userPlan.subscriptionPlan!.plan != FREE_LABEL ? UNLIMITED_LABEL : _userPlan.cookBookFoodLeft}',
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
-                          ),
-
-                          const SizedBox(height: 6,),
-
-                          /// food portion left
-                          Text(
-                            '$FOOD_PORTION_LEFT: ${_userPlan.foodPortionRequestsLeft}',
-                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
-                          ),
-
-
-                          const SizedBox(height: 20,),
-
-                          cancelSubscriptionButton(),
-
-                        ],
-                      ),
-                    ),
+                    userPlanIfUserHasLoggedIn(),
 
 
                     const SizedBox(height: 8,),
@@ -196,12 +264,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
                           ///free plan
                           freePlan(),
-
-
-                          const SizedBox(height: 8,),
-
-                          /// basic plan
-                          // basicPlan(),
 
 
                           const SizedBox(height: 8,),
@@ -304,241 +366,58 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     );
   }
 
-
-  Future<void> _showCancelSubscriptionConfirmation(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // User must tap a button to close the dialog
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(CANCEL_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(CANCEL_RENEWAL_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                cancelAutoRenewal();
-              },
-            ),
-            TextButton(
-              child: const Text(NO_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showFreePlanConfirmation(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // User must tap a button to close the dialog
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(FREE_LABEL.capitalize(), style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(SWITCH_FREE_PLAN_MSG, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(YES_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                switchToFreePlan();
-              },
-            ),
-            TextButton(
-              child: const Text(NO_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  
-  
-  void switchToFreePlan() async{
-    String message = '';
-    if(_userPlan.subscriptionId.isEmpty){
-      message = SWITCH_FREE_SUCCESS_ONE_TIME_MSG;
-    }else{
-      cancelAutoRenewal();
-      message = SWITCH_FREE_SUCCESS_SUBSCRIPTION_MSG;
-    }
-
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true, // User must tap a button to close the dialog
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(SUCCESS_LABEL.capitalize(), style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold)),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(message, style: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
-  void cancelAutoRenewal() async{
-    setState(() {
-      _loaderVisible = true;
-    });
-    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-    String supabaseId = await userHiveDataSource.getString(KEY_USER_ID);
-    final response = await Supabase.instance.client.functions
-        .invoke('cancel_subscription', body: {
-      'sub_id': _userPlan.subscriptionId,
-      'supabase_id': supabaseId
-    });
-
-    if(response.status == 200){
-      if(mounted){
-
-        setState(() {
-          _loaderVisible = false;
-        });
-
-        showSuccessToast(context, CANCEL_SUBSCRIPTION_SUCCESS_MSG);
-        setState(() {
-          _userPlan = _userPlan.copyWith(
-              subscriptionId: ''
-          );
-        });
-        _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
-      }
-    }else{
-      print('show_cancel: ${response.data} ,, ${_userPlan.subscriptionId}');
-      if(mounted){
-        setState(() {
-          _loaderVisible = false;
-        });
-
-        showErrorToast(context, CANCEL_SUBSCRIPTION_FAILED_MSG);
-      }
-    }
-
-  }
-
-
-  Widget subscriptionDetail(){
-    return Visibility(
-      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd && _userPlan.subscriptionPlan!.plan != FREE_LABEL,
-        child: Text(
-          '${_userPlan.interval.capitalize()}, $AUTO_RENEWAL_LABEL',
-          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 24, color: Colors.white),
-        )
-    );
-  }
-
-
   Widget paymentDetail(){
-
-    // renew case
-    int endsAtMillisecondsSinceEpoch = 0;
-    DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
-    if(_userPlan.endsAt.isNotEmpty && !_userPlan.cancelAtPeriodEnd){
-      endsAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
-      renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
-    }
-    String renewAtString= DateFormat('MMMM d, y').format(renewAt);
-
-
-
     // ends case
     int renewAtMillisecondsSinceEpoch = 0;
     DateTime endsAt = DateTime(renewAtMillisecondsSinceEpoch);
-    if(_userPlan.cancelAtPeriodEnd && _userPlan.endsAt.isNotEmpty){
-      renewAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
+    if(_userPlan.endsAt.isNotEmpty){
+      renewAtMillisecondsSinceEpoch = int.parse(_userPlan.endsAt);
       endsAt = DateTime.fromMillisecondsSinceEpoch(renewAtMillisecondsSinceEpoch);
     }
     String endsAtString= DateFormat('MMMM d, y').format(endsAt);
-    DateTime now = DateTime.now();
-
-    if(_userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd && _userPlan.subscriptionPlan!.plan != FREE_LABEL){
-      return Text(
-        '$NEXT_PAYMENT_LABEL $renewAtString',
-        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.redAccent),
-      );
-    }
-
 
     return Visibility(
-        visible: (_userPlan.subscriptionPlan!.plan.contains('basic') || _userPlan.subscriptionPlan!.plan.contains('premium')) &&
-            _userPlan.subscriptionId.isEmpty && _userPlan.cancelAtPeriodEnd && !endsAt.isBefore(now),
+        visible: _userPlan.subscriptionPlan!.plan.contains('premium'),
         child: Text(
-          '$ENDS_AT_LABEL: $endsAtString',
+          '$ENDS_AT_LABEL $endsAtString',
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.redAccent),
         )
     );
   }
 
 
-  Widget cancelReason(){
-    int millisecondsSinceEpoch = 0;
-    DateTime endsAtDate = DateTime(millisecondsSinceEpoch);
-    if(_userPlan.endsAt.isNotEmpty){
-      millisecondsSinceEpoch = int.parse(_userPlan.endsAt) * 1000;
-      endsAtDate= DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-    }
-    DateTime now = DateTime.now();
-
-
-    String reason = _userPlan.cancelReason;
-    if(_userPlan.cancelReason == 'subscription canceled'){
-      reason = CANCELED_AUTO_RENEWAL_INFO;
-    }
-
-    return Visibility(
-        visible: _userPlan.cancelReason.isNotEmpty  && _userPlan.subscriptionId.isEmpty && _userPlan.cancelAtPeriodEnd && !endsAtDate.isBefore(now),
-        child: Text(
-          reason,
-          style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.grey),
-        )
-    );
-  }
-
-  Widget cancelSubscriptionButton(){
-    return  Visibility(
-      visible: _userPlan.subscriptionId.isNotEmpty && !_userPlan.cancelAtPeriodEnd,
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              backgroundColor: MASTERPIE_YELLOW_COLOR
+  void showRegisterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(SIGNIN_LABEL, style: TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(LOGIN_MSG_PLAN, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+            ],
           ),
-          onPressed: () {
-            _showCancelSubscriptionConfirmation(context);
-          },
-          child: const Text(CANCEL_RENEWAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
-        ),
-      ),
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+              ),
+              child: const Text(SIGNIN_LABEL, style: TextStyle(fontSize: 14, color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignInScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -562,23 +441,28 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 backgroundColor: DARK_PRIMARY_COLOR
             ),
             onPressed: () {
-              if(_newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL)){
-                if(_userPlan.subscriptionPlan!.plan.contains(FREE_LABEL)){
-                  showSuccessToast(context, ALREADY_FREE_PLAN);
-                }else{
-                  _showFreePlanConfirmation(context);
-                }
+              if(_newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL) && _userPlan.subscriptionPlan!.plan.contains(FREE_LABEL)){
+                showSuccessToast(context, ALREADY_FREE_PLAN);
+              }else if(_newPlanInfo.subscriptionPlans[0].plan.contains(PREMIUM_LABEL) && _userPlan.subscriptionPlan!.plan.contains(PREMIUM_LABEL)){
+                showSuccessToast(context, ALREADY_PREMIUM_PLAN);
+              }else if(_newPlanInfo.subscriptionPlans[0].plan.contains(FREE_LABEL) && _userPlan.subscriptionPlan!.plan.contains(PREMIUM_LABEL)){
+                showSuccessToast(context, SWITCH_TO_FREE_AUTOMATIC_MSG);
               }else{
-                _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId,
-                    subscriptionId: _userPlan.subscriptionId, endsAt: _userPlan.endsAt,
-                    interval: _userPlan.interval, updatedAt: _userPlan.updatedAt,
-                    currentPlanName: _userPlan.subscriptionPlan!.plan, cancelAtPeriodEnd: _userPlan.cancelAtPeriodEnd);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaymentScreen(newPlanInfo: _newPlanInfo,),
-                  ),
-                );
+
+                if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                  _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId,
+                      subscriptionId: _userPlan.subscriptionId, endsAt: _userPlan.endsAt,
+                      interval: _userPlan.interval, updatedAt: _userPlan.updatedAt,
+                      currentPlanName: _userPlan.subscriptionPlan!.plan, cancelAtPeriodEnd: _userPlan.cancelAtPeriodEnd);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentScreen(newPlanInfo: _newPlanInfo,),
+                    ),
+                  );
+                }else{
+                  showRegisterDialog(context);
+                }
               }
             },
             child: const Text(CONTINUE_LABEL, style: TextStyle( color: Colors.white),),
@@ -587,28 +471,6 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       ),
     );
   }
-
-
-  Widget buildUpdateButton(){
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton(
-        onPressed: (){
-        },
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            backgroundColor: MASTERPIE_YELLOW_COLOR
-        ),
-        child: const Padding(
-            padding: EdgeInsets.all(12),
-            child: Text(SAVE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-        ),
-      ),
-    );
-  }
-
 
   Widget freePlan(){
     if(_subscriptions.isEmpty){
@@ -803,273 +665,13 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     );
   }
 
-
-
-
-  Widget basicPlan(){
-    if(_subscriptions.isEmpty){
-      return Container();
-    }
-    final subs = _subscriptions.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-    return GestureDetector(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(BORDER_RADIUS,),
-          color: _newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL) ? SELECTED_PLAN_COLOR : Colors.white,
-          border: Border.all(
-            color: Colors.grey,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            Text(BASIC_LABEL.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: DARK_PRIMARY_COLOR)),
-
-
-            const SizedBox(height: 16,),
-
-
-            //price
-            Center(
-              child: Column(
-                children: [
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      const SizedBox(width: 1,),
-                      const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
-                    ],
-                  ),
-                  const SizedBox(height: 4,),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                      const SizedBox(width: 1,),
-                      const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-
-
-            const SizedBox(height: 32,),
-
-
-
-            //macro tracking
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: MACRO_TRACKING_ACCESS,
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-                const SizedBox(width: 8,),
-
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-              ],
-            ),
-
-
-            //usda nutrition access
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: USDA_NUTRITION_ACCESS,
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-                const SizedBox(width: 8,),
-
-                const Icon(Icons.check, color: DARK_PRIMARY_COLOR, size: 18,)
-
-              ],
-            ),
-
-
-
-            //favorite food access
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$FAVORITE_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                const Text(
-                  UNLIMITED_LABEL,
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
-            ),
-
-            //cookbook food access
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$COOKBOOK_FOOD_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                const Text(
-                  UNLIMITED_LABEL,
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
-            ),
-
-            //food portion
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 14.0),
-                          child: Icon(
-                            Icons.circle,
-                            size: 8,
-                            color: DARK_PRIMARY_COLOR, // Set the color of the dot icon
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: '$FOOD_PORTION_ACCESS:',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Text(
-                  '${subs[0].foodPortionRequestsLimit}',
-                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
-                ),
-
-              ],
-            ),
-
-          ],
-        ),
-      ),
-      onTap: (){
-        setState(() {
-          if(_newPlanInfo.subscriptionPlans[0].plan.contains(BASIC_LABEL)){
-            _newPlanInfo = _newPlanInfo.copyWith(subscriptionPlans:  [SubscriptionPlan()]);
-          }else{
-            final list = _subscriptions.where((element) => element.plan.contains(BASIC_LABEL)).toList();
-            _newPlanInfo= _newPlanInfo.copyWith(subscriptionPlans: list);
-          }
-        });
-      },
-    );
-  }
-
-
   Widget premiumPlan(){
     if(_subscriptions.isEmpty){
       return Container();
     }
 
     final subs = _subscriptions.where((element) => element.plan.contains(PREMIUM_LABEL)).toList();
+
 
     return GestureDetector(
       child: Container(
@@ -1096,31 +698,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
             Center(
               child: Column(
                 children: [
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text('${subs[0].prices[0]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                  //     const SizedBox(width: 1,),
-                  //     const Text('($MONTHLY_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 4,),
-                  //
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text('${subs[0].prices[1]}\$/mo', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey)),
-                  //     const SizedBox(width: 1,),
-                  //     const Text('($ANNUAL_PLAN_LABEL)', style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.blueGrey)),
-                  //   ],
-                  // ),
-
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${subs[0].prices[1]*12}\$/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
+                      Text('${(subs[1].prices[1]*12).toInt()}\$/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
                     ],
                   ),
                 ],
@@ -1308,7 +889,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 const SizedBox(width: 8,),
 
                 Text(
-                  '${subs[0].foodPortionRequestsLimit}/mo (${subs[0].foodPortionRequestsLimit * 12} yearly)',
+                  '${subs[1].foodPortionRequestsLimit}/mo (${subs[1].foodPortionRequestsLimit * 12} yearly)',
                   style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                 ),
 

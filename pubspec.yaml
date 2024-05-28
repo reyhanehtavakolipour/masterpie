@@ -1,7 +1,7 @@
 name: masterpie
 description: "a diet application"
 
-version: 1.0.0+1
+version: 1.1.0+2
 
 
 publish_to: 'none'
@@ -44,6 +44,9 @@ dependencies:
   firebase_analytics: ^10.8.4
   oauth2: ^2.0.2
   flutter_barcode_scanner: ^2.0.0
+  in_app_purchase: ^3.2.0
+  in_app_purchase_storekit: ^0.3.4
+  in_app_purchase_android: ^0.3.0
 
 
 dev_dependencies:

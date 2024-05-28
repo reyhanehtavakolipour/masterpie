@@ -350,7 +350,6 @@ class UserRepositoryImpl extends UserRepository{
       premiumsOneTime.add(planResponse.asRight().firstWhere((element) => element.intervals[0] == 'yearly' && element.plan == 'premium one-time'));
 
 
-
       final free= planResponse.asRight().where((element) => element.plan == 'free').toList();
 
       final dietitian= planResponse.asRight().where((element) => element.plan == 'dietitian').toList();
@@ -408,8 +407,8 @@ class UserRepositoryImpl extends UserRepository{
               prices: [premiumsOneTime[0].prices[0], premiumsOneTime[1].prices[0]],
               intervals: [premiumsOneTime[0].intervals[0], premiumsOneTime[1].intervals[0]],
               favoriteFoodLimit: premiumsOneTime[0].favoriteFoodLimit,
-              suggestFoodRequestsLimit: premiumsOneTime[0].suggestFoodRequestsLimit,
-              foodPortionRequestsLimit: premiumsOneTime[0].foodPortionRequestsLimit
+              suggestFoodRequestsLimit: premiumsOneTime[1].suggestFoodRequestsLimit,
+              foodPortionRequestsLimit: premiumsOneTime[1].foodPortionRequestsLimit
           )
       );
 
