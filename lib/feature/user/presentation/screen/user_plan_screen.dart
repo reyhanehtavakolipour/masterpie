@@ -701,7 +701,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${(subs[1].prices[1]*12).toInt()}\$/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
+                      Text('${(subs[1].prices[1]*12).toInt()}USD/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
                     ],
                   ),
                 ],

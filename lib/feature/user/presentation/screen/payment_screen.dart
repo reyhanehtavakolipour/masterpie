@@ -256,7 +256,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
 
                             Text(
-                              '${(_amount*12).toInt()}\$',
+                              '${(_amount*12).toInt()}USD',
                               style: const TextStyle(
                                 fontSize: 56,
                                 color: Colors.green,

@@ -1317,13 +1317,14 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
                    }
                  }
                  _selectedUnitIndex = selectedIndex;
-                 _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
-                 _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
-                 _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
-                 _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
-                 _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+                 if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
+                   _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
+                   _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
+                   _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
+                   _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
+                   _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedUnitIndex].toString());
+                 }
                });
-
              },
              // style: Theme.of(context).textTheme.title,
            ),

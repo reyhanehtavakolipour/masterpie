@@ -345,7 +345,9 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                     ),
                   ).then((result) {
                     setState(() {
-                      _newMyCookBookFoods.add(result);
+                      if(result != null){
+                        _newMyCookBookFoods.add(result);
+                      }
                       requestMyCookBookFoods();
                     });
                   });

@@ -1553,11 +1553,13 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                   }
                 }
                 _selectedNewIngredientUnitIndex = selectedIndex;
-                _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedNewIngredientUnitIndex].toString());
-                _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedNewIngredientUnitIndex].toString());
-                _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedNewIngredientUnitIndex].toString());
-                _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedNewIngredientUnitIndex].toString());
-                _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedNewIngredientUnitIndex].toString());
+                if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
+                  _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedNewIngredientUnitIndex].toString());
+                  _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedNewIngredientUnitIndex].toString());
+                  _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedNewIngredientUnitIndex].toString());
+                  _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedNewIngredientUnitIndex].toString());
+                  _fatController = TextEditingController(text: _selectedGenericIngredient.fat[0][_selectedNewIngredientUnitIndex].toString());
+                }
               });
 
             },
