@@ -657,7 +657,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               Visibility(
                 visible: UserRegistrationStatus.userAccountId.isEmpty,
                 child: ListTile(
-                  leading: const Icon(Icons.app_registration),
+                  leading: const Icon(Icons.login),
                   title: const Text(SIGNIN_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
                   onTap: () {
                     _scaffoldKey.currentState?.openEndDrawer();

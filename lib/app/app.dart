@@ -31,6 +31,10 @@ import '../feature/user/presentation/screen/landing_screen.dart';
 
 
 class App extends StatelessWidget {
+
+  static const routeName = '/';
+
+
   App({Key? key}) : super(key: key);
 
   @override
@@ -111,7 +115,7 @@ class App extends StatelessWidget {
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
           routes: {
-            LandingScreen.routeName: (context) => const MainScreen(),
+            App.routeName: (context) => const LandingScreen(),
           },
         ),
     );

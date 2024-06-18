@@ -347,6 +347,7 @@ const UPGRADE_MSG_MACRO_EDITION= 'Upgrade to our premium plan to unlock the "mac
 const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
 const ERROR_RESET_PASS_REQUEST_EACH_60_SEC= 'You may submit this request only once every 60 seconds. Please wait until that time has passed.';
 const ERROR_CONFIRM_USER_SIGN_UP= 'Please verify your account by checking the confirmation email sent to your inbox';
+const DIET_WIZARD_TITLE_INTRO= 'With MasterPie Achieve Your Nutrition Goals With the Foods You Love!';
 
 
 

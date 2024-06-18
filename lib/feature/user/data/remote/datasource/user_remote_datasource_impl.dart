@@ -132,7 +132,9 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     try {
       // includes everything including name, email, gender, age, ...
       final supabase = Supabase.instance.client;
-      await supabase.from(PROFILE_REMOTE_TABLE).upsert(profileRemoteToJson(profileRemote));
+      await supabase.from(PROFILE_REMOTE_TABLE)
+          .update(profileRemoteToJson(profileRemote))
+          .eq('id', profileRemote.id);
       List<String> dailyMacros= ['0', '0', '0', '0'];
       if(profileRemote.age.isNotEmpty && profileRemote.height.isNotEmpty && profileRemote.weight.isNotEmpty &&
           profileRemote.goalWeight.isNotEmpty && profileRemote.gender.isNotEmpty){
@@ -256,10 +258,13 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         'dailyMacroGoal': profile.dailyMacroGoal,
       };
 
+
       final data = await supabase
           .from(PROFILE_REMOTE_TABLE)
           .update(updates)
           .eq('id', profile.id);
+
+
 
       return const Right(Success());
 

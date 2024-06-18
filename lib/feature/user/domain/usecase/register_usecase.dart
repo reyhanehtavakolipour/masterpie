@@ -17,16 +17,16 @@ class RegisterUseCase{
   Future<Either<Failure, String>> registerWithCredentials(String email, String password) async{
     final registerResponseRemote = await repo.registerUserWithCredentialInRemote(email, password);
     if(registerResponseRemote.isRight()){
-      await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight(), email: email));
       final loginResponseRemote = await repo.loginUserWithCredentialInRemote(email, password);
       if(loginResponseRemote.isRight()){
+        await repo.upsertProfileInLocal(Profile(id: loginResponseRemote.asRight(), email: email));
         await repo.saveUserEmailInHive(email);
         await repo.saveUserPasswordInHive(password);
-        await repo.saveUserIdInHive(registerResponseRemote.getOrElse(() => ''));
+        await repo.saveUserIdInHive(loginResponseRemote.asRight());
         await repo.setUserSubscriptionPlanAfterRegisterInRemote();
         return  Right(email);
       }
-      return Left(getFailure(FailureResponse(loginResponseRemote.asLeft().message)));
+      return Left(getFailure(const FailureResponse('User already registered')));
     }
     if(registerResponseRemote.asLeft().message == 'User already registered'){
       return Left(getFailure(const FailureResponse('User already registered')));

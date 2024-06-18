@@ -127,7 +127,7 @@ class _SignInScreenState extends State<SignInScreen>{
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
+                                builder: (context) => const ProfileAfterRegistrationScreen(),
                               ),
                             );
                           });

@@ -290,12 +290,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
 
-
-      // printWrapped('dgoijid: $foods');
-
-
-
-
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
 
@@ -531,11 +525,9 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       }
 
       List<FoodRemote> foods= [];
-
       if(data[0]['today_logs']['date'] == date){
         foods= fromFoodsJson(data[0]['today_logs'] as Map<String, dynamic>);
       }
-
       return Right(foods);
 
     } on PostgrestException catch (error) {
