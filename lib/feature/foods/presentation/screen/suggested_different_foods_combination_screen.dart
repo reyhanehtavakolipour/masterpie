@@ -120,10 +120,14 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
+              child: const SizedBox(
+                width: 40,
+                height: 40,
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
             ),
             actions: [

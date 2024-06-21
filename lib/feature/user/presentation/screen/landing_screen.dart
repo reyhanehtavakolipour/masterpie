@@ -71,7 +71,7 @@ class _LandingScreenState extends State<LandingScreen>{
                       child: Text(
                         DIET_WIZARD_TITLE_INTRO,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w800),
+                        style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -106,12 +106,14 @@ class _LandingScreenState extends State<LandingScreen>{
                     ),
                   ),
 
+                  const SizedBox(height: 4,),
+
                   InkWell(
                     onTap: () => launchURL(FAT_SECRET_ATTRIBUTE),
                     child: const Text(
                       FAT_SECRET_LABEL,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.grey,
                         fontSize: 10,
                         decoration: TextDecoration.underline,
                       ),

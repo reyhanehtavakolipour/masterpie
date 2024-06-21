@@ -42,6 +42,7 @@ const ERROR_INVALID_PURCHASE = 'Invalid Purchase';
 const SUBMIT_LOG_FOODS_LABEL = 'Submit Logged Foods';
 const LOG_FOODS_LABEL = 'Log Foods';
 const FOODS_COMBINATIONS_LABEL = 'Foods Combinations';
+const ADDED_FOODS = 'Added Foods';
 const FOOD_ADDED_COOKBOOK_SUCCESS = 'Food added to your cookbook successfully';
 const ADD_TO_MY_FAVORTITE = 'Add To My Favorites';
 const ADD_TO_MY_COOK_BOOK = 'Add To My CookBook';
@@ -52,11 +53,11 @@ const ERROR_FOOD_COUNT_EMPTY= 'Serving count can\'t be empty';
 const ERROR_FOOD_SERVING_RANGE_EMPTY= 'Please enter both min and max ';
 const ADD_NEW_LABEL= 'Add New';
 const UPDATE_LABEL= 'Update';
+const ENTER_VALUE_LABEL= 'Enter Value';
 const UPDATE_FAVORITE_LABEL= 'Update Favorite';
 const UPDATE_COOKBOOK_LABEL= 'Update CookBook';
 const HOW_MUCH_TO_EAT= 'Macro Diet Wizard';
-const FOOD_PORTION_INFO= '- Enter your macro goals. These are the range amounts of calorie, protein, carbs, and fats you want to eat each day.\n\n'
-    '- If you have a strict requirement for one particular macro, ensuring it doesn\'t fall below or exceed a specific amount, select it on this page.\n\n'
+const FOOD_PORTION_INFO= 'Based on your favourite foods and macro goal,We’ll calculate each food portion you can have to hit your goal!\n\n\nSteps:\n\n- Enter your macro goals. These are the range amounts of calorie, protein, carbs, and fats you want to eat each day.\n\n'
     '- On the next page, add all the foods you want to eat. Be sure to include everything you plan to have in your meals.\n\n'
     '- Boom! We will calculate the portion sizes of each food based on your macro goals. Now you know exactly how much of each food to eat to reach your targets. Enjoy your meal planning!';
 
@@ -72,7 +73,7 @@ const SERVING_LABEL = 'serving';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
 const SERVINGS_RECIPE_LABEL = 'For how many servings is this recipe intended?';
 const REQUEST_PORTIONS_LABEL  = 'Calculate Portions';
-const NEXT_LABEL  = 'Next';
+const NEXT_LABEL  = 'Next Step';
 const EDIT_LABEL = 'Edit';
 const CANCEL = 'cancel';
 const ADD_LABEL = 'Add';
@@ -92,8 +93,8 @@ const ADD_GROCERY_MANUALLY_LABEL = '+ grocery manually';
 const TOTAL_FAT_LABEL = 'Total Fat';
 const GROCERY_PRODUCTS_LABEL= 'Grocery Products';
 const GROCERY_LABEL = 'Grocery';
-const BY_PERCENTAGE_LABEL = 'by percentage';
-const BY_AMOUNT_LABEL = 'by amounts';
+const BY_PERCENTAGE_LABEL = 'BY PERCENTAGE';
+const BY_AMOUNT_LABEL = 'BY AMOUNTS';
 const FOOD_TYPE_LABEL = 'Food Type';
 const DELETE_LABEL = 'Delete';
 const DELETE_CONFIRMATION_QUESTION = 'Are you sure you want to delete this item?';
@@ -181,6 +182,10 @@ const INVALID_PASSWORD_ERROR = 'password must be:\n- At least 8 characters long.
     '\n-Contains at least one special character.\n-Contains both uppercase and lowercase letters.';
 const PROFILE_LABEL = 'Profile';
 const RESET_PASS_LABEL = 'Reset Password';
+const RESET_LABEL = 'Reset';
+const RESET_MACRO_LABEL = 'Reset Macro Goals';
+const ENTER_MACRO_MANUAL_MESSAGE = 'You need to input exactly 3 of the calories, protein, carbs, and fat. The remaining one will be calculated based on the first three.';
+const MACRO_FORMUAL = '(protein(g) x 4) + (carb(g) x 4) + (fat(g) x 9) = calories';
 const FIRST_NAME_LABEL = 'First Name';
 const LAST_NAME_LABEL = 'Last Name';
 const HEIGHT_LABEL = 'Height';
@@ -202,7 +207,7 @@ const LIGHT_LABEL = 'Light Activity';
 const MODERATE_LABEL = 'Moderate Activity';
 const VERY_ACTIVE_LABEL = 'Very Active';
 const MACRO_GOAL_LABEL = 'Macro Goals';
-const LET_US_CALCULATE_IT_MESSAGE = 'Allow us to calculate it for you';
+const LET_US_CALCULATE_IT_MESSAGE = 'Calculate My Macro Goal';
 const USER_INFORMATION_LABEL = 'User Information';
 const NOT_LOGGED_IN_MESSAGE = 'To view your current plan or purchase a premium plan, please log in first.';
 const GRAM_250_LABEL = '250 gram';
@@ -252,10 +257,10 @@ const ERROR_ADD_FOOD = 'Please add at least one food';
 const ERROR_ADD_INGREDIENT = 'Please add at least one ingredient';
 const ERROR_NO_GOAL = 'Please provide a minimum or maximum value for a macro';
 const ERROR_NO_GOAL_CALORIE = 'Please provide a minimum or maximum value for calories';
-const CALORIE_RANGE_LABEL = 'calorie range';
-const PROTEIN_RANGE_LABEL = 'protein range';
-const CARB_RANGE_LABEL = 'carb range';
-const FAT_RANGE_LABEL = 'fat range';
+const CALORIE_RANGE_LABEL = 'CALORIE\nRANGE';
+const PROTEIN_RANGE_LABEL = 'PROTEIN\nRANGE';
+const CARB_RANGE_LABEL = 'CARB\nRANGE';
+const FAT_RANGE_LABEL = 'FAT\nRANGE';
 const ASK_RETRICTION_FOOD_PORTION= 'Which macro would you like to restrict?';
 const RESTRICTION_LABEL = 'Restriction';
 const MIN_CALORIE_LABEL = 'Min calorie amount';
@@ -348,6 +353,14 @@ const ERROR_USER_ALREADY_REGISTERED= 'This user already exists';
 const ERROR_RESET_PASS_REQUEST_EACH_60_SEC= 'You may submit this request only once every 60 seconds. Please wait until that time has passed.';
 const ERROR_CONFIRM_USER_SIGN_UP= 'Please verify your account by checking the confirmation email sent to your inbox';
 const DIET_WIZARD_TITLE_INTRO= 'With MasterPie Achieve Your Nutrition Goals With the Foods You Love!';
+const BARCODE_AVAILABLE_IN_US= 'The barcode scanner is currently functional only for products from the US';
+const ERROR_LOW_CALORIE= 'Calorie must be more than';
+const ERROR_MAX_AMOUNT= 'Max amount of this macro can be';
+const ENTER_GOAL_RANGE= 'Please Specify the Range of Your Macro Goal';
+const ADD_FOODS_FOR_WIZARD= 'Include All the Foods You Plan to Eat During the Daydfighoigdihiofdhghiohdf';
+
+
+
 
 
 

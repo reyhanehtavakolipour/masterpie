@@ -355,7 +355,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   @override
   Future<Either<Failure, GenericFoodRemote>> getGroceryWithBarcode(String barcode) async{
     try {
-
       final clientResponse = await authFatSecret();
 
       if(clientResponse.isLeft()){
@@ -380,6 +379,10 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         final data = response.data;
 
         final groceryId = data['food_id']['value'];
+
+        if(groceryId.toString() == '0'){
+          return const Left(FailureResponse('food not found'));
+        }
 
         Map<String, dynamic> params = {
           'method': 'food.get.v4',
@@ -428,8 +431,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           ));
 
         }else{
-          return  Left(RemoteFailure(detailResponse.statusCode, detailResponse.data['message']));
-        };
+          return Left(RemoteFailure(detailResponse.statusCode, detailResponse.data['message']));
+        }
       }else{
         return  Left(RemoteFailure(response.statusCode, response.data['message']));
       }

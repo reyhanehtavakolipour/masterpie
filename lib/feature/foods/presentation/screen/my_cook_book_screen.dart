@@ -173,7 +173,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                                   spacing: 8.0,
                                   children: List.generate(
                                     foodsLog.length,
-                                        (index) => LoggedFoodChipWidget(
+                                        (index) => ChipWidget(
                                       text: foodsLog[index].name,
                                       onRemove: () {
                                         setState(() {
@@ -414,7 +414,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
                         /// My CookBook list
                         MyCookBookFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _newMyCookBookFoods), foods: _newMyCookBookFoods, onFoodsChanged: updateChangedCookBookFoods,
                           onRemoveButtonClicked: removeCookBook, onCookBookClicked: onCookBookClicked, foodsTypeRequested: const [FoodType.groceryProduct, FoodType.meal],
-                          foodBackGroundColor: MY_FAVORITE_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.food_bank, color: MASTERPIE_ORANGE_COLOR,),
+                          foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.food_bank, color: MASTERPIE_ORANGE_COLOR,),
                           macroEdition: true,),
 
                       ],

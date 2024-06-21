@@ -199,7 +199,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> saveToMyFavoriteGrocery(FoodRemote grocery, String userId) async{
     try {
 
-
       final favoriteListResponse = await getMyFavoriteFoods('', userId);
 
       if(favoriteListResponse.isRight()){
@@ -292,7 +291,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
-
       List<Map<String, dynamic>> foodsBodyValue = [];
       for (int i = 0; i < foods.length; i++) {
 
@@ -364,6 +362,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         'calorieLimitPercentageBased' : macroLimits[0],
         'macroPercentage': macroPercentage
       };
+
 
 
       final response= await request.post(FOODS_PORTION_API, data: foodsPortionRemoteBody);

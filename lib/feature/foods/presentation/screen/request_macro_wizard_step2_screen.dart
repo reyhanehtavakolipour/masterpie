@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -57,121 +58,139 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
   }
 
   Widget addFoodOptions(){
-    return Column(
+    return Row(
       children: [
 
-        Row(
-          children: [
-            Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
-                    ).then((result) {
-                      setState(() {
-                        _requestWizardArgumentModel= result;
-                        _requestWizardArgumentModel.foods.forEach((element) {
-                          _foodsExpansionState.add(false);
-                        });
-                      });
-                    });
+        const SizedBox(width: 4,),
 
-                  },
-                  child: const Text(SEARCH_GROCERY_LABEL, style: TextStyle( color: Colors.white),),
-                ),
+        /// search grocery
+        Expanded(
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
+              ).then((result) {
+                setState(() {
+                  _requestWizardArgumentModel= result;
+                  _requestWizardArgumentModel.foods.forEach((element) {
+                    _foodsExpansionState.add(false);
+                  });
+                });
+              });
+
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+              decoration: BoxDecoration(
+                color: DARK_PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(20), // Makes the container rounded
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  Image.asset(SEARCH_GROCERY_PATH, color: Colors.white, width: 48, height: 48,),
+
+                  const SizedBox(height: 16,),
+
+                  const Text(SEARCH_GROCERY_LABEL, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
+                ],
+              ),
             ),
-            const SizedBox(width: 4,),
-            Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
-                      ),
-                    ).then((result) {
-                      setState(() {
-                        _requestWizardArgumentModel= result;
-                        _requestWizardArgumentModel.foods.forEach((element) {
-                          _foodsExpansionState.add(false);
-                        });
-                      });
-                    });
-                  },
-                  child: const Text(SEARCH_RECIPE_LABEL, style: TextStyle( color: Colors.white),),
-                ),
-            ),
-          ],
+          ),
         ),
 
-        const SizedBox(height: 4,),
 
-        Row(
-          children: [
-            // Expanded(
-            //     child: ElevatedButton(
-            //       style: ElevatedButton.styleFrom(
-            //           shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(8),
-            //           ),
-            //           backgroundColor: DARK_PRIMARY_COLOR
-            //       ),
-            //       onPressed: () {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => const SuggestFoodMacroWizardScreen(),
-            //           ),
-            //         );
-            //       },
-            //       child: const Text(SUGGEST_FOOD_LABEL, style: TextStyle( color: Colors.white),),
-            //     ),
-            // ),
-            // const SizedBox(width: 4,),
-            Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
-                      ),
-                    ).then((result) {
-                      setState(() {
-                        if(result != null){
-                          _requestWizardArgumentModel= result;
-                          _requestWizardArgumentModel.foods.forEach((element) {
-                            _foodsExpansionState.add(false);
-                          });
-                        }
-                      });
-                    });
-                  },
-                  child: const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: Colors.white),),
+        const SizedBox(width: 4,),
+
+        /// search recipe
+        Expanded(
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
                 ),
-            ),
-          ],
-        )
+              ).then((result) {
+                setState(() {
+                  _requestWizardArgumentModel= result;
+                  _requestWizardArgumentModel.foods.forEach((element) {
+                    _foodsExpansionState.add(false);
+                  });
+                });
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+              decoration: BoxDecoration(
+                color: DARK_PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(20), // Makes the container rounded
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
+                  Image.asset(SEARCH_RECIPE_PATH, color: Colors.white, width: 48, height: 48,),
+
+                  const SizedBox(height: 16,),
+
+                  const Text(SEARCH_RECIPE_LABEL, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+
+
+        const SizedBox(width: 4,),
+
+        /// create manual
+        Expanded(
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                ),
+              ).then((result) {
+                setState(() {
+                  if(result != null){
+                    _requestWizardArgumentModel= result;
+                    _requestWizardArgumentModel.foods.forEach((element) {
+                      _foodsExpansionState.add(false);
+                    });
+                  }
+                });
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+              decoration: BoxDecoration(
+                color: DARK_PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(20), // Makes the container rounded
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(HOW_MUCH_EAT_PATH, color: Colors.white, width: 48, height: 48),
+
+                  const SizedBox(height: 16,),
+
+                  const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 4,),
       ]
     );
   }
@@ -186,102 +205,129 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
         appBar: AppBar(
           title: const Text(HOW_MUCH_TO_EAT, style: TextStyle(color: Colors.white)),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context, _requestWizardArgumentModel);
-            },
+          leading:  ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+            ),
             child: const Icon(
               Icons.arrow_back_ios,
               color: Colors.white,
               size: 24,
             ),
+            onPressed: () {
+              Navigator.pop(context, _requestWizardArgumentModel);
+            },
           ),
           actions: [
           ],
         ),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            child: Stack(
+        body: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
 
-                    Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
+                Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
 
-                                  const SizedBox(height: 8,),
+                              Container(
+                                color: DARK_PRIMARY_COLOR,
+                                padding: const EdgeInsets.all(16),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
 
-                                  const Text('$ADD_FOOD_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+                                    CircleAvatar(
+                                      radius: 12, // Adjust the radius as needed
+                                      backgroundColor: MASTERPIE_ORANGE_COLOR,
+                                      child: Text(
+                                        '2',
+                                        style: TextStyle(
+                                          fontSize: 10, // Adjust the font size as needed
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),),
+                                    ),
 
-                                  const SizedBox(height: 8,),
+                                    SizedBox(width: 8,),
 
-                                  /// add food options
-                                  addFoodOptions(),
-
-                                  const SizedBox(height: 4,),
-
-                                ],
+                                    Expanded(
+                                      child: Text(ADD_FOODS_FOR_WIZARD,
+                                        style: TextStyle(color: Colors.white, fontSize: 13),),
+                                    ),
+                                  ],
+                                ),
                               ),
 
-                              /// added foods
-                              addedFoods(),
+
+
+                              const SizedBox(height: 4,),
+
+                              /// add food options
+                              addFoodOptions(),
+
+                              const SizedBox(height: 4,),
 
                             ],
                           ),
-                        )
-                    ),
 
-                    /// request portions
-                    requestPortionsButton(),
+                          /// added foods
+                          addedFoods(),
 
-                  ],
+                        ],
+                      ),
+                    )
                 ),
 
-                BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
-                    builder: (context, state) {
-                      if (state is SuggestFoodsPortionLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is SuggestFoodsPortionLoadedState){
-                        _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SuggestedDifferentFoodsCombinationScreen(suggestedPortionsList: state.suggestedFoodsPortions),
-                            ),
-                          );
-                        });
-                      }else if(state is SuggestFoodsPortionErrorState){
-                        _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
-                            return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
-                          }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
-                            return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
-                          }
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
+                /// request portions
+                requestPortionsButton(),
 
-                    }
-                ),
               ],
-            )
+            ),
+
+            BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
+                builder: (context, state) {
+                  if (state is SuggestFoodsPortionLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is SuggestFoodsPortionLoadedState){
+                    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuggestedDifferentFoodsCombinationScreen(suggestedPortionsList: state.suggestedFoodsPortions),
+                        ),
+                      );
+                    });
+                  }else if(state is SuggestFoodsPortionErrorState){
+                    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
+                        return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
+                      }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                        return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
+                      }
+                      return showErrorToast(context, state.message);
+                    });
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
+          ],
         ),
       ),
     );
@@ -290,14 +336,14 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
   Widget requestPortionsButton(){
     return Container(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: const EdgeInsets.only(bottom: 24, left: 8, right: 8),
             width: double.infinity,
             child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                backgroundColor: DARK_PRIMARY_COLOR
+                backgroundColor: MASTERPIE_YELLOW_COLOR
             ),
             onPressed: () {
 
@@ -328,7 +374,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                 showRegisterDialog(context);
               }
             },
-            child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: Colors.white),),
+            child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         ),
       );
   }
@@ -357,16 +403,19 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
   Widget addedFoods(){
     return Visibility(
         visible: _requestWizardArgumentModel.foods.isNotEmpty,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16,),
-            const Text('$FOODS_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            const SizedBox(height: 16,),
-            FoodsMacroListUi(foods: _requestWizardArgumentModel.foods, foodsExpansionState: _foodsExpansionState,
-              onExpansionStateChanged: updateFoodsExpansionStateListUi, onFoodsUpdated: updateUiAfterFoodsUpdated, foodsServingRanges: _requestWizardArgumentModel.servingRanges,
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16,),
+              const Text(ADDED_FOODS, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 16),),
+              const SizedBox(height: 16,),
+              FoodsMacroListUi(foods: _requestWizardArgumentModel.foods, foodsExpansionState: _foodsExpansionState,
+                onExpansionStateChanged: updateFoodsExpansionStateListUi, onFoodsUpdated: updateUiAfterFoodsUpdated, foodsServingRanges: _requestWizardArgumentModel.servingRanges,
+              )
+            ],
+          ),
         )
     );
   }

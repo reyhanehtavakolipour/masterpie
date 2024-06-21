@@ -48,6 +48,8 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
 
     if(widget.orientation == HORIZONTAL_ORIENTATION){
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: widget.options
               .asMap()
               .entries
@@ -56,7 +58,7 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
               return Expanded(
                 child: RadioListTile(
                   contentPadding: const EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0),
-                  title: Text(entry.value, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 12, fontFamily: MONTSERRAT_FONT),),
+                  title: Text(entry.value, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 12, fontFamily: MONTSERRAT_FONT, fontWeight: FontWeight.bold),),
                   value: entry.key,
                   activeColor: DARK_PRIMARY_COLOR,
                   groupValue: selectedOptionIndex,
@@ -75,6 +77,8 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
         );
     }else{
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+
         children: widget.options
             .asMap()
             .entries
@@ -82,7 +86,7 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
               (entry) {
             return RadioListTile(
               contentPadding: const EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0),
-              title: Text(entry.value, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 12, fontFamily: MONTSERRAT_FONT)),
+              title: Text(entry.value, style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 12, fontFamily: MONTSERRAT_FONT, fontWeight: FontWeight.bold)),
               value: entry.key,
               activeColor: DARK_PRIMARY_COLOR,
               groupValue: selectedOptionIndex,

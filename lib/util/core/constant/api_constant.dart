@@ -27,6 +27,7 @@ const PLANS_TABLE = 'plans';
 const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.net/portionRecommendation';
 
 
+
 const FAT_SECRET_AUTH_URL = 'https://oauth.fatsecret.com/connect/token';
 
 

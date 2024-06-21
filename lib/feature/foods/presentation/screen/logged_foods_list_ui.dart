@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/edit_food_information_dialog.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/edit_food_info_ui_model.dart';
@@ -161,7 +162,15 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    widget.foodIcon,
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: IconButton(
+                                        icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR,),
+                                        onPressed: () {
+                                        },
+                                      ),
+                                    ),
                                     const SizedBox(width: 2,),
                                     Expanded(
                                       child: Text(food.name.capitalize(),

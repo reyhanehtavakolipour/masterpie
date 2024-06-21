@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 
-class LoggedFoodChipWidget extends StatelessWidget {
+class ChipWidget extends StatelessWidget {
   final String text;
   final Function onRemove;
 
-  LoggedFoodChipWidget({required this.text, required this.onRemove});
+  ChipWidget({required this.text, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {

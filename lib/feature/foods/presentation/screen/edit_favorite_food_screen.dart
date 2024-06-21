@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
@@ -478,7 +479,7 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
                   _addOrUpdateMyFavoriteBloc.add(const AddOrUpdateMyFavoriteEvent.onReset());
                   showSuccessToast(context, FAVORITE_UPDATED_SUCCESSFULLY);
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                    builder: (context) => const MainScreen(),
+                    builder: (context) => const MyFavoriteFoodsScreen(),
                   ), (route) => false);
                 });
               }else if(state is AddOrUpdateMyFavoriteErrorState){

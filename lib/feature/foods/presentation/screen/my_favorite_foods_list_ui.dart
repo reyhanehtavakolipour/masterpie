@@ -98,7 +98,15 @@ class _MyFavoritesFoodsListUiState extends State<MyFavoritesFoodsListUi> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    widget.foodIcon,
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: IconButton(
+                                        icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR,),
+                                        onPressed: () {
+                                        },
+                                      ),
+                                    ),
                                     const SizedBox(width: 2,),
                                     Expanded(
                                       child: Text(food.name.capitalize(),

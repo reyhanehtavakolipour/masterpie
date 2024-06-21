@@ -93,8 +93,15 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    widget.foodIcon,
-                                    const SizedBox(width: 2,),
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: IconButton(
+                                        icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR,),
+                                        onPressed: () {
+                                        },
+                                      ),
+                                    ),                                    const SizedBox(width: 2,),
                                     Expanded(
                                       child: Text(food.name.capitalize(),
                                         style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),

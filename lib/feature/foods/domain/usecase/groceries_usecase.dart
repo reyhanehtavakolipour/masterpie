@@ -59,7 +59,7 @@ class GroceriesUseCase{
       return Right([fatSecretResponseRemote.asRight()]);
     }
 
-    return Left(getFailure(fatSecretResponseRemote.asLeft()));
+    return Left(FailureResponse(fatSecretResponseRemote.asLeft().message));
   }
 
 

@@ -254,7 +254,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                                   spacing: 8.0,
                                   children: List.generate(
                                     foodsLog.length,
-                                        (index) => LoggedFoodChipWidget(
+                                        (index) => ChipWidget(
                                       text: foodsLog[index].name,
                                       onRemove: () {
                                         setState(() {
@@ -315,7 +315,8 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                     }
                   },
                   child: const Text(SUBMIT_LOG_FOODS_LABEL,
-                    style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),)
+                    style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),
+                  )
               ),
             ),
           ],
@@ -429,6 +430,21 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                 ],
               ),
             ),
+
+
+            Visibility(
+              visible: _newGroceries.isEmpty,
+                child: Container(
+                  padding: const EdgeInsets.all(32),
+                  child: const Center(
+                    child: Text(BARCODE_AVAILABLE_IN_US,
+                      textAlign: TextAlign.center,
+                      style: TextStyle( color: Colors.blueGrey, fontWeight: FontWeight.normal,),
+                    ),
+                  ),
+                )
+            ),
+
 
             logFoodButton(),
 
