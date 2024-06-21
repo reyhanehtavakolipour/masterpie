@@ -37,8 +37,10 @@ class FoodCalculator{
       if (intValue != null) {
         servingAmount = double.parse(serving);
       } else {
-        double doubleValue = double.parse(serving);
-        servingAmount = doubleValue;
+        if(food.foodType == FoodType.meal){
+          double doubleValue = double.parse(serving);
+          servingAmount = doubleValue;
+        }
       }
 
       foodUnit = food.units[0];

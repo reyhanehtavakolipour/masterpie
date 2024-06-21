@@ -66,7 +66,6 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
               String carb= foodInformation.carb[0][0].toStringAsFixed(foodInformation.carb[0][0].truncateToDouble() == foodInformation.carb[0][0] ? 0 : 2);
               String fat= foodInformation.fat[0][0].toStringAsFixed(foodInformation.fat[0][0].truncateToDouble() == foodInformation.fat ? 0 : 2);
               bool isFoodAdded= foodInformation.isFoodAdded;
-              double servingQuantity= foodInformation.servingAmounts[0][0];
               String foodUnit= foodInformation.units[0][0];
 
               return GestureDetector(

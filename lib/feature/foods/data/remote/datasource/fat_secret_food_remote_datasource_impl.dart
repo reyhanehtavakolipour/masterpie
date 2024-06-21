@@ -13,6 +13,8 @@ import '../../../../../util/core/response/failure.dart';
 import 'fat_secret_food_remote_datasource.dart';
 
 
+const fat_secret= 'fatsecret';
+
 class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
 
@@ -68,8 +70,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             protein.add(double.parse(serving['protein']).toString());
             carb.add(double.parse(serving['carbohydrate']).toString());
             fat.add(double.parse(serving['fat']).toString());
-            servingAmounts.add(double.parse(serving['number_of_units']).toStringAsFixed(2));
-            units.add(serving['measurement_description']);
+            servingAmounts.add(fat_secret);
+            units.add(serving['serving_description']);
             servingIngredientsCount.add('1.0');
           });
 
@@ -410,13 +412,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             ingredientProtein.add(element['protein'].toString());
             ingredientCarb.add(element['carbohydrate'].toString());
             ingredientFat.add(element['fat'].toString());
-            ingredientServingAmounts.add(element['number_of_units'].toString());
-
-            if(element['measurement_description'] == 'serving'){
-              ingredientUnits.add(element['serving_description'].toString());
-            }else{
-              ingredientUnits.add(element['measurement_description'].toString());
-            }
+            ingredientServingAmounts.add(fat_secret);
+            ingredientUnits.add(element['serving_description'].toString());
           });
 
           return Right(GenericFoodRemote(

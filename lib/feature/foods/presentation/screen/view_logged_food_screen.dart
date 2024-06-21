@@ -276,7 +276,7 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
     searchFoodInFavorites(widget.foodDetailArgumentModel.food ?? Food());
     if (widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct) {
       _foodName = widget.foodDetailArgumentModel.food!.name;
-      _totalServing = '${widget.foodDetailArgumentModel.food!.servingAmounts[0]} ${widget.foodDetailArgumentModel.food!.units[0]}';
+      _totalServing = widget.foodDetailArgumentModel.food!.units[0];
       _totalCalorie = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
       _totalProtein = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
       _totalCarb = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
@@ -321,8 +321,7 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
       String ingredients = '';
       for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-          String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-              * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])}'
+          String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])}'
               ' ${widget.foodDetailArgumentModel.food!.units[i]} '
               '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
           ingredients = ingredients + ingredient;

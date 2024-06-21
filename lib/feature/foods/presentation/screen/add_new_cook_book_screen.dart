@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
@@ -49,7 +51,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
    late TextEditingController _proteinController;
    late TextEditingController _carbController;
    late TextEditingController _fatController;
-   late TextEditingController _servingController;
    late TextEditingController _ingredientNameController;
    late TextEditingController _groceryNameController;
    int _selectedUnitIndex = 0;
@@ -98,7 +99,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _servingController= TextEditingController(text: '0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _ingredientNameController= TextEditingController();
     _groceryNameController= TextEditingController();
@@ -536,7 +536,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
                  }
                  _selectedUnitIndex = selectedIndex;
                  if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
-                   _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
                    _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
                    _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                    _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
@@ -557,39 +556,9 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
    Widget macroAmountsIngredient(){
      return Column(
        children: [
-         ///  serving + unit
+         ///  serving
          Row(
            children: [
-             const SizedBox(
-                 width: MACRO_TITLE_WIDTH,
-                 child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-             ),
-             const SizedBox(width: 4,),
-             SizedBox(
-               width: MACRO_WIDTH,
-               height: MACRO_HEIGHT,
-               child: TextField(
-                 controller: _servingController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                 inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                 ],
-                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   enabledBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   focusedBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                 ),
-                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
-               ),
-             ),
-             const SizedBox(width: 20,),
              const SizedBox(
                  width: MACRO_TITLE_WIDTH,
                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
@@ -597,10 +566,10 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
              const SizedBox(width: 4,),
 
              ingredientUnitDropDown()
-
            ],
          ),
-         const SizedBox(height: 4,),
+         const SizedBox(height: 16,),
+
 
          /// total calorie + protein
          Row(
@@ -1160,7 +1129,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
               _selectedUnitIndex= 0;
               _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
               _ingredientServingCountController= TextEditingController(text: '1.0');
-              _servingController = TextEditingController(text: grocery.servingAmounts[0][_selectedUnitIndex].toString());
               _calorieController = TextEditingController(text: grocery.calorie[0][_selectedUnitIndex].toString());
               _proteinController = TextEditingController(text: grocery.protein[0][_selectedUnitIndex].toString());
               _carbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
@@ -1313,8 +1281,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
        servingIngredientsCount.add(_ingredientServingCountController.text);
        List<String> ingredientsUnit = List<String>.from(newFood.units);
        ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex]);
-       List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-       ingredientsServingAmount.add(_servingController.text);
        List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
        ingredientsCalorie.add(_calorieController.text);
        List<String> ingredientsProtein = List<String>.from(newFood.protein);
@@ -1327,7 +1293,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
        newFood = newFood.copyWith(
            ingredients: ingredients,
            servingIngredientsCount: servingIngredientsCount,
-           servingAmounts: ingredientsServingAmount,
            units: ingredientsUnit,
            calorie: ingredientsCalorie,
            protein: ingredientsProtein,
@@ -1357,7 +1322,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      _proteinController.text = '0';
      _carbController.text = '0';
      _fatController.text = '0';
-     _servingController.text = '100';
      _selectedUnitIndex= 0;
    }
 

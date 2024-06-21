@@ -17,6 +17,7 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
@@ -590,41 +591,13 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
         ///  serving + unit
         Row(
           children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: _servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
+
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
-            const SizedBox(width: 4,),
+
+            const SizedBox(width: 16,),
 
             ingredientUnitDropDown()
 
@@ -1315,7 +1288,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
       List<String> ingredientsUnit = List<String>.from(newFood.units);
       ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex]);
       List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-      ingredientsServingAmount.add(_servingController.text);
+      ingredientsServingAmount.add(fat_secret);
       List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
       ingredientsCalorie.add(_calorieController.text);
       List<String> ingredientsProtein = List<String>.from(newFood.protein);
@@ -1359,7 +1332,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _proteinController.text = '0';
     _carbController.text = '0';
     _fatController.text = '0';
-    _servingController.text = '100';
+    _servingController.text = '1.0';
     _selectedUnitIndex= 0;
   }
 

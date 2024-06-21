@@ -62,7 +62,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
   late TextEditingController _proteinController;
   late TextEditingController _carbController;
   late TextEditingController _fatController;
-  late TextEditingController _servingController;
   late TextEditingController _ingredientNameController;
   late TextEditingController _groceryNameController;
   late TextEditingController _unitController;
@@ -109,7 +108,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _servingController= TextEditingController(text: '0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
@@ -230,7 +228,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     if(widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct){
       _foodType = GROCERY_LABEL;
       _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-      _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
       _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0];
       _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0];
       _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0];
@@ -351,7 +348,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
 
           ],
         ),
-        body: Padding(
+        body: Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: SingleChildScrollView(
               physics: const ScrollPhysics(),
@@ -690,23 +687,64 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       isEditable = false;
     }
 
-    return Column(
-      children: [
-        ///  serving + unit
-        Visibility(
-          visible: newFood.foodType == FoodType.groceryProduct,
-          child: Row(
+    return Container(
+      margin: const EdgeInsets.only(right: 24),
+      child: Column(
+        children: [
+          ///  unit
+          Visibility(
+            visible: newFood.foodType == FoodType.groceryProduct,
+            child: Row(
+              children: [
+                const SizedBox(
+                    width: MACRO_TITLE_WIDTH,
+                    child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+                ),
+                const SizedBox(width: 4,),
+                Expanded(
+                  child: SizedBox(
+                    height: MACRO_HEIGHT,
+                    child: TextField(
+                      style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
+                      controller: unitController,
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+          /// total calorie + protein
+          Row(
             children: [
               const SizedBox(
                   width: MACRO_TITLE_WIDTH,
-                  child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+                  child: Text('$CALORIE_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
               const SizedBox(width: 4,),
               SizedBox(
                 width: MACRO_WIDTH,
                 height: MACRO_HEIGHT,
                 child: TextField(
-                  controller: servingController,
+                  enabled: isEditable,
+                  controller: calorieController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
@@ -729,16 +767,19 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
               const SizedBox(width: 20,),
               const SizedBox(
                   width: MACRO_TITLE_WIDTH,
-                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+                  child: Text('$PROTEIN_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
               const SizedBox(width: 4,),
               SizedBox(
-                width: 70,
+                width: MACRO_WIDTH,
                 height: MACRO_HEIGHT,
                 child: TextField(
-                  style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                  controller: unitController,
-                  enabled: false,
+                  enabled: isEditable,
+                  controller: proteinController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
@@ -751,150 +792,82 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
                 ),
               ),
-
             ],
           ),
-        ),
-        const SizedBox(height: 4,),
 
-        /// total calorie + protein
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$CALORIE_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: isEditable,
-                controller: calorieController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$PROTEIN_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: isEditable,
-                controller: proteinController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-          ],
-        ),
+          const SizedBox(height: 12,),
 
-        const SizedBox(height: 12,),
-
-        /// total carb + fat
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$CARB_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: isEditable,
-                controller: carbController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
+          /// total carb + fat
+          Row(
+            children: [
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$CARB_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$FAT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: isEditable,
-                controller: fatController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: MACRO_WIDTH,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  enabled: isEditable,
+                  controller: carbController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
                 ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
               ),
-            ),
-          ],
-        ),
-      ],
+              const SizedBox(width: 20,),
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$FAT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+              ),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: MACRO_WIDTH,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  enabled: isEditable,
+                  controller: fatController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -1115,7 +1088,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 _selectedNewIngredientUnitIndex= 0;
                 _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
                 _ingredientServingCountController= TextEditingController(text: '1.0');
-                _servingController = TextEditingController(text: grocery.servingAmounts[0][_selectedNewIngredientUnitIndex].toString());
                 _calorieController = TextEditingController(text: grocery.calorie[0][_selectedNewIngredientUnitIndex].toString());
                 _proteinController = TextEditingController(text: grocery.protein[0][_selectedNewIngredientUnitIndex].toString());
                 _carbController = TextEditingController(text: grocery.carb[0][_selectedNewIngredientUnitIndex].toString());
@@ -1270,39 +1242,9 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
   Widget macroAmountsIngredient(){
     return Column(
       children: [
-        ///  serving + unit
+        /// unit
         Row(
           children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: _servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
@@ -1313,7 +1255,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
 
           ],
         ),
-        const SizedBox(height: 4,),
+        const SizedBox(height: 16,),
 
         /// total calorie + protein
         Row(
@@ -1554,7 +1496,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
                 }
                 _selectedNewIngredientUnitIndex = selectedIndex;
                 if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
-                  _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedNewIngredientUnitIndex].toString());
                   _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedNewIngredientUnitIndex].toString());
                   _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedNewIngredientUnitIndex].toString());
                   _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedNewIngredientUnitIndex].toString());
@@ -1596,11 +1537,9 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       if(_ingredientServingCountController.text.isEmpty){
         _ingredientServingCountController = TextEditingController(text: '1.0');
       }
-      servingIngredientsCount.add(_selectedGenericIngredient.servingIngredientsCount[0][_selectedNewIngredientUnitIndex]);
+      servingIngredientsCount.add(_ingredientServingCountController.text);
       List<String> ingredientsUnit = List<String>.from(newFood.units);
       ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedNewIngredientUnitIndex] : manualUnitOptions[_selectedNewIngredientUnitIndex]);
-      List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-      ingredientsServingAmount.add(_selectedGenericIngredient.servingAmounts[0][_selectedNewIngredientUnitIndex]);
       List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
       ingredientsCalorie.add(_selectedGenericIngredient.calorie[0][_selectedNewIngredientUnitIndex]);
       List<String> ingredientsProtein = List<String>.from(newFood.protein);
@@ -1610,10 +1549,10 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       List<String> ingredientsFat = List<String>.from(newFood.fat);
       ingredientsFat.add(_selectedGenericIngredient.fat[0][_selectedNewIngredientUnitIndex]);
 
+
       newFood = newFood.copyWith(
           ingredients: ingredients,
           servingIngredientsCount: servingIngredientsCount,
-          servingAmounts: ingredientsServingAmount,
           units: ingredientsUnit,
           calorie: ingredientsCalorie,
           protein: ingredientsProtein,
@@ -1635,7 +1574,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
     _proteinController.text = '0';
     _carbController.text = '0';
     _fatController.text = '0';
-    _servingController.text = '100';
     _unitController.text= GRAM_LABEL;
     _selectedNewIngredientUnitIndex= 0;
   }

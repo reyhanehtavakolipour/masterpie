@@ -24,7 +24,6 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
   List<String> protein= [];
   List<String> carb= [];
   List<String> fat= [];
-  List<String> servingAmounts= [];
   List<String> units= [];
   List<String> servingIngredientsCount= [];
 
@@ -34,7 +33,6 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
     protein.add(food.protein[i][selectedUnitIndexList[i]]);
     carb.add(food.carb[i][selectedUnitIndexList[i]]);
     fat.add(food.fat[i][selectedUnitIndexList[i]]);
-    servingAmounts.add(food.servingAmounts[i][selectedUnitIndexList[i]]);
     units.add(food.units[i][selectedUnitIndexList[i]]);
     servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
   }
@@ -47,7 +45,6 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
       protein: protein,
       carb: carb,
       fat: fat,
-      servingAmounts: servingAmounts,
       units: units,
       foodType: FoodType.meal,
       count: food.count,
@@ -72,7 +69,6 @@ GenericFood toGenericFood(Food food){
   List<List<String>> servingIngredientsCount= [];
 
 
-  print('sdfsgs: $food');
   for (int i = 0; i < food.calorie.length; i++){
     calorie.add([food.calorie[i]]);
     protein.add([food.protein[i]]);

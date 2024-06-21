@@ -474,13 +474,13 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
         String ingredients = '';
         for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-            String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-                * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])} x'
+            String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])}'
                 ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
                 '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
             ingredients = ingredients + ingredient;
           }
         }
+
 
         _foodName = widget.foodDetailArgumentModel.food!.name;
         _totalCalorie = calorie.toStringAsFixed(2);

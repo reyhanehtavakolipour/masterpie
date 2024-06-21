@@ -134,6 +134,7 @@ class AddToMyFavoriteUseCase{
     });
 
     List<String> servingAmounts= [];
+    if(food.foodType == FoodType.meal)
     food.servingAmounts.forEach((element) {
       if(element.isEmpty){
         servingAmounts.add('100.0');

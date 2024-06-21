@@ -6,13 +6,11 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
-import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -64,7 +62,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    late TextEditingController _proteinController;
    late TextEditingController _carbController;
    late TextEditingController _fatController;
-   late TextEditingController _servingController;
    late TextEditingController _ingredientNameController;
    late TextEditingController _unitController;
    final List<bool> _ingredientsExpansionState = [];
@@ -83,7 +80,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    bool _searchedGroceriesVisible = false;
 
    List<int> _selectedIngredientsUnitIndexList= [];
-   List<String> _selectedIngredientsUnit= [];
 
 
    late GroceriesBloc _groceriesBloc;
@@ -117,7 +113,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
     _fatController= TextEditingController(text: '0');
     _minServingController= TextEditingController(text: '0.5');
     _maxServingController= TextEditingController(text: '5.0');
-    _servingController= TextEditingController(text: '0');
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
@@ -596,7 +591,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       _selectedIngredientsUnitIndexList= selectedUnitIndexList;
@@ -952,7 +946,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
               _selectedUnitIndex= 0;
               _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
               _ingredientServingCountController= TextEditingController(text: '1.0');
-              _servingController = TextEditingController(text: grocery.servingAmounts[0][_selectedUnitIndex].toString());
               _calorieController = TextEditingController(text: grocery.calorie[0][_selectedUnitIndex].toString());
               _proteinController = TextEditingController(text: grocery.protein[0][_selectedUnitIndex].toString());
               _carbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
@@ -1081,36 +1074,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
          ///  serving + unit
          Row(
            children: [
-             const SizedBox(
-                 width: MACRO_TITLE_WIDTH,
-                 child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-             ),
-             const SizedBox(width: 4,),
-             SizedBox(
-               width: MACRO_WIDTH,
-               height: MACRO_HEIGHT,
-               child: TextField(
-                 controller: _servingController,
-                 keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                 inputFormatters: <TextInputFormatter>[
-                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                 ],
-                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   enabledBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                   ),
-                   focusedBorder: OutlineInputBorder(
-                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                 ),
-                 style: const TextStyle(color: DARK_PRIMARY_COLOR),
-               ),
-             ),
-             const SizedBox(width: 20,),
+
              const SizedBox(
                  width: MACRO_TITLE_WIDTH,
                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
@@ -1121,7 +1085,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
            ],
          ),
-         const SizedBox(height: 4,),
+         const SizedBox(height: 16,),
 
          /// total calorie + protein
          Row(
@@ -1359,7 +1323,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                  }
                  _selectedUnitIndex = selectedIndex;
                  if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
-                   _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
                    _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
                    _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                    _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
@@ -1404,8 +1367,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
        servingIngredientsCount.add([_ingredientServingCountController.text]);
        List<List<String>> ingredientsUnit = List<List<String>>.from(newFood.units);
        ingredientsUnit.add([_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex]]);
-       List<List<String>> ingredientsServingAmount = List<List<String>>.from(newFood.servingAmounts);
-       ingredientsServingAmount.add([_servingController.text]);
        List<List<String>> ingredientsCalorie = List<List<String>>.from(newFood.calorie);
        ingredientsCalorie.add([_calorieController.text]);
        List<List<String>> ingredientsProtein = List<List<String>>.from(newFood.protein);
@@ -1418,7 +1379,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
        newFood = newFood.copyWith(
            ingredients: ingredients,
            servingIngredientsCount: servingIngredientsCount,
-           servingAmounts: ingredientsServingAmount,
            units: ingredientsUnit,
            calorie: ingredientsCalorie,
            protein: ingredientsProtein,
@@ -1428,6 +1388,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
        _selectedAddIngredientOption = '';
        _ingredientNameBorderColor = Colors.black;
        _ingredientsExpansionState.add(false);
+
        calculateTotalMacros();
      });
    }
@@ -1440,7 +1401,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
      _proteinController.text = '0';
      _carbController.text = '0';
      _fatController.text = '0';
-     _servingController.text = '100';
      _unitController.text= GRAM_LABEL;
      _selectedUnitIndex= 0;
    }

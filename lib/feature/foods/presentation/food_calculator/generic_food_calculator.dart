@@ -53,13 +53,6 @@ class GenericFoodCalculator{
 
 
         List<double> groceryServingAmounts= [];
-        food.servingAmounts[0].forEach((element) {
-          if(element.isEmpty){
-            groceryServingAmounts.add(0.0);
-          }else{
-            groceryServingAmounts.add(double.parse(element));
-          }
-        });
         servingAmounts= [groceryServingAmounts];
 
         List<String> groceryUnits= [];

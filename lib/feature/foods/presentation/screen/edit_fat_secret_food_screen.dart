@@ -50,7 +50,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    late TextEditingController _totalUnitController;
    GenericFood _initialStateFood = GenericFood();
    final _debouncer = Debouncer(milliseconds: 1000);
-   double _previousoefficient= 1.0;
 
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
@@ -514,12 +513,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
           return;
         }
       }
-      if( num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) <= 0){
-        setState(() {
-          showErrorToast(context, ERROR_MEAL_SERVING_AMOUNT);
-        });
-        return;
-      }
       setState(() {
         _ingredientNameBorderColor = Colors.black;
       });
@@ -603,36 +596,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
         ///  serving + unit
         Row(
           children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
-              ),
-            ),
-            const SizedBox(width: 20,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)

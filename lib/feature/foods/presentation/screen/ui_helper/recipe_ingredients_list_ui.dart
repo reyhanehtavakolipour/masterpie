@@ -33,15 +33,12 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
   late TextEditingController _proteinController;
   late TextEditingController _carbController;
   late TextEditingController _fatController;
-  late TextEditingController _servingController;
   late TextEditingController _ingredientNameController;
   late TextEditingController _ingredientServingCountController;
 
 
   Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
-
-  List<Food> _suggestedGroceries = [];
 
 
   @override
@@ -51,7 +48,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _servingController= TextEditingController(text: '0');
     _ingredientNameController= TextEditingController(text: '');
     _ingredientServingCountController= TextEditingController(text: '1.0');
   }
@@ -72,7 +68,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
             _proteinController.text = widget.meal.protein[index][widget.selectedIngredientsUnitIndexList[index]];
             _carbController.text = widget.meal.carb[index][widget.selectedIngredientsUnitIndexList[index]];
             _fatController.text = widget.meal.fat[index][widget.selectedIngredientsUnitIndexList[index]];
-            _servingController.text = widget.meal.servingAmounts[index][widget.selectedIngredientsUnitIndexList[index]];
             _ingredientNameController.text = widget.meal.ingredients[index];
             _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index][0];
           }
@@ -217,7 +212,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
                 selectedUnitList[ingredientIndex]= selectedIndex;
                 widget.onIngredientUpdated(widget.meal, selectedUnitList);
 
-                _servingController = TextEditingController(text: widget.meal.servingAmounts[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
                 _calorieController = TextEditingController(text: widget.meal.calorie[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
                 _proteinController = TextEditingController(text: widget.meal.protein[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
                 _carbController = TextEditingController(text: widget.meal.carb[ingredientIndex][widget.selectedIngredientsUnitIndexList[ingredientIndex]].toString());
@@ -233,17 +227,15 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
   }
 
 
+
   void removeIngredientButtonClickListener(int index){
     setState(() {
-      widget.onExpansionStateChanged(index, !widget.ingredientsExpansionState[index], true);
       List<String> ingredients = List<String>.from(widget.meal.ingredients);
       ingredients.removeAt(index);
       List<List<String>> servingIngredientsCount = List<List<String>>.from(widget.meal.servingIngredientsCount);
       servingIngredientsCount.removeAt(index);
       List<List<String>> ingredientsUnit = List<List<String>>.from(widget.meal.units);
       ingredientsUnit.removeAt(index);
-      List<List<String>> ingredientsServingAmount = List<List<String>>.from(widget.meal.servingAmounts);
-      ingredientsServingAmount.removeAt(index);
       List<List<String>> ingredientsCalorie = List<List<String>>.from(widget.meal.calorie);
       ingredientsCalorie.removeAt(index);
       List<List<String>> ingredientsProtein = List<List<String>>.from(widget.meal.protein);
@@ -259,10 +251,10 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
           carb: ingredientsCarb,
           protein: ingredientsProtein,
           calorie: ingredientsCalorie,
-          servingAmounts: ingredientsServingAmount,
           units: ingredientsUnit
       );
       _ingredientNameBorderColor = Colors.black;
+      widget.onExpansionStateChanged(index, !widget.ingredientsExpansionState[index], true);
       widget.onIngredientUpdated(updatedFood, widget.selectedIngredientsUnitIndexList);
     });
   }
@@ -283,8 +275,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
         List<List<String>> servingIngredientsCount = List<List<String>>.from(widget.meal.servingIngredientsCount);
         servingIngredientsCount[index]= [_ingredientServingCountController.text];
         List<List<String>> ingredientsUnit = List<List<String>>.from(widget.meal.units);
-        List<List<String>> ingredientsServingAmount = List<List<String>>.from(widget.meal.servingAmounts);
-        ingredientsServingAmount[index][widget.selectedIngredientsUnitIndexList[index]]= _servingController.text;
         List<List<String>> ingredientsCalorie = List<List<String>>.from(widget.meal.calorie);
         ingredientsCalorie[index][widget.selectedIngredientsUnitIndexList[index]]= _calorieController.text;
         List<List<String>> ingredientsProtein = List<List<String>>.from(widget.meal.protein);
@@ -300,7 +290,6 @@ class _RecipeIngredientsListUiState extends State<RecipeIngredientsListUi> {
           carb: ingredientsCarb,
           protein: ingredientsProtein,
           calorie: ingredientsCalorie,
-          servingAmounts: ingredientsServingAmount,
           units: ingredientsUnit
         );
 

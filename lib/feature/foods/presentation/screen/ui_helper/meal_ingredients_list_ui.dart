@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:masterpie/feature/foods/data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
@@ -32,7 +34,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
   late TextEditingController _proteinController;
   late TextEditingController _carbController;
   late TextEditingController _fatController;
-  late TextEditingController _servingController;
   late TextEditingController _unitController;
   late TextEditingController _ingredientNameController;
   late TextEditingController _ingredientServingCountController;
@@ -40,8 +41,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
 
   Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
-
-  List<Food> _suggestedGroceries = [];
 
 
   @override
@@ -51,7 +50,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _servingController= TextEditingController(text: '0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController(text: '');
     _ingredientServingCountController= TextEditingController(text: '1.0');
@@ -73,11 +71,11 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
             _proteinController.text = widget.meal.protein[index];
             _carbController.text = widget.meal.carb[index];
             _fatController.text = widget.meal.fat[index];
-            _servingController.text = widget.meal.servingAmounts[index];
             _ingredientNameController.text = widget.meal.ingredients[index];
             _ingredientServingCountController.text = widget.meal.servingIngredientsCount[index];
-            _unitController.text = widget.meal.units[index];
+            _unitController.text =widget.meal.units[index];
           }
+
 
           return SizedBox(
               width: double.infinity,
@@ -87,8 +85,9 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(BORDER_RADIUS),
                     ),
-                    child: Padding(
+                    child: Container(
                       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -123,8 +122,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                                           Icons.arrow_drop_down,
                                           color: Colors.black,
                                         ),
-                                        Container(
-                                          width: 260,
+                                        Expanded(
                                           child: TextField(
                                             enabled: widget.isEditable,
                                             onChanged: updatedIngredientMacroListener,
@@ -174,8 +172,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
 
                                   ],
                                 ),
-
-                                suggestedGroceriesList(),
                               ],
                             ),
                           )
@@ -194,74 +190,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
     );
   }
 
-
-  Widget suggestedGroceriesList(){
-    return  Visibility(
-      visible: _suggestedGroceries.isNotEmpty,
-      child: Container(
-          width: 300,
-          height: 200,
-          padding: const EdgeInsets.only(top: 4, right: 4),
-          decoration: BoxDecoration(
-            color: LIGHT_GREY_COLOR,
-            borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
-          ),
-          margin: const EdgeInsets.only(top: 36),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.black,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _suggestedGroceries = [];
-                    });
-                  },
-                ),
-
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _suggestedGroceries.length,
-                      itemBuilder: (context, index){
-                        Food grocery = _suggestedGroceries[index];
-                        return GestureDetector(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                  child: Text(grocery.name.capitalize(), style: const TextStyle(color: Colors.blueGrey, fontSize: 12),)
-                              ),
-                              const SizedBox(height: 8,),
-                            ],
-                          ),
-                          onTap: (){
-                            _suggestedGroceries = [];
-                            _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
-                            _ingredientServingCountController= TextEditingController(text: '1.0');
-                            _servingController = TextEditingController(text: grocery.servingAmount.toString() == '0' ? '100' : grocery.servingAmount.toString());
-                            _calorieController = TextEditingController(text: grocery.calorie[0].toString());
-                            _proteinController = TextEditingController(text: grocery.protein[0].toString());
-                            _carbController = TextEditingController(text: grocery.carb[0].toString());
-                            _fatController = TextEditingController(text: grocery.fat[0].toString());
-                            _unitController= TextEditingController(text: grocery.units[0].toString());
-                            updatedIngredientMacroListener('');
-                          },
-                        );
-                      }
-                  ),
-              ],
-            ),
-          )
-      ),
-    );
-  }
-
-
   void removeIngredientButtonClickListener(int index){
     setState(() {
       widget.onExpansionStateChanged(index, !widget.ingredientsExpansionState[index], true);
@@ -271,8 +199,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
       servingIngredientsCount.removeAt(index);
       List<String> ingredientsUnit = List<String>.from(widget.meal.units);
       ingredientsUnit.removeAt(index);
-      List<String> ingredientsServingAmount = List<String>.from(widget.meal.servingAmounts);
-      ingredientsServingAmount.removeAt(index);
       List<String> ingredientsCalorie = List<String>.from(widget.meal.calorie);
       ingredientsCalorie.removeAt(index);
       List<String> ingredientsProtein = List<String>.from(widget.meal.protein);
@@ -288,14 +214,12 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
           carb: ingredientsCarb,
           protein: ingredientsProtein,
           calorie: ingredientsCalorie,
-          servingAmounts: ingredientsServingAmount,
           units: ingredientsUnit
       );
       _ingredientNameBorderColor = Colors.black;
       widget.onIngredientUpdated(updatedFood);
     });
   }
-
 
 
   void updatedIngredientMacroListener(String value){
@@ -313,8 +237,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
         servingIngredientsCount[index]= _ingredientServingCountController.text;
         List<String> ingredientsUnit = List<String>.from(widget.meal.units);
         ingredientsUnit[index]= _unitController.text;
-        List<String> ingredientsServingAmount = List<String>.from(widget.meal.servingAmounts);
-        ingredientsServingAmount[index]= _servingController.text;
         List<String> ingredientsCalorie = List<String>.from(widget.meal.calorie);
         ingredientsCalorie[index]= _calorieController.text;
         List<String> ingredientsProtein = List<String>.from(widget.meal.protein);
@@ -330,7 +252,6 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
           carb: ingredientsCarb,
           protein: ingredientsProtein,
           calorie: ingredientsCalorie,
-          servingAmounts: ingredientsServingAmount,
           units: ingredientsUnit
         );
 
@@ -344,70 +265,41 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
   Widget macroAmountsWidgets(int index){
     return Column(
       children: [
-        ///  serving + unit
+        ///  unit
         Row(
           children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                enabled: false,
-                onChanged: updatedIngredientMacroListener,
-                controller: _servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(numericRegExp),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-              ),
-            ),
-            const SizedBox(width: 28,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
             const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child:  TextField(
-                enabled: false,
-                onChanged: updatedIngredientMacroListener,
-                controller: _unitController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+            Expanded(
+              child: SizedBox(
+                height: MACRO_HEIGHT,
+                child:  TextField(
+                  enabled: false,
+                  onChanged: updatedIngredientMacroListener,
+                  controller: _unitController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 ),
               ),
             )
 
           ],
         ),
-        const SizedBox(height: 4,),
+
+        const SizedBox(height: 16,),
 
         /// total calorie + protein
         Row(
@@ -579,7 +471,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
             Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 child: SizedBox(
-                  width: 60,
+                  width: 70,
                   height: MACRO_HEIGHT,
                   child: TextField(
                     enabled: widget.isEditable,

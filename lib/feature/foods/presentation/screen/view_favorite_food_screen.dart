@@ -375,7 +375,7 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
    void init() {
      if (widget.foodDetailArgumentModel.food?.foodType == FoodType.groceryProduct) {
        _foodName = widget.foodDetailArgumentModel.food!.name;
-       _totalServing = '${widget.foodDetailArgumentModel.food!.servingAmounts[0]} ${widget.foodDetailArgumentModel.food!.units[0]}';
+       _totalServing = widget.foodDetailArgumentModel.food!.units[0];
        _totalCalorie = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
        _totalProtein = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
        _totalCarb = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);

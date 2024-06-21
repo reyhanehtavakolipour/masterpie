@@ -150,12 +150,12 @@ class _RegisterScreenState extends State<RegisterScreen>{
                         }else if(state is RegisterErrorState){
                           _registerBloc.add(const RegisterEvent.onReset());
                           Future.delayed(Duration.zero,(){
-                            if(state.message == ERROR_CONFIRM_USER_SIGN_UP){
-                              setState(() {
-                                _emailSent = true;
-                              });
-                              return Container();
-                            }
+                            // if(state.message == ERROR_CONFIRM_USER_SIGN_UP){
+                            //   setState(() {
+                            //     _emailSent = true;
+                            //   });
+                            //   return Container();
+                            // }
                             return showErrorToast(context, state.message);
                           });
                         }else{
