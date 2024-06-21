@@ -357,7 +357,7 @@ const BARCODE_AVAILABLE_IN_US= 'The barcode scanner is currently functional only
 const ERROR_LOW_CALORIE= 'Calorie must be more than';
 const ERROR_MAX_AMOUNT= 'Max amount of this macro can be';
 const ENTER_GOAL_RANGE= 'Please Specify the Range of Your Macro Goal';
-const ADD_FOODS_FOR_WIZARD= 'Include All the Foods You Plan to Eat During the Daydfighoigdihiofdhghiohdf';
+const ADD_FOODS_FOR_WIZARD= 'Include All the Foods You Plan to Eat During the Day.';
 
 
 
