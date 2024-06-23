@@ -1,6 +1,7 @@
 
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 
 import '../../../../domain/model/food_model.dart';
 import '../../../../domain/model/suggested_foods_portion_model.dart';
@@ -33,5 +34,5 @@ abstract class SuggestFoodsPortionState with _$SuggestFoodsPortionState{
   const factory SuggestFoodsPortionState.initial()= SuggestFoodsPortionInitialState;
   const factory SuggestFoodsPortionState.loading()= SuggestFoodsPortionLoadingState;
   const factory SuggestFoodsPortionState.error(String message)= SuggestFoodsPortionErrorState;
-  const factory SuggestFoodsPortionState.loaded({required List<SuggestedFoodsPortion> suggestedFoodsPortions})= SuggestFoodsPortionLoadedState;
+  const factory SuggestFoodsPortionState.loaded({required WizardResponseModel wizardResponseModel})= SuggestFoodsPortionLoadedState;
 }

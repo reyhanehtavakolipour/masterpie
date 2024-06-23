@@ -24,7 +24,7 @@ const USER_PLAN_TABLE = 'user_plan';
 const PLANS_TABLE = 'plans';
 
 
-const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.net/portionRecommendation';
+const FOODS_PORTION_API = 'https://us-central1-masterpie-389519.cloudfunctions.net/portionRecommendation2';
 
 
 

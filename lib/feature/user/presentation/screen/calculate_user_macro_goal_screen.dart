@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/user/presentation/screen/calculated_macro_goal_dialog.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -92,10 +93,23 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CalculatedMacroGoalsPopup(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
-          weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
+        return CalculatedMacroGoalDialog(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
+            weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
             age: _ageController.text, goalWeight: _goalWeightController.text,
-          carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable);
+            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable);
+      },
+    );
+  }
+
+
+  void showManualMacroPopup(BuildContext context, List<String> dailyMacros, bool isEditable) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CalculatedMacroGoalsPopup(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
+            weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
+            age: _ageController.text, goalWeight: _goalWeightController.text,
+            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable);
       },
     );
   }
@@ -120,15 +134,11 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
               appBar: AppBar(
                 title: const Text(MACRO_GOAL_LABEL, style: TextStyle(color: Colors.white,),),
                 backgroundColor: PRIMARY_COLOR,
-                leading: GestureDetector(
+                leading: InkWell(
                   onTap: () {
                     Navigator.pop(context, _dailyMacroGoal);
                   },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
                 ),
                 actions: [
 
@@ -350,7 +360,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       width: double.infinity,
       child: ElevatedButton(
         onPressed: (){
-          showMacroGoalsPopup(context, ['', '', '', ''], true);
+          showManualMacroPopup(context, ['', '', '', ''], true);
         },
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -425,7 +435,10 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
         cursorColor: DARK_PRIMARY_COLOR,
         controller: controller,
         enabled: isEditable,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(numericRegExp),
+        ],
         decoration: InputDecoration(
           labelText: hintText,
           border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),

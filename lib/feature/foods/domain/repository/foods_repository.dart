@@ -2,6 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
@@ -26,7 +27,7 @@ abstract class FoodsRepository{
   Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromRemote(String query);
 
 
-  Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
 

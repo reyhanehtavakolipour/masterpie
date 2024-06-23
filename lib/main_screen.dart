@@ -54,10 +54,9 @@ import 'feature/foods/presentation/bloc/log_foods_bloc/state_event/log_foods_sta
 
 const MAX_DIFFERENCE_DAYS = 7;
 
-const int MAX_CALORIES = 10000;
-const int MAX_PROTEIN = 500;
-const int MAX_CARB = 2000;
-const int MAX_FAT = 5000;
+const WIZARD_MIN_SERVING= '0.5';
+const WIZARD_MAX_SERVING= '2.0';
+
 
 final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -239,10 +238,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     fat.removeWhere((item) => item.isEmpty);
 
 
-    List<String> servingAmounts = [];
-    servingAmounts.addAll(food.servingAmounts);
-    servingAmounts.removeWhere((item) => item.isEmpty);
-
     List<String> servingUnits = [];
     servingUnits.addAll(food.units);
     servingUnits.removeWhere((item) => item.isEmpty);
@@ -259,7 +254,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         protein: protein,
         carb: carb,
         fat: fat,
-        servingAmounts: servingAmounts,
         units: servingUnits,
         servingIngredientsCount: servingIngredientCounts
     );
@@ -373,6 +367,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       _carbGoal = int.parse(goalMacros[2]);
       _fatGoal = int.parse(goalMacros[3]);
     });
+    requestLoggedFoods(DateTime.now());
   }
 
   void showMacroGoalsPopup(BuildContext context){
@@ -1108,7 +1103,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                       children: [
                                                         
                                                         Container(
-                                                          color: DARK_PRIMARY_COLOR,
+                                                          color: MASTERPIE_YELLOW_COLOR,
                                                           padding: const EdgeInsets.all(8),
                                                           child: const Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
@@ -1129,7 +1124,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                                 SizedBox(width: 8,),
 
                                                                 Text(ENTER_GOAL_RANGE,
-                                                                style: TextStyle(color: Colors.white, fontSize: 13),),
+                                                                style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
                                                               ],
                                                           ),
                                                         ),
@@ -1866,26 +1861,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               return;
             }
 
-
-            if(minCalorie >= MAX_CALORIES || maxCalorie >= MAX_CALORIES){
-              showErrorToast(context, ERROR_MAX_CALORIE);
-              return;
-            }
-
-            if(minProtein >= MAX_PROTEIN || maxProtein >= MAX_PROTEIN ){
-              showErrorToast(context, ERROR_MAX_PROTEIN);
-              return;
-            }
-
-            if(minCarb >= MAX_CARB|| maxCarb >= MAX_CARB){
-              showErrorToast(context, ERROR_MAX_CARB);
-              return;
-            }
-
-            if(minFat >= MAX_FAT || maxFat >= MAX_FAT){
-              showErrorToast(context, ERROR_MAX_FAT);
-              return;
-            }
           }else{
 
             if(minCalorie == 0.0 && maxCalorie == 0.0){
@@ -1893,33 +1868,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               return;
             }
 
-            if(minCalorie >= MAX_CALORIES || maxCalorie >= MAX_CALORIES){
-              showErrorToast(context, ERROR_MAX_CALORIE);
-              return;
-            }
-
-
             if(proteinPercentage + carbPercentage + fatPercentage != 100.0){
               showErrorToast(context, ERROR_MACRO_PERCENTAGE);
               return;
             }
 
-          }
-
-
-          if(maxCalorie == 0){
-            maxCalorie= MAX_CALORIES.toDouble();
-          }
-          if(maxProtein == 0){
-            maxProtein= MAX_PROTEIN.toDouble();
-          }
-
-          if(maxCarb == 0){
-            maxCarb = MAX_CARB.toDouble();
-          }
-
-          if(maxFat == 0){
-            maxFat = MAX_FAT.toDouble();
           }
 
           macroGoalsRange.add(maxCalorie > minCalorie ? [minCalorie, maxCalorie] : [maxCalorie, minCalorie]);

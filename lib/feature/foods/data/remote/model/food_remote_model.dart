@@ -25,7 +25,6 @@ class FoodRemote with _$FoodRemote{
     @Default([]) List<String> servingIngredientsCount,
     @Default('') String recipe,
     @Default([]) List<String> units,
-    @Default([]) List<String> servingAmounts,
     @Default([]) List<String> calorie,
     @Default([]) List<String> protein,
     @Default([]) List<String> carb,

@@ -9,7 +9,6 @@ Food fromGenericGrocery(GenericFood food){
       protein: [food.protein[0][0]],
       carb: [food.carb[0][0]],
       fat: [food.fat[0][0]],
-      servingAmounts: [food.servingAmounts[0][0]],
       units: [food.units[0][0]],
       foodType: FoodType.groceryProduct,
       count: food.count,
@@ -64,7 +63,6 @@ GenericFood toGenericFood(Food food){
   List<List<String>> protein= [];
   List<List<String>> carb= [];
   List<List<String>> fat= [];
-  List<List<String>> servingAmounts= [];
   List<List<String>> units= [];
   List<List<String>> servingIngredientsCount= [];
 
@@ -74,11 +72,9 @@ GenericFood toGenericFood(Food food){
     protein.add([food.protein[i]]);
     carb.add([food.carb[i]]);
     fat.add([food.fat[i]]);
-    servingAmounts.add([food.servingAmounts[i]]);
     units.add([food.units[i]]);
     servingIngredientsCount.add(food.foodType == FoodType.meal ? [food.servingIngredientsCount[i]] : []);
   }
-
 
 
 
@@ -88,7 +84,6 @@ GenericFood toGenericFood(Food food){
       protein: protein,
       carb: carb,
       fat: fat,
-      servingAmounts: servingAmounts,
       units: units,
       count: food.count,
       servingIngredientsCount: servingIngredientsCount,

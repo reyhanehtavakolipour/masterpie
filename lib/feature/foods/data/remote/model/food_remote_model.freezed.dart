@@ -32,7 +32,6 @@ mixin _$FoodRemote {
       throw _privateConstructorUsedError;
   String get recipe => throw _privateConstructorUsedError;
   List<String> get units => throw _privateConstructorUsedError;
-  List<String> get servingAmounts => throw _privateConstructorUsedError;
   List<String> get calorie => throw _privateConstructorUsedError;
   List<String> get protein => throw _privateConstructorUsedError;
   List<String> get carb => throw _privateConstructorUsedError;
@@ -69,7 +68,6 @@ abstract class $FoodRemoteCopyWith<$Res> {
       List<String> servingIngredientsCount,
       String recipe,
       List<String> units,
-      List<String> servingAmounts,
       List<String> calorie,
       List<String> protein,
       List<String> carb,
@@ -106,7 +104,6 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
     Object? servingIngredientsCount = null,
     Object? recipe = null,
     Object? units = null,
-    Object? servingAmounts = null,
     Object? calorie = null,
     Object? protein = null,
     Object? carb = null,
@@ -172,10 +169,6 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
           ? _value.units
           : units // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      servingAmounts: null == servingAmounts
-          ? _value.servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       calorie: null == calorie
           ? _value.calorie
           : calorie // ignore: cast_nullable_to_non_nullable
@@ -231,7 +224,6 @@ abstract class _$$FoodRemoteImplCopyWith<$Res>
       List<String> servingIngredientsCount,
       String recipe,
       List<String> units,
-      List<String> servingAmounts,
       List<String> calorie,
       List<String> protein,
       List<String> carb,
@@ -266,7 +258,6 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
     Object? servingIngredientsCount = null,
     Object? recipe = null,
     Object? units = null,
-    Object? servingAmounts = null,
     Object? calorie = null,
     Object? protein = null,
     Object? carb = null,
@@ -332,10 +323,6 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
           ? _value._units
           : units // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      servingAmounts: null == servingAmounts
-          ? _value._servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       calorie: null == calorie
           ? _value._calorie
           : calorie // ignore: cast_nullable_to_non_nullable
@@ -386,7 +373,6 @@ class _$FoodRemoteImpl implements _FoodRemote {
       final List<String> servingIngredientsCount = const [],
       this.recipe = '',
       final List<String> units = const [],
-      final List<String> servingAmounts = const [],
       final List<String> calorie = const [],
       final List<String> protein = const [],
       final List<String> carb = const [],
@@ -397,7 +383,6 @@ class _$FoodRemoteImpl implements _FoodRemote {
       : _ingredients = ingredients,
         _servingIngredientsCount = servingIngredientsCount,
         _units = units,
-        _servingAmounts = servingAmounts,
         _calorie = calorie,
         _protein = protein,
         _carb = carb,
@@ -467,15 +452,6 @@ class _$FoodRemoteImpl implements _FoodRemote {
     return EqualUnmodifiableListView(_units);
   }
 
-  final List<String> _servingAmounts;
-  @override
-  @JsonKey()
-  List<String> get servingAmounts {
-    if (_servingAmounts is EqualUnmodifiableListView) return _servingAmounts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_servingAmounts);
-  }
-
   final List<String> _calorie;
   @override
   @JsonKey()
@@ -537,7 +513,7 @@ class _$FoodRemoteImpl implements _FoodRemote {
 
   @override
   String toString() {
-    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, servingAmounts: $servingAmounts, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count)';
+    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count)';
   }
 
   @override
@@ -566,8 +542,6 @@ class _$FoodRemoteImpl implements _FoodRemote {
                 other._servingIngredientsCount, _servingIngredientsCount) &&
             (identical(other.recipe, recipe) || other.recipe == recipe) &&
             const DeepCollectionEquality().equals(other._units, _units) &&
-            const DeepCollectionEquality()
-                .equals(other._servingAmounts, _servingAmounts) &&
             const DeepCollectionEquality().equals(other._calorie, _calorie) &&
             const DeepCollectionEquality().equals(other._protein, _protein) &&
             const DeepCollectionEquality().equals(other._carb, _carb) &&
@@ -595,7 +569,6 @@ class _$FoodRemoteImpl implements _FoodRemote {
         const DeepCollectionEquality().hash(_servingIngredientsCount),
         recipe,
         const DeepCollectionEquality().hash(_units),
-        const DeepCollectionEquality().hash(_servingAmounts),
         const DeepCollectionEquality().hash(_calorie),
         const DeepCollectionEquality().hash(_protein),
         const DeepCollectionEquality().hash(_carb),
@@ -628,7 +601,6 @@ abstract class _FoodRemote implements FoodRemote {
       final List<String> servingIngredientsCount,
       final String recipe,
       final List<String> units,
-      final List<String> servingAmounts,
       final List<String> calorie,
       final List<String> protein,
       final List<String> carb,
@@ -665,8 +637,6 @@ abstract class _FoodRemote implements FoodRemote {
   String get recipe;
   @override
   List<String> get units;
-  @override
-  List<String> get servingAmounts;
   @override
   List<String> get calorie;
   @override

@@ -284,7 +284,7 @@ class _MyFavoritesFoodsListUiState extends State<MyFavoritesFoodsListUi> {
       if(shouldSaveToFavorites){
         final addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
         /// only favorite groceries can be updated from the list screen
-        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit], servingAmounts: [value.serving.toString()]);
+        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit]);
         addOrUpdateMyFavoriteBloc.add(
           AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(updatedFood),
         );

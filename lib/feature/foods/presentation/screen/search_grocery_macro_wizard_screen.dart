@@ -87,19 +87,11 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
           appBar: AppBar(
             title: const Text(SEARCH_GROCERY_LABEL, style: TextStyle(color: Colors.white)),
             backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context, _requestWizardArgumentModel);
               },
-              child: const SizedBox(
-                width: 48,
-                height: double.infinity,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
 
@@ -254,7 +246,7 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
     List<RangeValues> servingRanges = [];
     servingRanges.addAll(_requestWizardArgumentModel.servingRanges);
-    servingRanges.add(const RangeValues(0.5, 5.0));
+    servingRanges.add(const RangeValues(0.5, 2.0));
 
     RequestWizardArgumentModel argumentModel= _requestWizardArgumentModel.copyWith(
       foods: foods,

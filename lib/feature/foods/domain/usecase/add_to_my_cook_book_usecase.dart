@@ -114,14 +114,6 @@ class AddToMyCookBookUseCase{
       }
     });
 
-    List<String> servingAmounts= [];
-    food.servingAmounts.forEach((element) {
-      if(element.isEmpty){
-        servingAmounts.add('100.0');
-      }else{
-        servingAmounts.add(double.parse(element).toString());
-      }
-    });
 
     food = food.copyWith(
       ingredients: ingredients,
@@ -130,7 +122,6 @@ class AddToMyCookBookUseCase{
       carb: carb,
       fat: fat,
       units: units,
-      servingAmounts: servingAmounts,
       unit:  food.foodType == FoodType.meal && food.unit.isEmpty ? SERVING_LABEL : food.unit,
     );
     return food;

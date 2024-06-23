@@ -24,7 +24,6 @@ class GenericFoodRemote with _$GenericFoodRemote{
     @Default([]) List<List<String>> servingIngredientsCount,
     @Default('') String recipe,
     @Default([]) List<List<String>> units,
-    @Default([]) List<List<String>> servingAmounts,
     @Default([]) List<List<String>> calorie,
     @Default([]) List<List<String>> protein,
     @Default([]) List<List<String>> carb,

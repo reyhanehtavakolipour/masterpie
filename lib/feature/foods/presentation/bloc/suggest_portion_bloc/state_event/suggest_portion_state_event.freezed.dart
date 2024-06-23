@@ -495,9 +495,7 @@ mixin _$SuggestFoodsPortionState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(
-            List<SuggestedFoodsPortion> suggestedFoodsPortions)
-        loaded,
+    required TResult Function(WizardResponseModel wizardResponseModel) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -505,8 +503,7 @@ mixin _$SuggestFoodsPortionState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult? Function(WizardResponseModel wizardResponseModel)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -514,8 +511,7 @@ mixin _$SuggestFoodsPortionState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult Function(WizardResponseModel wizardResponseModel)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -611,9 +607,7 @@ class _$SuggestFoodsPortionInitialStateImpl
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(
-            List<SuggestedFoodsPortion> suggestedFoodsPortions)
-        loaded,
+    required TResult Function(WizardResponseModel wizardResponseModel) loaded,
   }) {
     return initial();
   }
@@ -624,8 +618,7 @@ class _$SuggestFoodsPortionInitialStateImpl
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult? Function(WizardResponseModel wizardResponseModel)? loaded,
   }) {
     return initial?.call();
   }
@@ -636,8 +629,7 @@ class _$SuggestFoodsPortionInitialStateImpl
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult Function(WizardResponseModel wizardResponseModel)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -736,9 +728,7 @@ class _$SuggestFoodsPortionLoadingStateImpl
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(
-            List<SuggestedFoodsPortion> suggestedFoodsPortions)
-        loaded,
+    required TResult Function(WizardResponseModel wizardResponseModel) loaded,
   }) {
     return loading();
   }
@@ -749,8 +739,7 @@ class _$SuggestFoodsPortionLoadingStateImpl
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult? Function(WizardResponseModel wizardResponseModel)? loaded,
   }) {
     return loading?.call();
   }
@@ -761,8 +750,7 @@ class _$SuggestFoodsPortionLoadingStateImpl
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult Function(WizardResponseModel wizardResponseModel)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -888,9 +876,7 @@ class _$SuggestFoodsPortionErrorStateImpl
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(
-            List<SuggestedFoodsPortion> suggestedFoodsPortions)
-        loaded,
+    required TResult Function(WizardResponseModel wizardResponseModel) loaded,
   }) {
     return error(message);
   }
@@ -901,8 +887,7 @@ class _$SuggestFoodsPortionErrorStateImpl
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult? Function(WizardResponseModel wizardResponseModel)? loaded,
   }) {
     return error?.call(message);
   }
@@ -913,8 +898,7 @@ class _$SuggestFoodsPortionErrorStateImpl
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult Function(WizardResponseModel wizardResponseModel)? loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -980,7 +964,9 @@ abstract class _$$SuggestFoodsPortionLoadedStateImplCopyWith<$Res> {
           $Res Function(_$SuggestFoodsPortionLoadedStateImpl) then) =
       __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<SuggestedFoodsPortion> suggestedFoodsPortions});
+  $Res call({WizardResponseModel wizardResponseModel});
+
+  $WizardResponseModelCopyWith<$Res> get wizardResponseModel;
 }
 
 /// @nodoc
@@ -996,14 +982,23 @@ class __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? suggestedFoodsPortions = null,
+    Object? wizardResponseModel = null,
   }) {
     return _then(_$SuggestFoodsPortionLoadedStateImpl(
-      suggestedFoodsPortions: null == suggestedFoodsPortions
-          ? _value._suggestedFoodsPortions
-          : suggestedFoodsPortions // ignore: cast_nullable_to_non_nullable
-              as List<SuggestedFoodsPortion>,
+      wizardResponseModel: null == wizardResponseModel
+          ? _value.wizardResponseModel
+          : wizardResponseModel // ignore: cast_nullable_to_non_nullable
+              as WizardResponseModel,
     ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $WizardResponseModelCopyWith<$Res> get wizardResponseModel {
+    return $WizardResponseModelCopyWith<$Res>(_value.wizardResponseModel,
+        (value) {
+      return _then(_value.copyWith(wizardResponseModel: value));
+    });
   }
 }
 
@@ -1012,21 +1007,14 @@ class __$$SuggestFoodsPortionLoadedStateImplCopyWithImpl<$Res>
 class _$SuggestFoodsPortionLoadedStateImpl
     implements SuggestFoodsPortionLoadedState {
   const _$SuggestFoodsPortionLoadedStateImpl(
-      {required final List<SuggestedFoodsPortion> suggestedFoodsPortions})
-      : _suggestedFoodsPortions = suggestedFoodsPortions;
+      {required this.wizardResponseModel});
 
-  final List<SuggestedFoodsPortion> _suggestedFoodsPortions;
   @override
-  List<SuggestedFoodsPortion> get suggestedFoodsPortions {
-    if (_suggestedFoodsPortions is EqualUnmodifiableListView)
-      return _suggestedFoodsPortions;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_suggestedFoodsPortions);
-  }
+  final WizardResponseModel wizardResponseModel;
 
   @override
   String toString() {
-    return 'SuggestFoodsPortionState.loaded(suggestedFoodsPortions: $suggestedFoodsPortions)';
+    return 'SuggestFoodsPortionState.loaded(wizardResponseModel: $wizardResponseModel)';
   }
 
   @override
@@ -1034,13 +1022,12 @@ class _$SuggestFoodsPortionLoadedStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SuggestFoodsPortionLoadedStateImpl &&
-            const DeepCollectionEquality().equals(
-                other._suggestedFoodsPortions, _suggestedFoodsPortions));
+            (identical(other.wizardResponseModel, wizardResponseModel) ||
+                other.wizardResponseModel == wizardResponseModel));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_suggestedFoodsPortions));
+  int get hashCode => Object.hash(runtimeType, wizardResponseModel);
 
   @JsonKey(ignore: true)
   @override
@@ -1056,11 +1043,9 @@ class _$SuggestFoodsPortionLoadedStateImpl
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(String message) error,
-    required TResult Function(
-            List<SuggestedFoodsPortion> suggestedFoodsPortions)
-        loaded,
+    required TResult Function(WizardResponseModel wizardResponseModel) loaded,
   }) {
-    return loaded(suggestedFoodsPortions);
+    return loaded(wizardResponseModel);
   }
 
   @override
@@ -1069,10 +1054,9 @@ class _$SuggestFoodsPortionLoadedStateImpl
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
-    TResult? Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult? Function(WizardResponseModel wizardResponseModel)? loaded,
   }) {
-    return loaded?.call(suggestedFoodsPortions);
+    return loaded?.call(wizardResponseModel);
   }
 
   @override
@@ -1081,12 +1065,11 @@ class _$SuggestFoodsPortionLoadedStateImpl
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(String message)? error,
-    TResult Function(List<SuggestedFoodsPortion> suggestedFoodsPortions)?
-        loaded,
+    TResult Function(WizardResponseModel wizardResponseModel)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(suggestedFoodsPortions);
+      return loaded(wizardResponseModel);
     }
     return orElse();
   }
@@ -1132,10 +1115,10 @@ class _$SuggestFoodsPortionLoadedStateImpl
 abstract class SuggestFoodsPortionLoadedState
     implements SuggestFoodsPortionState {
   const factory SuggestFoodsPortionLoadedState(
-          {required final List<SuggestedFoodsPortion> suggestedFoodsPortions}) =
+          {required final WizardResponseModel wizardResponseModel}) =
       _$SuggestFoodsPortionLoadedStateImpl;
 
-  List<SuggestedFoodsPortion> get suggestedFoodsPortions;
+  WizardResponseModel get wizardResponseModel;
   @JsonKey(ignore: true)
   _$$SuggestFoodsPortionLoadedStateImplCopyWith<
           _$SuggestFoodsPortionLoadedStateImpl>

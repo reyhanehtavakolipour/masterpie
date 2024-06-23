@@ -31,7 +31,6 @@ mixin _$GenericFood {
       throw _privateConstructorUsedError;
   String get recipe => throw _privateConstructorUsedError;
   List<List<String>> get units => throw _privateConstructorUsedError;
-  List<List<String>> get servingAmounts => throw _privateConstructorUsedError;
   List<List<String>> get calorie => throw _privateConstructorUsedError;
   List<List<String>> get protein => throw _privateConstructorUsedError;
   List<List<String>> get carb => throw _privateConstructorUsedError;
@@ -67,7 +66,6 @@ abstract class $GenericFoodCopyWith<$Res> {
       List<List<String>> servingIngredientsCount,
       String recipe,
       List<List<String>> units,
-      List<List<String>> servingAmounts,
       List<List<String>> calorie,
       List<List<String>> protein,
       List<List<String>> carb,
@@ -105,7 +103,6 @@ class _$GenericFoodCopyWithImpl<$Res, $Val extends GenericFood>
     Object? servingIngredientsCount = null,
     Object? recipe = null,
     Object? units = null,
-    Object? servingAmounts = null,
     Object? calorie = null,
     Object? protein = null,
     Object? carb = null,
@@ -172,10 +169,6 @@ class _$GenericFoodCopyWithImpl<$Res, $Val extends GenericFood>
           ? _value.units
           : units // ignore: cast_nullable_to_non_nullable
               as List<List<String>>,
-      servingAmounts: null == servingAmounts
-          ? _value.servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
       calorie: null == calorie
           ? _value.calorie
           : calorie // ignore: cast_nullable_to_non_nullable
@@ -235,7 +228,6 @@ abstract class _$$GenericFoodImplCopyWith<$Res>
       List<List<String>> servingIngredientsCount,
       String recipe,
       List<List<String>> units,
-      List<List<String>> servingAmounts,
       List<List<String>> calorie,
       List<List<String>> protein,
       List<List<String>> carb,
@@ -271,7 +263,6 @@ class __$$GenericFoodImplCopyWithImpl<$Res>
     Object? servingIngredientsCount = null,
     Object? recipe = null,
     Object? units = null,
-    Object? servingAmounts = null,
     Object? calorie = null,
     Object? protein = null,
     Object? carb = null,
@@ -338,10 +329,6 @@ class __$$GenericFoodImplCopyWithImpl<$Res>
           ? _value._units
           : units // ignore: cast_nullable_to_non_nullable
               as List<List<String>>,
-      servingAmounts: null == servingAmounts
-          ? _value._servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
       calorie: null == calorie
           ? _value._calorie
           : calorie // ignore: cast_nullable_to_non_nullable
@@ -396,7 +383,6 @@ class _$GenericFoodImpl implements _GenericFood {
       final List<List<String>> servingIngredientsCount = const [],
       this.recipe = '',
       final List<List<String>> units = const [],
-      final List<List<String>> servingAmounts = const [],
       final List<List<String>> calorie = const [],
       final List<List<String>> protein = const [],
       final List<List<String>> carb = const [],
@@ -410,7 +396,6 @@ class _$GenericFoodImpl implements _GenericFood {
         _ingredients = ingredients,
         _servingIngredientsCount = servingIngredientsCount,
         _units = units,
-        _servingAmounts = servingAmounts,
         _calorie = calorie,
         _protein = protein,
         _carb = carb,
@@ -491,15 +476,6 @@ class _$GenericFoodImpl implements _GenericFood {
     return EqualUnmodifiableListView(_units);
   }
 
-  final List<List<String>> _servingAmounts;
-  @override
-  @JsonKey()
-  List<List<String>> get servingAmounts {
-    if (_servingAmounts is EqualUnmodifiableListView) return _servingAmounts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_servingAmounts);
-  }
-
   final List<List<String>> _calorie;
   @override
   @JsonKey()
@@ -563,7 +539,7 @@ class _$GenericFoodImpl implements _GenericFood {
 
   @override
   String toString() {
-    return 'GenericFood(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, servingAmounts: $servingAmounts, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count, isFromFatSecret: $isFromFatSecret)';
+    return 'GenericFood(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count, isFromFatSecret: $isFromFatSecret)';
   }
 
   @override
@@ -592,8 +568,6 @@ class _$GenericFoodImpl implements _GenericFood {
                 other._servingIngredientsCount, _servingIngredientsCount) &&
             (identical(other.recipe, recipe) || other.recipe == recipe) &&
             const DeepCollectionEquality().equals(other._units, _units) &&
-            const DeepCollectionEquality()
-                .equals(other._servingAmounts, _servingAmounts) &&
             const DeepCollectionEquality().equals(other._calorie, _calorie) &&
             const DeepCollectionEquality().equals(other._protein, _protein) &&
             const DeepCollectionEquality().equals(other._carb, _carb) &&
@@ -623,7 +597,6 @@ class _$GenericFoodImpl implements _GenericFood {
         const DeepCollectionEquality().hash(_servingIngredientsCount),
         recipe,
         const DeepCollectionEquality().hash(_units),
-        const DeepCollectionEquality().hash(_servingAmounts),
         const DeepCollectionEquality().hash(_calorie),
         const DeepCollectionEquality().hash(_protein),
         const DeepCollectionEquality().hash(_carb),
@@ -657,7 +630,6 @@ abstract class _GenericFood implements GenericFood {
       final List<List<String>> servingIngredientsCount,
       final String recipe,
       final List<List<String>> units,
-      final List<List<String>> servingAmounts,
       final List<List<String>> calorie,
       final List<List<String>> protein,
       final List<List<String>> carb,
@@ -695,8 +667,6 @@ abstract class _GenericFood implements GenericFood {
   String get recipe;
   @override
   List<List<String>> get units;
-  @override
-  List<List<String>> get servingAmounts;
   @override
   List<List<String>> get calorie;
   @override

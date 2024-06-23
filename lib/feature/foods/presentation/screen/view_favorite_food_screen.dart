@@ -117,15 +117,11 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
             IconButton(
@@ -420,8 +416,7 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
        String ingredients = '';
        for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
          if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])
-               * double.parse(widget.foodDetailArgumentModel.food!.servingAmounts[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingAmounts[i])} x'
+           String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])} x'
                ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
                '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
            ingredients = ingredients + ingredient;

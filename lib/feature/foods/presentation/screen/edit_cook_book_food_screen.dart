@@ -155,15 +155,11 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
         appBar: AppBar(
           title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -383,7 +379,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       calculateTotalMacros();
@@ -1261,6 +1256,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
 
    Widget ingredientUnitDropDown(){
      final dropDownList = _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _searchUnitOptions : manualUnitOptions;
+
      return  SizedBox(
        width: MACRO_DROP_DOWN_WIDTH,
        height: MACRO_DROP_DOWN_HEIGHT,

@@ -17,19 +17,15 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../../domain/model/generic_food_model.dart';
-import '../bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
-import '../bloc/add_or_update_my_favorite_bloc/state_event/add_or_update_my_favorite_state_event.dart';
 import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
 import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
-import '../bloc/my_favorite_foods/my_favorite_foods_bloc.dart';
 
 
 class EditLoggedFoodScreen extends StatefulWidget {
@@ -121,59 +117,9 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
 
     init();
 
-    _totalServingController.addListener(_onTotalServingChanged);
-
   }
 
 
-  void _onTotalServingChanged() {
-    setState(() {
-
-    });
-    _debouncer.run(() {
-      if(_foodType == MEAL_LABEL){
-        setState(() {
-          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-            double coefficient = num.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text)/_initialStateFood.servingAmount;
-            List<String> servingIngredientsCount = [];
-            List<String> currentServingIngredientsCount = List<String>.from(newFood.servingIngredientsCount);
-            currentServingIngredientsCount.forEach((element) {
-              servingIngredientsCount.add((double.parse(element)*_previousCoefficient*coefficient).toString());
-            });
-
-            newFood= newFood.copyWith(
-                servingIngredientsCount: servingIngredientsCount,
-                calorie: _initialStateFood.calorie,
-                protein: _initialStateFood.protein,
-                carb: _initialStateFood.carb,
-                fat: _initialStateFood.fat
-            );
-            _previousCoefficient= 1/coefficient;
-            calculateTotalMacros();
-          }
-        });
-      }else{
-        setState(() {
-          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-            double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0]);
-            newFood= newFood.copyWith(
-                servingAmounts: [_totalServingController.text],
-                calorie: [(double.parse(_initialStateFood.calorie[0]) * count).toString()],
-                protein: [(double.parse(_initialStateFood.protein[0]) * count).toString()],
-                carb: [(double.parse(_initialStateFood.carb[0]) * count).toString()],
-                fat: [(double.parse(_initialStateFood.fat[0]) * count).toString()]
-            );
-
-            _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0]) * count}');
-            _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0]) * count}');
-            _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0]) * count}');
-            _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0]) * count}');
-          }
-        });
-      }
-    });
-  }
-  
    void requestLoggedFoods(){
      String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
      _getLoggedFoodsBloc.add(
@@ -334,15 +280,11 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
         appBar: AppBar(
           title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -616,7 +558,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       calculateTotalMacros();
@@ -645,7 +586,6 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.groceryProduct,
           name: _groceryNameController.text,
-          servingAmounts: [_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text],
           units: [_totalUnitController.text],
           calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
           protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],

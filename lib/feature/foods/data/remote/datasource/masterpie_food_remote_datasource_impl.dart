@@ -18,6 +18,7 @@ import '../model/food_remote_model.dart';
 import '../model/food_type_remote.dart';
 import '../model/suggested_food_remote_model.dart';
 import '../model/suggested_foods_portion_remote_model.dart';
+import '../model/wizard_response_remote_model.dart';
 import 'masterpie_food_remote_datasource.dart';
 
 class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
@@ -35,7 +36,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -52,7 +52,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(favoriteFood.protein.toString());
           newCarb.add(favoriteFood.carb.toString());
           newFat.add(favoriteFood.fat.toString());
-          newServingAmounts.add(favoriteFood.servingAmounts.toString());
           newServingUnits.add(favoriteFood.units.toString());
           newName.add(favoriteFood.name.toString());
           newTypes.add(favoriteFood.foodTypeRemote.name.toString());
@@ -67,7 +66,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         newProtein.add(mealRemote.protein.toString());
         newCarb.add(mealRemote.carb.toString());
         newFat.add(mealRemote.fat.toString());
-        newServingAmounts.add(mealRemote.servingAmounts.toString());
         newServingUnits.add(mealRemote.units.toString());
         newName.add(mealRemote.name.toString());
         newTypes.add(mealRemote.foodTypeRemote.name.toString());
@@ -83,7 +81,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['foodId'] = newFoodId;
         data['name'] = newName;
         data['type'] = newTypes;
-        data['servingAmounts'] = newServingAmounts;
         data['servingUnits'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -136,7 +133,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       final servingAmount = (data[0]['servingAmount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingUnit = (data[0]['servingUnit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final foodType = (data[0]['type'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final servingAmounts = buildListOfLists(data[0]['servingAmounts']);
       final servingUnits = buildListOfLists(data[0]['servingUnits']);
       final servingIngredientsCount = buildListOfLists(data[0]['servingIngredientsCount']);
       final ingredients = buildListOfLists(data[0]['ingredients']);
@@ -160,7 +156,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           fat: fat[i],
           ingredients: ingredients[i],
           servingIngredientsCount: servingIngredientsCount[i],
-          servingAmounts: servingAmounts[i],
           units: servingUnits[i],
           servingAmount: double.parse(servingAmount[i]),
           foodTypeRemote: foodType[i] ==  'groceryProduct' ? FoodTypeRemote.groceryProduct : FoodTypeRemote.meal,
@@ -209,7 +204,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           List<String> newProtein = [];
           List<String> newCarb = [];
           List<String> newFat = [];
-          List<String> newServingAmounts = [];
           List<String> newServingUnits = [];
           List<String> newServingAmount = [];
           List<String> newServingUnit = [];
@@ -226,7 +220,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
             newProtein.add(favoriteFood.protein.toString());
             newCarb.add(favoriteFood.carb.toString());
             newFat.add(favoriteFood.fat.toString());
-            newServingAmounts.add(favoriteFood.servingAmounts.toString());
             newServingUnits.add(favoriteFood.units.toString());
             newName.add(favoriteFood.name.toString());
             newTypes.add(favoriteFood.foodTypeRemote.name.toString());
@@ -242,7 +235,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(grocery.protein.toString());
           newCarb.add(grocery.carb.toString());
           newFat.add(grocery.fat.toString());
-          newServingAmounts.add(grocery.servingAmounts.toString());
           newServingUnits.add(grocery.units.toString());
           newName.add(grocery.name.toString());
           newTypes.add(grocery.foodTypeRemote.name.toString());
@@ -259,7 +251,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           data['foodId'] = newFoodId;
           data['name'] = newName;
           data['type'] = newTypes;
-          data['servingAmounts'] = newServingAmounts;
           data['servingUnits'] = newServingUnits;
           data['calorie'] = newCalorie;
           data['protein'] = newProtein;
@@ -285,7 +276,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
 
@@ -392,7 +383,12 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           foodsPortions.add(suggestedFoodsPortionRemote);
         }
 
-        return  Right(foodsPortions);
+        return  Right(
+          WizardResponseRemoteModel(
+            foodsPortions: foodsPortions,
+            messages: foodsPortionRemoteResult.messages
+          )
+        );
       }
       return  Left(RemoteFailure(response.statusCode, response.data['message']));
     }catch(e){
@@ -413,7 +409,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           item.protein.toString() == newFood.protein.toString() &&
           item.carb.toString() == newFood.carb.toString() &&
           item.fat.toString() == newFood.fat.toString() &&
-          item.servingAmounts.toString() == newFood.servingAmounts.toString() &&
           item.units.toString() == newFood.units.toString() &&
           item.servingAmount.toString() == newFood.servingAmount.toString() &&
           item.unit.toString() == newFood.unit.toString() &&
@@ -429,7 +424,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
                 element.protein.toString() == newFood.protein.toString() &&
                 element.carb.toString() == newFood.carb.toString() &&
                 element.fat.toString() == newFood.fat.toString() &&
-                element.servingAmounts.toString() == newFood.servingAmounts.toString() &&
                 element.units.toString() == newFood.units.toString() &&
                 element.servingAmount.toString() == newFood.servingAmount.toString() &&
                 element.unit.toString() == newFood.unit.toString() &&
@@ -445,7 +439,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
                   element.protein.toString() == newFood.protein.toString() &&
                   element.carb.toString() == newFood.carb.toString() &&
                   element.fat.toString() == newFood.fat.toString() &&
-                  element.servingAmounts.toString() == newFood.servingAmounts.toString() &&
                   element.units.toString() == newFood.units.toString() &&
                   element.servingAmount.toString() == newFood.servingAmount.toString() &&
                   element.unit.toString() == newFood.unit.toString() &&
@@ -550,7 +543,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -567,7 +559,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
             newProtein.add(favoriteFood.protein.toString());
             newCarb.add(favoriteFood.carb.toString());
             newFat.add(favoriteFood.fat.toString());
-            newServingAmounts.add(favoriteFood.servingAmounts.toString());
             newServingUnits.add(favoriteFood.units.toString());
             newName.add(favoriteFood.name.toString());
             newTypes.add(favoriteFood.foodTypeRemote.name.toString());
@@ -585,7 +576,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['foodId'] = newFoodId;
         data['name'] = newName;
         data['type'] = newTypes;
-        data['servingAmounts'] = newServingAmounts;
         data['servingUnits'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -622,7 +612,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -645,7 +634,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(foodRemote.protein.toString());
           newCarb.add(foodRemote.carb.toString());
           newFat.add(foodRemote.fat.toString());
-          newServingAmounts.add(foodRemote.servingAmounts.toString());
           newServingUnits.add(foodRemote.units.toString());
           newName.add(foodRemote.name.toString());
           newTypes.add(foodRemote.foodTypeRemote.name.toString());
@@ -662,7 +650,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['foodId'] = newFoodId;
         data['name'] = newName;
         data['type'] = newTypes;
-        data['servingAmounts'] = newServingAmounts;
         data['servingUnits'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -701,7 +688,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -725,7 +711,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(foodRemote.protein.toString());
           newCarb.add(foodRemote.carb.toString());
           newFat.add(foodRemote.fat.toString());
-          newServingAmounts.add(foodRemote.servingAmounts.toString());
           newServingUnits.add(foodRemote.units.toString());
           newName.add(foodRemote.name.toString());
           newTypes.add(foodRemote.foodTypeRemote.name.toString());
@@ -742,7 +727,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['foodId'] = newFoodId;
         data['name'] = newName;
         data['type'] = newTypes;
-        data['servingAmounts'] = newServingAmounts;
         data['servingUnits'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -915,7 +899,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       final recipe = (data[0]['recipe'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingAmount = (data[0]['serving_amount'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
       final servingUnit = (data[0]['unit'] as List<dynamic>).map((dynamic item) => item.toString()).toList();
-      final servingAmounts = buildListOfLists(data[0]['serving_amounts']);
       final servingUnits = buildListOfLists(data[0]['units']);
       final servingIngredientsCount = buildListOfLists(data[0]['serving_ingredients_count']);
       final ingredients = buildListOfLists(data[0]['ingredients']);
@@ -936,7 +919,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           fat: fat[i],
           ingredients: ingredients[i],
           servingIngredientsCount: servingIngredientsCount[i],
-          servingAmounts: servingAmounts[i],
           units: servingUnits[i],
           servingAmount: double.parse(servingAmount[i]),
           recipe: recipe[i],
@@ -967,7 +949,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -983,7 +964,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(favoriteFood.protein.toString());
           newCarb.add(favoriteFood.carb.toString());
           newFat.add(favoriteFood.fat.toString());
-          newServingAmounts.add(favoriteFood.servingAmounts.toString());
           newServingUnits.add(favoriteFood.units.toString());
           newName.add(favoriteFood.name.toString());
           newServingAmount.add(favoriteFood.servingAmount.toString());
@@ -997,7 +977,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         newProtein.add(mealRemote.protein.toString());
         newCarb.add(mealRemote.carb.toString());
         newFat.add(mealRemote.fat.toString());
-        newServingAmounts.add(mealRemote.servingAmounts.toString());
         newServingUnits.add(mealRemote.units.toString());
         newName.add(mealRemote.name.toString());
         newServingAmount.add(mealRemote.servingAmount.toString());
@@ -1011,7 +990,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['id'] = userId;
         data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['serving_amounts'] = newServingAmounts;
         data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -1051,7 +1029,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -1074,7 +1051,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           newProtein.add(foodRemote.protein.toString());
           newCarb.add(foodRemote.carb.toString());
           newFat.add(foodRemote.fat.toString());
-          newServingAmounts.add(foodRemote.servingAmounts.toString());
           newServingUnits.add(foodRemote.units.toString());
           newName.add(foodRemote.name.toString());
           newServingAmount.add(foodRemote.servingAmount.toString());
@@ -1089,7 +1065,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['id'] = userId;
         data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['serving_amounts'] = newServingAmounts;
         data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;
@@ -1127,7 +1102,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         List<String> newProtein = [];
         List<String> newCarb = [];
         List<String> newFat = [];
-        List<String> newServingAmounts = [];
         List<String> newServingUnits = [];
         List<String> newServingAmount = [];
         List<String> newServingUnit = [];
@@ -1143,7 +1117,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
             newProtein.add(favoriteFood.protein.toString());
             newCarb.add(favoriteFood.carb.toString());
             newFat.add(favoriteFood.fat.toString());
-            newServingAmounts.add(favoriteFood.servingAmounts.toString());
             newServingUnits.add(favoriteFood.units.toString());
             newName.add(favoriteFood.name.toString());
             newServingAmount.add(favoriteFood.servingAmount.toString());
@@ -1159,7 +1132,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         data['id'] = userId;
         data['food_id'] = newFoodId;
         data['name'] = newName;
-        data['serving_amounts'] = newServingAmounts;
         data['units'] = newServingUnits;
         data['calorie'] = newCalorie;
         data['protein'] = newProtein;

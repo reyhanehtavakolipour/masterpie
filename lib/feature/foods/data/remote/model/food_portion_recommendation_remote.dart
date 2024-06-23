@@ -2,13 +2,18 @@
 
 class FoodsPortionRemoteResult {
   final List<TopRecommendation> topRecommendations;
+  final List<String> messages;
 
-  FoodsPortionRemoteResult({required this.topRecommendations});
+
+  FoodsPortionRemoteResult({required this.topRecommendations, required this.messages});
 
   factory FoodsPortionRemoteResult.fromJson(Map<String, dynamic> json) {
     return FoodsPortionRemoteResult(
       topRecommendations: (json['body'] as List<dynamic>)
           .map((recommendation) => TopRecommendation.fromJson(recommendation))
+          .toList(),
+      messages: (json['message'] as List<dynamic>)
+          .map((message) => message.toString())
           .toList(),
     );
   }

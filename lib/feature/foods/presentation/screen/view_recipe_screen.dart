@@ -105,15 +105,11 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
             IconButton(
@@ -407,8 +403,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         String ingredients = '';
         for (int i = 0; i < genericFood.ingredients.length; i++) {
           if (i < genericFood.servingIngredientsCount.length) {
-            String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])
-                * double.parse(genericFood.servingAmounts[i].isEmpty ? '0' : genericFood.servingAmounts[i][0])} x'
+            String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])} x'
                 ' (${genericFood.units[i][0]}) '
                 '${genericFood.ingredients[i]},\n';
             ingredients = ingredients + ingredient;

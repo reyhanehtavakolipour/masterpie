@@ -11,6 +11,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/requ
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -111,8 +112,8 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _minServingController= TextEditingController(text: '0.5');
-    _maxServingController= TextEditingController(text: '5.0');
+    _minServingController= TextEditingController(text: WIZARD_MIN_SERVING);
+    _maxServingController= TextEditingController(text: WIZARD_MAX_SERVING);
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _unitController= TextEditingController(text: 'g');
     _ingredientNameController= TextEditingController();
@@ -168,15 +169,11 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
         appBar: AppBar(
           title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 

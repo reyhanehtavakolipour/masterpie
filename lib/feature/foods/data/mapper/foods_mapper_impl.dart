@@ -2,7 +2,9 @@
 
 
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
@@ -38,7 +40,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: foodLocal.description,
             nationality: '',
             image: foodLocal.image,
-            servingAmounts: foodLocal.servingAmounts,
             ingredients: [],
             servingIngredientsCount: [],
             units: foodLocal.units,
@@ -66,7 +67,6 @@ class FoodsMapperImpl extends FoodsMapper{
           description: mealRemote.description,
           nationality: mealRemote.nationality,
           image: mealRemote.image,
-          servingAmounts: mealRemote.servingAmounts,
           ingredients: mealRemote.ingredients,
           servingIngredientsCount: mealRemote.servingIngredientsCount,
           units: mealRemote.units,
@@ -95,7 +95,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: productRemote.description,
             nationality: '',
             image: productRemote.image,
-            servingAmounts: productRemote.servingAmounts,
             ingredients: [],
             servingIngredientsCount: productRemote.servingIngredientsCount,
             units: productRemote.units,
@@ -125,7 +124,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: '',
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: [],
             servingIngredientsCount: [],
             units: food.units,
@@ -137,7 +135,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: [],
             allergies: [],
             servingAmount: 0,
-          unit: '',
+          unit: '', servingAmounts: [],
         )
     ).toList();
   }
@@ -153,7 +151,6 @@ class FoodsMapperImpl extends FoodsMapper{
       description: mealRemote.description,
       nationality: mealRemote.nationality,
       image: mealRemote.image,
-      servingAmounts: mealRemote.servingAmounts,
       ingredients: mealRemote.ingredients,
       servingIngredientsCount: mealRemote.servingIngredientsCount,
       units: mealRemote.units,
@@ -181,7 +178,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         servingIngredientsCount: food.servingIngredientsCount,
         ingredients: food.ingredients,
         units: food.units,
@@ -193,7 +189,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit,
+      unit: food.unit, servingAmounts: [],
     );
   }
 
@@ -207,7 +203,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: foodLocal.description,
         nationality: foodLocal.nationality,
         image: foodLocal.image,
-        servingAmounts: foodLocal.servingAmounts,
         ingredients: foodLocal.ingredients,
         servingIngredientsCount: foodLocal.servingIngredientsCount,
         units: foodLocal.units,
@@ -235,7 +230,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         servingIngredientsCount: food.servingIngredientsCount,
         ingredients: food.ingredients,
         units: food.units,
@@ -247,7 +241,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit,
+      unit: food.unit, servingAmounts: [],
     );
   }
 
@@ -263,7 +257,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         servingIngredientsCount: food.servingIngredientsCount,
         ingredients: food.ingredients,
         units: food.units,
@@ -275,7 +268,7 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-        unit: food.unit
+        unit: food.unit, servingAmounts: []
     );
   }
 
@@ -291,7 +284,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: food.nationality,
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: food.ingredients,
             servingIngredientsCount: food.servingIngredientsCount,
             units: food.units,
@@ -320,7 +312,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: '',
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: [],
             servingIngredientsCount: [],
             units: food.units,
@@ -376,7 +367,6 @@ class FoodsMapperImpl extends FoodsMapper{
           description: food.description,
           nationality: '',
           image: food.image,
-          servingAmounts: food.servingAmounts,
           ingredients: [],
           servingIngredientsCount: [],
           units: food.units,
@@ -388,7 +378,7 @@ class FoodsMapperImpl extends FoodsMapper{
           diets: [],
           allergies: [],
           servingAmount: 0,
-            unit: ''
+            unit: '', servingAmounts: []
         )
     ).toList();
   }
@@ -406,7 +396,6 @@ class FoodsMapperImpl extends FoodsMapper{
           description: food.description,
           nationality: food.nationality,
           image: food.image,
-          servingAmounts: food.servingAmounts,
           ingredients: food.ingredients,
           servingIngredientsCount: food.servingIngredientsCount,
           units: food.units,
@@ -418,7 +407,7 @@ class FoodsMapperImpl extends FoodsMapper{
           diets: food.diets,
           allergies: food.allergies,
           servingAmount: food.servingAmount,
-          unit: food.unit,
+          unit: food.unit, servingAmounts: [],
         )
     ).toList();
   }
@@ -434,7 +423,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: '',
         image: food.image,
-        servingAmounts: food.servingAmounts,
         ingredients: [],
         servingIngredientsCount: [],
         units: food.units,
@@ -461,7 +449,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         ingredients: food.ingredients,
         servingIngredientsCount: food.servingIngredientsCount,
         units: food.units,
@@ -489,7 +476,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: food.nationality,
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: food.ingredients,
             servingIngredientsCount: food.servingIngredientsCount,
             units: food.units,
@@ -517,7 +503,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: '',
         image: food.image,
-        servingAmounts: food.servingAmounts,
         ingredients: [],
         servingIngredientsCount: [],
         units: food.units,
@@ -544,7 +529,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: food.nationality,
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: food.ingredients,
             servingIngredientsCount: food.servingIngredientsCount,
             units: food.units,
@@ -556,7 +540,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,
-          unit: food.unit,
+          unit: food.unit, servingAmounts: [],
         )
     ).toList();
   }
@@ -572,7 +556,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         servingIngredientsCount: food.servingIngredientsCount,
         ingredients: food.ingredients,
         units: food.units,
@@ -599,7 +582,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: food.description,
         nationality: food.nationality,
         image: food.image,
-        servingAmounts: food.servingAmounts,
         servingIngredientsCount: food.servingIngredientsCount,
         ingredients: food.ingredients,
         units: food.units,
@@ -611,19 +593,22 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit,
+      unit: food.unit, servingAmounts: [],
     );
   }
 
   @override
-  List<SuggestedFoodsPortion> fromSuggestedFoodsPortionRemote(List<SuggestedFoodsPortionRemote> suggestedFoodsPortionRemote) {
-    return suggestedFoodsPortionRemote.map((suggestedFoods) =>
-        SuggestedFoodsPortion(
-            foods: fromFoodsRemote(suggestedFoods.foods),
-          accuracy: suggestedFoods.accuracy,
-          totalMacro: suggestedFoods.totalMacro
-        )
-    ).toList();
+  WizardResponseModel fromWizardResponseRemote(WizardResponseRemoteModel wizardResponseRemoteModel) {
+    return WizardResponseModel(
+      foodsPortions: wizardResponseRemoteModel.foodsPortions.map((suggestedFoods) =>
+          SuggestedFoodsPortion(
+              foods: fromFoodsRemote(suggestedFoods.foods),
+              accuracy: suggestedFoods.accuracy,
+              totalMacro: suggestedFoods.totalMacro
+          )
+      ).toList(),
+      messages: wizardResponseRemoteModel.messages
+    );
   }
 
   @override
@@ -638,7 +623,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: food.nationality,
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: food.ingredients,
             servingIngredientsCount: food.servingIngredientsCount,
             units: food.units,
@@ -667,7 +651,6 @@ class FoodsMapperImpl extends FoodsMapper{
           description: food.description,
           nationality: food.nationality,
           image: food.image,
-          servingAmounts: food.servingAmounts,
           ingredients: food.ingredients,
           servingIngredientsCount: food.servingIngredientsCount,
           units: food.units,
@@ -697,7 +680,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: food.description,
             nationality: food.nationality,
             image: food.image,
-            servingAmounts: food.servingAmounts,
             ingredients: food.ingredients,
             servingIngredientsCount: food.servingIngredientsCount,
             units: food.units,
@@ -729,7 +711,6 @@ class FoodsMapperImpl extends FoodsMapper{
           description: food.description,
           nationality: food.nationality,
           image: food.image,
-          servingAmounts: food.servingAmounts,
           ingredients: food.ingredients,
           servingIngredientsCount: food.servingIngredientsCount,
           units: food.units,
@@ -742,7 +723,7 @@ class FoodsMapperImpl extends FoodsMapper{
           allergies: food.allergies,
           servingAmount: food.servingAmount,
           unit: food.unit,
-          count: food.count.toString(),
+          count: food.count.toString(), servingAmounts: [],
         )
     ).toList();
   }
@@ -774,7 +755,6 @@ class FoodsMapperImpl extends FoodsMapper{
             description: productRemote.description,
             nationality: '',
             image: productRemote.image,
-            servingAmounts: productRemote.servingAmounts,
             ingredients: productRemote.ingredients,
             servingIngredientsCount: productRemote.servingIngredientsCount,
             units: productRemote.units,
@@ -802,7 +782,6 @@ class FoodsMapperImpl extends FoodsMapper{
         description: productRemote.description,
         nationality: '',
         image: productRemote.image,
-        servingAmounts: productRemote.servingAmounts,
         ingredients: productRemote.ingredients,
         servingIngredientsCount: productRemote.servingIngredientsCount,
         units: productRemote.units,

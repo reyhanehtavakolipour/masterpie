@@ -308,7 +308,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$CALORIE_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
-            const SizedBox(width: 4,),
+            const SizedBox(width: 2,),
             SizedBox(
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
@@ -334,12 +334,12 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 ),
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(width: 8,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$PROTEIN_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
-            const SizedBox(width: 4,),
+            const SizedBox(width: 2,),
             SizedBox(
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
@@ -377,7 +377,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$CARB_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
-            const SizedBox(width: 4,),
+            const SizedBox(width: 2,),
             SizedBox(
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
@@ -403,12 +403,12 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                 ),
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(width: 8,),
             const SizedBox(
                 width: MACRO_TITLE_WIDTH,
                 child: Text('$FAT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
             ),
-            const SizedBox(width: 4,),
+            const SizedBox(width: 2,),
             SizedBox(
               width: MACRO_WIDTH,
               height: MACRO_HEIGHT,
@@ -446,7 +446,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
           children: [
             const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-            const SizedBox(width: 16,),
+            const SizedBox(width: 4,),
             Visibility(
               visible: widget.isEditable,
               child: GestureDetector(
@@ -469,9 +469,9 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
               ),
             ),
             Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 1),
                 child: SizedBox(
-                  width: 70,
+                  width: 55,
                   height: MACRO_HEIGHT,
                   child: TextField(
                     enabled: widget.isEditable,
@@ -493,7 +493,7 @@ class _MealIngredientsListUiState extends State<MealIngredientsListUi> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                     ),
                   ),
                 )

@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -13,7 +14,7 @@ class SuggestFoodsPortionsUseCase{
 
   final repo = serviceLocator<FoodsRepository>();
 
-  Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortions(
+  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortions(
       List<Food> foods,
       List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange,

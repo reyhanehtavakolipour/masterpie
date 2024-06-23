@@ -28,7 +28,6 @@ mixin _$Food {
   List<String> get protein => throw _privateConstructorUsedError;
   List<String> get carb => throw _privateConstructorUsedError;
   List<String> get fat => throw _privateConstructorUsedError;
-  List<String> get servingAmounts => throw _privateConstructorUsedError;
   List<String> get units => throw _privateConstructorUsedError;
 
   ///only for meals
@@ -66,7 +65,6 @@ abstract class $FoodCopyWith<$Res> {
       List<String> protein,
       List<String> carb,
       List<String> fat,
-      List<String> servingAmounts,
       List<String> units,
       List<String> ingredients,
       String unit,
@@ -103,7 +101,6 @@ class _$FoodCopyWithImpl<$Res, $Val extends Food>
     Object? protein = null,
     Object? carb = null,
     Object? fat = null,
-    Object? servingAmounts = null,
     Object? units = null,
     Object? ingredients = null,
     Object? unit = null,
@@ -156,10 +153,6 @@ class _$FoodCopyWithImpl<$Res, $Val extends Food>
       fat: null == fat
           ? _value.fat
           : fat // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      servingAmounts: null == servingAmounts
-          ? _value.servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
               as List<String>,
       units: null == units
           ? _value.units
@@ -227,7 +220,6 @@ abstract class _$$FoodImplCopyWith<$Res> implements $FoodCopyWith<$Res> {
       List<String> protein,
       List<String> carb,
       List<String> fat,
-      List<String> servingAmounts,
       List<String> units,
       List<String> ingredients,
       String unit,
@@ -261,7 +253,6 @@ class __$$FoodImplCopyWithImpl<$Res>
     Object? protein = null,
     Object? carb = null,
     Object? fat = null,
-    Object? servingAmounts = null,
     Object? units = null,
     Object? ingredients = null,
     Object? unit = null,
@@ -314,10 +305,6 @@ class __$$FoodImplCopyWithImpl<$Res>
       fat: null == fat
           ? _value._fat
           : fat // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      servingAmounts: null == servingAmounts
-          ? _value._servingAmounts
-          : servingAmounts // ignore: cast_nullable_to_non_nullable
               as List<String>,
       units: null == units
           ? _value._units
@@ -381,7 +368,6 @@ class _$FoodImpl implements _Food {
       final List<String> protein = const [],
       final List<String> carb = const [],
       final List<String> fat = const [],
-      final List<String> servingAmounts = const [],
       final List<String> units = const [],
       final List<String> ingredients = const [],
       this.unit = '',
@@ -397,7 +383,6 @@ class _$FoodImpl implements _Food {
         _protein = protein,
         _carb = carb,
         _fat = fat,
-        _servingAmounts = servingAmounts,
         _units = units,
         _ingredients = ingredients,
         _diets = diets,
@@ -460,15 +445,6 @@ class _$FoodImpl implements _Food {
     if (_fat is EqualUnmodifiableListView) return _fat;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_fat);
-  }
-
-  final List<String> _servingAmounts;
-  @override
-  @JsonKey()
-  List<String> get servingAmounts {
-    if (_servingAmounts is EqualUnmodifiableListView) return _servingAmounts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_servingAmounts);
   }
 
   final List<String> _units;
@@ -542,7 +518,7 @@ class _$FoodImpl implements _Food {
 
   @override
   String toString() {
-    return 'Food(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, image: $image, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, servingAmounts: $servingAmounts, units: $units, ingredients: $ingredients, unit: $unit, servingAmount: $servingAmount, recipe: $recipe, nationality: $nationality, description: $description, diets: $diets, allergies: $allergies, servingIngredientsCount: $servingIngredientsCount, count: $count)';
+    return 'Food(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, image: $image, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, units: $units, ingredients: $ingredients, unit: $unit, servingAmount: $servingAmount, recipe: $recipe, nationality: $nationality, description: $description, diets: $diets, allergies: $allergies, servingIngredientsCount: $servingIngredientsCount, count: $count)';
   }
 
   @override
@@ -562,8 +538,6 @@ class _$FoodImpl implements _Food {
             const DeepCollectionEquality().equals(other._protein, _protein) &&
             const DeepCollectionEquality().equals(other._carb, _carb) &&
             const DeepCollectionEquality().equals(other._fat, _fat) &&
-            const DeepCollectionEquality()
-                .equals(other._servingAmounts, _servingAmounts) &&
             const DeepCollectionEquality().equals(other._units, _units) &&
             const DeepCollectionEquality()
                 .equals(other._ingredients, _ingredients) &&
@@ -596,7 +570,6 @@ class _$FoodImpl implements _Food {
         const DeepCollectionEquality().hash(_protein),
         const DeepCollectionEquality().hash(_carb),
         const DeepCollectionEquality().hash(_fat),
-        const DeepCollectionEquality().hash(_servingAmounts),
         const DeepCollectionEquality().hash(_units),
         const DeepCollectionEquality().hash(_ingredients),
         unit,
@@ -629,7 +602,6 @@ abstract class _Food implements Food {
       final List<String> protein,
       final List<String> carb,
       final List<String> fat,
-      final List<String> servingAmounts,
       final List<String> units,
       final List<String> ingredients,
       final String unit,
@@ -664,8 +636,6 @@ abstract class _Food implements Food {
   List<String> get carb;
   @override
   List<String> get fat;
-  @override
-  List<String> get servingAmounts;
   @override
   List<String> get units;
   @override

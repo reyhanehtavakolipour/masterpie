@@ -5,9 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:masterpie/feature/foods/data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
@@ -167,15 +165,11 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
         appBar: AppBar(
           title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -342,7 +336,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       calculateTotalMacros();

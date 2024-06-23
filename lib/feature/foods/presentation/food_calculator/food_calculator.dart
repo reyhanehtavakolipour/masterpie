@@ -28,20 +28,6 @@ class FoodCalculator{
       carb = double.parse(food.carb[0]);
       fat = double.parse(food.fat[0]);
 
-      String serving = food.servingAmounts[0];
-      if(food.servingAmounts[0].isEmpty){
-        serving = "0.0";
-      }
-
-      int? intValue = int.tryParse(serving);
-      if (intValue != null) {
-        servingAmount = double.parse(serving);
-      } else {
-        if(food.foodType == FoodType.meal){
-          double doubleValue = double.parse(serving);
-          servingAmount = doubleValue;
-        }
-      }
 
       foodUnit = food.units[0];
     }else{
@@ -99,7 +85,6 @@ class FoodCalculator{
                 protein: value.protein,
                 carb: value.carb,
                 fat: value.fat,
-                servingAmounts: [value.serving.toString()],
                 units: [value.unit]
             );
           }else{
@@ -152,7 +137,6 @@ class FoodCalculator{
     return visibleFoods.where((element) => element.id == food.id &&
         food.servingAmount== element.servingAmount &&
         food.unit== element.unit &&
-        food.servingAmounts == element.servingAmounts &&
         food.units == element.units &&
         food.calorie == element.calorie &&
         food.protein == element.protein &&

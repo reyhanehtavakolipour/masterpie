@@ -247,10 +247,6 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
     fat.removeWhere((item) => item.isEmpty);
 
 
-    List<String> servingAmounts = [];
-    servingAmounts.addAll(food.servingAmounts);
-    servingAmounts.removeWhere((item) => item.isEmpty);
-
     List<String> servingUnits = [];
     servingUnits.addAll(food.units);
     servingUnits.removeWhere((item) => item.isEmpty);
@@ -267,7 +263,6 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
         protein: protein,
         carb: carb,
         fat: fat,
-        servingAmounts: servingAmounts,
         units: servingUnits,
         servingIngredientsCount: servingIngredientCounts
     );
@@ -302,7 +297,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
         appBar: AppBar(
           title: const Text(MY_FAVORITE_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               if (Navigator.of(context).canPop()){
                 Navigator.pop(context);
@@ -315,11 +310,7 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                 );
               }
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
           ],
@@ -546,7 +537,6 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
               _addedMyFavorites[i] = _addedMyFavorites[i].copyWith(
                   count: element.count,
                   units: element.units,
-                  servingAmounts: element.servingAmounts,
                   calorie: element.calorie,
                   protein: element.protein,
                   carb: element.carb,

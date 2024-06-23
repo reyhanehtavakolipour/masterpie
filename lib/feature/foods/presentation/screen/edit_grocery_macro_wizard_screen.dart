@@ -6,6 +6,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -38,7 +39,6 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
    late TextEditingController _totalServingController;
    late TextEditingController _totalUnitController;
    GenericFood _initialStateFood = GenericFood();
-   final _debouncer = Debouncer(milliseconds: 1000);
 
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 
@@ -54,11 +54,12 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
    GenericFood newFood = GenericFood();
 
 
+
   @override
   void initState() {
     super.initState();
-    _minServingController= TextEditingController(text: '0.5');
-    _maxServingController= TextEditingController(text: '5.0');
+    _minServingController= TextEditingController(text: WIZARD_MIN_SERVING);
+    _maxServingController= TextEditingController(text: WIZARD_MAX_SERVING);
     _totalCalorieController= TextEditingController(text: '0');
     _totalProteinController= TextEditingController(text: '0');
     _totalCarbController= TextEditingController(text: '0');
@@ -67,26 +68,8 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
     _totalUnitController= TextEditingController(text: 'g');
     _groceryNameController= TextEditingController();
     init();
-    _totalServingController.addListener(_onTotalServingChanged);
   }
 
-
-   void _onTotalServingChanged() {
-     setState(() {
-
-     });
-     _debouncer.run(() {
-         setState(() {
-           if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
-             double count = num.parse(_totalServingController.text)/double.parse(_initialStateFood.servingAmounts[0][_selectedUnitIndex]);
-             _totalCalorieController = TextEditingController(text: '${double.parse(_initialStateFood.calorie[0][_selectedUnitIndex]) * count}');
-             _totalProteinController = TextEditingController(text: '${double.parse(_initialStateFood.protein[0][_selectedUnitIndex]) * count}');
-             _totalCarbController = TextEditingController(text: '${double.parse(_initialStateFood.carb[0][_selectedUnitIndex]) * count}');
-             _totalFatController = TextEditingController(text: '${double.parse(_initialStateFood.fat[0][_selectedUnitIndex]) * count}');
-           }
-         });
-     });
-   }
 
    void handleMealMacrosWithoutIngredient(){
      if(newFood.foodType == FoodType.meal && newFood.ingredients.isEmpty){
@@ -112,15 +95,11 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -166,7 +145,6 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
 
   void init(){
     _groceryNameController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.name;
-    _totalServingController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.servingAmounts[0][0];
     _totalCalorieController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.calorie[0][0];
     _totalProteinController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.protein[0][0];
     _totalCarbController.text = widget.genericGroceryDetailForMacroWizardArgumentModel.food!.carb[0][0];
@@ -205,7 +183,6 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
                        protein: [_totalProteinController.text],
                        carb: [_totalCarbController.text],
                        fat: [_totalFatController.text],
-                       servingAmounts: [_totalServingController.text],
                        units: [_groceryUnitOptions[_selectedUnitIndex]],
                        foodType: FoodType.groceryProduct,
                        name: _groceryNameController.text,
@@ -344,12 +321,10 @@ class _EditGroceryForMacroWizardScreenState extends State<EditGroceryForMacroWiz
                    }
                  }
                  _selectedUnitIndex = selectedIndex;
-                 _totalServingController = TextEditingController(text: _initialStateFood.servingAmounts[0][_selectedUnitIndex].toString());
                  _totalCalorieController = TextEditingController(text: _initialStateFood.calorie[0][_selectedUnitIndex].toString());
                  _totalProteinController = TextEditingController(text: _initialStateFood.protein[0][_selectedUnitIndex].toString());
                  _totalCarbController = TextEditingController(text: _initialStateFood.carb[0][_selectedUnitIndex].toString());
                  _totalFatController = TextEditingController(text: _initialStateFood.fat[0][_selectedUnitIndex].toString());
-                 _totalServingController.addListener(_onTotalServingChanged);
                });
 
              },

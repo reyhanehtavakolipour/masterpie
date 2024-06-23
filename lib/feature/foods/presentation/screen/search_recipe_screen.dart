@@ -77,7 +77,6 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
         GenericFood(
             count: element.count,
             units: [element.units],
-            servingAmounts: [element.servingAmounts],
             calorie: [element.calorie],
             protein: [element.protein],
             carb: [element.carb],
@@ -110,19 +109,11 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
         appBar: AppBar(
           title: const Text(SEARCH_RECIPE_LABEL, style: TextStyle(color: Colors.white)),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const SizedBox(
-              width: 48,
-              height: double.infinity,
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 

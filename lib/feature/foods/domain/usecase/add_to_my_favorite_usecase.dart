@@ -133,16 +133,6 @@ class AddToMyFavoriteUseCase{
       }
     });
 
-    List<String> servingAmounts= [];
-    if(food.foodType == FoodType.meal)
-    food.servingAmounts.forEach((element) {
-      if(element.isEmpty){
-        servingAmounts.add('100.0');
-      }else{
-        servingAmounts.add(double.parse(element).toString());
-      }
-    });
-
     food = food.copyWith(
       ingredients: ingredients,
       calorie: calorie,
@@ -150,7 +140,6 @@ class AddToMyFavoriteUseCase{
       carb: carb,
       fat: fat,
       units: units,
-      servingAmounts: servingAmounts,
       unit:  food.foodType == FoodType.meal && food.unit.isEmpty ? SERVING_LABEL : food.unit,
     );
     return food;

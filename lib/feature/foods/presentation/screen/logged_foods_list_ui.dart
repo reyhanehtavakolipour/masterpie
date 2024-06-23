@@ -86,10 +86,6 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
     fat.removeWhere((item) => item.isEmpty);
 
 
-    List<String> servingAmounts = [];
-    servingAmounts.addAll(food.servingAmounts);
-    servingAmounts.removeWhere((item) => item.isEmpty);
-
     List<String> servingUnits = [];
     servingUnits.addAll(food.units);
     servingUnits.removeWhere((item) => item.isEmpty);
@@ -106,7 +102,6 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
         protein: protein,
         carb: carb,
         fat: fat,
-        servingAmounts: servingAmounts,
         units: servingUnits,
         servingIngredientsCount: servingIngredientCounts
     );
@@ -328,7 +323,7 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
       if(shouldSaveToFavorites){
         final addOrUpdateMyFavoriteBloc = context.read<AddOrUpdateMyFavoriteBloc>();
         /// only favorite groceries can be updated from the list screen
-        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit], servingAmounts: [value.serving.toString()]);
+        final updatedFood = food.copyWith(calorie: value.calorie, protein: value.protein, carb: value.carb, fat: value.fat, units: [value.unit]);
         addOrUpdateMyFavoriteBloc.add(
           AddOrUpdateMyFavoriteEvent.onAddOrUpdateMyFavorite(updatedFood),
         );

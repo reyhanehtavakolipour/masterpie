@@ -32,7 +32,7 @@ class SuggestPortionsBloc extends Bloc<SuggestFoodsPortionEvent, SuggestFoodsPor
           emit(SuggestFoodsPortionState.error(failure.message));
         },
             (data) {
-          emit(SuggestFoodsPortionState.loaded(suggestedFoodsPortions: data));
+          emit(SuggestFoodsPortionState.loaded(wizardResponseModel: data));
         },
       );
     }

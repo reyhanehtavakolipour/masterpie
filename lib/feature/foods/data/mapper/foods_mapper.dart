@@ -1,5 +1,8 @@
 
 
+import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
+
 import '../../domain/model/food_model.dart';
 import '../../domain/model/generic_food_model.dart';
 import '../../domain/model/suggested_foods_portion_model.dart';
@@ -68,7 +71,7 @@ abstract class FoodsMapper{
 
   FoodLocal toGroceryLocal(Food food);
 
-  List<SuggestedFoodsPortion> fromSuggestedFoodsPortionRemote(List<SuggestedFoodsPortionRemote> suggestedFoodsPortionRemote);
+  WizardResponseModel fromWizardResponseRemote(WizardResponseRemoteModel wizardResponseRemoteModel);
 
   List<Food> fromFoodsRemote(List<FoodRemote> foods);
 

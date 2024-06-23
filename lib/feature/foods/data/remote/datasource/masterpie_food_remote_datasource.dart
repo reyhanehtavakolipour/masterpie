@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
 
 
 import '../../../../../util/core/response/failure.dart';
@@ -35,7 +36,7 @@ abstract class MasterPieFoodRemoteDataSource{
 
 
 
-  Future<Either<Failure, List<SuggestedFoodsPortionRemote>>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
   Future<Either<Failure, List<FoodRemote>>> logFoods(List<FoodRemote> foods, String date, String userId);

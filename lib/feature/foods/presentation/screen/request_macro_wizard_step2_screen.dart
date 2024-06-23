@@ -95,7 +95,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
                   const SizedBox(height: 16,),
 
-                  const Text(SEARCH_GROCERY_LABEL, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
+                  const Text(SEARCH_GROCERY_WIZARD, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
                 ],
               ),
             ),
@@ -138,7 +138,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
                   const SizedBox(height: 16,),
 
-                  const Text(SEARCH_RECIPE_LABEL, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
+                  const Text(SEARCH_RECIPE_WIZARD, style: TextStyle( color: Colors.white), textAlign: TextAlign.center,),
 
                 ],
               ),
@@ -195,139 +195,134 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: MONTSERRAT_FONT),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(HOW_MUCH_TO_EAT, style: TextStyle(color: Colors.white)),
-          backgroundColor: PRIMARY_COLOR,
-          leading:  ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+    return PopScope(
+      canPop: false,
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: MONTSERRAT_FONT),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(HOW_MUCH_TO_EAT, style: TextStyle(color: Colors.white)),
+            backgroundColor: PRIMARY_COLOR,
+            leading: InkWell(
+              onTap: () {
+                Navigator.pop(context, _requestWizardArgumentModel);
+              },
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
-            onPressed: () {
-              Navigator.pop(context, _requestWizardArgumentModel);
-            },
+            actions: [
+            ],
           ),
-          actions: [
-          ],
-        ),
-        body: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          body: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
 
-                              Container(
-                                color: DARK_PRIMARY_COLOR,
-                                padding: const EdgeInsets.all(16),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
+                                Container(
+                                  color: MASTERPIE_YELLOW_COLOR,
+                                  padding: const EdgeInsets.all(16),
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
 
-                                    CircleAvatar(
-                                      radius: 12, // Adjust the radius as needed
-                                      backgroundColor: MASTERPIE_ORANGE_COLOR,
-                                      child: Text(
-                                        '2',
-                                        style: TextStyle(
-                                          fontSize: 10, // Adjust the font size as needed
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
-                                    ),
+                                      CircleAvatar(
+                                        radius: 12, // Adjust the radius as needed
+                                        backgroundColor: MASTERPIE_ORANGE_COLOR,
+                                        child: Text(
+                                          '2',
+                                          style: TextStyle(
+                                            fontSize: 10, // Adjust the font size as needed
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),),
+                                      ),
 
-                                    SizedBox(width: 8,),
+                                      SizedBox(width: 8,),
 
-                                    Expanded(
-                                      child: Text(ADD_FOODS_FOR_WIZARD,
-                                        style: TextStyle(color: Colors.white, fontSize: 13),),
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: Text(ADD_FOODS_FOR_WIZARD,
+                                          style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
 
 
 
-                              const SizedBox(height: 4,),
+                                const SizedBox(height: 4,),
 
-                              /// add food options
-                              addFoodOptions(),
+                                /// add food options
+                                addFoodOptions(),
 
-                              const SizedBox(height: 4,),
+                                const SizedBox(height: 4,),
 
-                            ],
-                          ),
+                              ],
+                            ),
 
-                          /// added foods
-                          addedFoods(),
+                            /// added foods
+                            addedFoods(),
 
-                        ],
-                      ),
-                    )
-                ),
-
-                /// request portions
-                requestPortionsButton(),
-
-              ],
-            ),
-
-            BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
-                builder: (context, state) {
-                  if (state is SuggestFoodsPortionLoadingState) {
-                    return const GFLoader(
-                      type: GFLoaderType.circle,
-                      loaderColorOne: DARK_PRIMARY_COLOR,
-                      loaderColorTwo: DARK_PRIMARY_COLOR,
-                      loaderColorThree: DARK_PRIMARY_COLOR,
-                    );
-                  }else if(state is SuggestFoodsPortionLoadedState){
-                    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                    Future.delayed(Duration.zero,(){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SuggestedDifferentFoodsCombinationScreen(suggestedPortionsList: state.suggestedFoodsPortions),
+                          ],
                         ),
-                      );
-                    });
-                  }else if(state is SuggestFoodsPortionErrorState){
-                    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                    Future.delayed(Duration.zero,(){
-                      if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
-                        return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
-                      }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
-                        return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
-                      }
-                      return showErrorToast(context, state.message);
-                    });
-                  }
-                  return Container();
-                },
-                listener: (context, state){
+                      )
+                  ),
 
-                }
-            ),
-          ],
+                  /// request portions
+                  requestPortionsButton(),
+
+                ],
+              ),
+
+              BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
+                  builder: (context, state) {
+                    if (state is SuggestFoodsPortionLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
+                      );
+                    }else if(state is SuggestFoodsPortionLoadedState){
+                      _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: state.wizardResponseModel),
+                          ),
+                        );
+                      });
+                    }else if(state is SuggestFoodsPortionErrorState){
+                      _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
+                          return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
+                        }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                          return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
+                        }
+                        return showErrorToast(context, state.message);
+                      });
+                    }
+                    return Container();
+                  },
+                  listener: (context, state){
+
+                  }
+              ),
+            ],
+          ),
         ),
       ),
     );

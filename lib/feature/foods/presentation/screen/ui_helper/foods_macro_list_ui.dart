@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import '../../../../../main_screen.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
 import '../../../../../util/design/size/app_widget_size.dart';
@@ -50,8 +51,8 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
     _servingController= TextEditingController(text: '0');
-    _minServingController= TextEditingController(text: '0.5');
-    _maxServingController= TextEditingController(text: '5.0');
+    _minServingController= TextEditingController(text: WIZARD_MIN_SERVING);
+    _maxServingController= TextEditingController(text: WIZARD_MAX_SERVING);
     _foodNameController= TextEditingController(text: '');
     _unitController= TextEditingController(text: GRAM_LABEL);
   }
@@ -78,7 +79,6 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               _carbController= TextEditingController(text: widget.foods[index].carb[0]);
               _fatController= TextEditingController(text: widget.foods[index].fat[0]);
               _unitController = TextEditingController(text: widget.foods[index].units[0]);
-              _servingController = TextEditingController(text: widget.foods[index].servingAmounts[0]);
             }else{
 
 
@@ -228,8 +228,8 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               onTap: (){
                 setState(() {
                   widget.onExpansionStateChanged(index, !widget.foodsExpansionState[index], false,
-                      RangeValues(double.parse(_minServingController.text.isEmpty ? '0.5' : _minServingController.text),
-                          double.parse(_maxServingController.text.isEmpty ? '5.0' : _maxServingController.text)));
+                      RangeValues(double.parse(_minServingController.text.isEmpty ? WIZARD_MIN_SERVING : _minServingController.text),
+                          double.parse(_maxServingController.text.isEmpty ? WIZARD_MAX_SERVING : _maxServingController.text)));
                 });
               },
             )
@@ -269,7 +269,6 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
             carb: [_carbController.text],
             protein: [_proteinController.text],
             calorie: [_calorieController.text],
-            servingAmounts: [_servingController.text],
             units: [_unitController.text]
         );
         List<Food> foods = List<Food>.from(widget.foods);

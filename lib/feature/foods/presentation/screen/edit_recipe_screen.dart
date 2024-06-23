@@ -204,15 +204,11 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         appBar: AppBar(
           title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -610,7 +606,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
          )
      );
   }
-
 
 
   void updateServingCountInUi(int index, double count){

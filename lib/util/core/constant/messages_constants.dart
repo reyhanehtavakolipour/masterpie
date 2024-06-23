@@ -68,6 +68,8 @@ const EMPTY_FAVORITE_LABEL = 'Your favorite list is empty';
 const SEARCH_FOOD_LABEL = 'Search Food';
 const SEARCH_GROCERY_LABEL = 'Search Grocery';
 const SEARCH_RECIPE_LABEL = 'Search Recipe';
+const SEARCH_GROCERY_WIZARD = 'Search\nGrocery';
+const SEARCH_RECIPE_WIZARD = 'Search\nRecipe';
 const SEARCH_RECIPES_LABEL = 'Search Recipes';
 const SERVING_LABEL = 'serving';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
@@ -125,7 +127,7 @@ const ALL_LABEL= 'All';
 const MY_FAVORITE_LABEL= 'My Favorite';
 const PER_SERVING_LABEL= 'per serving';
 const MANUAL_LABEL= 'Manual';
-const CREATE_MANUAL_LABEL= 'Create Manual';
+const CREATE_MANUAL_LABEL= 'Create\nManual';
 const HISTORY_LABEL= 'History';
 const NOTHING_FOUND= 'Nothing Found!';
 const CREATE_NOW_LABEL= 'Unable to find it? Please add it now, and you can access it in the future!';
@@ -358,6 +360,8 @@ const ERROR_LOW_CALORIE= 'Calorie must be more than';
 const ERROR_MAX_AMOUNT= 'Max amount of this macro can be';
 const ENTER_GOAL_RANGE= 'Please Specify the Range of Your Macro Goal';
 const ADD_FOODS_FOR_WIZARD= 'Include All the Foods You Plan to Eat During the Day.';
+const IMPROVE_ACCURACY_WARNING= 'How can accuracy be improved?';
+
 
 
 

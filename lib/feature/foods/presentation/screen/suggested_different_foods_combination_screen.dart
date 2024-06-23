@@ -2,11 +2,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -23,9 +25,9 @@ import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
 
-  final List<SuggestedFoodsPortion> suggestedPortionsList;
+  final WizardResponseModel wizardResponse;
 
-  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.suggestedPortionsList});
+  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.wizardResponse});
 
 
   @override
@@ -47,7 +49,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   @override
   void initState() {
     super.initState();
-    _suggestedFoodsPortions = widget.suggestedPortionsList;
+    _suggestedFoodsPortions = widget.wizardResponse.foodsPortions;
     calculateFoodsCombinationsMacros();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
@@ -109,6 +111,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
+      onPopInvoked: (bool didPop){
+
+      },
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
         debugShowCheckedModeBanner: false,
@@ -116,147 +121,176 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           appBar: AppBar(
             title: const Text(FOODS_COMBINATIONS_LABEL, style: TextStyle(color: Colors.white)),
             backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const SizedBox(
-                width: 40,
-                height: 40,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Stack(
-              children: [
-                ListView.builder(
-                    itemCount: _suggestedFoodsPortions.length,
-                    itemBuilder: (context, index){
-                      List<Food> foods = _suggestedFoodsPortions[index].foods;
-                      return Card(
-                        margin: const EdgeInsets.only(top: 8, bottom: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
+          body: Stack(
+            children: [
+
+              SingleChildScrollView(
+
+
+                child: Column(
+                  children: [
+
+
+
+                    Visibility(
+                      visible: widget.wizardResponse.messages.isNotEmpty,
+                      child: Container(
+                        color: MASTERPIE_YELLOW_COLOR,
+                        padding: const EdgeInsets.all(16),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              width: double.infinity,
-                              decoration: const BoxDecoration(
-                                color: DARK_PRIMARY_COLOR,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),    // Adjust the radius as needed
-                                  topRight: Radius.circular(10.0),   // Adjust the radius as needed
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  foodsCombinationAccuracy(_suggestedFoodsPortions[index].accuracy),
-
-                                  const SizedBox(height: 16,),
-
-                                  foodsCombinationMacros(index)
-                                ],
-                              )
+                            const Text(
+                              IMPROVE_ACCURACY_WARNING,
+                              style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold),
                             ),
 
-                            Container(
-                              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 12),
-                              color: BG_COMBINATION_BOTTOM_COLOR,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  foodsPortionsList(foods),
+                            const SizedBox(height: 8,),
 
-                                  const SizedBox(height: 12,),
-
-                                  logFoodsButton(index)
-                                ],
-                              ),
-                            )
+                            ...widget.wizardResponse.messages.map((item) => Text(
+                              '- $item',
+                              style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14),
+                            )).toList(),
                           ],
                         ),
+                      ),
+                    ),
+
+
+
+                    ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        itemCount: _suggestedFoodsPortions.length,
+                        itemBuilder: (context, index){
+                          List<Food> foods = _suggestedFoodsPortions[index].foods;
+                          return Card(
+                            margin: const EdgeInsets.only(top: 8, bottom: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                    width: double.infinity,
+                                    decoration: const BoxDecoration(
+                                      color: DARK_PRIMARY_COLOR,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10.0),    // Adjust the radius as needed
+                                        topRight: Radius.circular(10.0),   // Adjust the radius as needed
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        foodsCombinationAccuracy(_suggestedFoodsPortions[index].accuracy),
+
+                                        const SizedBox(height: 16,),
+
+                                        foodsCombinationMacros(index)
+                                      ],
+                                    )
+                                ),
+
+                                Container(
+                                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 12),
+                                  color: BG_COMBINATION_BOTTOM_COLOR,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      foodsPortionsList(foods),
+
+                                      const SizedBox(height: 12,),
+
+                                      logFoodsButton(index)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                    ),
+
+                  ],
+                ),
+              ),
+
+              BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                  builder: (mcontext, state) {
+                    if (state is GetLoggedFoodsLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
                       );
+                    }else if(state is GetLoggedFoodsLoadedState){
+                      _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        if(_suggestedFoodsPortions.isNotEmpty && _selectedCombinationFoods.isNotEmpty && _combinationMacros.isNotEmpty){
+                          logFoodsOfToday(state.loggedFoods.foods);
+                        }
+                      });
+                    }else if(state is GetLoggedFoodsErrorState){
+                      _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        return showErrorToast(context, state.message);
+                      });
                     }
-                ),
+                    return Container();
+                  },
+                  listener: (context, state){
 
-                BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                    builder: (mcontext, state) {
-                      if (state is GetLoggedFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is GetLoggedFoodsLoadedState){
-                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            if(_suggestedFoodsPortions.isNotEmpty && _selectedCombinationFoods.isNotEmpty && _combinationMacros.isNotEmpty){
-                              logFoodsOfToday(state.loggedFoods.foods);
-                            }
-                          });
-                      }else if(state is GetLoggedFoodsErrorState){
-                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
+                  }
+              ),
 
+              BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                  builder: (mcontext, state) {
+
+                    if (state is LogFoodsLoadingState) {
+                      return const GFLoader(
+                        type: GFLoaderType.circle,
+                        loaderColorOne: DARK_PRIMARY_COLOR,
+                        loaderColorTwo: DARK_PRIMARY_COLOR,
+                        loaderColorThree: DARK_PRIMARY_COLOR,
+                      );
+                    }else if(state is LogFoodsLoadedState){
+                      _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        if(_suggestedFoodsPortions.isNotEmpty && _selectedCombinationFoods.isNotEmpty && _combinationMacros.isNotEmpty){
+                          _suggestedFoodsPortions = [];
+                          _combinationMacros = [];
+                          _selectedCombinationFoods= [];
+                          showSuccessToast(context, LOGGED_SUCCESSFULLY);
+                          Navigator.pop(context);
+                        }
+                      });
+                    }else if(state is LogFoodsErrorState){
+                      _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                      Future.delayed(Duration.zero,(){
+                        return showErrorToast(context, state.message);
+                      });
                     }
-                ),
+                    return Container();
+                  },
+                  listener: (context, state){
 
-                BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                    builder: (mcontext, state) {
-
-                      if (state is LogFoodsLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is LogFoodsLoadedState){
-                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            if(_suggestedFoodsPortions.isNotEmpty && _selectedCombinationFoods.isNotEmpty && _combinationMacros.isNotEmpty){
-                              _suggestedFoodsPortions = [];
-                              _combinationMacros = [];
-                              _selectedCombinationFoods= [];
-                              showSuccessToast(context, LOGGED_SUCCESSFULLY);
-                              Navigator.pop(context);
-                            }
-                          });
-                      }else if(state is LogFoodsErrorState){
-                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
-
-                    }
-                ),
-              ],
-            ),
+                  }
+              ),
+            ],
           ),
         ),
       ),

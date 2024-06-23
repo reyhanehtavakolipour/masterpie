@@ -101,12 +101,6 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
 
 
 
-      List<String> servingAmounts= [];
-      servingAmounts = (jsonMap['serving amount'] as List<dynamic>).map((dynamicItem) => convertToDecimal(dynamicItem)).toList();
-
-
-
-
       List<String> units= [];
       units = (jsonMap['unit'] as List<dynamic>).map((dynamicItem) => dynamicItem.toString().replaceAll(',', '')).toList();
 
@@ -116,7 +110,6 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
       recipe = jsonMap['recipe'];
 
       print("Ingredients: $ingredients ,, ${ingredients.length}");
-      print("Serving Amounts: $servingAmounts ${servingAmounts.length}");
       print("units: $units ${units.length}");
       print("Calorie: $calorie ${calorie.length}");
       print("Protein: $protein ${protein.length}");
@@ -133,8 +126,7 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
 
 
       final ingredientsLength = ingredients.length;
-      if(servingAmounts.length != ingredientsLength ||
-          units.length != ingredientsLength ||
+      if(units.length != ingredientsLength ||
           calorie.length != ingredientsLength ||
           protein.length != ingredientsLength ||
           carb.length != ingredientsLength ||
@@ -150,7 +142,6 @@ class OpenAIFoodRemoteDataSourceImpl extends OpenAIFoodRemoteDataSource{
               name: mealName.trim(),
               foodTypeRemote: FoodTypeRemote.meal,
               ingredients: ingredients,
-              servingAmounts: servingAmounts,
               units: units,
               calorie: calorie,
               protein: protein,

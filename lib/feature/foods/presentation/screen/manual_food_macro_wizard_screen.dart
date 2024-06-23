@@ -11,6 +11,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/gene
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -49,7 +50,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   late TextEditingController _proteinController;
   late TextEditingController _carbController;
   late TextEditingController _fatController;
-  late TextEditingController _servingController;
   late TextEditingController _ingredientNameController;
   late TextEditingController _groceryNameController;
   int _selectedUnitIndex = 0;
@@ -96,9 +96,8 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _proteinController= TextEditingController(text: '0');
     _carbController= TextEditingController(text: '0');
     _fatController= TextEditingController(text: '0');
-    _servingController= TextEditingController(text: '0');
-    _minServingController= TextEditingController(text: '0.5');
-    _maxServingController= TextEditingController(text: '5.0');
+    _minServingController= TextEditingController(text: WIZARD_MIN_SERVING);
+    _maxServingController= TextEditingController(text: WIZARD_MAX_SERVING);
     _ingredientServingCountController= TextEditingController(text: '1.0');
     _ingredientNameController= TextEditingController();
     _groceryNameController= TextEditingController();
@@ -204,15 +203,11 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
           appBar: AppBar(
             title: const Text(ADD_NEW_LABEL, style: TextStyle(color: Colors.white),),
             backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
 
@@ -383,7 +378,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       _initialStateFood= newFood;
@@ -566,7 +560,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                 }
                 _selectedUnitIndex = selectedIndex;
                 if(_selectedAddIngredientOption != ADD_INGREDIENT_MANUALLY){
-                  _servingController = TextEditingController(text: _selectedGenericIngredient.servingAmounts[0][_selectedUnitIndex].toString());
                   _calorieController = TextEditingController(text: _selectedGenericIngredient.calorie[0][_selectedUnitIndex].toString());
                   _proteinController = TextEditingController(text: _selectedGenericIngredient.protein[0][_selectedUnitIndex].toString());
                   _carbController = TextEditingController(text: _selectedGenericIngredient.carb[0][_selectedUnitIndex].toString());
@@ -1134,7 +1127,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                 _selectedUnitIndex= 0;
                 _ingredientNameController= TextEditingController(text: grocery.name.replaceAll(',', ''));
                 _ingredientServingCountController= TextEditingController(text: '1.0');
-                _servingController = TextEditingController(text: grocery.servingAmounts[0][_selectedUnitIndex].toString());
                 _calorieController = TextEditingController(text: grocery.calorie[0][_selectedUnitIndex].toString());
                 _proteinController = TextEditingController(text: grocery.protein[0][_selectedUnitIndex].toString());
                 _carbController = TextEditingController(text: grocery.carb[0][_selectedUnitIndex].toString());
@@ -1287,8 +1279,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
       servingIngredientsCount.add(_ingredientServingCountController.text);
       List<String> ingredientsUnit = List<String>.from(newFood.units);
       ingredientsUnit.add(_selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH ? _selectedGenericIngredient.units[0][_selectedUnitIndex] : manualUnitOptions[_selectedUnitIndex]);
-      List<String> ingredientsServingAmount = List<String>.from(newFood.servingAmounts);
-      ingredientsServingAmount.add(fat_secret);
       List<String> ingredientsCalorie = List<String>.from(newFood.calorie);
       ingredientsCalorie.add(_calorieController.text);
       List<String> ingredientsProtein = List<String>.from(newFood.protein);
@@ -1301,7 +1291,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
       newFood = newFood.copyWith(
         ingredients: ingredients,
         servingIngredientsCount: servingIngredientsCount,
-        servingAmounts: ingredientsServingAmount,
         units: ingredientsUnit,
         calorie: ingredientsCalorie,
         protein: ingredientsProtein,
@@ -1332,7 +1321,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _proteinController.text = '0';
     _carbController.text = '0';
     _fatController.text = '0';
-    _servingController.text = '1.0';
     _selectedUnitIndex= 0;
   }
 

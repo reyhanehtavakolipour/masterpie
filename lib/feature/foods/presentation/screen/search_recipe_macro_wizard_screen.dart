@@ -92,7 +92,6 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
         GenericFood(
             count: element.count,
             units: [element.units],
-            servingAmounts: [element.servingAmounts],
             calorie: [element.calorie],
             protein: [element.protein],
             carb: [element.carb],
@@ -120,7 +119,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
     return  PopScope(
       canPop: false,
       onPopInvoked: (bool didPop){
-        // Navigator.pop(context, _requestWizardArgumentModel);
+
       },
       child: MaterialApp(
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
@@ -130,19 +129,11 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
           appBar: AppBar(
             title: const Text(SEARCH_RECIPE_LABEL, style: TextStyle(color: Colors.white)),
             backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context, _requestWizardArgumentModel);
               },
-              child: const SizedBox(
-                width: 48,
-                height: double.infinity,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
 

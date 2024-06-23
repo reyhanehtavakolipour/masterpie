@@ -145,15 +145,11 @@ class _ViewCookBookFoodScreenState extends State<ViewCookBookFoodScreen> {
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
             IconButton(

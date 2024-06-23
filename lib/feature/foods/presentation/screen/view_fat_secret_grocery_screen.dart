@@ -121,15 +121,11 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
         appBar: AppBar(
           title: const Text(FOOD_DETAIL_LABEL, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
 
@@ -241,7 +237,6 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
 
   void init(){
     _groceryNameController.text = widget.foodDetailArgumentModel.food!.name;
-    _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmounts[0].toString();
     _totalCalorieController.text = double.parse(widget.foodDetailArgumentModel.food!.calorie[0]).toStringAsFixed(2);
     _totalProteinController.text = double.parse(widget.foodDetailArgumentModel.food!.protein[0]).toStringAsFixed(2);
     _totalCarbController.text = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
@@ -339,7 +334,6 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
       newFood = newFood.copyWith(
         foodType: FoodType.groceryProduct,
         name: _groceryNameController.text,
-        servingAmounts: [_totalServingController.text],
         units: [_totalUnitController.text],
         calorie: [_totalCalorieController.text],
         protein: [_totalProteinController.text],

@@ -20,7 +20,6 @@ class GenericFoodCalculator{
     List<List<double>> carb = [];
     List<List<double>> fat = [];
     List<double> servingAmount = [];
-    List<List<double>> servingAmounts = [];
     List<String> unit= [];
     List<List<String>> units= [];
     double count = food.count;
@@ -51,10 +50,6 @@ class GenericFoodCalculator{
         });
         fat= [groceryFat];
 
-
-        List<double> groceryServingAmounts= [];
-        servingAmounts= [groceryServingAmounts];
-
         List<String> groceryUnits= [];
         food.units[0].forEach((element) {
           groceryUnits.add(element);
@@ -65,15 +60,12 @@ class GenericFoodCalculator{
 
         for (int i = 0; i < food.calorie.length; i++) {
           List<double> ingredientCalorie= [];
-          List<double> ingredientServingAmount= [];
           List<String> ingredientUnit= [];
           for(int j = 0; j < food.calorie[i].length; j++){
             double servingCount = double.parse(food.servingIngredientsCount[i][j].isEmpty ? '1' : food.servingIngredientsCount[i][j]);
             ingredientCalorie.add(double.parse(food.calorie[i][j].isEmpty ? '0' : food.calorie[i][j])*servingCount);
-            ingredientServingAmount.add(double.parse(food.servingAmounts[i][j].isEmpty ? '0' : food.servingAmounts[i][j]));
             ingredientUnit.add(food.units[i][j].isEmpty ? '0' : food.units[i][j]);
           }
-          servingAmounts.add(ingredientServingAmount);
           units.add(ingredientUnit);
           calorie.add(ingredientCalorie);
         }
@@ -118,7 +110,6 @@ class GenericFoodCalculator{
           carb: carb,
           fat: fat,
           count: count,
-          servingAmounts: servingAmounts,
           servingAmount: servingAmount,
           unit: unit,
           units: units,

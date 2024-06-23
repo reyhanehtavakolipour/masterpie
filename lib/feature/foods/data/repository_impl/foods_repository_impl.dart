@@ -3,6 +3,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
@@ -390,7 +391,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, List<SuggestedFoodsPortion>>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     await userRepo.checkSubscriptionInRemote();
     final userPlanResponse= await userRepo.getUserPlanInRemote();
@@ -401,7 +402,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
               macroGoalsRange, restriction, macroGoalType, macroPercentage);
           if(suggestedFoodsPortionResponse.isRight()){
             userRepo.updateFoodsPortionRequestsLeftInRemote();
-            return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
+            return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
           }
           return Left(suggestedFoodsPortionResponse.asLeft());
         }else{
@@ -413,7 +414,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
             macroGoalsRange, restriction, macroGoalType, macroPercentage);
         if(suggestedFoodsPortionResponse.isRight()){
           userRepo.updateFoodsPortionRequestsLeftInRemote();
-          return Right(mapper.fromSuggestedFoodsPortionRemote(suggestedFoodsPortionResponse.asRight()));
+          return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
         }
         return Left(suggestedFoodsPortionResponse.asLeft());
       }else{

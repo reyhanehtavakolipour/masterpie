@@ -556,11 +556,13 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
 
 
   setLoseWeightAmountWeeklyOptions(){
-    if(_weightSelectedUnit == KG_LABEL){
-      _weightChangeWeeklyOptions =  [GRAM_250_LABEL, GRAM_500_LABEL, GRAM_750_LABEL, GRAM_1000_LABEL];
-    }else{
-      _weightChangeWeeklyOptions =  [LB_HALF_LABEL, LB_1_LABEL, LB_15_LABEL, LB_2_LABEL];
-    }
+    setState(() {
+      if(_weightSelectedUnit == KG_LABEL){
+        _weightChangeWeeklyOptions =  [GRAM_250_LABEL, GRAM_500_LABEL, GRAM_750_LABEL, GRAM_1000_LABEL];
+      }else{
+        _weightChangeWeeklyOptions =  [LB_HALF_LABEL, LB_1_LABEL, LB_15_LABEL, LB_2_LABEL];
+      }
+    });
   }
 
 
@@ -595,6 +597,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
           onChanged: (String? newValue) {
             setState(() {
               _weightSelectedUnit = newValue.toString();
+              setLoseWeightAmountWeeklyOptions();
               updateWeightChangeWeekly();
             });
           },

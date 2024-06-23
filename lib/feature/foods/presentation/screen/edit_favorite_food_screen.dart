@@ -166,15 +166,11 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
           appBar: AppBar(
             title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
             backgroundColor: PRIMARY_COLOR,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24,
-              ),
+              child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
 
@@ -414,7 +410,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
           carb: updatedFood.carb,
           protein: updatedFood.protein,
           calorie: updatedFood.calorie,
-          servingAmounts: updatedFood.servingAmounts,
           units: updatedFood.units
       );
       calculateTotalMacros();
@@ -555,7 +550,6 @@ class _EditFavoriteFoodScreenState extends State<EditFavoriteFoodScreen> {
       newFood = newFood.copyWith(
           foodType: FoodType.groceryProduct,
           name: _groceryNameController.text,
-          servingAmounts: [_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text],
           units: [_totalUnitController.text],
           calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
           protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],

@@ -23,7 +23,6 @@ class Food with _$Food{
     @Default([]) List<String> protein,
     @Default([]) List<String> carb,
     @Default([]) List<String> fat,
-    @Default([]) List<String> servingAmounts,
     @Default([]) List<String> units,
 
 
