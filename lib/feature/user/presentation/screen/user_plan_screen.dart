@@ -100,6 +100,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
       endsAtMillisecondsSinceEpoch = int.parse(_userPlan.nextUpdateDate);
       renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+
       renewAtString= DateFormat('MMMM d, y').format(renewAt);
     }
 

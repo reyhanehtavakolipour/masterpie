@@ -644,6 +644,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         cookBookFoodsCreatedCount: data[0]['cook_book_created_count'] ?? 0
       );
 
+
+
       return Right(userSubscriptionPlanRemote);
 
     } on PostgrestException catch (error) {

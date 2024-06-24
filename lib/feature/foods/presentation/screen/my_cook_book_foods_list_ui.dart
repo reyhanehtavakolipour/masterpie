@@ -105,8 +105,6 @@ class _MyCookBookFoodsListUiState extends State<MyCookBookFoodsListUi> {
                                     Expanded(
                                       child: Text(food.name.capitalize(),
                                         style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
                                       ),
                                     ),
                                   ],
