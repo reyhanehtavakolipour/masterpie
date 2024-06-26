@@ -6,10 +6,6 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
@@ -21,7 +17,6 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
@@ -59,7 +54,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    int _selectedUnitIndex = 0;
    List<String> _searchUnitOptions = [];
 
-   final _debouncer = Debouncer(milliseconds: 1000);
 
    GenericFood _initialStateFood = GenericFood();
 
@@ -140,7 +134,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      setState(() {
 
      });
-     _debouncer.run(() {
+     debouncer.run(() {
        setState(() {
          if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
            double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount[0];
@@ -168,7 +162,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
      setState(() {
 
      });
-     _debouncer.run(() {
+     debouncer.run(() {
        _suggestedGroceries.clear();
        if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH){
          _groceriesBloc.add(

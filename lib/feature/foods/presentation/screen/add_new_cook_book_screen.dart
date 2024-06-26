@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import 'package:masterpie/main_screen.dart';
@@ -43,7 +42,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
    late TextEditingController _totalServingController;
 
 
-   final _debouncer = Debouncer(milliseconds: 1000);
 
    late TextEditingController _calorieController;
    late TextEditingController _proteinController;
@@ -114,7 +112,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      setState(() {
 
      });
-     _debouncer.run(() {
+     debouncer.run(() {
        _suggestedGroceries.clear();
        if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL){
          _groceriesBloc.add(
@@ -133,7 +131,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
      setState(() {
 
      });
-     _debouncer.run(() {
+     debouncer.run(() {
        _suggestedGroceries.clear();
        if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH){
          _groceriesBloc.add(

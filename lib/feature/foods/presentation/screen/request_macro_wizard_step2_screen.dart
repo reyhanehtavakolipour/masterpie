@@ -239,7 +239,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
                                       CircleAvatar(
                                         radius: 12, // Adjust the radius as needed
-                                        backgroundColor: MASTERPIE_ORANGE_COLOR,
+                                        backgroundColor: DARK_PRIMARY_COLOR,
                                         child: Text(
                                           '2',
                                           style: TextStyle(

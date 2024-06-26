@@ -45,9 +45,6 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
   List<GenericFood> _newRecipes= [];
 
 
-  final _debouncer = Debouncer(milliseconds: 1000);
-
-
   @override
   void initState() {
     super.initState();
@@ -93,7 +90,7 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       requestFoodsList();
     });
   }

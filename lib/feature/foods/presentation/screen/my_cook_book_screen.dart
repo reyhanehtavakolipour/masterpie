@@ -8,13 +8,13 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/presentation/screen/add_new_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_foods_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/view_cook_book_food_screen.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
+import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
@@ -59,7 +59,6 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
   List<Food> _newMyCookBookFoods= [];
 
 
-  final _debouncer = Debouncer(milliseconds: 1000);
 
   @override
   void initState() {
@@ -80,7 +79,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       requestMyCookBookFoods();
     });
   }

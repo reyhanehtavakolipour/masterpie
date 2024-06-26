@@ -6,7 +6,6 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
@@ -48,8 +47,6 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
    GenericFood _selectedGenericIngredient = GenericFood();
    int _selectedUnitIndex = 0;
    List<String> _searchUnitOptions = [];
-
-   final _debouncer = Debouncer(milliseconds: 1000);
 
    late TextEditingController _calorieController;
    late TextEditingController _proteinController;
@@ -117,7 +114,7 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
      setState(() {
 
      });
-     _debouncer.run(() {
+     debouncer.run(() {
        _suggestedGroceries.clear();
        if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH){
          _groceriesBloc.add(

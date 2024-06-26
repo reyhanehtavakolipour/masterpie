@@ -52,6 +52,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
         final foods = data['foods_search']['results']['food'];
 
+
         foods.forEach((element) {
 
           List<String> calorie = [];
@@ -71,10 +72,16 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             servingIngredientsCount.add('1.0');
           });
 
+          String brandName= '';
+          if(element['food_type'] == 'Brand'){
+            brandName= element['brand_name'];
+          }
+
           final product = GenericFoodRemote(
             id: element['food_id'],
             name: element['food_name'],
             foodType: FoodTypeRemote.groceryProduct,
+            brandName: brandName,
             calorie: [calorie],
             protein: [protein],
             carb: [carb],
@@ -380,7 +387,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         Map<String, dynamic> params = {
           'method': 'food.get.v4',
           'food_id': groceryId,
+          'flag_default_serving' : true,
           'format': 'json',
+
         };
 
         final detailResponse= await request.postParams(FAT_SECRET_URL, params: params);

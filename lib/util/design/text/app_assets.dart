@@ -1,4 +1,4 @@
-const String FAVORITE_FOOD_PATH = 'assets/foodtray.png';
+const String COOK_FOOD_PATH = 'assets/cookbook.png';
 const String INTERNATIONAL_FOOD_PATH = 'assets/international.png';
 const String SUGGEST_FOOD_PATH = 'assets/takeaway.png';
 const String HOW_MUCH_EAT_PATH= 'assets/nutrition.png';

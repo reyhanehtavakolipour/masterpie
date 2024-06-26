@@ -5,11 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -18,7 +15,6 @@ import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../data/remote/datasource/fat_secret_food_remote_datasource_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
 import '../bloc/groceries_bloc/groceries_bloc.dart';
@@ -43,8 +39,6 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   late TextEditingController _totalCarbController;
   late TextEditingController _totalFatController;
   late TextEditingController _totalServingController;
-
-  final _debouncer = Debouncer(milliseconds: 1000);
 
   late TextEditingController _calorieController;
   late TextEditingController _proteinController;
@@ -117,7 +111,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
   void _onTotalServingChanged() {
     setState(() {
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       setState(() {
         if(num.parse(_totalServingController.text.isEmpty ? '0' : _totalServingController.text) > 0){
           double coefficient = num.parse(_totalServingController.text)/_initialStateFood.servingAmount;
@@ -147,7 +141,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       _suggestedGroceries.clear();
       if(_groceryNameController.text.isNotEmpty && _selectedAddGroceryOption == ADD_GROCERY_BY_SEARCH_LABEL){
         _groceriesBloc.add(
@@ -166,7 +160,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       _suggestedGroceries.clear();
       if(_ingredientNameController.text.isNotEmpty && _selectedAddIngredientOption == ADD_INGREDIENT_BY_SEARCH){
         _groceriesBloc.add(

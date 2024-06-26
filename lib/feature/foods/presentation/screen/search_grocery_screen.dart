@@ -68,7 +68,6 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
 
   bool _logButtonCLicked = false;
 
-  final _debouncer = Debouncer(milliseconds: 1000);
 
 
   @override
@@ -163,7 +162,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       requestFoodsList();
     });
   }

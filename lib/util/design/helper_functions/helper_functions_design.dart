@@ -7,12 +7,16 @@ import 'package:masterpie/feature/user/presentation/screen/register_screen.dart'
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import '../../../feature/user/presentation/screen/user_plan_screen.dart';
 import '../../core/constant/api_constant.dart';
 import '../../core/constant/messages_constants.dart';
 import '../color/app_colors.dart';
 import '../size/app_widget_size.dart';
 import '../text/app_assets.dart';
+
+
+final debouncer = Debouncer(milliseconds: 500);
 
 extension StringExtension on String {
   String capitalize() {

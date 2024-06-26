@@ -79,11 +79,22 @@ class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesLis
                                     widget.foodIcon,
                                     const SizedBox(width: 2,),
                                     Expanded(
-                                      child: Text(food.name.capitalize(),
-                                        style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+
+                                          Text(food.name.capitalize(),
+                                            style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),
+                                          ),
+
+                                          Visibility(
+                                            visible: food.brandName.isNotEmpty,
+                                            child: Text(food.brandName.capitalize(),
+                                              style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13, fontWeight: FontWeight.normal, fontFamily: MONTSERRAT_FONT),
+                                            ),
+                                          ),
+                                        ],
+                                      )
                                     ),
                                   ],
                                 ),

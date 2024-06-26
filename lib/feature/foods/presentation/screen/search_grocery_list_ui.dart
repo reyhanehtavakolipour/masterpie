@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
@@ -105,9 +106,22 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                                     ),
                                     const SizedBox(width: 2,),
                                     Expanded(
-                                      child: Text(food.name.capitalize(),
-                                        style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),
-                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+
+                                          Text(food.name.capitalize(),
+                                            style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),
+                                          ),
+
+                                          Visibility(
+                                            visible: food.brandName.isNotEmpty,
+                                            child: Text(food.brandName.capitalize(),
+                                              style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13, fontWeight: FontWeight.normal, fontFamily: MONTSERRAT_FONT),
+                                            ),
+                                          ),
+                                        ],
+                                      )
                                     ),
                                   ],
                                 ),

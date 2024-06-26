@@ -1111,7 +1111,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                                               CircleAvatar(
                                                                 radius: 12, // Adjust the radius as needed
-                                                                backgroundColor: MASTERPIE_ORANGE_COLOR,
+                                                                backgroundColor: DARK_PRIMARY_COLOR,
                                                                 child: Text(
                                                                   '1',
                                                                   style: TextStyle(
@@ -1382,7 +1382,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                             shape: BoxShape.circle,
                                                           ),
                                                           child: IconButton(
-                                                            icon: Image.asset(FAVORITE_FOOD_PATH, color: Colors.white,),
+                                                            icon: Image.asset(COOK_FOOD_PATH, color: Colors.white,),
                                                             onPressed: () {
                                                               myCookBookClickListener();
                                                             },

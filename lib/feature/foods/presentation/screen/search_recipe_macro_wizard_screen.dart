@@ -52,9 +52,6 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
 
 
 
-  final _debouncer = Debouncer(milliseconds: 1000);
-
-
   @override
   void initState() {
     super.initState();
@@ -108,7 +105,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       requestFoodsList();
     });
   }

@@ -6,7 +6,6 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../main_screen.dart';
@@ -49,7 +48,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
    late TextEditingController _totalServingController;
    late TextEditingController _totalUnitController;
    GenericFood _initialStateFood = GenericFood();
-   final _debouncer = Debouncer(milliseconds: 1000);
 
    Color _ingredientNameBorderColor = DARK_PRIMARY_COLOR;
 

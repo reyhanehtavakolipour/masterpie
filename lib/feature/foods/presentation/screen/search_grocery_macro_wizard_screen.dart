@@ -7,7 +7,6 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui_macro_wizard.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -45,8 +44,6 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
   List<GenericFood> _newGroceries= [];
 
-  final _debouncer = Debouncer(milliseconds: 1000);
-
 
   @override
   void initState() {
@@ -64,7 +61,7 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
     setState(() {
 
     });
-    _debouncer.run(() {
+    debouncer.run(() {
       if(_searchController.text.isNotEmpty){
         requestFoodsList();
       }
