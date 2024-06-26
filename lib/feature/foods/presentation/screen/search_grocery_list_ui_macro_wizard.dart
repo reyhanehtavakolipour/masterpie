@@ -75,12 +75,18 @@ class _SearchGroceriesListUiForMacroWizardState extends State<SearchGroceriesLis
                                 /// food name
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    widget.foodIcon,
-                                    const SizedBox(width: 2,),
+                                    food.image.isEmpty ? IconButton(
+                                      icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 32, height: 32,),
+                                      onPressed: () {
+                                      },
+                                    ) : ClipOval(child: Image.network(food.image, width: 32, height: 32,)),
+                                    const SizedBox(width: 6 ,),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
 
                                           Text(food.name.capitalize(),

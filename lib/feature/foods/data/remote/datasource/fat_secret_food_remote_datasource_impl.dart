@@ -40,6 +40,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         'format': 'json',
         // 'page_number': 0,
         'max_result': 50,
+        'include_food_images': true,
         'include_sub_categories': true,
         'flag_default_serving' : true
       };
@@ -77,11 +78,24 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             brandName= element['brand_name'];
           }
 
+
+          String image= '';
+
+          if (element.containsKey('food_images')) {
+            final images= element['food_images']['food_image'] as List;
+            if(images.length >= 3){
+              image= images[2]['image_url'];
+            }
+          }
+
+
+
           final product = GenericFoodRemote(
             id: element['food_id'],
             name: element['food_name'],
             foodType: FoodTypeRemote.groceryProduct,
             brandName: brandName,
+            image: image,
             calorie: [calorie],
             protein: [protein],
             carb: [carb],
@@ -143,11 +157,17 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
           final recipe= (element as dynamic);
 
+          String image= '';
+
+          if (element.containsKey('recipe_image')) {
+            image= element['recipe_image'];
+          }
 
           final product = GenericFoodRemote(
                 id: element['recipe_id'],
                 name: element['recipe_name'],
                 foodType: FoodTypeRemote.groceryProduct,
+                image: image,
                 calorie: [[(double.parse(recipe['recipe_nutrition']['calories'].toString())).toString()]],
                 protein: [['0.0']],
                 carb: [['0.0']],

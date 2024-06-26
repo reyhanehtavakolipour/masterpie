@@ -87,15 +87,12 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: IconButton(
-                                        icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR,),
-                                        onPressed: () {
-                                        },
-                                      ),
-                                    ),                                    const SizedBox(width: 2,),
+                                    food.image.isEmpty ? IconButton(
+                                      icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 32, height: 32,),
+                                      onPressed: () {
+                                      },
+                                    ) : ClipOval(child: Image.network(food.image, width: 32, height: 32,)),
+                                    const SizedBox(width: 6,),
                                     Expanded(
                                       child: Text(food.name.capitalize(),
                                         style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: MONTSERRAT_FONT),

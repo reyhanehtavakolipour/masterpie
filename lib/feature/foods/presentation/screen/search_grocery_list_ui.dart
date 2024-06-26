@@ -95,16 +95,12 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: IconButton(
-                                        icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR,),
-                                        onPressed: () {
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 2,),
+                                    food.image.isEmpty ? IconButton(
+                                      icon: Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 32, height: 32,),
+                                      onPressed: () {
+                                      },
+                                    ) : ClipOval(child: Image.network(food.image, width: 32, height: 32,)),
+                                    const SizedBox(width: 6,),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +122,7 @@ class _SearchGroceriesListUiState extends State<SearchGroceriesListUi> {
                                   ],
                                 ),
 
-                                const SizedBox(height: 8,),
+                                const SizedBox(height: 6,),
 
 
                                 /// calorie
