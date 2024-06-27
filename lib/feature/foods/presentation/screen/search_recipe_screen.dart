@@ -52,6 +52,8 @@ class _SearchRecipeScreenState extends State<SearchRecipeScreen> {
     _recipeBloc = context.read<RecipesBloc>();
     _searchController.addListener(_onSearchChanged);
 
+    logEvent(SEARCH_RECIPE_VIEWED, null);
+
     requestFoodsList();
 
   }

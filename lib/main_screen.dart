@@ -139,7 +139,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   int _selectedRestrictionOption= -1;
 
 
-  String _macroGoalInputType= BY_AMOUNT_LABEL;
+  String _macroGoalInputType= BY_PERCENTAGE_LABEL;
 
   late RequestWizardArgumentModel _requestWizardArgumentModel;
 
@@ -187,6 +187,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     if(UserRegistrationStatus.userAccountId.isNotEmpty){
       requestProfile();
+    }else{
+      logEvent(MAIN_PAGE_VIEWED_WITHOUT_ACCOUNT, null);
     }
   }
 
@@ -1922,6 +1924,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               macroPercentage: macroGoalPercentage
           );
 
+          logEvent(MACRO_DIET_NEXT_BTN_CLICKED, null) ;
 
           Navigator.push(
             context,

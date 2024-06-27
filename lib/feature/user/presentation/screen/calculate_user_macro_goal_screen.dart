@@ -400,7 +400,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       child: ElevatedButton(
         onPressed: (){
           if(UserRegistrationStatus.userAccountId.isEmpty){
-            showRegisterDialog(context);
+            showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
           }else if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
               _ageController.text.isEmpty || _heightController.text.isEmpty){
             showErrorToast(context, FILL_ALL_ERROR);

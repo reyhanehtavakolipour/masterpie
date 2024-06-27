@@ -421,6 +421,16 @@ class FoodsRepositoryImpl extends FoodsRepository{
         return const Left(FailureResponse(ERROR_PAID_USER_FOODS_PORTION_OVER_LIMIT));
       }
     }
+    //let non-users use macro diet wizard for a limited time
+    if(userPlanResponse.asLeft().message.contains('invalid input syntax for type uuid')){
+      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+          macroGoalsRange, restriction, macroGoalType, macroPercentage);
+      if(suggestedFoodsPortionResponse.isRight()){
+        return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
+      }
+      return Left(suggestedFoodsPortionResponse.asLeft());
+    }
+
     return const Left(FailureResponse(ERROR_TRY_AGAIN));
   }
 

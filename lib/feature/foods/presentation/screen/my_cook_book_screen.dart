@@ -69,6 +69,8 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _searchController = TextEditingController();
 
+    logEvent(COOKBOOK_VIEWED, null);
+
      requestMyCookBookFoods();
 
     _searchController.addListener(_onSearchChanged);
@@ -328,6 +330,7 @@ class _MyCookBookScreenState extends State<MyCookBookScreen>{
               IconButton(
                 icon: const Icon(Icons.add, color: Colors.white,),
                 onPressed: () {
+                  logEvent(PLUS_COOKBOOK_BTN_CLICKED, null);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

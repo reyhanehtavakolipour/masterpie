@@ -111,7 +111,7 @@ class _CalculatedMacroGoalsPopupState extends State<CalculatedMacroGoalsPopup> {
           )
       );
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
     }
   }
 

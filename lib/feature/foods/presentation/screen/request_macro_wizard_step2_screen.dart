@@ -13,11 +13,14 @@ import 'package:masterpie/feature/foods/presentation/screen/suggested_different_
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'package:masterpie/main_screen.dart';
+import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
+import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../../user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import '../../data/repository_impl/foods_repository_impl.dart';
 import '../../domain/model/food_model.dart';
 import '../bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
@@ -329,6 +332,34 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
   }
 
 
+
+  void requestPortionsClickListener(bool isNonUser){
+    List<List<double>> servings = [];
+    _requestWizardArgumentModel.servingRanges.forEach((element) {
+      List<double> list = [];
+      list.add(element.start);
+      list.add(element.end);
+      servings.add(list);
+    });
+
+    final parameters=  {
+      IS_USER: !isNonUser,
+    };
+
+    logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, parameters);
+
+    _suggestPortionsBloc.add(
+        SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+            _requestWizardArgumentModel.foods,
+            servings,
+            widget.requestWizardArgumentModel.macroGoalRanges,
+            widget.requestWizardArgumentModel.restriction,
+            widget.requestWizardArgumentModel.goalType,
+            widget.requestWizardArgumentModel.macroPercentage
+        )
+    );
+  }
+
   Widget requestPortionsButton(){
     return Container(
             padding: const EdgeInsets.only(bottom: 24, left: 8, right: 8),
@@ -341,37 +372,38 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                 backgroundColor: MASTERPIE_YELLOW_COLOR
             ),
             onPressed: () {
-
               if(UserRegistrationStatus.userAccountId.isNotEmpty){
                 if(_requestWizardArgumentModel.foods.isEmpty){
                   showErrorToast(context, ERROR_ADD_FOOD);
                   return;
                 }
-                List<List<double>> servings = [];
-                _requestWizardArgumentModel.servingRanges.forEach((element) {
-                  List<double> list = [];
-                  list.add(element.start);
-                  list.add(element.end);
-                  servings.add(list);
-                });
-
-                _suggestPortionsBloc.add(
-                    SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                        _requestWizardArgumentModel.foods,
-                        servings,
-                        widget.requestWizardArgumentModel.macroGoalRanges,
-                        widget.requestWizardArgumentModel.restriction,
-                        widget.requestWizardArgumentModel.goalType,
-                        widget.requestWizardArgumentModel.macroPercentage
-                    )
-                );
+               requestPortionsClickListener(false);
               }else{
-                showRegisterDialog(context);
+                handleNonUserRequest();
               }
             },
             child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         ),
       );
+  }
+
+
+  void handleNonUserRequest()async{
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    int wizardRequestsCount = await userHiveDataSource.getInt(KEY_WIZARD_REQUEST);
+    if(wizardRequestsCount >= MAX_WIZARD_NON_USER_REQUEST){
+      showRegisterDialog(context, MACRO_DIET_REQUEST);
+    }else{
+
+      if(_requestWizardArgumentModel.foods.isEmpty){
+        showErrorToast(context, ERROR_ADD_FOOD);
+        return;
+      }
+
+      userHiveDataSource.putInt(KEY_WIZARD_REQUEST, wizardRequestsCount+1);
+      requestPortionsClickListener(true);
+    }
+
   }
 
   void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove, RangeValues rangeValues){

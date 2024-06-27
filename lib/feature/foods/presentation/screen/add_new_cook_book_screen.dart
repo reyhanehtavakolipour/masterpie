@@ -421,7 +421,7 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
   void bottomButtonClickListener(BuildContext context){
     if(UserRegistrationStatus.userAccountId.isEmpty){
-      showRegisterDialog(context);
+      showRegisterDialog(context, ADD_NEW_COOKBOOK_REQUEST);
     }else{
       if(_mealNameController.text.isEmpty){
         setState(() {
@@ -465,6 +465,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
+
+    logEvent(ADD_COOKBOOK_BTN_CLICKED, null);
 
     double servingAmount= double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text);
 

@@ -364,7 +364,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                      requestLoggedFoods();
                    }
                  }else{
-                   showRegisterDialog(context);
+                   showRegisterDialog(context, EDIT_RECIPE_REQUEST);
                  }
                },
                child: const Text(LOG_FOOD_LABEL,
@@ -742,7 +742,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
       });
       requestOperationOnFood(context);
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, EDIT_RECIPE_REQUEST);
     }
   }
 

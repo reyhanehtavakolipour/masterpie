@@ -101,6 +101,8 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
     _ingredientNameController.addListener(_onSearchIngredientChanged);
     _groceryNameController.addListener(_onSearchGroceryChanged);
 
+    logEvent(MACRO_DIET_MANUAL_VIEWED, null);
+
     _groceriesBloc = context.read<GroceriesBloc>();
 
     _totalServingController.addListener(_onTotalServingChanged);

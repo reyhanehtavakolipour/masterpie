@@ -1,9 +1,9 @@
 
 
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,6 +14,52 @@ import '../../core/constant/messages_constants.dart';
 import '../color/app_colors.dart';
 import '../size/app_widget_size.dart';
 import '../text/app_assets.dart';
+
+
+
+const MACRO_DIET_NEXT_BTN_CLICKED= 'macro_diet_next_btn_clicked';
+const MACRO_DIET_GROCERY_VIEWED= 'macro_diet_grocery_viewed';
+const MACRO_DIET_RECIPE_VIEWED= 'macro_diet_recipe_viewed';
+const MACRO_DIET_MANUAL_VIEWED= 'macro_diet_manual_viewed';
+const MACRO_DIET_CALCULATE_BTN_CLICKED= 'macro_diet_calculate_btn_clicked';
+const MACRO_DIET_LOG_BTN_CLICKED= 'macro_diet_log_btn_clicked';
+const IS_USER= 'isUser';
+
+const SEARCH_GROCERY_VIEWED= 'search_grocery_viewed';
+const SEARCH_RECIPE_VIEWED= 'search_recipe_viewed';
+const COOKBOOK_VIEWED= 'cookbook_viewed';
+const FAVORITE_VIEWED= 'favorite_viewed';
+
+
+const PLUS_COOKBOOK_BTN_CLICKED= 'plus_cookbook_btn_clicked';
+const ADD_COOKBOOK_BTN_CLICKED= 'add_cookbook_btn_clicked';
+
+
+const REGISTER_BTN_CLICKED= 'register_btn_clicked';
+
+const MAIN_PAGE_VIEWED_WITHOUT_ACCOUNT= 'main_page_viewed_without_account';
+
+
+const ASK_LOGIN_POPUP_DISPLAYED= 'ask_login_popup_displayed';
+const ASK_LOGIN_POPUP_FROM= 'from';
+const MACRO_DIET_REQUEST= 'macro_diet_request';
+const ADD_NEW_COOKBOOK_REQUEST= 'add_cookbook_request';
+const EDIT_FAT_SECRET_REQUEST= 'edit_fat_secret_request';
+const EDIT_RECIPE_REQUEST= 'edit_recipe_request';
+const SEARCH_GROCERY_REQUEST= 'search_grocery_request';
+const VIEW_RECIPE_REQUEST= 'view_recipe_request';
+const CALCUALTE_MACRO_GOAL_REQUEST= 'calculate_macro_goal_request';
+
+
+
+
+
+void logEvent(String eventName,  Map<String, Object>? parameters)async{
+  await FirebaseAnalytics.instance.logEvent(
+    name: eventName,
+    parameters: parameters
+  );
+}
 
 
 final debouncer = Debouncer(milliseconds: 500);
@@ -190,7 +236,14 @@ Widget fatSecretAttribute(){
 }
 
 
-void showRegisterDialog(BuildContext context) {
+void showRegisterDialog(BuildContext context, String from) {
+
+  final parameters=  {
+    ASK_LOGIN_POPUP_FROM: from,
+  };
+
+  logEvent(ASK_LOGIN_POPUP_DISPLAYED, parameters);
+
   showDialog(
     context: context,
     builder: (BuildContext context) {

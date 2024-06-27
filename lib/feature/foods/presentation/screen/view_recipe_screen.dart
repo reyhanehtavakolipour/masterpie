@@ -445,7 +445,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                     requestLoggedFoods();
                   }
                 }else{
-                  showRegisterDialog(context);
+                  showRegisterDialog(context, VIEW_RECIPE_REQUEST);
                 }
               },
               child: const Text(LOG_FOOD_LABEL,
@@ -623,7 +623,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         ),
       );
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, VIEW_RECIPE_REQUEST);
     }
   }
 

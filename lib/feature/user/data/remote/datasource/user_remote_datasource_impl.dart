@@ -649,7 +649,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       return Right(userSubscriptionPlanRemote);
 
     } on PostgrestException catch (error) {
-
       return Left(ExceptionFailure(error));
     } catch (error) {
       return Left(ExceptionFailure(error));

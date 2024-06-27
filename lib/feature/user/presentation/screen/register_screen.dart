@@ -510,6 +510,8 @@ class _RegisterScreenState extends State<RegisterScreen>{
     }
 
 
+    logEvent(REGISTER_BTN_CLICKED, null);
+
     _registerBloc.add(
       RegisterEvent.onRegisterWithCredential(_emailController.text, _passwordController.text),
     );

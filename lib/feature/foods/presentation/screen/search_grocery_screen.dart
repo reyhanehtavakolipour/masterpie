@@ -80,6 +80,8 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
     _logFoodsBloc = context.read<LogFoodsBloc>();
     _searchController.addListener(_onSearchChanged);
 
+    logEvent(SEARCH_GROCERY_VIEWED, null);
+
     requestFoodsList();
 
   }
@@ -92,7 +94,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
         ),
       );
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, SEARCH_GROCERY_REQUEST);
     }
   }
 
@@ -308,7 +310,7 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       _logButtonCLicked = true;
                       requestLoggedFoods();
                     }else{
-                      showRegisterDialog(context);
+                      showRegisterDialog(context, SEARCH_GROCERY_REQUEST);
                     }
                   },
                   child: const Text(SUBMIT_LOG_FOODS_LABEL,

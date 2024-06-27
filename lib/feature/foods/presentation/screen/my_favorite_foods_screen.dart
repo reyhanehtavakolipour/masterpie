@@ -69,6 +69,8 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
 
+    logEvent(FAVORITE_VIEWED, null);
+
     requestMyFavoriteFoods();
   }
 

@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/print.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -313,23 +315,27 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
   Widget logFoodsButton(int index){
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: ElevatedButton(
-          onPressed: () {
-            _selectedCombinationFoods = _suggestedFoodsPortions[index].foods;
-            requestLoggedFoods();
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+    return Visibility(
+      visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: ElevatedButton(
+            onPressed: () {
+              _selectedCombinationFoods = _suggestedFoodsPortions[index].foods;
+              logEvent(MACRO_DIET_LOG_BTN_CLICKED, null);
+              requestLoggedFoods();
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+              ),
+              backgroundColor: MASTERPIE_YELLOW_COLOR,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
             ),
-            backgroundColor: MASTERPIE_YELLOW_COLOR,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
-          ),
-          child: const Text(LOG_FOODS_LABEL,
-            style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 10, fontWeight: FontWeight.w600),
-          )
+            child: const Text(LOG_FOODS_LABEL,
+              style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 10, fontWeight: FontWeight.w600),
+            )
+        ),
       ),
     );
   }

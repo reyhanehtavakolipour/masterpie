@@ -325,7 +325,7 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
       });
       requestOperationOnFood(context);
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, '');
     }
   }
 

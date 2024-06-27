@@ -93,7 +93,7 @@ class _CalculatedMacroGoalDialogState extends State<CalculatedMacroGoalDialog> {
           )
       );
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
     }
   }
 

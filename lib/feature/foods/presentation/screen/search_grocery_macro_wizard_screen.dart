@@ -53,6 +53,8 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
     _requestWizardArgumentModel= widget.requestWizardArgumentModel;
     _searchController.addListener(_onSearchChanged);
 
+    logEvent(MACRO_DIET_GROCERY_VIEWED, null);
+
     requestFoodsList();
 
   }

@@ -300,7 +300,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                      requestLoggedFoods();
                    }
                  }else{
-                   showRegisterDialog(context);
+                   showRegisterDialog(context, EDIT_FAT_SECRET_REQUEST);
                  }
                },
                child: const Text(LOG_FOOD_LABEL,
@@ -473,7 +473,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
       });
       requestOperationOnFood(context);
     }else{
-      showRegisterDialog(context);
+      showRegisterDialog(context, EDIT_FAT_SECRET_REQUEST);
     }
 
   }
