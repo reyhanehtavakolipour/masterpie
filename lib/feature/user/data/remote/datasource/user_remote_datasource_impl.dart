@@ -346,29 +346,79 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   Future<Either<Failure, Success>> setUserSubscriptionPlanAfterRegister(String userId) async{
     try{
 
+      //todo uncomment when free plan should be set after registration
+      // final supabase = Supabase.instance.client;
+      //
+      // int timestamp = DateTime.now().millisecondsSinceEpoch;
+      //
+      // final subscriptions = await getSubscriptionPlans();
+      // if(subscriptions.isRight()){
+      //
+      //   final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
+      //
+      //   DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      //
+      //   String newNextUpdateDate = calculateNextDate(currentDate, 1, 'month').millisecondsSinceEpoch.toString();
+      //
+      //   final updates = {
+      //     'plan_name': freeSubscription.plan,
+      //     'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
+      //     'food_portion_left_request': freeSubscription.foodPortionRequestsLimit,
+      //     'favorite_food_left': freeSubscription.favoriteFoodLimit,
+      //     'cook_book_left': freeSubscription.cookBookFoodLimit,
+      //     'plan_updated_at': timestamp.toString(),
+      //     'next_update_date' : newNextUpdateDate,
+      //     'plan_interval': freeSubscription.intervals[0],
+      //     'current_period_end': ''
+      //   };
+      //
+      //
+      //   final data = await supabase
+      //       .from(USER_PLAN_TABLE)
+      //       .update(updates)
+      //       .eq('id', userId);
+      //
+      //   return const Right(Success());
+      // }
+      // return const Left(FailureResponse(''));
+
+
+
+
+
+
+    //todo delete whole when free plan should be set after registration
       final supabase = Supabase.instance.client;
+      final subsData = await supabase
+          .from(PLANS_TABLE)
+          .select<List<Map<String, dynamic>>>();
 
-      int timestamp = DateTime.now().millisecondsSinceEpoch;
 
-      final subscriptions = await getSubscriptionPlans();
-      if(subscriptions.isRight()){
-        
-        final freeSubscription = subscriptions.asRight().firstWhere((element) => element.plan == FREE_LABEL);
+        int foodsPortionRequests= 0;
+        subsData.forEach((element) {
+          if(element['plan_name'] == 'premium one-time' && element['interval'] == 'yearly'){
+            foodsPortionRequests= element['food_portion_limit'] ?? 0;
+          }
+        });
+
+
+        int timestamp = DateTime.now().millisecondsSinceEpoch;
 
         DateTime currentDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
 
         String newNextUpdateDate = calculateNextDate(currentDate, 1, 'month').millisecondsSinceEpoch.toString();
 
+        String endsAt = calculateNextDate(currentDate, 1, 'year').millisecondsSinceEpoch.toString();
+
+
+
         final updates = {
-          'plan_name': freeSubscription.plan,
-          'suggest_food_left_request': freeSubscription.suggestFoodRequestsLimit,
-          'food_portion_left_request': freeSubscription.foodPortionRequestsLimit,
-          'favorite_food_left': freeSubscription.favoriteFoodLimit,
-          'cook_book_left': freeSubscription.cookBookFoodLimit,
-          'plan_updated_at': timestamp.toString(),
+          'food_portion_left_request' : foodsPortionRequests,
+          'favorite_food_left' :  10000,
+          'cook_book_left' : 10000,
           'next_update_date' : newNextUpdateDate,
-          'plan_interval': freeSubscription.intervals[0],
-          'current_period_end': ''
+          'current_period_end': endsAt,
+          'plan_name' : PREMIUM_LABEL
         };
 
 
@@ -378,8 +428,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
             .eq('id', userId);
 
         return const Right(Success());
-      }
-      return const Left(FailureResponse(''));
+
     }on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
     } catch (error) {

@@ -172,12 +172,23 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _maxFatGoalController= TextEditingController(text: '0');
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _requestWizardArgumentModel= RequestWizardArgumentModel();
+    checkIfFirstTimeAppOpened();
     checkIfUserHasAccount();
 
   }
 
   void _switchTab(int index) {
     _tabController.animateTo(index);
+  }
+
+
+  void checkIfFirstTimeAppOpened()async{
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
+    if(firstTime != 100){
+      userHiveDataSource.putInt(KEY_WIZARD_REQUEST, 1);
+      showWelcomePopup(context);
+    }
   }
 
   void checkIfUserHasAccount() async {

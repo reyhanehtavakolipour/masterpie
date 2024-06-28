@@ -4,6 +4,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -213,6 +214,62 @@ Future<void> launchURL(String url) async {
   if (await canLaunchUrl(Uri.parse(url))) {
     await launchUrl(Uri.parse(url));
   }
+}
+
+Future<void> showWelcomePopup(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(REGISTER_LABEL, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              Image.asset(SAND_CLOCK_PATH, width: SIZE_IMAGE_UPGRADE_PLAN, height: SIZE_IMAGE_UPGRADE_PLAN,),
+
+              const SizedBox(height: 16,),
+
+              const Text.rich(
+                TextSpan(
+                  text: WELCOM_POPUP_MSG_1,
+                  style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: WELCOM_POPUP_MSG_2,
+                    style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
+
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          Center(
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(MASTERPIE_YELLOW_COLOR),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterScreen(),
+                  ),
+                );
+              },
+              child: const Text(REGISTER_LABEL, style: TextStyle(fontSize: 13, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 

@@ -362,6 +362,9 @@ const ERROR_MAX_AMOUNT= 'Max amount of this macro can be';
 const ENTER_GOAL_RANGE= 'Please Specify the Range of Your Macro Goal';
 const ADD_FOODS_FOR_WIZARD= 'Include All the Foods You Plan to Eat During the Day.';
 const IMPROVE_ACCURACY_WARNING= 'How can accuracy be improved?';
+const WELCOM_POPUP_MSG_1= 'If you\'re interested in using \"Macro Diet Wizard"\ for free, register now, and ';
+const WELCOM_POPUP_MSG_2= 'we\'ll activate your premium account for 2 months at no cost.';
+
 
 
 
