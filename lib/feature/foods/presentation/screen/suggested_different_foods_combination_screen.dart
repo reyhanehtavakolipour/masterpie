@@ -170,6 +170,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                     ListView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         itemCount: _suggestedFoodsPortions.length,
                         itemBuilder: (context, index){

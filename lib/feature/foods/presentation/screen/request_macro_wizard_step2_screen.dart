@@ -343,7 +343,7 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
     });
 
     final parameters=  {
-      IS_USER: !isNonUser,
+      IS_USER: isNonUser ? 0 : 1,
     };
 
     logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, parameters);

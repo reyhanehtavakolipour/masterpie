@@ -135,14 +135,15 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
           return SizedBox(
             width: double.infinity,
-            height: widget.foodsExpansionState[index] ? 460 : 70,
+            height: widget.foodsExpansionState[index] ? 420 : 70,
             child: GestureDetector(
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(BORDER_RADIUS),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -159,7 +160,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: FONT_SIZE_TITLE, fontWeight: FontWeight.bold),),
                             ),
-                            const Spacer(),
+                            // const Spacer(),
                             Text('${widget.foodsServingRanges[index].start} - ${widget.foodsServingRanges[index].end}', style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: FONT_SIZE_TITLE, fontWeight: FontWeight.bold),),
                           ],
                         ),

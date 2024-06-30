@@ -4,8 +4,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
+import 'package:masterpie/util/design/helper_functions/video_player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../feature/foods/presentation/screen/ui_helper/debouncer.dart';
@@ -25,6 +27,8 @@ const MACRO_DIET_MANUAL_VIEWED= 'macro_diet_manual_viewed';
 const MACRO_DIET_CALCULATE_BTN_CLICKED= 'macro_diet_calculate_btn_clicked';
 const MACRO_DIET_LOG_BTN_CLICKED= 'macro_diet_log_btn_clicked';
 const IS_USER= 'isUser';
+const VIDEO_CLICKED= 'video_clicked';
+
 
 const SEARCH_GROCERY_VIEWED= 'search_grocery_viewed';
 const SEARCH_RECIPE_VIEWED= 'search_recipe_viewed';
@@ -228,7 +232,24 @@ Future<void> showWelcomePopup(BuildContext context) async {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-              Image.asset(SAND_CLOCK_PATH, width: SIZE_IMAGE_UPGRADE_PLAN, height: SIZE_IMAGE_UPGRADE_PLAN,),
+
+
+              GestureDetector(
+                onTap: (){
+                  logEvent(VIDEO_CLICKED, null);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VideoPlayerScreen(),
+                    ),
+                  );
+                },
+                  child: Image.asset('assets/thumbnail.jpg', width: 200, height: 400,)
+              ),
+
+
+
 
               const SizedBox(height: 16,),
 
@@ -245,6 +266,18 @@ Future<void> showWelcomePopup(BuildContext context) async {
                   ],
                 ),
               ),
+
+
+              const SizedBox(height: 6,),
+
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                  color: GREEN_COLOR,
+                ),
+                child: const Text(NO_CREDIT, style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              )
 
             ],
           ),
@@ -311,6 +344,14 @@ void showRegisterDialog(BuildContext context, String from) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(LOGIN_MSG, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+
+            //todo delete this when free plan should be set after registration
+            SizedBox(height: 16,),
+            Text(
+              REGISTER_FOR_PREMIUM_ACCOUNT_MSG,
+              style: TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 12, color: GREEN_COLOR, fontWeight: FontWeight.bold),
+            ),
+
           ],
         ),
         actions: [
@@ -325,6 +366,24 @@ void showRegisterDialog(BuildContext context, String from) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const SignInScreen(),
+                ),
+              );
+            },
+          ),
+
+
+          //todo delete this when free plan should be set after registration
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+            ),
+            child: const Text(REGISTER_LABEL, style: TextStyle(fontSize: 14, color: Colors.white)),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RegisterScreen(),
                 ),
               );
             },

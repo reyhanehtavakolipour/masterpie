@@ -17,6 +17,7 @@ import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/di/service_locator.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
+import 'package:masterpie/util/design/helper_functions/video_player_screen.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -182,11 +183,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+
+
   void checkIfFirstTimeAppOpened()async{
+    //todo delete this when free plan should be set after registration
     final userHiveDataSource = serviceLocator<UserHiveDataSource>();
     int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
-    if(firstTime != 100){
-      userHiveDataSource.putInt(KEY_WIZARD_REQUEST, 1);
+    if(firstTime == 0){
+      userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 1);
       showWelcomePopup(context);
     }
   }
@@ -1094,7 +1098,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                         const SizedBox(width: 2,),
                                                         GestureDetector(
                                                           onTap: (){
-                                                            _showInformationPopup(context);
+                                                            logEvent(VIDEO_CLICKED, null);
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => const VideoPlayerScreen(),
+                                                              ),
+                                                            );
                                                           },
                                                           child: const Icon(
                                                             Icons.info_outline,

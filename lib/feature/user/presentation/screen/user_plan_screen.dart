@@ -695,10 +695,25 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
             Center(
               child: Column(
                 children: [
+                  //todo delete this when free plan should be set after registration
+                  const Text('Free', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.lightGreen)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${(subs[1].prices[1]*12).toInt()}USD/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
+                      // Text('${(subs[1].prices[1]*12).toInt()}USD/year', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.lightGreen)),
+
+
+                      //todo delete this when free plan should be set after registration
+                      Text(
+                        '${(subs[1].prices[1]*12).toInt()}USD/year',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: RED_ERROR_COLOR,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: RED_ERROR_COLOR,
+                        ),
+                      ),
                     ],
                   ),
                 ],
