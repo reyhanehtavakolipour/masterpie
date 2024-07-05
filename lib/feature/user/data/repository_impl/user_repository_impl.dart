@@ -528,6 +528,12 @@ class UserRepositoryImpl extends UserRepository{
     return Left(profileResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Success>> deleteAllLocalTables() async{
+    await userLocalDataSource.deleteAllTables();
+    return const Right(Success());
+  }
+
 
 
 

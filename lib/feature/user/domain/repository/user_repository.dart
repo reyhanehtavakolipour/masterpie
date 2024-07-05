@@ -101,6 +101,9 @@ abstract class UserRepository{
   Future<Either<Failure, Success>> updateDailyMacroAndInputsInLocal(Profile profile);
 
 
+  Future<Either<Failure, Success>> deleteAllLocalTables();
+
+
   Future<Either<Failure, Success>> logoutInRemote();
 
 

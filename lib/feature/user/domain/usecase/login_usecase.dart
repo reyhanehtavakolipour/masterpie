@@ -17,6 +17,7 @@ class LoginUseCase{
   Future<Either<Failure, Success>> loginWithCredentials(String email, String password) async{
     final loginResponseRemote = await repo.loginUserWithCredentialInRemote(email, password);
     if(loginResponseRemote.isRight()){
+      await repo.deleteAllLocalTables();
       await repo.saveUserIdInHive(loginResponseRemote.getOrElse(() => ''));
       await repo.saveUserEmailInHive(email);
       await repo.saveUserPasswordInHive(password);
