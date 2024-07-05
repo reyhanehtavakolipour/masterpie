@@ -41,6 +41,13 @@ class GetMyFavoriteFoodsUseCase{
   }
 
   Future<Either<Failure, List<Food>>> getMyFavoriteFoods(FoodType foodsType, String query) async {
+
+    final idResponse = await userRepo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
+      return getImmediateResponse(foodsType, query);
+    }
+
     final myFavoritesRemoteResponse = await foodRepo.getMyFoodsFromRemote(query);
     if (myFavoritesRemoteResponse.isRight()) {
       await foodRepo.saveMyFoodsToLocalDb(myFavoritesRemoteResponse.asRight());

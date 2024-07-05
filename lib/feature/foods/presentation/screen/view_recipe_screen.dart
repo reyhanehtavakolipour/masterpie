@@ -438,15 +438,11 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                   backgroundColor: DARK_PRIMARY_COLOR
               ),
               onPressed: () {
-                if(UserRegistrationStatus.userAccountId.isNotEmpty){
                   if(_foodCountController.text.isEmpty){
                     showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
                   }else{
                     requestLoggedFoods();
                   }
-                }else{
-                  showRegisterDialog(context, VIEW_RECIPE_REQUEST);
-                }
               },
               child: const Text(LOG_FOOD_LABEL,
                 style: TextStyle( color: Colors.white),)
@@ -609,7 +605,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
   void addToCookBookClickListener(BuildContext context){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
       newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
 
       List<int> unitIndexesList= [];
@@ -622,9 +617,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
           fromGenericRecipe(newFood, unitIndexesList),
         ),
       );
-    }else{
-      showRegisterDialog(context, VIEW_RECIPE_REQUEST);
-    }
   }
 
 }

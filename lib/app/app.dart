@@ -19,6 +19,7 @@ import '../feature/foods/presentation/bloc/recipes_bloc/recipes_bloc.dart';
 import '../feature/foods/presentation/bloc/remove_from_favorite_bloc/remove_from_my_favorite_bloc.dart';
 import '../feature/foods/presentation/bloc/suggest_food_bloc/suggest_food_bloc.dart';
 import '../feature/foods/presentation/bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
+import '../feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import '../feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import '../feature/user/presentation/bloc/get_user_credentials_bloc/get_user_credentials_bloc.dart';
 import '../feature/user/presentation/bloc/login_bloc/login_bloc.dart';
@@ -27,6 +28,8 @@ import '../feature/user/presentation/bloc/register_bloc/register_bloc.dart';
 import '../feature/user/presentation/bloc/update_profile_bloc/update_profile_bloc.dart';
 import '../feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 import '../feature/user/presentation/screen/landing_screen.dart';
+import '../util/core/constant/hive_constants.dart';
+import '../util/core/di/service_locator.dart';
 
 
 
@@ -36,6 +39,7 @@ class App extends StatelessWidget {
 
 
   App({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +119,7 @@ class App extends StatelessWidget {
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
           routes: {
-            App.routeName: (context) => const LandingScreen(),
+            App.routeName: (context) =>  const MainScreen(),
           },
         ),
     );

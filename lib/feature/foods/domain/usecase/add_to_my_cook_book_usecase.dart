@@ -7,6 +7,7 @@ import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/core/response/failure.dart';
+import '../../../user/domain/repository/user_repository.dart';
 import '../model/food_model.dart';
 import '../model/food_type.dart';
 import '../repository/foods_repository.dart';
@@ -14,12 +15,23 @@ import '../repository/foods_repository.dart';
 class AddToMyCookBookUseCase{
 
   final repo = serviceLocator<FoodsRepository>();
+  final userRepo = serviceLocator<UserRepository>();
+
 
   Future<Either<Failure, Food>> addToMyCookBook(Food food) async{
     food = checkFood(food);
     food= food.copyWith(
       id: generateRandomId()
     );
+
+    final idResponse = await userRepo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
+      await repo.saveMyCookBookMealToLocalDb(food);
+      return Right(food);
+    }
+
+
       final addToMyCookBookRemoteResponse = await repo.saveMealToMyCookBookRemote(food);
       if(addToMyCookBookRemoteResponse.isRight()){
         await repo.saveMyCookBookMealToLocalDb(food);
@@ -31,6 +43,14 @@ class AddToMyCookBookUseCase{
 
   Future<Either<Failure, Food>> updateMyCookBookFood(Food food) async{
     food = checkFood(food);
+
+    final idResponse = await userRepo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
+      await repo.updateMyCookBookMealInLocalDb(food);
+      return Right(food);
+    }
+
     final updateCookBookRemoteResponse = await repo.updateMyCookBookMealInRemote(food);
     if(updateCookBookRemoteResponse.isRight()){
     await repo.updateMyCookBookMealInLocalDb(food);

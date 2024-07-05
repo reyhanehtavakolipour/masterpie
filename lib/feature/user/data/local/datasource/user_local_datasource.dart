@@ -10,15 +10,20 @@ import '../model/profile_local.dart';
 
 abstract class UserLocalDataSource{
 
-  Future<Either<Failure, Success>> upsertProfileAfterRegister(ProfileLocal profileLocal);
+  Future<Either<Failure, Success>> updateUserProfile(ProfileLocal profileLocal);
 
-  Future<Either<Failure, ProfileLocal>> getProfile(String email);
+  Future<Either<Failure, Success>> insertUserProfile(ProfileLocal profileLocal);
+
+
+  Future<Either<Failure, Success>> upsertGuestProfile(ProfileLocal profileLocal);
+
+  Future<Either<Failure, ProfileLocal>> getProfile();
 
 
   Future<Either<Failure, Success>> updateUserInfo(ProfileLocal profile);
 
 
-  Future<Either<Failure, Success>> updateDailyMacroGoal(ProfileLocal profile);
+  Future<Either<Failure, Success>> updateDailyMacroGoal(List<String> dailyMacroGoal);
 
 
   Future<Either<Failure, Success>> updateDailyMacroAndInputs(ProfileLocal profile);

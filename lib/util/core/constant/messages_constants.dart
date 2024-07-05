@@ -229,6 +229,7 @@ const MAX_LABEL = 'max';
 const MACRO_SAVED_SUCCESS_MSG = 'Macros updated successfully';
 const ACTIVITY_LEVEL_LABEL  = 'Activity Level';
 const FILL_ALL_ERROR  = 'please complete all the fields';
+const FILL_MACRO_INPUT_ERROR  = 'completing weight, height, age and goal weight is required to calculate your macro goal';
 const MASTERPIE_NAME  = 'MasterPie';
 const SET_MACRO_MANUALLY_LABEL  = 'Set Macros Manually';
 const YOUR_PLAN_LABEL  = 'Your Plan';

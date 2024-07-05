@@ -20,14 +20,11 @@ class GetLoggedFoodsUseCase{
   Future<Either<Failure, LoggedFoods>> getImmediateResponse(String date) async{
     late Either<Failure, List<Food>> foodsLocalDb;
     foodsLocalDb= await repo.getLoggedFoodsFromLocalDb(date);
-    final userEmail= await userRepo.getEmailFromHive();
-    final userId= await userRepo.getUserIdFromHive();
-    final userPlan = await userRepo.getUserPlanInRemote();
-    final profileResponse = await userRepo.getProfileFromRemote(userEmail.asRight());
+    final profileResponse = await userRepo.getProfileFromLocal();
     if(profileResponse.isRight()){
       List<String> goals = profileResponse.asRight().dailyMacroGoal;
       if(goals.isEmpty){
-        goals = ['0.0', '0.0', '0.0', '0.0'];
+        goals = ['2197', '220', '165', '73'];
       }
       List<double> macroGoals= [];
       macroGoals.add(goals[0].isNotEmpty ? double.parse(goals[0]) : 0);
@@ -35,12 +32,7 @@ class GetLoggedFoodsUseCase{
       macroGoals.add(goals[2].isNotEmpty ? double.parse(goals[2]) : 0);
       macroGoals.add(goals[3].isNotEmpty ? double.parse(goals[3]) : 0);
 
-
-      if(userPlan.isLeft()){
-        return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: false));
-      }
-
-      return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: userPlan.asRight().subscriptionPlan!.macroEdition));
+      return Right(LoggedFoods(foods: foodsLocalDb.asRight(), date: date, goals: macroGoals, macroEdition: true));
     }
     return Left(getFailure(profileResponse.asLeft()));
   }
@@ -48,6 +40,15 @@ class GetLoggedFoodsUseCase{
 
 
   Future<Either<Failure, LoggedFoods>> getLoggedFoods(String date) async{
+
+    final idResponse = await userRepo.getUserIdFromHive();
+
+    if(idResponse.isRight()){
+      if(idResponse.asRight().isEmpty){
+        return getImmediateResponse(date);
+      }
+    }
+
     final foodsResponseRemote = await repo.getLoggedFoodsFromRemote(date);
     if(foodsResponseRemote.isRight()){
       final result= await repo.saveLoggedFoodsToLocalDb(foodsResponseRemote.getOrElse(() => []), date);

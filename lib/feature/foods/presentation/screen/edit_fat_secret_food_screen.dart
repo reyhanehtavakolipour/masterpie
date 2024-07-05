@@ -292,16 +292,12 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(UserRegistrationStatus.userAccountId.isNotEmpty){
                    if(_foodCountController.text.isEmpty){
                      showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
                    }else{
                      _logButtonClicked= true;
                      requestLoggedFoods();
                    }
-                 }else{
-                   showRegisterDialog(context, EDIT_FAT_SECRET_REQUEST);
-                 }
                },
                child: const Text(LOG_FOOD_LABEL,
                  style: TextStyle( color: Colors.white),)
@@ -446,7 +442,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
       if(newFood.foodType == FoodType.groceryProduct){
         if(_groceryNameController.text.isEmpty){
           setState(() {
@@ -472,10 +467,6 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
         _ingredientNameBorderColor = Colors.black;
       });
       requestOperationOnFood(context);
-    }else{
-      showRegisterDialog(context, EDIT_FAT_SECRET_REQUEST);
-    }
-
   }
 
 

@@ -13,13 +13,16 @@ import 'package:masterpie/feature/user/presentation/bloc/user_plan_bloc/user_pla
 import 'package:masterpie/feature/user/presentation/screen/model/new_plan_info_model.dart';
 import 'package:masterpie/feature/user/presentation/screen/payment_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
+import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
+import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../data/local/datasource/user_hive_keyvalue_datasource.dart';
 import '../bloc/user_plan_bloc/state_event/plan_state_event.dart';
 
 
@@ -47,6 +50,8 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   bool _loaderVisible= false;
 
+  bool _userLoggedIn= false;
+
 
   @override
   void initState() {
@@ -59,7 +64,10 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
   }
 
   void getPlan() async{
-    if(UserRegistrationStatus.userAccountId.isEmpty){
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    _userLoggedIn= userId.isEmpty ? true : false;
+    if(!_userLoggedIn){
       return;
     }
 
@@ -94,7 +102,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
     String renewAtString= '';
 
-    if(UserRegistrationStatus.userAccountId.isNotEmpty && _userPlan.nextUpdateDate.isNotEmpty){
+    if(_userLoggedIn){
       // macro diet wizard renew at
       int endsAtMillisecondsSinceEpoch = 0;
       DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
@@ -105,7 +113,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     }
 
     return Visibility(
-      visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+      visible: _userLoggedIn,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         color: DARK_PRIMARY_COLOR,
@@ -167,7 +175,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
 
   Widget userPlanIfUserHasNotLoggedIn(){
     return Visibility(
-        visible: UserRegistrationStatus.userAccountId.isEmpty,
+        visible: !_userLoggedIn,
         child: Container(
             padding: const EdgeInsets.all(16),
             color: LIGHT_GREY_COLOR,
@@ -446,7 +454,7 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
                 showSuccessToast(context, SWITCH_TO_FREE_AUTOMATIC_MSG);
               }else{
 
-                if(UserRegistrationStatus.userAccountId.isNotEmpty){
+                if(_userLoggedIn){
                   _newPlanInfo = _newPlanInfo.copyWith(customerId: _userPlan.customerId,
                       subscriptionId: _userPlan.subscriptionId, endsAt: _userPlan.endsAt,
                       interval: _userPlan.interval, updatedAt: _userPlan.updatedAt,

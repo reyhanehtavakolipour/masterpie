@@ -361,12 +361,10 @@ class _MyFavoriteFoodsScreenState extends State<MyFavoriteFoodsScreen>{
                           checkIfFavoriteFoodsAddedBefore(state.foods);
                         });
                       }else if(state is MyFavoriteFoodsErrorState){
-                        if(UserRegistrationStatus.userAccountId.isNotEmpty){
-                          _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
-                          Future.delayed(Duration.zero,(){
-                            return showErrorToast(context, state.message);
-                          });
-                        }
+                        _myFavoriteFoodsBloc.add(const MyFavoriteFoodsEvent.onReset());
+                        Future.delayed(Duration.zero,(){
+                          return showErrorToast(context, state.message);
+                        });
                       }
                       return Container();
                     },

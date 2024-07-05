@@ -372,15 +372,11 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
                 backgroundColor: MASTERPIE_YELLOW_COLOR
             ),
             onPressed: () {
-              if(UserRegistrationStatus.userAccountId.isNotEmpty){
                 if(_requestWizardArgumentModel.foods.isEmpty){
                   showErrorToast(context, ERROR_ADD_FOOD);
                   return;
                 }
                requestPortionsClickListener(false);
-              }else{
-                handleNonUserRequest();
-              }
             },
             child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         ),
@@ -391,10 +387,6 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
   void handleNonUserRequest()async{
     final userHiveDataSource = serviceLocator<UserHiveDataSource>();
     int wizardRequestsCount = await userHiveDataSource.getInt(KEY_WIZARD_REQUEST);
-    if(wizardRequestsCount >= MAX_WIZARD_NON_USER_REQUEST){
-      showRegisterDialog(context, MACRO_DIET_REQUEST);
-    }else{
-
       if(_requestWizardArgumentModel.foods.isEmpty){
         showErrorToast(context, ERROR_ADD_FOOD);
         return;
@@ -402,7 +394,6 @@ class _RequestMacroWizardStepTwoScreenState extends State<RequestMacroWizardStep
 
       userHiveDataSource.putInt(KEY_WIZARD_REQUEST, wizardRequestsCount+1);
       requestPortionsClickListener(true);
-    }
 
   }
 

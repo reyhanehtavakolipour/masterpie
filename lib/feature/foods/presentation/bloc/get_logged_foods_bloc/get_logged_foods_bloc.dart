@@ -38,22 +38,7 @@ class GetLoggedFoodsBloc extends Bloc<GetLoggedFoodsEvent, GetLoggedFoodsState> 
     on<GetAllLoggedFoodsEvent>(
             (event, emit) async {
           emit(const GetLoggedFoodsState.loading());
-          //
-          ///get immediate response
-          final useCase= serviceLocator<GetLoggedFoodsUseCase>();
-          var immediateResult = await useCase.getImmediateResponse(event.date);
-          immediateResult.fold(
-                (failure) {
-              emit(GetLoggedFoodsState.error(failure.message));
-            },
-                (data) {
-              emit(GetLoggedFoodsState.loaded(loggedFoods: data));
-            },
-          );
-
-            emit(const GetLoggedFoodsState.loading());
-
-            /// get fresh data
+           final useCase= serviceLocator<GetLoggedFoodsUseCase>();
             var result = await useCase.getLoggedFoods(
                 event.date,
             );

@@ -3,6 +3,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/user/data/remote/model/user_plan_remote_model.dart';
+import 'package:masterpie/feature/user/domain/model/profile_model.dart';
 
 
 import '../../../../../util/core/response/failure.dart';
@@ -21,7 +22,7 @@ abstract class UserRemoteDataSource{
   Future<Either<Failure, GoogleSignInRemote>> signInUserWithGoogle();
 
 
-  Future<Either<Failure, Success>> upsertProfileAfterRegister(ProfileRemote profileRemote);
+  Future<Either<Failure, ProfileRemote>> upsertProfileAfterRegister(ProfileRemote profileRemote);
 
 
   Future<Either<Failure, Success>> updateUserInfo(ProfileRemote profile);

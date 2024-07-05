@@ -421,7 +421,12 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
   Widget buildSaveButton(){
     return ElevatedButton(
       onPressed: (){
-        updateProfile();
+        if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
+            _ageController.text.isEmpty || _heightController.text.isEmpty){
+          showErrorToast(context, FILL_MACRO_INPUT_ERROR);
+        }else{
+          updateProfile();
+        }
       },
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

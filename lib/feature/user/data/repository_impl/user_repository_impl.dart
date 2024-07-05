@@ -102,30 +102,50 @@ class UserRepositoryImpl extends UserRepository{
 
 
   @override
-  Future<Either<Failure, Success>> upsertProfileAfterRegisterInRemote(Profile profile) async{
+  Future<Either<Failure, Profile>> upsertProfileAfterRegisterInRemote(Profile profile) async{
     final userId = await getUserIdFromHive();
     profile = profile.copyWith(id: userId.asRight());
     final saveProfileResponse = await userRemoteDataSource.upsertProfileAfterRegister(mapper.toProfileRemote(profile));
     if(saveProfileResponse.isRight()){
-      return const Right(Success());
+      return Right(mapper.fromProfileRemote(saveProfileResponse.asRight()));
     }
     return Left(saveProfileResponse.asLeft());
   }
 
   @override
-  Future<Either<Failure, Success>> upsertProfileInLocal(Profile profile) async{
+  Future<Either<Failure, Success>> updateProfileInLocal(Profile profile) async{
     final userId = await getUserIdFromHive();
-    profile = profile.copyWith(id: userId.asRight());
-    final saveProfileResponse = await userLocalDataSource.upsertProfileAfterRegister(mapper.toProfileLocal(profile));
+
+    if((userId.isRight() ?  userId.asRight() : '').isEmpty){
+      final saveProfileResponse = await userLocalDataSource.upsertGuestProfile(mapper.toProfileLocal(profile));
+      if(saveProfileResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(saveProfileResponse.asLeft());
+    }
+
+
+    final saveProfileResponse = await userLocalDataSource.updateUserProfile(mapper.toProfileLocal(profile.copyWith(id: userId.asRight())));
     if(saveProfileResponse.isRight()){
       return const Right(Success());
     }
     return Left(saveProfileResponse.asLeft());
   }
 
+
   @override
-  Future<Either<Failure, Profile>> getProfileFromLocal(String email) async{
-    final profileResponse = await userLocalDataSource.getProfile(email);
+  Future<Either<Failure, Success>> insertUserProfileInLocal(Profile profile) async{
+      final saveProfileResponse = await userLocalDataSource.insertUserProfile(mapper.toProfileLocal(profile));
+      if(saveProfileResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(saveProfileResponse.asLeft());
+  }
+
+
+  @override
+  Future<Either<Failure, Profile>> getProfileFromLocal() async{
+    final profileResponse = await userLocalDataSource.getProfile();
     if(profileResponse.isRight()){
       return Right(mapper.fromProfileLocal(profileResponse.asRight()));
     }
@@ -199,10 +219,8 @@ class UserRepositoryImpl extends UserRepository{
 
 
   @override
-  Future<Either<Failure, Success>> updateDailyMacroGoalInLocal(Profile profile) async{
-    final userId = await getUserIdFromHive();
-    profile = profile.copyWith(id: userId.asRight());
-    final saveProfileResponse = await userLocalDataSource.updateDailyMacroGoal(mapper.toProfileLocal(profile));
+  Future<Either<Failure, Success>> updateDailyMacroGoalInLocal(List<String> dailyMacroGoal) async{
+    final saveProfileResponse = await userLocalDataSource.updateDailyMacroGoal(dailyMacroGoal);
     if(saveProfileResponse.isRight()){
       return const Right(Success());
     }
@@ -509,6 +527,8 @@ class UserRepositoryImpl extends UserRepository{
     }
     return Left(profileResponse.asLeft());
   }
+
+
 
 
 

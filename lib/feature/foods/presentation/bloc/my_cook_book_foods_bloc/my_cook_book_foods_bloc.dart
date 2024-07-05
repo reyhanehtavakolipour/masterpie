@@ -4,6 +4,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/my_cook_book_foods_bloc/state_event/my_cook_book_foods_state_event.dart';
+import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../../util/core/di/service_locator.dart';
 import '../../../domain/usecase/get_my_cook_book_foods_usecase.dart';
 
@@ -20,7 +21,6 @@ class MyCookBookFoodsBloc extends Bloc<MyCookBookFoodsEvent, MyCookBookFoodsStat
 
 
     on<GetCookBookFoodsImmediately>((event, emit) async {
-
       final useCase= serviceLocator<GetMyCookBookFoodsUseCase>();
 
       emit(const MyCookBookFoodsState.loading());
@@ -60,13 +60,13 @@ class MyCookBookFoodsBloc extends Bloc<MyCookBookFoodsEvent, MyCookBookFoodsStat
     );
 
     on<CookBookFoods>((event, emit) async {
-
       final useCase= serviceLocator<GetMyCookBookFoodsUseCase>();
 
       emit(const MyCookBookFoodsState.loading());
 
       ///get immediate response
       var immediateResult = await useCase.getImmediateResponse(event.query);
+
       immediateResult.fold(
             (failure) {
           emit(MyCookBookFoodsState.error(failure.message));
@@ -86,7 +86,7 @@ class MyCookBookFoodsBloc extends Bloc<MyCookBookFoodsEvent, MyCookBookFoodsStat
           emit(MyCookBookFoodsState.error(failure.message));
         },
             (data) {
-          emit(MyCookBookFoodsState.loaded(foods: data));
+              emit(MyCookBookFoodsState.loaded(foods: data));
         },
       );
     }

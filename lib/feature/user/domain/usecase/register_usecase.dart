@@ -3,6 +3,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/user/data/local/model/profile_local.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -19,11 +20,15 @@ class RegisterUseCase{
     if(registerResponseRemote.isRight()){
       final loginResponseRemote = await repo.loginUserWithCredentialInRemote(email, password);
       if(loginResponseRemote.isRight()){
-        await repo.upsertProfileInLocal(Profile(id: loginResponseRemote.asRight(), email: email));
         await repo.saveUserEmailInHive(email);
         await repo.saveUserPasswordInHive(password);
         await repo.saveUserIdInHive(loginResponseRemote.asRight());
         await repo.setUserSubscriptionPlanAfterRegisterInRemote();
+        final profileResponse= await repo.getProfileFromLocal();
+        Profile profile= profileResponse.isRight() ? profileResponse.asRight() : Profile();
+        profile= profile.copyWith(id: loginResponseRemote.asRight(), email: email);
+        await repo.insertUserProfileInLocal(profile);
+        await repo.upsertProfileAfterRegisterInRemote(profile);
         return  Right(email);
       }
       return Left(getFailure(const FailureResponse('User already registered')));
@@ -42,7 +47,7 @@ class RegisterUseCase{
       await repo.saveUserEmailInHive(registerResponseRemote.asRight().email);
       await repo.saveUserPasswordInHive('');
       await repo.setUserSubscriptionPlanAfterRegisterInRemote();
-      await repo.upsertProfileInLocal(Profile(id: registerResponseRemote.asRight().id, email: registerResponseRemote.asRight().email));
+      await repo.updateProfileInLocal(Profile(id: registerResponseRemote.asRight().id, email: registerResponseRemote.asRight().email));
       return Right(registerResponseRemote.asRight().email);
     }
     return Left(getFailure(registerResponseRemote.asLeft()));

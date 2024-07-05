@@ -11,14 +11,11 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -87,15 +84,11 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
   }
 
   void addToFavorites(Food food){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
-      _addToMyFavoriteBloc.add(
-        AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
-            food
-        ),
-      );
-    }else{
-      showRegisterDialog(context, SEARCH_GROCERY_REQUEST);
-    }
+    _addToMyFavoriteBloc.add(
+      AddOrUpdateMyFavoriteEvent.onAddToMyFavorite(
+          food
+      ),
+    );
   }
 
 
@@ -306,12 +299,8 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
                       backgroundColor: LOG_FOOD_BTN_COLOR
                   ),
                   onPressed: () {
-                    if(UserRegistrationStatus.userAccountId.isNotEmpty){
                       _logButtonCLicked = true;
                       requestLoggedFoods();
-                    }else{
-                      showRegisterDialog(context, SEARCH_GROCERY_REQUEST);
-                    }
                   },
                   child: const Text(SUBMIT_LOG_FOODS_LABEL,
                     style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),

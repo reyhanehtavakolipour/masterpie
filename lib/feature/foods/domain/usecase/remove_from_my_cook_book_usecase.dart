@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/user/domain/repository/user_repository.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -11,14 +12,24 @@ import '../repository/foods_repository.dart';
 class RemoveFromMyCookBookUseCase{
 
   final repo = serviceLocator<FoodsRepository>();
+  final userRepo = serviceLocator<UserRepository>();
+
 
   Future<Either<Failure, Food>> removeFromMyCookBook(Food food) async{
-    final removeFromMyCookBookRemoteResponse = await repo.removeMealFromMyCookBookInRemote(food);
-    if(removeFromMyCookBookRemoteResponse.isRight()){
+
+    final idResponse = await userRepo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
       await repo.removeMealFromMyCookBookInLocalDb(food);
       return Right(food);
+    }else{
+      final removeFromMyCookBookRemoteResponse = await repo.removeMealFromMyCookBookInRemote(food);
+      if(removeFromMyCookBookRemoteResponse.isRight()){
+        await repo.removeMealFromMyCookBookInLocalDb(food);
+        return Right(food);
+      }
+      return Left(getFailure(removeFromMyCookBookRemoteResponse.asLeft()));
     }
-    return Left(getFailure(removeFromMyCookBookRemoteResponse.asLeft()));
   }
 
 }

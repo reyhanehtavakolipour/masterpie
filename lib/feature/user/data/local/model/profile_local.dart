@@ -1,6 +1,8 @@
 
 
 
+import 'package:masterpie/util/core/constant/messages_constants.dart';
+
 class ProfileLocal{
   String id;
   String email;
@@ -93,4 +95,24 @@ class ProfileLocal{
         'dailyMacroGoal: $dailyMacroGoal';
   }
 
+}
+
+
+ProfileLocal emptyProfile(){
+  return ProfileLocal(
+      id: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      age: '',
+      gender: FEMALE_LABEL,
+      weight: '',
+      height: '',
+      weightUnit: LB_LABEL,
+      heightUnit: FT_LABEL,
+      goalWeight: '',
+      dailyMacroGoal: ['2197', '220', '165', '73'],
+      activityLevel: SEDENTARY_LABEL,
+      weightChangeWeekly: LB_1_LABEL
+  );
 }

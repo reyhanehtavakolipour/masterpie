@@ -420,9 +420,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
 
 
   void bottomButtonClickListener(BuildContext context){
-    if(UserRegistrationStatus.userAccountId.isEmpty){
-      showRegisterDialog(context, ADD_NEW_COOKBOOK_REQUEST);
-    }else{
       if(_mealNameController.text.isEmpty){
         setState(() {
           _mealNameBorderColor = Colors.red;
@@ -460,7 +457,6 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
         _mealNameBorderColor = Colors.black;
       });
       requestOperationOnFood(context);
-    }
   }
 
 

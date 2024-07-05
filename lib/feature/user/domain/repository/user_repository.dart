@@ -57,13 +57,15 @@ abstract class UserRepository{
 
   Future<Either<Failure, Success>> saveUserPasswordInHive(String password);
 
-  Future<Either<Failure, Success>> upsertProfileAfterRegisterInRemote(Profile profile);
+  Future<Either<Failure, Profile>> upsertProfileAfterRegisterInRemote(Profile profile);
 
   Future<Either<Failure, Success>> checkSubscriptionInRemote();
 
-  Future<Either<Failure, Success>> upsertProfileInLocal(Profile profile);
+  Future<Either<Failure, Success>> updateProfileInLocal(Profile profile);
 
-  Future<Either<Failure, Profile>> getProfileFromLocal(String email);
+  Future<Either<Failure, Success>> insertUserProfileInLocal(Profile profile);
+
+  Future<Either<Failure, Profile>> getProfileFromLocal();
 
   Future<Either<Failure, Profile>> getProfileFromRemote(String email);
 
@@ -90,7 +92,7 @@ abstract class UserRepository{
   Future<Either<Failure, Success>> updateUserInfoInLocal(Profile profile);
 
 
-  Future<Either<Failure, Success>> updateDailyMacroGoalInLocal(Profile profile);
+  Future<Either<Failure, Success>> updateDailyMacroGoalInLocal(List<String> dailyMacroGoal);
 
 
   Future<Either<Failure, Success>> updateDailyMacroAndInputsInRemote(Profile profile);

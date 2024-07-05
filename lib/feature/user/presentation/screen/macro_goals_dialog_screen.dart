@@ -5,9 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:masterpie/util/core/constant/sqflite_constants.dart';
-import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -16,11 +13,6 @@ import '../../../../util/design/toast/app_toast.dart';
 import '../../../foods/presentation/screen/ui_helper/logged_food_chip_widget.dart';
 import '../bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
-import 'calculate_user_macro_goal_screen.dart';
-
-
-
-
 
 
 
@@ -62,12 +54,11 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
   }
 
   void updateProfile(){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
 
-      int calorie = int.parse(_addedMacros[CALORIE_LABEL] ?? '0');
-      int protein = int.parse(_addedMacros[PROTEIN_LABEL] ?? '0');
-      int carb = int.parse(_addedMacros[CARB_LABEL] ?? '0');
-      int fat = int.parse(_addedMacros[FAT_LABEL] ?? '0');
+      int calorie = int.parse(_addedMacros[CALORIE_LABEL] ?? '2197');
+      int protein = int.parse(_addedMacros[PROTEIN_LABEL] ?? '220');
+      int carb = int.parse(_addedMacros[CARB_LABEL] ?? '165');
+      int fat = int.parse(_addedMacros[FAT_LABEL] ?? '73');
 
       if(!_addedMacros.containsKey(CALORIE_LABEL)){
         calorie= protein * 4 + carb * 4 + fat * 9;
@@ -95,9 +86,6 @@ class _MacroGoalsPopupState extends State<MacroGoalsPopup> {
               fat.toString()
           )
       );
-    }else{
-      showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
-    }
   }
 
   @override

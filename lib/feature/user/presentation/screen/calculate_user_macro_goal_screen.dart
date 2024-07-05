@@ -63,9 +63,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     super.initState();
     _getProfileBloc = context.read<GetProfileBloc>();
     _updateProfileBloc = context.read<UpdateProfileBloc>();
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
-      getProfile();
-    }
+    getProfile();
   }
 
 
@@ -387,7 +385,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       _heightSelectedUnit = profile.heightUnit.isEmpty ? FT_LABEL : profile.heightUnit;
       _ageController.text = profile.age;
       _activitySelected = profile.activityLevel.isEmpty ? SEDENTARY_LABEL : profile.activityLevel;
-      updateWeightChangeWeekly();
+      _weightChangeWeekly= profile.weightChangeWeekly;
       _dailyMacroGoal = profile.dailyMacroGoal;
       _getProfileBloc.add(const GetProfileEvent.onReset());
     });
@@ -399,9 +397,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
         onPressed: (){
-          if(UserRegistrationStatus.userAccountId.isEmpty){
-            showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
-          }else if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
+          if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
               _ageController.text.isEmpty || _heightController.text.isEmpty){
             showErrorToast(context, FILL_ALL_ERROR);
           }else{

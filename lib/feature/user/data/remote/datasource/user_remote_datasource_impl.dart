@@ -128,14 +128,14 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, Success>> upsertProfileAfterRegister(ProfileRemote profileRemote) async{
+  Future<Either<Failure, ProfileRemote>> upsertProfileAfterRegister(ProfileRemote profileRemote) async{
     try {
       // includes everything including name, email, gender, age, ...
       final supabase = Supabase.instance.client;
       await supabase.from(PROFILE_REMOTE_TABLE)
           .update(profileRemoteToJson(profileRemote))
           .eq('id', profileRemote.id);
-      List<String> dailyMacros= ['0', '0', '0', '0'];
+      List<String> dailyMacros= profileRemote.dailyMacroGoal;
       if(profileRemote.age.isNotEmpty && profileRemote.height.isNotEmpty && profileRemote.weight.isNotEmpty &&
           profileRemote.goalWeight.isNotEmpty && profileRemote.gender.isNotEmpty){
         final dailyMacroResponse= await calculateDailyMacroGoal(profileRemote);
@@ -146,7 +146,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
       profileRemote= profileRemote.copyWith(dailyMacroGoal: dailyMacros);
       await updateDailyMacroGoal(profileRemote);
 
-      return const Right(Success());
+      return Right(profileRemote);
     } on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
     } catch (error) {

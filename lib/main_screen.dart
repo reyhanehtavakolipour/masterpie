@@ -72,13 +72,11 @@ class MainScreen extends StatefulWidget {
 State<MainScreen> createState() => _MainScreenState();
 }
 
-class UserRegistrationStatus {
-  static  String userAccountId = "";
-}
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
 
 
+  bool _userLoggedIn= false;
 
   late final TabController _tabController;
 
@@ -174,38 +172,34 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _requestWizardArgumentModel= RequestWizardArgumentModel();
     checkIfFirstTimeAppOpened();
-    checkIfUserHasAccount();
+    requestProfile();
 
   }
+
+
+
+  void checkIfFirstTimeAppOpened() async{
+    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+    int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
+    if(firstTime == 0){
+      userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 1);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LandingScreen(),
+        ),
+      );
+    }
+  }
+
+
+
 
   void _switchTab(int index) {
     _tabController.animateTo(index);
   }
 
 
-
-
-  void checkIfFirstTimeAppOpened()async{
-    //todo delete this when free plan should be set after registration
-    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-    int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
-    if(firstTime == 0){
-      userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 1);
-      showWelcomePopup(context);
-    }
-  }
-
-  void checkIfUserHasAccount() async {
-    final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-    String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    UserRegistrationStatus.userAccountId= userId;
-
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
-      requestProfile();
-    }else{
-      logEvent(MAIN_PAGE_VIEWED_WITHOUT_ACCOUNT, null);
-    }
-  }
 
   @override
   void dispose() {
@@ -406,6 +400,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       ),
     ).then((result) {
       setMacroGoals(result);
+      requestLoggedFoods(DateTime.now());
     });
   }
 
@@ -633,7 +628,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 ),
               ),
               Visibility(
-                visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+                visible: _userLoggedIn,
                 child: ListTile(
                   leading: const Icon(Icons.account_box),
                   title: const Text(PROFILE_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
@@ -665,7 +660,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 },
               ),
               Visibility(
-                visible: UserRegistrationStatus.userAccountId.isEmpty,
+                visible: !_userLoggedIn,
                 child: ListTile(
                   leading: const Icon(Icons.login),
                   title: const Text(SIGNIN_LABEL, style: TextStyle( fontSize: 14, color: DARK_PRIMARY_COLOR),),
@@ -688,21 +683,24 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   onCalculateMacroClicked();
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.credit_card),
-                title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
-                onTap: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserPlanScreen(),
-                    ),
-                  );
-                },
+              Visibility(
+                visible: false,
+                child: ListTile(
+                  leading: const Icon(Icons.credit_card),
+                  title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                  onTap: () {
+                    _scaffoldKey.currentState?.openEndDrawer();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserPlanScreen(),
+                      ),
+                    );
+                  },
+                ),
               ),
               Visibility(
-                visible: UserRegistrationStatus.userAccountId.isNotEmpty,
+                visible: _userLoggedIn,
                 child: ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text(LOGOUT_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
@@ -1455,7 +1453,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                                 BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
                                     builder: (mcontext, state) {
-
                                       if (state is GetLoggedFoodsLoadingState) {
                                         return const GFLoader(
                                           type: GFLoaderType.circle,
@@ -1479,11 +1476,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                           setMacroRangesInWizard(state.loggedFoods);
                                         });
                                       }else if(state is GetLoggedFoodsErrorState){
-                                        if(UserRegistrationStatus.userAccountId.isNotEmpty){
                                           Future.delayed(Duration.zero,(){
                                             return showErrorToast(context, state.message);
                                           });
-                                        }
                                       }
                                       return Container();
                                     },
@@ -1568,34 +1563,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       }else if(state is GetProfileLoadedState){
                                         _getProfileBloc.add(const GetProfileEvent.onReset());
                                         Future.delayed(Duration.zero,(){
+                                          _userLoggedIn= state.profile.id.isEmpty ? false : true;
                                           requestLoggedFoods(DateTime.now());
                                           setMacros(state.profile);
                                         });
-                                      }else if(state is UserNotFoundState){
-                                        if(UserRegistrationStatus.userAccountId.isNotEmpty){
-                                          _getProfileBloc.add(const GetProfileEvent.onReset());
-                                          Future.delayed(Duration.zero,(){
-                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                                              builder: (context) => const SignInScreen(),
-                                            ), (route) => false);
-                                          });
-                                        }
                                       }else if(state is GetProfileErrorState){
-                                        if(UserRegistrationStatus.userAccountId.isNotEmpty){
                                           _getProfileBloc.add(const GetProfileEvent.onReset());
-
                                           Future.delayed(Duration.zero,(){
-                                            if(state.message == 'email not found'){
-                                              return Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => const LandingScreen(),
-                                                ),
-                                              );
-                                            }
                                             return showErrorToast(context, state.message);
                                           });
-                                        }
                                       }else{
                                       }
                                       return Container();

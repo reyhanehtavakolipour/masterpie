@@ -74,7 +74,6 @@ class _CalculatedMacroGoalDialogState extends State<CalculatedMacroGoalDialog> {
 
 
   void updateProfile(){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
       _updateProfileBloc.add(
           UpdateProfileEvent.onUpdateMacroGoalsAndInputs(
               widget.gender,
@@ -92,9 +91,6 @@ class _CalculatedMacroGoalDialogState extends State<CalculatedMacroGoalDialog> {
               _fatController.text
           )
       );
-    }else{
-      showRegisterDialog(context, CALCUALTE_MACRO_GOAL_REQUEST);
-    }
   }
 
   @override

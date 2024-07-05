@@ -15,18 +15,8 @@ class GetProfileUseCase{
   final repo = serviceLocator<UserRepository>();
 
 
-  Future<Either<Failure, Profile>> getImmediateResponse() async{
-    final emailResponse = await repo.getEmailFromHive();
-    if(emailResponse.isLeft()){
-      return const Left(ExceptionFailure('email not found'));
-    }
-
-    if(emailResponse.asRight().isEmpty){
-      return const Left(ExceptionFailure('email not found'));
-    }
-
-
-    final profileResponse = await repo.getProfileFromLocal(emailResponse.asRight());
+  Future<Either<Failure, Profile>> getLocalResponseForGuestUser() async{
+    final profileResponse = await repo.getProfileFromLocal();
     if(profileResponse.isRight()){
       return Right(profileResponse.asRight());
     }
@@ -36,23 +26,26 @@ class GetProfileUseCase{
   Future<Either<Failure, Profile>> getProfile() async{
     final emailResponse = await repo.getEmailFromHive();
     final idResponse = await repo.getUserIdFromHive();
-    if(emailResponse.isLeft()){
-      return const Left(ExceptionFailure('email not found'));
-    }
-    if(emailResponse.asRight().isEmpty){
-      return const Left(ExceptionFailure('email not found'));
-    }
+
     if(idResponse.isLeft()){
       return const Left(ExceptionFailure('user not found'));
     }
 
     if(idResponse.asRight().isEmpty){
-      return Right(Profile(id: ''));
+      return getLocalResponseForGuestUser();
+    }
+
+    if(emailResponse.isLeft()){
+      return const Left(ExceptionFailure('email not found'));
+    }
+
+    if(emailResponse.asRight().isEmpty){
+      return const Left(ExceptionFailure('email not found'));
     }
 
     final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight());
     if(profileResponse.isRight()){
-      await repo.upsertProfileInLocal(profileResponse.asRight());
+      await repo.updateProfileInLocal(profileResponse.asRight());
       return  Right(profileResponse.asRight());
     }
 

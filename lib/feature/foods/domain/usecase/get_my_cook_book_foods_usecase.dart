@@ -33,12 +33,16 @@ class GetMyCookBookFoodsUseCase{
   }
 
   Future<Either<Failure, List<Food>>> getMyCookBookFoods(String query) async {
-    final myCookBookRemoteResponse = await foodRepo.getMyCookBookFoodsFromRemote(query);
-    if (myCookBookRemoteResponse.isRight()) {
-      await foodRepo.saveMyCookBookFoodsToLocalDb(myCookBookRemoteResponse.asRight());
-      return getImmediateResponse(query);
+    final idResponse = await userRepo.getUserIdFromHive();
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isNotEmpty){
+      final myCookBookRemoteResponse = await foodRepo.getMyCookBookFoodsFromRemote(query);
+      if (myCookBookRemoteResponse.isRight()) {
+        await foodRepo.saveMyCookBookFoodsToLocalDb(myCookBookRemoteResponse.asRight());
+        return getImmediateResponse(query);
+      }
+      return Left(getFailure(myCookBookRemoteResponse.asLeft()));
     }
-    return Left(getFailure(myCookBookRemoteResponse.asLeft()));
+    return getImmediateResponse(query);
   }
 
 }

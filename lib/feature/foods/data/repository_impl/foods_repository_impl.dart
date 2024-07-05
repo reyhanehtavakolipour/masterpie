@@ -393,6 +393,18 @@ class FoodsRepositoryImpl extends FoodsRepository{
   @override
   Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
+
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    if(userId.isEmpty){
+      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+          macroGoalsRange, restriction, macroGoalType, macroPercentage);
+      if(suggestedFoodsPortionResponse.isRight()){
+        return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
+      }
+      return Left(suggestedFoodsPortionResponse.asLeft());
+    }
+
+
     await userRepo.checkSubscriptionInRemote();
     final userPlanResponse= await userRepo.getUserPlanInRemote();
     if(userPlanResponse.isRight()){

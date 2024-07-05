@@ -28,12 +28,8 @@ class GetProfileBloc extends Bloc<GetProfileEvent, GetProfileState> {
                 emit(GetProfileState.error(failure.message));
               },
                   (data) {
-                  if(data.id.isEmpty){
-                    emit(const GetProfileState.userNotFound());
-                  }else{
                     emit(GetProfileState.loaded(data));
-                  }
-              },
+                  },
             );
         }
     );

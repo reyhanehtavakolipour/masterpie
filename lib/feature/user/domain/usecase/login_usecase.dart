@@ -33,11 +33,11 @@ class LoginUseCase{
       await repo.saveUserEmailInHive(loginResponseRemote.asRight().email);
       await repo.saveUserPasswordInHive('');
 
-      final profileResponse = await repo.getProfileFromLocal(loginResponseRemote.asRight().email);
+      final profileResponse = await repo.getProfileFromLocal();
       if(profileResponse.isLeft()){
         if(profileResponse.asLeft().message == 'profile not found'){
           await repo.setUserSubscriptionPlanAfterRegisterInRemote();
-          await repo.upsertProfileInLocal(Profile(id: loginResponseRemote.asRight().id, email: loginResponseRemote.asRight().email));
+          await repo.updateProfileInLocal(Profile(id: loginResponseRemote.asRight().id, email: loginResponseRemote.asRight().email));
         }
       }
 

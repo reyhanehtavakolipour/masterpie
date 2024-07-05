@@ -14,17 +14,12 @@ import 'user_local_datasource.dart';
 
 class UserLocalDataSourceImpl extends UserLocalDataSource{
 
-
   @override
-  Future<Either<Failure, Success>> upsertProfileAfterRegister(ProfileLocal profileLocal) async{
-
+  Future<Either<Failure, Success>> upsertGuestProfile(ProfileLocal profileLocal) async{
     final db = await serviceLocator<DatabaseHelper>().db;
-
     try{
       final result = await db?.query(
         TABLE_PROFILE,
-        where: 'id = ?',
-        whereArgs: [profileLocal.id],
       );
 
       if (result == null){
@@ -52,23 +47,62 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
     return const Right(Success());
   }
 
+
   @override
-  Future<Either<Failure, ProfileLocal>> getProfile(String email) async{
+  Future<Either<Failure, Success>> insertUserProfile(ProfileLocal profileLocal) async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+
+      //user just registered and should set the user id
+      await db?.delete(TABLE_PROFILE);
+      await db?.insert(TABLE_PROFILE, profileLocal.toJson());
+      return const Right(Success());
+
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }catch(e){
+      return Left(ExceptionFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateUserProfile(ProfileLocal profileLocal) async{
+
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+
+      await db?.update(
+        TABLE_PROFILE,
+        profileLocal.toJson(),
+        where: '$ID = ?',
+        whereArgs: [profileLocal.id],
+      );
+      return const Right(Success());
+
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }catch(e){
+      return Left(ExceptionFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfileLocal>> getProfile() async{
     final db = await serviceLocator<DatabaseHelper>().db;
     ProfileLocal profile;
     try{
       final list = await db?.query(
         TABLE_PROFILE,
-        where: '$EMAIL = ?',
-        whereArgs: [email],
       );
 
       if(list == null){
-        return const Left(ExceptionFailure('profile not found'));
+        upsertGuestProfile(emptyProfile());
+        return Right(emptyProfile());
       }
 
       if(list.isEmpty){
-        return const Left(ExceptionFailure('profile not found'));
+        upsertGuestProfile(emptyProfile());
+        return Right(emptyProfile());
       }
 
       profile = ProfileLocal.fromJson(list[0]);
@@ -83,14 +117,13 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
 
 
   @override
-  Future<Either<Failure, Success>> updateDailyMacroGoal(ProfileLocal profile) async{
+  Future<Either<Failure, Success>> updateDailyMacroGoal(List<String> dailyMacroGoal) async{
     final db = await serviceLocator<DatabaseHelper>().db;
     try{
+
       await db?.update(
         TABLE_PROFILE,
-        {DAILY_MACRO_GOAL: profile.dailyMacroGoal},
-        where: '$ID = ?',
-        whereArgs: [profile.id],
+        {DAILY_MACRO_GOAL: dailyMacroGoal.join(';')},
        );
 
     }on DatabaseException catch (e) {
@@ -98,7 +131,6 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
     }catch(e){
       return Left(ExceptionFailure(e));
     }
-
     return const Right(Success());
   }
 
@@ -132,18 +164,17 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
       await db?.update(
         TABLE_PROFILE,
         {
-          DAILY_MACRO_GOAL: profile.dailyMacroGoal,
+          DAILY_MACRO_GOAL: profile.dailyMacroGoal.join(';'),
           GENDER: profile.gender,
           AGE: profile.age,
           WEIGHT: profile.weight,
           HEIGHT: profile.height,
           WEIGHT_UNIT: profile.weightUnit,
           HEIGHT_UNIT: profile.heightUnit,
+          GOAL_WEIGHT: profile.goalWeight,
           ACTIVITY_LEVEL: profile.activityLevel,
-          WEEKLY_WEIGHT_CHANGE_LABEL: profile.weightChangeWeekly,
+          WEIGHT_CHANGE_WEEKLY: profile.weightChangeWeekly,
         },
-        where: '$ID = ?',
-        whereArgs: [profile.id],
       );
 
     }on DatabaseException catch (e) {

@@ -32,12 +32,16 @@ class UpdateProfileUseCase{
       updateProfileShown: true
     );
 
+
     final upsertProfileResponse = await repo.upsertProfileAfterRegisterInRemote(profile);
-    if(upsertProfileResponse.isRight()){
-      await repo.upsertProfileInLocal(profile);
-      return const Right(Success());
+
+    if(upsertProfileResponse.isLeft()){
+      return Left(getFailure(upsertProfileResponse.asLeft()));
     }
-    return Left(getFailure(upsertProfileResponse.asLeft()));
+
+    profile= profile.copyWith(dailyMacroGoal: upsertProfileResponse.asRight().dailyMacroGoal);
+    await repo.updateProfileInLocal(profile);
+    return const Right(Success());
   }
 
 
@@ -45,6 +49,7 @@ class UpdateProfileUseCase{
   Future<Either<Failure, Success>> updateMacroGoalsAndInputs(String gender,
       String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age,
       String activityLevel, String weightChangeWeekly, String calorie, String protein, String carb, String fat) async{
+
 
     Profile profile = Profile(
         gender: gender,
@@ -58,6 +63,18 @@ class UpdateProfileUseCase{
         weightChangeWeekly: weightChangeWeekly,
         dailyMacroGoal: [calorie, protein, carb, fat]
     );
+
+
+    final idResponse = await repo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
+      final upsertProfileResponse = await repo.updateDailyMacroAndInputsInLocal(profile);
+      if(upsertProfileResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(getFailure(upsertProfileResponse.asLeft()));
+    }
+
 
     final upsertProfileResponse = await repo.updateDailyMacroAndInputsInRemote(profile);
     if(upsertProfileResponse.isRight()){
@@ -99,6 +116,7 @@ class UpdateProfileUseCase{
         weightChangeWeekly: weightChangeWeekly
     );
 
+
     final upsertProfileResponse = await repo.calculateDailyMacroGoalInRemote(profile);
     if(upsertProfileResponse.isRight()){
       return Right(upsertProfileResponse.asRight());
@@ -112,13 +130,24 @@ class UpdateProfileUseCase{
 
     List<String> dailyMacroGoal = [calorie, protein, carb, fat];
 
+
+    final idResponse = await repo.getUserIdFromHive();
+
+    if((idResponse.isRight() ?  idResponse.asRight() : '').isEmpty){
+      final upsertProfileResponse = await repo.updateDailyMacroGoalInLocal(dailyMacroGoal);
+      if(upsertProfileResponse.isRight()){
+        return const Right(Success());
+      }
+      return Left(getFailure(upsertProfileResponse.asLeft()));
+    }
+
     Profile profile = Profile(
         dailyMacroGoal: dailyMacroGoal
     );
 
     final upsertProfileResponse = await repo.updateDailyMacroGoalInRemote(profile);
     if(upsertProfileResponse.isRight()){
-      await repo.updateDailyMacroGoalInLocal(profile);
+      await repo.updateDailyMacroGoalInLocal(dailyMacroGoal);
       return const Right(Success());
     }
     return Left(getFailure(upsertProfileResponse.asLeft()));

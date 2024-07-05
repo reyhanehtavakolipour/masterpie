@@ -357,15 +357,11 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                    backgroundColor: DARK_PRIMARY_COLOR
                ),
                onPressed: () {
-                 if(UserRegistrationStatus.userAccountId.isNotEmpty){
                    if(_foodCountController.text.isEmpty){
                      showErrorToast(context, ERROR_FOOD_COUNT_EMPTY);
                    }else{
                      requestLoggedFoods();
                    }
-                 }else{
-                   showRegisterDialog(context, EDIT_RECIPE_REQUEST);
-                 }
                },
                child: const Text(LOG_FOOD_LABEL,
                  style: TextStyle( color: Colors.white),)
@@ -709,7 +705,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
 
   void addToCookBookButtonClickListener(BuildContext context){
-    if(UserRegistrationStatus.userAccountId.isNotEmpty){
       if(_mealNameController.text.isEmpty){
         setState(() {
           _mealNameBorderColor = Colors.red;
@@ -741,9 +736,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         _mealNameBorderColor = Colors.black;
       });
       requestOperationOnFood(context);
-    }else{
-      showRegisterDialog(context, EDIT_RECIPE_REQUEST);
-    }
   }
 
 
