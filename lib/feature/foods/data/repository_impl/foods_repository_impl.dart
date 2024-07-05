@@ -708,6 +708,37 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return Left(groceryResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Success>> saveFoodsToMyCookBookRemote(List<Food> foods) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    List<FoodRemote> myFoods= mapper.toFoodsRemote(foods);
+    final saveFoodsResponse = await masterPieFoodRemoteDataSource.saveToMyCookBook(myFoods, userId);
+    if(saveFoodsResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(saveFoodsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMyFoodsToRemote(List<Food> foods) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    List<FoodRemote> myFoods= mapper.toFoodsRemote(foods);
+    final saveFoodsResponse = await masterPieFoodRemoteDataSource.saveToMyFavorite(myFoods, userId);
+    if(saveFoodsResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(saveFoodsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, List<Food>>> getAllLoggedFoodsFromLocalDb() async{
+    final loggedFoodsResponse = await foodLocalDataSource.getAllLoggedFoods();
+    if(loggedFoodsResponse.isRight()){
+      return Right(mapper.fromLoggedFoodsLocal(loggedFoodsResponse.asRight()));
+    }
+    return Left(loggedFoodsResponse.asLeft());
+  }
+
 
 
 }

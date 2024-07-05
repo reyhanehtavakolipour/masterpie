@@ -5,6 +5,7 @@ import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_mo
 import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
+import 'package:masterpie/util/core/helper/request_api.dart';
 
 import '../../domain/model/food_model.dart';
 import '../../domain/model/food_type.dart';
@@ -244,6 +245,7 @@ class FoodsMapperImpl extends FoodsMapper{
       unit: food.unit, servingAmounts: [],
     );
   }
+
 
   @override
   MyFoodLocal toMyGroceryLocal(Food food, String userId) {
@@ -646,6 +648,7 @@ class FoodsMapperImpl extends FoodsMapper{
         FoodRemote(
           foodTypeRemote: food.foodType == FoodType.groceryProduct ? FoodTypeRemote.groceryProduct : FoodTypeRemote.meal,
           name: food.name,
+          id: food.id,
           barcode: food.barcode,
           brandName: food.brandName,
           description: food.description,

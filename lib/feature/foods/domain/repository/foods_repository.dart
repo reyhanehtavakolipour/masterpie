@@ -31,6 +31,8 @@ abstract class FoodsRepository{
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
 
+  Future<Either<Failure, Success>> saveMyFoodsToRemote(List<Food> foods);
+
 
   Future<Either<Failure, Success>> saveMyGroceryProductToRemote(Food food);
 
@@ -39,6 +41,8 @@ abstract class FoodsRepository{
   Future<Either<Failure, Success>> saveMyMealToRemote(Food food);
 
   Future<Either<Failure, Success>> saveMealToMyCookBookRemote(Food food);
+
+  Future<Either<Failure, Success>> saveFoodsToMyCookBookRemote(List<Food> foods);
 
 
   Future<Either<Failure, Success>> removeMealFromMyFavoritesInRemote(Food food);
@@ -66,6 +70,8 @@ abstract class FoodsRepository{
 
   // source: table LoggedFoods
   Future<Either<Failure, List<Food>>> getLoggedFoodsFromLocalDb(String date);
+
+  Future<Either<Failure, List<Food>>> getAllLoggedFoodsFromLocalDb();
 
   Future<Either<Failure, List<Food>>> saveLoggedFoodsToLocalDb(List<Food> foods, String date);
 

@@ -74,6 +74,8 @@ abstract class FoodLocalDataSource{
 
 
   // source: table logged foods
+  Future<Either<Failure, List<LoggedFoodsLocal>>> getAllLoggedFoods();
+
   Future<Either<Failure, List<LoggedFoodsLocal>>> getLoggedFoods(String date, String myId);
 
   Future<Either<Failure, List<LoggedFoodsLocal>>> saveLoggedFoods(List<LoggedFoodsLocal> foods);

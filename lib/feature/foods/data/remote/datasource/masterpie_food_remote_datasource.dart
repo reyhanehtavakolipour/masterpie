@@ -20,6 +20,9 @@ abstract class MasterPieFoodRemoteDataSource{
 
   Future<Either<Failure, Success>> saveToMyCookBookMeals(FoodRemote mealRemote, String userId);
 
+  Future<Either<Failure, Success>> saveToMyCookBook(List<FoodRemote> foods, String userId);
+
+  Future<Either<Failure, Success>> saveToMyFavorite(List<FoodRemote> foods, String userId);
 
   Future<Either<Failure, Success>> updateMyFavoriteMeal(FoodRemote meal, String userId);
 

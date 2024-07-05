@@ -218,6 +218,7 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     }on DatabaseException catch (e) {
       return Left(ExceptionFailure(e));
     }
+
     return Right(foods);
   }
 
@@ -264,7 +265,9 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     final db = await serviceLocator<DatabaseHelper>().db;
     try {
 
-    Batch? batch = db?.batch();
+      await db?.delete(TABLE_MY_FOOD);
+
+      Batch? batch = db?.batch();
 
     for (MyFoodLocal foodLocal in myFoodsLocal) {
     batch?.insert(TABLE_MY_FOOD, foodLocal.toJson());
@@ -512,7 +515,7 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     Batch? batch = db?.batch();
 
     for (MyFoodLocal foodLocal in myFoodsLocal) {
-    batch?.insert(TABLE_MY_COOKBOOK, foodLocal.toJson());
+      batch?.insert(TABLE_MY_COOKBOOK, foodLocal.toJson());
     }
     await batch?.commit(noResult: true);
     } on DatabaseException catch (e) {
@@ -583,6 +586,22 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
       return Left(ExceptionFailure(e));
     }
     return Right(favoriteId);
+  }
+
+  @override
+  Future<Either<Failure, List<LoggedFoodsLocal>>> getAllLoggedFoods() async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    List<LoggedFoodsLocal> foods = [];
+    try{
+      final list = await db?.query(TABLE_LOGGED_FOODS);
+      list?.forEach((element) {
+        final food = LoggedFoodsLocal.fromJson(element);
+        foods.add(food);
+      });
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+    return Right(foods);
   }
 
 

@@ -191,6 +191,7 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
     try{
       await db?.delete(TABLE_PROFILE);
       await db?.delete(TABLE_MY_FOOD);
+      await db?.delete(TABLE_MY_COOKBOOK);
       await db?.delete(TABLE_FOOD);
       await db?.delete(TABLE_LOGGED_FOODS);
     }on DatabaseException catch (e) {
