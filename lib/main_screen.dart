@@ -684,7 +684,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 },
               ),
               Visibility(
-                visible: false,
+                visible: _userLoggedIn,
                 child: ListTile(
                   leading: const Icon(Icons.credit_card),
                   title: const Text(YOUR_PLAN_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),

@@ -63,15 +63,13 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
     getSubscriptionPlans();
   }
 
-  void getPlan() async{
+  void getPlan() async {
     final userHiveDataSource = serviceLocator<UserHiveDataSource>();
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
-    _userLoggedIn= userId.isEmpty ? true : false;
-    if(!_userLoggedIn){
-      return;
+    _userLoggedIn = userId.isNotEmpty; // Set _userLoggedIn to true if userId is not empty
+    if (_userLoggedIn) {
+      _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
     }
-
-    _userPlanBloc.add(const UserPlanEvent.onGetUserPlan());
   }
 
 
@@ -106,11 +104,13 @@ class _UserPlanScreenState extends State<UserPlanScreen> {
       // macro diet wizard renew at
       int endsAtMillisecondsSinceEpoch = 0;
       DateTime renewAt = DateTime(endsAtMillisecondsSinceEpoch);
-      endsAtMillisecondsSinceEpoch = int.parse(_userPlan.nextUpdateDate);
-      renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
-
-      renewAtString= DateFormat('MMMM d, y').format(renewAt);
+      if(_userPlan.nextUpdateDate.isNotEmpty){
+        endsAtMillisecondsSinceEpoch = int.parse(_userPlan.nextUpdateDate);
+        renewAt = DateTime.fromMillisecondsSinceEpoch(endsAtMillisecondsSinceEpoch);
+        renewAtString= DateFormat('MMMM d, y').format(renewAt);
+      }
     }
+
 
     return Visibility(
       visible: _userLoggedIn,
