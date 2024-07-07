@@ -8,6 +8,7 @@ import 'package:masterpie/feature/foods/presentation/bloc/my_cook_book_foods_blo
 import 'package:masterpie/feature/foods/presentation/bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/forgot_password_bloc/forgot_password_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_subscription_plans_bloc/get_subscription_plans_bloc.dart';
+import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
 import 'package:masterpie/main_screen.dart';
 import '../feature/foods/presentation/bloc/add_or_update_my_favorite_bloc/add_or_update_my_favorite_bloc.dart';
 import '../feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
@@ -119,7 +120,7 @@ class App extends StatelessWidget {
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
           routes: {
-            App.routeName: (context) =>  const MainScreen(),
+            App.routeName: (context) =>  const OnBoardingScreen(),
           },
         ),
     );

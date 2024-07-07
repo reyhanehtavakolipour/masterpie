@@ -629,7 +629,7 @@ class _RequestMacroWizardStepOneScreenState extends State<RequestMacroWizardStep
               });
             },
 
-            child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white),),
+            child: const Text(NEXT_STEP_LABEL, style: TextStyle( color: Colors.white),),
         ),
       );
   }

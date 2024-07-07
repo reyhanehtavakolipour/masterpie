@@ -76,7 +76,7 @@ const SERVING_LABEL = 'serving';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
 const SERVINGS_RECIPE_LABEL = 'For how many servings is this recipe intended?';
 const REQUEST_PORTIONS_LABEL  = 'Calculate Portions';
-const NEXT_LABEL  = 'Next Step';
+const NEXT_STEP_LABEL  = 'Next Step';
 const EDIT_LABEL = 'Edit';
 const CANCEL = 'cancel';
 const ADD_LABEL = 'Add';
@@ -367,6 +367,16 @@ const NO_CREDIT= 'No credit card required';
 const WELCOM_POPUP_MSG_1= 'If you\'re interested in using \"Macro Diet Wizard"\, register now, and ';
 const WELCOM_POPUP_MSG_2= 'we\'ll activate your premium account for one year at no cost.';
 const REGISTER_FOR_PREMIUM_ACCOUNT_MSG= 'If you don\'t have an account yet, register now and we\'ll activate your premium account for one year at no cost.\nNo credit card required.';
+const EATING_MAIN_DISH_FREQUENCY= 'How often do you typically have a main dish throughout the day?';
+const EATING_SIDE_DISH_FREQUENCY= 'How often do you typically have a side dish like soup, dessert, snack,...?';
+const ENTER_MANUALLY= 'Enter Manually';
+const SELECT_ANSWER= 'Select an Answer';
+const PREVIOUS_LABEL= 'Previous';
+const NEXT_LABEL= 'Next';
+
+
+
+
 
 
 

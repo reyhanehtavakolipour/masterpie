@@ -9,6 +9,7 @@ const String MASTERPIE_LOGO_PATH = 'assets/masterpie_logo.png';
 const String MONTSERRAT_FONT = 'Montserrat';
 const String GOOGLE_PATH = 'assets/google.png';
 const String WELCOME_PATH = 'assets/welcome.png';
+const String FEQUENT_EATING_PATH = 'assets/delicious.png';
 const String MEASURE_PATH = 'assets/measure.png';
 const String ACCURACY_PATH = 'assets/accuracy.png';
 const String PLANS_PATH = 'assets/plans.png';

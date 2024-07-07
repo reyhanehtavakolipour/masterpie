@@ -18,9 +18,7 @@ import '../bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
 
 class ProfileAfterRegistrationScreen extends StatefulWidget {
-
-  static const routeName = '/profile-after-registration-screen';
-
+  
 
   const ProfileAfterRegistrationScreen({super.key});
 

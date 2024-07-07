@@ -143,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const ProfileAfterRegistrationScreen(),
+                                builder: (context) => const MainScreen(),
                               ),
                             );
                           });
@@ -193,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen>{
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const ProfileAfterRegistrationScreen(),
+                                builder: (context) => const MainScreen(),
                               ),
                             );
                           });

@@ -1935,7 +1935,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           });
         },
 
-        child: const Text(NEXT_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+        child: const Text(NEXT_STEP_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
       ),
     );
   }
