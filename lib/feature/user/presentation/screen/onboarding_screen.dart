@@ -2,12 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/get_fat_secret_foods_info_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/state_event/get_fat_secret_foods_info_state_event.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
+import '../../../../util/design/toast/app_toast.dart';
 
 
 
@@ -25,15 +30,30 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int _currentPage = 0;
 
 
+  late GetFatSecretFoodsInfoBloc _getFatSecretFoodsInfoBloc;
+
+  FatSecretFoodsInfo _fatSecretFoodsInfo= FatSecretFoodsInfo();
 
   //how many times you have main dish?
   bool _isCustomNumberMainDishSelected = false;
   int _selectedMainDishChoice= 3;
+  late TextEditingController _mainDishTimesController;
 
   //how many times you have side dish?
   bool _isCustomNumberSideDishSelected = false;
   int _selectedSideDishChoice= 2;
+  late TextEditingController _sideDishTimesController;
 
+
+
+  @override
+  void initState() {
+    super.initState();
+    _getFatSecretFoodsInfoBloc = context.read<GetFatSecretFoodsInfoBloc>();
+    _mainDishTimesController= TextEditingController(text: '3');
+    _sideDishTimesController= TextEditingController(text: '2');
+    _requestFatSecretFoodsInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +102,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
               ),
             ),
+            BlocConsumer<GetFatSecretFoodsInfoBloc, GetFatSecretFoodsInfoState>(
+                builder: (mcontext, state) {
+                  if(state is FatSecretFoodInfoLoadedState){
+                    Future.delayed(Duration.zero,(){
+                      _getFatSecretFoodsInfoBloc.add(const GetFatSecretFoodsInfoEvent.onReset());
+                      _fatSecretFoodsInfo= state.fatSecretFoodsInfo;
+                    });
+                    return Container();
+                  }else if(state is FatSecretFoodInfoErrorState){
+                    Future.delayed(Duration.zero,(){
+                      return showErrorToast(context, state.message);
+                    });
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
             const SizedBox(height: 20.0),
           ],
         ),
@@ -89,6 +128,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
+
+
+  void _requestFatSecretFoodsInfo(){
+    _getFatSecretFoodsInfoBloc.add(
+        const GetFatSecretFoodsInfoEvent.onGetFatSecretFoodsInfo()
+    );
+  }
 
   void _goToPage(int page) {
     _pageController.animateToPage(
@@ -129,6 +175,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
 
                 ],
               ),
@@ -233,8 +280,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const TextField(
-                          decoration: InputDecoration(
+                         TextField(
+                           controller: _mainDishTimesController,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),
@@ -316,8 +364,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const TextField(
-                          decoration: InputDecoration(
+                         TextField(
+                          controller: _sideDishTimesController,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),

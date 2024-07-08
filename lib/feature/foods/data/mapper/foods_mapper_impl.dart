@@ -1,8 +1,10 @@
 
 
 
+import 'package:masterpie/feature/foods/data/remote/model/fat_secret_foods_info_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
+import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/request_api.dart';
@@ -797,6 +799,15 @@ class FoodsMapperImpl extends FoodsMapper{
         allergies: [],
         servingAmount: productRemote.servingAmount,
         unit: productRemote.unit,
+    );
+  }
+
+  @override
+  FatSecretFoodsInfo fromFatSecretFoodsInfoRemote(FatSecretFoodsInfoRemote fatSecretFoodsInfoRemote) {
+    return FatSecretFoodsInfo(
+      recipeTypes: fatSecretFoodsInfoRemote.recipeTypes,
+      categories: fatSecretFoodsInfoRemote.categories,
+      allergens: fatSecretFoodsInfoRemote.allergens
     );
   }
 

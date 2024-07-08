@@ -6,6 +6,7 @@ import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart'
 
 import '../../../../util/core/response/failure.dart';
 import '../../../../util/core/response/success.dart';
+import '../model/fat_secret_foods_info_model.dart';
 import '../model/food_model.dart';
 import '../model/suggested_foods_portion_model.dart';
 
@@ -148,6 +149,10 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, Success>> saveUserSuggestedFoodInRemote(String name, List<String> ingredients, String diet, String nationality);
 
+
+
+
+  Future<Either<Failure, FatSecretFoodsInfo>> getFatSecretFoodsInfoFromRemote();
 
 
 }

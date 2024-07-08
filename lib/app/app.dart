@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/get_fat_secret_foods_info_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/get_recipe_bloc/get_recipe_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/my_cook_book_foods_bloc/my_cook_book_foods_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/remove_from_cook_book_bloc/remove_from_my_cook_book_bloc.dart';
@@ -114,6 +115,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => GetRecipeBloc(),
+          ),
+          BlocProvider(
+            create: (_) => GetFatSecretFoodsInfoBloc(),
           ),
         ],
         child: MaterialApp(

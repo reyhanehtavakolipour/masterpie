@@ -1,6 +1,8 @@
 
 
+import 'package:masterpie/feature/foods/data/remote/model/fat_secret_foods_info_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
+import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 
 import '../../domain/model/food_model.dart';
@@ -81,5 +83,6 @@ abstract class FoodsMapper{
 
   List<LoggedFoodsLocal> toLoggedFoodsLocal(List<Food> foods, String date, String myId);
 
+  FatSecretFoodsInfo fromFatSecretFoodsInfoRemote(FatSecretFoodsInfoRemote fatSecretFoodsInfoRemote);
 
 }

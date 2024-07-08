@@ -2,6 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
@@ -737,6 +738,15 @@ class FoodsRepositoryImpl extends FoodsRepository{
       return Right(mapper.fromLoggedFoodsLocal(loggedFoodsResponse.asRight()));
     }
     return Left(loggedFoodsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, FatSecretFoodsInfo>> getFatSecretFoodsInfoFromRemote() async{
+    final fatSecretFoodsResponse = await productRemoteDataSource.getFatSecretFoodsInfo();
+    if(fatSecretFoodsResponse.isRight()){
+      return Right(mapper.fromFatSecretFoodsInfoRemote(fatSecretFoodsResponse.asRight()));
+    }
+    return Left(fatSecretFoodsResponse.asLeft());
   }
 
 

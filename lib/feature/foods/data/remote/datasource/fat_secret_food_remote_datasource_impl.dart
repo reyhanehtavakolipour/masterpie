@@ -2,6 +2,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/data/remote/model/fat_secret_foods_info_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -449,6 +450,97 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         }
       }else{
         return  Left(RemoteFailure(response.statusCode, response.data['message']));
+      }
+
+    } catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+
+  }
+
+  @override
+  Future<Either<Failure, FatSecretFoodsInfoRemote>> getFatSecretFoodsInfo() async{
+
+    try {
+
+      final clientResponse = await authFatSecret();
+
+      if(clientResponse.isLeft()){
+        return const Left(FailureResponse('oauth2 failed'));
+      }
+
+      String token = clientResponse.asRight().credentials.accessToken;
+      print('Successfully authenticated!: $token');
+
+      final NetworkRequest request = await NetworkRequest.createFatSecret(token);
+
+      Map<String, dynamic> recipeTypesParams = {
+        'format': 'json',
+        'method': 'recipe_types.get.v2',
+      };
+
+      /// recipe types api
+      final recipeTypesResponse= await request.postParams(FAT_SECRET_URL, params: recipeTypesParams);
+
+      if(recipeTypesResponse.statusCode == SUCCESS_API_CODE){
+
+        final recipeTypesData = recipeTypesResponse.data;
+
+        List<String> recipeTypes= [];
+
+        (recipeTypesData['recipe_types']['recipe_type'] as List).forEach((element) {
+          recipeTypes.add(element.toString());
+        });
+
+
+
+        /// foods category
+        Map<String, dynamic> categoriesParams = {
+          'format': 'json',
+          'method': 'food_categories.get.v2',
+        };
+
+        final categoriesResponse= await request.postParams(FAT_SECRET_URL, params: categoriesParams);
+
+        if(categoriesResponse.statusCode == SUCCESS_API_CODE){
+          final categoriesData = categoriesResponse.data;
+
+          List<String> categories= [];
+
+          (categoriesData['food_categories']['food_category'] as List).forEach((element) {
+            categories.add(element['food_category_name']);
+          });
+
+
+
+
+          /// allergens
+          List<String> allergens= [];
+          allergens.add('Milk');
+          allergens.add('Lactose');
+          allergens.add('Egg');
+          allergens.add('Fish');
+          allergens.add('Milk');
+          allergens.add('Gluten');
+          allergens.add('Nuts');
+          allergens.add('Peanuts');
+          allergens.add('Shellfish');
+          allergens.add('Soy');
+          allergens.add('Sesame');
+
+          return Right(
+              FatSecretFoodsInfoRemote(
+                recipeTypes: recipeTypes,
+                categories: categories,
+                allergens: allergens
+              )
+          );
+
+        }
+        return  Left(RemoteFailure(categoriesResponse.statusCode, categoriesResponse.data['message']));
+
+      }else{
+        return  Left(RemoteFailure(recipeTypesResponse.statusCode, recipeTypesResponse.data['message']));
       }
 
     } catch (e) {
