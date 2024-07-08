@@ -373,6 +373,12 @@ const ENTER_MANUALLY= 'Enter Manually';
 const SELECT_ANSWER= 'Select an Answer';
 const PREVIOUS_LABEL= 'Previous';
 const NEXT_LABEL= 'Next';
+const SELECT_RECIPE_TYPE= 'Select recipe type for each meal.';
+const MAIN_DISH_LABEL= 'MAIN DISH';
+const SIDE_DISH_LABEL= 'SIDE DISH';
+const SELECT_MEAL_TYPE= 'Select meal type';
+const SUBMIT_LABEL= 'Submit';
+
 
 
 

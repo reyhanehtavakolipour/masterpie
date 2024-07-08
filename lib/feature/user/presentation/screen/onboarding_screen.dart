@@ -13,6 +13,7 @@ import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../../foods/presentation/screen/recie_types_popup.dart';
 
 
 
@@ -34,15 +35,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   FatSecretFoodsInfo _fatSecretFoodsInfo= FatSecretFoodsInfo();
 
-  //how many times you have main dish?
+  //main dishes
   bool _isCustomNumberMainDishSelected = false;
   int _selectedMainDishChoice= 3;
   late TextEditingController _mainDishTimesController;
+  List<String> _mainDishesType= [];
 
-  //how many times you have side dish?
+  //side dishes
   bool _isCustomNumberSideDishSelected = false;
   int _selectedSideDishChoice= 2;
   late TextEditingController _sideDishTimesController;
+  List<String> _sideDishesType= [];
 
 
 
@@ -52,7 +55,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _getFatSecretFoodsInfoBloc = context.read<GetFatSecretFoodsInfoBloc>();
     _mainDishTimesController= TextEditingController(text: '3');
     _sideDishTimesController= TextEditingController(text: '2');
+    _updateMainDishType('');
+    _updateSideDishType('');
     _requestFatSecretFoodsInfo();
+    _setEditTextsListener();
+  }
+
+
+  void _setEditTextsListener(){
+    _mainDishTimesController.addListener(() {
+      if(_mainDishTimesController.text.isNotEmpty){
+        _updateMainDishType('');
+      }
+    });
+    _sideDishTimesController.addListener(() {
+      if(_sideDishTimesController.text.isNotEmpty){
+        _updateSideDishType('');
+      }
+    });
   }
 
   @override
@@ -78,6 +98,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
                   /// step2
                   _selectRecipesType(),
+
+                  /// step 3
+                  _selectFavoriteCategories(),
+
+                  /// step4
+                  _selectHateCategories(),
+
+                  /// step 5
+                  _selectAllergens()
 
                 ],
               ),
@@ -144,10 +173,60 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
+  void _updateMainDishType(String type){
+    setState(() {
+      if(int.parse(_mainDishTimesController.text) <= _mainDishesType.length){
+        List<String> newList= [];
+        for (int i = 1; i <= int.parse(_mainDishTimesController.text); i++) {
+          if(i <=  int.parse(_mainDishTimesController.text)){
+            newList.add(_mainDishesType[i-1]);
+          }
+        }
+        _mainDishesType= newList;
+      }else{
+        List<String> newList= [];
+        for (int i = 1; i <= int.parse(_mainDishTimesController.text); i++) {
+          if(i <= _mainDishesType.length){
+            newList.add(_mainDishesType[i-1]);
+          }else{
+            newList.add('');
+          }
+        }
+        _mainDishesType= newList;
+      }
+    });
+  }
+
+
+  void _updateSideDishType(String type){
+    setState(() {
+      if(int.parse(_sideDishTimesController.text) <= _sideDishesType.length){
+        List<String> newList= [];
+        for (int i = 1; i <= int.parse(_sideDishTimesController.text); i++) {
+          if(i <=  int.parse(_sideDishTimesController.text)){
+            newList.add(_sideDishesType[i-1]);
+          }
+        }
+        _sideDishesType= newList;
+      }else{
+        List<String> newList= [];
+        for (int i = 1; i <= int.parse(_sideDishTimesController.text); i++) {
+          if(i <= _sideDishesType.length){
+            newList.add(_sideDishesType[i-1]);
+          }else{
+            newList.add('');
+          }
+        }
+        _sideDishesType= newList;
+      }
+    });
+  }
+
   Widget _selectRecipesType(){
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
           Container(
@@ -176,6 +255,289 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
 
+                  const Text(
+                    SELECT_RECIPE_TYPE,
+                    style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+
+                  const SizedBox(height: 16,),
+
+
+                  const Text(
+                    MAIN_DISH_LABEL,
+                    style: TextStyle(fontSize: 14, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.start,
+                  ),
+
+
+                  _buildMainDishesTypes(),
+
+                  const SizedBox(height: 32,),
+
+
+                  const Text(
+                    SIDE_DISH_LABEL,
+                    style: TextStyle(fontSize: 14, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.start,
+                  ),
+
+
+                  _buildSideDishesTypes(),
+
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+          /// next & previous button
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(0);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
+
+              const SizedBox(width: 8,),
+
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: DARK_PRIMARY_COLOR
+                  ),
+                  onPressed: (){
+                    _goToPage(2);
+                  },
+                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _selectHateCategories(){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            margin: const EdgeInsets.only(top: 48),
+            height: 30,
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    '4/5',
+                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                skipBtn()
+
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24,),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+          /// next & previous button
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(2);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
+
+              const SizedBox(width: 8,),
+
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: DARK_PRIMARY_COLOR
+                  ),
+                  onPressed: (){
+                    _goToPage(4);
+                  },
+                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+
+
+  Widget _selectAllergens(){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            margin: const EdgeInsets.only(top: 48),
+            height: 30,
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    '5/5',
+                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                skipBtn()
+
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24,),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+          /// next & previous button
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(3);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
+
+              const SizedBox(width: 8,),
+
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: DARK_PRIMARY_COLOR
+                  ),
+                  onPressed: (){
+                    // _goToPage(5);
+                  },
+                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+
+  Widget _selectFavoriteCategories(){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            margin: const EdgeInsets.only(top: 48),
+            height: 30,
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    '3/5',
+                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                skipBtn()
+
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24,),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 
                 ],
               ),
@@ -198,7 +560,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     ),
                     onPressed: (){
                       setState(() {
-                        _goToPage(0);
+                        _goToPage(1);
                       });
                     },
                     child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
@@ -216,7 +578,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
-                    //todo go to next page from step 2
+                    _goToPage(3);
                   },
                   child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
@@ -229,6 +591,110 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
 
+  Widget _buildMainDishesTypes(){
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _mainDishesType.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: (){
+            _showAllRecipeTypesForMainDishes(index);
+          },
+          child: Container(
+            margin: const EdgeInsets.all(4.0),
+            decoration: BoxDecoration(
+              color: _mainDishesType[index].isEmpty ? LIGHT_GREY_COLOR : Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: Colors.grey, // Border color
+                width: 1, // Border width
+              ),
+            ),
+            height: 70.0,
+            child: Center(
+              child: _mainDishesType[index].isEmpty ? Text(
+                'NUMBER ${index+1} MAIN DISH',
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ) : Text(
+                _mainDishesType[index],
+                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+              ) ,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSideDishesTypes(){
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _sideDishesType.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: (){
+            _showAllRecipeTypesForSideDishes(index);
+          },
+          child: Container(
+            margin: const EdgeInsets.all(4.0),
+            decoration: BoxDecoration(
+              color: _sideDishesType[index].isEmpty ? LIGHT_GREY_COLOR : Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: _sideDishesType[index].isEmpty ? Colors.grey : DARK_PRIMARY_COLOR, // Border color
+                width: 1,          // Border width
+              ),
+            ),
+            height: 70.0,
+            child: Center(
+              child: _sideDishesType[index].isEmpty ? Text(
+                'NUMBER ${index+1} SIDE DISH',
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ) : Text(
+                _sideDishesType[index],
+                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+              ) ,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  void _showAllRecipeTypesForSideDishes(int index) async{
+    int selectedIndex = await showDialog(
+      context: context,
+      builder: (context) {
+        return RecipeTypesPopup(
+          types: _fatSecretFoodsInfo.recipeTypes,
+        );
+      },
+    );
+    setState(() {
+      _sideDishesType[index] = _fatSecretFoodsInfo.recipeTypes[selectedIndex];
+    });
+  }
+
+
+  void _showAllRecipeTypesForMainDishes(int index) async{
+    int selectedIndex = await showDialog(
+      context: context,
+      builder: (context) {
+        return RecipeTypesPopup(
+          types: _fatSecretFoodsInfo.recipeTypes,
+        );
+      },
+    );
+
+    setState(() {
+      _mainDishesType[index] = _fatSecretFoodsInfo.recipeTypes[selectedIndex];
+    });
+  }
 
   Widget _numberOfMealsDuringDays(){
     return Container(
@@ -471,6 +937,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       onSelected: (bool selected) {
         setState(() {
           _selectedMainDishChoice = (selected ? value : null)!;
+          _mainDishTimesController.text= _selectedMainDishChoice.toString();
+          _updateMainDishType('');
         });
       },
     );
@@ -486,6 +954,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       onSelected: (bool selected) {
         setState(() {
           _selectedSideDishChoice = (selected ? value : null)!;
+          _sideDishTimesController.text= _selectedSideDishChoice.toString();
+          _updateSideDishType('');
         });
       },
     );
