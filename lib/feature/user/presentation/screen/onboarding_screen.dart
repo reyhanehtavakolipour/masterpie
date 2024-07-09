@@ -14,6 +14,7 @@ import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
 import '../../../foods/presentation/screen/recie_types_popup.dart';
+import '../../../foods/presentation/screen/ui_helper/custom_chips.dart';
 
 
 
@@ -46,6 +47,33 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int _selectedSideDishChoice= 2;
   late TextEditingController _sideDishTimesController;
   List<String> _sideDishesType= [];
+
+
+  //favorite categories
+  List<String> _favoriteCategories=[];
+
+
+  //hate categories
+  List<String> _hateCategories=[];
+
+  //allergens
+  List<String> _allergens= [];
+
+
+  // form
+  final _weightController = TextEditingController();
+
+  final _ageController = TextEditingController();
+
+  final _heightController = TextEditingController();
+
+  final _goalWeightController = TextEditingController();
+
+
+  String _heightSelectedUnit = FT_LABEL;
+  String _weightSelectedUnit = LB_LABEL;
+  String _activitySelected = SEDENTARY_LABEL;
+  String _genderSelected = FEMALE_LABEL;
 
 
 
@@ -106,7 +134,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   _selectHateCategories(),
 
                   /// step 5
-                  _selectAllergens()
+                  _selectAllergens(),
+
+                  /// step6
+                  _fillForm()
 
                 ],
               ),
@@ -236,7 +267,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 const Expanded(
                   child: Text(
-                    '2/5',
+                    '2/6',
                     style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -255,9 +286,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
 
-                  const Text(
-                    SELECT_RECIPE_TYPE,
-                    style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      SELECT_RECIPE_TYPE,
+                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
                   ),
 
                   const SizedBox(height: 16,),
@@ -349,7 +388,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 const Expanded(
                   child: Text(
-                    '4/5',
+                    '4/6',
                     style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -367,6 +406,30 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Center(child: Image.asset(HATE_RECIPE_PATH, width: 200, height: 200,))
+                  ),
+
+                  const SizedBox(height: 16,),
+
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      SELECT_HATE_CATEGORIES,
+                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+
+                  _buildHateCategories()
 
                 ],
               ),
@@ -420,8 +483,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
 
-
-  Widget _selectAllergens(){
+  Widget _fillForm(){
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -435,7 +497,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 const Expanded(
                   child: Text(
-                    '5/5',
+                    '6/6',
                     style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -453,6 +515,389 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Center(child: Image.asset(FORM_PATH, width: 200, height: 200,))
+                  ),
+
+
+
+                  const SizedBox(height: 48,),
+
+
+                  /// Gender Dropdown
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: buildGenderDropdown()
+                  ),
+
+
+                  const SizedBox(height: 24.0),
+
+
+                  /// Weight and Unit Row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                            child: buildWeightUnitDropdown()
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+
+                  const SizedBox(height: 24.0),
+
+
+
+                  /// age and activity level Row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                            child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+
+                  const SizedBox(height: 24.0),
+
+
+
+                  /// Height and Unit Row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
+                        ),
+                        const SizedBox(width: 32.0),
+                        Expanded(
+                            child: buildHeightUnitDropdown()
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+
+
+                  const SizedBox(height: 24.0),
+
+
+                  /// activity level
+                  const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(ACTIVITY_LEVEL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                  ),
+                  const SizedBox(height: 4.0),
+
+
+                  buildActivityLevelDropdown(),
+
+
+
+
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+
+          /// done & previous button
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(4);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
+
+              const SizedBox(width: 8,),
+
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: DARK_PRIMARY_COLOR
+                  ),
+                  onPressed: (){
+                    _goToMainScreen();
+                  },
+                  child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildActivityLevelDropdown() {
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+        border: Border.all(
+          color: DARK_PRIMARY_COLOR,
+          width: 0.5,
+        ),
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 45,
+        child: DropdownButtonFormField<String?>(
+          value: _activitySelected,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          ),
+          focusColor: PRIMARY_COLOR,
+          items: [SEDENTARY_LABEL, LIGHT_LABEL, MODERATE_LABEL, VERY_ACTIVE_LABEL].map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              _activitySelected = newValue.toString();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+
+  Widget buildWeightUnitDropdown() {
+
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+        border: Border.all(
+          color: DARK_PRIMARY_COLOR,
+          width: 0.5,
+        ),
+      ),
+      child: SizedBox(
+        width: 80,
+        height: 45,
+        child: DropdownButtonFormField<String?>(
+          value: _weightSelectedUnit,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          ),
+          focusColor: PRIMARY_COLOR,
+          items: [LB_LABEL, KG_LABEL].map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              _weightSelectedUnit = newValue.toString();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget buildHeightUnitDropdown() {
+
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+        border: Border.all(
+          color: DARK_PRIMARY_COLOR,
+          width: 0.5,
+        ),
+      ),
+      child: SizedBox(
+        width: 80,
+        height: 45,
+        child: DropdownButtonFormField<String?>(
+          value: _heightSelectedUnit,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          ),
+          focusColor: PRIMARY_COLOR,
+          items: [FT_LABEL, CM_LABEL].map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              _heightSelectedUnit = newValue.toString();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+
+  Widget buildNumberTextField({
+    required String hintText,
+    String? initialValue,
+    bool isEditable = true,
+    required TextEditingController controller
+  }) {
+    return SizedBox(
+      height: 48,
+      child: TextFormField(
+        cursorColor: DARK_PRIMARY_COLOR,
+        controller: controller,
+        enabled: isEditable,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        decoration: InputDecoration(
+          labelText: hintText,
+          border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+          fillColor: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget buildGenderDropdown() {
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+        border: Border.all(
+          color: DARK_PRIMARY_COLOR,
+          width: 0.5,
+        ),
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: 45,
+        child: DropdownButtonFormField<String?>(
+          value: _genderSelected,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          ),
+          focusColor: PRIMARY_COLOR,
+          items: [MALE_LABEL, FEMALE_LABEL].map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              _genderSelected = newValue.toString();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _selectAllergens(){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            margin: const EdgeInsets.only(top: 48),
+            height: 30,
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    '5/6',
+                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                skipBtn()
+
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24,),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Center(child: Image.asset(ALLERGEN_PATH, width: 200, height: 200,))
+                  ),
+
+                  const SizedBox(height: 16,),
+
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      SELECT_ALLERGENS,
+                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  _buildAllergens(),
 
                 ],
               ),
@@ -493,7 +938,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
-                    // _goToPage(5);
+                    _goToPage(5);
                   },
                   child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
@@ -520,7 +965,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 const Expanded(
                   child: Text(
-                    '3/5',
+                    '3/6',
                     style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -537,7 +982,33 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: <Widget>[
+
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Center(child: Image.asset(FAVORITE_RECIPE_PATH, width: 200, height: 200,))
+                  ),
+
+                  const SizedBox(height: 16,),
+
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      SELECT_FAVORITE_CATEGORIES,
+                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  _buildFavoriteCategories(),
+
 
                 ],
               ),
@@ -586,6 +1057,104 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ],
           )
         ],
+      ),
+    );
+  }
+
+
+  Widget _buildHateCategories(){
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Wrap(
+        spacing: 24,
+        children:  _fatSecretFoodsInfo.categories.map(
+              (item) {
+            return RawChip(
+              backgroundColor: _hateCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
+              onSelected: (bool selected) {
+                setState(() {
+                  if(selected){
+                    _hateCategories.add(item);
+                  }else{
+                    _hateCategories.remove(item);
+                  }
+                });
+              },
+              deleteIconColor: LIGHT_GREY_COLOR,
+              onDeleted: (){
+                setState(() {
+                  _hateCategories.remove(item);
+                });
+              },
+              label: Text(item, style: TextStyle(color: _hateCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
+            );
+          },
+        ).toList(),
+      ),
+    );
+  }
+
+  Widget _buildAllergens(){
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Wrap(
+        spacing: 24,
+        children:  _fatSecretFoodsInfo.allergens.map(
+              (item) {
+            return RawChip(
+              backgroundColor: _allergens.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
+              onSelected: (bool selected) {
+                setState(() {
+                  if(selected){
+                    _allergens.add(item);
+                  }else{
+                    _allergens.remove(item);
+                  }
+                });
+              },
+              deleteIconColor: LIGHT_GREY_COLOR,
+              onDeleted: (){
+                setState(() {
+                  _allergens.remove(item);
+                });
+              },
+              label: Text(item, style: TextStyle(color: _allergens.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
+            );
+          },
+        ).toList(),
+      ),
+    );
+  }
+
+
+  Widget _buildFavoriteCategories(){
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Wrap(
+        spacing: 24,
+        children:  _fatSecretFoodsInfo.categories.map(
+              (item) {
+            return RawChip(
+              backgroundColor: _favoriteCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
+              onSelected: (bool selected) {
+                setState(() {
+                  if(selected){
+                    _favoriteCategories.add(item);
+                  }else{
+                    _favoriteCategories.remove(item);
+                  }
+                });
+              },
+              deleteIconColor: LIGHT_GREY_COLOR,
+              onDeleted: (){
+                setState(() {
+                  _favoriteCategories.remove(item);
+                });
+              },
+              label: Text(item, style: TextStyle(color: _favoriteCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
+            );
+          },
+        ).toList(),
       ),
     );
   }
@@ -709,7 +1278,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 const Expanded(
                     child: Text(
-                      '1/5',
+                      '1/6',
                       style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                 ),
@@ -736,10 +1305,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ///main dish
-                  const Text(
-                    EATING_MAIN_DISH_FREQUENCY,
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      EATING_MAIN_DISH_FREQUENCY,
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   if (_isCustomNumberMainDishSelected)
@@ -820,10 +1396,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   const SizedBox(height: 48,),
 
                   ///side dish
-                  const Text(
-                    EATING_SIDE_DISH_FREQUENCY,
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      EATING_SIDE_DISH_FREQUENCY,
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   if (_isCustomNumberSideDishSelected)
@@ -962,16 +1545,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
 
+  void _goToMainScreen(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainScreen(),
+      ),
+    );
+  }
+
  Widget skipBtn(){
    return Expanded(
      child: GestureDetector(
        onTap: (){
-         Navigator.push(
-           context,
-           MaterialPageRoute(
-             builder: (context) => const MainScreen(),
-           ),
-         );
+         _goToMainScreen();
        },
        child: const Text(
          SKIP_LABEL,

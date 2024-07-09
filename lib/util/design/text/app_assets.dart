@@ -14,3 +14,8 @@ const String MEASURE_PATH = 'assets/measure.png';
 const String ACCURACY_PATH = 'assets/accuracy.png';
 const String PLANS_PATH = 'assets/plans.png';
 const String SAND_CLOCK_PATH = 'assets/sandclock.png';
+const String FAVORITE_RECIPE_PATH = 'assets/favoriterecipe.png';
+const String HATE_RECIPE_PATH = 'assets/hate.png';
+const String ALLERGEN_PATH = 'assets/allergen.png';
+const String FORM_PATH = 'assets/form.png';
+
