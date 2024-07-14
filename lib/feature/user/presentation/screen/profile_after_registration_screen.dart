@@ -18,7 +18,7 @@ import '../bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
 
 class ProfileAfterRegistrationScreen extends StatefulWidget {
-  
+
 
   const ProfileAfterRegistrationScreen({super.key});
 
@@ -77,22 +77,22 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
 
 
   void updateProfile(){
-    _updateProfileBloc.add(
-      UpdateProfileEvent.onUpdateProfileAfterRegister(
-          _emailController.text,
-          _firstNameController.text,
-          _lastNameController.text,
-          _genderSelected,
-          _weightController.text,
-          _heightController.text,
-          _weightSelectedUnit,
-          _heightSelectedUnit,
-          _goalWeightController.text,
-          _ageController.text,
-          _activitySelected,
-          _weightChangeWeekly
-      )
-    );
+    // _updateProfileBloc.add(
+    //   UpdateProfileEvent.onUpdateProfileAfterRegister(
+    //       _emailController.text,
+    //       _firstNameController.text,
+    //       _lastNameController.text,
+    //       _genderSelected,
+    //       _weightController.text,
+    //       _heightController.text,
+    //       _weightSelectedUnit,
+    //       _heightSelectedUnit,
+    //       _goalWeightController.text,
+    //       _ageController.text,
+    //       _activitySelected,
+    //       _weightChangeWeekly
+    //   )
+    // );
   }
 
 
@@ -362,7 +362,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
                       loaderColorTwo: DARK_PRIMARY_COLOR,
                       loaderColorThree: DARK_PRIMARY_COLOR,
                     );
-                  }else if(state is ProfileUpdatedAfterRegisterState){
+                  }else if(state is ProfileUpdatedState){
                     Future.delayed(Duration.zero,(){
                       setState(() {
                         showSuccessToast(context, PROFILE_UPDATED_MSG);

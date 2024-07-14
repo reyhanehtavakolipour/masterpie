@@ -5,11 +5,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/wait_popup.dart';
 import 'package:masterpie/feature/user/presentation/screen/register_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/signin_screen.dart';
 import 'package:masterpie/util/design/helper_functions/video_player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../feature/foods/domain/model/food_model.dart';
 import '../../../feature/foods/presentation/screen/ui_helper/debouncer.dart';
 import '../../../feature/user/presentation/screen/user_plan_screen.dart';
 import '../../core/constant/api_constant.dart';
@@ -123,6 +125,16 @@ bool isValidPassword(String password) {
   return true;
 }
 
+Future<List<Food>> showWaitPopup(BuildContext context, String message) async{
+  return await showDialog(
+    context: context,
+    builder: (context) {
+      return WaitPopup(
+        message: message,
+      );
+    },
+  );
+}
 
 Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) async {
   return showDialog<void>(

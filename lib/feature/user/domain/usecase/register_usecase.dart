@@ -36,7 +36,7 @@ class RegisterUseCase{
         Profile profile= profileResponse.isRight() ? profileResponse.asRight() : Profile();
         profile= profile.copyWith(id: loginResponseRemote.asRight(), email: email);
         await userRepo.insertUserProfileInLocal(profile);
-        await userRepo.upsertProfileAfterRegisterInRemote(profile);
+        await userRepo.upsertProfileInRemote(profile);
 
         //favorite foods
         final favoriteFoodsResponse= await repo.getMyFoodsFromLocalDb('');
@@ -48,7 +48,7 @@ class RegisterUseCase{
         await repo.saveMyFoodsToRemote(updatedFoods);
 
 
-        //favorite foods
+        //cookbook foods
         final cookBookFoodsResponse= await repo.getMyCookBookFoodsFromLocalDb('');
         List<Food> cookBookFoods= cookBookFoodsResponse.isRight() ? cookBookFoodsResponse.asRight() : [];
         List<Food> updatedCookBookFoods = cookBookFoods.map((food) {

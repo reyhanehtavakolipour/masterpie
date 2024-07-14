@@ -57,7 +57,7 @@ abstract class UserRepository{
 
   Future<Either<Failure, Success>> saveUserPasswordInHive(String password);
 
-  Future<Either<Failure, Profile>> upsertProfileAfterRegisterInRemote(Profile profile);
+  Future<Either<Failure, Profile>> upsertProfileInRemote(Profile profile);
 
   Future<Either<Failure, Success>> checkSubscriptionInRemote();
 
@@ -111,7 +111,6 @@ abstract class UserRepository{
 
 
   Future<Either<Failure, Success>> logoutInLocal();
-
 
 
 }

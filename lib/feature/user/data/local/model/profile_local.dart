@@ -18,6 +18,11 @@ class ProfileLocal{
   List<String> dailyMacroGoal;
   String activityLevel;
   String weightChangeWeekly;
+  List<String> favoriteCategories;
+  List<String> hateCategories;
+  List<String> allergens;
+  List<String> mainDishTypes;
+  List<String> sideDishTypes;
 
 
 
@@ -36,6 +41,11 @@ class ProfileLocal{
     required this.dailyMacroGoal,
     required this.activityLevel,
     required this.weightChangeWeekly,
+    required this.favoriteCategories,
+    required this.hateCategories,
+    required this.allergens,
+    required this.mainDishTypes,
+    required this.sideDishTypes
   });
 
 
@@ -55,6 +65,11 @@ class ProfileLocal{
         activityLevel: parsedJson['activityLevel'],
         dailyMacroGoal: (parsedJson['dailyMacroGoal'] as String).split(';'),
         weightChangeWeekly: parsedJson['weightChangeWeekly'],
+      mainDishTypes: (parsedJson['mainDishTypes'] as String).split(';'),
+      sideDishTypes: (parsedJson['sideDishTypes'] as String).split(';'),
+      favoriteCategories: (parsedJson['favoriteCategories'] as String).split(';'),
+      hateCategories: (parsedJson['hateCategories'] as String).split(';'),
+      allergens: (parsedJson['allergens'] as String).split(';'),
     );
   }
 
@@ -74,6 +89,12 @@ class ProfileLocal{
     data['activityLevel'] = activityLevel;
     data['weightChangeWeekly'] = weightChangeWeekly;
     data['dailyMacroGoal'] = dailyMacroGoal.join(';');
+    data['mainDishTypes'] = mainDishTypes.join(';');
+    data['sideDishTypes'] = sideDishTypes.join(';');
+    data['favoriteCategories'] = favoriteCategories.join(';');
+    data['hateCategories'] = hateCategories.join(';');
+    data['allergens'] = allergens.join(';');
+
     return data;
   }
 
@@ -92,6 +113,11 @@ class ProfileLocal{
         'age: $age,'
         'activityLevel: $activityLevel,'
         'weightChangeWeekly: $weightChangeWeekly,'
+        'favoriteCategories: $favoriteCategories,'
+        'hateCategories: $hateCategories,'
+        'mainDishTypes: $mainDishTypes,'
+        'sideDishTypes: $sideDishTypes,'
+        'allergens: $allergens,'
         'dailyMacroGoal: $dailyMacroGoal';
   }
 
@@ -113,6 +139,11 @@ ProfileLocal emptyProfile(){
       goalWeight: '',
       dailyMacroGoal: ['2197', '220', '165', '73'],
       activityLevel: SEDENTARY_LABEL,
-      weightChangeWeekly: LB_1_LABEL
+      weightChangeWeekly: LB_1_LABEL,
+    favoriteCategories: [],
+    hateCategories: [],
+    mainDishTypes: [],
+    sideDishTypes: [],
+    allergens: []
   );
 }

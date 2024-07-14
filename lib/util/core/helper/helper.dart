@@ -19,7 +19,11 @@ int generateRandomNumber(int length) {
   return randomNumber;
 }
 
-
+List<String> sortAlphabetically(List<String> inputList) {
+  List<String> sortedList = List.from(inputList);
+  sortedList.sort((a, b) => a.compareTo(b));
+  return sortedList;
+}
 
 DateTime calculateNextDate(DateTime inputDate, int interval, String intervalType) {
   if (interval <= 0) {

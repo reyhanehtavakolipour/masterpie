@@ -25,7 +25,7 @@ class DatabaseHelper {
     var docdir = await getApplicationDocumentsDirectory();
     String path = join(docdir.path, 'masterpie_db.db');
     final password= await FlutterConfig.get(SQFLITE_PASSWORD_KEY);
-    return await openDatabase(path, version: 1, onCreate: _onCreate, password: password);
+    return await openDatabase(path, version: 2, onCreate: _onCreate, password: password);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -44,7 +44,12 @@ class DatabaseHelper {
         ' $AGE TEXT,'
         ' $DAILY_MACRO_GOAL TEXT,'
         ' $ACTIVITY_LEVEL TEXT,'
-        ' $WEIGHT_CHANGE_WEEKLY TEXT'
+        ' $WEIGHT_CHANGE_WEEKLY TEXT,'
+        ' $MAIN_DISH_TYPES TEXT,'
+        ' $SIDE_DISH_TYPES TEXT,'
+        ' $FAVORITE_CATEGORIES TEXT,'
+        ' $HATE_CATEGORIES TEXT,'
+        ' $ALLERGENS TEXT'
         ')');
 
 

@@ -3,23 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/get_fat_secret_foods_info_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/state_event/get_fat_secret_foods_info_state_event.dart';
+import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
+import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
+import 'package:masterpie/feature/user/presentation/bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/core/helper/helper.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
-
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
 import '../../../foods/presentation/screen/recie_types_popup.dart';
-import '../../../foods/presentation/screen/ui_helper/custom_chips.dart';
-
+import '../../domain/model/profile_model.dart';
+import '../bloc/update_profile_bloc/update_profile_bloc.dart';
 
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+
+  final bool isOnBoard;
+
+  const OnBoardingScreen({super.key, required this.isOnBoard});
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
@@ -34,7 +41,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   late GetFatSecretFoodsInfoBloc _getFatSecretFoodsInfoBloc;
 
-  FatSecretFoodsInfo _fatSecretFoodsInfo= FatSecretFoodsInfo();
+  Profile _profile= Profile();
+
+
+  // fatsecret
+  List<String> _fatSecretMainDishesTypes= [];
+  List<String> _fatSecretSideDishesTypes= [];
+  List<String> _allCategoryOptions= [];
+  List<String> _allAllergenOptions= [];
+
+
 
   //main dishes
   bool _isCustomNumberMainDishSelected = false;
@@ -69,6 +85,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   final _goalWeightController = TextEditingController();
 
+  late UpdateProfileBloc _updateProfileBloc;
+  late GetProfileBloc _getProfileBloc;
+
 
   String _heightSelectedUnit = FT_LABEL;
   String _weightSelectedUnit = LB_LABEL;
@@ -83,12 +102,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _getFatSecretFoodsInfoBloc = context.read<GetFatSecretFoodsInfoBloc>();
     _mainDishTimesController= TextEditingController(text: '3');
     _sideDishTimesController= TextEditingController(text: '2');
-    _updateMainDishType('');
-    _updateSideDishType('');
-    _requestFatSecretFoodsInfo();
+    _updateProfileBloc = context.read<UpdateProfileBloc>();
+    _getProfileBloc = context.read<GetProfileBloc>();
+    getProfile();
     _setEditTextsListener();
   }
 
+
+  void getProfile(){
+    _getProfileBloc.add(
+      const GetProfileEvent.onGetProfile()
+    );
+  }
 
   void _setEditTextsListener(){
     _mainDishTimesController.addListener(() {
@@ -137,7 +162,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   _selectAllergens(),
 
                   /// step6
-                  _fillForm()
+                  Visibility(
+                      visible: widget.isOnBoard,
+                      child: _fillForm()
+                  )
 
                 ],
               ),
@@ -162,12 +190,49 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
               ),
             ),
+
+            BlocConsumer<GetProfileBloc, GetProfileState>(
+                builder: (mcontext, state) {
+                  if (state is GetProfileLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is GetProfileLoadedState){
+                    Future.delayed(Duration.zero,(){
+                      _profile= state.profile;
+                      fillUiWithProfile(state.profile);
+                      _requestFatSecretFoodsInfo();
+                    });
+                  }else if(state is GetProfileErrorState){
+                    _getProfileBloc.add(const GetProfileEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      _requestFatSecretFoodsInfo();
+                      return showErrorToast(context, state.message);
+                    });
+                  }else{
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
+
             BlocConsumer<GetFatSecretFoodsInfoBloc, GetFatSecretFoodsInfoState>(
                 builder: (mcontext, state) {
                   if(state is FatSecretFoodInfoLoadedState){
                     Future.delayed(Duration.zero,(){
                       _getFatSecretFoodsInfoBloc.add(const GetFatSecretFoodsInfoEvent.onReset());
-                      _fatSecretFoodsInfo= state.fatSecretFoodsInfo;
+                      _fatSecretMainDishesTypes= state.fatSecretFoodsInfo.recipeTypes;
+                      _fatSecretSideDishesTypes= state.fatSecretFoodsInfo.recipeTypes;
+                      _allCategoryOptions= state.fatSecretFoodsInfo.categories;
+                      _allAllergenOptions= state.fatSecretFoodsInfo.allergens;
+                      _convertFatSecretDataToUiData();
+                      _updateMainDishType('');
+                      _updateSideDishType('');
                     });
                     return Container();
                   }else if(state is FatSecretFoodInfoErrorState){
@@ -181,6 +246,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
                 }
             ),
+
+
+            BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
+                builder: (mcontext, state) {
+                  if (state is UpdateProfileLoadingState) {
+                    return const GFLoader(
+                      type: GFLoaderType.circle,
+                      loaderColorOne: DARK_PRIMARY_COLOR,
+                      loaderColorTwo: DARK_PRIMARY_COLOR,
+                      loaderColorThree: DARK_PRIMARY_COLOR,
+                    );
+                  }else if(state is ProfileUpdatedState){
+                    Future.delayed(Duration.zero,(){
+                      setState(() {
+                        _updateProfileBloc.add(const UpdateProfileEvent.onReset());
+                        _goToMainScreen();
+                      });
+
+                    });
+                  }else if(state is UpdateProfileErrorState){
+                    _updateProfileBloc.add(const UpdateProfileEvent.onReset());
+                    Future.delayed(Duration.zero,(){
+                      return showErrorToast(context, state.message);
+                    });
+                  }else{
+                  }
+                  return Container();
+                },
+                listener: (context, state){
+
+                }
+            ),
+
             const SizedBox(height: 20.0),
           ],
         ),
@@ -188,6 +286,51 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
+
+
+  void fillUiWithProfile(Profile profile){
+    setState(() {
+      _mainDishTimesController.text= profile.mainDishTypes.length.toString();
+      _sideDishTimesController.text= profile.sideDishTypes.length.toString();
+      _selectedMainDishChoice= profile.mainDishTypes.length;
+      _selectedSideDishChoice= profile.sideDishTypes.length;
+      _mainDishesType= profile.mainDishTypes;
+      _sideDishesType= profile.sideDishTypes;
+      _favoriteCategories= profile.favoriteCategories;
+      _hateCategories= profile.hateCategories;
+      _allergens= profile.allergens;
+    });
+  }
+
+
+  void _convertFatSecretDataToUiData(){
+
+    //organize main dishes types
+    List<String> mainDishTypes= [];
+    _fatSecretMainDishesTypes.forEach((element) {
+      if(element != 'Appetizer'  && element != 'Beverage' &&
+          element != 'Sauce and Condiment' && element != 'Side Dish' &&
+          element != 'Snack'){
+        mainDishTypes.add(element);
+      }
+    });
+    mainDishTypes.add('Dinner');
+    _fatSecretMainDishesTypes= sortAlphabetically(mainDishTypes);
+
+
+    //organize side dishes types
+    List<String> sideDishTypes= [];
+    _fatSecretSideDishesTypes.forEach((element) {
+      if(element != 'Breakfast'  && element != 'Lunch' &&
+          element != 'Main Dish'){
+        sideDishTypes.add(element);
+      }
+    });
+    _fatSecretSideDishesTypes= sideDishTypes;
+
+
+
+  }
 
 
   void _requestFatSecretFoodsInfo(){
@@ -260,21 +403,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    '2/6',
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Container(
+              margin: const EdgeInsets.only(top: 48),
+              height: 30,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '2/6',
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
 
-                skipBtn()
+                  skipBtn()
 
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -381,21 +527,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    '4/6',
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Container(
+              margin: const EdgeInsets.only(top: 48),
+              height: 30,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '4/6',
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
 
-                skipBtn()
+                  skipBtn()
 
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -655,7 +804,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
-                    _goToMainScreen();
+                    _saveUserInputsInOnboard();
                   },
                   child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
@@ -666,6 +815,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
     );
   }
+
+
+  void _saveUserInputsInOnboard(){
+
+    if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
+        _ageController.text.isEmpty || _heightController.text.isEmpty){
+      showErrorToast(context, FILL_ALL_ERROR);
+      return;
+    }
+
+    String weightChangeWeekly= _weightSelectedUnit == LB_LABEL ? LB_1_LABEL : GRAM_250_LABEL;
+
+    _updateProfileBloc.add(
+      UpdateProfileEvent.onUpdateProfile(
+          _genderSelected,
+          _weightController.text,
+          _heightController.text,
+          _weightSelectedUnit,
+          _heightSelectedUnit,
+          _goalWeightController.text,
+          _ageController.text,
+          _activitySelected,
+          weightChangeWeekly,
+          _mainDishesType,
+          _sideDishesType,
+          _favoriteCategories,
+          _hateCategories,
+          _allergens
+      )
+    );
+  }
+
+
 
   Widget buildActivityLevelDropdown() {
 
@@ -849,21 +1031,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    '5/6',
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Container(
+              margin: const EdgeInsets.only(top: 48),
+              height: 30,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '5/6',
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
 
-                skipBtn()
+                  skipBtn()
 
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -908,48 +1093,114 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           const SizedBox(height: 16,),
 
           /// next & previous button
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: MASTERPIE_YELLOW_COLOR
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        ),
+                        backgroundColor: MASTERPIE_YELLOW_COLOR
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        _goToPage(3);
+                      });
+                    },
+                    child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
                   ),
-                  onPressed: (){
-                    setState(() {
-                      _goToPage(3);
-                    });
-                  },
-                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
                 ),
-              ),
 
-              const SizedBox(width: 8,),
+                const SizedBox(width: 8,),
 
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        ),
+                        backgroundColor: DARK_PRIMARY_COLOR
+                    ),
+                    onPressed: (){
+                      _goToPage(5);
+                    },
+                    child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                   ),
-                  onPressed: (){
-                    _goToPage(5);
-                  },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+
+          /// done & previous button
+          Visibility(
+            visible: !widget.isOnBoard,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape:  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                          ),
+                          backgroundColor: MASTERPIE_YELLOW_COLOR
+                      ),
+                      onPressed: (){
+                        setState(() {
+                          _goToPage(3);
+                        });
+                      },
+                      child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8,),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape:  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                          ),
+                          backgroundColor: DARK_PRIMARY_COLOR
+                      ),
+                      onPressed: (){
+                        _saveUserInputsInsideApp();
+                      },
+                      child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                    ),
+                  ),
+                ],
+              )
           )
         ],
       ),
     );
   }
 
+
+  void _saveUserInputsInsideApp(){
+    _updateProfileBloc.add(
+        UpdateProfileEvent.onUpdateProfile(
+            _profile.gender,
+            _profile.weight,
+            _profile.height,
+            _profile.weightUnit,
+            _profile.heightUnit,
+            _profile.goalWeight,
+            _profile.age,
+            _profile.activityLevel,
+            _profile.weightChangeWeekly,
+            _mainDishesType,
+            _sideDishesType,
+            _favoriteCategories,
+            _hateCategories,
+            _allergens
+        )
+    );
+  }
 
   Widget _selectFavoriteCategories(){
     return Container(
@@ -958,21 +1209,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    '3/6',
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Container(
+              margin: const EdgeInsets.only(top: 48),
+              height: 30,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '3/6',
+                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
 
-                skipBtn()
+                  skipBtn()
 
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -1063,18 +1317,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
   Widget _buildHateCategories(){
+
+    //remove favorite categories from the options
+
+    List<String> hateOptions= [];
+    _allCategoryOptions.forEach((element) {
+      if(!_favoriteCategories.contains(element)){
+        hateOptions.add(element);
+      }
+    });
+
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Wrap(
         spacing: 24,
-        children:  _fatSecretFoodsInfo.categories.map(
+        children:  hateOptions.map(
               (item) {
             return RawChip(
               backgroundColor: _hateCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
               onSelected: (bool selected) {
                 setState(() {
                   if(selected){
-                    _hateCategories.add(item);
+                    if(!_hateCategories.contains(item)){
+                      _hateCategories.add(item);
+                    }
                   }else{
                     _hateCategories.remove(item);
                   }
@@ -1099,14 +1366,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       padding: const EdgeInsets.all(16),
       child: Wrap(
         spacing: 24,
-        children:  _fatSecretFoodsInfo.allergens.map(
+        children:  _allAllergenOptions.map(
               (item) {
             return RawChip(
               backgroundColor: _allergens.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
               onSelected: (bool selected) {
                 setState(() {
                   if(selected){
-                    _allergens.add(item);
+                    if(!_allergens.contains(item)){
+                      _allergens.add(item);
+                    }
                   }else{
                     _allergens.remove(item);
                   }
@@ -1132,14 +1401,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       padding: const EdgeInsets.all(16),
       child: Wrap(
         spacing: 24,
-        children:  _fatSecretFoodsInfo.categories.map(
+        children:  _allCategoryOptions.map(
               (item) {
             return RawChip(
               backgroundColor: _favoriteCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
               onSelected: (bool selected) {
                 setState(() {
                   if(selected){
-                    _favoriteCategories.add(item);
+                    if(!_favoriteCategories.contains(item)){
+                      _favoriteCategories.add(item);
+                    }
                   }else{
                     _favoriteCategories.remove(item);
                   }
@@ -1240,12 +1511,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       context: context,
       builder: (context) {
         return RecipeTypesPopup(
-          types: _fatSecretFoodsInfo.recipeTypes,
+          types: _fatSecretSideDishesTypes,
         );
       },
     );
     setState(() {
-      _sideDishesType[index] = _fatSecretFoodsInfo.recipeTypes[selectedIndex];
+      _sideDishesType[index] = _fatSecretSideDishesTypes[selectedIndex];
     });
   }
 
@@ -1255,13 +1526,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       context: context,
       builder: (context) {
         return RecipeTypesPopup(
-          types: _fatSecretFoodsInfo.recipeTypes,
+          types: _fatSecretMainDishesTypes,
         );
       },
     );
 
     setState(() {
-      _mainDishesType[index] = _fatSecretFoodsInfo.recipeTypes[selectedIndex];
+      _mainDishesType[index] = _fatSecretMainDishesTypes[selectedIndex];
     });
   }
 
@@ -1271,21 +1542,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       child: Column(
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                const Expanded(
-                    child: Text(
-                      '1/6',
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                ),
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Container(
+              margin: const EdgeInsets.only(top: 48),
+              height: 30,
+              child: Row(
+                children: [
+                  const Expanded(
+                      child: Text(
+                        '1/6',
+                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      ),
+                  ),
 
-              skipBtn()
+                skipBtn()
 
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -1549,7 +1823,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const MainScreen(),
+        builder: (context) => MainScreen(isFromOnboard: widget.isOnBoard),
       ),
     );
   }

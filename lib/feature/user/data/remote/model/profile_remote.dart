@@ -22,6 +22,11 @@ class ProfileRemote with _$ProfileRemote{
     @Default('') String activityLevel,
     @Default('') String weightChangeWeekly,
     @Default(false) bool updateProfileShown,
+    @Default([]) List<String> favoriteCategories,
+    @Default([]) List<String> hateCategories,
+    @Default([]) List<String> mainDishTypes,
+    @Default([]) List<String> sideDishTypes,
+    @Default([]) List<String> allergens,
   })= _ProfileRemote;
 
 }
@@ -43,5 +48,10 @@ Map<String, dynamic> profileRemoteToJson(ProfileRemote profileRemote) {
   data['activityLevel'] = profileRemote.activityLevel;
   data['weightChangeWeekly'] = profileRemote.weightChangeWeekly;
   data['update_profile_shown'] = profileRemote.updateProfileShown;
+  data['favorite_categories'] = profileRemote.favoriteCategories;
+  data['hate_categories'] = profileRemote.hateCategories;
+  data['main_dish_types'] = profileRemote.mainDishTypes;
+  data['side_dish_types'] = profileRemote.sideDishTypes;
+  data['allergens'] = profileRemote.allergens;
   return data;
 }

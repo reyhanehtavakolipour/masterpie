@@ -15,18 +15,19 @@ class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
     }
     );
 
-    on<UpdateProfileAfterRegistration>(
+    on<UpdateProfile>(
             (event, emit) async {
               emit(const UpdateProfileState.loading());
           final useCase= serviceLocator<UpdateProfileUseCase>();
-          var result = await useCase.updateProfileAfterRegister(event.email, event.firstName, event.lastName, event.gender, event.weight,
-              event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel, event.weightChangeWeekly);
+          var result = await useCase.updateProfile(event.gender, event.weight,
+              event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel, event.weightChangeWeekly,
+              event.mainDishTypes, event.sideDishTypes, event.favoriteCategories, event.hateCategories, event.allergens);
           result.fold(
                 (failure) {
                   emit(UpdateProfileState.error(failure.message));
             },
                 (data) {
-              emit(const UpdateProfileState.profileUpdatedAfterRegistration());
+              emit(const UpdateProfileState.profileUpdated());
             },
           );
 

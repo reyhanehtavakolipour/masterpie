@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
 import 'package:masterpie/main_screen.dart';
 import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -86,7 +87,7 @@ class _LandingScreenState extends State<LandingScreen>{
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MainScreen(),
+                            builder: (context) => const OnBoardingScreen(isOnBoard: true,),
                           ),
                         );
                       },

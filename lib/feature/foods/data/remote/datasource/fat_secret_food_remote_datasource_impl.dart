@@ -493,7 +493,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         });
 
 
-
         /// foods category
         Map<String, dynamic> categoriesParams = {
           'format': 'json',
@@ -520,7 +519,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           allergens.add('Lactose');
           allergens.add('Egg');
           allergens.add('Fish');
-          allergens.add('Milk');
           allergens.add('Gluten');
           allergens.add('Nuts');
           allergens.add('Peanuts');
@@ -530,9 +528,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
           return Right(
               FatSecretFoodsInfoRemote(
-                recipeTypes: recipeTypes,
-                categories: categories,
-                allergens: allergens
+                recipeTypes: sortAlphabetically(recipeTypes),
+                categories: sortAlphabetically(categories),
+                allergens: sortAlphabetically(allergens)
               )
           );
 

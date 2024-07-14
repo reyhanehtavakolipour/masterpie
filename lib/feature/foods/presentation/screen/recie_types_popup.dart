@@ -43,13 +43,14 @@ class _SelectContainerPopupState extends State<RecipeTypesPopup> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: _selectedIndex == index ? MASTERPIE_YELLOW_COLOR : DARK_PRIMARY_COLOR,
+                  color: _selectedIndex == index ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey)
                 ),
                 child: Center(
                   child: Text(
                     widget.types[index],
-                    style: TextStyle(color: _selectedIndex == index ? DARK_PRIMARY_COLOR : Colors.white  , fontSize: 13, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: _selectedIndex == index ? Colors.white :  DARK_PRIMARY_COLOR , fontSize: 13, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                   ),
                 ),

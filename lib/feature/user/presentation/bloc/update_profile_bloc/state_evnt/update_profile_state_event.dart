@@ -6,10 +6,7 @@ part 'update_profile_state_event.freezed.dart';
 @freezed
 abstract class UpdateProfileEvent with _$UpdateProfileEvent {
 
-  const factory UpdateProfileEvent.onUpdateProfileAfterRegister(
-      String email,
-      String firstName,
-      String lastName,
+  const factory UpdateProfileEvent.onUpdateProfile(
       String gender,
       String weight,
       String height,
@@ -18,8 +15,13 @@ abstract class UpdateProfileEvent with _$UpdateProfileEvent {
       String goalWeight,
       String age,
       String activityLevel,
-      String weightChangeWeekly
-      ) = UpdateProfileAfterRegistration;
+      String weightChangeWeekly,
+      List<String> mainDishTypes,
+      List<String> sideDishTypes,
+      List<String> favoriteCategories,
+      List<String> hateCategories,
+      List<String> allergens,
+      ) = UpdateProfile;
 
 
   const factory UpdateProfileEvent.onUpdateUserInfo(
@@ -76,7 +78,7 @@ abstract class UpdateProfileState with _$UpdateProfileState{
   const factory UpdateProfileState.initial()= UpdateProfileInitialState;
   const factory UpdateProfileState.loading()= UpdateProfileLoadingState;
   const factory UpdateProfileState.error(String message)= UpdateProfileErrorState;
-  const factory UpdateProfileState.profileUpdatedAfterRegistration()= ProfileUpdatedAfterRegisterState;
+  const factory UpdateProfileState.profileUpdated()= ProfileUpdatedState;
   const factory UpdateProfileState.macroGoalsCalculated(List<String> dailyGoals)= MacroGoalsCalculatedState;
   const factory UpdateProfileState.userInfoUpdated()= UserInfoUpdatedState;
   const factory UpdateProfileState.macroGoalsUpdated()= MacroGoalsUpdatedState;

@@ -13,13 +13,11 @@ class UpdateProfileUseCase{
 
   final repo = serviceLocator<UserRepository>();
 
-  Future<Either<Failure, Success>> updateProfileAfterRegister(String email, String firstName, String lastName, String gender,
-      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age, String activityLevel, String weightChangeWeekly) async{
+  Future<Either<Failure, Success>> updateProfile(String gender, String weight, String height, String weightUnit, String heightUnit,
+      String goalWeight, String age, String activityLevel, String weightChangeWeekly,   List<String> mainDishTypes, List<String> sideDishTypes,
+      List<String> favoriteCategories, List<String> hateCategories, List<String> allergens) async{
 
     Profile profile = Profile(
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
       gender: gender,
       weight: weight,
       height: height,
@@ -29,19 +27,41 @@ class UpdateProfileUseCase{
       age: age,
       activityLevel: activityLevel,
       weightChangeWeekly: weightChangeWeekly,
-      updateProfileShown: true
+      updateProfileShown: true,
+      mainDishTypes: mainDishTypes,
+      sideDishTypes: sideDishTypes,
+      favoriteCategories: favoriteCategories,
+      hateCategories: hateCategories,
+      allergens: allergens
     );
 
 
-    final upsertProfileResponse = await repo.upsertProfileAfterRegisterInRemote(profile);
+    final userIdResponse= await repo.getUserIdFromHive();
+    final userId= userIdResponse.isRight() ? userIdResponse.asRight() : '';
 
-    if(upsertProfileResponse.isLeft()){
-      return Left(getFailure(upsertProfileResponse.asLeft()));
+    if(userId.isNotEmpty){
+      final upsertProfileResponse = await repo.upsertProfileInRemote(profile);
+
+      if(upsertProfileResponse.isLeft()){
+        return Left(getFailure(upsertProfileResponse.asLeft()));
+      }
+
+      profile= profile.copyWith(dailyMacroGoal: upsertProfileResponse.asRight().dailyMacroGoal);
+      await repo.updateProfileInLocal(profile);
+      return const Right(Success());
+    }else{
+      final calculateResponse = await repo.calculateDailyMacroGoalInRemote(profile);
+      if(calculateResponse.isLeft()){
+        return Left(getFailure(calculateResponse.asLeft()));
+      }
+
+      profile= profile.copyWith(dailyMacroGoal: calculateResponse.asRight());
+
+      await repo.updateProfileInLocal(profile);
+      return const Right(Success());
+
     }
 
-    profile= profile.copyWith(dailyMacroGoal: upsertProfileResponse.asRight().dailyMacroGoal);
-    await repo.updateProfileInLocal(profile);
-    return const Right(Success());
   }
 
 

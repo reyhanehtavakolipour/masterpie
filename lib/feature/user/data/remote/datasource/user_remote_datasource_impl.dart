@@ -128,23 +128,23 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, ProfileRemote>> upsertProfileAfterRegister(ProfileRemote profileRemote) async{
+  Future<Either<Failure, ProfileRemote>> upsertProfile(ProfileRemote profileRemote) async{
     try {
       // includes everything including name, email, gender, age, ...
       final supabase = Supabase.instance.client;
       await supabase.from(PROFILE_REMOTE_TABLE)
           .update(profileRemoteToJson(profileRemote))
           .eq('id', profileRemote.id);
-      List<String> dailyMacros= profileRemote.dailyMacroGoal;
-      if(profileRemote.age.isNotEmpty && profileRemote.height.isNotEmpty && profileRemote.weight.isNotEmpty &&
-          profileRemote.goalWeight.isNotEmpty && profileRemote.gender.isNotEmpty){
-        final dailyMacroResponse= await calculateDailyMacroGoal(profileRemote);
-        if(dailyMacroResponse.isRight()){
-          dailyMacros= dailyMacroResponse.asRight();
-        }
-      }
-      profileRemote= profileRemote.copyWith(dailyMacroGoal: dailyMacros);
-      await updateDailyMacroGoal(profileRemote);
+      // List<String> dailyMacros= profileRemote.dailyMacroGoal;
+      // if(profileRemote.age.isNotEmpty && profileRemote.height.isNotEmpty && profileRemote.weight.isNotEmpty &&
+      //     profileRemote.goalWeight.isNotEmpty && profileRemote.gender.isNotEmpty){
+      //   final dailyMacroResponse= await calculateDailyMacroGoal(profileRemote);
+      //   if(dailyMacroResponse.isRight()){
+      //     dailyMacros= dailyMacroResponse.asRight();
+      //   }
+      // }
+      // profileRemote= profileRemote.copyWith(dailyMacroGoal: dailyMacros);
+      // await updateDailyMacroGoal(profileRemote);
 
       return Right(profileRemote);
     } on PostgrestException catch (error) {
@@ -182,7 +182,12 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         dailyMacroGoal: data[0]['dailyMacroGoal'] == null ? ['', '', '', ''] : (data[0]['dailyMacroGoal'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         age: data[0]['age'] ?? '',
         weightChangeWeekly: data[0]['weightChangeWeekly'] ?? '',
-        updateProfileShown: data[0]['update_profile_shown'] ?? false
+        updateProfileShown: data[0]['update_profile_shown'] ?? false,
+        favoriteCategories: data[0]['favorite_categories'] == null ? [] : (data[0]['favorite_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        hateCategories: data[0]['hate_categories'] == null ? [] : (data[0]['hate_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        mainDishTypes: data[0]['main_dish_types'] == null ? [] : (data[0]['main_dish_types'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        sideDishTypes: data[0]['side_dish_types'] == null ? [] : (data[0]['side_dish_types'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        allergens: data[0]['allergens'] == null ? [] : (data[0]['allergens'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
       );
 
       return Right(profileRemote);

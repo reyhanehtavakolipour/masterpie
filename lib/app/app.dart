@@ -124,7 +124,7 @@ class App extends StatelessWidget {
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
           routes: {
-            App.routeName: (context) =>  const OnBoardingScreen(),
+            App.routeName: (context) =>  const MainScreen(),
           },
         ),
     );

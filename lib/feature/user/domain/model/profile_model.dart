@@ -22,6 +22,11 @@ class Profile with _$Profile{
     @Default('') String activityLevel,
     @Default('') String weightChangeWeekly,
     @Default(false) bool updateProfileShown,
+    @Default([]) List<String> favoriteCategories,
+    @Default([]) List<String> hateCategories,
+    @Default([]) List<String> mainDishTypes,
+    @Default([]) List<String> sideDishTypes,
+    @Default([]) List<String> allergens,
   })= _Profile;
 
 }

@@ -209,6 +209,7 @@ const SEDENTARY_LABEL = 'Sedentary';
 const LIGHT_LABEL = 'Light Activity';
 const MODERATE_LABEL = 'Moderate Activity';
 const VERY_ACTIVE_LABEL = 'Very Active';
+const MY_DIET_LABEL = 'My Diet';
 const MACRO_GOAL_LABEL = 'Macro Goals';
 const LET_US_CALCULATE_IT_MESSAGE = 'Calculate My Macro Goal';
 const USER_INFORMATION_LABEL = 'User Information';
@@ -382,6 +383,10 @@ const SIDE_DISH_LABEL= 'SIDE DISH';
 const SELECT_MEAL_TYPE= 'Select meal type';
 const SUBMIT_LABEL= 'Submit';
 const DONE_LABEL= 'Done';
+const WAIT_LABEL= 'Wait';
+const GENERATE_MEAL_PLAN= 'Wait a moment while we generate your personalized meal options based on your preferences.\n\nPlease do\'t close the popup.Thank you for your patience!';
+
+
 
 
 

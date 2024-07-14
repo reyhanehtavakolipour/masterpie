@@ -102,10 +102,10 @@ class UserRepositoryImpl extends UserRepository{
 
 
   @override
-  Future<Either<Failure, Profile>> upsertProfileAfterRegisterInRemote(Profile profile) async{
+  Future<Either<Failure, Profile>> upsertProfileInRemote(Profile profile) async{
     final userId = await getUserIdFromHive();
     profile = profile.copyWith(id: userId.asRight());
-    final saveProfileResponse = await userRemoteDataSource.upsertProfileAfterRegister(mapper.toProfileRemote(profile));
+    final saveProfileResponse = await userRemoteDataSource.upsertProfile(mapper.toProfileRemote(profile));
     if(saveProfileResponse.isRight()){
       return Right(mapper.fromProfileRemote(saveProfileResponse.asRight()));
     }

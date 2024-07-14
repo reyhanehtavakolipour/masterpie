@@ -31,6 +31,11 @@ mixin _$Profile {
   String get activityLevel => throw _privateConstructorUsedError;
   String get weightChangeWeekly => throw _privateConstructorUsedError;
   bool get updateProfileShown => throw _privateConstructorUsedError;
+  List<String> get favoriteCategories => throw _privateConstructorUsedError;
+  List<String> get hateCategories => throw _privateConstructorUsedError;
+  List<String> get mainDishTypes => throw _privateConstructorUsedError;
+  List<String> get sideDishTypes => throw _privateConstructorUsedError;
+  List<String> get allergens => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileCopyWith<Profile> get copyWith => throw _privateConstructorUsedError;
@@ -56,7 +61,12 @@ abstract class $ProfileCopyWith<$Res> {
       String age,
       String activityLevel,
       String weightChangeWeekly,
-      bool updateProfileShown});
+      bool updateProfileShown,
+      List<String> favoriteCategories,
+      List<String> hateCategories,
+      List<String> mainDishTypes,
+      List<String> sideDishTypes,
+      List<String> allergens});
 }
 
 /// @nodoc
@@ -87,6 +97,11 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
     Object? updateProfileShown = null,
+    Object? favoriteCategories = null,
+    Object? hateCategories = null,
+    Object? mainDishTypes = null,
+    Object? sideDishTypes = null,
+    Object? allergens = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -149,6 +164,26 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.updateProfileShown
           : updateProfileShown // ignore: cast_nullable_to_non_nullable
               as bool,
+      favoriteCategories: null == favoriteCategories
+          ? _value.favoriteCategories
+          : favoriteCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      hateCategories: null == hateCategories
+          ? _value.hateCategories
+          : hateCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      mainDishTypes: null == mainDishTypes
+          ? _value.mainDishTypes
+          : mainDishTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      sideDishTypes: null == sideDishTypes
+          ? _value.sideDishTypes
+          : sideDishTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      allergens: null == allergens
+          ? _value.allergens
+          : allergens // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -175,7 +210,12 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       String age,
       String activityLevel,
       String weightChangeWeekly,
-      bool updateProfileShown});
+      bool updateProfileShown,
+      List<String> favoriteCategories,
+      List<String> hateCategories,
+      List<String> mainDishTypes,
+      List<String> sideDishTypes,
+      List<String> allergens});
 }
 
 /// @nodoc
@@ -204,6 +244,11 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? activityLevel = null,
     Object? weightChangeWeekly = null,
     Object? updateProfileShown = null,
+    Object? favoriteCategories = null,
+    Object? hateCategories = null,
+    Object? mainDishTypes = null,
+    Object? sideDishTypes = null,
+    Object? allergens = null,
   }) {
     return _then(_$ProfileImpl(
       email: null == email
@@ -266,6 +311,26 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value.updateProfileShown
           : updateProfileShown // ignore: cast_nullable_to_non_nullable
               as bool,
+      favoriteCategories: null == favoriteCategories
+          ? _value._favoriteCategories
+          : favoriteCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      hateCategories: null == hateCategories
+          ? _value._hateCategories
+          : hateCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      mainDishTypes: null == mainDishTypes
+          ? _value._mainDishTypes
+          : mainDishTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      sideDishTypes: null == sideDishTypes
+          ? _value._sideDishTypes
+          : sideDishTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      allergens: null == allergens
+          ? _value._allergens
+          : allergens // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -288,8 +353,18 @@ class _$ProfileImpl implements _Profile {
       this.age = '',
       this.activityLevel = '',
       this.weightChangeWeekly = '',
-      this.updateProfileShown = false})
-      : _dailyMacroGoal = dailyMacroGoal;
+      this.updateProfileShown = false,
+      final List<String> favoriteCategories = const [],
+      final List<String> hateCategories = const [],
+      final List<String> mainDishTypes = const [],
+      final List<String> sideDishTypes = const [],
+      final List<String> allergens = const []})
+      : _dailyMacroGoal = dailyMacroGoal,
+        _favoriteCategories = favoriteCategories,
+        _hateCategories = hateCategories,
+        _mainDishTypes = mainDishTypes,
+        _sideDishTypes = sideDishTypes,
+        _allergens = allergens;
 
   @override
   @JsonKey()
@@ -342,10 +417,55 @@ class _$ProfileImpl implements _Profile {
   @override
   @JsonKey()
   final bool updateProfileShown;
+  final List<String> _favoriteCategories;
+  @override
+  @JsonKey()
+  List<String> get favoriteCategories {
+    if (_favoriteCategories is EqualUnmodifiableListView)
+      return _favoriteCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_favoriteCategories);
+  }
+
+  final List<String> _hateCategories;
+  @override
+  @JsonKey()
+  List<String> get hateCategories {
+    if (_hateCategories is EqualUnmodifiableListView) return _hateCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_hateCategories);
+  }
+
+  final List<String> _mainDishTypes;
+  @override
+  @JsonKey()
+  List<String> get mainDishTypes {
+    if (_mainDishTypes is EqualUnmodifiableListView) return _mainDishTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mainDishTypes);
+  }
+
+  final List<String> _sideDishTypes;
+  @override
+  @JsonKey()
+  List<String> get sideDishTypes {
+    if (_sideDishTypes is EqualUnmodifiableListView) return _sideDishTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sideDishTypes);
+  }
+
+  final List<String> _allergens;
+  @override
+  @JsonKey()
+  List<String> get allergens {
+    if (_allergens is EqualUnmodifiableListView) return _allergens;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allergens);
+  }
 
   @override
   String toString() {
-    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown)';
+    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, allergens: $allergens)';
   }
 
   @override
@@ -376,27 +496,43 @@ class _$ProfileImpl implements _Profile {
             (identical(other.weightChangeWeekly, weightChangeWeekly) ||
                 other.weightChangeWeekly == weightChangeWeekly) &&
             (identical(other.updateProfileShown, updateProfileShown) ||
-                other.updateProfileShown == updateProfileShown));
+                other.updateProfileShown == updateProfileShown) &&
+            const DeepCollectionEquality()
+                .equals(other._favoriteCategories, _favoriteCategories) &&
+            const DeepCollectionEquality()
+                .equals(other._hateCategories, _hateCategories) &&
+            const DeepCollectionEquality()
+                .equals(other._mainDishTypes, _mainDishTypes) &&
+            const DeepCollectionEquality()
+                .equals(other._sideDishTypes, _sideDishTypes) &&
+            const DeepCollectionEquality()
+                .equals(other._allergens, _allergens));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      email,
-      id,
-      firstName,
-      lastName,
-      weight,
-      height,
-      weightUnit,
-      heightUnit,
-      goalWeight,
-      gender,
-      const DeepCollectionEquality().hash(_dailyMacroGoal),
-      age,
-      activityLevel,
-      weightChangeWeekly,
-      updateProfileShown);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        email,
+        id,
+        firstName,
+        lastName,
+        weight,
+        height,
+        weightUnit,
+        heightUnit,
+        goalWeight,
+        gender,
+        const DeepCollectionEquality().hash(_dailyMacroGoal),
+        age,
+        activityLevel,
+        weightChangeWeekly,
+        updateProfileShown,
+        const DeepCollectionEquality().hash(_favoriteCategories),
+        const DeepCollectionEquality().hash(_hateCategories),
+        const DeepCollectionEquality().hash(_mainDishTypes),
+        const DeepCollectionEquality().hash(_sideDishTypes),
+        const DeepCollectionEquality().hash(_allergens)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -421,7 +557,12 @@ abstract class _Profile implements Profile {
       final String age,
       final String activityLevel,
       final String weightChangeWeekly,
-      final bool updateProfileShown}) = _$ProfileImpl;
+      final bool updateProfileShown,
+      final List<String> favoriteCategories,
+      final List<String> hateCategories,
+      final List<String> mainDishTypes,
+      final List<String> sideDishTypes,
+      final List<String> allergens}) = _$ProfileImpl;
 
   @override
   String get email;
@@ -453,6 +594,16 @@ abstract class _Profile implements Profile {
   String get weightChangeWeekly;
   @override
   bool get updateProfileShown;
+  @override
+  List<String> get favoriteCategories;
+  @override
+  List<String> get hateCategories;
+  @override
+  List<String> get mainDishTypes;
+  @override
+  List<String> get sideDishTypes;
+  @override
+  List<String> get allergens;
   @override
   @JsonKey(ignore: true)
   _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>

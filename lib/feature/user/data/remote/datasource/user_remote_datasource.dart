@@ -22,7 +22,7 @@ abstract class UserRemoteDataSource{
   Future<Either<Failure, GoogleSignInRemote>> signInUserWithGoogle();
 
 
-  Future<Either<Failure, ProfileRemote>> upsertProfileAfterRegister(ProfileRemote profileRemote);
+  Future<Either<Failure, ProfileRemote>> upsertProfile(ProfileRemote profileRemote);
 
 
   Future<Either<Failure, Success>> updateUserInfo(ProfileRemote profile);

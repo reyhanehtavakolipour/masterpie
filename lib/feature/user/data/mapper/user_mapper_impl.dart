@@ -43,7 +43,12 @@ class UserMapperImpl extends UserMapper{
         age: profile.age,
         activityLevel: profile.activityLevel,
         dailyMacroGoal: profile.dailyMacroGoal,
-        weightChangeWeekly: profile.weightChangeWeekly
+        weightChangeWeekly: profile.weightChangeWeekly,
+      favoriteCategories: profile.favoriteCategories,
+      hateCategories: profile.hateCategories,
+      mainDishTypes: profile.mainDishTypes,
+      sideDishTypes: profile.sideDishTypes,
+      allergens: profile.allergens
     );
   }
 
@@ -64,7 +69,12 @@ class UserMapperImpl extends UserMapper{
         age: profile.age,
         activityLevel: profile.activityLevel,
         weightChangeWeekly: profile.weightChangeWeekly,
-        updateProfileShown: profile.updateProfileShown
+        updateProfileShown: profile.updateProfileShown,
+        favoriteCategories: profile.favoriteCategories,
+        hateCategories: profile.hateCategories,
+        mainDishTypes: profile.mainDishTypes,
+        sideDishTypes: profile.sideDishTypes,
+        allergens: profile.allergens
     );
   }
 
@@ -84,7 +94,12 @@ class UserMapperImpl extends UserMapper{
         dailyMacroGoal: profile.dailyMacroGoal,
         age: profile.age,
         activityLevel: profile.activityLevel,
-        weightChangeWeekly: profile.weightChangeWeekly
+        weightChangeWeekly: profile.weightChangeWeekly,
+        favoriteCategories: profile.favoriteCategories,
+        hateCategories: profile.hateCategories,
+        mainDishTypes: profile.mainDishTypes,
+        sideDishTypes: profile.sideDishTypes,
+        allergens: profile.allergens
     );
   }
 
@@ -105,7 +120,12 @@ class UserMapperImpl extends UserMapper{
         age: profile.age,
         activityLevel: profile.activityLevel,
         weightChangeWeekly: profile.weightChangeWeekly,
-        updateProfileShown: profile.updateProfileShown
+        updateProfileShown: profile.updateProfileShown,
+        favoriteCategories: profile.favoriteCategories,
+        hateCategories: profile.hateCategories,
+        mainDishTypes: profile.mainDishTypes,
+        sideDishTypes: profile.sideDishTypes,
+        allergens: profile.allergens
     );
   }
 

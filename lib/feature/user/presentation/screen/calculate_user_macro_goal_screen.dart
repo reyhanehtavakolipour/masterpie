@@ -51,7 +51,6 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
   String _weightChangeWeekly = LB_1_LABEL;
 
 
-
   List<String> _dailyMacroGoal = [];
 
   late GetProfileBloc _getProfileBloc;
@@ -94,7 +93,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
         return CalculatedMacroGoalDialog(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
             weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
             age: _ageController.text, goalWeight: _goalWeightController.text,
-            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable);
+            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable,);
       },
     );
   }

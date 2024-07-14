@@ -12,6 +12,7 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
+import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
 import 'package:masterpie/util/core/constant/api_constant.dart';
 import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
@@ -63,10 +64,9 @@ final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
 class MainScreen extends StatefulWidget {
 
-  static const routeName = '/main-screen';
+  final bool? isFromOnboard;
 
-
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key,  this.isFromOnboard}) : super(key: key);
 
 @override
 State<MainScreen> createState() => _MainScreenState();
@@ -172,10 +172,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _requestWizardArgumentModel= RequestWizardArgumentModel();
     checkIfFirstTimeAppOpened();
+    checkIfUserCameFromOnBoard();
     requestProfile();
 
   }
 
+
+
+  void checkIfUserCameFromOnBoard(){
+    // auto generate meals for macro diet wizard if user just completed the onboard
+    if(widget.isFromOnboard == true){
+      Future.delayed(Duration.zero, () {
+        _autoGenerateMealsForDietWizard();
+      });
+    }
+  }
 
 
   void checkIfFirstTimeAppOpened() async{
@@ -402,6 +413,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       setMacroGoals(result);
       requestLoggedFoods(DateTime.now());
     });
+  }
+
+
+  void onDietClicked(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OnBoardingScreen(isOnBoard: false,),
+      ),
+    );
   }
 
   void showContactPage() async{
@@ -681,6 +702,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 onTap: () {
                   _scaffoldKey.currentState?.openEndDrawer();
                   onCalculateMacroClicked();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.fastfood_outlined),
+                title: const Text(MY_DIET_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  onDietClicked();
                 },
               ),
               Visibility(
@@ -1616,6 +1645,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+
+  void _autoGenerateMealsForDietWizard(){
+    showWaitPopup(context, GENERATE_MEAL_PLAN);
+  }
 
   void setMacroRangesInWizard(LoggedFoods loggedFoods){
     double totalTakenCalories= 0;
