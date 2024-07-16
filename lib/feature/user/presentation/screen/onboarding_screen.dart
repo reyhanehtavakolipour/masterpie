@@ -203,6 +203,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   }else if(state is GetProfileLoadedState){
                     Future.delayed(Duration.zero,(){
                       _profile= state.profile;
+                      _getProfileBloc.add(const GetProfileEvent.onReset());
                       fillUiWithProfile(state.profile);
                       _requestFatSecretFoodsInfo();
                     });
@@ -829,20 +830,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     _updateProfileBloc.add(
       UpdateProfileEvent.onUpdateProfile(
-          _genderSelected,
-          _weightController.text,
-          _heightController.text,
-          _weightSelectedUnit,
-          _heightSelectedUnit,
-          _goalWeightController.text,
-          _ageController.text,
-          _activitySelected,
-          weightChangeWeekly,
-          _mainDishesType,
-          _sideDishesType,
-          _favoriteCategories,
-          _hateCategories,
-          _allergens
+        _profile.email,
+        _profile.firstName,
+        _profile.lastName,
+        _genderSelected,
+        _weightController.text,
+        _heightController.text,
+        _weightSelectedUnit,
+        _heightSelectedUnit,
+        _goalWeightController.text,
+        _ageController.text,
+        _activitySelected,
+        weightChangeWeekly,
+        _mainDishesType,
+        _sideDishesType,
+        _favoriteCategories,
+        _hateCategories,
+        _allergens,
+        _profile.dailyMacroGoal
       )
     );
   }
@@ -1182,22 +1187,78 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
   void _saveUserInputsInsideApp(){
+
+    //favorites
+    List<String> favorites= [];
+    _favoriteCategories.forEach((element) {
+      if(element.isNotEmpty){
+        favorites.add(element);
+      }
+    });
+    _favoriteCategories= favorites;
+
+
+    //hates
+    List<String> hates= [];
+    _hateCategories.forEach((element) {
+      if(element.isNotEmpty){
+        hates.add(element);
+      }
+    });
+    _hateCategories= hates;
+
+
+    //main dish types
+    List<String> mainDishTypes= [];
+    _mainDishesType.forEach((element) {
+      if(element.isNotEmpty){
+        mainDishTypes.add(element);
+      }
+    });
+    _mainDishesType= mainDishTypes;
+
+
+    //sideDishTypes
+    List<String> sideDishTypes= [];
+    _sideDishesType.forEach((element) {
+      if(element.isNotEmpty){
+        sideDishTypes.add(element);
+      }
+    });
+    _sideDishesType= sideDishTypes;
+
+
+
+    //allergens
+    List<String> allergens= [];
+    _allergens.forEach((element) {
+      if(element.isNotEmpty){
+        allergens.add(element);
+      }
+    });
+    _allergens= allergens;
+
+
     _updateProfileBloc.add(
         UpdateProfileEvent.onUpdateProfile(
-            _profile.gender,
-            _profile.weight,
-            _profile.height,
-            _profile.weightUnit,
-            _profile.heightUnit,
-            _profile.goalWeight,
-            _profile.age,
-            _profile.activityLevel,
-            _profile.weightChangeWeekly,
-            _mainDishesType,
-            _sideDishesType,
-            _favoriteCategories,
-            _hateCategories,
-            _allergens
+          _profile.email,
+          _profile.firstName,
+          _profile.lastName,
+          _profile.gender,
+          _profile.weight,
+          _profile.height,
+          _profile.weightUnit,
+          _profile.heightUnit,
+          _profile.goalWeight,
+          _profile.age,
+          _profile.activityLevel,
+          _profile.weightChangeWeekly,
+          _mainDishesType,
+          _sideDishesType,
+          _favoriteCategories,
+          _hateCategories,
+          _allergens,
+          _profile.dailyMacroGoal
         )
     );
   }
@@ -1340,7 +1401,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 setState(() {
                   if(selected){
                     if(!_hateCategories.contains(item)){
-                      _hateCategories.add(item);
+                      List<String> list= [];
+                      list.addAll(_hateCategories);
+                      list.add(item);
+                      _hateCategories= list;
                     }
                   }else{
                     _hateCategories.remove(item);
@@ -1350,7 +1414,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               deleteIconColor: LIGHT_GREY_COLOR,
               onDeleted: (){
                 setState(() {
-                  _hateCategories.remove(item);
+                  List<String> list= [];
+                  _hateCategories.forEach((element) {
+                    if(element != item){
+                      list.add(element);
+                    }
+                  });
+                  _hateCategories= list;
                 });
               },
               label: Text(item, style: TextStyle(color: _hateCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
@@ -1374,7 +1444,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 setState(() {
                   if(selected){
                     if(!_allergens.contains(item)){
-                      _allergens.add(item);
+                      List<String> list= [];
+                      list.addAll(_allergens);
+                      list.add(item);
+                      _allergens= list;
                     }
                   }else{
                     _allergens.remove(item);
@@ -1384,7 +1457,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               deleteIconColor: LIGHT_GREY_COLOR,
               onDeleted: (){
                 setState(() {
-                  _allergens.remove(item);
+                  List<String> list= [];
+                  _allergens.forEach((element) {
+                    if(element != item){
+                      list.add(element);
+                    }
+                  });
+                  _allergens= list;
                 });
               },
               label: Text(item, style: TextStyle(color: _allergens.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
@@ -1409,7 +1488,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 setState(() {
                   if(selected){
                     if(!_favoriteCategories.contains(item)){
-                      _favoriteCategories.add(item);
+                      List<String> list= [];
+                      list.addAll(_favoriteCategories);
+                      list.add(item);
+                      _favoriteCategories= list;
                     }
                   }else{
                     _favoriteCategories.remove(item);
@@ -1419,7 +1501,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               deleteIconColor: LIGHT_GREY_COLOR,
               onDeleted: (){
                 setState(() {
-                  _favoriteCategories.remove(item);
+                  List<String> list= [];
+                  _favoriteCategories.forEach((element) {
+                    if(element != item){
+                      list.add(element);
+                    }
+                  });
+                  _favoriteCategories= list;
                 });
               },
               label: Text(item, style: TextStyle(color: _favoriteCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
@@ -1820,7 +1908,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
   void _goToMainScreen(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => MainScreen(isFromOnboard: widget.isOnBoard),

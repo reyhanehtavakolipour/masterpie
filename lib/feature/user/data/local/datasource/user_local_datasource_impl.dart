@@ -52,7 +52,6 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
   Future<Either<Failure, Success>> insertUserProfile(ProfileLocal profileLocal) async{
     final db = await serviceLocator<DatabaseHelper>().db;
     try{
-
       //user just registered and should set the user id
       await db?.delete(TABLE_PROFILE);
       await db?.insert(TABLE_PROFILE, profileLocal.toJson());

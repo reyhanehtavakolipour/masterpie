@@ -489,7 +489,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         List<String> recipeTypes= [];
 
         (recipeTypesData['recipe_types']['recipe_type'] as List).forEach((element) {
-          recipeTypes.add(element.toString());
+          recipeTypes.add(element.toString().replaceAll(',', ''));
         });
 
 
@@ -507,10 +507,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           List<String> categories= [];
 
           (categoriesData['food_categories']['food_category'] as List).forEach((element) {
-            categories.add(element['food_category_name']);
+            categories.add(element['food_category_name'].toString().replaceAll(',', ''));
           });
-
-
 
 
           /// allergens

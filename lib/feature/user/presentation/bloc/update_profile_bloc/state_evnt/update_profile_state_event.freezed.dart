@@ -19,6 +19,9 @@ mixin _$UpdateProfileEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -32,7 +35,8 @@ mixin _$UpdateProfileEvent {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -71,6 +75,9 @@ mixin _$UpdateProfileEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -84,7 +91,8 @@ mixin _$UpdateProfileEvent {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -121,6 +129,9 @@ mixin _$UpdateProfileEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -134,7 +145,8 @@ mixin _$UpdateProfileEvent {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -232,7 +244,10 @@ abstract class _$$UpdateProfileImplCopyWith<$Res> {
       __$$UpdateProfileImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {String gender,
+      {String email,
+      String fName,
+      String lName,
+      String gender,
       String weight,
       String height,
       String weightUnit,
@@ -245,7 +260,8 @@ abstract class _$$UpdateProfileImplCopyWith<$Res> {
       List<String> sideDishTypes,
       List<String> favoriteCategories,
       List<String> hateCategories,
-      List<String> allergens});
+      List<String> allergens,
+      List<String> dailyMacroGoal});
 }
 
 /// @nodoc
@@ -259,6 +275,9 @@ class __$$UpdateProfileImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? email = null,
+    Object? fName = null,
+    Object? lName = null,
     Object? gender = null,
     Object? weight = null,
     Object? height = null,
@@ -273,8 +292,21 @@ class __$$UpdateProfileImplCopyWithImpl<$Res>
     Object? favoriteCategories = null,
     Object? hateCategories = null,
     Object? allergens = null,
+    Object? dailyMacroGoal = null,
   }) {
     return _then(_$UpdateProfileImpl(
+      null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == fName
+          ? _value.fName
+          : fName // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == lName
+          ? _value.lName
+          : lName // ignore: cast_nullable_to_non_nullable
+              as String,
       null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -331,6 +363,10 @@ class __$$UpdateProfileImplCopyWithImpl<$Res>
           ? _value._allergens
           : allergens // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      null == dailyMacroGoal
+          ? _value._dailyMacroGoal
+          : dailyMacroGoal // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -339,6 +375,9 @@ class __$$UpdateProfileImplCopyWithImpl<$Res>
 
 class _$UpdateProfileImpl implements UpdateProfile {
   const _$UpdateProfileImpl(
+      this.email,
+      this.fName,
+      this.lName,
       this.gender,
       this.weight,
       this.height,
@@ -352,13 +391,21 @@ class _$UpdateProfileImpl implements UpdateProfile {
       final List<String> sideDishTypes,
       final List<String> favoriteCategories,
       final List<String> hateCategories,
-      final List<String> allergens)
+      final List<String> allergens,
+      final List<String> dailyMacroGoal)
       : _mainDishTypes = mainDishTypes,
         _sideDishTypes = sideDishTypes,
         _favoriteCategories = favoriteCategories,
         _hateCategories = hateCategories,
-        _allergens = allergens;
+        _allergens = allergens,
+        _dailyMacroGoal = dailyMacroGoal;
 
+  @override
+  final String email;
+  @override
+  final String fName;
+  @override
+  final String lName;
   @override
   final String gender;
   @override
@@ -418,9 +465,17 @@ class _$UpdateProfileImpl implements UpdateProfile {
     return EqualUnmodifiableListView(_allergens);
   }
 
+  final List<String> _dailyMacroGoal;
+  @override
+  List<String> get dailyMacroGoal {
+    if (_dailyMacroGoal is EqualUnmodifiableListView) return _dailyMacroGoal;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_dailyMacroGoal);
+  }
+
   @override
   String toString() {
-    return 'UpdateProfileEvent.onUpdateProfile(gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, allergens: $allergens)';
+    return 'UpdateProfileEvent.onUpdateProfile(email: $email, fName: $fName, lName: $lName, gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, allergens: $allergens, dailyMacroGoal: $dailyMacroGoal)';
   }
 
   @override
@@ -428,6 +483,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UpdateProfileImpl &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.fName, fName) || other.fName == fName) &&
+            (identical(other.lName, lName) || other.lName == lName) &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.height, height) || other.height == height) &&
@@ -451,12 +509,17 @@ class _$UpdateProfileImpl implements UpdateProfile {
             const DeepCollectionEquality()
                 .equals(other._hateCategories, _hateCategories) &&
             const DeepCollectionEquality()
-                .equals(other._allergens, _allergens));
+                .equals(other._allergens, _allergens) &&
+            const DeepCollectionEquality()
+                .equals(other._dailyMacroGoal, _dailyMacroGoal));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      email,
+      fName,
+      lName,
       gender,
       weight,
       height,
@@ -470,7 +533,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
       const DeepCollectionEquality().hash(_sideDishTypes),
       const DeepCollectionEquality().hash(_favoriteCategories),
       const DeepCollectionEquality().hash(_hateCategories),
-      const DeepCollectionEquality().hash(_allergens));
+      const DeepCollectionEquality().hash(_allergens),
+      const DeepCollectionEquality().hash(_dailyMacroGoal));
 
   @JsonKey(ignore: true)
   @override
@@ -482,6 +546,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -495,7 +562,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -531,6 +599,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
     required TResult Function() onReset,
   }) {
     return onUpdateProfile(
+        email,
+        fName,
+        lName,
         gender,
         weight,
         height,
@@ -544,13 +615,17 @@ class _$UpdateProfileImpl implements UpdateProfile {
         sideDishTypes,
         favoriteCategories,
         hateCategories,
-        allergens);
+        allergens,
+        dailyMacroGoal);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -564,7 +639,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -598,6 +674,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
     TResult? Function()? onReset,
   }) {
     return onUpdateProfile?.call(
+        email,
+        fName,
+        lName,
         gender,
         weight,
         height,
@@ -611,13 +690,17 @@ class _$UpdateProfileImpl implements UpdateProfile {
         sideDishTypes,
         favoriteCategories,
         hateCategories,
-        allergens);
+        allergens,
+        dailyMacroGoal);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -631,7 +714,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -667,6 +751,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
   }) {
     if (onUpdateProfile != null) {
       return onUpdateProfile(
+          email,
+          fName,
+          lName,
           gender,
           weight,
           height,
@@ -680,7 +767,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
           sideDishTypes,
           favoriteCategories,
           hateCategories,
-          allergens);
+          allergens,
+          dailyMacroGoal);
     }
     return orElse();
   }
@@ -736,6 +824,9 @@ class _$UpdateProfileImpl implements UpdateProfile {
 
 abstract class UpdateProfile implements UpdateProfileEvent {
   const factory UpdateProfile(
+      final String email,
+      final String fName,
+      final String lName,
       final String gender,
       final String weight,
       final String height,
@@ -749,8 +840,12 @@ abstract class UpdateProfile implements UpdateProfileEvent {
       final List<String> sideDishTypes,
       final List<String> favoriteCategories,
       final List<String> hateCategories,
-      final List<String> allergens) = _$UpdateProfileImpl;
+      final List<String> allergens,
+      final List<String> dailyMacroGoal) = _$UpdateProfileImpl;
 
+  String get email;
+  String get fName;
+  String get lName;
   String get gender;
   String get weight;
   String get height;
@@ -765,6 +860,7 @@ abstract class UpdateProfile implements UpdateProfileEvent {
   List<String> get favoriteCategories;
   List<String> get hateCategories;
   List<String> get allergens;
+  List<String> get dailyMacroGoal;
   @JsonKey(ignore: true)
   _$$UpdateProfileImplCopyWith<_$UpdateProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -846,6 +942,9 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -859,7 +958,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -901,6 +1001,9 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -914,7 +1017,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -954,6 +1058,9 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -967,7 +1074,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -1233,6 +1341,9 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1246,7 +1357,8 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -1289,6 +1401,9 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1302,7 +1417,8 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -1343,6 +1459,9 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1356,7 +1475,8 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -1564,6 +1684,9 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1577,7 +1700,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -1619,6 +1743,9 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1632,7 +1759,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -1672,6 +1800,9 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -1685,7 +1816,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -1997,6 +2129,9 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2010,7 +2145,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -2065,6 +2201,9 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2078,7 +2217,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -2131,6 +2271,9 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2144,7 +2287,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(
@@ -2319,6 +2463,9 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2332,7 +2479,8 @@ class _$ResetImpl implements Reset {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)
+            List<String> allergens,
+            List<String> dailyMacroGoal)
         onUpdateProfile,
     required TResult Function(String firstName, String lastName)
         onUpdateUserInfo,
@@ -2374,6 +2522,9 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2387,7 +2538,8 @@ class _$ResetImpl implements Reset {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult? Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult? Function(
@@ -2427,6 +2579,9 @@ class _$ResetImpl implements Reset {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            String email,
+            String fName,
+            String lName,
             String gender,
             String weight,
             String height,
@@ -2440,7 +2595,8 @@ class _$ResetImpl implements Reset {
             List<String> sideDishTypes,
             List<String> favoriteCategories,
             List<String> hateCategories,
-            List<String> allergens)?
+            List<String> allergens,
+            List<String> dailyMacroGoal)?
         onUpdateProfile,
     TResult Function(String firstName, String lastName)? onUpdateUserInfo,
     TResult Function(

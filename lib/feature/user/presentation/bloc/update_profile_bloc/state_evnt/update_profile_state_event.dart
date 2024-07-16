@@ -7,6 +7,9 @@ part 'update_profile_state_event.freezed.dart';
 abstract class UpdateProfileEvent with _$UpdateProfileEvent {
 
   const factory UpdateProfileEvent.onUpdateProfile(
+      String email,
+      String fName,
+      String lName,
       String gender,
       String weight,
       String height,
@@ -21,6 +24,7 @@ abstract class UpdateProfileEvent with _$UpdateProfileEvent {
       List<String> favoriteCategories,
       List<String> hateCategories,
       List<String> allergens,
+      List<String> dailyMacroGoal
       ) = UpdateProfile;
 
 

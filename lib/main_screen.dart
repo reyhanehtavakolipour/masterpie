@@ -417,7 +417,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   void onDietClicked(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const OnBoardingScreen(isOnBoard: false,),

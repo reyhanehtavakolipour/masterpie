@@ -130,22 +130,13 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   @override
   Future<Either<Failure, ProfileRemote>> upsertProfile(ProfileRemote profileRemote) async{
     try {
+      print('dfgfdo2: ${profileRemoteToJson(profileRemote)}');
+
       // includes everything including name, email, gender, age, ...
       final supabase = Supabase.instance.client;
       await supabase.from(PROFILE_REMOTE_TABLE)
           .update(profileRemoteToJson(profileRemote))
           .eq('id', profileRemote.id);
-      // List<String> dailyMacros= profileRemote.dailyMacroGoal;
-      // if(profileRemote.age.isNotEmpty && profileRemote.height.isNotEmpty && profileRemote.weight.isNotEmpty &&
-      //     profileRemote.goalWeight.isNotEmpty && profileRemote.gender.isNotEmpty){
-      //   final dailyMacroResponse= await calculateDailyMacroGoal(profileRemote);
-      //   if(dailyMacroResponse.isRight()){
-      //     dailyMacros= dailyMacroResponse.asRight();
-      //   }
-      // }
-      // profileRemote= profileRemote.copyWith(dailyMacroGoal: dailyMacros);
-      // await updateDailyMacroGoal(profileRemote);
-
       return Right(profileRemote);
     } on PostgrestException catch (error) {
       return Left(ExceptionFailure(error));
@@ -204,7 +195,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     try{
       final NetworkRequest request = await NetworkRequest.create();
 
-
       String weightChangeWeekly = '';
       if(profile.weightUnit == LB_LABEL){
         weightChangeWeekly = LB_1_LABEL;
@@ -248,6 +238,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         ];
         return  Right(macroGoal);
       }
+
       return  Left(RemoteFailure(response.statusCode, response.data['message']));
     }catch(e){
       return Left(ExceptionFailure(e));

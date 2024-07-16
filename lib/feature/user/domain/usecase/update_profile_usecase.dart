@@ -13,9 +13,9 @@ class UpdateProfileUseCase{
 
   final repo = serviceLocator<UserRepository>();
 
-  Future<Either<Failure, Success>> updateProfile(String gender, String weight, String height, String weightUnit, String heightUnit,
+  Future<Either<Failure, Success>> updateProfile(String email, String fName, String lName, String gender, String weight, String height, String weightUnit, String heightUnit,
       String goalWeight, String age, String activityLevel, String weightChangeWeekly,   List<String> mainDishTypes, List<String> sideDishTypes,
-      List<String> favoriteCategories, List<String> hateCategories, List<String> allergens) async{
+      List<String> favoriteCategories, List<String> hateCategories, List<String> allergens, List<String> dailyMacroGoal) async{
 
     Profile profile = Profile(
       gender: gender,
@@ -25,8 +25,12 @@ class UpdateProfileUseCase{
       heightUnit: heightUnit,
       goalWeight: goalWeight,
       age: age,
+      email: email,
+      firstName: fName,
+      lastName: lName,
       activityLevel: activityLevel,
       weightChangeWeekly: weightChangeWeekly,
+      dailyMacroGoal: dailyMacroGoal,
       updateProfileShown: true,
       mainDishTypes: mainDishTypes,
       sideDishTypes: sideDishTypes,
@@ -34,6 +38,7 @@ class UpdateProfileUseCase{
       hateCategories: hateCategories,
       allergens: allergens
     );
+
 
 
     final userIdResponse= await repo.getUserIdFromHive();
@@ -50,16 +55,8 @@ class UpdateProfileUseCase{
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
     }else{
-      final calculateResponse = await repo.calculateDailyMacroGoalInRemote(profile);
-      if(calculateResponse.isLeft()){
-        return Left(getFailure(calculateResponse.asLeft()));
-      }
-
-      profile= profile.copyWith(dailyMacroGoal: calculateResponse.asRight());
-
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
-
     }
 
   }

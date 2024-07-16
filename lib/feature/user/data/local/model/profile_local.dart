@@ -142,8 +142,8 @@ ProfileLocal emptyProfile(){
       weightChangeWeekly: LB_1_LABEL,
     favoriteCategories: [],
     hateCategories: [],
-    mainDishTypes: [],
-    sideDishTypes: [],
+    mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
+    sideDishTypes: ['Dessert', 'Beverage'],
     allergens: []
   );
 }
