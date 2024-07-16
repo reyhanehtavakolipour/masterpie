@@ -18,4 +18,6 @@ const String FAVORITE_RECIPE_PATH = 'assets/favoriterecipe.png';
 const String HATE_RECIPE_PATH = 'assets/hate.png';
 const String ALLERGEN_PATH = 'assets/allergen.png';
 const String FORM_PATH = 'assets/form.png';
+const String AUTO_PATH= 'assets/auto.png';
+
 

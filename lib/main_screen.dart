@@ -24,15 +24,23 @@ import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'feature/foods/data/repository_impl/foods_repository_impl.dart';
 import 'feature/foods/domain/model/food_model.dart';
 import 'feature/foods/domain/model/logged_foods_model.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import 'feature/foods/presentation/bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
+import 'feature/foods/presentation/bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
+import 'feature/foods/presentation/bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
 import 'feature/foods/presentation/food_calculator/food_calculator.dart';
+import 'feature/foods/presentation/screen/manual_food_macro_wizard_screen.dart';
 import 'feature/foods/presentation/screen/my_favorite_foods_screen.dart';
 import 'feature/foods/presentation/screen/request_macro_wizard_step2_screen.dart';
+import 'feature/foods/presentation/screen/search_grocery_macro_wizard_screen.dart';
 import 'feature/foods/presentation/screen/search_grocery_screen.dart';
+import 'feature/foods/presentation/screen/search_recipe_macro_wizard_screen.dart';
+import 'feature/foods/presentation/screen/suggested_different_foods_combination_screen.dart';
 import 'feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
+import 'feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
 import 'feature/foods/presentation/screen/view_logged_food_screen.dart';
@@ -115,6 +123,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   //wizard
 
+
+  late RequestWizardArgumentModel _requestWizardArgumentModel;
+
+
   late TextEditingController _proteinPercentageController;
   late TextEditingController _carbPercentageController;
   late TextEditingController _fatPercentageController;
@@ -140,7 +152,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   String _macroGoalInputType= BY_PERCENTAGE_LABEL;
 
-  late RequestWizardArgumentModel _requestWizardArgumentModel;
+
+  bool _step_1_expanded= false;
+
+
+  final List<bool> _foodsExpansionState = [];
+
+  late SuggestPortionsBloc _suggestPortionsBloc;
+
+  List<Food> _wizardFoods= [];
+
+
 
 
   @override
@@ -170,7 +192,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _maxCarbGoalController= TextEditingController(text: '0');
     _maxFatGoalController= TextEditingController(text: '0');
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
+    _suggestPortionsBloc = context.read<SuggestPortionsBloc>();
+    _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
     _requestWizardArgumentModel= RequestWizardArgumentModel();
+
+
     checkIfFirstTimeAppOpened();
     checkIfUserCameFromOnBoard();
     requestProfile();
@@ -183,7 +209,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     // auto generate meals for macro diet wizard if user just completed the onboard
     if(widget.isFromOnboard == true){
       Future.delayed(Duration.zero, () {
-        _autoGenerateMealsForDietWizard();
+        //todo show tutorial
       });
     }
   }
@@ -448,56 +474,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     double proteinPercent = double.parse((_totalTakenProteins/_proteinGoal).toStringAsFixed(2));
     double carbPercent = double.parse((_totalTakenCarbs/_carbGoal).toStringAsFixed(2));
     double fatPercent = double.parse((_totalTakenFats/_fatGoal).toStringAsFixed(2));
-
-
-    int remainedCalorie = (_calorieGoal.toDouble() - _totalTakenCalories).toInt();
-    int remainedProtein = (_proteinGoal.toDouble() - _totalTakenProteins).toInt();
-    int remainedCarb = (_carbGoal.toDouble() - _totalTakenCarbs).toInt();
-    int remainedFat = (_fatGoal.toDouble() - _totalTakenFats).toInt();
-
-
-    if(caloriePercent > 1){
-      caloriePercent = 1;
-      remainedCalorie = 0;
-    }
-
-    if(proteinPercent > 1){
-      proteinPercent = 1;
-      remainedProtein = 0;
-    }
-
-    if(carbPercent > 1){
-      carbPercent = 1;
-      remainedCarb = 0;
-    }
-
-    if(fatPercent > 1){
-      fatPercent = 1;
-      remainedFat = 0;
-    }
-
-
-
-    if(_totalTakenCalories == 0.0 && _calorieGoal == 0){
-      caloriePercent = 0;
-      remainedCalorie = 0;
-    }
-
-    if(_totalTakenProteins == 0.0 && _proteinGoal == 0){
-      proteinPercent = 0;
-      remainedProtein = 0;
-    }
-
-    if(_totalTakenCarbs == 0.0 && _carbGoal == 0){
-      carbPercent = 0;
-      remainedCarb = 0;
-    }
-
-    if(_totalTakenFats == 0.0 && _fatGoal == 0){
-      fatPercent = 0;
-      remainedFat = 0;
-    }
-
 
 
     _totalTakenCalories = double.parse(_totalTakenCalories.toStringAsFixed(1));
@@ -1091,182 +1067,222 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                            */
                                           Container(
                                             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-
-
-                                                  /// total macros
-                                                  Container(
-                                                    width: double.infinity,
-                                                    decoration:  BoxDecoration(
-                                                      color: DARK_PRIMARY_COLOR,
-                                                      borderRadius:  const BorderRadius.only(
-                                                        topLeft: Radius.circular(BORDER_RADIUS),
-                                                        topRight: Radius.circular(BORDER_RADIUS),
-                                                      ),
-                                                      border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 0.5,
-                                                      ),
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                          color: Colors.black26,
-                                                          blurRadius: 10,
-                                                          offset: Offset(0, 5),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    padding: const EdgeInsets.all(24),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
                                                       children: [
-                                                        const Text(HOW_MUCH_TO_EAT,style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.center,),
-                                                        const SizedBox(width: 2,),
+
+                                                        /// total macro goal ranges
                                                         GestureDetector(
                                                           onTap: (){
-                                                            logEvent(VIDEO_CLICKED, null);
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (context) => const VideoPlayerScreen(),
-                                                              ),
-                                                            );
+                                                            setState(() {
+                                                              _step_1_expanded= !_step_1_expanded;
+                                                            });
                                                           },
-                                                          child: const Icon(
-                                                            Icons.info_outline,
-                                                            color: Colors.white,
-                                                            size: 24,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ),
-
-
-                                                  Container(
-                                                    decoration:  const BoxDecoration(
-                                                      color: WIZARD_STEP1_BACKGROUND_COLOR,
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        
-                                                        Container(
-                                                          color: MASTERPIE_YELLOW_COLOR,
-                                                          padding: const EdgeInsets.all(8),
-                                                          child: const Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                          child: Container(
+                                                            decoration:  const BoxDecoration(
+                                                              color: WIZARD_STEP1_BACKGROUND_COLOR,
+                                                            ),
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
 
-                                                              CircleAvatar(
-                                                                radius: 12, // Adjust the radius as needed
-                                                                backgroundColor: DARK_PRIMARY_COLOR,
-                                                                child: Text(
-                                                                  '1',
-                                                                  style: TextStyle(
-                                                                    fontSize: 10, // Adjust the font size as needed
-                                                                    color: Colors.white,
-                                                                    fontWeight: FontWeight.bold,
-                                                                  ),),
-                                                                 ),
+                                                                _stepOneTitleWhenExpanded(),
 
-                                                                SizedBox(width: 8,),
-
-                                                                Text(ENTER_GOAL_RANGE,
-                                                                style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
-                                                              ],
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(height: 8,),
-
-                                                        Container(
-                                                          padding: const EdgeInsets.all(12),
-                                                          decoration: BoxDecoration(
-                                                            color: WIZARD_BG_COLOR,
-                                                            borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                                                          ),
-                                                          child: CustomRadioListTile(
-                                                            options: const [BY_PERCENTAGE_LABEL, BY_AMOUNT_LABEL],
-                                                            onSelectedOptionChanged: updateMacroGoalInputUi,
-                                                            selectedOption: _macroGoalInputType,
-                                                            orientation: HORIZONTAL_ORIENTATION,
-                                                            isEditable: true,
-                                                          ),
-                                                        ),
-
-                                                        const SizedBox(height: 8,),
+                                                                _stepOneTitleWhenNotExpanded(),
 
 
-                                                        Visibility(
-                                                            visible: _macroGoalInputType == BY_AMOUNT_LABEL,
-                                                            child: Row(
-                                                              children: [
-                                                                proteinGoalRangeWidgets(),
-
-                                                                const SizedBox(width: 8,),
-
-                                                                carbGoalRangeWidgets(),
-
-                                                                const SizedBox(width: 8,),
-
-                                                                fatGoalRangeWidgets()
-                                                              ],
-                                                            )
-                                                        ),
-
-
-                                                        Visibility(
-                                                            visible: _macroGoalInputType == BY_PERCENTAGE_LABEL,
-                                                            child: Row(
-                                                              children: [
-
-                                                                calorieRangeWidgets(),
-
-                                                                const SizedBox(width: 8,),
-
-
-                                                                Expanded(
-                                                                  child: Container(
-                                                                    height: 300,
-                                                                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                                                                    decoration: BoxDecoration(
-                                                                      color: WIZARD_BG_COLOR,
-                                                                      borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                                                                    ),
+                                                                Visibility(
+                                                                    visible: _step_1_expanded,
                                                                     child: Column(
-                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                      crossAxisAlignment: CrossAxisAlignment.center,
                                                                       children: [
+                                                                        const SizedBox(height: 18,),
 
-                                                                        fatPercentageWidget(),
+                                                                        Container(
+                                                                          padding: const EdgeInsets.all(12),
+                                                                          margin: const EdgeInsets.all(8),
+                                                                          decoration: BoxDecoration(
+                                                                            color: WIZARD_BG_COLOR,
+                                                                            borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                                                                          ),
+                                                                          child: CustomRadioListTile(
+                                                                            options: const [BY_PERCENTAGE_LABEL, BY_AMOUNT_LABEL],
+                                                                            onSelectedOptionChanged: updateMacroGoalInputUi,
+                                                                            selectedOption: _macroGoalInputType,
+                                                                            orientation: HORIZONTAL_ORIENTATION,
+                                                                            isEditable: true,
+                                                                          ),
+                                                                        ),
+
+                                                                        const SizedBox(height: 8,),
 
 
-                                                                        carbPercentageWidget(),
+                                                                        Visibility(
+                                                                            visible: _macroGoalInputType == BY_AMOUNT_LABEL,
+                                                                            child: Container(
+                                                                              margin: const EdgeInsets.all(8),
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  proteinGoalRangeWidgets(),
+
+                                                                                  const SizedBox(width: 12,),
+
+                                                                                  carbGoalRangeWidgets(),
+
+                                                                                  const SizedBox(width: 12,),
+
+                                                                                  fatGoalRangeWidgets()
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                        ),
 
 
-                                                                        proteinPercentageWidget(),
+                                                                        Visibility(
+                                                                            visible: _macroGoalInputType == BY_PERCENTAGE_LABEL,
+                                                                            child: Container(
+                                                                              margin: const EdgeInsets.all(8),
+                                                                              child: Row(
+                                                                                children: [
 
+                                                                                  calorieRangeWidgets(),
+
+                                                                                  const SizedBox(width: 16,),
+
+
+                                                                                  Expanded(
+                                                                                    child: Container(
+                                                                                      height: 300,
+                                                                                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: WIZARD_BG_COLOR,
+                                                                                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                                                                                      ),
+                                                                                      child: Column(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                        children: [
+
+                                                                                          fatPercentageWidget(),
+
+                                                                                          const SizedBox(height: 10,),
+
+                                                                                          carbPercentageWidget(),
+
+                                                                                          const SizedBox(height: 10,),
+
+                                                                                          proteinPercentageWidget(),
+
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                        ),
+
+                                                                        const SizedBox(height: 16,),
                                                                       ],
-                                                                    ),
-                                                                  ),
+                                                                    )
                                                                 ),
+
                                                               ],
-                                                            )
+                                                            ),
+                                                          ),
                                                         ),
+
+
+                                                        const SizedBox(height: 16,),
+
+
+                                                        /// added foods part
+                                                        Container(
+                                                          decoration:  const BoxDecoration(
+                                                            color: WIZARD_STEP1_BACKGROUND_COLOR,
+                                                          ),
+                                                          child: Column(
+                                                            children: [
+
+                                                              Container(
+                                                                decoration:  BoxDecoration(
+                                                                  color: DARK_PRIMARY_COLOR,
+                                                                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                                                  border: Border.all(
+                                                                    color: Colors.grey,
+                                                                    width: 0.5,
+                                                                  ),
+                                                                  boxShadow: const [
+                                                                    BoxShadow(
+                                                                      color: Colors.black26,
+                                                                      blurRadius: 10,
+                                                                      offset: Offset(0, 5),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+                                                                child: const Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  children: [
+
+                                                                    SizedBox(width: 16,),
+
+                                                                    CircleAvatar(
+                                                                      radius: 12, // Adjust the radius as needed
+                                                                      backgroundColor: MASTERPIE_YELLOW_COLOR,
+                                                                      child: Text(
+                                                                        '2',
+                                                                        style: TextStyle(
+                                                                          fontSize: 10, // Adjust the font size as needed
+                                                                          color: DARK_PRIMARY_COLOR,
+                                                                          fontWeight: FontWeight.bold,
+                                                                        ),),
+                                                                    ),
+
+                                                                    SizedBox(width: 8,),
+
+                                                                    Flexible(
+                                                                      child: Text(ADD_FOODS_FOR_WIZARD,
+                                                                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+
+
+                                                              Column(
+                                                                children: [
+
+                                                                  const SizedBox(height: 16,),
+
+                                                                  /// add food options
+                                                                  addFoodOptions(),
+
+                                                                  /// added foods
+                                                                  addedFoods(),
+
+                                                                  const SizedBox(height: 18,),
+
+                                                                ],
+                                                              )
+
+                                                            ],
+                                                          ),
+                                                        ),
+
+
+                                                        const SizedBox(height: 16,),
 
                                                       ],
                                                     ),
                                                   ),
+                                                ),
 
+                                                calculatePortionsButton(),
 
-                                                  const SizedBox(height: 16,),
-
-
-                                                  nextButton()
-                                                ],
-                                              ),
+                                              ],
                                             ),
                                           ),
 
@@ -1613,6 +1629,46 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
 
+                                BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
+                                    builder: (context, state) {
+                                      if (state is SuggestFoodsPortionLoadingState) {
+                                        return const GFLoader(
+                                          type: GFLoaderType.circle,
+                                          loaderColorOne: DARK_PRIMARY_COLOR,
+                                          loaderColorTwo: DARK_PRIMARY_COLOR,
+                                          loaderColorThree: DARK_PRIMARY_COLOR,
+                                        );
+                                      }else if(state is SuggestFoodsPortionLoadedState){
+                                        _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                                        Future.delayed(Duration.zero,(){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: state.wizardResponseModel),
+                                            ),
+                                          );
+                                        });
+                                      }else if(state is SuggestFoodsPortionErrorState){
+                                        _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                                        Future.delayed(Duration.zero,(){
+                                          if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
+                                            return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
+                                          }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                                            return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
+                                          }
+                                          return showErrorToast(context, state.message);
+                                        });
+                                      }
+                                      return Container();
+                                    },
+                                    listener: (context, state){
+
+                                    }
+                                ),
+
+
+
+
                               ],
                             ),
                           ],
@@ -1643,6 +1699,505 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       },
     );
   }
+
+
+  Widget addedFoods(){
+    return Visibility(
+        visible: _requestWizardArgumentModel.foods.isNotEmpty,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16,),
+              const Text(ADDED_FOODS, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 16),),
+              const SizedBox(height: 16,),
+              FoodsMacroListUi(foods: _requestWizardArgumentModel.foods, foodsExpansionState: _foodsExpansionState,
+                onExpansionStateChanged: updateFoodsExpansionStateListUi, onFoodsUpdated: updateUiAfterFoodsUpdated, foodsServingRanges: _requestWizardArgumentModel.servingRanges,
+              )
+            ],
+          ),
+        )
+    );
+  }
+
+  void updateFoodsExpansionStateListUi(int index, bool state, bool isRemove, RangeValues rangeValues){
+    setState(() {
+      if(isRemove){
+        _foodsExpansionState.removeAt(index);
+      }else{
+        if(state == true){
+          for (int i = 0; i < _foodsExpansionState.length; i++) {
+            _foodsExpansionState[i] = false;
+          }
+        }else{
+          List<RangeValues> servingRanges = List<RangeValues>.from(_requestWizardArgumentModel.servingRanges);
+          servingRanges[index] = rangeValues;
+          _requestWizardArgumentModel= _requestWizardArgumentModel.copyWith(servingRanges: servingRanges);
+        }
+        _foodsExpansionState[index] = state;
+
+
+      }
+    });
+  }
+
+  void updateUiAfterFoodsUpdated(List<Food> foods, List<RangeValues> ranges){
+    setState(() {
+      _requestWizardArgumentModel= _requestWizardArgumentModel.copyWith(
+          foods: foods,
+          servingRanges: ranges
+      );
+    });
+  }
+
+
+  Widget addFoodOptions(){
+    return Row(
+        children: [
+
+          const SizedBox(width: 4,),
+
+          /// search grocery
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                _updateWizardParams();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
+                ).then((result) {
+                  setState(() {
+                    _requestWizardArgumentModel= result;
+                    _requestWizardArgumentModel.foods.forEach((element) {
+                      _foodsExpansionState.add(false);
+                    });
+                  });
+                });
+
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    Image.asset(SEARCH_GROCERY_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
+
+                    const SizedBox(height: 16,),
+
+                    const Text(SEARCH_GROCERY_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+
+          const SizedBox(width: 6,),
+
+          /// search recipe
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                _updateWizardParams();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                  ),
+                ).then((result) {
+                  setState(() {
+                    _requestWizardArgumentModel= result;
+                    _requestWizardArgumentModel.foods.forEach((element) {
+                      _foodsExpansionState.add(false);
+                    });
+                  });
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    Image.asset(SEARCH_RECIPE_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
+
+                    const SizedBox(height: 16,),
+
+                    const Text(SEARCH_RECIPE_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+
+          const SizedBox(width: 6,),
+
+          /// create manual
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                _updateWizardParams();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                  ),
+                ).then((result) {
+                  setState(() {
+                    if(result != null){
+                      _requestWizardArgumentModel= result;
+                      _requestWizardArgumentModel.foods.forEach((element) {
+                        _foodsExpansionState.add(false);
+                      });
+                    }
+                  });
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
+
+                    const SizedBox(height: 16,),
+
+                    const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 6,),
+
+          /// auto generate
+          Expanded(
+            child: GestureDetector(
+              onTap: (){
+                _updateWizardParams();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                  ),
+                ).then((result) {
+                  setState(() {
+                    if(result != null){
+                      _requestWizardArgumentModel= result;
+                      _requestWizardArgumentModel.foods.forEach((element) {
+                        _foodsExpansionState.add(false);
+                      });
+                    }
+                  });
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(AUTO_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
+
+                    const SizedBox(height: 16,),
+
+                    const Text(AUTO_GENERATE_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 6,),
+        ]
+    );
+  }
+
+
+
+
+  Widget _stepOneTitleWhenExpanded(){
+    return Visibility(
+      visible: _step_1_expanded,
+        child:   Container(
+          height: 100,
+          decoration:  BoxDecoration(
+            color: DARK_PRIMARY_COLOR,
+            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+
+              Icon(
+                _step_1_expanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                color: Colors.white,
+                size: 25,
+              ),
+
+              const SizedBox(width: 4,),
+
+              const CircleAvatar(
+                radius: 12, // Adjust the radius as needed
+                backgroundColor: MASTERPIE_YELLOW_COLOR,
+                child: Text(
+                  '1',
+                  style: TextStyle(
+                    fontSize: 10, // Adjust the font size as needed
+                    color: DARK_PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold,
+                  ),),
+              ),
+
+              const SizedBox(width: 8,),
+
+              const Flexible(
+                child: Text(ENTER_GOAL_RANGE,
+                  style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+        ),
+    );
+  }
+
+
+  Widget _stepOneTitleWhenNotExpanded(){
+
+    String stepOneTitle= ENTER_GOAL_RANGE;
+    String stepOneSubTitle= '';
+
+
+    double minCalorie= _minCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_minCalorieGoalController.text);
+    double minProtein= _minProteinGoalController.text.isEmpty ? 0.0 : double.parse(_minProteinGoalController.text);
+    double minCarb= _minCarbGoalController.text.isEmpty ? 0.0 : double.parse(_minCarbGoalController.text);
+    double minFat= _minFatGoalController.text.isEmpty ? 0.0 : double.parse(_minFatGoalController.text);
+
+    double maxCalorie= _maxCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_maxCalorieGoalController.text);
+    double maxProtein= _maxProteinGoalController.text.isEmpty ? 0.0 : double.parse(_maxProteinGoalController.text);
+    double maxCarb= _maxCarbGoalController.text.isEmpty ? 0.0 : double.parse(_maxCarbGoalController.text);
+    double maxFat= _maxFatGoalController.text.isEmpty ? 0.0 : double.parse(_maxFatGoalController.text);
+
+
+    double proteinPercentage= _proteinPercentageController.text.isEmpty ? 0.0 : double.parse(_proteinPercentageController.text);
+    double carbPercentage= _carbPercentageController.text.isEmpty ? 0.0 : double.parse(_carbPercentageController.text);
+    double fatPercentage= _fatPercentageController.text.isEmpty ? 0.0 : double.parse(_fatPercentageController.text);
+
+
+    if(_macroGoalInputType == BY_AMOUNT_LABEL){
+      int protein= (minProtein + maxProtein)~/2;
+      int carb= (minCarb + maxCarb)~/2;
+      int fat= (minFat + maxFat)~/2;
+
+      if(protein != 0 || carb != 0 || fat != 0){
+        stepOneTitle= YOUR_MACRO_GOAL_LABEL;
+        stepOneSubTitle= '$protein g protein, $carb g carb, $fat g fat';
+      }
+
+    }else{
+      int calorie= (minCalorie + maxCalorie)~/2;
+      if(calorie != 0){
+        stepOneTitle= YOUR_MACRO_GOAL_LABEL;
+        stepOneSubTitle= '$calorie cal with ${proteinPercentage.toInt()}% protein, ${carbPercentage.toInt()}% carb, ${fatPercentage.toInt()}% fat';
+      }
+    }
+
+
+
+
+    return Visibility(
+        visible: !_step_1_expanded,
+        child: Container(
+          height: 100,
+          decoration:  BoxDecoration(
+            color: DARK_PRIMARY_COLOR,
+            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+          child: Center(
+
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                Icon(
+                  _step_1_expanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                  color: Colors.white,
+                  size: 25,
+                ),
+
+                const SizedBox(width: 8,),
+
+
+                 Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Flexible(
+                       child: Text(stepOneTitle,
+                         style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                     ),
+
+                     const SizedBox(height: 8,),
+
+                     Visibility(
+                       visible: stepOneSubTitle.isNotEmpty,
+                         child: Flexible(
+                           child: Text(stepOneSubTitle,
+                             style: const TextStyle(color: MASTERPIE_YELLOW_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
+                         ),
+                     ),
+                   ],
+                 ),
+
+              ],
+            ),
+          ),
+        ),
+    );
+
+  }
+
+
+
+
+  _updateWizardParams(){
+    List<List<double>> macroGoalsRange= [];
+    double minCalorie= _minCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_minCalorieGoalController.text);
+    double minProtein= _minProteinGoalController.text.isEmpty ? 0.0 : double.parse(_minProteinGoalController.text);
+    double minCarb= _minCarbGoalController.text.isEmpty ? 0.0 : double.parse(_minCarbGoalController.text);
+    double minFat= _minFatGoalController.text.isEmpty ? 0.0 : double.parse(_minFatGoalController.text);
+
+    double maxCalorie= _maxCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_maxCalorieGoalController.text);
+    double maxProtein= _maxProteinGoalController.text.isEmpty ? 0.0 : double.parse(_maxProteinGoalController.text);
+    double maxCarb= _maxCarbGoalController.text.isEmpty ? 0.0 : double.parse(_maxCarbGoalController.text);
+    double maxFat= _maxFatGoalController.text.isEmpty ? 0.0 : double.parse(_maxFatGoalController.text);
+
+
+    double proteinPercentage= _proteinPercentageController.text.isEmpty ? 0.0 : double.parse(_proteinPercentageController.text);
+    double carbPercentage= _carbPercentageController.text.isEmpty ? 0.0 : double.parse(_carbPercentageController.text);
+    double fatPercentage= _fatPercentageController.text.isEmpty ? 0.0 : double.parse(_fatPercentageController.text);
+
+
+    /// validate inputs
+    if(_macroGoalInputType == BY_AMOUNT_LABEL){
+      if(minProtein == 0.0 && maxProtein == 0.0 &&
+          minCarb == 0.0 && maxCarb == 0.0 &&
+          minFat == 0.0 && maxFat == 0.0){
+        showErrorToast(context, ERROR_NO_GOAL);
+        return;
+      }
+
+    }else{
+
+      if(minCalorie == 0.0 && maxCalorie == 0.0){
+        showErrorToast(context, ERROR_NO_GOAL_CALORIE);
+        return;
+      }
+
+      if(proteinPercentage + carbPercentage + fatPercentage != 100.0){
+        showErrorToast(context, ERROR_MACRO_PERCENTAGE);
+        return;
+      }
+
+    }
+
+    macroGoalsRange.add(maxCalorie > minCalorie ? [minCalorie, maxCalorie] : [maxCalorie, minCalorie]);
+    macroGoalsRange.add(maxProtein > minProtein ? [minProtein, maxProtein] : [maxProtein, minProtein]);
+    macroGoalsRange.add(maxCarb > minCarb ? [minCarb, maxCarb] : [maxCarb, minCarb]);
+    macroGoalsRange.add(maxFat > minFat ? [minFat, maxFat] : [maxFat, minFat]);
+
+
+
+    List<double> macroGoalPercentage= [proteinPercentage, carbPercentage, fatPercentage];
+
+
+    List<String> restriction= [];
+    if(_selectedRestrictionOption != -1 && _selectedRestrictionOption != 0){
+      switch(_selectedRestrictionOption){
+        case 1:
+          restriction= ['0', 'min'];
+          break;
+        case 2:
+          restriction= ['0', 'max'];
+          break;
+        case 3:
+          restriction= ['1', 'min'];
+          break;
+        case 4:
+          restriction= ['1', 'max'];
+          break;
+        case 5:
+          restriction= ['2', 'min'];
+          break;
+        case 6:
+          restriction= ['2', 'max'];
+          break;
+        case 7:
+          restriction= ['3', 'min'];
+          break;
+        case 8:
+          restriction= ['3', 'max'];
+          break;
+      }
+    }
+
+
+    _requestWizardArgumentModel = _requestWizardArgumentModel.copyWith(
+        restriction: restriction,
+        macroGoalRanges: macroGoalsRange,
+        goalType: _macroGoalInputType,
+        macroPercentage: macroGoalPercentage
+    );
+  }
+
 
 
 
@@ -1690,6 +2245,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       int remainedProtein= (loggedFoods.goals[1] - totalTakenProteins).toInt();
       int remainedCarb= (loggedFoods.goals[2] - totalTakenCarbs).toInt();
       int remainedFat= (loggedFoods.goals[3] - totalTakenFats).toInt();
+
 
       if(remainedCalorie <= 0){
         remainedCalorie = 0;
@@ -1855,7 +2411,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
-  Widget nextButton(){
+  Widget calculatePortionsButton(){
     return Container(
       padding: const EdgeInsets.only(bottom: 24),
       width: double.infinity,
@@ -1867,108 +2423,40 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             backgroundColor: MASTERPIE_YELLOW_COLOR
         ),
         onPressed: () {
-          List<List<double>> macroGoalsRange= [];
-          double minCalorie= _minCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_minCalorieGoalController.text);
-          double minProtein= _minProteinGoalController.text.isEmpty ? 0.0 : double.parse(_minProteinGoalController.text);
-          double minCarb= _minCarbGoalController.text.isEmpty ? 0.0 : double.parse(_minCarbGoalController.text);
-          double minFat= _minFatGoalController.text.isEmpty ? 0.0 : double.parse(_minFatGoalController.text);
 
-          double maxCalorie= _maxCalorieGoalController.text.isEmpty ? 0.0 : double.parse(_maxCalorieGoalController.text);
-          double maxProtein= _maxProteinGoalController.text.isEmpty ? 0.0 : double.parse(_maxProteinGoalController.text);
-          double maxCarb= _maxCarbGoalController.text.isEmpty ? 0.0 : double.parse(_maxCarbGoalController.text);
-          double maxFat= _maxFatGoalController.text.isEmpty ? 0.0 : double.parse(_maxFatGoalController.text);
-
-
-          double proteinPercentage= _proteinPercentageController.text.isEmpty ? 0.0 : double.parse(_proteinPercentageController.text);
-          double carbPercentage= _carbPercentageController.text.isEmpty ? 0.0 : double.parse(_carbPercentageController.text);
-          double fatPercentage= _fatPercentageController.text.isEmpty ? 0.0 : double.parse(_fatPercentageController.text);
-
-
-          /// validate inputs
-          if(_macroGoalInputType == BY_AMOUNT_LABEL){
-            if(minProtein == 0.0 && maxProtein == 0.0 &&
-                minCarb == 0.0 && maxCarb == 0.0 &&
-                minFat == 0.0 && maxFat == 0.0){
-              showErrorToast(context, ERROR_NO_GOAL);
-              return;
-            }
-
-          }else{
-
-            if(minCalorie == 0.0 && maxCalorie == 0.0){
-              showErrorToast(context, ERROR_NO_GOAL_CALORIE);
-              return;
-            }
-
-            if(proteinPercentage + carbPercentage + fatPercentage != 100.0){
-              showErrorToast(context, ERROR_MACRO_PERCENTAGE);
-              return;
-            }
-
+          if(_requestWizardArgumentModel.foods.isEmpty){
+            showErrorToast(context, ERROR_ADD_FOOD);
+            return;
           }
 
-          macroGoalsRange.add(maxCalorie > minCalorie ? [minCalorie, maxCalorie] : [maxCalorie, minCalorie]);
-          macroGoalsRange.add(maxProtein > minProtein ? [minProtein, maxProtein] : [maxProtein, minProtein]);
-          macroGoalsRange.add(maxCarb > minCarb ? [minCarb, maxCarb] : [maxCarb, minCarb]);
-          macroGoalsRange.add(maxFat > minFat ? [minFat, maxFat] : [maxFat, minFat]);
+          _updateWizardParams();
 
 
+          List<List<double>> servings = [];
+          _requestWizardArgumentModel.servingRanges.forEach((element) {
+            List<double> list = [];
+            list.add(element.start);
+            list.add(element.end);
+            servings.add(list);
+          });
 
-          List<double> macroGoalPercentage= [proteinPercentage, carbPercentage, fatPercentage];
 
+          logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
 
-          List<String> restriction= [];
-          if(_selectedRestrictionOption != -1 && _selectedRestrictionOption != 0){
-            switch(_selectedRestrictionOption){
-              case 1:
-                restriction= ['0', 'min'];
-                break;
-              case 2:
-                restriction= ['0', 'max'];
-                break;
-              case 3:
-                restriction= ['1', 'min'];
-                break;
-              case 4:
-                restriction= ['1', 'max'];
-                break;
-              case 5:
-                restriction= ['2', 'min'];
-                break;
-              case 6:
-                restriction= ['2', 'max'];
-                break;
-              case 7:
-                restriction= ['3', 'min'];
-                break;
-              case 8:
-                restriction= ['3', 'max'];
-                break;
-            }
-          }
-
-          _requestWizardArgumentModel = _requestWizardArgumentModel.copyWith(
-              restriction: restriction,
-              macroGoalRanges: macroGoalsRange,
-              goalType: _macroGoalInputType,
-              macroPercentage: macroGoalPercentage
+          _suggestPortionsBloc.add(
+              SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                  _requestWizardArgumentModel.foods,
+                  servings,
+                  _requestWizardArgumentModel.macroGoalRanges,
+                  _requestWizardArgumentModel.restriction,
+                  _requestWizardArgumentModel.goalType,
+                  _requestWizardArgumentModel.macroPercentage
+              )
           );
 
-          logEvent(MACRO_DIET_NEXT_BTN_CLICKED, null) ;
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RequestMacroWizardStepTwoScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
-          ).then((result) {
-            setState(() {
-              if(result != null){
-                _requestWizardArgumentModel= result;
-              }
-            });
-          });
         },
 
-        child: const Text(NEXT_STEP_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+        child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
       ),
     );
   }
@@ -1986,30 +2474,44 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               child: Text('${PROTEIN_LABEL.toUpperCase()}%', style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
           ),
           const SizedBox(width: 8,),
-          SizedBox(
-            width: MACRO_WIDTH,
-            height: MACRO_HEIGHT,
-            child: TextField(
-              controller: _proteinPercentageController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-                FilteringTextInputFormatter.allow(numericRegExp),
-              ],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+
+          Row(
+            children: [
+
+              SizedBox(
+                width: 50,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  controller: _proteinPercentageController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.allow(numericRegExp),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               ),
-            ),
-          ),
+
+              const SizedBox(width: 8,),
+
+              const SizedBox(
+                width: 100,
+                child: Text(OF_TOTAL_CAL,
+                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -2026,29 +2528,42 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               child: Text('${CARB_LABEL.toUpperCase()}%', style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
           ),
           const SizedBox(width: 8,),
-          SizedBox(
-            width: MACRO_WIDTH,
-            height: MACRO_HEIGHT,
-            child: TextField(
-              controller: _carbPercentageController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-                FilteringTextInputFormatter.allow(numericRegExp),
-              ],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+
+          Row(
+            children: [
+              SizedBox(
+                width: 50,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  controller: _carbPercentageController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.allow(numericRegExp),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               ),
-            ),
+
+              const SizedBox(width: 8,),
+
+              const SizedBox(
+                width: 100,
+                child: Text(OF_TOTAL_CAL,
+                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
+              )
+            ],
           ),
         ],
       ),
@@ -2067,27 +2582,45 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           ),
           const SizedBox(height: 8,),
           SizedBox(
-            width: MACRO_WIDTH,
+            // width: 100,
             height: MACRO_HEIGHT,
-            child: TextField(
-              controller: _fatPercentageController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-                FilteringTextInputFormatter.allow(numericRegExp),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                SizedBox(
+                  width: 50,
+                  child: TextField(
+                    controller: _fatPercentageController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.allow(numericRegExp),
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 8,),
+
+                const SizedBox(
+                  width: 100,
+                  child: Text(OF_TOTAL_CAL,
+                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
+                )
+
               ],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              ),
             ),
           ),
         ],
@@ -2213,7 +2746,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MIN_LABEL,
+                  labelText: '$MIN_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2243,7 +2776,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MAX_LABEL,
+                  labelText: '$MAX_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2294,7 +2827,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MIN_LABEL,
+                  labelText: '$MIN_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2323,7 +2856,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MAX_LABEL,
+                  labelText: '$MAX_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2372,7 +2905,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MIN_LABEL,
+                  labelText: '$MIN_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2400,7 +2933,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: MAX_LABEL,
+                  labelText: '$MAX_LABEL(g)',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
