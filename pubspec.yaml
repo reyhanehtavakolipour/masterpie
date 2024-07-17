@@ -49,6 +49,8 @@ dependencies:
   in_app_purchase_android: ^0.3.0
   flutter_expandable_fab: ^2.0.0
   video_player: ^2.9.1
+  showcaseview: ^3.0.0
+
 
 
 

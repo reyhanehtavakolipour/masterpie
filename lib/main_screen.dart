@@ -23,6 +23,7 @@ import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'feature/foods/data/repository_impl/foods_repository_impl.dart';
 import 'feature/foods/domain/model/food_model.dart';
@@ -160,8 +161,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   late SuggestPortionsBloc _suggestPortionsBloc;
 
-  List<Food> _wizardFoods= [];
 
+
+  // showcase tutorial
+  final GlobalKey _tutorialOne = GlobalKey();
+  final GlobalKey _tutorialTwo = GlobalKey();
+  final GlobalKey _tutorialThree = GlobalKey();
+  final GlobalKey _tutorialFour = GlobalKey();
 
 
 
@@ -209,9 +215,19 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     // auto generate meals for macro diet wizard if user just completed the onboard
     if(widget.isFromOnboard == true){
       Future.delayed(Duration.zero, () {
-        //todo show tutorial
+        _autoGenerateMealsForDietWizard();
       });
     }
+  }
+
+
+  void _showTutorial(){
+    Future.delayed(Duration.zero,(){
+      setState(() {
+        ShowCaseWidget.of(context)
+            .startShowCase([_tutorialOne, _tutorialTwo, _tutorialThree, _tutorialFour]);
+      });
+    });
   }
 
 
@@ -469,12 +485,36 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    double caloriePercent = 0;
+    if (_calorieGoal != 0) {
+      caloriePercent = double.parse((_totalTakenCalories / _calorieGoal).toStringAsFixed(2));
+    } else {
+      caloriePercent = 0;
+    }
 
-    double caloriePercent = double.parse((_totalTakenCalories/_calorieGoal).toStringAsFixed(2));
-    double proteinPercent = double.parse((_totalTakenProteins/_proteinGoal).toStringAsFixed(2));
-    double carbPercent = double.parse((_totalTakenCarbs/_carbGoal).toStringAsFixed(2));
-    double fatPercent = double.parse((_totalTakenFats/_fatGoal).toStringAsFixed(2));
 
+    double proteinPercent = 0;
+    if (_proteinGoal != 0) {
+      proteinPercent = double.parse((_totalTakenProteins / _proteinGoal).toStringAsFixed(2));
+    } else {
+      proteinPercent = 0;
+    }
+
+
+    double carbPercent = 0;
+    if (_carbGoal != 0) {
+      carbPercent = double.parse((_totalTakenCarbs / _carbGoal).toStringAsFixed(2));
+    } else {
+      carbPercent = 0;
+    }
+
+
+    double fatPercent = 0;
+    if (_fatGoal != 0) {
+      fatPercent = double.parse((_totalTakenFats / _fatGoal).toStringAsFixed(2));
+    } else {
+      fatPercent = 0;
+    }
 
     _totalTakenCalories = double.parse(_totalTakenCalories.toStringAsFixed(1));
     _totalTakenProteins = double.parse(_totalTakenProteins.toStringAsFixed(1));
@@ -552,57 +592,67 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               );
             },
           ),
-          title: Container(
-            /**
-             * date
-             */
-            width: double.infinity,
-            height: DATE_CONTAINER_HEIGHT,
-            color: TOP_PART_MAIN_SCREE_COLOR,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: false,
-                  child: GestureDetector(
-                    onTap: (){
-                      if(DateTime.now().difference(_focusedDay.subtract(const Duration(days: 1))).inDays < MAX_DIFFERENCE_DAYS + 1){
-                        setState(() {
-                          _focusedDay = _focusedDay.subtract(const Duration(days: 1));
-                        });
-                      }
-                    },
-                    child: const Icon(Icons.arrow_left, color: Colors.white,),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: (){
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                /**
+                 * date
+                 */
+                height: DATE_CONTAINER_HEIGHT,
+                color: TOP_PART_MAIN_SCREE_COLOR,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: false,
+                      child: GestureDetector(
+                        onTap: (){
+                          if(DateTime.now().difference(_focusedDay.subtract(const Duration(days: 1))).inDays < MAX_DIFFERENCE_DAYS + 1){
+                            setState(() {
+                              _focusedDay = _focusedDay.subtract(const Duration(days: 1));
+                            });
+                          }
+                        },
+                        child: const Icon(Icons.arrow_left, color: Colors.white,),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
 
-                  },
-                  child: Container(
-                      margin: const EdgeInsets.only(left: 24, right: 24),
-                      child: Text(
-                        DateFormat('d MMMM yy').format(_focusedDay),
-                        style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
-                      )
-                  ),
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.only(left: 24, right: 24),
+                          child: Text(
+                            DateFormat('d MMMM yy').format(_focusedDay),
+                            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
+                          )
+                      ),
+                    ),
+                    Visibility(
+                      visible: false,
+                      child: GestureDetector(
+                        onTap: (){
+                          if(_focusedDay.add(const Duration(days: 1)).isBefore(DateTime.now())){
+                            setState(() {
+                              _focusedDay = _focusedDay.add(const Duration(days: 1));
+                            });
+                          }
+                        },
+                        child: const Icon(Icons.arrow_right, color: Colors.white,),
+                      ),
+                    )
+                  ],
                 ),
-                Visibility(
-                  visible: false,
-                  child: GestureDetector(
-                    onTap: (){
-                      if(_focusedDay.add(const Duration(days: 1)).isBefore(DateTime.now())){
-                        setState(() {
-                          _focusedDay = _focusedDay.add(const Duration(days: 1));
-                        });
-                      }
-                    },
-                    child: const Icon(Icons.arrow_right, color: Colors.white,),
-                  ),
-                )
-              ],
-            ),
-          ),
+              ),
+              GestureDetector(
+                  onTap: (){
+                    _showTutorial();
+                  },
+                  child: const Icon(Icons.info_outline, color: Colors.white,)
+              )
+            ],
+          )
          ),
         drawer: Drawer(
           backgroundColor: Colors.white,
@@ -1010,20 +1060,29 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   ),
                 ),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+                Showcase(
+                  key: _tutorialOne,
+                  title: TUTORIAL_STEP_1_TITLE,
+                  description: TUTORIAL_STEP_1_DESC,
+                  titlePadding: const EdgeInsets.all(16),
+                  titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
+                  descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                  targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(DARK_PRIMARY_COLOR),
+                      ),
+                      child: Icon(_isMacroTrackerVisible ? Icons.keyboard_double_arrow_up_rounded : Icons.keyboard_double_arrow_down_rounded ,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isMacroTrackerVisible= !_isMacroTrackerVisible;
+                        });
+                      },
                     ),
-                    child: Icon(_isMacroTrackerVisible ? Icons.keyboard_double_arrow_up_rounded : Icons.keyboard_double_arrow_down_rounded ,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isMacroTrackerVisible= !_isMacroTrackerVisible;
-                      });
-                    },
                   ),
                 ),
 
@@ -1075,203 +1134,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                                       children: [
 
                                                         /// total macro goal ranges
-                                                        GestureDetector(
-                                                          onTap: (){
-                                                            setState(() {
-                                                              _step_1_expanded= !_step_1_expanded;
-                                                            });
-                                                          },
-                                                          child: Container(
-                                                            decoration:  const BoxDecoration(
-                                                              color: WIZARD_STEP1_BACKGROUND_COLOR,
-                                                            ),
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-
-                                                                _stepOneTitleWhenExpanded(),
-
-                                                                _stepOneTitleWhenNotExpanded(),
-
-
-                                                                Visibility(
-                                                                    visible: _step_1_expanded,
-                                                                    child: Column(
-                                                                      children: [
-                                                                        const SizedBox(height: 18,),
-
-                                                                        Container(
-                                                                          padding: const EdgeInsets.all(12),
-                                                                          margin: const EdgeInsets.all(8),
-                                                                          decoration: BoxDecoration(
-                                                                            color: WIZARD_BG_COLOR,
-                                                                            borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                                                                          ),
-                                                                          child: CustomRadioListTile(
-                                                                            options: const [BY_PERCENTAGE_LABEL, BY_AMOUNT_LABEL],
-                                                                            onSelectedOptionChanged: updateMacroGoalInputUi,
-                                                                            selectedOption: _macroGoalInputType,
-                                                                            orientation: HORIZONTAL_ORIENTATION,
-                                                                            isEditable: true,
-                                                                          ),
-                                                                        ),
-
-                                                                        const SizedBox(height: 8,),
-
-
-                                                                        Visibility(
-                                                                            visible: _macroGoalInputType == BY_AMOUNT_LABEL,
-                                                                            child: Container(
-                                                                              margin: const EdgeInsets.all(8),
-                                                                              child: Row(
-                                                                                children: [
-                                                                                  proteinGoalRangeWidgets(),
-
-                                                                                  const SizedBox(width: 12,),
-
-                                                                                  carbGoalRangeWidgets(),
-
-                                                                                  const SizedBox(width: 12,),
-
-                                                                                  fatGoalRangeWidgets()
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                        ),
-
-
-                                                                        Visibility(
-                                                                            visible: _macroGoalInputType == BY_PERCENTAGE_LABEL,
-                                                                            child: Container(
-                                                                              margin: const EdgeInsets.all(8),
-                                                                              child: Row(
-                                                                                children: [
-
-                                                                                  calorieRangeWidgets(),
-
-                                                                                  const SizedBox(width: 16,),
-
-
-                                                                                  Expanded(
-                                                                                    child: Container(
-                                                                                      height: 300,
-                                                                                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: WIZARD_BG_COLOR,
-                                                                                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                                                                                      ),
-                                                                                      child: Column(
-                                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                        children: [
-
-                                                                                          fatPercentageWidget(),
-
-                                                                                          const SizedBox(height: 10,),
-
-                                                                                          carbPercentageWidget(),
-
-                                                                                          const SizedBox(height: 10,),
-
-                                                                                          proteinPercentageWidget(),
-
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                        ),
-
-                                                                        const SizedBox(height: 16,),
-                                                                      ],
-                                                                    )
-                                                                ),
-
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-
+                                                        _totalMacroGoalsWizard(),
 
                                                         const SizedBox(height: 16,),
 
 
                                                         /// added foods part
-                                                        Container(
-                                                          decoration:  const BoxDecoration(
-                                                            color: WIZARD_STEP1_BACKGROUND_COLOR,
-                                                          ),
-                                                          child: Column(
-                                                            children: [
-
-                                                              Container(
-                                                                decoration:  BoxDecoration(
-                                                                  color: DARK_PRIMARY_COLOR,
-                                                                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                                                  border: Border.all(
-                                                                    color: Colors.grey,
-                                                                    width: 0.5,
-                                                                  ),
-                                                                  boxShadow: const [
-                                                                    BoxShadow(
-                                                                      color: Colors.black26,
-                                                                      blurRadius: 10,
-                                                                      offset: Offset(0, 5),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-                                                                child: const Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-
-                                                                    SizedBox(width: 16,),
-
-                                                                    CircleAvatar(
-                                                                      radius: 12, // Adjust the radius as needed
-                                                                      backgroundColor: MASTERPIE_YELLOW_COLOR,
-                                                                      child: Text(
-                                                                        '2',
-                                                                        style: TextStyle(
-                                                                          fontSize: 10, // Adjust the font size as needed
-                                                                          color: DARK_PRIMARY_COLOR,
-                                                                          fontWeight: FontWeight.bold,
-                                                                        ),),
-                                                                    ),
-
-                                                                    SizedBox(width: 8,),
-
-                                                                    Flexible(
-                                                                      child: Text(ADD_FOODS_FOR_WIZARD,
-                                                                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-
-
-                                                              Column(
-                                                                children: [
-
-                                                                  const SizedBox(height: 16,),
-
-                                                                  /// add food options
-                                                                  addFoodOptions(),
-
-                                                                  /// added foods
-                                                                  addedFoods(),
-
-                                                                  const SizedBox(height: 18,),
-
-                                                                ],
-                                                              )
-
-                                                            ],
-                                                          ),
-                                                        ),
-
+                                                        _addedFoodsWizard(),
 
                                                         const SizedBox(height: 16,),
 
@@ -1681,6 +1550,212 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       ),
     );
   }
+
+
+  Widget _totalMacroGoalsWizard(){
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          _step_1_expanded= !_step_1_expanded;
+        });
+      },
+      child: Container(
+        decoration:  const BoxDecoration(
+          color: WIZARD_STEP1_BACKGROUND_COLOR,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+            _stepOneTitleWhenExpanded(),
+
+            _stepOneTitleWhenNotExpanded(),
+
+
+            Visibility(
+                visible: _step_1_expanded,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 18,),
+
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: WIZARD_BG_COLOR,
+                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                      ),
+                      child: CustomRadioListTile(
+                        options: const [BY_PERCENTAGE_LABEL, BY_AMOUNT_LABEL],
+                        onSelectedOptionChanged: updateMacroGoalInputUi,
+                        selectedOption: _macroGoalInputType,
+                        orientation: HORIZONTAL_ORIENTATION,
+                        isEditable: true,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8,),
+
+
+                    Visibility(
+                        visible: _macroGoalInputType == BY_AMOUNT_LABEL,
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              proteinGoalRangeWidgets(),
+
+                              const SizedBox(width: 12,),
+
+                              carbGoalRangeWidgets(),
+
+                              const SizedBox(width: 12,),
+
+                              fatGoalRangeWidgets()
+                            ],
+                          ),
+                        )
+                    ),
+
+
+                    Visibility(
+                        visible: _macroGoalInputType == BY_PERCENTAGE_LABEL,
+                        child: Container(
+                          margin: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+
+                              calorieRangeWidgets(),
+
+                              const SizedBox(width: 16,),
+
+
+                              Expanded(
+                                child: Container(
+                                  height: 300,
+                                  padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: WIZARD_BG_COLOR,
+                                    borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+
+                                      fatPercentageWidget(),
+
+                                      const SizedBox(height: 10,),
+
+                                      carbPercentageWidget(),
+
+                                      const SizedBox(height: 10,),
+
+                                      proteinPercentageWidget(),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+
+                    const SizedBox(height: 16,),
+                  ],
+                )
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget _addedFoodsWizard(){
+    return   Container(
+      decoration:  const BoxDecoration(
+        color: WIZARD_STEP1_BACKGROUND_COLOR,
+      ),
+      child: Column(
+        children: [
+
+          Showcase(
+            key: _tutorialThree,
+            title: TUTORIAL_STEP_3_TITLE,
+            description: TUTORIAL_STEP_3_DESC,
+            titlePadding: const EdgeInsets.all(16),
+            titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
+            descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+            targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
+            child: Container(
+              decoration:  BoxDecoration(
+                color: DARK_PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 0.5,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 38),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+
+                  CircleAvatar(
+                    radius: 12, // Adjust the radius as needed
+                    backgroundColor: MASTERPIE_YELLOW_COLOR,
+                    child: Text(
+                      '2',
+                      style: TextStyle(
+                        fontSize: 10, // Adjust the font size as needed
+                        color: DARK_PRIMARY_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),),
+                  ),
+
+                  SizedBox(width: 8,),
+
+                  Flexible(
+                    child: Text(ADD_FOODS_FOR_WIZARD,
+                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+
+          Column(
+            children: [
+
+              const SizedBox(height: 16,),
+
+              /// add food options
+              addFoodOptions(),
+
+              /// added foods
+              addedFoods(),
+
+              const SizedBox(height: 18,),
+
+            ],
+          )
+
+        ],
+      ),
+    );
+  }
+
   void _showInformationPopup(BuildContext context) {
     showDialog(
       context: context,
@@ -2043,61 +2118,85 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     return Visibility(
         visible: !_step_1_expanded,
-        child: Container(
-          height: 100,
-          decoration:  BoxDecoration(
-            color: DARK_PRIMARY_COLOR,
-            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-            border: Border.all(
-              color: Colors.grey,
-              width: 0.5,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 5),
+        child: Showcase(
+          key: _tutorialTwo,
+          title: TUTORIAL_STEP_2_TITLE,
+          description: TUTORIAL_STEP_2_DESC,
+          titlePadding: const EdgeInsets.all(16),
+          titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
+          descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+          targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
+          child: Container(
+            height: 100,
+            decoration:  BoxDecoration(
+              color: DARK_PRIMARY_COLOR,
+              borderRadius: BorderRadius.circular(BORDER_RADIUS),
+              border: Border.all(
+                color: Colors.grey,
+                width: 0.5,
               ),
-            ],
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-          child: Center(
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                Icon(
-                  _step_1_expanded ? Icons.arrow_drop_down : Icons.arrow_right,
-                  color: Colors.white,
-                  size: 25,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
                 ),
-
-                const SizedBox(width: 8,),
-
-
-                 Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Flexible(
-                       child: Text(stepOneTitle,
-                         style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
-                     ),
-
-                     const SizedBox(height: 8,),
-
-                     Visibility(
-                       visible: stepOneSubTitle.isNotEmpty,
-                         child: Flexible(
-                           child: Text(stepOneSubTitle,
-                             style: const TextStyle(color: MASTERPIE_YELLOW_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
-                         ),
-                     ),
-                   ],
-                 ),
-
               ],
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+            child: Center(
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+
+                  Icon(
+                    _step_1_expanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                    color: Colors.white,
+                    size: 25,
+                  ),
+
+                  const SizedBox(width: 4,),
+
+                  const CircleAvatar(
+                    radius: 12, // Adjust the radius as needed
+                    backgroundColor: MASTERPIE_YELLOW_COLOR,
+                    child: Text(
+                      '1',
+                      style: TextStyle(
+                        fontSize: 10, // Adjust the font size as needed
+                        color: DARK_PRIMARY_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),),
+                  ),
+
+
+                  const SizedBox(width: 16,),
+
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(stepOneTitle,
+                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                      ),
+
+                      const SizedBox(height: 8,),
+
+                      Visibility(
+                        visible: stepOneSubTitle.isNotEmpty,
+                        child: Flexible(
+                          child: Text(stepOneSubTitle,
+                            style: const TextStyle(color: MASTERPIE_YELLOW_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
         ),
@@ -2412,51 +2511,60 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   Widget calculatePortionsButton(){
-    return Container(
-      padding: const EdgeInsets.only(bottom: 24),
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape:  RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(BORDER_RADIUS),
-            ),
-            backgroundColor: MASTERPIE_YELLOW_COLOR
+    return Showcase(
+      key: _tutorialFour,
+      title: TUTORIAL_STEP_4_TITLE,
+      description: TUTORIAL_STEP_4_DESC,
+      titlePadding: const EdgeInsets.all(16),
+      titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
+      descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 24),
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape:  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+              ),
+              backgroundColor: MASTERPIE_YELLOW_COLOR
+          ),
+          onPressed: () {
+      
+            if(_requestWizardArgumentModel.foods.isEmpty){
+              showErrorToast(context, ERROR_ADD_FOOD);
+              return;
+            }
+      
+            _updateWizardParams();
+      
+      
+            List<List<double>> servings = [];
+            _requestWizardArgumentModel.servingRanges.forEach((element) {
+              List<double> list = [];
+              list.add(element.start);
+              list.add(element.end);
+              servings.add(list);
+            });
+      
+      
+            logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
+      
+            _suggestPortionsBloc.add(
+                SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                    _requestWizardArgumentModel.foods,
+                    servings,
+                    _requestWizardArgumentModel.macroGoalRanges,
+                    _requestWizardArgumentModel.restriction,
+                    _requestWizardArgumentModel.goalType,
+                    _requestWizardArgumentModel.macroPercentage
+                )
+            );
+      
+          },
+      
+          child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         ),
-        onPressed: () {
-
-          if(_requestWizardArgumentModel.foods.isEmpty){
-            showErrorToast(context, ERROR_ADD_FOOD);
-            return;
-          }
-
-          _updateWizardParams();
-
-
-          List<List<double>> servings = [];
-          _requestWizardArgumentModel.servingRanges.forEach((element) {
-            List<double> list = [];
-            list.add(element.start);
-            list.add(element.end);
-            servings.add(list);
-          });
-
-
-          logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
-
-          _suggestPortionsBloc.add(
-              SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                  _requestWizardArgumentModel.foods,
-                  servings,
-                  _requestWizardArgumentModel.macroGoalRanges,
-                  _requestWizardArgumentModel.restriction,
-                  _requestWizardArgumentModel.goalType,
-                  _requestWizardArgumentModel.macroPercentage
-              )
-          );
-
-        },
-
-        child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
       ),
     );
   }
@@ -2746,7 +2854,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MIN_LABEL(g)',
+                  labelText: MIN_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2776,7 +2884,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MAX_LABEL(g)',
+                  labelText: MAX_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2827,7 +2935,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MIN_LABEL(g)',
+                  labelText: MIN_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2856,7 +2964,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MAX_LABEL(g)',
+                  labelText: MAX_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2905,7 +3013,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MIN_LABEL(g)',
+                  labelText: MIN_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),
@@ -2933,7 +3041,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   FilteringTextInputFormatter.allow(numericRegExp),
                 ],
                 decoration: const InputDecoration(
-                  labelText: '$MAX_LABEL(g)',
+                  labelText: MAX_LABEL,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                   ),

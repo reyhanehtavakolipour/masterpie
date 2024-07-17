@@ -266,10 +266,10 @@ const ERROR_ADD_FOOD = 'Please add at least one food';
 const ERROR_ADD_INGREDIENT = 'Please add at least one ingredient';
 const ERROR_NO_GOAL = 'Please provide a minimum or maximum value for a macro';
 const ERROR_NO_GOAL_CALORIE = 'Please provide a minimum or maximum value for calories';
-const CALORIE_RANGE_LABEL = 'CALORIE\nRANGE';
-const PROTEIN_RANGE_LABEL = 'PROTEIN\nRANGE';
-const CARB_RANGE_LABEL = 'CARB\nRANGE';
-const FAT_RANGE_LABEL = 'FAT\nRANGE';
+const CALORIE_RANGE_LABEL = 'CALORIE\nRANGE\n(GRAMS)';
+const PROTEIN_RANGE_LABEL = 'PROTEIN\nRANGE\n(GRAMS)';
+const CARB_RANGE_LABEL = 'CARB\nRANGE\n(GRAMS)';
+const FAT_RANGE_LABEL = 'FAT\nRANGE\n(GRAMS)';
 const ASK_RETRICTION_FOOD_PORTION= 'Which macro would you like to restrict?';
 const RESTRICTION_LABEL = 'Restriction';
 const MIN_CALORIE_LABEL = 'Min calorie amount';
@@ -389,7 +389,15 @@ const SUBMIT_LABEL= 'Submit';
 const DONE_LABEL= 'Done';
 const WAIT_LABEL= 'Wait';
 const GENERATE_MEAL_PLAN= 'Wait a moment while we generate your personalized meal options based on your preferences.\n\nPlease do\'t close the popup.Thank you for your patience!';
-
+const TUTORIAL_STEP_1_TITLE= 'How does the Macro Diet Wizard help you lose weight?';
+const TUTORIAL_STEP_1_DESC= 'This feature helps you lose weight by allowing you to choose from foods you love and that are readily available to you, including ready-to-eat options from the supermarket.'
+    'In Masterpie, we don\'t require you to eat recipes that you can\'t prepare simply because you\'re too busy or you do\'t like cooking.We aim to support people who struggle to follow traditional diet apps. Let\'s get started.';
+const TUTORIAL_STEP_2_TITLE= 'Edit Your Macro Goal';
+const TUTORIAL_STEP_2_DESC= 'To start using "Macro Diet Wizard," first set your daily targets for calories, protein, carbs, and fats. The default macro goals displayed are based on your input and your target weight. You can adjust these goals anytime.';
+const TUTORIAL_STEP_3_TITLE= 'Add Foods';
+const TUTORIAL_STEP_3_DESC= 'Next, add all the foods you love to eat during the day to meet the macro goals you set in the previous step. You can add them manually or find them in our database. Alternatively, you can click on "Auto Generate," and we\'ll automatically add some foods based on your preferences.';
+const TUTORIAL_STEP_4_TITLE= 'Calculate Foods Portion';
+const TUTORIAL_STEP_4_DESC= 'Finally, after setting your macro goals and adding your foods, tap on the "Calculate Portions" button. We\'ll then generate your meal plan with precise portions customized to help you achieve your goal using the foods you enjoy, all while supporting weight loss.';
 
 
 
