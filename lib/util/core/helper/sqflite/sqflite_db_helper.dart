@@ -49,6 +49,8 @@ class DatabaseHelper {
         ' $SIDE_DISH_TYPES TEXT,'
         ' $FAVORITE_CATEGORIES TEXT,'
         ' $HATE_CATEGORIES TEXT,'
+        ' $FAVORITE_SUBCATEGORIES TEXT,'
+        ' $HATE_SUBCATEGORIES TEXT,'
         ' $ALLERGENS TEXT'
         ')');
 

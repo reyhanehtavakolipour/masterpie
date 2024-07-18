@@ -52,4 +52,6 @@ const String MAIN_DISH_TYPES = 'mainDishTypes';
 const String SIDE_DISH_TYPES = 'sideDishTypes';
 const String FAVORITE_CATEGORIES = 'favoriteCategories';
 const String HATE_CATEGORIES = 'hateCategories';
+const String FAVORITE_SUBCATEGORIES = 'favoriteSubCategories';
+const String HATE_SUBCATEGORIES = 'hateSubCategories';
 const String ALLERGENS = 'allergens';

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/auto_generate_bloc/auto_generate_foods_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
@@ -36,120 +37,151 @@ import '../feature/user/presentation/bloc/user_plan_bloc/user_plan_bloc.dart';
 
 class App extends StatelessWidget {
 
-  static const routeName = '/';
-
-
   App({Key? key}) : super(key: key);
+
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MultiBlocProvider(
+  //       providers: [
+  //         BlocProvider(
+  //           create: (_) => RegisterBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => LoginBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => UserPlanBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetSubscriptionPlansBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => ForgotPasswordBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => LogoutBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetProfileBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => UpdateProfileBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetUserCredentialsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GroceriesBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => SuggestFoodBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => AddOrUpdateMyFavoriteBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => MyFavoriteFoodsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => RemoveFromMyFavoriteBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => SuggestPortionsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => InternationalMealsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => LogFoodsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetLoggedFoodsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => MyCookBookFoodsBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => RemoveFromMyCookBookBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => AddOrUpdateMyCookBookBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => RecipesBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetRecipeBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => GetFatSecretFoodsInfoBloc(),
+  //         ),
+  //         BlocProvider(
+  //           create: (_) => AutoGenerateFoodsBloc(),
+  //         ),
+  //       ],
+  //       child: MaterialApp(
+  //         debugShowCheckedModeBanner: false,
+  //         home: Scaffold(
+  //           body: ShowCaseWidget(
+  //             builder: (context) => const MainScreen(),
+  //           ),
+  //         ),
+  //       ),
+  //   );
+  // }
+
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return ShowCaseWidget(
+      builder: (context) => MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (_) => RegisterBloc(),
-          ),
-          BlocProvider(
-            create: (_) => LoginBloc(),
-          ),
-          BlocProvider(
-            create: (_) => UserPlanBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetSubscriptionPlansBloc(),
-          ),
-          BlocProvider(
-            create: (_) => ForgotPasswordBloc(),
-          ),
-          BlocProvider(
-            create: (_) => LogoutBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetProfileBloc(),
-          ),
-          BlocProvider(
-            create: (_) => UpdateProfileBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetUserCredentialsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GroceriesBloc(),
-          ),
-          BlocProvider(
-            create: (_) => SuggestFoodBloc(),
-          ),
-          BlocProvider(
-            create: (_) => AddOrUpdateMyFavoriteBloc(),
-          ),
-          BlocProvider(
-            create: (_) => MyFavoriteFoodsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => RemoveFromMyFavoriteBloc(),
-          ),
-          BlocProvider(
-            create: (_) => SuggestPortionsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => InternationalMealsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => LogFoodsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetLoggedFoodsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => MyCookBookFoodsBloc(),
-          ),
-          BlocProvider(
-            create: (_) => RemoveFromMyCookBookBloc(),
-          ),
-          BlocProvider(
-            create: (_) => AddOrUpdateMyCookBookBloc(),
-          ),
-          BlocProvider(
-            create: (_) => RecipesBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetRecipeBloc(),
-          ),
-          BlocProvider(
-            create: (_) => GetFatSecretFoodsInfoBloc(),
-          ),
+          BlocProvider(create: (_) => RegisterBloc()),
+          BlocProvider(create: (_) => LoginBloc()),
+          BlocProvider(create: (_) => UserPlanBloc()),
+          BlocProvider(create: (_) => GetSubscriptionPlansBloc()),
+          BlocProvider(create: (_) => ForgotPasswordBloc()),
+          BlocProvider(create: (_) => LogoutBloc()),
+          BlocProvider(create: (_) => GetProfileBloc()),
+          BlocProvider(create: (_) => UpdateProfileBloc()),
+          BlocProvider(create: (_) => GetUserCredentialsBloc()),
+          BlocProvider(create: (_) => GroceriesBloc()),
+          BlocProvider(create: (_) => SuggestFoodBloc()),
+          BlocProvider(create: (_) => AddOrUpdateMyFavoriteBloc()),
+          BlocProvider(create: (_) => MyFavoriteFoodsBloc()),
+          BlocProvider(create: (_) => RemoveFromMyFavoriteBloc()),
+          BlocProvider(create: (_) => SuggestPortionsBloc()),
+          BlocProvider(create: (_) => InternationalMealsBloc()),
+          BlocProvider(create: (_) => LogFoodsBloc()),
+          BlocProvider(create: (_) => GetLoggedFoodsBloc()),
+          BlocProvider(create: (_) => MyCookBookFoodsBloc()),
+          BlocProvider(create: (_) => RemoveFromMyCookBookBloc()),
+          BlocProvider(create: (_) => AddOrUpdateMyCookBookBloc()),
+          BlocProvider(create: (_) => RecipesBloc()),
+          BlocProvider(create: (_) => GetRecipeBloc()),
+          BlocProvider(create: (_) => GetFatSecretFoodsInfoBloc()),
+          BlocProvider(create: (_) => AutoGenerateFoodsBloc()),
         ],
-        child: MaterialApp(
-          // initialRoute: '/',
+        child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
-            body: ShowCaseWidget(
-              onStart: (index, key) {
-                // log('onStart: $index, $key');
-              },
-              onComplete: (index, key) {
-                // log('onComplete: $index, $key');
-                if (index == 4) {
-                  SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle.light.copyWith(
-                      statusBarIconBrightness: Brightness.dark,
-                      statusBarColor: Colors.white,
-                    ),
-                  );
-                }
-              },
-              blurValue: 1,
-              autoPlayDelay: const Duration(seconds: 3),
-              builder: (context) => const MainScreen(),
-            ),
+            body: MainScreen(),
           ),
-          // routes: {
-          //   App.routeName: (context) =>  const MainScreen()
-          // },
         ),
+      ),
     );
   }
+
+
 }
+
+
 
 
 

@@ -46,6 +46,8 @@ class UserMapperImpl extends UserMapper{
         weightChangeWeekly: profile.weightChangeWeekly,
       favoriteCategories: profile.favoriteCategories,
       hateCategories: profile.hateCategories,
+        favoriteSubCategories: profile.favoriteSubCategories,
+        hateSubCategories: profile.hateSubCategories,
       mainDishTypes: profile.mainDishTypes,
       sideDishTypes: profile.sideDishTypes,
       allergens: profile.allergens
@@ -72,6 +74,8 @@ class UserMapperImpl extends UserMapper{
         updateProfileShown: profile.updateProfileShown,
         favoriteCategories: profile.favoriteCategories,
         hateCategories: profile.hateCategories,
+        favoriteSubCategories: profile.favoriteSubCategories,
+        hateSubCategories: profile.hateSubCategories,
         mainDishTypes: profile.mainDishTypes,
         sideDishTypes: profile.sideDishTypes,
         allergens: profile.allergens
@@ -97,6 +101,8 @@ class UserMapperImpl extends UserMapper{
         weightChangeWeekly: profile.weightChangeWeekly,
         favoriteCategories: profile.favoriteCategories,
         hateCategories: profile.hateCategories,
+        favoriteSubCategories: profile.favoriteSubCategories,
+        hateSubCategories: profile.hateSubCategories,
         mainDishTypes: profile.mainDishTypes,
         sideDishTypes: profile.sideDishTypes,
         allergens: profile.allergens
@@ -123,6 +129,8 @@ class UserMapperImpl extends UserMapper{
         updateProfileShown: profile.updateProfileShown,
         favoriteCategories: profile.favoriteCategories,
         hateCategories: profile.hateCategories,
+        favoriteSubCategories: profile.favoriteSubCategories,
+        hateSubCategories: profile.hateSubCategories,
         mainDishTypes: profile.mainDishTypes,
         sideDishTypes: profile.sideDishTypes,
         allergens: profile.allergens

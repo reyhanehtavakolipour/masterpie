@@ -41,6 +41,10 @@ class UpdateProfileUseCase{
 
 
 
+    //todo call sub categoris fatsecret api and update profile here
+
+
+
     final userIdResponse= await repo.getUserIdFromHive();
     final userId= userIdResponse.isRight() ? userIdResponse.asRight() : '';
 

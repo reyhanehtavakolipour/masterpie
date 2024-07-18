@@ -33,6 +33,8 @@ mixin _$ProfileRemote {
   bool get updateProfileShown => throw _privateConstructorUsedError;
   List<String> get favoriteCategories => throw _privateConstructorUsedError;
   List<String> get hateCategories => throw _privateConstructorUsedError;
+  List<String> get favoriteSubCategories => throw _privateConstructorUsedError;
+  List<String> get hateSubCategories => throw _privateConstructorUsedError;
   List<String> get mainDishTypes => throw _privateConstructorUsedError;
   List<String> get sideDishTypes => throw _privateConstructorUsedError;
   List<String> get allergens => throw _privateConstructorUsedError;
@@ -66,6 +68,8 @@ abstract class $ProfileRemoteCopyWith<$Res> {
       bool updateProfileShown,
       List<String> favoriteCategories,
       List<String> hateCategories,
+      List<String> favoriteSubCategories,
+      List<String> hateSubCategories,
       List<String> mainDishTypes,
       List<String> sideDishTypes,
       List<String> allergens});
@@ -101,6 +105,8 @@ class _$ProfileRemoteCopyWithImpl<$Res, $Val extends ProfileRemote>
     Object? updateProfileShown = null,
     Object? favoriteCategories = null,
     Object? hateCategories = null,
+    Object? favoriteSubCategories = null,
+    Object? hateSubCategories = null,
     Object? mainDishTypes = null,
     Object? sideDishTypes = null,
     Object? allergens = null,
@@ -174,6 +180,14 @@ class _$ProfileRemoteCopyWithImpl<$Res, $Val extends ProfileRemote>
           ? _value.hateCategories
           : hateCategories // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      favoriteSubCategories: null == favoriteSubCategories
+          ? _value.favoriteSubCategories
+          : favoriteSubCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      hateSubCategories: null == hateSubCategories
+          ? _value.hateSubCategories
+          : hateSubCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       mainDishTypes: null == mainDishTypes
           ? _value.mainDishTypes
           : mainDishTypes // ignore: cast_nullable_to_non_nullable
@@ -216,6 +230,8 @@ abstract class _$$ProfileRemoteImplCopyWith<$Res>
       bool updateProfileShown,
       List<String> favoriteCategories,
       List<String> hateCategories,
+      List<String> favoriteSubCategories,
+      List<String> hateSubCategories,
       List<String> mainDishTypes,
       List<String> sideDishTypes,
       List<String> allergens});
@@ -249,6 +265,8 @@ class __$$ProfileRemoteImplCopyWithImpl<$Res>
     Object? updateProfileShown = null,
     Object? favoriteCategories = null,
     Object? hateCategories = null,
+    Object? favoriteSubCategories = null,
+    Object? hateSubCategories = null,
     Object? mainDishTypes = null,
     Object? sideDishTypes = null,
     Object? allergens = null,
@@ -322,6 +340,14 @@ class __$$ProfileRemoteImplCopyWithImpl<$Res>
           ? _value._hateCategories
           : hateCategories // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      favoriteSubCategories: null == favoriteSubCategories
+          ? _value._favoriteSubCategories
+          : favoriteSubCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      hateSubCategories: null == hateSubCategories
+          ? _value._hateSubCategories
+          : hateSubCategories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       mainDishTypes: null == mainDishTypes
           ? _value._mainDishTypes
           : mainDishTypes // ignore: cast_nullable_to_non_nullable
@@ -359,12 +385,16 @@ class _$ProfileRemoteImpl implements _ProfileRemote {
       this.updateProfileShown = false,
       final List<String> favoriteCategories = const [],
       final List<String> hateCategories = const [],
+      final List<String> favoriteSubCategories = const [],
+      final List<String> hateSubCategories = const [],
       final List<String> mainDishTypes = const [],
       final List<String> sideDishTypes = const [],
       final List<String> allergens = const []})
       : _dailyMacroGoal = dailyMacroGoal,
         _favoriteCategories = favoriteCategories,
         _hateCategories = hateCategories,
+        _favoriteSubCategories = favoriteSubCategories,
+        _hateSubCategories = hateSubCategories,
         _mainDishTypes = mainDishTypes,
         _sideDishTypes = sideDishTypes,
         _allergens = allergens;
@@ -439,6 +469,26 @@ class _$ProfileRemoteImpl implements _ProfileRemote {
     return EqualUnmodifiableListView(_hateCategories);
   }
 
+  final List<String> _favoriteSubCategories;
+  @override
+  @JsonKey()
+  List<String> get favoriteSubCategories {
+    if (_favoriteSubCategories is EqualUnmodifiableListView)
+      return _favoriteSubCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_favoriteSubCategories);
+  }
+
+  final List<String> _hateSubCategories;
+  @override
+  @JsonKey()
+  List<String> get hateSubCategories {
+    if (_hateSubCategories is EqualUnmodifiableListView)
+      return _hateSubCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_hateSubCategories);
+  }
+
   final List<String> _mainDishTypes;
   @override
   @JsonKey()
@@ -468,7 +518,7 @@ class _$ProfileRemoteImpl implements _ProfileRemote {
 
   @override
   String toString() {
-    return 'ProfileRemote(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, allergens: $allergens)';
+    return 'ProfileRemote(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, favoriteSubCategories: $favoriteSubCategories, hateSubCategories: $hateSubCategories, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, allergens: $allergens)';
   }
 
   @override
@@ -505,6 +555,10 @@ class _$ProfileRemoteImpl implements _ProfileRemote {
             const DeepCollectionEquality()
                 .equals(other._hateCategories, _hateCategories) &&
             const DeepCollectionEquality()
+                .equals(other._favoriteSubCategories, _favoriteSubCategories) &&
+            const DeepCollectionEquality()
+                .equals(other._hateSubCategories, _hateSubCategories) &&
+            const DeepCollectionEquality()
                 .equals(other._mainDishTypes, _mainDishTypes) &&
             const DeepCollectionEquality()
                 .equals(other._sideDishTypes, _sideDishTypes) &&
@@ -532,6 +586,8 @@ class _$ProfileRemoteImpl implements _ProfileRemote {
         updateProfileShown,
         const DeepCollectionEquality().hash(_favoriteCategories),
         const DeepCollectionEquality().hash(_hateCategories),
+        const DeepCollectionEquality().hash(_favoriteSubCategories),
+        const DeepCollectionEquality().hash(_hateSubCategories),
         const DeepCollectionEquality().hash(_mainDishTypes),
         const DeepCollectionEquality().hash(_sideDishTypes),
         const DeepCollectionEquality().hash(_allergens)
@@ -563,6 +619,8 @@ abstract class _ProfileRemote implements ProfileRemote {
       final bool updateProfileShown,
       final List<String> favoriteCategories,
       final List<String> hateCategories,
+      final List<String> favoriteSubCategories,
+      final List<String> hateSubCategories,
       final List<String> mainDishTypes,
       final List<String> sideDishTypes,
       final List<String> allergens}) = _$ProfileRemoteImpl;
@@ -601,6 +659,10 @@ abstract class _ProfileRemote implements ProfileRemote {
   List<String> get favoriteCategories;
   @override
   List<String> get hateCategories;
+  @override
+  List<String> get favoriteSubCategories;
+  @override
+  List<String> get hateSubCategories;
   @override
   List<String> get mainDishTypes;
   @override

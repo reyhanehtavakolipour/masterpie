@@ -130,8 +130,6 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   @override
   Future<Either<Failure, ProfileRemote>> upsertProfile(ProfileRemote profileRemote) async{
     try {
-      print('dfgfdo2: ${profileRemoteToJson(profileRemote)}');
-
       // includes everything including name, email, gender, age, ...
       final supabase = Supabase.instance.client;
       await supabase.from(PROFILE_REMOTE_TABLE)
@@ -176,6 +174,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         updateProfileShown: data[0]['update_profile_shown'] ?? false,
         favoriteCategories: data[0]['favorite_categories'] == null ? [] : (data[0]['favorite_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         hateCategories: data[0]['hate_categories'] == null ? [] : (data[0]['hate_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        favoriteSubCategories: data[0]['favorite_sub_categories'] == null ? [] : (data[0]['favorite_sub_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
+        hateSubCategories: data[0]['hate_sub_categories'] == null ? [] : (data[0]['hate_sub_categories'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         mainDishTypes: data[0]['main_dish_types'] == null ? [] : (data[0]['main_dish_types'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         sideDishTypes: data[0]['side_dish_types'] == null ? [] : (data[0]['side_dish_types'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),
         allergens: data[0]['allergens'] == null ? [] : (data[0]['allergens'] as List<dynamic>).map((dynamic item) => item.toString()).toList(),

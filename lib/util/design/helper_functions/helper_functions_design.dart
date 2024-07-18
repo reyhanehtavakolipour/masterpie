@@ -125,16 +125,7 @@ bool isValidPassword(String password) {
   return true;
 }
 
-Future<List<Food>> showWaitPopup(BuildContext context, String message) async{
-  return await showDialog(
-    context: context,
-    builder: (context) {
-      return WaitPopup(
-        message: message,
-      );
-    },
-  );
-}
+
 
 Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) async {
   return showDialog<void>(

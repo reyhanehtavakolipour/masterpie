@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/auto_generate_bloc/auto_generate_foods_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/auto_generate_bloc/state_event/auto_generate_foods_state_event.dart';
 import 'package:masterpie/feature/foods/presentation/screen/logged_foods_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_screen.dart';
@@ -44,6 +46,7 @@ import 'feature/foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import 'feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/food_detail_argument_model.dart';
 import 'feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'feature/foods/presentation/screen/ui_helper/wait_popup.dart';
 import 'feature/foods/presentation/screen/view_logged_food_screen.dart';
 import 'feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'feature/user/domain/model/profile_model.dart';
@@ -161,6 +164,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   late SuggestPortionsBloc _suggestPortionsBloc;
 
+  late AutoGenerateFoodsBloc _autoGenerateFoodsBloc;
 
 
   // showcase tutorial
@@ -199,9 +203,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _maxFatGoalController= TextEditingController(text: '0');
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _suggestPortionsBloc = context.read<SuggestPortionsBloc>();
+    _autoGenerateFoodsBloc = context.read<AutoGenerateFoodsBloc>();
     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
     _requestWizardArgumentModel= RequestWizardArgumentModel();
-
 
     checkIfFirstTimeAppOpened();
     checkIfUserCameFromOnBoard();
@@ -210,12 +214,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+  void _autoGenerateFoods(){
+    _autoGenerateFoodsBloc.add(
+      const AutoGenerateFoodsEvent.onAutoGenerateFoods()
+    );
+  }
 
   void checkIfUserCameFromOnBoard(){
     // auto generate meals for macro diet wizard if user just completed the onboard
     if(widget.isFromOnboard == true){
       Future.delayed(Duration.zero, () {
-        _autoGenerateMealsForDietWizard();
+        _autoGenerateFoods();
       });
     }
   }
@@ -1496,6 +1505,40 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                 ),
 
 
+                                BlocConsumer<AutoGenerateFoodsBloc, AutoGenerateFoodsState>(
+                                    builder: (mcontext, state) {
+                                      if (state is AutoGenerateFoodsLoadingState) {
+                                        _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
+                                        Future.delayed(Duration.zero,(){
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return WaitPopup(
+                                                message: GENERATE_MEAL_PLAN,
+                                              );
+                                            },
+                                          );
+                                        });
+
+                                      }else if(state is AutoGenerateFoodsLoadedState){
+                                        _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
+                                        Future.delayed(Duration.zero,(){
+                                          //todo show foods in wizard
+                                          Navigator.pop(context);
+                                        });
+                                      }else if(state is AutoGenerateFoodsErrorState){
+                                        _getProfileBloc.add(const GetProfileEvent.onReset());
+                                        Future.delayed(Duration.zero,(){
+                                          return showErrorToast(context, state.message);
+                                        });
+                                      }else{
+                                      }
+                                      return Container();
+                                    },
+                                    listener: (context, state){
+
+                                    }
+                                ),
 
 
                                 BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
@@ -1970,21 +2013,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             child: GestureDetector(
               onTap: (){
                 _updateWizardParams();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
-                  ),
-                ).then((result) {
-                  setState(() {
-                    if(result != null){
-                      _requestWizardArgumentModel= result;
-                      _requestWizardArgumentModel.foods.forEach((element) {
-                        _foodsExpansionState.add(false);
-                      });
-                    }
-                  });
-                });
+               _autoGenerateFoods();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
@@ -2298,12 +2327,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
-
-
-  void _autoGenerateMealsForDietWizard(){
-    showWaitPopup(context, GENERATE_MEAL_PLAN);
-  }
-
   void setMacroRangesInWizard(LoggedFoods loggedFoods){
     double totalTakenCalories= 0;
     double totalTakenProteins= 0;
@@ -2530,15 +2553,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               backgroundColor: MASTERPIE_YELLOW_COLOR
           ),
           onPressed: () {
-      
+
             if(_requestWizardArgumentModel.foods.isEmpty){
               showErrorToast(context, ERROR_ADD_FOOD);
               return;
             }
-      
+
             _updateWizardParams();
-      
-      
+
+
             List<List<double>> servings = [];
             _requestWizardArgumentModel.servingRanges.forEach((element) {
               List<double> list = [];
@@ -2546,10 +2569,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               list.add(element.end);
               servings.add(list);
             });
-      
-      
+
+
             logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
-      
+
             _suggestPortionsBloc.add(
                 SuggestFoodsPortionEvent.onSuggestFoodsPortion(
                     _requestWizardArgumentModel.foods,
@@ -2560,9 +2583,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     _requestWizardArgumentModel.macroPercentage
                 )
             );
-      
+
           },
-      
+
           child: const Text(REQUEST_PORTIONS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
         ),
       ),

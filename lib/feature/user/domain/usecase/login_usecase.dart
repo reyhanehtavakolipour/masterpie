@@ -21,6 +21,12 @@ class LoginUseCase{
       await repo.saveUserIdInHive(loginResponseRemote.getOrElse(() => ''));
       await repo.saveUserEmailInHive(email);
       await repo.saveUserPasswordInHive(password);
+
+      // profile
+      final profileResponse= await repo.getProfileFromRemote(email);
+      Profile profile= profileResponse.isRight() ? profileResponse.asRight() : Profile();
+      await repo.insertUserProfileInLocal(profile);
+
       return const Right(Success());
     }
     return Left(getFailure(loginResponseRemote.asLeft()));

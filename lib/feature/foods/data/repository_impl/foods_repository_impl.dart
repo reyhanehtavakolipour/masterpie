@@ -6,6 +6,8 @@ import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
+import 'package:masterpie/feature/user/data/mapper/user_mapper.dart';
+import 'package:masterpie/feature/user/domain/model/profile_model.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -41,6 +43,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
   final productRemoteDataSource = serviceLocator<FatSecretRemoteDataSource>();
   final userHiveDataSource = serviceLocator<UserHiveDataSource>();
   final mapper = serviceLocator<FoodsMapper>();
+  final userMapper = serviceLocator<UserMapper>();
   final userRepo = serviceLocator<UserRepository>();
 
 
@@ -745,6 +748,15 @@ class FoodsRepositoryImpl extends FoodsRepository{
     final fatSecretFoodsResponse = await productRemoteDataSource.getFatSecretFoodsInfo();
     if(fatSecretFoodsResponse.isRight()){
       return Right(mapper.fromFatSecretFoodsInfoRemote(fatSecretFoodsResponse.asRight()));
+    }
+    return Left(fatSecretFoodsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, List<GenericFood>>> autoGenerateFoods(Profile profile) async{
+    final fatSecretFoodsResponse = await productRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
+    if(fatSecretFoodsResponse.isRight()){
+      return Right(mapper.fromGenericFoodsRemote(fatSecretFoodsResponse.asRight()));
     }
     return Left(fatSecretFoodsResponse.asLeft());
   }

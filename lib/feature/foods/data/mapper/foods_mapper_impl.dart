@@ -811,6 +811,34 @@ class FoodsMapperImpl extends FoodsMapper{
     );
   }
 
+  @override
+  List<GenericFood> fromGenericFoodsRemote(List<GenericFoodRemote> foods) {
+    return foods.map((genericRemote) =>
+    GenericFood(
+      id: genericRemote.id,
+      foodType: FoodType.groceryProduct,
+      name: genericRemote.name,
+      barcode: genericRemote.barcode,
+      brandName: genericRemote.brandName,
+      description: genericRemote.description,
+      nationality: '',
+      image: genericRemote.image,
+      ingredients: genericRemote.ingredients,
+      servingIngredientsCount: genericRemote.servingIngredientsCount,
+      units: genericRemote.units,
+      recipe: genericRemote.recipe,
+      calorie: genericRemote.calorie,
+      protein: genericRemote.protein,
+      carb: genericRemote.carb,
+      fat: genericRemote.fat,
+      diets: [],
+      allergies: [],
+      servingAmount: genericRemote.servingAmount,
+      unit: genericRemote.unit,
+    )
+    ).toList();
+  }
+
 
 
 

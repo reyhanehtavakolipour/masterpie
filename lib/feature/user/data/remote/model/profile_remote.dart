@@ -24,6 +24,8 @@ class ProfileRemote with _$ProfileRemote{
     @Default(false) bool updateProfileShown,
     @Default([]) List<String> favoriteCategories,
     @Default([]) List<String> hateCategories,
+    @Default([]) List<String> favoriteSubCategories,
+    @Default([]) List<String> hateSubCategories,
     @Default([]) List<String> mainDishTypes,
     @Default([]) List<String> sideDishTypes,
     @Default([]) List<String> allergens,
@@ -49,6 +51,8 @@ Map<String, dynamic> profileRemoteToJson(ProfileRemote profileRemote) {
   data['weightChangeWeekly'] = profileRemote.weightChangeWeekly;
   data['favorite_categories'] = profileRemote.favoriteCategories;
   data['hate_categories'] = profileRemote.hateCategories;
+  data['favorite_sub_categories'] = profileRemote.favoriteSubCategories;
+  data['hate_sub_categories'] = profileRemote.hateSubCategories;
   data['main_dish_types'] = profileRemote.mainDishTypes;
   data['side_dish_types'] = profileRemote.sideDishTypes;
   data['allergens'] = profileRemote.allergens;

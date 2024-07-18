@@ -20,6 +20,8 @@ class ProfileLocal{
   String weightChangeWeekly;
   List<String> favoriteCategories;
   List<String> hateCategories;
+  List<String> favoriteSubCategories;
+  List<String> hateSubCategories;
   List<String> allergens;
   List<String> mainDishTypes;
   List<String> sideDishTypes;
@@ -43,6 +45,8 @@ class ProfileLocal{
     required this.weightChangeWeekly,
     required this.favoriteCategories,
     required this.hateCategories,
+    required this.favoriteSubCategories,
+    required this.hateSubCategories,
     required this.allergens,
     required this.mainDishTypes,
     required this.sideDishTypes
@@ -69,6 +73,8 @@ class ProfileLocal{
       sideDishTypes: (parsedJson['sideDishTypes'] as String).split(';'),
       favoriteCategories: (parsedJson['favoriteCategories'] as String).split(';'),
       hateCategories: (parsedJson['hateCategories'] as String).split(';'),
+      favoriteSubCategories: (parsedJson['favoriteSubCategories'] as String).split(';'),
+      hateSubCategories: (parsedJson['hateSubCategories'] as String).split(';'),
       allergens: (parsedJson['allergens'] as String).split(';'),
     );
   }
@@ -93,6 +99,8 @@ class ProfileLocal{
     data['sideDishTypes'] = sideDishTypes.join(';');
     data['favoriteCategories'] = favoriteCategories.join(';');
     data['hateCategories'] = hateCategories.join(';');
+    data['favoriteSubCategories'] = favoriteSubCategories.join(';');
+    data['hateSubCategories'] = hateSubCategories.join(';');
     data['allergens'] = allergens.join(';');
 
     return data;
@@ -115,6 +123,8 @@ class ProfileLocal{
         'weightChangeWeekly: $weightChangeWeekly,'
         'favoriteCategories: $favoriteCategories,'
         'hateCategories: $hateCategories,'
+        'favoriteSubCategories: $favoriteSubCategories,'
+        'hateSubCategories: $hateSubCategories,'
         'mainDishTypes: $mainDishTypes,'
         'sideDishTypes: $sideDishTypes,'
         'allergens: $allergens,'
@@ -140,10 +150,12 @@ ProfileLocal emptyProfile(){
       dailyMacroGoal: ['2197', '220', '165', '73'],
       activityLevel: SEDENTARY_LABEL,
       weightChangeWeekly: LB_1_LABEL,
-    favoriteCategories: [],
-    hateCategories: [],
-    mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
-    sideDishTypes: ['Dessert', 'Beverage'],
-    allergens: []
+      favoriteCategories: [],
+      hateCategories: [],
+      favoriteSubCategories: [],
+      hateSubCategories: [],
+      mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
+      sideDishTypes: ['Dessert', 'Beverage'],
+      allergens: []
   );
 }
