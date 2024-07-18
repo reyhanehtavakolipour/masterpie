@@ -548,7 +548,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
   @override
   Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) {
-    print('dfgpjs1: ${profileRemote}');
+    printWrapped('dfgpjs1: ${profileRemote}');
 
 
     // do this for each string in mainDishTypes and sideDishTypes:
@@ -577,6 +577,64 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
     throw UnimplementedError();
   }
+
+
+  @override
+  Future<Either<Failure, List<String>>> getSubcategories(List<String> categories) async {
+    try {
+      List<String> subCategories = [];
+
+      final clientResponse = await authFatSecret();
+
+      if (clientResponse.isLeft()) {
+        print('Client authentication failed');
+        return const Right([]);
+      }
+
+      String token = clientResponse.asRight().credentials.accessToken;
+      print('Successfully authenticated!: $token');
+
+      final NetworkRequest request = await NetworkRequest.createFatSecret(token);
+
+      Map<String, dynamic> categoriesParams = {
+        'format': 'json',
+        'method': 'food_categories.get.v2',
+      };
+
+      final categoriesResponse = await request.postParams(FAT_SECRET_URL, params: categoriesParams);
+
+      if (categoriesResponse.statusCode == SUCCESS_API_CODE) {
+        final categoriesData = categoriesResponse.data;
+
+        for (var item in categories) {
+          for (var element in (categoriesData['food_categories']['food_category'] as List)) {
+            if (element['food_category_name'].toString().replaceAll(',', '') == item) {
+              final catId = element['food_category_id'].toString();
+
+              // request sub categories
+              Map<String, dynamic> subCategoriesParams = {
+                'format': 'json',
+                'method': 'food_sub_categories.get.v2',
+                'food_category_id': catId
+              };
+
+              final subCategoriesResponse = await request.postParams(FAT_SECRET_URL, params: subCategoriesParams);
+
+              if (subCategoriesResponse.statusCode == SUCCESS_API_CODE) {
+                final subCategoriesData = subCategoriesResponse.data;
+                final subCats = subCategoriesData['food_sub_categories']['food_sub_category'];
+                subCategories.addAll(subCats.map<String>((sc) => sc.toString()).toList());
+              }
+            }
+          }
+        }
+      }
+      return Right(subCategories);
+    } catch (e) {
+      return Left(ExceptionFailure(e));
+    }
+  }
+
 
 
 }

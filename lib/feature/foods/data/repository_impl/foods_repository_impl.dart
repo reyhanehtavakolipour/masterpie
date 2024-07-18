@@ -761,6 +761,15 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return Left(fatSecretFoodsResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, List<String>>> getSubcategoriesFromRemote(List<String> categories) async {
+    final fatSecretFoodsResponse = await productRemoteDataSource.getSubcategories(categories);
+    if(fatSecretFoodsResponse.isRight()){
+      return Right(fatSecretFoodsResponse.asRight());
+    }
+    return Left(fatSecretFoodsResponse.asLeft());
+  }
+
 
 
 }

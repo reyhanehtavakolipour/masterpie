@@ -1,7 +1,9 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/domain/repository/foods_repository.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
 import '../../../../util/core/response/failure.dart';
@@ -12,6 +14,9 @@ import '../repository/user_repository.dart';
 class UpdateProfileUseCase{
 
   final repo = serviceLocator<UserRepository>();
+
+  final foodsRepo = serviceLocator<FoodsRepository>();
+
 
   Future<Either<Failure, Success>> updateProfile(String email, String fName, String lName, String gender, String weight, String height, String weightUnit, String heightUnit,
       String goalWeight, String age, String activityLevel, String weightChangeWeekly,   List<String> mainDishTypes, List<String> sideDishTypes,
@@ -41,8 +46,15 @@ class UpdateProfileUseCase{
 
 
 
-    //todo call sub categoris fatsecret api and update profile here
+    // get sub categories
+    final favoriteSubCatResponse= await foodsRepo.getSubcategoriesFromRemote(favoriteCategories);
+    final hateSubCatResponse= await foodsRepo.getSubcategoriesFromRemote(hateCategories);
 
+
+    profile= profile.copyWith(
+      favoriteSubCategories: favoriteSubCatResponse.isRight() ? favoriteSubCatResponse.asRight() : [],
+      hateSubCategories: hateSubCatResponse.isRight() ? hateSubCatResponse.asRight() : [],
+    );
 
 
     final userIdResponse= await repo.getUserIdFromHive();
