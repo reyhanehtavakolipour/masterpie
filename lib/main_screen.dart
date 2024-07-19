@@ -1759,12 +1759,19 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 38),
-                child: const Row(
+                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+                child:  Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
 
-                    CircleAvatar(
+                     Icon(
+                      _addFoodOptionsIsVisible ? Icons.arrow_drop_down : Icons.arrow_right,
+                      color: Colors.white,
+                    ),
+
+                    const SizedBox(width: 8,),
+
+                    const CircleAvatar(
                       radius: 20,
                       backgroundColor: MASTERPIE_YELLOW_COLOR,
                       child: Text(
@@ -1778,9 +1785,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       ),
                     ),
 
-                    SizedBox(width: 8,),
+                    const SizedBox(width: 8,),
 
-                    Flexible(
+                    const Flexible(
                       child: Text(ADD_FOODS_FOR_WIZARD,
                         style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
                     ),
@@ -1792,25 +1799,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             Container(
               padding: const EdgeInsets.all(16),
               width: double.infinity,
-              child:  Row(
-                children: [
-                  const Text(
-                    ADD_FOOD_WIZARD,
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: DARK_GREY_COLOR,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-
-                  const SizedBox(width: 16,),
-
-                  Icon(
-                    _addFoodOptionsIsVisible ? Icons.arrow_drop_up : null,
+              child: const Text(
+                ADD_FOOD_WIZARD,
+                style: TextStyle(
+                    fontSize: 12,
                     color: DARK_GREY_COLOR,
-                    size: 25,
-                  ),
-                ],
+                    fontWeight: FontWeight.bold
+                ),
               ),
             ),
 
