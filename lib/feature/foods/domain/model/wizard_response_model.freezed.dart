@@ -19,6 +19,7 @@ mixin _$WizardResponseModel {
   List<SuggestedFoodsPortion> get foodsPortions =>
       throw _privateConstructorUsedError;
   List<String> get messages => throw _privateConstructorUsedError;
+  List<int> get macroGoal => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WizardResponseModelCopyWith<WizardResponseModel> get copyWith =>
@@ -31,7 +32,10 @@ abstract class $WizardResponseModelCopyWith<$Res> {
           WizardResponseModel value, $Res Function(WizardResponseModel) then) =
       _$WizardResponseModelCopyWithImpl<$Res, WizardResponseModel>;
   @useResult
-  $Res call({List<SuggestedFoodsPortion> foodsPortions, List<String> messages});
+  $Res call(
+      {List<SuggestedFoodsPortion> foodsPortions,
+      List<String> messages,
+      List<int> macroGoal});
 }
 
 /// @nodoc
@@ -49,6 +53,7 @@ class _$WizardResponseModelCopyWithImpl<$Res, $Val extends WizardResponseModel>
   $Res call({
     Object? foodsPortions = null,
     Object? messages = null,
+    Object? macroGoal = null,
   }) {
     return _then(_value.copyWith(
       foodsPortions: null == foodsPortions
@@ -59,6 +64,10 @@ class _$WizardResponseModelCopyWithImpl<$Res, $Val extends WizardResponseModel>
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      macroGoal: null == macroGoal
+          ? _value.macroGoal
+          : macroGoal // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 }
@@ -71,7 +80,10 @@ abstract class _$$WizardResponseModelImplCopyWith<$Res>
       __$$WizardResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SuggestedFoodsPortion> foodsPortions, List<String> messages});
+  $Res call(
+      {List<SuggestedFoodsPortion> foodsPortions,
+      List<String> messages,
+      List<int> macroGoal});
 }
 
 /// @nodoc
@@ -87,6 +99,7 @@ class __$$WizardResponseModelImplCopyWithImpl<$Res>
   $Res call({
     Object? foodsPortions = null,
     Object? messages = null,
+    Object? macroGoal = null,
   }) {
     return _then(_$WizardResponseModelImpl(
       foodsPortions: null == foodsPortions
@@ -97,6 +110,10 @@ class __$$WizardResponseModelImplCopyWithImpl<$Res>
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      macroGoal: null == macroGoal
+          ? _value._macroGoal
+          : macroGoal // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
@@ -106,9 +123,11 @@ class __$$WizardResponseModelImplCopyWithImpl<$Res>
 class _$WizardResponseModelImpl implements _WizardResponseModel {
   _$WizardResponseModelImpl(
       {final List<SuggestedFoodsPortion> foodsPortions = const [],
-      final List<String> messages = const []})
+      final List<String> messages = const [],
+      final List<int> macroGoal = const []})
       : _foodsPortions = foodsPortions,
-        _messages = messages;
+        _messages = messages,
+        _macroGoal = macroGoal;
 
   final List<SuggestedFoodsPortion> _foodsPortions;
   @override
@@ -128,9 +147,18 @@ class _$WizardResponseModelImpl implements _WizardResponseModel {
     return EqualUnmodifiableListView(_messages);
   }
 
+  final List<int> _macroGoal;
+  @override
+  @JsonKey()
+  List<int> get macroGoal {
+    if (_macroGoal is EqualUnmodifiableListView) return _macroGoal;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_macroGoal);
+  }
+
   @override
   String toString() {
-    return 'WizardResponseModel(foodsPortions: $foodsPortions, messages: $messages)';
+    return 'WizardResponseModel(foodsPortions: $foodsPortions, messages: $messages, macroGoal: $macroGoal)';
   }
 
   @override
@@ -140,14 +168,17 @@ class _$WizardResponseModelImpl implements _WizardResponseModel {
             other is _$WizardResponseModelImpl &&
             const DeepCollectionEquality()
                 .equals(other._foodsPortions, _foodsPortions) &&
-            const DeepCollectionEquality().equals(other._messages, _messages));
+            const DeepCollectionEquality().equals(other._messages, _messages) &&
+            const DeepCollectionEquality()
+                .equals(other._macroGoal, _macroGoal));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_foodsPortions),
-      const DeepCollectionEquality().hash(_messages));
+      const DeepCollectionEquality().hash(_messages),
+      const DeepCollectionEquality().hash(_macroGoal));
 
   @JsonKey(ignore: true)
   @override
@@ -160,12 +191,15 @@ class _$WizardResponseModelImpl implements _WizardResponseModel {
 abstract class _WizardResponseModel implements WizardResponseModel {
   factory _WizardResponseModel(
       {final List<SuggestedFoodsPortion> foodsPortions,
-      final List<String> messages}) = _$WizardResponseModelImpl;
+      final List<String> messages,
+      final List<int> macroGoal}) = _$WizardResponseModelImpl;
 
   @override
   List<SuggestedFoodsPortion> get foodsPortions;
   @override
   List<String> get messages;
+  @override
+  List<int> get macroGoal;
   @override
   @JsonKey(ignore: true)
   _$$WizardResponseModelImplCopyWith<_$WizardResponseModelImpl> get copyWith =>

@@ -11,7 +11,6 @@ import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -48,6 +47,14 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   late LogFoodsBloc _logFoodsBloc;
 
 
+  //index of current combination
+  int _currentPage= 0;
+
+
+  List<bool> _foodsExpansionState= [];
+
+  bool _messageExpanded= false;
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +65,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
+
+    widget.wizardResponse.foodsPortions[_currentPage].foods.forEach((element) {
+      _foodsExpansionState.add(false);
+    });
   }
 
 
@@ -139,97 +150,93 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
                 child: Column(
+
                   children: [
 
 
+                    _helperMessage(),
 
-                    Visibility(
-                      visible: widget.wizardResponse.messages.isNotEmpty,
-                      child: Container(
-                        color: MASTERPIE_YELLOW_COLOR,
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            const Text(
-                              IMPROVE_ACCURACY_WARNING,
-                              style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
 
-                            const SizedBox(height: 8,),
+                    _totalMacroInfo(),
 
-                            ...widget.wizardResponse.messages.map((item) => Text(
-                              '- $item',
-                              style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14),
-                            )).toList(),
-                          ],
-                        ),
-                      ),
-                    ),
+
+                    const SizedBox(height: 8,),
 
 
 
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        itemCount: _suggestedFoodsPortions.length,
-                        itemBuilder: (context, index){
-                          List<Food> foods = _suggestedFoodsPortions[index].foods;
-                          return Card(
-                            margin: const EdgeInsets.only(top: 8, bottom: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                    width: double.infinity,
-                                    decoration: const BoxDecoration(
-                                      color: DARK_PRIMARY_COLOR,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.0),    // Adjust the radius as needed
-                                        topRight: Radius.circular(10.0),   // Adjust the radius as needed
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        foodsCombinationAccuracy(_suggestedFoodsPortions[index].accuracy),
+                    _buildFoodsPortions(),
 
-                                        const SizedBox(height: 16,),
 
-                                        foodsCombinationMacros(index)
-                                      ],
-                                    )
-                                ),
 
-                                Container(
-                                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 12),
-                                  color: BG_COMBINATION_BOTTOM_COLOR,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      foodsPortionsList(foods),
 
-                                      const SizedBox(height: 12,),
+                    const SizedBox(height: 90,),
 
-                                      logFoodsButton(index)
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                    ),
+
+                    // ListView.builder(
+                    //     shrinkWrap: true,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     padding: const EdgeInsets.symmetric(horizontal: 8),
+                    //     itemCount: _suggestedFoodsPortions.length,
+                    //     itemBuilder: (context, index){
+                    //       List<Food> foods = _suggestedFoodsPortions[index].foods;
+                    //       return Card(
+                    //         margin: const EdgeInsets.only(top: 8, bottom: 8),
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                    //         ),
+                    //         child: Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           mainAxisAlignment: MainAxisAlignment.start,
+                    //           children: [
+                    //             Container(
+                    //                 width: double.infinity,
+                    //                 decoration: const BoxDecoration(
+                    //                   color: DARK_PRIMARY_COLOR,
+                    //                   borderRadius: BorderRadius.only(
+                    //                     topLeft: Radius.circular(10.0),    // Adjust the radius as needed
+                    //                     topRight: Radius.circular(10.0),   // Adjust the radius as needed
+                    //                   ),
+                    //                 ),
+                    //                 padding: const EdgeInsets.all(16),
+                    //                 child: Column(
+                    //                   crossAxisAlignment: CrossAxisAlignment.start,
+                    //                   mainAxisAlignment: MainAxisAlignment.start,
+                    //                   children: [
+                    //                     foodsCombinationAccuracy(_suggestedFoodsPortions[index].accuracy),
+                    //
+                    //                     const SizedBox(height: 16,),
+                    //
+                    //                     foodsCombinationMacros(index)
+                    //                   ],
+                    //                 )
+                    //             ),
+                    //
+                    //             Container(
+                    //               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 12),
+                    //               color: BG_COMBINATION_BOTTOM_COLOR,
+                    //               child: Column(
+                    //                 crossAxisAlignment: CrossAxisAlignment.start,
+                    //                 children: [
+                    //                   foodsPortionsList(foods),
+                    //
+                    //                   const SizedBox(height: 12,),
+                    //
+                    //                   logFoodsButton(index)
+                    //                 ],
+                    //               ),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       );
+                    //     }
+                    // ),
 
                   ],
                 ),
               ),
+
+
+              logFoodsButton(),
 
               BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
                   builder: (mcontext, state) {
@@ -301,6 +308,371 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   }
 
 
+
+
+  Widget _buildFoodsPortions(){
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        itemCount: _suggestedFoodsPortions[_currentPage].foods.length,
+        itemBuilder: (context, index){
+          Food food = _suggestedFoodsPortions[_currentPage].foods[index];
+          return InkWell(
+            onTap: (){
+              if(food.foodType == FoodType.meal){
+                setState(() {
+                  _foodsExpansionState[index]= !_foodsExpansionState[index];
+                });
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  const SizedBox(height: 16,),
+
+
+                  Row(
+                    children: [
+
+                      Visibility(
+                        visible: food.foodType == FoodType.meal,
+                        child: Icon(
+                          _foodsExpansionState[index] ? Icons.arrow_drop_down : Icons.arrow_right,
+                          color: DARK_PRIMARY_COLOR,
+                          size: 16,
+                        ),
+                      ),
+
+                      const SizedBox(width: 8,),
+
+                      Visibility(
+                          visible: food.foodType != FoodType.meal,
+                          child: const SizedBox(width: 16,)
+                      ),
+
+                      Text(
+                        '${food.count} serving(s) ${food.name}',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                      ),
+
+                    ],
+                  ),
+
+
+                  _foodIngredients(food, index),
+
+                  const SizedBox(height: 16,),
+
+
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: LIGHT_GREY_COLOR,
+                  ),
+
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+
+
+  Widget _foodIngredients(Food food, int index){
+
+    String ingredients= '';
+
+    if(food.foodType == FoodType.meal){
+
+
+      for(int i = 0; i < food.ingredients.length; i++){
+        double ingredientCount= double.parse(food.servingIngredientsCount[i]);
+        double count= ingredientCount * food.count;
+        String ing= '- $count x (${food.units[i]}) ${food.ingredients[i]}\n';
+        ingredients= ingredients + ing;
+      }
+
+    }
+
+
+    return Visibility(
+      visible: _foodsExpansionState[index],
+        child: Container(
+          margin: const EdgeInsets.only(left: 16, right: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              const SizedBox(height: 12,),
+
+              Text(
+                ingredients,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: DARK_PRIMARY_COLOR,
+                ),
+              ),
+
+            ],
+          ),
+        ),
+    );
+  }
+
+
+
+  Widget _totalMacroInfo(){
+    return    Container(
+      padding: const EdgeInsets.all(24),
+      color: DARK_PRIMARY_COLOR,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+
+            ///calorie
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.wizardResponse.foodsPortions[_currentPage].totalMacro[0].toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: MASTERPIE_YELLOW_COLOR, fontSize: 36),
+                ),
+                Text(
+                  '/${widget.wizardResponse.macroGoal[0]} cal',
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 18),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24,),
+
+            Row(
+              children: [
+                /// protein
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    height: 120,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: DARK_PRIMARY_COLOR,
+                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      border: Border.all(
+                        color: LIGHT_GREY_COLOR,
+                        width: 1,
+                      ),
+                    ),
+                    margin: const EdgeInsets.all(MACRO_MARGIN),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          PROTEIN_LABEL,
+                          textAlign: TextAlign.center,
+                          style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: MASTERPIE_YELLOW_COLOR),
+                        ),
+
+                        const SizedBox(height: 8,),
+
+                        Text(
+                          '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[1].toInt()}/${widget.wizardResponse.macroGoal[1]} g',
+                          textAlign: TextAlign.center,
+                          style:
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+
+                const SizedBox(width: 2,),
+
+                /// carb
+                Expanded(
+                  child: Container(
+                      width: double.infinity,
+                      height: 120,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: DARK_PRIMARY_COLOR,
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        border: Border.all(
+                          color: LIGHT_GREY_COLOR,
+                          width: 1,
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(MACRO_MARGIN),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            CARB_LABEL,
+                            textAlign: TextAlign.center,
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: MASTERPIE_YELLOW_COLOR),
+                          ),
+
+                          const SizedBox(height: 8,),
+
+                          Text(
+                            '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[2].toInt()}/${widget.wizardResponse.macroGoal[2]} g',
+                            textAlign: TextAlign.center,
+                            style:
+                            const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+                          ),
+                        ],
+                      )
+                  ),
+                ),
+
+
+
+                const SizedBox(width: 2,),
+
+                
+                /// fat
+                Expanded(
+                  child: Container(
+                      width: double.infinity,
+                      height: 120,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: DARK_PRIMARY_COLOR,
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        border: Border.all(
+                          color: LIGHT_GREY_COLOR,
+                          width: 1,
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(MACRO_MARGIN),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            FAT_LABEL,
+                            textAlign: TextAlign.center,
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: MASTERPIE_YELLOW_COLOR),
+                          ),
+
+                          const SizedBox(height: 8,),
+
+                          Text(
+                            '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[3].toInt()}/${widget.wizardResponse.macroGoal[3]} g',
+                            textAlign: TextAlign.center,
+                            style:
+                            const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
+                          ),
+                        ],
+                      )
+                  ),
+                ),
+
+
+              ],
+            ),
+
+
+
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget _helperMessage(){
+    return Column(
+      children: [
+
+        Visibility(
+          visible: widget.wizardResponse.messages.isNotEmpty && !_messageExpanded,
+          child: GestureDetector(
+            onTap: (){
+              setState(() {
+                _messageExpanded= !_messageExpanded;
+              });
+            },
+            child: Container(
+              color: MASTERPIE_YELLOW_COLOR,
+              padding: const EdgeInsets.all(16),
+              child: const Row(
+                children: [
+
+                  Icon(
+                    Icons.arrow_right,
+                    color: DARK_PRIMARY_COLOR,
+                  ),
+
+                  SizedBox(width: 4,),
+
+                  Text(
+                    IMPROVE_ACCURACY_WARNING,
+                    style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+
+        Visibility(
+          visible: widget.wizardResponse.messages.isNotEmpty && _messageExpanded,
+          child: GestureDetector(
+            onTap: (){
+              setState(() {
+                _messageExpanded= !_messageExpanded;
+              });
+            },
+            child: Container(
+              color: MASTERPIE_YELLOW_COLOR,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+
+                      Icon(
+                        Icons.arrow_drop_down,
+                        color: DARK_PRIMARY_COLOR,
+                      ),
+
+                      SizedBox(width: 4,),
+
+                      Text(
+                        IMPROVE_ACCURACY_WARNING,
+                        style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 8,),
+
+                  ...widget.wizardResponse.messages.map((item) => Text(
+                    '- $item',
+                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14),
+                  )).toList(),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
   void logFoodsOfToday(List<Food> foodsLoggedBefore){
 
     List<Food> foods = [];
@@ -315,25 +687,30 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
-  Widget logFoodsButton(int index){
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: ElevatedButton(
-          onPressed: () {
-            _selectedCombinationFoods = _suggestedFoodsPortions[index].foods;
-            logEvent(MACRO_DIET_LOG_BTN_CLICKED, null);
-            requestLoggedFoods();
-          },
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-              ),
-              backgroundColor: MASTERPIE_YELLOW_COLOR,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
-          ),
-          child: const Text(LOG_FOODS_LABEL,
-            style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 10, fontWeight: FontWeight.w600),
-          )
+  Widget logFoodsButton(){
+    return Positioned(
+      bottom: 36,
+      left: 16,
+      right: 16,
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+            onPressed: () {
+              _selectedCombinationFoods = _suggestedFoodsPortions[_currentPage].foods;
+              logEvent(MACRO_DIET_LOG_BTN_CLICKED, null);
+              requestLoggedFoods();
+            },
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                ),
+                backgroundColor: MASTERPIE_YELLOW_COLOR,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
+            ),
+            child: const Text(LOG_FOODS_LABEL,
+              style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+            )
+        ),
       ),
     );
   }

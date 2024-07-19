@@ -15,6 +15,7 @@ class WizardResponseModel with _$WizardResponseModel{
   factory WizardResponseModel({
     @Default([]) List<SuggestedFoodsPortion> foodsPortions,
     @Default([]) List<String> messages,
+    @Default([]) List<int> macroGoal,
   })= _WizardResponseModel;
 
 }

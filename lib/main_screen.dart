@@ -503,6 +503,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     } else {
       caloriePercent = 0;
     }
+    if(caloriePercent> 1.0){
+      caloriePercent= 1.0;
+    }
 
 
     double proteinPercent = 0;
@@ -511,7 +514,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     } else {
       proteinPercent = 0;
     }
-
+    if(proteinPercent> 1.0){
+      proteinPercent= 1.0;
+    }
 
     double carbPercent = 0;
     if (_carbGoal != 0) {
@@ -519,7 +524,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     } else {
       carbPercent = 0;
     }
-
+    if(carbPercent> 1.0){
+      carbPercent= 1.0;
+    }
 
     double fatPercent = 0;
     if (_fatGoal != 0) {
@@ -527,6 +534,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     } else {
       fatPercent = 0;
     }
+    if(fatPercent> 1.0){
+      fatPercent= 1.0;
+    }
+
+
+
 
     _totalTakenCalories = double.parse(_totalTakenCalories.toStringAsFixed(1));
     _totalTakenProteins = double.parse(_totalTakenProteins.toStringAsFixed(1));
@@ -1556,10 +1569,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                                       }else if(state is SuggestFoodsPortionLoadedState){
                                         _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                                         Future.delayed(Duration.zero,(){
+                                          final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _getMacroGoalInputInWizard());
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: state.wizardResponseModel),
+                                              builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
                                             ),
                                           );
                                         });
@@ -1595,6 +1609,53 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             ),
       ),
     );
+  }
+
+
+
+  List<int> _getMacroGoalInputInWizard(){
+    List<int> macro= [];
+
+    int calorieGoal= 0;
+    int proteinGoal= 0;
+    int carbGoal= 0;
+    int fatGoal= 0;
+
+    if(_macroGoalInputType == BY_PERCENTAGE_LABEL){
+
+      calorieGoal= (double.parse(_minCalorieGoalController.text.isEmpty ? '0.0' : _minCalorieGoalController.text)+
+          double.parse(_maxCalorieGoalController.text.isEmpty ? '0.0' : _maxCalorieGoalController.text))~/2;
+
+      final totalProteinCalorie= calorieGoal*int.parse(_proteinPercentageController.text)/100;
+      proteinGoal= totalProteinCalorie~/4;
+
+      final totalCarbCalorie= calorieGoal*int.parse(_carbPercentageController.text)/100;
+      carbGoal= totalCarbCalorie~/4;
+
+      final totalFatCalorie= calorieGoal*int.parse(_fatPercentageController.text)/100;
+      fatGoal= totalFatCalorie~/9;
+    }else{
+
+      proteinGoal= (double.parse(_minProteinGoalController.text.isEmpty ? '0.0' : _minProteinGoalController.text)+
+          double.parse(_maxProteinGoalController.text.isEmpty ? '0.0' : _maxProteinGoalController.text))~/2;
+
+      carbGoal= (double.parse(_minCarbGoalController.text.isEmpty ? '0.0' : _minCarbGoalController.text)+
+          double.parse(_maxCarbGoalController.text.isEmpty ? '0.0' : _maxCarbGoalController.text))~/2;
+
+      fatGoal= (double.parse(_minFatGoalController.text.isEmpty ? '0.0' : _minFatGoalController.text)+
+          double.parse(_maxFatGoalController.text.isEmpty ? '0.0' : _maxFatGoalController.text))~/2;
+
+      calorieGoal= (proteinGoal * 4) + (carbGoal *4) + (fatGoal * 9);
+
+    }
+
+
+    macro.add(calorieGoal);
+    macro.add(proteinGoal);
+    macro.add(carbGoal);
+    macro.add(fatGoal);
+
+    return macro;
   }
 
 
@@ -2241,25 +2302,28 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   const SizedBox(width: 16,),
 
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(stepOneTitle,
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
-                      ),
-
-                      const SizedBox(height: 8,),
-
-                      Visibility(
-                        visible: stepOneSubTitle.isNotEmpty,
-                        child: Flexible(
-                          child: Text(stepOneSubTitle,
-                            style: const TextStyle(color: MASTERPIE_YELLOW_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(stepOneTitle,
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
                         ),
-                      ),
-                    ],
+                    
+                        const SizedBox(height: 8,),
+                    
+                        Visibility(
+                          visible: stepOneSubTitle.isNotEmpty,
+                          child: Flexible(
+                            child: Text(stepOneSubTitle,
+                              style: const TextStyle(color: MASTERPIE_YELLOW_COLOR, fontSize: 13, fontWeight: FontWeight.bold),),
+                          ),
+                        ),
+                    
+                      ],
+                    ),
                   ),
 
                 ],

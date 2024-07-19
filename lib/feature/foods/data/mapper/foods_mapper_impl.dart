@@ -608,10 +608,10 @@ class FoodsMapperImpl extends FoodsMapper{
           SuggestedFoodsPortion(
               foods: fromFoodsRemote(suggestedFoods.foods),
               accuracy: suggestedFoods.accuracy,
-              totalMacro: suggestedFoods.totalMacro
+              totalMacro: suggestedFoods.totalMacro,
           )
       ).toList(),
-      messages: wizardResponseRemoteModel.messages
+      messages: wizardResponseRemoteModel.messages,
     );
   }
 
