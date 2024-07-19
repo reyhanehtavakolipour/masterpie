@@ -546,38 +546,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
   }
 
-  @override
-  Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) {
-    printWrapped('dfgpjs1: ${profileRemote}');
-
-
-    // do this for each string in mainDishTypes and sideDishTypes:
-
-    // step1 : call search v3 in recipe api with adding "recipe_types" and "recipe_types_matchall" and empty "search_expression" in params
-
-    //step 2: get the "total_results" from previous step and divide it by 50(recipe size in each page) and name it "totalPages".
-
-    // step 3 : choose random number between 0 and "totalPages"
-
-    //step 4: call search v3 in recipe api with adding "recipe_types" and "recipe_types_matchall" and empty "search_expression"
-    // and "page_number" = random number generated in step 3
-
-
-    //step 5: generate another number between 1 nad 50 and get potential food with random index from the previous step list
-
-
-    //step 6: call api search v3 in foods with "include_food_attributes" , "include_sub_categories" in params to get info of each ingredients of  food resulted in previous step.
-    // do the same with allergens.
-
-    // step 7: check if non of the ingredient "food_sub_categories" from previous step is inside user profile's hate categories or sub categories
-
-    // step 8: if yes, go to step 5 and follow step 6, 7 until all the ingredients of the selected food are acceptable
-
-
-
-    throw UnimplementedError();
-  }
-
 
   @override
   Future<Either<Failure, List<String>>> getSubcategories(List<String> categories) async {

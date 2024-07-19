@@ -754,7 +754,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, List<GenericFood>>> autoGenerateFoods(Profile profile) async{
-    final fatSecretFoodsResponse = await productRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
+    final fatSecretFoodsResponse = await masterPieFoodRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
     if(fatSecretFoodsResponse.isRight()){
       return Right(mapper.fromGenericFoodsRemote(fatSecretFoodsResponse.asRight()));
     }

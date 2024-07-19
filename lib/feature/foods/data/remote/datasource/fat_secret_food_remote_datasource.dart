@@ -24,9 +24,6 @@ abstract class FatSecretRemoteDataSource{
   Future<Either<Failure, FatSecretFoodsInfoRemote>> getFatSecretFoodsInfo();
 
 
-  Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote);
-
-
   Future<Either<Failure, List<String>>> getSubcategories(List<String> categories);
 
 

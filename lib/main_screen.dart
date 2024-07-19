@@ -1,4 +1,5 @@
 
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -127,6 +128,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   //wizard
 
+
+  bool _addFoodOptionsIsVisible= false;
 
   late RequestWizardArgumentModel _requestWizardArgumentModel;
 
@@ -1718,83 +1721,108 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   Widget _addedFoodsWizard(){
-    return   Container(
-      decoration:  const BoxDecoration(
-        color: WIZARD_STEP1_BACKGROUND_COLOR,
-      ),
-      child: Column(
-        children: [
+    return  GestureDetector(
+      onTap: (){
+        setState(() {
+          _addFoodOptionsIsVisible= !_addFoodOptionsIsVisible;
+        });
+      },
+      child: Container(
+        decoration:  const BoxDecoration(
+          color: WIZARD_STEP1_BACKGROUND_COLOR,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          Showcase(
-            key: _tutorialThree,
-            title: TUTORIAL_STEP_3_TITLE,
-            description: TUTORIAL_STEP_3_DESC,
-            titlePadding: const EdgeInsets.all(16),
-            titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
-            descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-            targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
-            child: Container(
-              decoration:  BoxDecoration(
-                color: DARK_PRIMARY_COLOR,
-                borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 0.5,
+            Showcase(
+              key: _tutorialThree,
+              title: TUTORIAL_STEP_3_TITLE,
+              description: TUTORIAL_STEP_3_DESC,
+              titlePadding: const EdgeInsets.all(16),
+              titleTextStyle: const TextStyle(fontFamily: MONTSERRAT_FONT, fontSize: 18, fontWeight: FontWeight.bold, color: GREEN_COLOR),
+              descriptionPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+              targetBorderRadius: const BorderRadius.all(Radius.circular(BORDER_RADIUS)),
+              child: Container(
+                decoration:  BoxDecoration(
+                  color: DARK_PRIMARY_COLOR,
+                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
-                  ),
-                ],
+                padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 38),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: MASTERPIE_YELLOW_COLOR,
+                      child: Text(
+                        STEP_TWO,
+                        style: TextStyle(
+                          fontSize: 8,
+                          color: DARK_PRIMARY_COLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    SizedBox(width: 8,),
+
+                    Flexible(
+                      child: Text(ADD_FOODS_FOR_WIZARD,
+                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                    ),
+                  ],
+                ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 38),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
+            ),
 
-                  CircleAvatar(
-                    radius: 12, // Adjust the radius as needed
-                    backgroundColor: MASTERPIE_YELLOW_COLOR,
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                        fontSize: 10, // Adjust the font size as needed
-                        color: DARK_PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),),
+            Container(
+              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              child:  Row(
+                children: [
+                  const Text(
+                    ADD_FOOD_WIZARD,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: DARK_GREY_COLOR,
+                        fontWeight: FontWeight.bold
+                    ),
                   ),
 
-                  SizedBox(width: 8,),
+                  const SizedBox(width: 16,),
 
-                  Flexible(
-                    child: Text(ADD_FOODS_FOR_WIZARD,
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),),
+                  Icon(
+                    _addFoodOptionsIsVisible ? Icons.arrow_drop_up : null,
+                    color: DARK_GREY_COLOR,
+                    size: 25,
                   ),
                 ],
               ),
             ),
-          ),
+
+            /// add food options
+            addFoodOptions(),
 
 
-          Column(
-            children: [
+            /// added foods
+            addedFoods(),
 
-              const SizedBox(height: 16,),
-
-              /// add food options
-              addFoodOptions(),
-
-              /// added foods
-              addedFoods(),
-
-              const SizedBox(height: 18,),
-
-            ],
-          )
-
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1871,173 +1899,184 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   Widget addFoodOptions(){
-    return Row(
+    return Visibility(
+      visible: _addFoodOptionsIsVisible,
+      child: Column(
         children: [
+          Row(
+              children: [
 
-          const SizedBox(width: 4,),
+                const SizedBox(width: 4,),
 
-          /// search grocery
-          Expanded(
-            child: GestureDetector(
-              onTap: (){
-                _updateWizardParams();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
-                ).then((result) {
-                  setState(() {
-                    _requestWizardArgumentModel= result;
-                    _requestWizardArgumentModel.foods.forEach((element) {
-                      _foodsExpansionState.add(false);
-                    });
-                  });
-                });
-
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    Image.asset(SEARCH_GROCERY_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
-
-                    const SizedBox(height: 16,),
-
-                    const Text(SEARCH_GROCERY_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-
-          const SizedBox(width: 6,),
-
-          /// search recipe
-          Expanded(
-            child: GestureDetector(
-              onTap: (){
-                _updateWizardParams();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
-                  ),
-                ).then((result) {
-                  setState(() {
-                    _requestWizardArgumentModel= result;
-                    _requestWizardArgumentModel.foods.forEach((element) {
-                      _foodsExpansionState.add(false);
-                    });
-                  });
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    Image.asset(SEARCH_RECIPE_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
-
-                    const SizedBox(height: 16,),
-
-                    const Text(SEARCH_RECIPE_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-
-          const SizedBox(width: 6,),
-
-          /// create manual
-          Expanded(
-            child: GestureDetector(
-              onTap: (){
-                _updateWizardParams();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
-                  ),
-                ).then((result) {
-                  setState(() {
-                    if(result != null){
-                      _requestWizardArgumentModel= result;
-                      _requestWizardArgumentModel.foods.forEach((element) {
-                        _foodsExpansionState.add(false);
+                /// search grocery
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      _updateWizardParams();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel)),
+                      ).then((result) {
+                        setState(() {
+                          _requestWizardArgumentModel= result;
+                          _requestWizardArgumentModel.foods.forEach((element) {
+                            _foodsExpansionState.add(false);
+                          });
+                        });
                       });
-                    }
-                  });
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
 
-                    const SizedBox(height: 16,),
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
 
-                    const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
-                  ],
+                          Image.asset(SEARCH_GROCERY_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
+
+                          const SizedBox(height: 16,),
+
+                          const Text(SEARCH_GROCERY_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+
+
+                const SizedBox(width: 6,),
+
+                /// search recipe
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      _updateWizardParams();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SearchRecipeMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                        ),
+                      ).then((result) {
+                        setState(() {
+                          _requestWizardArgumentModel= result;
+                          _requestWizardArgumentModel.foods.forEach((element) {
+                            _foodsExpansionState.add(false);
+                          });
+                        });
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          Image.asset(SEARCH_RECIPE_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48,),
+
+                          const SizedBox(height: 16,),
+
+                          const Text(SEARCH_RECIPE_WIZARD, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+
+                const SizedBox(width: 6,),
+
+                /// create manual
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      _updateWizardParams();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManualFoodMacroWizardScreen(requestWizardArgumentModel: _requestWizardArgumentModel,),
+                        ),
+                      ).then((result) {
+                        setState(() {
+                          if(result != null){
+                            _requestWizardArgumentModel= result;
+                            _requestWizardArgumentModel.foods.forEach((element) {
+                              _foodsExpansionState.add(false);
+                            });
+                          }
+                        });
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(HOW_MUCH_EAT_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
+
+                          const SizedBox(height: 16,),
+
+                          const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 6,),
+
+                /// auto generate
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      _updateWizardParams();
+                      _autoGenerateFoods();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20), // Makes the container rounded
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(AUTO_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
+
+                          const SizedBox(height: 16,),
+
+                          const Text(AUTO_GENERATE_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 6,),
+              ]
           ),
 
-          const SizedBox(width: 6,),
+          const SizedBox(height: 24,),
 
-          /// auto generate
-          Expanded(
-            child: GestureDetector(
-              onTap: (){
-                _updateWizardParams();
-               _autoGenerateFoods();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20), // Makes the container rounded
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(AUTO_PATH, color: DARK_PRIMARY_COLOR, width: 48, height: 48),
+        ],
 
-                    const SizedBox(height: 16,),
-
-                    const Text(AUTO_GENERATE_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR), textAlign: TextAlign.center,),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 6,),
-        ]
+      ),
     );
   }
 
@@ -2077,16 +2116,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
               const SizedBox(width: 4,),
 
-              const CircleAvatar(
-                radius: 12, // Adjust the radius as needed
+               const CircleAvatar(
+                radius: 20,
                 backgroundColor: MASTERPIE_YELLOW_COLOR,
                 child: Text(
-                  '1',
+                  STEP_ONE,
                   style: TextStyle(
-                    fontSize: 10, // Adjust the font size as needed
+                    fontSize: 8,
                     color: DARK_PRIMARY_COLOR,
                     fontWeight: FontWeight.bold,
-                  ),),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
 
               const SizedBox(width: 8,),
@@ -2188,15 +2229,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   const SizedBox(width: 4,),
 
                   const CircleAvatar(
-                    radius: 12, // Adjust the radius as needed
+                    radius: 20,
                     backgroundColor: MASTERPIE_YELLOW_COLOR,
                     child: Text(
-                      '1',
+                      STEP_ONE,
                       style: TextStyle(
-                        fontSize: 10, // Adjust the font size as needed
+                        fontSize: 8,
                         color: DARK_PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
-                      ),),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
 
 

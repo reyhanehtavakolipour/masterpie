@@ -6,7 +6,9 @@ import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote
 
 import '../../../../../util/core/response/failure.dart';
 import '../../../../../util/core/response/success.dart';
+import '../../../../user/data/remote/model/profile_remote.dart';
 import '../model/food_remote_model.dart';
+import '../model/generic_food_remote_model.dart';
 import '../model/suggested_food_remote_model.dart';
 import '../model/suggested_foods_portion_remote_model.dart';
 
@@ -57,4 +59,7 @@ abstract class MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> saveUserSuggestedFood(String foodName, List<String> ingredients, String diet, String nationality, String userId);
 
   Future<Either<Failure, SuggestedFoodRemote>> getUserSuggestedFoods(String userId);
+
+  Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote);
+
 }
