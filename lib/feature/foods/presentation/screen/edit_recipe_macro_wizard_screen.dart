@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
@@ -31,7 +31,7 @@ import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 
 class EditRecipeMacroWizardScreen extends StatefulWidget {
 
-  final GenericGroceryDetailForMacroWizardArgumentModel genericGroceryDetailForMacroWizardArgumentModel;
+  final GenericFoodDetailForMacroWizardArgumentModel genericGroceryDetailForMacroWizardArgumentModel;
 
   const EditRecipeMacroWizardScreen({super.key, required this.genericGroceryDetailForMacroWizardArgumentModel});
 
@@ -164,7 +164,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(UPDATE_LABEL, style: TextStyle(color: Colors.white),),
+          title: const Text(EDIT_BEFORE_ADDING, style: TextStyle(color: Colors.white),),
           backgroundColor: PRIMARY_COLOR,
           leading: InkWell(
             onTap: () {
@@ -347,24 +347,14 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                  if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
                    showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
-                   List<Food> foods= [];
-                   foods.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.foods);
                    newFood= newFood.copyWith(name: _mealNameController.text, servingAmount: [double.parse(_totalServingController.text)]);
-                   foods.add(
-                       fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList)
-                   );
+                   final food= fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList);
 
-                   List<RangeValues> rangeValues= [];
-                   rangeValues.addAll(widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.servingRanges);
-                   rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
 
-                   RequestWizardArgumentModel model= RequestWizardArgumentModel(
-                     restriction: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.restriction,
-                     macroGoalRanges: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroGoalRanges,
-                     macroPercentage: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.macroPercentage,
-                     goalType: widget.genericGroceryDetailForMacroWizardArgumentModel.requestWizardArgumentModel!.goalType,
-                     servingRanges: rangeValues,
-                     foods: foods,
+                   FoodDetailForMacroWizardArgumentModel model= FoodDetailForMacroWizardArgumentModel(
+                     type: widget.genericGroceryDetailForMacroWizardArgumentModel.type,
+                     index: widget.genericGroceryDetailForMacroWizardArgumentModel.index,
+                     food: food,
                    );
                    showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);
                    Navigator.pop(context, model);
@@ -381,84 +371,87 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
    Widget foodServingRange(){
-     return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+     return Visibility(
+       visible: false,
+       child: Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: [
+           const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-         const SizedBox(height: 16,),
+           const SizedBox(height: 16,),
 
-         Row(
-           mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-             ///min
-             const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-             Container(
-                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                 child: SizedBox(
-                   width: 60,
-                   height: MACRO_HEIGHT,
-                   child: TextField(
-                     controller: _minServingController,
-                     textAlign: TextAlign.center,
-                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                     inputFormatters: <TextInputFormatter>[
-                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                     ],
-                     decoration: const InputDecoration(
-                       border: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
+           Row(
+             mainAxisAlignment: MainAxisAlignment.start,
+             children: [
+               ///min
+               const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+               Container(
+                   margin: const EdgeInsets.symmetric(horizontal: 4),
+                   child: SizedBox(
+                     width: 60,
+                     height: MACRO_HEIGHT,
+                     child: TextField(
+                       controller: _minServingController,
+                       textAlign: TextAlign.center,
+                       style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                       keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                       inputFormatters: <TextInputFormatter>[
+                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                       ],
+                       decoration: const InputDecoration(
+                         border: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR),
+                         ),
+                         enabledBorder: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR),
+                         ),
+                         focusedBorder: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                         ),
+                         contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                        ),
-                       enabledBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
-                       ),
-                       focusedBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                       ),
-                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                      ),
-                   ),
-                 )
-             ),
+                   )
+               ),
 
 
-             const SizedBox(width: 8,),
+               const SizedBox(width: 8,),
 
-             ///max
-             const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-             Container(
-                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                 child: SizedBox(
-                   width: 60,
-                   height: MACRO_HEIGHT,
-                   child: TextField(
-                     controller: _maxServingController,
-                     textAlign: TextAlign.center,
-                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                     inputFormatters: <TextInputFormatter>[
-                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                     ],
-                     decoration: const InputDecoration(
-                       border: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
+               ///max
+               const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+               Container(
+                   margin: const EdgeInsets.symmetric(horizontal: 4),
+                   child: SizedBox(
+                     width: 60,
+                     height: MACRO_HEIGHT,
+                     child: TextField(
+                       controller: _maxServingController,
+                       textAlign: TextAlign.center,
+                       style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                       keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                       inputFormatters: <TextInputFormatter>[
+                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                       ],
+                       decoration: const InputDecoration(
+                         border: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR),
+                         ),
+                         enabledBorder: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR),
+                         ),
+                         focusedBorder: OutlineInputBorder(
+                           borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                         ),
+                         contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                        ),
-                       enabledBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
-                       ),
-                       focusedBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                       ),
-                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                      ),
-                   ),
-                 )
-             ),
+                   )
+               ),
 
-           ],
-         )
-       ],
+             ],
+           )
+         ],
+       ),
      );
    }
 

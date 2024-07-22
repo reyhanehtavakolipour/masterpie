@@ -1282,7 +1282,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) {
+  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) async{
     printWrapped('show_user_pref: ${profileRemote}');
 
 
@@ -1308,7 +1308,42 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
     // step 8: if yes, go to step 5 and follow step 6, 7 until all the ingredients of the selected food are acceptable
 
-    throw UnimplementedError();
+
+
+    // final NetworkRequest request = await NetworkRequest.create();
+    //
+    // Map<String, dynamic> calculateMacroGoalRemoteBody = {
+    //   'favoriteCategories': [''],
+    //   'hateCategories': [''],
+    //   'favoriteSubCategories': [''],
+    //   'hateSubCategories': ['Egg'],
+    //   'mainDishTypes': 'Breakfast',
+    //   'sideDishTypes': '',
+    //   'allergens': ['Garlic']
+    // };
+    //
+    //
+    // final macroGoalApi= 'https://SUPABASE_PROJECT_REF_REMOVED.supabase.co/functions/v1/meal_auto_generate';
+    //
+    // final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
+    //
+    //
+    // if(response.statusCode == SUCCESS_API_CODE){
+    //
+    //   print('show_result: ${response.data}');
+    //
+    // }
+
+
+
+
+
+
+
+
+    await Future.delayed(Duration(seconds: 3));
+
+    return Right([FoodRemote(name: 'rey')]);
   }
 
 

@@ -3,6 +3,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/domain/usecase/auto_generate_foods_usecase.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/auto_generate_bloc/state_event/auto_generate_foods_state_event.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import '../../../../../util/core/di/service_locator.dart';
 
 
@@ -15,7 +16,7 @@ class AutoGenerateFoodsBloc extends Bloc<AutoGenerateFoodsEvent, AutoGenerateFoo
     });
 
 
-    on<AutoGenerateFoods>(
+    on<AutoGenerateFoodsForDay>(
             (event, emit) async {
               final useCase= serviceLocator<AutoGenerateFoodsUseCase>();
 
@@ -27,9 +28,28 @@ class AutoGenerateFoodsBloc extends Bloc<AutoGenerateFoodsEvent, AutoGenerateFoo
                 emit(AutoGenerateFoodsState.error(failure.message));
               },
                   (data) {
-                emit(AutoGenerateFoodsState.loaded(foods: data));
+                emit(AutoGenerateFoodsState.foodsLoaded(foods: data));
               },
             );
+
+        }
+    );
+
+    on<AutoGenerateFood>(
+            (event, emit) async {
+          final useCase= serviceLocator<AutoGenerateFoodsUseCase>();
+
+          emit(const AutoGenerateFoodsState.loading());
+
+          var result = await useCase.autoGenerateFoods();
+          result.fold(
+                (failure) {
+              emit(AutoGenerateFoodsState.error(failure.message));
+            },
+                (data) {
+              emit(AutoGenerateFoodsState.foodLoaded(food: data[0], type: event.type, index: event.index));
+            },
+          );
 
         }
     );

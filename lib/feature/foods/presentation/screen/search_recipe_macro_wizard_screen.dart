@@ -8,10 +8,8 @@ import 'package:getwidget/getwidget.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/food_calculator/generic_food_calculator.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_macro_wizard_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/debouncer.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
-import 'package:masterpie/util/core/helper/print.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -28,9 +26,9 @@ import 'edit_recipe_macro_wizard_screen.dart';
 
 class SearchRecipeMacroWizardScreen extends StatefulWidget {
 
-  final RequestWizardArgumentModel requestWizardArgumentModel;
+  final GenericFoodDetailForMacroWizardArgumentModel genericFoodDetailForMacroWizardArgumentModel;
 
-  const SearchRecipeMacroWizardScreen({super.key, required this.requestWizardArgumentModel});
+  const SearchRecipeMacroWizardScreen({super.key, required this.genericFoodDetailForMacroWizardArgumentModel});
 
 
   @override
@@ -48,8 +46,6 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
 
   List<GenericFood> _newRecipes= [];
 
-  late RequestWizardArgumentModel _requestWizardArgumentModel;
-
 
 
   @override
@@ -57,7 +53,6 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
     super.initState();
     _searchController = TextEditingController();
     _recipeBloc = context.read<RecipesBloc>();
-    _requestWizardArgumentModel= widget.requestWizardArgumentModel;
     _searchController.addListener(_onSearchChanged);
 
     logEvent(MACRO_DIET_RECIPE_VIEWED, null);
@@ -68,8 +63,9 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
 
   void onRecipeClicked(GenericFood food){
     GenericFood meal= food;
-    GenericGroceryDetailForMacroWizardArgumentModel argumentModel = GenericGroceryDetailForMacroWizardArgumentModel(
-        requestWizardArgumentModel: _requestWizardArgumentModel,
+    GenericFoodDetailForMacroWizardArgumentModel argumentModel = GenericFoodDetailForMacroWizardArgumentModel(
+        type: widget.genericFoodDetailForMacroWizardArgumentModel.type,
+        index: widget.genericFoodDetailForMacroWizardArgumentModel.index,
         food: meal
     );
     Navigator.push(
@@ -80,7 +76,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
     ).then((result) {
       setState(() {
         if(result != null){
-          _requestWizardArgumentModel= result;
+          Navigator.pop(context, result);
         }
       });
     });
@@ -130,7 +126,7 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
             backgroundColor: PRIMARY_COLOR,
             leading: InkWell(
               onTap: () {
-                Navigator.pop(context, _requestWizardArgumentModel);
+                Navigator.pop(context, FoodDetailForMacroWizardArgumentModel(food: null));
               },
               child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),

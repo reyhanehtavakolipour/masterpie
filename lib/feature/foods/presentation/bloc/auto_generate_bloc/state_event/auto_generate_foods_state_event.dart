@@ -2,6 +2,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+
+import '../../../../domain/model/food_model.dart';
 part 'auto_generate_foods_state_event.freezed.dart';
 
 
@@ -9,7 +11,8 @@ part 'auto_generate_foods_state_event.freezed.dart';
 @freezed
 abstract class AutoGenerateFoodsEvent with _$AutoGenerateFoodsEvent {
 
-  const factory AutoGenerateFoodsEvent.onAutoGenerateFoods() = AutoGenerateFoods;
+  const factory AutoGenerateFoodsEvent.onAutoGenerateFood(String type, int index) = AutoGenerateFood;
+  const factory AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay() = AutoGenerateFoodsForDay;
   const factory AutoGenerateFoodsEvent.onReset() = Reset;
 
 }
@@ -21,6 +24,7 @@ abstract class AutoGenerateFoodsState with _$AutoGenerateFoodsState{
   const factory AutoGenerateFoodsState.initial()= AutoGenerateFoodsInitialState;
   const factory AutoGenerateFoodsState.loading()= AutoGenerateFoodsLoadingState;
   const factory AutoGenerateFoodsState.error(String message)= AutoGenerateFoodsErrorState;
-  const factory AutoGenerateFoodsState.loaded({required List<GenericFood> foods})= AutoGenerateFoodsLoadedState;
+  const factory AutoGenerateFoodsState.foodsLoaded({required List<Food> foods})= AutoGenerateFoodsForDayLoadedState;
+  const factory AutoGenerateFoodsState.foodLoaded({required Food food, required String type, required int index})= AutoGenerateFoodLoadedState;
 }
 

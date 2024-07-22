@@ -60,6 +60,6 @@ abstract class MasterPieFoodRemoteDataSource{
 
   Future<Either<Failure, SuggestedFoodRemote>> getUserSuggestedFoods(String userId);
 
-  Future<Either<Failure, List<GenericFoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote);
+  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote);
 
 }

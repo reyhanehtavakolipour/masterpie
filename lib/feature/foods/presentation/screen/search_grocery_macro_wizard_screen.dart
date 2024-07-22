@@ -7,8 +7,9 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/search_grocery_list_ui_macro_wizard.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_grocery_detail_macro_wizard_argument_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -25,17 +26,15 @@ import 'edit_grocery_macro_wizard_screen.dart';
 
 class SearchGroceryMacroWizardScreen extends StatefulWidget {
 
-  final RequestWizardArgumentModel requestWizardArgumentModel;
+  final GenericFoodDetailForMacroWizardArgumentModel genericFoodDetailForMacroWizardArgumentModel;
 
-  const SearchGroceryMacroWizardScreen({super.key, required this.requestWizardArgumentModel});
+  const SearchGroceryMacroWizardScreen({super.key, required this.genericFoodDetailForMacroWizardArgumentModel});
 
   @override
   State<SearchGroceryMacroWizardScreen> createState() => _SearchGroceryMacroWizardScreenState();
 }
 
 class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizardScreen> {
-
-  late RequestWizardArgumentModel _requestWizardArgumentModel;
 
 
   late TextEditingController _searchController;
@@ -50,7 +49,6 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
     super.initState();
     _searchController = TextEditingController();
     _groceriesBloc = context.read<GroceriesBloc>();
-    _requestWizardArgumentModel= widget.requestWizardArgumentModel;
     _searchController.addListener(_onSearchChanged);
 
     logEvent(MACRO_DIET_GROCERY_VIEWED, null);
@@ -88,7 +86,7 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
             backgroundColor: PRIMARY_COLOR,
             leading: InkWell(
               onTap: () {
-                Navigator.pop(context, _requestWizardArgumentModel);
+                Navigator.pop(context, FoodDetailForMacroWizardArgumentModel(food: null,));
               },
               child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
@@ -239,17 +237,10 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
 
   void onAddButtonClicked(Food food){
-    List<Food> foods = [];
-    foods.addAll(_requestWizardArgumentModel.foods);
-    foods.add(food);
-
-    List<RangeValues> servingRanges = [];
-    servingRanges.addAll(_requestWizardArgumentModel.servingRanges);
-    servingRanges.add(const RangeValues(0.5, 2.0));
-
-    RequestWizardArgumentModel argumentModel= _requestWizardArgumentModel.copyWith(
-      foods: foods,
-      servingRanges: servingRanges
+    FoodDetailForMacroWizardArgumentModel argumentModel= FoodDetailForMacroWizardArgumentModel(
+      food: food,
+      type: widget.genericFoodDetailForMacroWizardArgumentModel.type,
+      index: widget.genericFoodDetailForMacroWizardArgumentModel.index
     );
 
     Navigator.pop(context, argumentModel);
@@ -258,18 +249,19 @@ class _SearchGroceryMacroWizardScreenState extends State<SearchGroceryMacroWizar
 
 
   void onGroceryClicked(GenericFood food){
-    GenericGroceryDetailForMacroWizardArgumentModel argumentModel = GenericGroceryDetailForMacroWizardArgumentModel(
-        requestWizardArgumentModel: _requestWizardArgumentModel,
+    GenericFoodDetailForMacroWizardArgumentModel argumentModel = GenericFoodDetailForMacroWizardArgumentModel(
+        type: widget.genericFoodDetailForMacroWizardArgumentModel.type,
+        index: widget.genericFoodDetailForMacroWizardArgumentModel.index,
         food: food
     );
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditGroceryForMacroWizardScreen(genericGroceryDetailForMacroWizardArgumentModel: argumentModel,),
+        builder: (context) => EditGroceryForMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: argumentModel,),
       ),
     ).then((result) {
       setState(() {
-        _requestWizardArgumentModel= result;
+        Navigator.pop(context, result);
       });
     });
   }

@@ -6,7 +6,8 @@ import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/meal_ingredients_list_ui.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/request_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -23,9 +24,9 @@ import '../bloc/groceries_bloc/state_event/groceries_state_event.dart';
 
 class ManualFoodMacroWizardScreen extends StatefulWidget {
 
-  final RequestWizardArgumentModel requestWizardArgumentModel;
+  final GenericFoodDetailForMacroWizardArgumentModel genericFoodDetailForMacroWizardArgumentModel;
 
-  const ManualFoodMacroWizardScreen({super.key, required this.requestWizardArgumentModel});
+  const ManualFoodMacroWizardScreen({super.key, required this.genericFoodDetailForMacroWizardArgumentModel});
 
   @override
   State<ManualFoodMacroWizardScreen> createState() => _ManualFoodMacroWizardScreenState();
@@ -201,7 +202,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
             backgroundColor: PRIMARY_COLOR,
             leading: InkWell(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pop(context, FoodDetailForMacroWizardArgumentModel(food: null));
               },
               child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
@@ -416,22 +417,13 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                 else if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
                   showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                 }else{
-                  List<Food> foods= [];
-                  foods.addAll(widget.requestWizardArgumentModel.foods);
+
                   newFood= newFood.copyWith(name: _mealNameController.text);
-                  foods.add(newFood);
 
-                  List<RangeValues> rangeValues= [];
-                  rangeValues.addAll(widget.requestWizardArgumentModel.servingRanges);
-                  rangeValues.add(RangeValues(double.parse(_minServingController.text), double.parse(_maxServingController.text)));
-
-                  RequestWizardArgumentModel model= RequestWizardArgumentModel(
-                    restriction: widget.requestWizardArgumentModel.restriction,
-                    macroGoalRanges: widget.requestWizardArgumentModel.macroGoalRanges,
-                    macroPercentage: widget.requestWizardArgumentModel.macroPercentage,
-                    goalType: widget.requestWizardArgumentModel.goalType,
-                    servingRanges: rangeValues,
-                    foods: foods,
+                  FoodDetailForMacroWizardArgumentModel model= FoodDetailForMacroWizardArgumentModel(
+                    type: widget.genericFoodDetailForMacroWizardArgumentModel.type,
+                    index: widget.genericFoodDetailForMacroWizardArgumentModel.index,
+                    food: newFood,
                   );
                   showSuccessToast(context, FOOD_ADDED_TO_WIZARD_MSG);
                   Navigator.pop(context, model);
@@ -448,84 +440,87 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
 
 
   Widget foodServingRange(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+    return Visibility(
+      visible: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-        const SizedBox(height: 16,),
+          const SizedBox(height: 16,),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ///min
-            const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: SizedBox(
-                  width: 60,
-                  height: MACRO_HEIGHT,
-                  child: TextField(
-                    controller: _minServingController,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    ],
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ///min
+              const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: SizedBox(
+                    width: 60,
+                    height: MACRO_HEIGHT,
+                    child: TextField(
+                      controller: _minServingController,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                      ],
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     ),
-                  ),
-                )
-            ),
+                  )
+              ),
 
 
-            const SizedBox(width: 8,),
+              const SizedBox(width: 8,),
 
-            ///max
-            const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: SizedBox(
-                  width: 60,
-                  height: MACRO_HEIGHT,
-                  child: TextField(
-                    controller: _maxServingController,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    ],
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
+              ///max
+              const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: SizedBox(
+                    width: 60,
+                    height: MACRO_HEIGHT,
+                    child: TextField(
+                      controller: _maxServingController,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                      ],
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     ),
-                  ),
-                )
-            ),
+                  )
+              ),
 
-          ],
-        )
-      ],
+            ],
+          )
+        ],
+      ),
     );
   }
 

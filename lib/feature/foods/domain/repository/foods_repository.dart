@@ -14,7 +14,7 @@ import '../model/food_model.dart';
 
 abstract class FoodsRepository{
 
-  Future<Either<Failure, List<GenericFood>>> autoGenerateFoods(Profile profile);
+  Future<Either<Failure, List<Food>>> autoGenerateFoods(Profile profile);
 
   Future<Either<Failure, List<String>>> getSubcategoriesFromRemote(List<String> categories);
 

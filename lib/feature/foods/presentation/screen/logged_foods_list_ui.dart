@@ -112,8 +112,9 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
 
   @override
   Widget build(BuildContext context) {
+
     return ListView.builder(
-            physics: null,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.foods.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
@@ -180,7 +181,7 @@ class _LoggedFoodsListUiState extends State<LoggedFoodsListUi> {
 
                                 /// calorie
                                 GestureDetector(
-                                  child: Text('$calorie cal',
+                                  child: Text('$calorie cal per serving',
                                     style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 12,
