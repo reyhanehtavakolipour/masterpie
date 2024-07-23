@@ -1310,29 +1310,35 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
 
 
-    // final NetworkRequest request = await NetworkRequest.create();
-    //
-    // Map<String, dynamic> calculateMacroGoalRemoteBody = {
-    //   'favoriteCategories': [''],
-    //   'hateCategories': [''],
-    //   'favoriteSubCategories': [''],
-    //   'hateSubCategories': ['Egg'],
-    //   'mainDishTypes': 'Breakfast',
-    //   'sideDishTypes': '',
-    //   'allergens': ['Garlic']
-    // };
-    //
-    //
-    // final macroGoalApi= 'https://SUPABASE_PROJECT_REF_REMOVED.supabase.co/functions/v1/meal_auto_generate';
-    //
-    // final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
-    //
-    //
-    // if(response.statusCode == SUCCESS_API_CODE){
-    //
-    //   print('show_result: ${response.data}');
-    //
-    // }
+    final NetworkRequest request = await NetworkRequest.create();
+
+    Map<String, dynamic> calculateMacroGoalRemoteBody = {
+      'favoriteCategories': [''],
+      'hateCategories': [''],
+      'favoriteSubCategories': [''],
+      'hateSubCategories': ['Egg'],
+      'DishTypes': 'Breakfast',
+      'isMainDish': false,
+      'allergens': ['Garlic'],
+      'numMainDish' : 2,
+      'numSideDish': 2,
+      'macroGoal': [2000, 150, 200, 70]
+    };
+
+
+    final macroGoalApi= 'https://SUPABASE_PROJECT_REF_REMOVED.supabase.co/functions/v1/meal_auto_generate';
+
+    final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
+
+
+    if(response.statusCode == SUCCESS_API_CODE){
+
+      print('show_result: ${response.data}');
+
+    }else{
+      print('show_error: ${response.statusMessage}');
+
+    }
 
 
 
@@ -1341,7 +1347,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
 
 
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 3));
 
     return Right([FoodRemote(name: 'rey')]);
   }

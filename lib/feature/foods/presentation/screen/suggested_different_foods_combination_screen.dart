@@ -147,8 +147,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             children: [
 
               SingleChildScrollView(
-
-
                 child: Column(
 
                   children: [
@@ -171,65 +169,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                     const SizedBox(height: 90,),
 
-
-                    // ListView.builder(
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    //     itemCount: _suggestedFoodsPortions.length,
-                    //     itemBuilder: (context, index){
-                    //       List<Food> foods = _suggestedFoodsPortions[index].foods;
-                    //       return Card(
-                    //         margin: const EdgeInsets.only(top: 8, bottom: 8),
-                    //         shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                    //         ),
-                    //         child: Column(
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           mainAxisAlignment: MainAxisAlignment.start,
-                    //           children: [
-                    //             Container(
-                    //                 width: double.infinity,
-                    //                 decoration: const BoxDecoration(
-                    //                   color: DARK_PRIMARY_COLOR,
-                    //                   borderRadius: BorderRadius.only(
-                    //                     topLeft: Radius.circular(10.0),    // Adjust the radius as needed
-                    //                     topRight: Radius.circular(10.0),   // Adjust the radius as needed
-                    //                   ),
-                    //                 ),
-                    //                 padding: const EdgeInsets.all(16),
-                    //                 child: Column(
-                    //                   crossAxisAlignment: CrossAxisAlignment.start,
-                    //                   mainAxisAlignment: MainAxisAlignment.start,
-                    //                   children: [
-                    //                     foodsCombinationAccuracy(_suggestedFoodsPortions[index].accuracy),
-                    //
-                    //                     const SizedBox(height: 16,),
-                    //
-                    //                     foodsCombinationMacros(index)
-                    //                   ],
-                    //                 )
-                    //             ),
-                    //
-                    //             Container(
-                    //               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 12),
-                    //               color: BG_COMBINATION_BOTTOM_COLOR,
-                    //               child: Column(
-                    //                 crossAxisAlignment: CrossAxisAlignment.start,
-                    //                 children: [
-                    //                   foodsPortionsList(foods),
-                    //
-                    //                   const SizedBox(height: 12,),
-                    //
-                    //                   logFoodsButton(index)
-                    //                 ],
-                    //               ),
-                    //             )
-                    //           ],
-                    //         ),
-                    //       );
-                    //     }
-                    // ),
 
                   ],
                 ),
@@ -311,8 +250,13 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
   Widget _buildFoodsPortions(){
+
+    // int count=
+
     return ListView.builder(
-        shrinkWrap: true,
+        shrinkWrap: false,
+        primary: true,
+        scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: _suggestedFoodsPortions[_currentPage].foods.length,
@@ -354,9 +298,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           child: const SizedBox(width: 16,)
                       ),
 
-                      Text(
-                        '${food.count} serving(s) ${food.name}',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                      Flexible(
+                        child: Text(
+                          '${convertDoubleToFraction(food.count)} serving(s) ${food.name}',
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                        ),
                       ),
 
                     ],
@@ -394,32 +340,39 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
       for(int i = 0; i < food.ingredients.length; i++){
         double ingredientCount= double.parse(food.servingIngredientsCount[i]);
         double count= ingredientCount * food.count;
-        String ing= '- $count x (${food.units[i]}) ${food.ingredients[i]}\n';
+        String ing= '- ${convertDoubleToFraction(count)} x (${food.units[i]}) ${food.ingredients[i]}\n';
         ingredients= ingredients + ing;
       }
 
     }
 
 
+
     return Visibility(
       visible: _foodsExpansionState[index],
         child: Container(
           margin: const EdgeInsets.only(left: 16, right: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          height: 200,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              const SizedBox(height: 12,),
 
-              Text(
-                ingredients,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: DARK_PRIMARY_COLOR,
+                const SizedBox(height: 12,),
+
+                Flexible(
+                  child: Text(
+                    ingredients,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: DARK_PRIMARY_COLOR,
+                    ),
+                  ),
                 ),
-              ),
 
-            ],
+              ],
+            ),
           ),
         ),
     );
@@ -442,7 +395,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  widget.wizardResponse.foodsPortions[_currentPage].totalMacro[0].toString(),
+                  widget.wizardResponse.foodsPortions[_currentPage].totalMacro[0].toInt().toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold, color: MASTERPIE_YELLOW_COLOR, fontSize: 36),
                 ),
                 Text(

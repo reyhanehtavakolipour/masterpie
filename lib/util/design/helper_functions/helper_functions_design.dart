@@ -19,6 +19,7 @@ import '../../core/constant/messages_constants.dart';
 import '../color/app_colors.dart';
 import '../size/app_widget_size.dart';
 import '../text/app_assets.dart';
+import 'package:fraction/fraction.dart';
 
 
 
@@ -309,4 +310,22 @@ void showRegisterDialog(BuildContext context, String from) {
       );
     },
   );
+}
+
+String convertDoubleToFraction(double number) {
+  // Convert the double to a Fraction
+  final fraction = Fraction.fromDouble(number);
+
+  // Split the fraction into integer part and fractional part
+  final intPart = fraction.toMixedFraction().whole;
+  final fracPart = fraction - Fraction(intPart);
+
+  // Construct the result string
+  if (intPart > 0 && fracPart.numerator > 0) {
+    return '$intPart ${fracPart.numerator}/${fracPart.denominator}';
+  } else if (intPart > 0) {
+    return '$intPart';
+  } else {
+    return '${fracPart.numerator}/${fracPart.denominator}';
+  }
 }

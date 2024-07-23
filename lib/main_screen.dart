@@ -899,716 +899,848 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   ),
                 ];
               },
-              body: TabBarView(
-                controller: _tabController,
+              body: Stack(
                 children: [
+                  TabBarView(
+                    controller: _tabController,
+                    children: [
 
 
-                  /**
-                   * macro diet wizard Tab
-                   */
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                    child: Column(
-                      children: [
+                      /**
+                       * macro diet wizard Tab
+                       */
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        child: Column(
+                          children: [
 
 
-
-                        BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                            builder: (mcontext, state) {
-                              if (state is GetLoggedFoodsLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is GetLoggedFoodsLoadedState){
-                                Future.delayed(Duration.zero,(){
-                                  _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                                  _macroEdition = state.loggedFoods.macroEdition;
-                                  updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
-                                  setMacroRangesInWizard(state.loggedFoods);
-                                });
-                                return Container();
-                              }else if(state is GetImmediateLoggedFoodsState){
-                                Future.delayed(Duration.zero,(){
-                                  _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                                  _macroEdition = state.loggedFoods.macroEdition;
-                                  updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
-                                  setMacroRangesInWizard(state.loggedFoods);
-                                });
-                              }else if(state is GetLoggedFoodsErrorState){
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-                        BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                            builder: (mcontext, state) {
-                              if (state is LogFoodsLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is LogFoodsLoadedState){
-                                _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  showSuccessToast(context, LOG_UPDATED_SUCCESSFULLY);
-                                  setState(() {
-                                    requestLoggedFoodsImmediately(DateTime.now());
-                                  });
-                                });
-                              }else if(state is LogFoodsErrorState){
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-                        BlocConsumer<LogoutBloc, LogoutState>(
-                            builder: (mcontext, state) {
-                              if (state is LogoutLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is LogoutLoadedState){
-                                Future.delayed(Duration.zero,(){
-                                  _logoutBloc.add(const LogoutEvent.onReset());
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const SignInScreen(),
-                                    ),
-                                  );
-                                });
-                              }else if(state is LogoutErrorState){
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }else{
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-
-
-
-                        BlocConsumer<GetProfileBloc, GetProfileState>(
-                            builder: (mcontext, state) {
-                              if (state is GetProfileLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is GetProfileLoadedState){
-                                _getProfileBloc.add(const GetProfileEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  _addEmptyFoodsInWizard(state.profile);
-                                  _userLoggedIn= state.profile.id.isEmpty ? false : true;
-                                  requestLoggedFoods(DateTime.now());
-                                  setMacros(state.profile);
-                                });
-                              }else if(state is GetProfileErrorState){
-                                _getProfileBloc.add(const GetProfileEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }else{
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-                        BlocConsumer<AutoGenerateFoodsBloc, AutoGenerateFoodsState>(
-                            builder: (mcontext, state) {
-                              if (state is AutoGenerateFoodsLoadingState) {
-                                _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return WaitPopup(
-                                        message: GENERATE_MEAL_PLAN,
-                                      );
-                                    },
-                                  );
-                                });
-                              }else if(state is AutoGenerateFoodsForDayLoadedState){
-                                _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  Navigator.of(context, rootNavigator: true).pop();
-                                  //todo show foods in wizard
-                                });
-                              }else if(state is AutoGenerateFoodLoadedState){
-                                _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  Navigator.of(context, rootNavigator: true).pop();
-                                  setState(() {
-                                    if(state.type == MAIN_DISH_LABEL){
-                                      _mainDishFoods[state.index]= state.food;
-                                    }else{
-                                      _sideDishFoods[state.index]= state.food;
-                                    }
-                                  });
-
-                                });
-                              }else if(state is AutoGenerateFoodsErrorState){
-                                _getProfileBloc.add(const GetProfileEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  return showErrorToast(context, state.message);
-                                });
-                              }else{
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-
-                        BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
-                            builder: (context, state) {
-                              if (state is SuggestFoodsPortionLoadingState) {
-                                return const GFLoader(
-                                  type: GFLoaderType.circle,
-                                  loaderColorOne: DARK_PRIMARY_COLOR,
-                                  loaderColorTwo: DARK_PRIMARY_COLOR,
-                                  loaderColorThree: DARK_PRIMARY_COLOR,
-                                );
-                              }else if(state is SuggestFoodsPortionLoadedState){
-                                _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _getMacroGoalInputInWizard());
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
-                                    ),
-                                  );
-                                });
-                              }else if(state is SuggestFoodsPortionErrorState){
-                                _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                                Future.delayed(Duration.zero,(){
-                                  if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
-                                    return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
-                                  }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
-                                    return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
-                                  }
-                                  return showErrorToast(context, state.message);
-                                });
-                              }
-                              return Container();
-                            },
-                            listener: (context, state){
-
-                            }
-                        ),
-
-
-
-
-
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-
-                                /// total macro goal ranges
-                                _totalMacroGoalsWizard(),
-
-                                const SizedBox(height: 16,),
-
-
-                                /// added foods part
-                                _addedFoodsWizard(),
-
-                                const SizedBox(height: 200,),
-
-                              ],
-                            ),
-                          ),
-
-                        ),
-
-                        calculatePortionsButton(),
-
-                      ],
-                    ),
-                  ),
-
-
-                  /**
-                   * Macro tracking Tab
-                   */
-                  Scaffold(
-                    body: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                      
-                          /**
-                           * today weight
-                           */
-                          Visibility(
-                            visible: false,
-                            child: Container(
-                              color: TODAY_WEIGHT_CONTAINER_COLOR,
-                              padding: const EdgeInsets.all(12),
-                              child: Row(
-                                  children: [
-                                    const Text('$TODAY_WEIGHT:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: SizedBox(
-                                        width: 20,
-                                        height: 10,
-                                        child: TextField(
-                                          textAlign: TextAlign.center, // Set text alignment to center
-                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),
-                                          decoration: const InputDecoration(
-                                            labelStyle: TextStyle(color: DARK_PRIMARY_COLOR), // Color of the label text
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when enabled
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when focused
-                                            ),
-                                          ),
-                                          controller: _todayWeightController,
-                                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.digitsOnly,
-                                            FilteringTextInputFormatter.allow(numericRegExp),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                      
-                                    const Text('Kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_WEIGH_INFO, color: DARK_PRIMARY_COLOR),),
-                                    Expanded(child: Container())
-                                  ]
-                              ),
-                            ),
-                          ),
-
-
-
-
-                          /**
-                           * logged foods
-                           */
-                          Container(
-                            color: DARK_PRIMARY_COLOR,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                                const SizedBox(height: 24,),
-
-
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
-                                    child: Text('$YOUR_LOGGED_FOODS:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),)
-                                ),
-
-                                const SizedBox(height: 8,),
-
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
                                   children: [
 
-                                    /// calorie
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          showMacroGoalsPopup(context);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                            border: Border.all(
-                                              color: LIGHT_GREY_COLOR,
-                                              width: 0.25,
-                                            ),
-                                          ),
-                                          padding: const EdgeInsets.all(16),
-                                          margin: const EdgeInsets.symmetric(vertical: 16),
-                                          child: CircularPercentIndicator(
-                                            radius: MACRO_CIRCLE_RADIUS,
-                                            animation: true,
-                                            animationDuration: MACRO_ANIMATION_DURATION,
-                                            lineWidth: MACRO_CIRCLE_WIDTH,
-                                            percent: caloriePercent,
-                                            center: Text(
-                                              "${(caloriePercent*100).toInt()}%",
-                                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                            ),
-                                            circularStrokeCap: CircularStrokeCap.butt,
-                                            backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                            progressColor: calorieProgressColor,
-                                            footer: Column(
-                                              children: [
-                                                const SizedBox(height: 4,),
-                                                Container(
-                                                  margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                  child: const Text(
-                                                    CALORIE_LABEL,
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                    TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
-                                                  ),
-                                                ),
+                                    /// total macro goal ranges
+                                    _totalMacroGoalsWizard(),
 
-                                                const SizedBox(height: 6,),
+                                    const SizedBox(height: 16,),
 
-                                                Text(
-                                                  '$_totalTakenCalories/$_calorieGoal',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    /// added foods part
+                                    _addedFoodsWizard(),
 
-                                    const SizedBox(width: 8,),
-
-                                    /// protein
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          showMacroGoalsPopup(context);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                            border: Border.all(
-                                              color: LIGHT_GREY_COLOR,
-                                              width: 0.25,
-                                            ),
-                                          ),
-                                          margin: const EdgeInsets.symmetric(vertical: 16),
-                                          padding: const EdgeInsets.all(16),
-                                          child: CircularPercentIndicator(
-                                            radius: MACRO_CIRCLE_RADIUS,
-                                            animation: true,
-                                            animationDuration: MACRO_ANIMATION_DURATION,
-                                            lineWidth: MACRO_CIRCLE_WIDTH,
-                                            percent: proteinPercent,
-                                            center: Text(
-                                              "${(proteinPercent*100).toInt()}%",
-                                              style:
-                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                            ),
-                                            circularStrokeCap: CircularStrokeCap.butt,
-                                            backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                            progressColor: proteinProgressColor,
-                                            footer: Column(
-                                              children: [
-                                                const SizedBox(height: 4,),
-                                                Container(
-                                                  margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                  child: const Text(
-                                                    PROTEIN_LABEL,
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                    TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
-                                                  ),
-                                                ),
-
-                                                const SizedBox(height: 6,),
-
-                                                Text(
-                                                  '$_totalTakenProteins/$_proteinGoal',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(width: 8,),
-
-                                    /// carb
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          showMacroGoalsPopup(context);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                            border: Border.all(
-                                              color: LIGHT_GREY_COLOR,
-                                              width: 0.25,
-                                            ),
-                                          ),
-                                          margin: const EdgeInsets.symmetric(vertical: 16),
-                                          padding: const EdgeInsets.all(16),
-                                          child: CircularPercentIndicator(
-                                            radius: MACRO_CIRCLE_RADIUS,
-                                            animation: true,
-                                            animationDuration: MACRO_ANIMATION_DURATION,
-                                            lineWidth: MACRO_CIRCLE_WIDTH,
-                                            percent: carbPercent,
-                                            center: Text(
-                                              "${(carbPercent*100).toInt()}%",
-                                              style:
-                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                            ),
-                                            circularStrokeCap: CircularStrokeCap.butt,
-                                            backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                            progressColor: carbProgressColor,
-                                            footer: Column(
-                                              children: [
-                                                const SizedBox(height: 4,),
-                                                Container(
-                                                  margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                  child: const Text(
-                                                    CARB_LABEL,
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                    TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
-                                                  ),
-
-                                                ),
-
-                                                const SizedBox(height: 6,),
-
-                                                Text(
-                                                  '$_totalTakenCarbs/$_carbGoal',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(width: 8,),
-
-                                    /// fat
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          showMacroGoalsPopup(context);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                                            border: Border.all(
-                                              color: LIGHT_GREY_COLOR,
-                                              width: 0.25,
-                                            ),
-                                          ),
-                                          margin: const EdgeInsets.symmetric(vertical: 16),
-                                          padding: const EdgeInsets.all(16),
-                                          child: CircularPercentIndicator(
-                                            radius: MACRO_CIRCLE_RADIUS,
-                                            animation: true,
-                                            animationDuration: MACRO_ANIMATION_DURATION,
-                                            lineWidth: MACRO_CIRCLE_WIDTH,
-                                            percent: fatPercent,
-                                            center: Text(
-                                              "${(fatPercent*100).toInt()}%",
-                                              style:
-                                              const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
-                                            ),
-                                            circularStrokeCap: CircularStrokeCap.butt,
-                                            backgroundColor: MACRO_PERCENTAGE_COLOR,
-                                            progressColor: fatProgressColor,
-                                            footer: Column(
-                                              children: [
-                                                const SizedBox(height: 4,),
-                                                Container(
-                                                  margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
-                                                  child: const Text(
-                                                    FAT_LABEL,
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                    TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
-                                                  ),
-                                                ),
-
-                                                const SizedBox(height: 6,),
-
-                                                Text(
-                                                  '$_totalTakenFats/$_fatGoal',
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    const SizedBox(height: 200,),
 
                                   ],
                                 ),
+                              ),
 
-                                const SizedBox(height: 8,),
-
-                              ],
                             ),
-                          ),
-                      
-                          Visibility(
-                            visible: _foods.isEmpty,
-                            child: Center(
+
+                            calculatePortionsButton(),
+
+                          ],
+                        ),
+                      ),
+
+
+                      /**
+                       * Macro tracking Tab
+                       */
+                      Scaffold(
+                        body: SingleChildScrollView(
+                          child: Column(
+                            children: [
+
+                              /**
+                               * today weight
+                               */
+                              Visibility(
+                                visible: false,
                                 child: Container(
-                                  margin: const EdgeInsets.all(64),
-                      
-                                  child: const Text(CLICK_FAB_TO_START, style: TextStyle(color: DARK_GREY_COLOR, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.center,),
-                                )
-                            ),
-                          ),
-                      
-                          Visibility(
-                              visible: _foods.isNotEmpty,
-                              child: LoggedFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
-                                onFavoriteButtonClicked: addOrRemoveFavorite, onLoggedFoodClicked: onLoggedFoodClicked, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
-                                foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
-                                macroEdition: _macroEdition,)
-                          ),
-                      
-                        ],
-                      ),
-                    ),
-                    floatingActionButtonLocation: ExpandableFab.location,
-                    floatingActionButton: ExpandableFab(
-                      key: _key,
-                      type: ExpandableFabType.up,
-                      // pos: ExpandableFabPos.left,
-                      childrenOffset: const Offset(0, 20),
-                      // fanAngle: 40,
-                      distance: 70,
-                      openButtonBuilder: RotateFloatingActionButtonBuilder(
-                        child: const Icon(Icons.add),
-                        fabSize: ExpandableFabSize.regular,
-                        foregroundColor: Colors.white,
-                        backgroundColor: DARK_PRIMARY_COLOR,
-                        shape: const CircleBorder(),
-                        angle: 3.14 * 2,
-                      ),
-                      closeButtonBuilder: FloatingActionButtonBuilder(
-                        size: 56,
-                        builder: (BuildContext context, void Function()? onPressed,
-                            Animation<double> progress) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              color: MASTERPIE_YELLOW_COLOR, // Background color
-                              shape: BoxShape.circle, // If you want a circular background
-                            ),
-                            child: IconButton(
-                              onPressed: onPressed,
-                              icon: const Icon(
-                                Icons.close,
-                                size: 24,
+                                  color: TODAY_WEIGHT_CONTAINER_COLOR,
+                                  padding: const EdgeInsets.all(12),
+                                  child: Row(
+                                      children: [
+                                        const Text('$TODAY_WEIGHT:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 10,
+                                            child: TextField(
+                                              textAlign: TextAlign.center, // Set text alignment to center
+                                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: DARK_PRIMARY_COLOR),
+                                              decoration: const InputDecoration(
+                                                labelStyle: TextStyle(color: DARK_PRIMARY_COLOR), // Color of the label text
+                                                enabledBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when enabled
+                                                ),
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(color: DARK_PRIMARY_COLOR), // Color of the underline when focused
+                                                ),
+                                              ),
+                                              controller: _todayWeightController,
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              inputFormatters: <TextInputFormatter>[
+                                                FilteringTextInputFormatter.digitsOnly,
+                                                FilteringTextInputFormatter.allow(numericRegExp),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+
+                                        const Text('Kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: FONT_WEIGH_INFO, color: DARK_PRIMARY_COLOR),),
+                                        Expanded(child: Container())
+                                      ]
+                                  ),
+                                ),
+                              ),
+
+
+
+
+                              /**
+                               * logged foods
+                               */
+                              Container(
                                 color: DARK_PRIMARY_COLOR,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    const SizedBox(height: 24,),
+
+
+                                    const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 12),
+                                        child: Text('$YOUR_LOGGED_FOODS:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),)
+                                    ),
+
+                                    const SizedBox(height: 8,),
+
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+
+                                        /// calorie
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: (){
+                                              showMacroGoalsPopup(context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                                border: Border.all(
+                                                  color: LIGHT_GREY_COLOR,
+                                                  width: 0.25,
+                                                ),
+                                              ),
+                                              padding: const EdgeInsets.all(16),
+                                              margin: const EdgeInsets.symmetric(vertical: 16),
+                                              child: CircularPercentIndicator(
+                                                radius: MACRO_CIRCLE_RADIUS,
+                                                animation: true,
+                                                animationDuration: MACRO_ANIMATION_DURATION,
+                                                lineWidth: MACRO_CIRCLE_WIDTH,
+                                                percent: caloriePercent,
+                                                center: Text(
+                                                  "${(caloriePercent*100).toInt()}%",
+                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                                ),
+                                                circularStrokeCap: CircularStrokeCap.butt,
+                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                                progressColor: calorieProgressColor,
+                                                footer: Column(
+                                                  children: [
+                                                    const SizedBox(height: 4,),
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                                      child: const Text(
+                                                        CALORIE_LABEL,
+                                                        textAlign: TextAlign.center,
+                                                        style:
+                                                        TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 6,),
+
+                                                    Text(
+                                                      '$_totalTakenCalories/$_calorieGoal',
+                                                      textAlign: TextAlign.center,
+                                                      style:
+                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 8,),
+
+                                        /// protein
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: (){
+                                              showMacroGoalsPopup(context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                                border: Border.all(
+                                                  color: LIGHT_GREY_COLOR,
+                                                  width: 0.25,
+                                                ),
+                                              ),
+                                              margin: const EdgeInsets.symmetric(vertical: 16),
+                                              padding: const EdgeInsets.all(16),
+                                              child: CircularPercentIndicator(
+                                                radius: MACRO_CIRCLE_RADIUS,
+                                                animation: true,
+                                                animationDuration: MACRO_ANIMATION_DURATION,
+                                                lineWidth: MACRO_CIRCLE_WIDTH,
+                                                percent: proteinPercent,
+                                                center: Text(
+                                                  "${(proteinPercent*100).toInt()}%",
+                                                  style:
+                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                                ),
+                                                circularStrokeCap: CircularStrokeCap.butt,
+                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                                progressColor: proteinProgressColor,
+                                                footer: Column(
+                                                  children: [
+                                                    const SizedBox(height: 4,),
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                                      child: const Text(
+                                                        PROTEIN_LABEL,
+                                                        textAlign: TextAlign.center,
+                                                        style:
+                                                        TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 6,),
+
+                                                    Text(
+                                                      '$_totalTakenProteins/$_proteinGoal',
+                                                      textAlign: TextAlign.center,
+                                                      style:
+                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 8,),
+
+                                        /// carb
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: (){
+                                              showMacroGoalsPopup(context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                                border: Border.all(
+                                                  color: LIGHT_GREY_COLOR,
+                                                  width: 0.25,
+                                                ),
+                                              ),
+                                              margin: const EdgeInsets.symmetric(vertical: 16),
+                                              padding: const EdgeInsets.all(16),
+                                              child: CircularPercentIndicator(
+                                                radius: MACRO_CIRCLE_RADIUS,
+                                                animation: true,
+                                                animationDuration: MACRO_ANIMATION_DURATION,
+                                                lineWidth: MACRO_CIRCLE_WIDTH,
+                                                percent: carbPercent,
+                                                center: Text(
+                                                  "${(carbPercent*100).toInt()}%",
+                                                  style:
+                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                                ),
+                                                circularStrokeCap: CircularStrokeCap.butt,
+                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                                progressColor: carbProgressColor,
+                                                footer: Column(
+                                                  children: [
+                                                    const SizedBox(height: 4,),
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                                      child: const Text(
+                                                        CARB_LABEL,
+                                                        textAlign: TextAlign.center,
+                                                        style:
+                                                        TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                                      ),
+
+                                                    ),
+
+                                                    const SizedBox(height: 6,),
+
+                                                    Text(
+                                                      '$_totalTakenCarbs/$_carbGoal',
+                                                      textAlign: TextAlign.center,
+                                                      style:
+                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 8,),
+
+                                        /// fat
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: (){
+                                              showMacroGoalsPopup(context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                                border: Border.all(
+                                                  color: LIGHT_GREY_COLOR,
+                                                  width: 0.25,
+                                                ),
+                                              ),
+                                              margin: const EdgeInsets.symmetric(vertical: 16),
+                                              padding: const EdgeInsets.all(16),
+                                              child: CircularPercentIndicator(
+                                                radius: MACRO_CIRCLE_RADIUS,
+                                                animation: true,
+                                                animationDuration: MACRO_ANIMATION_DURATION,
+                                                lineWidth: MACRO_CIRCLE_WIDTH,
+                                                percent: fatPercent,
+                                                center: Text(
+                                                  "${(fatPercent*100).toInt()}%",
+                                                  style:
+                                                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: MACRO_PERCENTAGE_COLOR),
+                                                ),
+                                                circularStrokeCap: CircularStrokeCap.butt,
+                                                backgroundColor: MACRO_PERCENTAGE_COLOR,
+                                                progressColor: fatProgressColor,
+                                                footer: Column(
+                                                  children: [
+                                                    const SizedBox(height: 4,),
+                                                    Container(
+                                                      margin: const EdgeInsets.only(top: MACRO_LABEL_TOP_MARGIN),
+                                                      child: const Text(
+                                                        FAT_LABEL,
+                                                        textAlign: TextAlign.center,
+                                                        style:
+                                                        TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: MASTERPIE_YELLOW_COLOR),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 6,),
+
+                                                    Text(
+                                                      '$_totalTakenFats/$_fatGoal',
+                                                      textAlign: TextAlign.center,
+                                                      style:
+                                                      const TextStyle(fontWeight: FontWeight.bold, fontSize: MACRO_LABEL_FONT_SIZE, color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 8,),
+
+                                  ],
+                                ),
+                              ),
+
+
+                              // BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                              //     builder: (mcontext, state) {
+                              //       if (state is GetLoggedFoodsLoadingState) {
+                              //         return const GFLoader(
+                              //           type: GFLoaderType.circle,
+                              //           loaderColorOne: DARK_PRIMARY_COLOR,
+                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
+                              //           loaderColorThree: DARK_PRIMARY_COLOR,
+                              //         );
+                              //       }else if(state is GetLoggedFoodsLoadedState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                              //           _macroEdition = state.loggedFoods.macroEdition;
+                              //           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
+                              //           setMacroRangesInWizard(state.loggedFoods);
+                              //         });
+                              //         return Container();
+                              //       }else if(state is GetImmediateLoggedFoodsState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                              //           _macroEdition = state.loggedFoods.macroEdition;
+                              //           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
+                              //           setMacroRangesInWizard(state.loggedFoods);
+                              //         });
+                              //       }else if(state is GetLoggedFoodsErrorState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           return showErrorToast(context, state.message);
+                              //         });
+                              //       }
+                              //       return Container();
+                              //     },
+                              //     listener: (context, state){
+                              //
+                              //     }
+                              // ),
+                              //
+                              // BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                              //     builder: (mcontext, state) {
+                              //       if (state is LogFoodsLoadingState) {
+                              //         return const GFLoader(
+                              //           type: GFLoaderType.circle,
+                              //           loaderColorOne: DARK_PRIMARY_COLOR,
+                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
+                              //           loaderColorThree: DARK_PRIMARY_COLOR,
+                              //         );
+                              //       }else if(state is LogFoodsLoadedState){
+                              //         _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                              //         Future.delayed(Duration.zero,(){
+                              //           showSuccessToast(context, LOG_UPDATED_SUCCESSFULLY);
+                              //           setState(() {
+                              //             requestLoggedFoodsImmediately(DateTime.now());
+                              //           });
+                              //         });
+                              //       }else if(state is LogFoodsErrorState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           return showErrorToast(context, state.message);
+                              //         });
+                              //       }
+                              //       return Container();
+                              //     },
+                              //     listener: (context, state){
+                              //
+                              //     }
+                              // ),
+                              //
+                              // BlocConsumer<LogoutBloc, LogoutState>(
+                              //     builder: (mcontext, state) {
+                              //       if (state is LogoutLoadingState) {
+                              //         return const GFLoader(
+                              //           type: GFLoaderType.circle,
+                              //           loaderColorOne: DARK_PRIMARY_COLOR,
+                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
+                              //           loaderColorThree: DARK_PRIMARY_COLOR,
+                              //         );
+                              //       }else if(state is LogoutLoadedState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           _logoutBloc.add(const LogoutEvent.onReset());
+                              //           Navigator.pushReplacement(
+                              //             context,
+                              //             MaterialPageRoute(
+                              //               builder: (context) => const SignInScreen(),
+                              //             ),
+                              //           );
+                              //         });
+                              //       }else if(state is LogoutErrorState){
+                              //         Future.delayed(Duration.zero,(){
+                              //           return showErrorToast(context, state.message);
+                              //         });
+                              //       }else{
+                              //       }
+                              //       return Container();
+                              //     },
+                              //     listener: (context, state){
+                              //
+                              //     }
+                              // ),
+                              //
+                              //
+                              // BlocConsumer<GetProfileBloc, GetProfileState>(
+                              //     builder: (mcontext, state) {
+                              //       if (state is GetProfileLoadingState) {
+                              //         return const GFLoader(
+                              //           type: GFLoaderType.circle,
+                              //           loaderColorOne: DARK_PRIMARY_COLOR,
+                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
+                              //           loaderColorThree: DARK_PRIMARY_COLOR,
+                              //         );
+                              //       }else if(state is GetProfileLoadedState){
+                              //         _getProfileBloc.add(const GetProfileEvent.onReset());
+                              //         Future.delayed(Duration.zero,(){
+                              //           _addEmptyFoodsInWizard(state.profile);
+                              //           _userLoggedIn= state.profile.id.isEmpty ? false : true;
+                              //           requestLoggedFoods(DateTime.now());
+                              //           setMacros(state.profile);
+                              //         });
+                              //       }else if(state is GetProfileErrorState){
+                              //         _getProfileBloc.add(const GetProfileEvent.onReset());
+                              //         Future.delayed(Duration.zero,(){
+                              //           return showErrorToast(context, state.message);
+                              //         });
+                              //       }else{
+                              //       }
+                              //       return Container();
+                              //     },
+                              //     listener: (context, state){
+                              //
+                              //     }
+                              // ),
+                              //
+
+                              Visibility(
+                                visible: _foods.isEmpty,
+                                child: Center(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(64),
+
+                                      child: const Text(CLICK_FAB_TO_START, style: TextStyle(color: DARK_GREY_COLOR, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.center,),
+                                    )
+                                ),
+                              ),
+
+                              Visibility(
+                                  visible: _foods.isNotEmpty,
+                                  child: LoggedFoodsListUi(foodCalculator: FoodCalculator(visibleFoods: _foods), foods: _foods, onFoodsChanged: updateScreenAfterEatenFoodsChanges,
+                                    onFavoriteButtonClicked: addOrRemoveFavorite, onLoggedFoodClicked: onLoggedFoodClicked, foodsTypeRequested:  const [FoodType.groceryProduct, FoodType.meal],
+                                    foodBackGroundColor: DEFAULT_FOOD_BACKGROUND_COLOR, foodIcon: const Icon(Icons.fastfood, color: Colors.blueGrey,),
+                                    macroEdition: _macroEdition,)
+                              ),
+
+                            ],
+                          ),
+                        ),
+                        floatingActionButtonLocation: ExpandableFab.location,
+                        floatingActionButton: ExpandableFab(
+                          key: _key,
+                          type: ExpandableFabType.up,
+                          // pos: ExpandableFabPos.left,
+                          childrenOffset: const Offset(0, 20),
+                          // fanAngle: 40,
+                          distance: 70,
+                          openButtonBuilder: RotateFloatingActionButtonBuilder(
+                            child: const Icon(Icons.add),
+                            fabSize: ExpandableFabSize.regular,
+                            foregroundColor: Colors.white,
+                            backgroundColor: DARK_PRIMARY_COLOR,
+                            shape: const CircleBorder(),
+                            angle: 3.14 * 2,
+                          ),
+                          closeButtonBuilder: FloatingActionButtonBuilder(
+                            size: 56,
+                            builder: (BuildContext context, void Function()? onPressed,
+                                Animation<double> progress) {
+                              return Container(
+                                decoration: const BoxDecoration(
+                                  color: MASTERPIE_YELLOW_COLOR, // Background color
+                                  shape: BoxShape.circle, // If you want a circular background
+                                ),
+                                child: IconButton(
+                                  onPressed: onPressed,
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 24,
+                                    color: DARK_PRIMARY_COLOR,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          children: [
+                            Container(
+                              width: FAB_SIZE,
+                              height: FAB_SIZE,
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: DARK_PRIMARY_COLOR,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Image.asset(SEARCH_GROCERY_PATH, color: Colors.white,),
+                                onPressed: () {
+                                  searchGroceriesClickListener();
+                                },
                               ),
                             ),
-                          );
-                        },
+                            Container(
+                              width: FAB_SIZE,
+                              height: FAB_SIZE,
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: DARK_PRIMARY_COLOR,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Image.asset(SEARCH_RECIPE_PATH, color: Colors.white,),
+                                onPressed: () {
+                                  searchRecipesClickListener();
+                                },
+                              ),
+                            ), Container(
+                              width: FAB_SIZE,
+                              height: FAB_SIZE,
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: DARK_PRIMARY_COLOR,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Image.asset(COOK_FOOD_PATH, color: Colors.white,),
+                                onPressed: () {
+                                  myCookBookClickListener();
+                                },
+                              ),
+                            ), Container(
+                              width: FAB_SIZE,
+                              height: FAB_SIZE,
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: DARK_PRIMARY_COLOR,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.favorite_outline_rounded, color: Colors.white,),
+                                onPressed: () {
+                                  myFavoriteFoodsClickListener();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      children: [
-                        Container(
-                          width: FAB_SIZE,
-                          height: FAB_SIZE,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: DARK_PRIMARY_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: Image.asset(SEARCH_GROCERY_PATH, color: Colors.white,),
-                            onPressed: () {
-                              searchGroceriesClickListener();
-                            },
-                          ),
-                        ),
-                        Container(
-                          width: FAB_SIZE,
-                          height: FAB_SIZE,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: DARK_PRIMARY_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: Image.asset(SEARCH_RECIPE_PATH, color: Colors.white,),
-                            onPressed: () {
-                              searchRecipesClickListener();
-                            },
-                          ),
-                        ), Container(
-                          width: FAB_SIZE,
-                          height: FAB_SIZE,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: DARK_PRIMARY_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: Image.asset(COOK_FOOD_PATH, color: Colors.white,),
-                            onPressed: () {
-                              myCookBookClickListener();
-                            },
-                          ),
-                        ), Container(
-                          width: FAB_SIZE,
-                          height: FAB_SIZE,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: DARK_PRIMARY_COLOR,
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.favorite_outline_rounded, color: Colors.white,),
-                            onPressed: () {
-                              myFavoriteFoodsClickListener();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+
+                    ],
+                  ),
+
+
+                  BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
+                      builder: (mcontext, state) {
+                        if (state is GetLoggedFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetLoggedFoodsLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                            _macroEdition = state.loggedFoods.macroEdition;
+                            updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
+                            setMacroRangesInWizard(state.loggedFoods);
+                          });
+                          return Container();
+                        }else if(state is GetImmediateLoggedFoodsState){
+                          Future.delayed(Duration.zero,(){
+                            _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
+                            _macroEdition = state.loggedFoods.macroEdition;
+                            updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
+                            setMacroRangesInWizard(state.loggedFoods);
+                          });
+                        }else if(state is GetLoggedFoodsErrorState){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+                  BlocConsumer<LogFoodsBloc, LogFoodsState>(
+                      builder: (mcontext, state) {
+                        if (state is LogFoodsLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LogFoodsLoadedState){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            showSuccessToast(context, LOG_UPDATED_SUCCESSFULLY);
+                            setState(() {
+                              requestLoggedFoodsImmediately(DateTime.now());
+                            });
+                          });
+                        }else if(state is LogFoodsErrorState){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+                  BlocConsumer<LogoutBloc, LogoutState>(
+                      builder: (mcontext, state) {
+                        if (state is LogoutLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is LogoutLoadedState){
+                          Future.delayed(Duration.zero,(){
+                            _logoutBloc.add(const LogoutEvent.onReset());
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignInScreen(),
+                              ),
+                            );
+                          });
+                        }else if(state is LogoutErrorState){
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+
+                  BlocConsumer<AutoGenerateFoodsBloc, AutoGenerateFoodsState>(
+                      builder: (mcontext, state) {
+                        if (state is AutoGenerateFoodsLoadingState) {
+                          _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return WaitPopup(
+                                  message: GENERATE_MEAL_PLAN,
+                                );
+                              },
+                            );
+                          });
+                        }else if(state is AutoGenerateFoodsForDayLoadedState){
+                          _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.of(context, rootNavigator: true).pop();
+                            //todo show foods in wizard
+                          });
+                        }else if(state is AutoGenerateFoodLoadedState){
+                          _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            Navigator.of(context, rootNavigator: true).pop();
+                            setState(() {
+                              if(state.type == MAIN_DISH_LABEL){
+                                _mainDishFoods[state.index]= state.food;
+                              }else{
+                                _sideDishFoods[state.index]= state.food;
+                              }
+                            });
+
+                          });
+                        }else if(state is AutoGenerateFoodsErrorState){
+                          _getProfileBloc.add(const GetProfileEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+
+                  BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
+                      builder: (context, state) {
+                        if (state is SuggestFoodsPortionLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is SuggestFoodsPortionLoadedState){
+                          _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _getMacroGoalInputInWizard());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
+                              ),
+                            );
+                          });
+                        }else if(state is SuggestFoodsPortionErrorState){
+                          _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
+                              return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
+                            }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
+                              return showOVerLimitPaidUsers(context, ERROR_OVER_LIMIT_FOODS_PORTION_MSG);
+                            }
+                            return showErrorToast(context, state.message);
+                          });
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
+                  ),
+
+
+
+
+                  BlocConsumer<GetProfileBloc, GetProfileState>(
+                      builder: (mcontext, state) {
+                        if (state is GetProfileLoadingState) {
+                          return const GFLoader(
+                            type: GFLoaderType.circle,
+                            loaderColorOne: DARK_PRIMARY_COLOR,
+                            loaderColorTwo: DARK_PRIMARY_COLOR,
+                            loaderColorThree: DARK_PRIMARY_COLOR,
+                          );
+                        }else if(state is GetProfileLoadedState){
+                          _getProfileBloc.add(const GetProfileEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            _addEmptyFoodsInWizard(state.profile);
+                            _userLoggedIn= state.profile.id.isEmpty ? false : true;
+                            requestLoggedFoods(DateTime.now());
+                            setMacros(state.profile);
+                          });
+                        }else if(state is GetProfileErrorState){
+                          _getProfileBloc.add(const GetProfileEvent.onReset());
+                          Future.delayed(Duration.zero,(){
+                            return showErrorToast(context, state.message);
+                          });
+                        }else{
+                        }
+                        return Container();
+                      },
+                      listener: (context, state){
+
+                      }
                   ),
 
                 ],
@@ -2477,8 +2609,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
     List<Food> foods= [];
-    foods.addAll(_mainDishFoods);
-    foods.addAll(_sideDishFoods);
+    foods.addAll(_mainDishFoods.where((element) => element.name.isNotEmpty));
+    foods.addAll(_sideDishFoods.where((element) => element.name.isNotEmpty));
 
 
 
@@ -2721,6 +2853,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           onPressed: () {
 
             _prepareWizardParams();
+
 
             if(_requestWizardArgumentModel.foods.isEmpty){
               showErrorToast(context, ERROR_ADD_FOOD);
