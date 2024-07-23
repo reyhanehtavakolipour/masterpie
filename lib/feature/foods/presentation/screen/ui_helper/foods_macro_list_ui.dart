@@ -220,41 +220,46 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
                 Visibility(
                   visible: foodName.isNotEmpty,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                    margin: const EdgeInsets.only(top: 4,),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: LIGHT_GREY_COLOR,
-                        width: 2,
+                  child: GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 4,),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: LIGHT_GREY_COLOR,
+                          width: 2,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20), // Radius value
+                        ),
                       ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20), // Radius value
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
 
-                        Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
+                          Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
 
 
-                        Visibility(
-                          visible: false,
-                          child: GestureDetector(
-                            onTap: (){
-                              removeFoodButtonClickListener(index);
-                            },
-                            child: const Icon(
-                              Icons.remove_circle,
-                              color: RED_ERROR_COLOR,
-                              size: 25,
+                          Visibility(
+                            visible: false,
+                            child: GestureDetector(
+                              onTap: (){
+                                removeFoodButtonClickListener(index);
+                              },
+                              child: const Icon(
+                                Icons.remove_circle,
+                                color: RED_ERROR_COLOR,
+                                size: 25,
+                              ),
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

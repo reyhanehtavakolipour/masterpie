@@ -615,9 +615,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                   SizedBox(width: 4,),
 
-                  Text(
-                    IMPROVE_ACCURACY_WARNING,
-                    style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                  Flexible(
+                    child: Text(
+                      IMPROVE_ACCURACY_WARNING,
+                      style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
@@ -650,9 +652,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                       SizedBox(width: 4,),
 
-                      Text(
-                        IMPROVE_ACCURACY_WARNING,
-                        style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                      Flexible(
+                        child: Text(
+                          IMPROVE_ACCURACY_WARNING,
+                          style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
