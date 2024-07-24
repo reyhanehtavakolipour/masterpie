@@ -2,6 +2,10 @@
 
 import 'dart:math';
 
+import 'package:masterpie/feature/foods/data/remote/model/food_remote_model.dart';
+import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
+import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+
 int calculateDifferenceInDays(DateTime date1, DateTime date2) {
 
   Duration difference = date2.difference(date1);
@@ -113,4 +117,43 @@ int getIngredientAmountInGrams(String unit){
 
 double roundToQuarter(double number) {
   return (number * 4).round() / 4;
+}
+
+FoodRemote fromGenericRecipeRemote(GenericFoodRemote food, List<int> selectedUnitIndexList){
+
+  List<String> calorie= [];
+  List<String> protein= [];
+  List<String> carb= [];
+  List<String> fat= [];
+  List<String> units= [];
+  List<String> servingIngredientsCount= [];
+
+
+  for (int i = 0; i < food.ingredients.length; i++){
+    calorie.add(food.calorie[i][selectedUnitIndexList[i]]);
+    protein.add(food.protein[i][selectedUnitIndexList[i]]);
+    carb.add(food.carb[i][selectedUnitIndexList[i]]);
+    fat.add(food.fat[i][selectedUnitIndexList[i]]);
+    units.add(food.units[i][selectedUnitIndexList[i]]);
+    servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
+  }
+
+
+
+  return FoodRemote(
+      id: food.id,
+      calorie: calorie,
+      protein: protein,
+      carb: carb,
+      fat: fat,
+      units: units,
+      foodTypeRemote: FoodTypeRemote.meal,
+      count: food.count,
+      name: food.name,
+      ingredients: food.ingredients,
+      servingAmount: food.servingAmount[0],
+      unit: food.unit[0],
+      recipe: food.recipe,
+      servingIngredientsCount: servingIngredientsCount
+  );
 }

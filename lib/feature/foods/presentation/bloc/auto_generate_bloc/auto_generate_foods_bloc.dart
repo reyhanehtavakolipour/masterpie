@@ -41,13 +41,13 @@ class AutoGenerateFoodsBloc extends Bloc<AutoGenerateFoodsEvent, AutoGenerateFoo
 
           emit(const AutoGenerateFoodsState.loading());
 
-          var result = await useCase.autoGenerateFoods();
+          var result = await useCase.autoGenerateFood(event.type);
           result.fold(
                 (failure) {
               emit(AutoGenerateFoodsState.error(failure.message));
             },
                 (data) {
-              emit(AutoGenerateFoodsState.foodLoaded(food: data[0], type: event.type, index: event.index));
+              emit(AutoGenerateFoodsState.foodLoaded(food: data, type: event.type, index: event.index, isMainDish: event.isMainDish));
             },
           );
 

@@ -18,21 +18,24 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AutoGenerateFoodsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String type, int index) onAutoGenerateFood,
+    required TResult Function(String type, int index, bool isMainDish)
+        onAutoGenerateFood,
     required TResult Function() onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String type, int index)? onAutoGenerateFood,
+    TResult? Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult? Function()? onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String type, int index)? onAutoGenerateFood,
+    TResult Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult Function()? onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -88,7 +91,7 @@ abstract class _$$AutoGenerateFoodImplCopyWith<$Res> {
           $Res Function(_$AutoGenerateFoodImpl) then) =
       __$$AutoGenerateFoodImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String type, int index});
+  $Res call({String type, int index, bool isMainDish});
 }
 
 /// @nodoc
@@ -104,6 +107,7 @@ class __$$AutoGenerateFoodImplCopyWithImpl<$Res>
   $Res call({
     Object? type = null,
     Object? index = null,
+    Object? isMainDish = null,
   }) {
     return _then(_$AutoGenerateFoodImpl(
       null == type
@@ -114,6 +118,10 @@ class __$$AutoGenerateFoodImplCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int,
+      null == isMainDish
+          ? _value.isMainDish
+          : isMainDish // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -121,16 +129,18 @@ class __$$AutoGenerateFoodImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AutoGenerateFoodImpl implements AutoGenerateFood {
-  const _$AutoGenerateFoodImpl(this.type, this.index);
+  const _$AutoGenerateFoodImpl(this.type, this.index, this.isMainDish);
 
   @override
   final String type;
   @override
   final int index;
+  @override
+  final bool isMainDish;
 
   @override
   String toString() {
-    return 'AutoGenerateFoodsEvent.onAutoGenerateFood(type: $type, index: $index)';
+    return 'AutoGenerateFoodsEvent.onAutoGenerateFood(type: $type, index: $index, isMainDish: $isMainDish)';
   }
 
   @override
@@ -139,11 +149,13 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
         (other.runtimeType == runtimeType &&
             other is _$AutoGenerateFoodImpl &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.index, index) || other.index == index));
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.isMainDish, isMainDish) ||
+                other.isMainDish == isMainDish));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, type, index);
+  int get hashCode => Object.hash(runtimeType, type, index, isMainDish);
 
   @JsonKey(ignore: true)
   @override
@@ -155,33 +167,36 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String type, int index) onAutoGenerateFood,
+    required TResult Function(String type, int index, bool isMainDish)
+        onAutoGenerateFood,
     required TResult Function() onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
-    return onAutoGenerateFood(type, index);
+    return onAutoGenerateFood(type, index, isMainDish);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String type, int index)? onAutoGenerateFood,
+    TResult? Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult? Function()? onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
-    return onAutoGenerateFood?.call(type, index);
+    return onAutoGenerateFood?.call(type, index, isMainDish);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String type, int index)? onAutoGenerateFood,
+    TResult Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult Function()? onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
     if (onAutoGenerateFood != null) {
-      return onAutoGenerateFood(type, index);
+      return onAutoGenerateFood(type, index, isMainDish);
     }
     return orElse();
   }
@@ -223,11 +238,13 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
 }
 
 abstract class AutoGenerateFood implements AutoGenerateFoodsEvent {
-  const factory AutoGenerateFood(final String type, final int index) =
+  const factory AutoGenerateFood(
+          final String type, final int index, final bool isMainDish) =
       _$AutoGenerateFoodImpl;
 
   String get type;
   int get index;
+  bool get isMainDish;
   @JsonKey(ignore: true)
   _$$AutoGenerateFoodImplCopyWith<_$AutoGenerateFoodImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -275,7 +292,8 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String type, int index) onAutoGenerateFood,
+    required TResult Function(String type, int index, bool isMainDish)
+        onAutoGenerateFood,
     required TResult Function() onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
@@ -285,7 +303,8 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String type, int index)? onAutoGenerateFood,
+    TResult? Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult? Function()? onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
@@ -295,7 +314,8 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String type, int index)? onAutoGenerateFood,
+    TResult Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult Function()? onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -384,7 +404,8 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String type, int index) onAutoGenerateFood,
+    required TResult Function(String type, int index, bool isMainDish)
+        onAutoGenerateFood,
     required TResult Function() onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
@@ -394,7 +415,8 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String type, int index)? onAutoGenerateFood,
+    TResult? Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult? Function()? onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
@@ -404,7 +426,8 @@ class _$ResetImpl implements Reset {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String type, int index)? onAutoGenerateFood,
+    TResult Function(String type, int index, bool isMainDish)?
+        onAutoGenerateFood,
     TResult Function()? onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -463,7 +486,9 @@ mixin _$AutoGenerateFoodsState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -472,7 +497,8 @@ mixin _$AutoGenerateFoodsState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -481,7 +507,8 @@ mixin _$AutoGenerateFoodsState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -582,7 +609,9 @@ class _$AutoGenerateFoodsInitialStateImpl
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) {
     return initial();
   }
@@ -594,7 +623,8 @@ class _$AutoGenerateFoodsInitialStateImpl
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) {
     return initial?.call();
   }
@@ -606,7 +636,8 @@ class _$AutoGenerateFoodsInitialStateImpl
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -709,7 +740,9 @@ class _$AutoGenerateFoodsLoadingStateImpl
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) {
     return loading();
   }
@@ -721,7 +754,8 @@ class _$AutoGenerateFoodsLoadingStateImpl
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) {
     return loading?.call();
   }
@@ -733,7 +767,8 @@ class _$AutoGenerateFoodsLoadingStateImpl
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -861,7 +896,9 @@ class _$AutoGenerateFoodsErrorStateImpl implements AutoGenerateFoodsErrorState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) {
     return error(message);
   }
@@ -873,7 +910,8 @@ class _$AutoGenerateFoodsErrorStateImpl implements AutoGenerateFoodsErrorState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) {
     return error?.call(message);
   }
@@ -885,7 +923,8 @@ class _$AutoGenerateFoodsErrorStateImpl implements AutoGenerateFoodsErrorState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1028,7 +1067,9 @@ class _$AutoGenerateFoodsForDayLoadedStateImpl
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) {
     return foodsLoaded(foods);
   }
@@ -1040,7 +1081,8 @@ class _$AutoGenerateFoodsForDayLoadedStateImpl
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) {
     return foodsLoaded?.call(foods);
   }
@@ -1052,7 +1094,8 @@ class _$AutoGenerateFoodsForDayLoadedStateImpl
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) {
     if (foodsLoaded != null) {
@@ -1123,7 +1166,7 @@ abstract class _$$AutoGenerateFoodLoadedStateImplCopyWith<$Res> {
           $Res Function(_$AutoGenerateFoodLoadedStateImpl) then) =
       __$$AutoGenerateFoodLoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Food food, String type, int index});
+  $Res call({Food food, String type, int index, bool isMainDish});
 
   $FoodCopyWith<$Res> get food;
 }
@@ -1144,6 +1187,7 @@ class __$$AutoGenerateFoodLoadedStateImplCopyWithImpl<$Res>
     Object? food = null,
     Object? type = null,
     Object? index = null,
+    Object? isMainDish = null,
   }) {
     return _then(_$AutoGenerateFoodLoadedStateImpl(
       food: null == food
@@ -1158,6 +1202,10 @@ class __$$AutoGenerateFoodLoadedStateImplCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int,
+      isMainDish: null == isMainDish
+          ? _value.isMainDish
+          : isMainDish // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 
@@ -1174,7 +1222,10 @@ class __$$AutoGenerateFoodLoadedStateImplCopyWithImpl<$Res>
 
 class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
   const _$AutoGenerateFoodLoadedStateImpl(
-      {required this.food, required this.type, required this.index});
+      {required this.food,
+      required this.type,
+      required this.index,
+      required this.isMainDish});
 
   @override
   final Food food;
@@ -1182,10 +1233,12 @@ class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
   final String type;
   @override
   final int index;
+  @override
+  final bool isMainDish;
 
   @override
   String toString() {
-    return 'AutoGenerateFoodsState.foodLoaded(food: $food, type: $type, index: $index)';
+    return 'AutoGenerateFoodsState.foodLoaded(food: $food, type: $type, index: $index, isMainDish: $isMainDish)';
   }
 
   @override
@@ -1195,11 +1248,13 @@ class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
             other is _$AutoGenerateFoodLoadedStateImpl &&
             (identical(other.food, food) || other.food == food) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.index, index) || other.index == index));
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.isMainDish, isMainDish) ||
+                other.isMainDish == isMainDish));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, food, type, index);
+  int get hashCode => Object.hash(runtimeType, food, type, index, isMainDish);
 
   @JsonKey(ignore: true)
   @override
@@ -1215,9 +1270,11 @@ class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
     required TResult Function() loading,
     required TResult Function(String message) error,
     required TResult Function(List<Food> foods) foodsLoaded,
-    required TResult Function(Food food, String type, int index) foodLoaded,
+    required TResult Function(
+            Food food, String type, int index, bool isMainDish)
+        foodLoaded,
   }) {
-    return foodLoaded(food, type, index);
+    return foodLoaded(food, type, index, isMainDish);
   }
 
   @override
@@ -1227,9 +1284,10 @@ class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
     TResult? Function()? loading,
     TResult? Function(String message)? error,
     TResult? Function(List<Food> foods)? foodsLoaded,
-    TResult? Function(Food food, String type, int index)? foodLoaded,
+    TResult? Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
   }) {
-    return foodLoaded?.call(food, type, index);
+    return foodLoaded?.call(food, type, index, isMainDish);
   }
 
   @override
@@ -1239,11 +1297,12 @@ class _$AutoGenerateFoodLoadedStateImpl implements AutoGenerateFoodLoadedState {
     TResult Function()? loading,
     TResult Function(String message)? error,
     TResult Function(List<Food> foods)? foodsLoaded,
-    TResult Function(Food food, String type, int index)? foodLoaded,
+    TResult Function(Food food, String type, int index, bool isMainDish)?
+        foodLoaded,
     required TResult orElse(),
   }) {
     if (foodLoaded != null) {
-      return foodLoaded(food, type, index);
+      return foodLoaded(food, type, index, isMainDish);
     }
     return orElse();
   }
@@ -1294,11 +1353,13 @@ abstract class AutoGenerateFoodLoadedState implements AutoGenerateFoodsState {
   const factory AutoGenerateFoodLoadedState(
       {required final Food food,
       required final String type,
-      required final int index}) = _$AutoGenerateFoodLoadedStateImpl;
+      required final int index,
+      required final bool isMainDish}) = _$AutoGenerateFoodLoadedStateImpl;
 
   Food get food;
   String get type;
   int get index;
+  bool get isMainDish;
   @JsonKey(ignore: true)
   _$$AutoGenerateFoodLoadedStateImplCopyWith<_$AutoGenerateFoodLoadedStateImpl>
       get copyWith => throw _privateConstructorUsedError;

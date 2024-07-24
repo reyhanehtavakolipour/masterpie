@@ -16,6 +16,8 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, List<Food>>> autoGenerateFoods(Profile profile);
 
+  Future<Either<Failure, Food>> autoGenerateFood(Profile profile, String type);
+
   Future<Either<Failure, List<String>>> getSubcategoriesFromRemote(List<String> categories);
 
   Future<Either<Failure, List<GenericFood>>> getGroceryProductsFromRemote(String query);

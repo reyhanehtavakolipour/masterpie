@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_json_converter.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
 import 'package:masterpie/feature/user/data/remote/model/profile_remote.dart';
@@ -1280,77 +1281,5 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       return Left(ExceptionFailure(error));
     }
   }
-
-  @override
-  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) async{
-    printWrapped('show_user_pref: ${profileRemote}');
-
-
-    // do this for each string in mainDishTypes and sideDishTypes:
-
-    // step1 : call search v3 in recipe api with adding "recipe_types" and "recipe_types_matchall" and empty "search_expression" in params
-
-    //step 2: get the "total_results" from previous step and divide it by 50(recipe size in each page) and name it "totalPages".
-
-    // step 3 : choose random number between 0 and "totalPages"
-
-    //step 4: call search v3 in recipe api with adding "recipe_types" and "recipe_types_matchall" and empty "search_expression"
-    // and "page_number" = random number generated in step 3
-
-
-    //step 5: generate another number between 1 nad 50 and get potential food with random index from the previous step list
-
-
-    //step 6: call api search v3 in foods with "include_food_attributes" , "include_sub_categories" in params to get info of each ingredients of  food resulted in previous step.
-    // do the same with allergens.
-
-    // step 7: check if non of the ingredient "food_sub_categories" from previous step is inside user profile's hate categories or sub categories
-
-    // step 8: if yes, go to step 5 and follow step 6, 7 until all the ingredients of the selected food are acceptable
-
-
-
-    final NetworkRequest request = await NetworkRequest.create();
-
-    Map<String, dynamic> calculateMacroGoalRemoteBody = {
-      'favoriteCategories': [''],
-      'hateCategories': [''],
-      'favoriteSubCategories': [''],
-      'hateSubCategories': ['Egg'],
-      'DishTypes': 'Breakfast',
-      'isMainDish': false,
-      'allergens': ['Garlic'],
-      'numMainDish' : 2,
-      'numSideDish': 2,
-      'macroGoal': [2000, 150, 200, 70]
-    };
-
-
-    final macroGoalApi= 'https://SUPABASE_PROJECT_REF_REMOVED.supabase.co/functions/v1/meal_auto_generate';
-
-    final response= await request.post(macroGoalApi, data: calculateMacroGoalRemoteBody);
-
-
-    if(response.statusCode == SUCCESS_API_CODE){
-
-      print('show_result: ${response.data}');
-
-    }else{
-      print('show_error: ${response.statusMessage}');
-
-    }
-
-
-
-
-
-
-
-
-    // await Future.delayed(Duration(seconds: 3));
-
-    return Right([FoodRemote(name: 'rey')]);
-  }
-
 
 }

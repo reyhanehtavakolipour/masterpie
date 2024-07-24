@@ -754,11 +754,11 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, List<Food>>> autoGenerateFoods(Profile profile) async{
-    final fatSecretFoodsResponse = await masterPieFoodRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
-    if(fatSecretFoodsResponse.isRight()){
-      return Right(mapper.fromFoodsRemote(fatSecretFoodsResponse.asRight()));
+    final foodsResponse = await productRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
+    if(foodsResponse.isRight()){
+      return Right(mapper.fromFoodsRemote(foodsResponse.asRight()));
     }
-    return Left(fatSecretFoodsResponse.asLeft());
+    return Left(foodsResponse.asLeft());
   }
 
   @override
@@ -770,6 +770,14 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return Left(fatSecretFoodsResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Food>> autoGenerateFood(Profile profile, String type) async{
+    final foodsResponse = await productRemoteDataSource.autoGenerateFood(userMapper.toProfileRemote(profile), type);
+    if(foodsResponse.isRight()){
+      return Right(mapper.fromMealRemote(foodsResponse.asRight()));
+    }
+    return Left(foodsResponse.asLeft());
+  }
 
 
 }

@@ -226,9 +226,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     );
   }
 
-  void _autoGenerateFood(String type, int index){
+  void _autoGenerateFood(String type, int index, bool isMainDish){
     _autoGenerateFoodsBloc.add(
-       AutoGenerateFoodsEvent.onAutoGenerateFood(type, index)
+       AutoGenerateFoodsEvent.onAutoGenerateFood(type, index, isMainDish)
     );
   }
 
@@ -1270,136 +1270,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                               ),
 
 
-                              // BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
-                              //     builder: (mcontext, state) {
-                              //       if (state is GetLoggedFoodsLoadingState) {
-                              //         return const GFLoader(
-                              //           type: GFLoaderType.circle,
-                              //           loaderColorOne: DARK_PRIMARY_COLOR,
-                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
-                              //           loaderColorThree: DARK_PRIMARY_COLOR,
-                              //         );
-                              //       }else if(state is GetLoggedFoodsLoadedState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                              //           _macroEdition = state.loggedFoods.macroEdition;
-                              //           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
-                              //           setMacroRangesInWizard(state.loggedFoods);
-                              //         });
-                              //         return Container();
-                              //       }else if(state is GetImmediateLoggedFoodsState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
-                              //           _macroEdition = state.loggedFoods.macroEdition;
-                              //           updateScreenWithNewLoggedFoods(state.loggedFoods.foods);
-                              //           setMacroRangesInWizard(state.loggedFoods);
-                              //         });
-                              //       }else if(state is GetLoggedFoodsErrorState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           return showErrorToast(context, state.message);
-                              //         });
-                              //       }
-                              //       return Container();
-                              //     },
-                              //     listener: (context, state){
-                              //
-                              //     }
-                              // ),
-                              //
-                              // BlocConsumer<LogFoodsBloc, LogFoodsState>(
-                              //     builder: (mcontext, state) {
-                              //       if (state is LogFoodsLoadingState) {
-                              //         return const GFLoader(
-                              //           type: GFLoaderType.circle,
-                              //           loaderColorOne: DARK_PRIMARY_COLOR,
-                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
-                              //           loaderColorThree: DARK_PRIMARY_COLOR,
-                              //         );
-                              //       }else if(state is LogFoodsLoadedState){
-                              //         _logFoodsBloc.add(const LogFoodsEvent.onReset());
-                              //         Future.delayed(Duration.zero,(){
-                              //           showSuccessToast(context, LOG_UPDATED_SUCCESSFULLY);
-                              //           setState(() {
-                              //             requestLoggedFoodsImmediately(DateTime.now());
-                              //           });
-                              //         });
-                              //       }else if(state is LogFoodsErrorState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           return showErrorToast(context, state.message);
-                              //         });
-                              //       }
-                              //       return Container();
-                              //     },
-                              //     listener: (context, state){
-                              //
-                              //     }
-                              // ),
-                              //
-                              // BlocConsumer<LogoutBloc, LogoutState>(
-                              //     builder: (mcontext, state) {
-                              //       if (state is LogoutLoadingState) {
-                              //         return const GFLoader(
-                              //           type: GFLoaderType.circle,
-                              //           loaderColorOne: DARK_PRIMARY_COLOR,
-                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
-                              //           loaderColorThree: DARK_PRIMARY_COLOR,
-                              //         );
-                              //       }else if(state is LogoutLoadedState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           _logoutBloc.add(const LogoutEvent.onReset());
-                              //           Navigator.pushReplacement(
-                              //             context,
-                              //             MaterialPageRoute(
-                              //               builder: (context) => const SignInScreen(),
-                              //             ),
-                              //           );
-                              //         });
-                              //       }else if(state is LogoutErrorState){
-                              //         Future.delayed(Duration.zero,(){
-                              //           return showErrorToast(context, state.message);
-                              //         });
-                              //       }else{
-                              //       }
-                              //       return Container();
-                              //     },
-                              //     listener: (context, state){
-                              //
-                              //     }
-                              // ),
-                              //
-                              //
-                              // BlocConsumer<GetProfileBloc, GetProfileState>(
-                              //     builder: (mcontext, state) {
-                              //       if (state is GetProfileLoadingState) {
-                              //         return const GFLoader(
-                              //           type: GFLoaderType.circle,
-                              //           loaderColorOne: DARK_PRIMARY_COLOR,
-                              //           loaderColorTwo: DARK_PRIMARY_COLOR,
-                              //           loaderColorThree: DARK_PRIMARY_COLOR,
-                              //         );
-                              //       }else if(state is GetProfileLoadedState){
-                              //         _getProfileBloc.add(const GetProfileEvent.onReset());
-                              //         Future.delayed(Duration.zero,(){
-                              //           _addEmptyFoodsInWizard(state.profile);
-                              //           _userLoggedIn= state.profile.id.isEmpty ? false : true;
-                              //           requestLoggedFoods(DateTime.now());
-                              //           setMacros(state.profile);
-                              //         });
-                              //       }else if(state is GetProfileErrorState){
-                              //         _getProfileBloc.add(const GetProfileEvent.onReset());
-                              //         Future.delayed(Duration.zero,(){
-                              //           return showErrorToast(context, state.message);
-                              //         });
-                              //       }else{
-                              //       }
-                              //       return Container();
-                              //     },
-                              //     listener: (context, state){
-                              //
-                              //     }
-                              // ),
-                              //
-
                               Visibility(
                                 visible: _foods.isEmpty,
                                 child: Center(
@@ -1648,7 +1518,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           Future.delayed(Duration.zero,(){
                             Navigator.of(context, rootNavigator: true).pop();
                             setState(() {
-                              if(state.type == MAIN_DISH_LABEL){
+                              if(state.isMainDish){
                                 _mainDishFoods[state.index]= state.food;
                               }else{
                                 _sideDishFoods[state.index]= state.food;
@@ -1657,6 +1527,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                           });
                         }else if(state is AutoGenerateFoodsErrorState){
+                          Navigator.of(context, rootNavigator: true).pop();
                           _getProfileBloc.add(const GetProfileEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             return showErrorToast(context, state.message);
@@ -2113,7 +1984,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         },
       );
     }else if(source == AUTO_GENERATE_LABEL){
-      _autoGenerateFood(MAIN_DISH_LABEL, index);
+      _autoGenerateFood(_mainDishTypes[index], index, true);
     }
   }
 
@@ -2211,7 +2082,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         },
       );
     }else if(source == AUTO_GENERATE_LABEL){
-      _autoGenerateFood(SIDE_DISH_TYPES, index);
+      _autoGenerateFood(_sideDishTypes[index], index, false);
     }
   }
 

@@ -2,9 +2,11 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/fat_secret_foods_info_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/feature/user/data/remote/model/profile_remote.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:masterpie/util/core/helper/print.dart';
@@ -12,6 +14,7 @@ import '../../../../../util/core/constant/api_constant.dart';
 import '../../../../../util/core/helper/helper.dart';
 import '../../../../../util/core/helper/request_api.dart';
 import '../../../../../util/core/response/failure.dart';
+import '../model/food_remote_model.dart';
 import 'fat_secret_food_remote_datasource.dart';
 
 
@@ -600,6 +603,116 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       return Right(subCategories);
     } catch (e) {
       return Left(ExceptionFailure(e));
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) async{
+    try{
+      printWrapped('show_user_pref: ${profileRemote}');
+
+      final NetworkRequest request = await NetworkRequest.create();
+
+      Map<String, dynamic> autoGenerateFoodParams = {
+        'favoriteCategories': [''],
+        'hateCategories': [''],
+        'favoriteSubCategories': [''],
+        'hateSubCategories': ['Egg'],
+        'DishTypes': 'Breakfast',
+        'isMainDish': false,
+        'allergens': ['Garlic'],
+        'numMainDish' : 2,
+        'numSideDish': 2,
+        'macroGoal': [2000, 150, 200, 70]
+      };
+
+
+      final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
+
+
+      final response= await request.post(macroGoalApi, data: autoGenerateFoodParams);
+
+
+      if(response.statusCode == SUCCESS_API_CODE){
+
+        // print('show_result: ${response.data}');
+
+
+        return Right([FoodRemote()]);
+
+
+      }else{
+        return Left(RemoteFailure(response.statusCode, response.statusMessage ?? ''));
+      }
+    }catch(error){
+      return Left(ExceptionFailure(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FoodRemote>> autoGenerateFood(ProfileRemote profileRemote, String type) async{
+    try{
+      printWrapped('show_user_pref: ${type}');
+
+      final NetworkRequest request = await NetworkRequest.create();
+
+      Map<String, dynamic> autoGenerateFoodParams = {
+        'favoriteCategories': [''],
+        'hateCategories': [''],
+        'favoriteSubCategories': profileRemote.favoriteSubCategories,
+        'hateSubCategories': profileRemote.hateSubCategories,
+        'DishTypes': type == 'Dinner' ? 'Lunch' : type,
+        'isMainDish': false,
+        'allergens': profileRemote.allergens,
+        'numMainDish' : profileRemote.mainDishTypes.length,
+        'numSideDish': profileRemote.sideDishTypes.length,
+        'macroGoal': profileRemote.dailyMacroGoal
+      };
+
+      final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
+
+
+      final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
+
+
+      if(recipeResponse.statusCode == SUCCESS_API_CODE){
+
+        Map<String, dynamic> data= recipeResponse.data;
+
+        print('show_result: ${data}');
+
+        String recipeId= data['recipe_id'];
+
+        final recipeDetailResponse= await getRecipe(recipeId);
+        if(recipeDetailResponse.isRight()){
+
+          print('show_result22: ${recipeDetailResponse.asRight()}');
+
+
+          List<int> ingredientIndexes= [];
+          recipeDetailResponse.asRight().ingredients.forEach((element) {
+            ingredientIndexes.add(0);
+          });
+
+          final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight(), ingredientIndexes);
+
+          printWrapped('show_result33: ${generatedFood}');
+
+          return Right(generatedFood);
+
+        }
+        return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
+      }else{
+        print('show_error: ${recipeResponse.statusMessage}');
+        return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
+      }
+    }catch(error){
+      return Left(ExceptionFailure(error));
     }
   }
 

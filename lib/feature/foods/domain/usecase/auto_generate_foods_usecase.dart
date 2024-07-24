@@ -31,4 +31,15 @@ class AutoGenerateFoodsUseCase{
   }
 
 
+  Future<Either<Failure, Food>> autoGenerateFood(String type) async{
+    final userResponse= await userRepo.getProfileFromLocal();
+    final foodsResponse = await repo.autoGenerateFood(userResponse.isRight() ? userResponse.asRight() : Profile(), type);
+    if(foodsResponse.isLeft()){
+      return Left(foodsResponse.asLeft());
+    }
+
+    return Right(foodsResponse.asRight());
+  }
+
+
 }
