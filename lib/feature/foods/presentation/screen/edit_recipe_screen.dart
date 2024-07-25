@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -182,7 +183,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
      newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
 
-     foods.add(fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList));
+     foods.add(fromGenericRecipe(newFood));
 
      _logFoodsBloc.add(
          LogFoodsEvent.onLogFoods(foods)
@@ -239,7 +240,10 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
                       const SizedBox(height: 16,),
 
-                      const Text('$TOTAL_MACRO_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+
+                       Text(newFood.ingredients.length == newFood.calorie.length ? '$TOTAL_MACRO_LABEL:' :'$TOTAL_MACRO_PER_SERVING_LABEL:',
+                        style: const TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
 
                       const SizedBox(height: 16,),
 
@@ -445,51 +449,60 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
 
    void init(){
-      double calorie = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          _selectedIngredientsUnitIndexList.add(0);
-          _selectedIngredientsUnit.add(widget.foodDetailArgumentModel.food!.units[i][0]);
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i][0])*servingCount;
-        }
-      }
+     if(widget.foodDetailArgumentModel.food!.ingredients.length == widget.foodDetailArgumentModel.food!.calorie.length){
+       double calorie = 0;
+       for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
+         if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+           _selectedIngredientsUnitIndexList.add(0);
+           _selectedIngredientsUnit.add(widget.foodDetailArgumentModel.food!.units[i][0]);
+           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
+           calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i][0])*servingCount;
+         }
+       }
 
-      double protein = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i][0])*servingCount;
-        }
-      }
+       double protein = 0;
+       for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
+         if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
+           protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i][0])*servingCount;
+         }
+       }
 
-      double carb = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i][0])*servingCount;
-        }
-      }
+       double carb = 0;
+       for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
+         if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
+           carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i][0])*servingCount;
+         }
+       }
 
 
-      double fat = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
-          fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i][0])*servingCount;
-        }
-      }
-      _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
-      _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount[0].toString();
-      _totalCalorieController.text = calorie.toString();
-      _totalProteinController.text = protein.toString();
-      _totalCarbController.text = carb.toString();
-      _totalFatController.text = fat.toString();
-      _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit[0];
-      _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
-      widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
-        _ingredientsExpansionState.add(false);
-      });
+       double fat = 0;
+       for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
+         if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i][0]);
+           fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i][0])*servingCount;
+         }
+       }
+       _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
+       _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount[0].toString();
+       _totalCalorieController.text = calorie.toString();
+       _totalProteinController.text = protein.toString();
+       _totalCarbController.text = carb.toString();
+       _totalFatController.text = fat.toString();
+       _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit[0];
+       _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
+       widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
+         _ingredientsExpansionState.add(false);
+       });
+     }else{
+       _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
+       _totalCalorieController.text = widget.foodDetailArgumentModel.food!.calorie[0][0].toString();
+       _totalProteinController.text = widget.foodDetailArgumentModel.food!.protein[0][0].toString();
+       _totalCarbController.text = widget.foodDetailArgumentModel.food!.carb[0][0].toString();
+       _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0][0].toString();
+       _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
+     }
 
     newFood = widget.foodDetailArgumentModel.food!;
     _initialStateFood= newFood;
@@ -580,7 +593,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
   Widget addedIngredients(){
      return Visibility(
-       visible: newFood.ingredients.isNotEmpty,
+       visible: newFood.ingredients.isNotEmpty && newFood.ingredients.length == newFood.calorie.length,
          child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            children: [
@@ -743,15 +756,16 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     newFood = newFood.copyWith(
         foodType: FoodType.meal,
         name: _mealNameController.text,
-        servingAmount: [double.parse(_totalServingController.text.isEmpty ? _initialStateFood.servingAmount.toString() : _totalServingController.text)],
+        servingAmount: widget.foodDetailArgumentModel.food!.servingAmount,
         unit: [_totalUnitController.text],
         recipe: _recipeController.text
     );
 
+
     if(widget.foodDetailArgumentModel.macroEdition){
       _addOrUpdateMyCookBookBloc.add(
         AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-          fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList),
+          fromGenericRecipe(newFood),
         ),
       );
       return;
@@ -764,73 +778,76 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
     bool isEditable= true;
 
-    if(calorieController == _totalCalorieController){
+    if(calorieController == _totalCalorieController && newFood.ingredients.length == newFood.calorie.length){
       isEditable = false;
     }
 
     return Column(
       children: [
         ///  serving + unit
-        Row(
-          children: [
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: MACRO_WIDTH,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                controller: servingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
+        Visibility(
+          visible: !isEditable,
+          child: Row(
+            children: [
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
               ),
-            ),
-            const SizedBox(width: 20,),
-            const SizedBox(
-                width: MACRO_TITLE_WIDTH,
-                child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-            ),
-            const SizedBox(width: 4,),
-            SizedBox(
-              width: 70,
-              height: MACRO_HEIGHT,
-              child: TextField(
-                style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                controller: unitController,
-                enabled: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: MACRO_WIDTH,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  controller: servingController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
                 ),
               ),
-            ),
+              const SizedBox(width: 20,),
+              const SizedBox(
+                  width: MACRO_TITLE_WIDTH,
+                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
+              ),
+              const SizedBox(width: 4,),
+              SizedBox(
+                width: 70,
+                height: MACRO_HEIGHT,
+                child: TextField(
+                  style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
+                  controller: unitController,
+                  enabled: false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  ),
+                ),
+              ),
 
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 4,),
 
@@ -1037,20 +1054,23 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
    Widget addIngredientChips(){
      /// add ingredients chips
-     return Column(
-       children: [
-         const SizedBox(height: 16,),
-         Wrap(
-           spacing: 4,
-           children: _addNewIngredientOptions.map((item) {
-             if(_selectedAddIngredientOption == item){
-               return addIngredientOptionChipSelected(item);
-             }else{
-               return addIngredientChipNotSelected(item);
-             }
-           },).toList(),
-         ),
-       ],
+     return Visibility(
+       visible: newFood.ingredients.length == newFood.calorie.length,
+       child: Column(
+         children: [
+           const SizedBox(height: 16,),
+           Wrap(
+             spacing: 4,
+             children: _addNewIngredientOptions.map((item) {
+               if(_selectedAddIngredientOption == item){
+                 return addIngredientOptionChipSelected(item);
+               }else{
+                 return addIngredientChipNotSelected(item);
+               }
+             },).toList(),
+           ),
+         ],
+       ),
      );
    }
 
@@ -1166,7 +1186,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
    Widget newIngredient(){
      return Visibility(
-       visible: _selectedAddIngredientOption.isNotEmpty,
+       visible: _selectedAddIngredientOption.isNotEmpty && newFood.ingredients.length == newFood.calorie.length,
        child: Card(
            child: Padding(
              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),

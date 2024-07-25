@@ -28,6 +28,8 @@ class LoggedFoodsLocal{
   double servingAmount;
   String unit;
   String count;
+  int createdFromFatSecretRecipes;
+
 
 
 
@@ -56,6 +58,7 @@ class LoggedFoodsLocal{
     required this.servingAmount,
     required this.unit,
     required this.count,
+    required this.createdFromFatSecretRecipes
 });
 
 
@@ -84,6 +87,7 @@ class LoggedFoodsLocal{
       allergies: (parsedJson['allergies'] as String).split(';'),
       servingAmount: double.parse(parsedJson['servingAmount'].toString()),
       unit: parsedJson['unit'],
+      createdFromFatSecretRecipes: parsedJson['createdFromFatSecretRecipes'],
       count: parsedJson['count'],
     );
   }
@@ -114,6 +118,7 @@ class LoggedFoodsLocal{
     data['servingAmount'] = servingAmount;
     data['unit'] = unit;
     data['count'] = count;
+    data['createdFromFatSecretRecipes']= createdFromFatSecretRecipes;
     return data;
   }
 
@@ -142,6 +147,7 @@ class LoggedFoodsLocal{
         'allergies: $allergies,'
         'servingAmount: $servingAmount,'
         'count: $count,'
+        'createdFromFatSecretRecipes: $createdFromFatSecretRecipes,'
         'unit: $unit';
   }
 

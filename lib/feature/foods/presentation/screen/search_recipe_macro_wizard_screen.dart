@@ -10,6 +10,8 @@ import 'package:masterpie/feature/foods/presentation/food_calculator/generic_foo
 import 'package:masterpie/feature/foods/presentation/screen/search_recipe_macro_wizard_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/view_recipe_macro_wizard_screen.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -68,10 +70,11 @@ class _SearchRecipeMacroWizardScreenState extends State<SearchRecipeMacroWizardS
         index: widget.genericFoodDetailForMacroWizardArgumentModel.index,
         food: meal
     );
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditRecipeMacroWizardScreen(genericGroceryDetailForMacroWizardArgumentModel: argumentModel,),
+        builder: (context) => ViewRecipeMacroWizardScreen(foodDetailArgumentModel: argumentModel,),
       ),
     ).then((result) {
       setState(() {

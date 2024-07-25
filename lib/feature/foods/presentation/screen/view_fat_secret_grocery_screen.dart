@@ -90,7 +90,7 @@ class _ViewFatSecretGroceryScreenState extends State<ViewFatSecretGroceryScreen>
    void logFoodsOfToday(List<Food> foodsLoggedBefore){
      List<Food> foods = [];
      foods.addAll(foodsLoggedBefore);
-     foods.add(newFood);
+     foods.add(newFood.copyWith(createdFromFatSecretRecipes: 0));
      _logFoodsBloc.add(
          LogFoodsEvent.onLogFoods(foods)
      );

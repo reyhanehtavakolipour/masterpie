@@ -124,17 +124,20 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
             child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.white,),
-              onPressed: () {
-                FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood, macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditFavoriteFoodScreen(foodDetailArgumentModel: argumentModel,),
-                  ),
-                );
-              },
+            Visibility(
+              visible: newFood.createdFromFatSecretRecipes == 0,
+              child: IconButton(
+                icon: const Icon(Icons.edit, color: Colors.white,),
+                onPressed: () {
+                  FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood, macroEdition: widget.foodDetailArgumentModel.macroEdition);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditFavoriteFoodScreen(foodDetailArgumentModel: argumentModel,),
+                    ),
+                  );
+                },
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.white,),
@@ -377,51 +380,52 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
        _totalCarb = double.parse(widget.foodDetailArgumentModel.food!.carb[0]).toStringAsFixed(2);
        _totalFat = double.parse(widget.foodDetailArgumentModel.food!.fat[0]).toStringAsFixed(2);
      } else {
-       double calorie = 0;
-       for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           double servingCount = double.parse(
-               widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-           calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i]) * servingCount;
+       if(widget.foodDetailArgumentModel.food!.ingredients.length == widget.foodDetailArgumentModel.food!.calorie.length){
+         double calorie = 0;
+         for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
+           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+             double servingCount = double.parse(
+                 widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+             calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i]) * servingCount;
+           }
          }
-       }
 
-       double protein = 0;
-       for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-           protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i]) * servingCount;
+         double protein = 0;
+         for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
+           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+             double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+             protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i]) * servingCount;
+           }
          }
-       }
 
-       double carb = 0;
-       for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-           carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i]) * servingCount;
+         double carb = 0;
+         for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
+           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+             double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+             carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i]) * servingCount;
+           }
          }
-       }
 
 
-       double fat = 0;
-       for (int i = 0; i <
-           widget.foodDetailArgumentModel.food!.fat.length; i++) {
-         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-           fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i]) * servingCount;
+         double fat = 0;
+         for (int i = 0; i <
+             widget.foodDetailArgumentModel.food!.fat.length; i++) {
+           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+             double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+             fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i]) * servingCount;
+           }
          }
-       }
 
 
-       String ingredients = '';
-       for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
-         if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
-           String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])} x'
-               ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
-               '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
-           ingredients = ingredients + ingredient;
+         String ingredients = '';
+         for (int i = 0; i < widget.foodDetailArgumentModel.food!.ingredients.length; i++) {
+           if (i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length) {
+             String ingredient = '- ${double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i])} x'
+                 ' (${widget.foodDetailArgumentModel.food!.units[i]}) '
+                 '${widget.foodDetailArgumentModel.food!.ingredients[i]},\n';
+             ingredients = ingredients + ingredient;
+           }
          }
-       }
 
          _foodName = widget.foodDetailArgumentModel.food!.name;
          _totalServing =
@@ -433,7 +437,22 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
          _totalFat = fat.toStringAsFixed(2);
          _recipe = widget.foodDetailArgumentModel.food!.recipe;
          _ingredients = ingredients;
+       }else{
+         final food= widget.foodDetailArgumentModel.food!;
+         String ingredients = '';
+         for (int i = 0; i < food.ingredients.length; i++) {
+           ingredients = '$ingredients- ${food.ingredients[i]}\n';
+         }
+
+         _foodName = '${food.name}(for ${food.servingAmount.toInt()} servings)';
+         _totalCalorie = num.parse(food.calorie[0]).toInt().toString();
+         _totalProtein = num.parse(food.protein[0]).toInt().toString();
+         _totalCarb = num.parse(food.carb[0]).toInt().toString();
+         _totalFat = num.parse(food.fat[0]).toInt().toString();
+         _recipe = food.recipe;
+         _ingredients = ingredients;
        }
+     }
 
        newFood = widget.foodDetailArgumentModel.food!;
      }

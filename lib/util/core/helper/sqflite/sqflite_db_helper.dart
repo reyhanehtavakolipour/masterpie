@@ -82,6 +82,7 @@ class DatabaseHelper {
         ' $PROTEIN TEXT,'
         ' $CARB TEXT,'
         ' $FAT TEXT,'
+        ' $CREATED_FROM_FAT_SECRET_RECIPES INTEGER,'
         ' $COUNT TEXT'
         ')');
 
@@ -155,6 +156,7 @@ class DatabaseHelper {
         ' $CALORIE TEXT,'
         ' $PROTEIN TEXT,'
         ' $CARB TEXT,'
+        ' $CREATED_FROM_FAT_SECRET_RECIPES INTEGER,'
         ' $FAT TEXT'
         ')');
 
@@ -181,6 +183,7 @@ class DatabaseHelper {
         ' $CALORIE TEXT,'
         ' $PROTEIN TEXT,'
         ' $CARB TEXT,'
+        ' $CREATED_FROM_FAT_SECRET_RECIPES INTEGER,'
         ' $FAT TEXT'
         ')');
   }

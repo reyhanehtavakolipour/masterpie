@@ -7,6 +7,7 @@ import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/helper/error_handling.dart';
@@ -31,7 +32,7 @@ class RecipesUseCase{
       List<GenericFood> list= [];
       for (int i = 0; i < meals.length; i++){
         list.add(
-          meals[i].copyWith(isFromFatSecret: false, foodType: FoodType.meal)
+          meals[i].copyWith(foodType: FoodType.meal)
         );
       }
       foods.addAll(list);
@@ -42,7 +43,7 @@ class RecipesUseCase{
       List<GenericFood> list= [];
       for (int i = 0; i < meals.length; i++){
         list.add(
-            meals[i].copyWith(isFromFatSecret: false, foodType: FoodType.meal)
+            meals[i].copyWith(foodType: FoodType.meal)
         );
       }
       foods.addAll(list);
@@ -53,7 +54,7 @@ class RecipesUseCase{
       List<GenericFood> list= [];
       for (int i = 0; i < meals.length; i++){
         list.add(
-            meals[i].copyWith(isFromFatSecret: true, foodType: FoodType.meal)
+            meals[i].copyWith(foodType: FoodType.meal)
         );
       }
       foods.addAll(list);

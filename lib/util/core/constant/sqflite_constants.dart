@@ -12,6 +12,7 @@ const String ID = "id";
 const String FOOD_ID = "foodId";
 const String MY_ID = "myId";
 const String NAME = "name";
+const String CREATED_FROM_FAT_SECRET_RECIPES = "createdFromFatSecretRecipes";
 const String BARCODE = 'barcode';
 const String FOOD_TYPE= 'foodTypeLocal';
 const String BRAND_NAME = "brandName";

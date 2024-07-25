@@ -33,6 +33,7 @@ class FoodRemote with _$FoodRemote{
     @Default([]) List<String> allergies,
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,
+    @Default(1) int createdFromFatSecretRecipes
   })= _FoodRemote;
 
 }

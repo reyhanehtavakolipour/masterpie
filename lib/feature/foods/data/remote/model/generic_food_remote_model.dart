@@ -31,6 +31,7 @@ class GenericFoodRemote with _$GenericFoodRemote{
     @Default([]) List<String> diets,
     @Default([]) List<String> allergies,
     @Default(0.0) double count,
+    @Default(1) int createdFromFatSecretRecipes
   })= _GenericFoodRemote;
 
 }

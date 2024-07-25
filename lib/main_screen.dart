@@ -1511,6 +1511,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             Navigator.of(context, rootNavigator: true).pop();
+                            _showTutorial();
                             //todo show foods in wizard
                           });
                         }else if(state is AutoGenerateFoodLoadedState){

@@ -26,6 +26,8 @@ class MyFoodLocal{
   List<String> allergies;
   double servingAmount;
   String unit;
+  int createdFromFatSecretRecipes;
+
 
 
 
@@ -52,6 +54,7 @@ class MyFoodLocal{
     required this.allergies,
     required this.servingAmount,
     required this.unit,
+    required this.createdFromFatSecretRecipes
   });
 
 
@@ -78,6 +81,7 @@ class MyFoodLocal{
         diets: (parsedJson['diets'] as String).split(';'),
         allergies: (parsedJson['allergies'] as String).split(';'),
     servingAmount: double.parse(parsedJson['servingAmount'].toString()),
+        createdFromFatSecretRecipes: parsedJson['createdFromFatSecretRecipes'],
         unit: parsedJson['unit']);
   }
 
@@ -105,6 +109,7 @@ class MyFoodLocal{
     data['allergies'] = allergies.join(';');
     data['servingAmount'] = servingAmount;
     data['unit'] = unit;
+    data['createdFromFatSecretRecipes'] = 0;
     return data;
   }
 
@@ -131,6 +136,7 @@ class MyFoodLocal{
         'diets: $diets,'
         'allergies: $allergies,'
         'servingAmount: $servingAmount,'
+        'createdFromFatSecretRecipes: $createdFromFatSecretRecipes,'
         'unit: $unit';
   }
 

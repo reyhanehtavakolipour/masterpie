@@ -41,6 +41,7 @@ class EditRecipeMacroWizardScreen extends StatefulWidget {
 
 class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScreen> {
 
+
    late TextEditingController _totalCalorieController;
    late TextEditingController _totalProteinController;
    late TextEditingController _totalCarbController;
@@ -126,16 +127,9 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
    void getRecipe(){
-
-    if(widget.genericGroceryDetailForMacroWizardArgumentModel.food!.isFromFatSecret){
-      _getRecipeBloc.add(
-          GetRecipeEvent.onGetRecipe(widget.genericGroceryDetailForMacroWizardArgumentModel.food!)
-      );
-    }else{
       _isRecipeLoaded= true;
       fillUi(widget.genericGroceryDetailForMacroWizardArgumentModel.food!);
-    }
-   }
+  }
 
 
 
@@ -267,7 +261,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
 
    void fillUi(GenericFood genericFood){
-
      setState(() {
        double calorie = 0;
        for (int i = 0; i < genericFood.calorie.length; i++) {
@@ -325,7 +318,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
        newFood = genericFood;
 
-
      });
    }
 
@@ -348,8 +340,17 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                    showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
                    newFood= newFood.copyWith(name: _mealNameController.text, servingAmount: [double.parse(_totalServingController.text)]);
-                   final food= fromGenericRecipe(newFood, _selectedIngredientsUnitIndexList);
+                   Food food= fromGenericRecipe(newFood);
 
+                   if(food.ingredients.length != food.calorie.length){
+                     food= food.copyWith(
+                       calorie: [_totalCalorieController.text],
+                       protein: [_totalProteinController.text],
+                       carb: [_totalCarbController.text],
+                       fat: [_totalFatController.text],
+                       name: _mealNameController.text
+                     );
+                   }
 
                    FoodDetailForMacroWizardArgumentModel model= FoodDetailForMacroWizardArgumentModel(
                      type: widget.genericGroceryDetailForMacroWizardArgumentModel.type,
@@ -456,38 +457,41 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
    }
 
   Widget recipe(){
-    return Container(
-        margin: const EdgeInsets.only(top: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('$RECIPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            const SizedBox(height: 16,),
-            SizedBox(
-              height: RECIPE_HEIGHT,
-              child: TextField(
-                controller: _recipeController,
-                maxLines: null,
-                expands: true,
-                textAlign: TextAlign.start,
-                textAlignVertical: TextAlignVertical.top,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+    return Visibility(
+      visible: newFood.ingredients.length == newFood.calorie.length,
+      child: Container(
+          margin: const EdgeInsets.only(top: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('$RECIPE_LABEL:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+              const SizedBox(height: 16,),
+              SizedBox(
+                height: RECIPE_HEIGHT,
+                child: TextField(
+                  controller: _recipeController,
+                  maxLines: null,
+                  expands: true,
+                  textAlign: TextAlign.start,
+                  textAlignVertical: TextAlignVertical.top,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
                 ),
-                style: const TextStyle(color: DARK_PRIMARY_COLOR),
               ),
-            ),
-          ],
-        )
+            ],
+          )
+      ),
     );
   }
 
@@ -538,7 +542,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
   Widget addedIngredients(){
      return Visibility(
-       visible: newFood.ingredients.isNotEmpty,
+       visible: newFood.ingredients.isNotEmpty &&  newFood.ingredients.length == newFood.calorie.length,
          child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            children: [
@@ -607,7 +611,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
     bool isEditable= true;
 
-    if(calorieController == _totalCalorieController){
+    if(calorieController == _totalCalorieController && newFood.ingredients.length == newFood.calorie.length){
       isEditable = false;
     }
 
@@ -817,20 +821,23 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    Widget addIngredientChips(){
      /// add ingredients chips
-     return Column(
-       children: [
-         const SizedBox(height: 16,),
-         Wrap(
-           spacing: 4,
-           children: _addNewIngredientOptions.map((item) {
-             if(_selectedAddIngredientOption == item){
-               return addIngredientOptionChipSelected(item);
-             }else{
-               return addIngredientChipNotSelected(item);
-             }
-           },).toList(),
-         ),
-       ],
+     return Visibility(
+       visible: newFood.ingredients.length == newFood.calorie.length,
+       child: Column(
+         children: [
+           const SizedBox(height: 16,),
+           Wrap(
+             spacing: 4,
+             children: _addNewIngredientOptions.map((item) {
+               if(_selectedAddIngredientOption == item){
+                 return addIngredientOptionChipSelected(item);
+               }else{
+                 return addIngredientChipNotSelected(item);
+               }
+             },).toList(),
+           ),
+         ],
+       ),
      );
    }
 
@@ -947,7 +954,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    Widget newIngredient(){
      return Visibility(
-       visible: _selectedAddIngredientOption.isNotEmpty,
+       visible: _selectedAddIngredientOption.isNotEmpty && newFood.ingredients.length == newFood.calorie.length,
        child: Card(
            child: Padding(
              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),

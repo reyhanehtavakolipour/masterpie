@@ -112,7 +112,8 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
              units: [_groceryUnitOptions[_selectedUnitIndex]],
              foodType: FoodType.groceryProduct,
              name: _groceryNameController.text,
-             count: num.parse(_foodCountController.text).toDouble()
+             count: num.parse(_foodCountController.text).toDouble(),
+           createdFromFatSecretRecipes: 0
          )
        );
      }else{

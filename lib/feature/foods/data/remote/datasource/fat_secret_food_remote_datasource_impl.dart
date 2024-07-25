@@ -212,14 +212,12 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       final NetworkRequest request = await NetworkRequest.createFatSecret(token);
 
       List<String> ingredients = [];
-      List<List<String>> servingIngredientsCount = [];
-      List<List<String>> calorie = [];
-      List<List<String>> protein = [];
-      List<List<String>> carb = [];
-      List<List<String>> fat = [];
-      List<List<String>> servingAmounts = [];
-      List<List<String>> units = [];
+      String calorie = '';
+      String protein = '';
+      String carb = '';
+      String fat = '';
       String recipeInstruction = '';
+      double numberOfServing= 1.0;
 
 
       /// first api to get recipe detail
@@ -240,113 +238,21 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         }
 
 
-        final numberOfServing= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
-
-        await Future.forEach((recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List), (ingredient) async {
-          ingredients.add(ingredient['food_name']);
-          final ingredientNumberOfUnit= double.parse(ingredient['number_of_units']);
-          final servingId= double.parse(ingredient['serving_id']);
-
-          /// calling second api to get ingredient detail
-
-          Map<String, dynamic> params = {
-            'method': 'food.get.v4',
-            'food_id': ingredient['food_id'],
-            'format': 'json',
-          };
-
-          final response= await request.postParams(FAT_SECRET_URL, params: params);
-
-          if(response.statusCode == SUCCESS_API_CODE){
-
-            final data = response.data;
-
-            final serving= data['food']['servings']['serving'] as List;
+       numberOfServing= double.parse(recipeDetailResponse.data['recipe']['number_of_servings']);
 
 
-            List<String> ingredientCalorie= [];
-            List<String> ingredientProtein= [];
-            List<String> ingredientCarb= [];
-            List<String> ingredientFat= [];
-            List<String> ingredientServingAmounts= [];
-            List<String> ingredientUnits= [];
+        final recipeIngredients= recipeDetailResponse.data['recipe']['ingredients']['ingredient'] as List;
+        for (int i = 0; i < recipeIngredients.length; i++){
+          ingredients.add(recipeIngredients[i]['ingredient_description'].toString());
+        }
 
-            /// add the serving unit used in recipe, first
-            final ingServingData= serving.where((element) => double.parse(element['serving_id'].toString()) == servingId).toList();
-
-            if(ingServingData.isEmpty){
-
-              final ingUnit = ingredient['measurement_description'];
-              double  ingCount = double.parse(ingredient['number_of_units'].toString());
-              final element= serving[0];
-              if(element['measurement_description'] != 'serving'){
-                // final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2))/1);
-                final count= roundToQuarter(double.parse(((ingCount * getIngredientAmountInGrams(ingUnit))/double.parse(element['metric_serving_amount'])).toStringAsFixed(2))/numberOfServing);
-                servingIngredientsCount.add([count.toString()]);
-                ingredientCalorie.add((double.parse(element['calories'].toString())).toStringAsFixed(1));
-                ingredientProtein.add((double.parse(element['protein'].toString())).toStringAsFixed(1));
-                ingredientCarb.add((double.parse(element['carbohydrate'].toString())).toStringAsFixed(1));
-                ingredientFat.add((double.parse(element['fat'].toString())).toStringAsFixed(1));
-                ingredientServingAmounts.add('1.0');
-                ingredientUnits.add(element['measurement_description'].toString());
-              }else{
-                // double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
-                double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/numberOfServing).toStringAsFixed(2)));
-                servingIngredientsCount.add([servingIngredientCount.toString()]);
-              }
-
-
-            }else{
-              final count= double.parse(ingServingData[0]['number_of_units'].toString());
-              ingredientCalorie.add((double.parse(ingServingData[0]['calories'].toString())/count).toStringAsFixed(1));
-              ingredientProtein.add((double.parse(ingServingData[0]['protein'].toString())/count).toStringAsFixed(1));
-              ingredientCarb.add((double.parse(ingServingData[0]['carbohydrate'].toString())/count).toStringAsFixed(1));
-              ingredientFat.add((double.parse(ingServingData[0]['fat'].toString())/count).toStringAsFixed(1));
-              ingredientServingAmounts.add('1.0');
-
-              if(ingServingData[0]['measurement_description'] == 'serving'){
-                ingredientUnits.add(ingServingData[0]['serving_description'].toString());
-              }else{
-                ingredientUnits.add(ingServingData[0]['measurement_description'].toString());
-              }
-
-              // double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/1).toStringAsFixed(2)));
-              double servingIngredientCount = roundToQuarter(double.parse((ingredientNumberOfUnit/numberOfServing).toStringAsFixed(2)));
-              servingIngredientsCount.add([servingIngredientCount.toString()]);
-            }
-
-
-            serving.forEach((element) {
-              if(element['serving_id'] != servingId && !ingredientUnits.contains(element['measurement_description']) &&
-                  !ingredientUnits.contains(element['serving_description'])){
-                final count= double.parse(element['number_of_units'].toString());
-                ingredientCalorie.add((double.parse(element['calories'].toString())/count).toStringAsFixed(1));
-                ingredientProtein.add((double.parse(element['protein'].toString())/count).toStringAsFixed(1));
-                ingredientCarb.add((double.parse(element['carbohydrate'].toString())/count).toStringAsFixed(1));
-                ingredientFat.add((double.parse(element['fat'].toString())/count).toStringAsFixed(1));
-                ingredientServingAmounts.add('1.0');
-
-                if(element['measurement_description'] == 'serving'){
-                  ingredientUnits.add(element['serving_description'].toString());
-                }else{
-                  ingredientUnits.add(element['measurement_description'].toString());
-                }
-              }
-            });
-
-            calorie.add(ingredientCalorie);
-            protein.add(ingredientProtein);
-            carb.add(ingredientCarb);
-            fat.add(ingredientFat);
-            servingAmounts.add(ingredientServingAmounts);
-            units.add(ingredientUnits);
+        calorie= recipeDetailResponse.data['recipe']['serving_sizes']['serving']['calories'];
+        protein= recipeDetailResponse.data['recipe']['serving_sizes']['serving']['protein'];
+        carb= recipeDetailResponse.data['recipe']['serving_sizes']['serving']['carbohydrate'];
+        fat= recipeDetailResponse.data['recipe']['serving_sizes']['serving']['fat'];
 
 
 
-          }else{
-            return Left(RemoteFailure(response.statusCode, response.data['message']));
-          }
-        });
       }else{
         return  Left(RemoteFailure(recipeDetailResponse.statusCode, recipeDetailResponse.data['message']));
       }
@@ -357,16 +263,15 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
               id: recipeId,
               name: recipeDetailResponse.data['recipe']['recipe_name'],
               foodType: FoodTypeRemote.meal,
-              calorie: calorie,
-              protein: protein,
-              carb: carb,
-              fat: fat,
+              calorie: [[calorie]],
+              protein: [[protein]],
+              carb: [[carb]],
+              fat: [[fat]],
               recipe: recipeInstruction,
               ingredients: ingredients,
-              servingIngredientsCount: servingIngredientsCount,
-              servingAmount: [1],
+              servingAmount: [numberOfServing],
               unit: ['serving'],
-              units: units
+            createdFromFatSecretRecipes: 1
           ));
 
 

@@ -77,17 +77,20 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
             child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.white,),
-              onPressed: () {
-                FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood, macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditLoggedFoodScreen(foodDetailArgumentModel: argumentModel,),
-                  ),
-                );
-              },
+            Visibility(
+              visible: newFood.createdFromFatSecretRecipes == 0,
+              child: IconButton(
+                icon: const Icon(Icons.edit, color: Colors.white,),
+                onPressed: () {
+                  FoodDetailArgumentModel argumentModel = FoodDetailArgumentModel(food: newFood, macroEdition: widget.foodDetailArgumentModel.macroEdition);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditLoggedFoodScreen(foodDetailArgumentModel: argumentModel,),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

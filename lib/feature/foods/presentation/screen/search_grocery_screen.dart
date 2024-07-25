@@ -586,6 +586,8 @@ class _SearchGroceryScreenState extends State<SearchGroceryScreen> {
     List<Food> foods = [];
 
     foods.addAll(foodsLoggedBefore);
+
+
     foods.addAll(_addedGroceries);
 
     _logFoodsBloc.add(

@@ -39,6 +39,7 @@ class Food with _$Food{
 
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,
+    @Default(1) int createdFromFatSecretRecipes
   })= _Food;
 
 }

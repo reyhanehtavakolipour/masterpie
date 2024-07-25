@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
@@ -13,6 +14,7 @@ import 'package:masterpie/feature/foods/presentation/bloc/get_recipe_bloc/state_
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -46,7 +48,6 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   String _totalProtein= '';
   String _totalCarb= '';
   String _totalFat= '';
-  String _totalServing= '';
   String _ingredients= '';
   String _foodName= '';
   String _recipe= '';
@@ -78,7 +79,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   }
 
   void getRecipe(){
-    if(widget.foodDetailArgumentModel.food!.isFromFatSecret){
+    if(widget.foodDetailArgumentModel.food!.createdFromFatSecretRecipes == 1){
       _getRecipeBloc.add(
           GetRecipeEvent.onGetRecipe(widget.foodDetailArgumentModel.food!)
       );
@@ -113,18 +114,18 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.edit, color: Colors.white,),
-              onPressed: () {
-                GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(food: newFood,
-                    macroEdition: widget.foodDetailArgumentModel.macroEdition);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditRecipeScreen(foodDetailArgumentModel: argumentModel,),
-                  ),
-                );
-              },
-            ),
+            icon: const Icon(Icons.edit, color: Colors.white,),
+            onPressed: () {
+              GenericFoodDetailArgumentModel argumentModel = GenericFoodDetailArgumentModel(food: newFood,
+                  macroEdition: widget.foodDetailArgumentModel.macroEdition);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditRecipeScreen(foodDetailArgumentModel: argumentModel,),
+                ),
+              );
+            },
+          ),
           ],
         ),
         body: Padding(
@@ -362,8 +363,10 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 
   void fillUi(GenericFood genericFood){
-
     setState(() {
+
+      if(genericFood.createdFromFatSecretRecipes == 0){
+
         double calorie = 0;
         for (int i = 0; i < genericFood.calorie.length; i++) {
           if (i < genericFood.servingIngredientsCount.length) {
@@ -411,13 +414,28 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         }
 
         _foodName = genericFood.name;
-        _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
         _totalCalorie = calorie.toStringAsFixed(2);
         _totalProtein = protein.toStringAsFixed(2);
         _totalCarb = carb.toStringAsFixed(2);
         _totalFat = fat.toStringAsFixed(2);
         _recipe = genericFood.recipe;
         _ingredients = ingredients;
+      }else{
+
+        String ingredients = '';
+        for (int i = 0; i < genericFood.ingredients.length; i++) {
+            ingredients = '$ingredients- ${genericFood.ingredients[i]}\n';
+        }
+
+        _foodName = '${genericFood.name}(for ${genericFood.servingAmount[0].toInt()} servings)';
+        _totalCalorie = genericFood.calorie[0][0];
+        _totalProtein = genericFood.protein[0][0];
+        _totalCarb = genericFood.carb[0][0];
+        _totalFat = genericFood.fat[0][0];
+        _recipe = genericFood.recipe;
+        _ingredients = ingredients;
+      }
+
 
 
       newFood = genericFood;
@@ -597,7 +615,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
     newFood.ingredients.forEach((element) {
       unitIndexesList.add(0);
     });
-    foods.add(fromGenericRecipe(newFood, unitIndexesList));
+    foods.add(fromGenericRecipe(newFood));
 
     _logFoodsBloc.add(
         LogFoodsEvent.onLogFoods(foods)
@@ -614,9 +632,10 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
       _addOrUpdateMyCookBookBloc.add(
         AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
-          fromGenericRecipe(newFood, unitIndexesList),
+          fromGenericRecipe(newFood),
         ),
       );
   }
+
 
 }

@@ -13,11 +13,12 @@ Food fromGenericGrocery(GenericFood food){
       foodType: FoodType.groceryProduct,
       count: food.count,
       name: food.name,
+    createdFromFatSecretRecipes: 0
   );
 }
 
 
-Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
+Food fromGenericRecipe(GenericFood food){
 
   List<String> calorie= [];
   List<String> protein= [];
@@ -27,20 +28,22 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
   List<String> servingIngredientsCount= [];
 
 
-  for (int i = 0; i < food.ingredients.length; i++){
-    calorie.add(food.calorie[i][selectedUnitIndexList[i]]);
-    protein.add(food.protein[i][selectedUnitIndexList[i]]);
-    carb.add(food.carb[i][selectedUnitIndexList[i]]);
-    fat.add(food.fat[i][selectedUnitIndexList[i]]);
-    units.add(food.units[i][selectedUnitIndexList[i]]);
-    servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
+  for (int i = 0; i < food.calorie.length; i++){
+    calorie.add(food.calorie[i][0]);
+    protein.add(food.protein[i][0]);
+    carb.add(food.carb[i][0]);
+    fat.add(food.fat[i][0]);
+    if(i < food.units.length){
+      units.add(food.units[i][0]);
+      servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
+    }
   }
 
 
 
   return Food(
       id: food.id,
-      calorie: calorie,
+      calorie: food.calorie[0],
       protein: protein,
       carb: carb,
       fat: fat,
@@ -52,7 +55,8 @@ Food fromGenericRecipe(GenericFood food, List<int> selectedUnitIndexList){
       servingAmount: food.servingAmount[0],
       unit: food.unit[0],
       recipe: food.recipe,
-      servingIngredientsCount: servingIngredientsCount
+      servingIngredientsCount: servingIngredientsCount,
+      createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
   );
 }
 
@@ -91,7 +95,8 @@ GenericFood toGenericFood(Food food){
       servingAmount: [food.servingAmount],
       recipe: food.recipe,
       unit: [food.unit],
-      name: food.name
+      name: food.name,
+    createdFromFatSecretRecipes:food.createdFromFatSecretRecipes
   );
 }
 

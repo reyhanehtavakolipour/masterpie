@@ -38,7 +38,7 @@ mixin _$GenericFood {
   List<String> get diets => throw _privateConstructorUsedError;
   List<String> get allergies => throw _privateConstructorUsedError;
   double get count => throw _privateConstructorUsedError;
-  bool get isFromFatSecret => throw _privateConstructorUsedError;
+  int get createdFromFatSecretRecipes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GenericFoodCopyWith<GenericFood> get copyWith =>
@@ -73,7 +73,7 @@ abstract class $GenericFoodCopyWith<$Res> {
       List<String> diets,
       List<String> allergies,
       double count,
-      bool isFromFatSecret});
+      int createdFromFatSecretRecipes});
 }
 
 /// @nodoc
@@ -110,7 +110,7 @@ class _$GenericFoodCopyWithImpl<$Res, $Val extends GenericFood>
     Object? diets = null,
     Object? allergies = null,
     Object? count = null,
-    Object? isFromFatSecret = null,
+    Object? createdFromFatSecretRecipes = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -197,10 +197,10 @@ class _$GenericFoodCopyWithImpl<$Res, $Val extends GenericFood>
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as double,
-      isFromFatSecret: null == isFromFatSecret
-          ? _value.isFromFatSecret
-          : isFromFatSecret // ignore: cast_nullable_to_non_nullable
-              as bool,
+      createdFromFatSecretRecipes: null == createdFromFatSecretRecipes
+          ? _value.createdFromFatSecretRecipes
+          : createdFromFatSecretRecipes // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -235,7 +235,7 @@ abstract class _$$GenericFoodImplCopyWith<$Res>
       List<String> diets,
       List<String> allergies,
       double count,
-      bool isFromFatSecret});
+      int createdFromFatSecretRecipes});
 }
 
 /// @nodoc
@@ -270,7 +270,7 @@ class __$$GenericFoodImplCopyWithImpl<$Res>
     Object? diets = null,
     Object? allergies = null,
     Object? count = null,
-    Object? isFromFatSecret = null,
+    Object? createdFromFatSecretRecipes = null,
   }) {
     return _then(_$GenericFoodImpl(
       id: null == id
@@ -357,10 +357,10 @@ class __$$GenericFoodImplCopyWithImpl<$Res>
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as double,
-      isFromFatSecret: null == isFromFatSecret
-          ? _value.isFromFatSecret
-          : isFromFatSecret // ignore: cast_nullable_to_non_nullable
-              as bool,
+      createdFromFatSecretRecipes: null == createdFromFatSecretRecipes
+          ? _value.createdFromFatSecretRecipes
+          : createdFromFatSecretRecipes // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -390,7 +390,7 @@ class _$GenericFoodImpl implements _GenericFood {
       final List<String> diets = const [],
       final List<String> allergies = const [],
       this.count = 0.0,
-      this.isFromFatSecret = true})
+      this.createdFromFatSecretRecipes = 1})
       : _servingAmount = servingAmount,
         _unit = unit,
         _ingredients = ingredients,
@@ -535,11 +535,11 @@ class _$GenericFoodImpl implements _GenericFood {
   final double count;
   @override
   @JsonKey()
-  final bool isFromFatSecret;
+  final int createdFromFatSecretRecipes;
 
   @override
   String toString() {
-    return 'GenericFood(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count, isFromFatSecret: $isFromFatSecret)';
+    return 'GenericFood(id: $id, foodType: $foodType, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count, createdFromFatSecretRecipes: $createdFromFatSecretRecipes)';
   }
 
   @override
@@ -576,8 +576,10 @@ class _$GenericFoodImpl implements _GenericFood {
             const DeepCollectionEquality()
                 .equals(other._allergies, _allergies) &&
             (identical(other.count, count) || other.count == count) &&
-            (identical(other.isFromFatSecret, isFromFatSecret) ||
-                other.isFromFatSecret == isFromFatSecret));
+            (identical(other.createdFromFatSecretRecipes,
+                    createdFromFatSecretRecipes) ||
+                other.createdFromFatSecretRecipes ==
+                    createdFromFatSecretRecipes));
   }
 
   @override
@@ -604,7 +606,7 @@ class _$GenericFoodImpl implements _GenericFood {
         const DeepCollectionEquality().hash(_diets),
         const DeepCollectionEquality().hash(_allergies),
         count,
-        isFromFatSecret
+        createdFromFatSecretRecipes
       ]);
 
   @JsonKey(ignore: true)
@@ -637,7 +639,7 @@ abstract class _GenericFood implements GenericFood {
       final List<String> diets,
       final List<String> allergies,
       final double count,
-      final bool isFromFatSecret}) = _$GenericFoodImpl;
+      final int createdFromFatSecretRecipes}) = _$GenericFoodImpl;
 
   @override
   String get id;
@@ -682,7 +684,7 @@ abstract class _GenericFood implements GenericFood {
   @override
   double get count;
   @override
-  bool get isFromFatSecret;
+  int get createdFromFatSecretRecipes;
   @override
   @JsonKey(ignore: true)
   _$$GenericFoodImplCopyWith<_$GenericFoodImpl> get copyWith =>

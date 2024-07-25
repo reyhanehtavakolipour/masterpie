@@ -490,6 +490,8 @@ class _AddNewCookBookScreenState extends State<AddNewCookBookScreen> {
       );
     }
 
+    newFood= newFood.copyWith(createdFromFatSecretRecipes: 0);
+
     _addOrUpdateMyCookBookBloc.add(
     AddOrUpdateMyCookBookEvent.onAddToMyCookBook(
         newFood

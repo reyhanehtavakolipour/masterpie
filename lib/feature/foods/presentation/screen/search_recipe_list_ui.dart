@@ -105,7 +105,7 @@ class _SearchRecipesListUiState extends State<SearchRecipesListUi> {
 
 
                                 /// calorie
-                                Text('~ $calorie cal $PER_SERVING_LABEL',
+                                Text('$calorie cal $PER_SERVING_LABEL',
                                   style: const TextStyle(
                                       color: Colors.grey,
                                       fontSize: 12,
