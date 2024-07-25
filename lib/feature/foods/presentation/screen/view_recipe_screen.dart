@@ -365,7 +365,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   void fillUi(GenericFood genericFood){
     setState(() {
 
-      if(genericFood.createdFromFatSecretRecipes == 0){
+      if(genericFood.ingredients.length == genericFood.calorie.length){
 
         double calorie = 0;
         for (int i = 0; i < genericFood.calorie.length; i++) {

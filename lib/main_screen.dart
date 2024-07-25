@@ -25,6 +25,7 @@ import 'package:masterpie/util/core/constant/hive_constants.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/constant/sqflite_constants.dart';
 import 'package:masterpie/util/core/di/service_locator.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/core/helper/request_api.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/helper_functions/video_player_screen.dart';
@@ -412,11 +413,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         fat= double.parse(element.fat[0]);
 
       }else{
-        for(int i = 0; i < element.servingIngredientsCount.length; i++){
-          calorie= calorie + (double.parse(element.calorie[i]) * num.parse(element.servingIngredientsCount[i]));
-          protein= protein + (double.parse(element.protein[i]) * num.parse(element.servingIngredientsCount[i]));
-          carb= carb + (double.parse(element.carb[i]) * num.parse(element.servingIngredientsCount[i]));
-          fat= fat + (double.parse(element.fat[i]) * num.parse(element.servingIngredientsCount[i]));
+        if(element.ingredients.length == element.calorie.length){
+          for(int i = 0; i < element.servingIngredientsCount.length; i++){
+            calorie= calorie + (double.parse(element.calorie[i]) * num.parse(element.servingIngredientsCount[i]));
+            protein= protein + (double.parse(element.protein[i]) * num.parse(element.servingIngredientsCount[i]));
+            carb= carb + (double.parse(element.carb[i]) * num.parse(element.servingIngredientsCount[i]));
+            fat= fat + (double.parse(element.fat[i]) * num.parse(element.servingIngredientsCount[i]));
+          }
+        }else{
+          calorie= calorie + double.parse(element.calorie[0]);
+          protein= protein + double.parse(element.protein[0]);
+          carb= carb + double.parse(element.carb[0]);
+          fat= fat + double.parse(element.fat[0]);
         }
       }
 
@@ -2617,6 +2625,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     setState(() {
       _foods= [];
       _foods.addAll(foods);
+      printWrapped('dfhfd: ${_foods}');
       deleteFoodsWithZeroCount(foods);
       calculateTotalTakenMacros();
     });

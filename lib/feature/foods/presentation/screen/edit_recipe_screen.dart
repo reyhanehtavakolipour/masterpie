@@ -12,6 +12,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_conv
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/recipe_ingredients_list_ui.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/unit_options.dart';
 import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -89,6 +90,8 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
    late GroceriesBloc _groceriesBloc;
   GenericFood newFood = GenericFood();
   late AddOrUpdateMyCookBookBloc _addOrUpdateMyCookBookBloc;
+
+   bool _logFoodButtonCLicked= false;
 
 
    List<GenericFood> _suggestedGroceries= [];
@@ -181,9 +184,47 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
      foods.addAll(foodsLoggedBefore);
 
-     newFood= newFood.copyWith(count: num.parse(_foodCountController.text).toDouble());
+     if(newFood.ingredients.length == newFood.calorie.length){
+       List<List<String>> servingIngredientsCounts= [];
+       for (int i = 0; i < newFood.ingredients.length; i++) {
+         double servingCount = double.parse(newFood.servingIngredientsCount[i][0].isEmpty ? '1.0' : newFood.servingIngredientsCount[i][0]);
+         servingIngredientsCounts.add([servingCount.toStringAsFixed(2)]);
+       }
 
-     foods.add(fromGenericRecipe(newFood));
+       newFood = newFood.copyWith(
+           foodType: FoodType.meal,
+           name: _mealNameController.text,
+           servingAmount: [1.0],
+           servingIngredientsCount: servingIngredientsCounts,
+           unit: [SERVING_LABEL],
+           recipe: _recipeController.text
+       );
+
+       if(newFood.ingredients.isEmpty){
+         newFood= newFood.copyWith(
+             calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
+             protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
+             carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
+             fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]]
+         );
+       }
+
+     }else{
+       newFood = newFood.copyWith(
+         foodType: FoodType.meal,
+         name: _mealNameController.text,
+         servingAmount: widget.foodDetailArgumentModel.food!.servingAmount,
+         unit: [_totalUnitController.text],
+         recipe: _recipeController.text,
+         calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
+         protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
+         carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
+         fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]],
+       );
+     }
+
+
+     foods.add(fromGenericRecipe(newFood).copyWith(count: num.parse(_foodCountController.text).toDouble()));
 
      _logFoodsBloc.add(
          LogFoodsEvent.onLogFoods(foods)
@@ -283,12 +324,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                       }else if(state is GetLoggedFoodsLoadedState){
                         _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
-                          logFoodsOfToday(state.loggedFoods.foods);
+                          if(_logFoodButtonCLicked){
+                            _logFoodButtonCLicked= false;
+                            logFoodsOfToday(state.loggedFoods.foods);
+                          }
                         });
                       }else if(state is GetLoggedFoodsErrorState){
                         FocusScope.of(context).unfocus();
-                        _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
+                          _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
                           return showErrorToast(context, state.message);
                         });
                       }
@@ -300,7 +344,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                 ),
                 BlocConsumer<LogFoodsBloc, LogFoodsState>(
                     builder: (mcontext, state) {
-
                       if (state is LogFoodsLoadingState) {
                         return const GFLoader(
                           type: GFLoaderType.circle,
@@ -309,8 +352,8 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                           loaderColorThree: DARK_PRIMARY_COLOR,
                         );
                       }else if(state is LogFoodsLoadedState){
-                        _logFoodsBloc.add(const LogFoodsEvent.onReset());
                         Future.delayed(Duration.zero,(){
+                          _logFoodsBloc.add(const LogFoodsEvent.onReset());
                           showSuccessToast(context, LOGGED_SUCCESSFULLY);
                           Navigator.pushAndRemoveUntil(
                               context,
@@ -341,6 +384,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   }
 
    void requestLoggedFoods(){
+     _logFoodButtonCLicked= true;
      String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
      _getLoggedFoodsBloc.add(
          GetLoggedFoodsEvent.onGetLoggedFoods(formattedDate)
@@ -753,13 +797,44 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
 
   void requestOperationOnFood(BuildContext context){
-    newFood = newFood.copyWith(
-        foodType: FoodType.meal,
-        name: _mealNameController.text,
-        servingAmount: widget.foodDetailArgumentModel.food!.servingAmount,
-        unit: [_totalUnitController.text],
-        recipe: _recipeController.text
-    );
+    if(newFood.ingredients.length == newFood.calorie.length){
+      List<List<String>> servingIngredientsCounts= [];
+      for (int i = 0; i < newFood.ingredients.length; i++) {
+        double servingCount = double.parse(newFood.servingIngredientsCount[i][0].isEmpty ? '1.0' : newFood.servingIngredientsCount[i][0]);
+        servingIngredientsCounts.add([servingCount.toStringAsFixed(2)]);
+      }
+
+      newFood = newFood.copyWith(
+          foodType: FoodType.meal,
+          name: _mealNameController.text,
+          servingAmount: [1.0],
+          servingIngredientsCount: servingIngredientsCounts,
+          unit: [SERVING_LABEL],
+          recipe: _recipeController.text
+      );
+
+      if(newFood.ingredients.isEmpty){
+        newFood= newFood.copyWith(
+            calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
+            protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
+            carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
+            fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]]
+        );
+      }
+
+    }else{
+      newFood = newFood.copyWith(
+          foodType: FoodType.meal,
+          name: _mealNameController.text,
+          servingAmount: widget.foodDetailArgumentModel.food!.servingAmount,
+          unit: [_totalUnitController.text],
+          recipe: _recipeController.text,
+        calorie: [[_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text]],
+        protein: [[_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text]],
+        carb: [[_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text]],
+        fat: [[_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]],
+      );
+    }
 
 
     if(widget.foodDetailArgumentModel.macroEdition){
@@ -784,72 +859,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
     return Column(
       children: [
-        ///  serving + unit
-        Visibility(
-          visible: !isEditable,
-          child: Row(
-            children: [
-              const SizedBox(
-                  width: MACRO_TITLE_WIDTH,
-                  child: Text('$SERVING_AMOUNT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-              ),
-              const SizedBox(width: 4,),
-              SizedBox(
-                width: MACRO_WIDTH,
-                height: MACRO_HEIGHT,
-                child: TextField(
-                  controller: servingController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  ),
-                  style: const TextStyle(color: DARK_PRIMARY_COLOR),
-                ),
-              ),
-              const SizedBox(width: 20,),
-              const SizedBox(
-                  width: MACRO_TITLE_WIDTH,
-                  child: Text('$UNIT_LABEL:', style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: FONT_HEADER),)
-              ),
-              const SizedBox(width: 4,),
-              SizedBox(
-                width: 70,
-                height: MACRO_HEIGHT,
-                child: TextField(
-                  style: const TextStyle(fontSize: 11, color: DARK_PRIMARY_COLOR),
-                  controller: unitController,
-                  enabled: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        ),
-        const SizedBox(height: 4,),
 
         /// total calorie + protein
         Row(

@@ -178,50 +178,61 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
       _totalFatController.text = widget.foodDetailArgumentModel.food!.fat[0];
       _totalUnitController.text = widget.foodDetailArgumentModel.food!.units[0];
     }else{
-      double calorie = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-          calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i])*servingCount;
+      if(widget.foodDetailArgumentModel.food!.ingredients.length == widget.foodDetailArgumentModel.food!.calorie.length){
+        double calorie = 0;
+        for (int i = 0; i < widget.foodDetailArgumentModel.food!.calorie.length; i++) {
+          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+            calorie = calorie + double.parse(widget.foodDetailArgumentModel.food!.calorie[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.calorie[i])*servingCount;
+          }
         }
-      }
 
-      double protein = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-          protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i])*servingCount;
+        double protein = 0;
+        for (int i = 0; i < widget.foodDetailArgumentModel.food!.protein.length; i++) {
+          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+            protein = protein + double.parse(widget.foodDetailArgumentModel.food!.protein[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.protein[i])*servingCount;
+          }
         }
-      }
 
-      double carb = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-          carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i])*servingCount;
+        double carb = 0;
+        for (int i = 0; i < widget.foodDetailArgumentModel.food!.carb.length; i++) {
+          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+            carb = carb + double.parse(widget.foodDetailArgumentModel.food!.carb[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.carb[i])*servingCount;
+          }
         }
-      }
 
 
-      double fat = 0;
-      for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
-        if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
-          double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
-          fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i])*servingCount;
+        double fat = 0;
+        for (int i = 0; i < widget.foodDetailArgumentModel.food!.fat.length; i++) {
+          if(i < widget.foodDetailArgumentModel.food!.servingIngredientsCount.length){
+            double servingCount = double.parse(widget.foodDetailArgumentModel.food!.servingIngredientsCount[i].isEmpty ? '0': widget.foodDetailArgumentModel.food!.servingIngredientsCount[i]);
+            fat = fat + double.parse(widget.foodDetailArgumentModel.food!.fat[i].isEmpty ? '0' : widget.foodDetailArgumentModel.food!.fat[i])*servingCount;
+          }
         }
+        _foodType = MEAL_LABEL;
+        _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
+        _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount.toString();
+        _totalCalorieController.text = calorie.toString();
+        _totalProteinController.text = protein.toString();
+        _totalCarbController.text = carb.toString();
+        _totalFatController.text = fat.toString();
+        _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit;
+        _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
+        widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
+          _ingredientsExpansionState.add(false);
+        });
+      }else{
+        _foodType = MEAL_LABEL;
+        final food= widget.foodDetailArgumentModel.food!;
+        _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
+        _totalCalorieController.text = num.parse(food.calorie[0]).toInt().toString();
+        _totalProteinController.text = num.parse(food.protein[0]).toInt().toString();
+        _totalCarbController.text = num.parse(food.carb[0]).toInt().toString();
+        _totalFatController.text = num.parse(food.fat[0]).toInt().toString();
+        _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
       }
-      _foodType = MEAL_LABEL;
-      _mealNameController.text = widget.foodDetailArgumentModel.food!.name;
-      _totalServingController.text = widget.foodDetailArgumentModel.food!.servingAmount.toString();
-      _totalCalorieController.text = calorie.toString();
-      _totalProteinController.text = protein.toString();
-      _totalCarbController.text = carb.toString();
-      _totalFatController.text = fat.toString();
-      _totalUnitController.text = widget.foodDetailArgumentModel.food!.unit;
-      _recipeController.text = widget.foodDetailArgumentModel.food!.recipe;
-      widget.foodDetailArgumentModel.food!.ingredients.forEach((element) {
-        _ingredientsExpansionState.add(false);
-      });
     }
 
     newFood = widget.foodDetailArgumentModel.food!;
@@ -516,7 +527,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
 
   Widget addedIngredients(){
     return Visibility(
-        visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty,
+        visible: _foodType == MEAL_LABEL && newFood.ingredients.isNotEmpty && newFood.ingredients.length == newFood.calorie.length,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -591,20 +602,31 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
           fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
       );
     }else{
-      newFood = newFood.copyWith(
-          foodType: FoodType.meal,
-          name: _mealNameController.text,
-          servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
-          unit: _totalUnitController.text,
-          recipe: _recipeController.text
-      );
+      if(newFood.ingredients.length == newFood.calorie.length){
+        newFood = newFood.copyWith(
+            foodType: FoodType.meal,
+            name: _mealNameController.text,
+            servingAmount: double.parse(_totalServingController.text.isEmpty ? '1.0' : _totalServingController.text),
+            unit: _totalUnitController.text,
+            recipe: _recipeController.text
+        );
 
-      if(newFood.ingredients.isEmpty){
+        if(newFood.ingredients.isEmpty){
+          newFood= newFood.copyWith(
+              calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
+              protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
+              carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
+              fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
+          );
+        }
+      }else{
         newFood= newFood.copyWith(
+            name: _mealNameController.text,
             calorie: [_totalCalorieController.text.isEmpty ? '0.0' : _totalCalorieController.text],
             protein: [_totalProteinController.text.isEmpty ? '0.0' : _totalProteinController.text],
             carb: [_totalCarbController.text.isEmpty ? '0.0' : _totalCarbController.text],
-            fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text]
+            fat: [_totalFatController.text.isEmpty ? '0.0' : _totalFatController.text],
+            recipe: _recipeController.text
         );
       }
     }
@@ -621,7 +643,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
 
     bool isEditable= true;
 
-    if(_foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && (calorieController == _totalCalorieController)){
+    if(_foodType.toLowerCase() == FoodType.meal.name.toLowerCase() && (calorieController == _totalCalorieController) && newFood.ingredients.length == newFood.calorie.length){
       isEditable = false;
     }
 
@@ -908,7 +930,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
   Widget addIngredientChips(){
     /// add ingredients chips
     return Visibility(
-        visible: _foodType == MEAL_LABEL,
+        visible: _foodType == MEAL_LABEL && newFood.ingredients.length == newFood.calorie.length,
         child: Column(
           children: [
             const SizedBox(height: 16,),
@@ -1069,7 +1091,7 @@ class _EditLoggedFoodScreenState extends State<EditLoggedFoodScreen> {
   }
   Widget newIngredient(){
     return Visibility(
-      visible: _selectedAddIngredientOption.isNotEmpty && _foodType == MEAL_LABEL,
+      visible: _selectedAddIngredientOption.isNotEmpty && _foodType == MEAL_LABEL && newFood.ingredients.length == newFood.calorie.length,
       child: Card(
           child: Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 4),

@@ -43,7 +43,7 @@ Food fromGenericRecipe(GenericFood food){
 
   return Food(
       id: food.id,
-      calorie: food.calorie[0],
+      calorie: calorie,
       protein: protein,
       carb: carb,
       fat: fat,
