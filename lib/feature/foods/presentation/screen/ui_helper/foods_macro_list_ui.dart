@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/view_recipe_popup.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../main_screen.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
@@ -15,6 +16,7 @@ import 'debouncer.dart';
 
 class FoodsMacroListUi extends StatefulWidget {
 
+  final Function(int index, String type) onRemoveDishClicked;
   final Function(int index, String type) onRemoveFoodClicked;
   final List<Food> mainDishesFoods;
   final List<Food> sideDishesFoods;
@@ -25,7 +27,7 @@ class FoodsMacroListUi extends StatefulWidget {
 
 
   FoodsMacroListUi({super.key, required this.mainDishesFoods, required this.sideDishesFoods, required this.mainDishesTypes, required this.sideDishesTypes,
-    required this.onRemoveFoodClicked, required this.onMainDishClicked, required this.onSideDishClicked});
+    required this.onRemoveDishClicked, required this.onRemoveFoodClicked, required this.onMainDishClicked, required this.onSideDishClicked});
 
   @override
   State<FoodsMacroListUi> createState() => _FoodsMacroListUiState();
@@ -108,7 +110,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
                     GestureDetector(
                       onTap: (){
-                        removeFoodButtonClickListener(index);
+                        removeDishClickListener(index);
                       },
                       child: const Icon(
                         Icons.close,
@@ -222,7 +224,14 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                   visible: foodName.isNotEmpty,
                   child: GestureDetector(
                     onTap: (){
-
+                      if(_foods[index].foodType == FoodType.meal){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ViewRecipePopup(food: _foods[index],);
+                          },
+                        );
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -237,29 +246,42 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                           Radius.circular(20), // Radius value
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
 
-                          Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
+                              Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
 
+
+                              GestureDetector(
+                                onTap: (){
+                                  removeFoodClickListener(index);
+                                },
+                                child: const Icon(
+                                  Icons.remove_circle,
+                                  color: RED_ERROR_COLOR,
+                                  size: 25,
+                                ),
+                              ),
+
+                            ],
+                          ),
 
                           Visibility(
-                            visible: false,
-                            child: GestureDetector(
-                              onTap: (){
-                                removeFoodButtonClickListener(index);
-                              },
-                              child: const Icon(
-                                Icons.remove_circle,
-                                color: RED_ERROR_COLOR,
-                                size: 25,
+                            visible: _foods[index].foodType == FoodType.meal,
+                            child: Container(
+                              child: const Text(
+                                SEE_RECIPE_LABEL,
+                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
                               ),
                             ),
                           ),
 
                         ],
-                      ),
+                      )
                     ),
                   ),
                 ),
@@ -271,7 +293,18 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   }
 
 
-  void removeFoodButtonClickListener(int index){
+  void removeDishClickListener(int index){
+    setState(() {
+      if(index < widget.mainDishesFoods.length){
+        widget.onRemoveDishClicked(index, MAIN_DISH_LABEL);
+      }else{
+        int removeIndex= index - widget.mainDishesFoods.length;
+        widget.onRemoveDishClicked(removeIndex, SIDE_DISH_LABEL);
+      }
+    });
+  }
+
+  void removeFoodClickListener(int index){
     setState(() {
       if(index < widget.mainDishesFoods.length){
         widget.onRemoveFoodClicked(index, MAIN_DISH_LABEL);

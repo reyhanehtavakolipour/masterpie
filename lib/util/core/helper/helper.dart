@@ -120,7 +120,7 @@ double roundToQuarter(double number) {
   return (number * 4).round() / 4;
 }
 
-FoodRemote fromGenericRecipeRemote(GenericFoodRemote food, List<int> selectedUnitIndexList){
+FoodRemote fromGenericRecipeRemote(GenericFoodRemote food){
 
   List<String> calorie= [];
   List<String> protein= [];
@@ -130,13 +130,15 @@ FoodRemote fromGenericRecipeRemote(GenericFoodRemote food, List<int> selectedUni
   List<String> servingIngredientsCount= [];
 
 
-  for (int i = 0; i < food.ingredients.length; i++){
-    calorie.add(food.calorie[i][selectedUnitIndexList[i]]);
-    protein.add(food.protein[i][selectedUnitIndexList[i]]);
-    carb.add(food.carb[i][selectedUnitIndexList[i]]);
-    fat.add(food.fat[i][selectedUnitIndexList[i]]);
-    units.add(food.units[i][selectedUnitIndexList[i]]);
-    servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
+  for (int i = 0; i < food.calorie.length; i++){
+    calorie.add(food.calorie[i][0]);
+    protein.add(food.protein[i][0]);
+    carb.add(food.carb[i][0]);
+    fat.add(food.fat[i][0]);
+    if(i < food.units.length){
+      units.add(food.units[i][0]);
+      servingIngredientsCount.add(food.servingIngredientsCount[i][0]);
+    }
   }
 
 
@@ -155,6 +157,7 @@ FoodRemote fromGenericRecipeRemote(GenericFoodRemote food, List<int> selectedUni
       servingAmount: food.servingAmount[0],
       unit: food.unit[0],
       recipe: food.recipe,
-      servingIngredientsCount: servingIngredientsCount
+      servingIngredientsCount: servingIngredientsCount,
+      createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
   );
 }

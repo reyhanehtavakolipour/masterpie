@@ -753,8 +753,8 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, List<Food>>> autoGenerateFoods(Profile profile) async{
-    final foodsResponse = await productRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile));
+  Future<Either<Failure, List<Food>>> autoGenerateFoods(Profile profile, List<String> mainDishType, List<String> sideDishTypes) async{
+    final foodsResponse = await productRemoteDataSource.autoGenerateFoods(userMapper.toProfileRemote(profile), mainDishType, sideDishTypes);
     if(foodsResponse.isRight()){
       return Right(mapper.fromFoodsRemote(foodsResponse.asRight()));
     }

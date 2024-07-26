@@ -12,7 +12,9 @@ import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/state_
 import 'package:masterpie/feature/user/presentation/bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/core/helper/helper.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
+import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';

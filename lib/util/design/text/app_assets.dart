@@ -4,6 +4,7 @@ const String SUGGEST_FOOD_PATH = 'assets/takeaway.png';
 const String HOW_MUCH_EAT_PATH= 'assets/nutrition.png';
 const String SEARCH_RECIPE_PATH = 'assets/search.png';
 const String SEARCH_GROCERY_PATH = 'assets/grocery.png';
+const String GROCERY_PATH = 'assets/groceries.png';
 const String LANDING_IMAGE_PATH = 'assets/landing.png';
 const String MASTERPIE_LOGO_PATH = 'assets/masterpie_logo.png';
 const String MONTSERRAT_FONT = 'Montserrat';

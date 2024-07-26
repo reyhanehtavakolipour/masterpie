@@ -22,7 +22,7 @@ class AutoGenerateFoodsBloc extends Bloc<AutoGenerateFoodsEvent, AutoGenerateFoo
 
             emit(const AutoGenerateFoodsState.loading());
 
-            var result = await useCase.autoGenerateFoods();
+            var result = await useCase.autoGenerateFoods(event.mainDishType, event.sideDishTypes);
             result.fold(
                   (failure) {
                 emit(AutoGenerateFoodsState.error(failure.message));

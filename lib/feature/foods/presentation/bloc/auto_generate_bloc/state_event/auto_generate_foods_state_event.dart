@@ -12,7 +12,7 @@ part 'auto_generate_foods_state_event.freezed.dart';
 abstract class AutoGenerateFoodsEvent with _$AutoGenerateFoodsEvent {
 
   const factory AutoGenerateFoodsEvent.onAutoGenerateFood(String type, int index, bool isMainDish) = AutoGenerateFood;
-  const factory AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay() = AutoGenerateFoodsForDay;
+  const factory AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(List<String> mainDishType, List<String> sideDishTypes) = AutoGenerateFoodsForDay;
   const factory AutoGenerateFoodsEvent.onReset() = Reset;
 
 }

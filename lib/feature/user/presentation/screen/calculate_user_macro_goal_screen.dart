@@ -71,6 +71,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
   }
 
   void calculateDailyMacro(){
+
     _updateProfileBloc.add(
         UpdateProfileEvent.onCalculateDailyMacroGoal(
             _genderSelected,

@@ -109,25 +109,25 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
             child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
           ),
           actions: [
-            Visibility(
-              visible: newFood.createdFromFatSecretRecipes == 0,
-              child: IconButton(
-                icon: const Icon(Icons.edit, color: Colors.white,),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditRecipeMacroWizardScreen(genericGroceryDetailForMacroWizardArgumentModel: widget.foodDetailArgumentModel,),
-                    ),
-                  ).then((result) {
-                    setState(() {
-                      if(result != null){
-                        Navigator.pop(context, result);
-                      }
-                    });
+            IconButton(
+              icon: const Icon(Icons.edit, color: Colors.white,),
+              onPressed: () {
+                final argument= widget.foodDetailArgumentModel.copyWith(
+                  food: newFood
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditRecipeMacroWizardScreen(genericGroceryDetailForMacroWizardArgumentModel: argument,),
+                  ),
+                ).then((result) {
+                  setState(() {
+                    if(result != null){
+                      Navigator.pop(context, result);
+                    }
                   });
-                },
-              ),
+                });
+              },
             ),
           ],
         ),
@@ -295,62 +295,77 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
   void fillUi(GenericFood genericFood){
 
     setState(() {
-      double calorie = 0;
-      for (int i = 0; i < genericFood.calorie.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(
-              genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+      if(genericFood.ingredients.length == genericFood.calorie.length){
+        double calorie = 0;
+        for (int i = 0; i < genericFood.calorie.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(
+                genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+          }
         }
-      }
 
-      double protein = 0;
-      for (int i = 0; i < genericFood.protein.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+        double protein = 0;
+        for (int i = 0; i < genericFood.protein.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+          }
         }
-      }
 
-      double carb = 0;
-      for (int i = 0; i < genericFood.carb.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+        double carb = 0;
+        for (int i = 0; i < genericFood.carb.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+          }
         }
-      }
 
 
-      double fat = 0;
-      for (int i = 0; i <
-          genericFood.fat.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-          fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+        double fat = 0;
+        for (int i = 0; i <
+            genericFood.fat.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+            fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+          }
         }
-      }
 
 
-      String ingredients = '';
-      for (int i = 0; i < genericFood.ingredients.length; i++) {
-        if (i < genericFood.servingIngredientsCount.length) {
-          String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])} x'
-              ' (${genericFood.units[i][0]}) '
-              '${genericFood.ingredients[i]},\n';
-          ingredients = ingredients + ingredient;
+        String ingredients = '';
+        for (int i = 0; i < genericFood.ingredients.length; i++) {
+          if (i < genericFood.servingIngredientsCount.length) {
+            String ingredient = '- ${double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0])} x'
+                ' (${genericFood.units[i][0]}) '
+                '${genericFood.ingredients[i]},\n';
+            ingredients = ingredients + ingredient;
+          }
         }
+
+        _foodName = genericFood.name;
+        _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
+        _totalCalorie = calorie.toStringAsFixed(2);
+        _totalProtein = protein.toStringAsFixed(2);
+        _totalCarb = carb.toStringAsFixed(2);
+        _totalFat = fat.toStringAsFixed(2);
+        _recipe = genericFood.recipe;
+        _ingredients = ingredients;
+
+      }else{
+
+        String ingredients = '';
+        for (int i = 0; i < genericFood.ingredients.length; i++) {
+          ingredients = '$ingredients- ${genericFood.ingredients[i]}\n';
+        }
+
+        _foodName = '${genericFood.name}(for ${genericFood.servingAmount[0].toInt()} servings)';
+        _totalCalorie = genericFood.calorie[0][0];
+        _totalProtein = genericFood.protein[0][0];
+        _totalCarb = genericFood.carb[0][0];
+        _totalFat = genericFood.fat[0][0];
+        _recipe = genericFood.recipe;
+        _ingredients = ingredients;
       }
-
-      _foodName = genericFood.name;
-      _totalServing = '${genericFood.servingAmount[0]} ${genericFood.unit[0]}';
-      _totalCalorie = calorie.toStringAsFixed(2);
-      _totalProtein = protein.toStringAsFixed(2);
-      _totalCarb = carb.toStringAsFixed(2);
-      _totalFat = fat.toStringAsFixed(2);
-      _recipe = genericFood.recipe;
-      _ingredients = ingredients;
-
-
       newFood = genericFood;
     });
   }
@@ -376,17 +391,8 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
                 });
 
 
-                if(newFood.createdFromFatSecretRecipes == 1){
-                  newFood= newFood.copyWith(
-                    calorie: [[_totalCalorie]],
-                    protein: [[_totalProtein]],
-                    carb: [[_totalCarb]],
-                    fat: [[_totalFat]],
-                  );
-                }
-
-
                 final food= fromGenericRecipe(newFood);
+
 
                 FoodDetailForMacroWizardArgumentModel model= FoodDetailForMacroWizardArgumentModel(
                   type: widget.foodDetailArgumentModel.type,

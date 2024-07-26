@@ -195,18 +195,13 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
     try{
       final NetworkRequest request = await NetworkRequest.create();
 
-      String weightChangeWeekly = '';
-      if(profile.weightUnit == LB_LABEL){
-        weightChangeWeekly = LB_1_LABEL;
-      }else{
-        weightChangeWeekly = GRAM_500_LABEL;
-      }
-      RegExp regex = RegExp(r'\d+');
-      RegExpMatch? match = regex.firstMatch(profile.weightChangeWeekly);
+      double weightChangeWeekly = 0.0;
+      RegExp regExp = RegExp(r'(\d+(\.\d+)?)');
+
+      Match? match = regExp.firstMatch(profile.weightChangeWeekly);
       if (match != null) {
-        if(match.group(0) != null){
-          weightChangeWeekly = match.group(0)!;
-        }
+        String matchedNumber = match.group(0)!;
+        weightChangeWeekly = double.parse(matchedNumber);
       }
 
       //body
@@ -217,11 +212,10 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         'height': double.parse(profile.height),
         'activityLevel': profile.activityLevel,
         'goalWeight': profile.goalWeight,
-        'weightChangeWeekly': double.parse(weightChangeWeekly),
+        'weightChangeWeekly': weightChangeWeekly,
         'weightUnit': profile.weightUnit,
         'heightUnit': profile.heightUnit
       };
-
 
 
       final macroGoalApi= await FlutterConfig.get(CALCULATE_MACRO_GOAL_API);
@@ -236,6 +230,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
           response.data['carb'].toString(),
           response.data['fat'].toString(),
         ];
+
         return  Right(macroGoal);
       }
 

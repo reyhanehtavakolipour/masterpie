@@ -88,7 +88,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    List<GenericFood> _suggestedGroceries= [];
 
-   late GetRecipeBloc _getRecipeBloc;
 
 
   @override
@@ -98,7 +97,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
     _addOrUpdateMyCookBookBloc.add(
       const AddOrUpdateMyCookBookEvent.onReset(),
     );
-    _getRecipeBloc = context.read<GetRecipeBloc>();
     _mealNameController= TextEditingController();
     _totalCalorieController= TextEditingController(text: '0');
     _totalProteinController= TextEditingController(text: '0');
@@ -223,35 +221,6 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                     ),
                   ),
                 ),
-
-                BlocConsumer<GetRecipeBloc, GetRecipeState>(
-                    builder: (mcontext, state) {
-                      if (state is GetRecipeLoadingState) {
-                        return const GFLoader(
-                          type: GFLoaderType.circle,
-                          loaderColorOne: DARK_PRIMARY_COLOR,
-                          loaderColorTwo: DARK_PRIMARY_COLOR,
-                          loaderColorThree: DARK_PRIMARY_COLOR,
-                        );
-                      }else if(state is GetRecipeLoadedState){
-                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          _isRecipeLoaded= true;
-                          fillUi(state.food);
-                        });
-                      }else if(state is GetRecipeErrorState){
-                        FocusScope.of(context).unfocus();
-                        _getRecipeBloc.add(const GetRecipeEvent.onReset());
-                        Future.delayed(Duration.zero,(){
-                          return showErrorToast(context, state.message);
-                        });
-                      }
-                      return Container();
-                    },
-                    listener: (context, state){
-
-                    }
-                ),
               ],
             )
         ),
@@ -262,58 +231,68 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
 
    void fillUi(GenericFood genericFood){
      setState(() {
-       double calorie = 0;
-       for (int i = 0; i < genericFood.calorie.length; i++) {
-         if (i < genericFood.servingIngredientsCount.length) {
-           double servingCount = double.parse(
-               genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-           calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+
+       if(genericFood.ingredients.length == genericFood.calorie.length){
+         double calorie = 0;
+         for (int i = 0; i < genericFood.calorie.length; i++) {
+           if (i < genericFood.servingIngredientsCount.length) {
+             double servingCount = double.parse(
+                 genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+             calorie = calorie + double.parse(genericFood.calorie[i].isEmpty ? '0' : genericFood.calorie[i][0]) * servingCount;
+           }
          }
-       }
 
 
-       double protein = 0;
-       for (int i = 0; i < genericFood.protein.length; i++) {
-         if (i < genericFood.servingIngredientsCount.length) {
-           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-           protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+         double protein = 0;
+         for (int i = 0; i < genericFood.protein.length; i++) {
+           if (i < genericFood.servingIngredientsCount.length) {
+             double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+             protein = protein + double.parse(genericFood.protein[i].isEmpty ? '0' : genericFood.protein[i][0]) * servingCount;
+           }
          }
-       }
 
-       double carb = 0;
-       for (int i = 0; i < genericFood.carb.length; i++) {
-         if (i < genericFood.servingIngredientsCount.length) {
-           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-           carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+         double carb = 0;
+         for (int i = 0; i < genericFood.carb.length; i++) {
+           if (i < genericFood.servingIngredientsCount.length) {
+             double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+             carb = carb + double.parse(genericFood.carb[i].isEmpty ? '0' : genericFood.carb[i][0]) * servingCount;
+           }
          }
-       }
 
 
-       double fat = 0;
-       for (int i = 0; i <
-           genericFood.fat.length; i++) {
-         if (i < genericFood.servingIngredientsCount.length) {
-           double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
-           fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+         double fat = 0;
+         for (int i = 0; i <
+             genericFood.fat.length; i++) {
+           if (i < genericFood.servingIngredientsCount.length) {
+             double servingCount = double.parse(genericFood.servingIngredientsCount[i].isEmpty ? '0' : genericFood.servingIngredientsCount[i][0]);
+             fat = fat + double.parse(genericFood.fat[i].isEmpty ? '0' : genericFood.fat[i][0]) * servingCount;
+           }
          }
+
+
+
+
+         _mealNameController.text = genericFood.name;
+         _totalServingController.text = '${genericFood.servingAmount[0]}';
+         _totalCalorieController.text = calorie.toStringAsFixed(2);
+         _totalProteinController.text = protein.toStringAsFixed(2);
+         _totalCarbController.text = carb.toStringAsFixed(2);
+         _totalFatController.text = fat.toStringAsFixed(2);
+         _totalUnitController.text = SERVING_LABEL;
+
+         _recipeController.text = genericFood.recipe;
+         genericFood.ingredients.forEach((element) {
+           _ingredientsExpansionState.add(false);
+           _selectedIngredientsUnitIndexList.add(0);
+         });
+       }else{
+         _mealNameController.text = genericFood.name;
+         _totalCalorieController.text = genericFood.calorie[0][0].toString();
+         _totalProteinController.text = genericFood.protein[0][0].toString();
+         _totalCarbController.text = genericFood.carb[0][0].toString();
+         _totalFatController.text = genericFood.fat[0][0].toString();
+         _recipeController.text = genericFood.recipe;
        }
-
-
-
-
-       _mealNameController.text = genericFood.name;
-       _totalServingController.text = '${genericFood.servingAmount[0]}';
-       _totalCalorieController.text = calorie.toStringAsFixed(2);
-       _totalProteinController.text = protein.toStringAsFixed(2);
-       _totalCarbController.text = carb.toStringAsFixed(2);
-       _totalFatController.text = fat.toStringAsFixed(2);
-       _totalUnitController.text = SERVING_LABEL;
-
-       _recipeController.text = genericFood.recipe;
-       genericFood.ingredients.forEach((element) {
-         _ingredientsExpansionState.add(false);
-         _selectedIngredientsUnitIndexList.add(0);
-       });
 
 
        newFood = genericFood;
@@ -339,8 +318,13 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
                  if(_minServingController.text.isEmpty || _maxServingController.text.isEmpty){
                    showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                  }else{
-                   newFood= newFood.copyWith(name: _mealNameController.text, servingAmount: [double.parse(_totalServingController.text)]);
+                   newFood= newFood.copyWith(
+                       name: _mealNameController.text,
+                       servingAmount: [double.parse(_totalServingController.text)],
+                     recipe: _recipeController.text
+                   );
                    Food food= fromGenericRecipe(newFood);
+
 
                    if(food.ingredients.length != food.calorie.length){
                      food= food.copyWith(

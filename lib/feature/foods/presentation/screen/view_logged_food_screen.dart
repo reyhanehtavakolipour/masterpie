@@ -115,7 +115,7 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
 
                         const SizedBox(height: 16,),
 
-                        const Text('$INGREDIENTS_PER_SERVING_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                        const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
                         const SizedBox(height: 4,),
 

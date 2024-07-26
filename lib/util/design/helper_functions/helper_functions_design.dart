@@ -60,6 +60,9 @@ const CALCUALTE_MACRO_GOAL_REQUEST= 'calculate_macro_goal_request';
 
 
 
+List<String> fatSecretMainDishTypes= ['Baked', 'Breakfast', 'Dessert', 'Lunch', 'Main Dish', 'Salad and Salad Dressing', 'Soup', 'Dinner'];
+List<String> fatSecretSideDishTypes= ['Appetizer', 'Baked', 'Beverage', 'Dessert', 'Salad and Salad Dressing', 'Sauce and Condiment', 'Side Dish', 'Snack', 'Soup'];
+
 
 
 void logEvent(String eventName,  Map<String, Object>? parameters)async{

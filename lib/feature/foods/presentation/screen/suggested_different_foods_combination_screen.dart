@@ -9,6 +9,7 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/view_recipe_popup.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -50,8 +51,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   int _currentPage= 0;
 
 
-  List<bool> _foodsExpansionState= [];
-
   bool _messageExpanded= false;
 
   @override
@@ -65,9 +64,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
 
-    widget.wizardResponse.foodsPortions[_currentPage].foods.forEach((element) {
-      _foodsExpansionState.add(false);
-    });
   }
 
 
@@ -101,11 +97,29 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             fat = fat + (portion * double.parse(element));
           });
         }else{
-          for(int i = 0; i < food.servingIngredientsCount.length; i++){
-            calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-            protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-            carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-            fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+          if(food.ingredients.length == food.calorie.length){
+            for(int i = 0; i < food.servingIngredientsCount.length; i++){
+              calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            }
+          }else{
+            food.calorie.forEach((element) {
+              calorie = calorie + (portion * double.parse(element));
+            });
+
+            food.protein.forEach((element) {
+              protein = protein + (portion * double.parse(element));
+            });
+
+            food.carb.forEach((element) {
+              carb = carb + (portion * double.parse(element));
+            });
+
+            food.fat.forEach((element) {
+              fat = fat + (portion * double.parse(element));
+            });
           }
         }
       }
@@ -121,6 +135,8 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
   @override
   Widget build(BuildContext context) {
+    _suggestedFoodsPortions = widget.wizardResponse.foodsPortions;
+
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop){
@@ -266,9 +282,12 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             return InkWell(
               onTap: (){
                 if(food.foodType == FoodType.meal){
-                  setState(() {
-                    _foodsExpansionState[index]= !_foodsExpansionState[index];
-                  });
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ViewRecipePopup(food: food,);
+                    },
+                  );
                 }
               },
               child: Container(
@@ -283,25 +302,18 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     Row(
                       children: [
 
-                        Visibility(
-                          visible: food.foodType == FoodType.meal,
-                          child: Icon(
-                            _foodsExpansionState[index] ? Icons.arrow_drop_down : Icons.arrow_right,
-                            color: DARK_PRIMARY_COLOR,
-                            size: 16,
-                          ),
-                        ),
+                        Image.asset(food.foodType == FoodType.meal ? HOW_MUCH_EAT_PATH : GROCERY_PATH, width: 25, height: 25,),
 
                         const SizedBox(width: 8,),
 
                         Visibility(
-                            visible: food.foodType != FoodType.meal,
+                            visible: food.foodType != FoodType.meal && food.ingredients.length == food.calorie.length,
                             child: const SizedBox(width: 16,)
                         ),
 
                         Flexible(
                           child: Text(
-                            '${convertDoubleToFraction(food.count)} serving(s) ${food.name}',
+                            '${convertDoubleToFraction(food.count)} serving ${food.name}',
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
                           ),
                         ),
@@ -309,9 +321,19 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                       ],
                     ),
 
+                    const SizedBox(height: 8,),
 
-                    _foodIngredients(food, index),
-      
+                    Visibility(
+                    visible: food.foodType == FoodType.meal,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: const Text(
+                        SEE_RECIPE_LABEL,
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+
       
                     const SizedBox(height: 16,),
       
@@ -328,52 +350,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             );
           }
       ),
-    );
-  }
-
-
-
-  Widget _foodIngredients(Food food, int index){
-
-    String ingredients= '';
-
-    if(food.foodType == FoodType.meal){
-
-
-      for(int i = 0; i < food.ingredients.length; i++){
-        double ingredientCount= double.parse(food.servingIngredientsCount[i]);
-        double count= ingredientCount * food.count;
-        String ing= '- ${convertDoubleToFraction(count)} x (${food.units[i]}) ${food.ingredients[i]}\n';
-        ingredients= ingredients + ing;
-      }
-
-    }
-
-    return Visibility(
-      visible: _foodsExpansionState[index],
-        child: Container(
-          margin: const EdgeInsets.only(left: 16, right: 8),
-          height: 150,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-
-              const SizedBox(height: 12,),
-
-              Flexible(
-                child: Text(
-                  ingredients,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: DARK_PRIMARY_COLOR,
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        ),
     );
   }
 

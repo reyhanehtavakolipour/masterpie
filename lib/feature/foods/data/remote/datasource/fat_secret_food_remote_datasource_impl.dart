@@ -517,44 +517,63 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
 
   @override
-  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote) async{
+  Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote, List<String> mainDishType, List<String> sideDishTypes) async{
     try{
       printWrapped('show_user_pref: ${profileRemote}');
 
       final NetworkRequest request = await NetworkRequest.create();
 
-      Map<String, dynamic> autoGenerateFoodParams = {
-        'favoriteCategories': [''],
-        'hateCategories': [''],
-        'favoriteSubCategories': [''],
-        'hateSubCategories': ['Egg'],
-        'DishTypes': 'Breakfast',
-        'isMainDish': false,
-        'allergens': ['Garlic'],
-        'numMainDish' : 2,
-        'numSideDish': 2,
-        'macroGoal': [2000, 150, 200, 70]
-      };
+      List<String> types= [];
+      types.addAll(mainDishType);
+      types.addAll(sideDishTypes);
 
+      List<FoodRemote> foods= [];
 
-      final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
+      await Future.forEach(types, (type) async{
 
+        Map<String, dynamic> autoGenerateFoodParams = {
+          'favoriteCategories': [''],
+          'hateCategories': [''],
+          'favoriteSubCategories': profileRemote.favoriteSubCategories,
+          'hateSubCategories': profileRemote.hateSubCategories,
+          'DishTypes': type == 'Dinner' ? 'Lunch' : type,
+          'isMainDish': false,
+          'allergens': profileRemote.allergens,
+          'numMainDish' : mainDishType.length,
+          'numSideDish': sideDishTypes.length,
+          'macroGoal': profileRemote.dailyMacroGoal
+        };
 
-      final response= await request.post(macroGoalApi, data: autoGenerateFoodParams);
+        printWrapped('show_user_pref2: ${autoGenerateFoodParams}');
 
+        final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
-      if(response.statusCode == SUCCESS_API_CODE){
+        final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
 
-        // print('show_result: ${response.data}');
+        if(recipeResponse.statusCode == SUCCESS_API_CODE){
+          Map<String, dynamic> data= recipeResponse.data;
+          String recipeId= data['recipe_id'];
+          print('show_result: ${data}');
+          final recipeDetailResponse= await getRecipe(recipeId);
+          if(recipeDetailResponse.isRight()){
+            print('show_result11: ${recipeDetailResponse.asRight()}');
+            final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
+            printWrapped('show_result22: ${generatedFood}');
+            foods.add(generatedFood);
+          }else{
+            print('show_error33: ${recipeDetailResponse.asLeft().message}');
+            foods.add(FoodRemote());
+          }
+        }else{
+          print('show_error44: ${recipeResponse.statusMessage}');
+          foods.add(FoodRemote());
+        }
+      });
+      printWrapped('all_foods: $foods');
+      return Right(foods);
 
-
-        return Right([FoodRemote()]);
-
-
-      }else{
-        return Left(RemoteFailure(response.statusCode, response.statusMessage ?? ''));
-      }
     }catch(error){
+      print('show_error55: ${error}');
       return Left(ExceptionFailure(error));
     }
   }
@@ -562,7 +581,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   @override
   Future<Either<Failure, FoodRemote>> autoGenerateFood(ProfileRemote profileRemote, String type) async{
     try{
-      printWrapped('show_user_pref: ${type}');
+      // printWrapped('show_user_pref: ${profileRemote}');
 
       final NetworkRequest request = await NetworkRequest.create();
 
@@ -579,6 +598,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         'macroGoal': profileRemote.dailyMacroGoal
       };
 
+      printWrapped('show_user_pref2: ${autoGenerateFoodParams}');
+
+
       final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
 
@@ -589,9 +611,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
         Map<String, dynamic> data= recipeResponse.data;
 
-        print('show_result: ${data}');
 
         String recipeId= data['recipe_id'];
+        print('show_result: ${data}');
 
         final recipeDetailResponse= await getRecipe(recipeId);
         if(recipeDetailResponse.isRight()){
@@ -599,24 +621,21 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           print('show_result22: ${recipeDetailResponse.asRight()}');
 
 
-          List<int> ingredientIndexes= [];
-          recipeDetailResponse.asRight().ingredients.forEach((element) {
-            ingredientIndexes.add(0);
-          });
-
-          final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight(), ingredientIndexes);
+          final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
 
           printWrapped('show_result33: ${generatedFood}');
 
           return Right(generatedFood);
 
         }
+        print('show_error0: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
       }else{
-        print('show_error: ${recipeResponse.statusMessage}');
+        print('show_error1: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
       }
     }catch(error){
+      print('show_error2: ${error}');
       return Left(ExceptionFailure(error));
     }
   }

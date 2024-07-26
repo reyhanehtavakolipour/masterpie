@@ -20,7 +20,9 @@ mixin _$AutoGenerateFoodsEvent {
   TResult when<TResult extends Object?>({
     required TResult Function(String type, int index, bool isMainDish)
         onAutoGenerateFood,
-    required TResult Function() onAutoGenerateFoodsForDay,
+    required TResult Function(
+            List<String> mainDishType, List<String> sideDishTypes)
+        onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +30,8 @@ mixin _$AutoGenerateFoodsEvent {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult? Function()? onAutoGenerateFoodsForDay,
+    TResult? Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +39,8 @@ mixin _$AutoGenerateFoodsEvent {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult Function()? onAutoGenerateFoodsForDay,
+    TResult Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
   }) =>
@@ -169,7 +173,9 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
   TResult when<TResult extends Object?>({
     required TResult Function(String type, int index, bool isMainDish)
         onAutoGenerateFood,
-    required TResult Function() onAutoGenerateFoodsForDay,
+    required TResult Function(
+            List<String> mainDishType, List<String> sideDishTypes)
+        onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
     return onAutoGenerateFood(type, index, isMainDish);
@@ -180,7 +186,8 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult? Function()? onAutoGenerateFoodsForDay,
+    TResult? Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
     return onAutoGenerateFood?.call(type, index, isMainDish);
@@ -191,7 +198,8 @@ class _$AutoGenerateFoodImpl implements AutoGenerateFood {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult Function()? onAutoGenerateFoodsForDay,
+    TResult Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
@@ -256,6 +264,8 @@ abstract class _$$AutoGenerateFoodsForDayImplCopyWith<$Res> {
           _$AutoGenerateFoodsForDayImpl value,
           $Res Function(_$AutoGenerateFoodsForDayImpl) then) =
       __$$AutoGenerateFoodsForDayImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<String> mainDishType, List<String> sideDishTypes});
 }
 
 /// @nodoc
@@ -267,37 +277,90 @@ class __$$AutoGenerateFoodsForDayImplCopyWithImpl<$Res>
       _$AutoGenerateFoodsForDayImpl _value,
       $Res Function(_$AutoGenerateFoodsForDayImpl) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? mainDishType = null,
+    Object? sideDishTypes = null,
+  }) {
+    return _then(_$AutoGenerateFoodsForDayImpl(
+      null == mainDishType
+          ? _value._mainDishType
+          : mainDishType // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      null == sideDishTypes
+          ? _value._sideDishTypes
+          : sideDishTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
-  const _$AutoGenerateFoodsForDayImpl();
+  const _$AutoGenerateFoodsForDayImpl(
+      final List<String> mainDishType, final List<String> sideDishTypes)
+      : _mainDishType = mainDishType,
+        _sideDishTypes = sideDishTypes;
+
+  final List<String> _mainDishType;
+  @override
+  List<String> get mainDishType {
+    if (_mainDishType is EqualUnmodifiableListView) return _mainDishType;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mainDishType);
+  }
+
+  final List<String> _sideDishTypes;
+  @override
+  List<String> get sideDishTypes {
+    if (_sideDishTypes is EqualUnmodifiableListView) return _sideDishTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sideDishTypes);
+  }
 
   @override
   String toString() {
-    return 'AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay()';
+    return 'AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(mainDishType: $mainDishType, sideDishTypes: $sideDishTypes)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AutoGenerateFoodsForDayImpl);
+            other is _$AutoGenerateFoodsForDayImpl &&
+            const DeepCollectionEquality()
+                .equals(other._mainDishType, _mainDishType) &&
+            const DeepCollectionEquality()
+                .equals(other._sideDishTypes, _sideDishTypes));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_mainDishType),
+      const DeepCollectionEquality().hash(_sideDishTypes));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AutoGenerateFoodsForDayImplCopyWith<_$AutoGenerateFoodsForDayImpl>
+      get copyWith => __$$AutoGenerateFoodsForDayImplCopyWithImpl<
+          _$AutoGenerateFoodsForDayImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String type, int index, bool isMainDish)
         onAutoGenerateFood,
-    required TResult Function() onAutoGenerateFoodsForDay,
+    required TResult Function(
+            List<String> mainDishType, List<String> sideDishTypes)
+        onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
-    return onAutoGenerateFoodsForDay();
+    return onAutoGenerateFoodsForDay(mainDishType, sideDishTypes);
   }
 
   @override
@@ -305,10 +368,11 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult? Function()? onAutoGenerateFoodsForDay,
+    TResult? Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
-    return onAutoGenerateFoodsForDay?.call();
+    return onAutoGenerateFoodsForDay?.call(mainDishType, sideDishTypes);
   }
 
   @override
@@ -316,12 +380,13 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult Function()? onAutoGenerateFoodsForDay,
+    TResult Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
     if (onAutoGenerateFoodsForDay != null) {
-      return onAutoGenerateFoodsForDay();
+      return onAutoGenerateFoodsForDay(mainDishType, sideDishTypes);
     }
     return orElse();
   }
@@ -363,7 +428,15 @@ class _$AutoGenerateFoodsForDayImpl implements AutoGenerateFoodsForDay {
 }
 
 abstract class AutoGenerateFoodsForDay implements AutoGenerateFoodsEvent {
-  const factory AutoGenerateFoodsForDay() = _$AutoGenerateFoodsForDayImpl;
+  const factory AutoGenerateFoodsForDay(
+          final List<String> mainDishType, final List<String> sideDishTypes) =
+      _$AutoGenerateFoodsForDayImpl;
+
+  List<String> get mainDishType;
+  List<String> get sideDishTypes;
+  @JsonKey(ignore: true)
+  _$$AutoGenerateFoodsForDayImplCopyWith<_$AutoGenerateFoodsForDayImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -406,7 +479,9 @@ class _$ResetImpl implements Reset {
   TResult when<TResult extends Object?>({
     required TResult Function(String type, int index, bool isMainDish)
         onAutoGenerateFood,
-    required TResult Function() onAutoGenerateFoodsForDay,
+    required TResult Function(
+            List<String> mainDishType, List<String> sideDishTypes)
+        onAutoGenerateFoodsForDay,
     required TResult Function() onReset,
   }) {
     return onReset();
@@ -417,7 +492,8 @@ class _$ResetImpl implements Reset {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult? Function()? onAutoGenerateFoodsForDay,
+    TResult? Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult? Function()? onReset,
   }) {
     return onReset?.call();
@@ -428,7 +504,8 @@ class _$ResetImpl implements Reset {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String type, int index, bool isMainDish)?
         onAutoGenerateFood,
-    TResult Function()? onAutoGenerateFoodsForDay,
+    TResult Function(List<String> mainDishType, List<String> sideDishTypes)?
+        onAutoGenerateFoodsForDay,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {

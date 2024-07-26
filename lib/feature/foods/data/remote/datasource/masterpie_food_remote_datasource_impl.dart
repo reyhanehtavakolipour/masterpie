@@ -283,6 +283,10 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
 
+      printWrapped('dfgpji1: ${foods}');
+      printWrapped('dfgpji2: ${servingRanges}');
+      printWrapped('dfgpji3: ${macroGoalsRange}');
+
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
       List<Map<String, dynamic>> foodsBodyValue = [];
@@ -312,11 +316,26 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           });
         }else{
 
-          for(int i = 0; i < food.servingIngredientsCount.length; i++){
-            calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
-            protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
-            carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
-            fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
+          if(food.ingredients.length == food.calorie.length){
+            for(int i = 0; i < food.servingIngredientsCount.length; i++){
+              calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
+              protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
+              carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
+              fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
+            }
+          }else{
+            food.calorie.forEach((cal) {
+              calorie= calorie + double.parse(cal);
+            });
+            food.protein.forEach((prot) {
+              protein= protein + double.parse(prot);
+            });
+            food.carb.forEach((car) {
+              carb= carb + double.parse(car);
+            });
+            food.fat.forEach((fats) {
+              fat= fat + double.parse(fats);
+            });
           }
 
         }
