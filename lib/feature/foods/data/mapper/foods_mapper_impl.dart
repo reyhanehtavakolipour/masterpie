@@ -766,7 +766,6 @@ class FoodsMapperImpl extends FoodsMapper{
 
   @override
   Food fromGenericFoodToFood(GenericFood genericFood) {
-    // TODO: implement fromGenericFoodToFood
     throw UnimplementedError();
   }
 

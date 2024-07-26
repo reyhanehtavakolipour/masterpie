@@ -151,7 +151,7 @@ class _ProfileAfterRegistrationScreenState extends State<ProfileAfterRegistratio
                             child:  Center(
                                 child: Column(
                                   children: [
-                                    Image.asset(WELCOME_PATH, width: 200, height: 200,),
+                                    // Image.asset(WELCOME_PATH, width: 200, height: 200,),
 
                                     const SizedBox(height: 8,),
 

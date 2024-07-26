@@ -312,13 +312,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     //organize main dishes types
     List<String> mainDishTypes= [];
-    _fatSecretMainDishesTypes.forEach((element) {
-      if(element != 'Appetizer'  && element != 'Beverage' &&
-          element != 'Sauce and Condiment' && element != 'Side Dish' &&
-          element != 'Snack'){
-        mainDishTypes.add(element);
-      }
-    });
+    mainDishTypes.add('Breakfast');
+    mainDishTypes.add('Lunch');
     mainDishTypes.add('Dinner');
     _fatSecretMainDishesTypes= sortAlphabetically(mainDishTypes);
 
@@ -327,7 +322,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     List<String> sideDishTypes= [];
     _fatSecretSideDishesTypes.forEach((element) {
       if(element != 'Breakfast'  && element != 'Lunch' &&
-          element != 'Main Dish'){
+          element != 'Baked' && element != 'Sauce and Condiment' &&
+          element != 'Side Dish' && element != 'Main Dish' && element != 'Other'){
         sideDishTypes.add(element);
       }
     });
@@ -1973,14 +1969,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
  Widget skipBtn(){
    return Expanded(
-     child: GestureDetector(
-       onTap: (){
-         _goToMainScreen();
-       },
-       child: const Text(
-         SKIP_LABEL,
-         style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-         textAlign: TextAlign.end,
+     child: Visibility(
+       visible: false,
+       child: GestureDetector(
+         onTap: (){
+           _goToMainScreen();
+         },
+         child: const Text(
+           SKIP_LABEL,
+           style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+           textAlign: TextAlign.end,
+         ),
        ),
      ),
    );

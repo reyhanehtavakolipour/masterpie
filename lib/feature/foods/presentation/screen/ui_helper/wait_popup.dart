@@ -36,15 +36,15 @@ class _SelectContainerPopupState extends State<WaitPopup> {
 
                 Padding(
                     padding: const EdgeInsets.all(4),
-                    child: Image.asset(SAND_CLOCK_PATH, width: 100, height: 100,)
+                    child: Image.asset(widget.message == GENERATE_MEAL_PLAN ? SAND_CLOCK_PATH : WELCOME_PATH, width: 100, height: 100,)
                 ),
 
 
                 const SizedBox(height: 16,),
 
-                const Text(
-                  GENERATE_MEAL_PLAN,
-                  style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                 Text(
+                  widget.message,
+                  style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
 

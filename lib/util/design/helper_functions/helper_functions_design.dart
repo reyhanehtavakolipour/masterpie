@@ -59,9 +59,10 @@ const VIEW_RECIPE_REQUEST= 'view_recipe_request';
 const CALCUALTE_MACRO_GOAL_REQUEST= 'calculate_macro_goal_request';
 
 
+List<String> fatSecretMainDishTypes= ['Breakfast', 'Lunch', 'Dinner'];
+List<String> fatSecretSideDishTypes= ['Appetizer', 'Beverage', 'Dessert', 'Snack', 'Soup'];
 
-List<String> fatSecretMainDishTypes= ['Baked', 'Breakfast', 'Dessert', 'Lunch', 'Main Dish', 'Salad and Salad Dressing', 'Soup', 'Dinner'];
-List<String> fatSecretSideDishTypes= ['Appetizer', 'Baked', 'Beverage', 'Dessert', 'Salad and Salad Dressing', 'Sauce and Condiment', 'Side Dish', 'Snack', 'Soup'];
+
 
 
 
@@ -115,20 +116,20 @@ bool isValidPassword(String password) {
     return false;
   }
 
-  // Check if the password contains at least one digit
-  if (!password.contains(RegExp(r'\d'))) {
-    return false;
-  }
-
-  // Check if the password contains at least one special character
-  if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-    return false;
-  }
-
-  // Check if the password contains both uppercase and lowercase letters
-  if (!password.contains(RegExp(r'[a-z]')) || !password.contains(RegExp(r'[A-Z]'))) {
-    return false;
-  }
+  // // Check if the password contains at least one digit
+  // if (!password.contains(RegExp(r'\d'))) {
+  //   return false;
+  // }
+  //
+  // // Check if the password contains at least one special character
+  // if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  //   return false;
+  // }
+  //
+  // // Check if the password contains both uppercase and lowercase letters
+  // if (!password.contains(RegExp(r'[a-z]')) || !password.contains(RegExp(r'[A-Z]'))) {
+  //   return false;
+  // }
 
   return true;
 }
