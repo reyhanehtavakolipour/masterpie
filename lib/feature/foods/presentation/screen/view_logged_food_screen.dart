@@ -63,6 +63,13 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
 
 @override
   Widget build(BuildContext context) {
+
+  String servingNumber= '';
+  if(isValidNumber(newFood.servingAmount.toString())){
+    servingNumber= newFood.servingAmount.toInt().toString();
+  }
+
+
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
       debugShowCheckedModeBanner: false,
@@ -115,7 +122,8 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
 
                         const SizedBox(height: 16,),
 
-                        const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                        Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
 
                         const SizedBox(height: 4,),
 
@@ -359,7 +367,7 @@ class _ViewLoggedFoodScreenState extends State<ViewLoggedFoodScreen> {
           ingredients = '$ingredients- ${food.ingredients[i]}\n';
         }
 
-        _foodName = '${food.name}(for ${food.servingAmount.toInt()} servings)';
+        _foodName = food.name;
         _totalCalorie = num.parse(food.calorie[0]).toInt().toString();
         _totalProtein = num.parse(food.protein[0]).toInt().toString();
         _totalCarb = num.parse(food.carb[0]).toInt().toString();

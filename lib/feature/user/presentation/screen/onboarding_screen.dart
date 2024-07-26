@@ -155,13 +155,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   _selectRecipesType(),
 
                   /// step 3
-                  _selectFavoriteCategories(),
+                  _selectAllergens(),
+
 
                   /// step4
-                  _selectHateCategories(),
+                  _selectFavoriteCategories(),
+
 
                   /// step 5
-                  _selectAllergens(),
+                  _selectHateCategories(),
 
                   /// step6
                   Visibility(
@@ -332,6 +334,30 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _fatSecretSideDishesTypes= sideDishTypes;
 
 
+
+    //remove useless categories
+    List<String> categories= [];
+    _allCategoryOptions.forEach((element) {
+      if(element != 'Beverages' &&  element != 'Fast Food' &&
+          element != 'Fruit' &&  element != 'Other' &&
+          element != 'Salads' &&  element != 'Sauces Spices & Spreads' &&
+          element != 'Snack' &&  element != 'Vegetables'
+      ){
+        categories.add(element);
+      }
+    });
+    _allCategoryOptions= categories;
+
+
+
+    //remove useless allergen
+    List<String> allergens= [];
+    _allAllergenOptions.forEach((element) {
+      if(element != 'Peanuts' && element != 'Milk'){
+        allergens.add(element);
+      }
+    });
+    _allAllergenOptions= allergens;
 
   }
 
@@ -539,7 +565,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   const Expanded(
                     child: Text(
-                      '4/6',
+                      '5/6',
                       style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -591,44 +617,90 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
           const SizedBox(height: 16,),
 
+
           /// next & previous button
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: MASTERPIE_YELLOW_COLOR
+          Visibility(
+            visible: widget.isOnBoard,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        ),
+                        backgroundColor: MASTERPIE_YELLOW_COLOR
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        _goToPage(3);
+                      });
+                    },
+                    child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
                   ),
-                  onPressed: (){
-                    setState(() {
-                      _goToPage(2);
-                    });
-                  },
-                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
                 ),
-              ),
 
-              const SizedBox(width: 8,),
+                const SizedBox(width: 8,),
 
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                        ),
+                        backgroundColor: DARK_PRIMARY_COLOR
+                    ),
+                    onPressed: (){
+                      _goToPage(5);
+                    },
+                    child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                   ),
-                  onPressed: (){
-                    _goToPage(4);
-                  },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
+          ),
+
+          /// done & previous button
+          Visibility(
+              visible: !widget.isOnBoard,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape:  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                          ),
+                          backgroundColor: MASTERPIE_YELLOW_COLOR
+                      ),
+                      onPressed: (){
+                        setState(() {
+                          _goToPage(3);
+                        });
+                      },
+                      child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8,),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape:  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                          ),
+                          backgroundColor: DARK_PRIMARY_COLOR
+                      ),
+                      onPressed: (){
+                        _saveUserInputsInsideApp();
+                      },
+                      child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                    ),
+                  ),
+                ],
+              )
+          ),
         ],
       ),
     );
@@ -1047,7 +1119,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   const Expanded(
                     child: Text(
-                      '5/6',
+                      '3/6',
                       style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -1100,87 +1172,42 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           const SizedBox(height: 16,),
 
           /// next & previous button
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
-                        backgroundColor: MASTERPIE_YELLOW_COLOR
-                    ),
-                    onPressed: (){
-                      setState(() {
-                        _goToPage(3);
-                      });
-                    },
-                    child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
-                        backgroundColor: DARK_PRIMARY_COLOR
-                    ),
-                    onPressed: (){
-                      _goToPage(5);
-                    },
-                    child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          /// done & previous button
-          Visibility(
-            visible: !widget.isOnBoard,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape:  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                          ),
-                          backgroundColor: MASTERPIE_YELLOW_COLOR
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
                       ),
-                      onPressed: (){
-                        setState(() {
-                          _goToPage(3);
-                        });
-                      },
-                      child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                    ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
                   ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(1);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
 
-                  const SizedBox(width: 8,),
+              const SizedBox(width: 8,),
 
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape:  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                          ),
-                          backgroundColor: DARK_PRIMARY_COLOR
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
                       ),
-                      onPressed: (){
-                        _saveUserInputsInsideApp();
-                      },
-                      child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                    ),
+                      backgroundColor: DARK_PRIMARY_COLOR
                   ),
-                ],
-              )
+                  onPressed: (){
+                    _goToPage(3);
+                  },
+                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -1281,7 +1308,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   const Expanded(
                     child: Text(
-                      '3/6',
+                      '4/6',
                       style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -1348,7 +1375,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     ),
                     onPressed: (){
                       setState(() {
-                        _goToPage(1);
+                        _goToPage(2);
                       });
                     },
                     child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
@@ -1366,7 +1393,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
-                    _goToPage(3);
+                    _goToPage(4);
                   },
                   child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
@@ -1478,6 +1505,32 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
   Widget _buildFavoriteCategories(){
+
+    //remove allergens
+    if(_allergens.contains('Egg') || _allergens.contains('Fish') || _allergens.contains('Nuts')){
+      List<String> categories= [];
+      _allCategoryOptions.forEach((element) {
+        if(element == 'Eggs'){
+          if(!_allergens.contains('Egg')){
+            categories.add(element);
+          }
+        }else if(element == 'Nuts & Seeds'){
+          if(!_allergens.contains('Nuts')){
+            categories.add(element);
+          }
+        }else if(element == 'Fish & Seafood'){
+          if(!_allergens.contains('Fish')){
+            categories.add(element);
+          }
+        }else{
+          categories.add(element);
+        }
+      });
+
+      _allCategoryOptions= categories;
+    }
+
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Wrap(

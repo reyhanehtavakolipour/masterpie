@@ -99,6 +99,14 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
 @override
   Widget build(BuildContext context) {
+
+    String servingNumber= '';
+    if(newFood.servingAmount.isNotEmpty){
+      if(isValidNumber(newFood.servingAmount[0].toString())){
+        servingNumber= newFood.servingAmount[0].toInt().toString();
+      }
+    }
+
     return MaterialApp(
       theme: ThemeData(fontFamily: MONTSERRAT_FONT),
       debugShowCheckedModeBanner: false,
@@ -156,7 +164,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
                             const SizedBox(height: 16,),
 
-                            const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                            Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
                             const SizedBox(height: 4,),
 
@@ -427,7 +435,7 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
             ingredients = '$ingredients- ${genericFood.ingredients[i]}\n';
         }
 
-        _foodName = '${genericFood.name}(for ${genericFood.servingAmount[0].toInt()} servings)';
+        _foodName = genericFood.name;
         _totalCalorie = genericFood.calorie[0][0];
         _totalProtein = genericFood.protein[0][0];
         _totalCarb = genericFood.carb[0][0];

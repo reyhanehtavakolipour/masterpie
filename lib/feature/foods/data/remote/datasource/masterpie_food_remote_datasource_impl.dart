@@ -283,10 +283,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
 
-      printWrapped('dfgpji1: ${foods}');
-      printWrapped('dfgpji2: ${servingRanges}');
-      printWrapped('dfgpji3: ${macroGoalsRange}');
-
       final NetworkRequest request = await NetworkRequest.createGoogleCloud();
 
       List<Map<String, dynamic>> foodsBodyValue = [];

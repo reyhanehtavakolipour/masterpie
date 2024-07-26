@@ -91,6 +91,38 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
 
 
+          String macroDetails= '';
+          if(_foods[index].name.isNotEmpty){
+            double calorie= 0;
+            double protein= 0;
+            double carb= 0;
+            double fat= 0;
+            final food= _foods[index];
+
+            if(food.foodType ==FoodType.groceryProduct){
+              calorie= double.parse(food.calorie[0]);
+              protein= double.parse(food.protein[0]);
+              carb= double.parse(food.carb[0]);
+              fat= double.parse(food.fat[0]);
+            }else{
+              if(food.ingredients.length == food.calorie.length){
+                for(int i = 0; i < food.servingIngredientsCount.length; i++){
+                  calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
+                  protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
+                  carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
+                  fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
+                }
+              }else{
+                calorie= calorie + double.parse(food.calorie[0]);
+                protein= protein + double.parse(food.protein[0]);
+                carb= carb + double.parse(food.carb[0]);
+                fat= fat + double.parse(food.fat[0]);
+              }
+            }
+
+            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat per serving';
+          }
+
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             margin: const EdgeInsets.only(top: 8,),
@@ -270,13 +302,16 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                             ],
                           ),
 
+                          Text(
+                            macroDetails,
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
+                          ),
+
                           Visibility(
                             visible: _foods[index].foodType == FoodType.meal,
-                            child: Container(
-                              child: const Text(
-                                SEE_RECIPE_LABEL,
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
-                              ),
+                            child: const Text(
+                              SEE_RECIPE_LABEL,
+                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
                             ),
                           ),
 

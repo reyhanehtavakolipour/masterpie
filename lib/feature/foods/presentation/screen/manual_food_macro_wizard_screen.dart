@@ -418,7 +418,7 @@ class _ManualFoodMacroWizardScreenState extends State<ManualFoodMacroWizardScree
                   showErrorToast(context, ERROR_FOOD_SERVING_RANGE_EMPTY);
                 }else{
 
-                  newFood= newFood.copyWith(name: _mealNameController.text);
+                  newFood= newFood.copyWith(name: _mealNameController.text, foodType: FoodType.groceryProduct);
 
                   FoodDetailForMacroWizardArgumentModel model= FoodDetailForMacroWizardArgumentModel(
                     type: widget.genericFoodDetailForMacroWizardArgumentModel.type,

@@ -268,6 +268,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
   Widget _buildFoodsPortions(){
+
     return SizedBox(
       height: 2000,
       child: ListView.builder(
@@ -278,7 +279,40 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           padding: const EdgeInsets.symmetric(horizontal: 8),
           itemCount: _suggestedFoodsPortions[_currentPage].foods.length,
           itemBuilder: (context, index){
+
             Food food = _suggestedFoodsPortions[_currentPage].foods[index];
+
+            String macroDetails= '';
+            double calorie= 0;
+            double protein= 0;
+            double carb= 0;
+            double fat= 0;
+
+            if(food.foodType ==FoodType.groceryProduct){
+              calorie= double.parse(food.calorie[0]);
+              protein= double.parse(food.protein[0]);
+              carb= double.parse(food.carb[0]);
+              fat= double.parse(food.fat[0]);
+            }else{
+              if(food.ingredients.length == food.calorie.length){
+                for(int i = 0; i < food.servingIngredientsCount.length; i++){
+                  calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
+                  protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
+                  carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
+                  fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
+                }
+              }else{
+                calorie= calorie + double.parse(food.calorie[0]);
+                protein= protein + double.parse(food.protein[0]);
+                carb= carb + double.parse(food.carb[0]);
+                fat= fat + double.parse(food.fat[0]);
+              }
+            }
+
+            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat per serving';
+
+
+
             return InkWell(
               onTap: (){
                 if(food.foodType == FoodType.meal){
@@ -323,14 +357,18 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                     const SizedBox(height: 8,),
 
+
+                    Text(
+                      macroDetails,
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
+                    ),
+
+
                     Visibility(
                     visible: food.foodType == FoodType.meal,
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: const Text(
-                        SEE_RECIPE_LABEL,
-                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
-                      ),
+                    child: const Text(
+                      SEE_RECIPE_LABEL,
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
                     ),
                   ),
 

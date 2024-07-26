@@ -514,12 +514,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
 
 
-
-
   @override
   Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote, List<String> mainDishType, List<String> sideDishTypes) async{
     try{
-      printWrapped('show_user_pref: ${profileRemote}');
 
       final NetworkRequest request = await NetworkRequest.create();
 
@@ -544,8 +541,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           'macroGoal': profileRemote.dailyMacroGoal
         };
 
-        printWrapped('show_user_pref2: ${autoGenerateFoodParams}');
-
         final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
         final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
@@ -553,27 +548,22 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         if(recipeResponse.statusCode == SUCCESS_API_CODE){
           Map<String, dynamic> data= recipeResponse.data;
           String recipeId= data['recipe_id'];
-          print('show_result: ${data}');
           final recipeDetailResponse= await getRecipe(recipeId);
           if(recipeDetailResponse.isRight()){
-            print('show_result11: ${recipeDetailResponse.asRight()}');
             final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
-            printWrapped('show_result22: ${generatedFood}');
             foods.add(generatedFood);
           }else{
-            print('show_error33: ${recipeDetailResponse.asLeft().message}');
+            print('show_error: ${recipeDetailResponse.asLeft().message}');
             foods.add(FoodRemote());
           }
         }else{
-          print('show_error44: ${recipeResponse.statusMessage}');
+          print('show_error: ${recipeResponse.statusMessage}');
           foods.add(FoodRemote());
         }
       });
-      printWrapped('all_foods: $foods');
       return Right(foods);
-
     }catch(error){
-      print('show_error55: ${error}');
+      print('show_error: $error');
       return Left(ExceptionFailure(error));
     }
   }
@@ -581,7 +571,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   @override
   Future<Either<Failure, FoodRemote>> autoGenerateFood(ProfileRemote profileRemote, String type) async{
     try{
-      // printWrapped('show_user_pref: ${profileRemote}');
 
       final NetworkRequest request = await NetworkRequest.create();
 
@@ -598,8 +587,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         'macroGoal': profileRemote.dailyMacroGoal
       };
 
-      printWrapped('show_user_pref2: ${autoGenerateFoodParams}');
-
 
       final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
@@ -613,29 +600,21 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
 
         String recipeId= data['recipe_id'];
-        print('show_result: ${data}');
 
         final recipeDetailResponse= await getRecipe(recipeId);
         if(recipeDetailResponse.isRight()){
-
-          print('show_result22: ${recipeDetailResponse.asRight()}');
-
-
           final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
-
-          printWrapped('show_result33: ${generatedFood}');
-
           return Right(generatedFood);
 
         }
-        print('show_error0: ${recipeResponse.statusMessage}');
+        print('show_error: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
       }else{
-        print('show_error1: ${recipeResponse.statusMessage}');
+        print('show_error: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
       }
     }catch(error){
-      print('show_error2: ${error}');
+      print('show_error: $error');
       return Left(ExceptionFailure(error));
     }
   }

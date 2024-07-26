@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
+import '../../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../../util/design/text/app_assets.dart';
 import '../../../domain/model/food_model.dart';
 
@@ -73,6 +74,11 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
 
   Widget contentBox(BuildContext context) {
 
+    String servingNumber= '';
+    if(isValidNumber(widget.food.servingAmount.toString())){
+      servingNumber= widget.food.servingAmount.toInt().toString();
+    }
+
     return  Container(
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
@@ -117,12 +123,9 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
                   Text(widget.food.name, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
 
-                  Text('recipe for ${widget.food.servingAmount.toInt()} serving', style: const TextStyle(fontSize: 12, color: GREEN_COLOR, fontWeight: FontWeight.bold),),
-
-
                   const SizedBox(height: 16,),
 
-                  const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                  Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
                   const SizedBox(height: 4,),
 

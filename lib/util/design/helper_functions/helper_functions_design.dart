@@ -97,6 +97,10 @@ String checkNumberType(num number) {
   }
 }
 
+bool isValidNumber(String input) {
+  return double.tryParse(input) != null;
+}
+
 bool isValidEmail(String email) {
   final emailRegex = RegExp(
     r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
