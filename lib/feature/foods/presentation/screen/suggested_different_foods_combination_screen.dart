@@ -312,7 +312,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat per serving';
 
 
-
             return InkWell(
               onTap: (){
                 if(food.foodType == FoodType.meal){
@@ -372,9 +371,16 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     ),
                   ),
 
+                    Visibility(
+                      visible: food.foodType == FoodType.groceryProduct,
+                      child: Text(
+                        'One Serving = ${food.foodType == FoodType.groceryProduct ? food.units[0] : ''}',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+                      ),
+                    ),
       
                     const SizedBox(height: 16,),
-      
+
       
                     Container(
                       width: double.infinity,

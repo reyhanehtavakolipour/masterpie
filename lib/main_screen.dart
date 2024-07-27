@@ -83,7 +83,7 @@ class MainScreen extends StatefulWidget {
 
   final bool? isFromOnboard;
 
-  const MainScreen({Key? key,  this.isFromOnboard}) : super(key: key);
+   const MainScreen({Key? key,  this.isFromOnboard}) : super(key: key);
 
 @override
 State<MainScreen> createState() => _MainScreenState();
@@ -92,6 +92,7 @@ State<MainScreen> createState() => _MainScreenState();
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
 
+  bool isFromOnboard= false;
 
   bool _userLoggedIn= false;
 
@@ -189,6 +190,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+    isFromOnboard= widget.isFromOnboard ?? false;
     _tabController = TabController(length: TABS_SIZE, vsync: this);
     _todayWeightController= TextEditingController(text: '0');
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
@@ -238,7 +240,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   void checkIfUserCameFromOnBoard(){
     // auto generate meals for macro diet wizard if user just completed the onboard
-    if(widget.isFromOnboard == true){
+    if(isFromOnboard == true){
       Future.delayed(Duration.zero, () {
         _autoGenerateFoodsForDay();
       });
@@ -1510,7 +1512,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           _autoGenerateFoodsBloc.add(const AutoGenerateFoodsEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             String popupMsg= '';
-                            if(widget.isFromOnboard == true){
+                            if(isFromOnboard == true){
                               popupMsg= GENERATE_MEAL_PLAN_ONBOARD;
                             }else{
                               popupMsg= GENERATE_MEAL_PLAN;
@@ -1667,7 +1669,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     });
 
 
-    if(widget.isFromOnboard == true){
+    if(isFromOnboard == true){
+      isFromOnboard = false;
       showDialog(
         context: context,
         barrierDismissible: false,

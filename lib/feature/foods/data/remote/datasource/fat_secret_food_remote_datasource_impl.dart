@@ -531,11 +531,11 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         Map<String, dynamic> autoGenerateFoodParams = {
           'favoriteCategories': [''],
           'hateCategories': [''],
-          'favoriteSubCategories': profileRemote.favoriteSubCategories,
-          'hateSubCategories': profileRemote.hateSubCategories,
+          'favoriteSubCategories': profileRemote.favoriteSubCategories.isEmpty ? [''] : profileRemote.favoriteSubCategories,
+          'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
           'DishTypes': type == 'Dinner' ? 'Lunch' : type,
           'isMainDish': false,
-          'allergens': profileRemote.allergens,
+          'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
           'numMainDish' : mainDishType.length,
           'numSideDish': sideDishTypes.length,
           'macroGoal': profileRemote.dailyMacroGoal
@@ -577,11 +577,11 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       Map<String, dynamic> autoGenerateFoodParams = {
         'favoriteCategories': [''],
         'hateCategories': [''],
-        'favoriteSubCategories': profileRemote.favoriteSubCategories,
-        'hateSubCategories': profileRemote.hateSubCategories,
+        'favoriteSubCategories': profileRemote.favoriteSubCategories.isEmpty ? [''] : profileRemote.favoriteSubCategories,
+        'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
         'DishTypes': type == 'Dinner' ? 'Lunch' : type,
         'isMainDish': false,
-        'allergens': profileRemote.allergens,
+        'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
         'numMainDish' : profileRemote.mainDishTypes.length,
         'numSideDish': profileRemote.sideDishTypes.length,
         'macroGoal': profileRemote.dailyMacroGoal

@@ -2,6 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/foods/domain/repository/foods_repository.dart';
+import 'package:masterpie/feature/user/data/local/model/profile_local.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/di/service_locator.dart';
@@ -71,6 +72,17 @@ class UpdateProfileUseCase{
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
     }else{
+      final macroResponse = await repo.calculateDailyMacroGoalInRemote(profile);
+
+      List<String> macro= [];
+
+      if(macroResponse.isRight()){
+        macro= macroResponse.asRight();
+      }else{
+        macro= emptyProfile().dailyMacroGoal;
+      }
+
+      profile= profile.copyWith(dailyMacroGoal: macro);
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
     }
