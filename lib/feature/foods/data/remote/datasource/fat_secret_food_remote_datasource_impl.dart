@@ -541,6 +541,9 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           'macroGoal': profileRemote.dailyMacroGoal
         };
 
+
+        print('auto_generate_params: $autoGenerateFoodParams');
+
         final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
         final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
@@ -553,7 +556,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
             final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
             foods.add(generatedFood);
           }else{
-            print('show_error: ${recipeDetailResponse.asLeft().message}');
             foods.add(FoodRemote());
           }
         }else{
@@ -563,7 +565,6 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       });
       return Right(foods);
     }catch(error){
-      print('show_error: $error');
       return Left(ExceptionFailure(error));
     }
   }
@@ -587,6 +588,8 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         'macroGoal': profileRemote.dailyMacroGoal
       };
 
+      print('auto_generate_params: $autoGenerateFoodParams');
+
 
       final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
@@ -607,17 +610,16 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           return Right(generatedFood);
 
         }
-        print('show_error: ${recipeResponse.statusMessage}');
-        return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
+        return Left(RemoteFailure(recipeDetailResponse.asLeft().errorCode, recipeDetailResponse.asLeft().message ?? ''));
       }else{
         print('show_error: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
       }
     }catch(error){
-      print('show_error: $error');
       return Left(ExceptionFailure(error));
     }
   }
+
 
 
 
