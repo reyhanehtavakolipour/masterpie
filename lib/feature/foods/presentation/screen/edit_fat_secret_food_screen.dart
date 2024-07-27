@@ -313,7 +313,7 @@ class _EditFatSecretFoodScreenState extends State<EditFatSecretFoodScreen> {
      return  Row(
        mainAxisAlignment: MainAxisAlignment.start,
        children: [
-         const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+         const Text('$LOG_HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
          const SizedBox(width: 16,),
          GestureDetector(

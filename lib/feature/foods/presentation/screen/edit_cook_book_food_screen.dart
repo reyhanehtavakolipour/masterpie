@@ -1208,73 +1208,78 @@ class _EditCookBookFoodScreenState extends State<EditCookBookFoodScreen> {
          const SizedBox(height: 48,),
 
          /// how many serving?
-         Row(
-           mainAxisAlignment: MainAxisAlignment.start,
+         Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
            children: [
              const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
-             const SizedBox(width: 16,),
-             GestureDetector(
-               child: const CircleAvatar(
-                 radius: 14,
-                 backgroundColor: DARK_PRIMARY_COLOR,
-                 child: Icon(
-                   Icons.remove,
-                   color: Colors.white,
-                 ),
-               ),
-               onTap: (){
-                 setState(() {
-                   if(double.parse(_ingredientServingCountController.text) >= STEP_AMOUNT){
-                     _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) - STEP_AMOUNT).toString());
-                   }
-                 });
-               },
+             const SizedBox(height: 16,),
 
-             ),
-             Container(
-                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                 child: SizedBox(
-                   width: 60,
-                   height: MACRO_HEIGHT,
-                   child: TextField(
-                     controller: _ingredientServingCountController,
-                     textAlign: TextAlign.center,
-                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                     inputFormatters: <TextInputFormatter>[
-                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                     ],
-                     decoration: const InputDecoration(
-                       border: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
-                       ),
-                       enabledBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR),
-                       ),
-                       focusedBorder: OutlineInputBorder(
-                         borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                       ),
-                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+             Row(
+               children: [
+                 GestureDetector(
+                   child: const CircleAvatar(
+                     radius: 14,
+                     backgroundColor: DARK_PRIMARY_COLOR,
+                     child: Icon(
+                       Icons.remove,
+                       color: Colors.white,
                      ),
                    ),
-                 )
-             ),
-             GestureDetector(
-               child: const CircleAvatar(
-                 radius: 14,
-                 backgroundColor: DARK_PRIMARY_COLOR,
-                 child: Icon(
-                   Icons.add,
-                   color: Colors.white,
+                   onTap: (){
+                     setState(() {
+                       if(double.parse(_ingredientServingCountController.text) >= STEP_AMOUNT){
+                         _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) - STEP_AMOUNT).toString());
+                       }
+                     });
+                   },
+
                  ),
-               ),
-               onTap: (){
-                 setState(() {
-                   _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) + STEP_AMOUNT).toString());
-                 });
-               },
-             ),
+                 Container(
+                     margin: const EdgeInsets.symmetric(horizontal: 4),
+                     child: SizedBox(
+                       width: 60,
+                       height: MACRO_HEIGHT,
+                       child: TextField(
+                         controller: _ingredientServingCountController,
+                         textAlign: TextAlign.center,
+                         style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                         inputFormatters: <TextInputFormatter>[
+                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                         ],
+                         decoration: const InputDecoration(
+                           border: OutlineInputBorder(
+                             borderSide: BorderSide(color: PRIMARY_COLOR),
+                           ),
+                           enabledBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: PRIMARY_COLOR),
+                           ),
+                           focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
+                           ),
+                           contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                         ),
+                       ),
+                     )
+                 ),
+                 GestureDetector(
+                   child: const CircleAvatar(
+                     radius: 14,
+                     backgroundColor: DARK_PRIMARY_COLOR,
+                     child: Icon(
+                       Icons.add,
+                       color: Colors.white,
+                     ),
+                   ),
+                   onTap: (){
+                     setState(() {
+                       _ingredientServingCountController = TextEditingController(text: (double.parse(_ingredientServingCountController.text) + STEP_AMOUNT).toString());
+                     });
+                   },
+                 ),
+               ],
+             )
            ],
          ),
        ],

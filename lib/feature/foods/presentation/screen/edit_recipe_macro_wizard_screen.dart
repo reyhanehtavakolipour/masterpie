@@ -1204,7 +1204,7 @@ class _EditRecipeMacroWizardScreenState extends State<EditRecipeMacroWizardScree
          Row(
            mainAxisAlignment: MainAxisAlignment.start,
            children: [
-             const Text('$HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
+             const Text('$LOG_HOW_MANY_SERVINGS:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
 
              const SizedBox(width: 16,),
              GestureDetector(

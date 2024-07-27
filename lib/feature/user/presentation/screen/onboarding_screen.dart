@@ -1702,14 +1702,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
           ),
 
-          const SizedBox(height: 24,),
-
-          Padding(
-              padding: const EdgeInsets.all(4),
-              child: Image.asset(FEQUENT_EATING_PATH, width: 200, height: 200,)
-          ),
-
-          const SizedBox(height: 32,),
 
 
           Expanded(
@@ -1717,6 +1709,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Center(child: Image.asset(FEQUENT_EATING_PATH, width: 200, height: 200,))
+                  ),
+
+                  const SizedBox(height: 32,),
+
                   ///main dish
                   Container(
                     padding: const EdgeInsets.all(8),

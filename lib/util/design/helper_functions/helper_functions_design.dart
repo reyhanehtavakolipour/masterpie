@@ -23,7 +23,6 @@ import 'package:fraction/fraction.dart';
 
 
 
-const MACRO_DIET_NEXT_BTN_CLICKED= 'macro_diet_next_btn_clicked';
 const MACRO_DIET_GROCERY_VIEWED= 'macro_diet_grocery_viewed';
 const MACRO_DIET_RECIPE_VIEWED= 'macro_diet_recipe_viewed';
 const MACRO_DIET_MANUAL_VIEWED= 'macro_diet_manual_viewed';
