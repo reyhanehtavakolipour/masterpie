@@ -112,7 +112,7 @@ class _ViewFavoriteFoodScreenState extends State<ViewFavoriteFoodScreen> {
   Widget build(BuildContext context) {
 
   String servingNumber= '';
-  if(isValidNumber(newFood.servingAmount.toString())){
+  if(isValidDouble(newFood.servingAmount.toString())){
     servingNumber= newFood.servingAmount.toInt().toString();
   }
 

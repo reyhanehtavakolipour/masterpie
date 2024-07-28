@@ -374,17 +374,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   void _updateMainDishType(String type){
     setState(() {
-      if(int.parse(_mainDishTimesController.text) <= _mainDishesType.length){
+
+      int mainDishTimes= 3;
+      bool isValid= isValidInteger(_mainDishTimesController.text);
+      if(isValid){
+        mainDishTimes= int.parse(_mainDishTimesController.text);
+      }
+
+      if( mainDishTimes <= _mainDishesType.length){
         List<String> newList= [];
-        for (int i = 1; i <= int.parse(_mainDishTimesController.text); i++) {
-          if(i <=  int.parse(_mainDishTimesController.text)){
+        for (int i = 1; i <= mainDishTimes; i++) {
+          if(i <=  mainDishTimes){
             newList.add(_mainDishesType[i-1]);
           }
         }
         _mainDishesType= newList;
       }else{
         List<String> newList= [];
-        for (int i = 1; i <= int.parse(_mainDishTimesController.text); i++) {
+        for (int i = 1; i <= mainDishTimes; i++) {
           if(i <= _mainDishesType.length){
             newList.add(_mainDishesType[i-1]);
           }else{
@@ -399,17 +406,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   void _updateSideDishType(String type){
     setState(() {
-      if(int.parse(_sideDishTimesController.text) <= _sideDishesType.length){
+
+      int sideDishTimes= 3;
+      bool isValid= isValidInteger(_sideDishTimesController.text);
+      if(isValid){
+        sideDishTimes= int.parse(_sideDishTimesController.text);
+      }
+
+      if(sideDishTimes <= _sideDishesType.length){
         List<String> newList= [];
-        for (int i = 1; i <= int.parse(_sideDishTimesController.text); i++) {
-          if(i <=  int.parse(_sideDishTimesController.text)){
+        for (int i = 1; i <= sideDishTimes; i++) {
+          if(i <=  sideDishTimes){
             newList.add(_sideDishesType[i-1]);
           }
         }
         _sideDishesType= newList;
       }else{
         List<String> newList= [];
-        for (int i = 1; i <= int.parse(_sideDishTimesController.text); i++) {
+        for (int i = 1; i <= sideDishTimes; i++) {
           if(i <= _sideDishesType.length){
             newList.add(_sideDishesType[i-1]);
           }else{
@@ -1052,8 +1066,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         cursorColor: DARK_PRIMARY_COLOR,
         controller: controller,
         enabled: isEditable,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        decoration: InputDecoration(
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+        ],        decoration: InputDecoration(
           labelText: hintText,
           border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
           fillColor: Colors.white,
@@ -1930,9 +1946,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       selected: _selectedMainDishChoice == value,
       selectedColor: MASTERPIE_YELLOW_COLOR,
       showCheckmark: false,
-      onSelected: (bool selected) {
+      onSelected: (bool? selected) {
         setState(() {
-          _selectedMainDishChoice = (selected ? value : null)!;
+
+          if(selected != null){
+            _selectedMainDishChoice = selected ? value : 3;
+          }else{
+            _selectedMainDishChoice= 3;
+          }
+
           _mainDishTimesController.text= _selectedMainDishChoice.toString();
           _updateMainDishType('');
         });
@@ -1947,9 +1969,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       selected: _selectedSideDishChoice == value,
       selectedColor: MASTERPIE_YELLOW_COLOR,
       showCheckmark: false,
-      onSelected: (bool selected) {
+      onSelected: (bool? selected) {
         setState(() {
-          _selectedSideDishChoice = (selected ? value : null)!;
+          if(selected != null){
+            _selectedSideDishChoice = selected ? value : 2;
+          }else{
+            _selectedSideDishChoice= 3;
+          }
+
           _sideDishTimesController.text= _selectedSideDishChoice.toString();
           _updateSideDishType('');
         });

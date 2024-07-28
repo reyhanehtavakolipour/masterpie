@@ -21,11 +21,54 @@ class DatabaseHelper {
     return _database;
   }
 
+
+
+
   initDatabase() async {
     var docdir = await getApplicationDocumentsDirectory();
     String path = join(docdir.path, 'masterpie_db.db');
     final password= await FlutterConfig.get(SQFLITE_PASSWORD_KEY);
-    return await openDatabase(path, version: 2, onCreate: _onCreate, password: password);
+
+
+
+
+    bool dbExists = await databaseExists(path);
+
+    if (dbExists) {
+      await deleteDatabase(path);
+      print('Database deleted');
+    }
+
+
+    return await openDatabase(
+        path,
+        version: 1,
+        onCreate: _onCreate,
+        password: password,
+      // onUpgrade: (db, oldVersion, newVersion) async {
+      //   if (oldVersion < 5) {
+      //
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $MAIN_DISH_TYPES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $SIDE_DISH_TYPES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $FAVORITE_CATEGORIES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $HATE_CATEGORIES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $FAVORITE_SUBCATEGORIES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $HATE_SUBCATEGORIES TEXT');
+      //     await db.execute('ALTER TABLE $TABLE_PROFILE ADD COLUMN $ALLERGENS TEXT');
+      //
+      //
+      //     await db.execute('ALTER TABLE $TABLE_LOGGED_FOODS ADD COLUMN $CREATED_FROM_FAT_SECRET_RECIPES INTEGER');
+      //
+      //     await db.execute('ALTER TABLE $TABLE_MY_COOKBOOK ADD COLUMN $CREATED_FROM_FAT_SECRET_RECIPES INTEGER');
+      //
+      //     await db.execute('ALTER TABLE $TABLE_MY_FOOD ADD COLUMN $CREATED_FROM_FAT_SECRET_RECIPES INTEGER');
+      //
+      //
+      //
+      //
+      //   }
+      // },
+    );
   }
 
   Future _onCreate(Database db, int version) async {

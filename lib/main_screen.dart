@@ -2247,12 +2247,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           const SizedBox(width: 8,),
 
           /// add new main dish
-          dishTypesDropDown(ADD_MAIN_DISH_WIZARD),
+          Expanded(child: dishTypesDropDown(ADD_MAIN_DISH_WIZARD)),
 
           const SizedBox(width: 12,),
 
           /// add new side dish
-         dishTypesDropDown(ADD_SIDE_DISH_WIZARD),
+         Expanded(child: dishTypesDropDown(ADD_SIDE_DISH_WIZARD)),
 
 
         ]
@@ -2272,7 +2272,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     }
 
     return  SizedBox(
-      width: 170,
       height: 40,
       child: DropdownButtonFormField<String?>(
         value: title,

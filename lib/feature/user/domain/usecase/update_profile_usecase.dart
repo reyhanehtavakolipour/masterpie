@@ -83,6 +83,7 @@ class UpdateProfileUseCase{
       }
 
       profile= profile.copyWith(dailyMacroGoal: macro);
+
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
     }

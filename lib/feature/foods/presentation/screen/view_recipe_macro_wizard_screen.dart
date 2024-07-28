@@ -98,7 +98,7 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
 
     String servingNumber= '';
     if(newFood.servingAmount.isNotEmpty){
-      if(isValidNumber(newFood.servingAmount[0].toString())){
+      if(isValidDouble(newFood.servingAmount[0].toString())){
         servingNumber= newFood.servingAmount[0].toInt().toString();
       }
     }

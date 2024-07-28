@@ -97,8 +97,13 @@ String checkNumberType(num number) {
   }
 }
 
-bool isValidNumber(String input) {
+bool isValidDouble(String input) {
   return double.tryParse(input) != null;
+}
+
+
+bool isValidInteger(String input) {
+  return int.tryParse(input) != null;
 }
 
 bool isValidEmail(String email) {

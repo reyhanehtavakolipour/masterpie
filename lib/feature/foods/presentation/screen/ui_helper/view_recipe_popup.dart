@@ -75,7 +75,7 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
   Widget contentBox(BuildContext context) {
 
     String servingNumber= '';
-    if(isValidNumber(widget.food.servingAmount.toString())){
+    if(isValidDouble(widget.food.servingAmount.toString())){
       servingNumber= widget.food.servingAmount.toInt().toString();
     }
 
