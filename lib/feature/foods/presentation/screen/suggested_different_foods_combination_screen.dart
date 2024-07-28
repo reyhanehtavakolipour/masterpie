@@ -179,15 +179,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     _buildFoodsPortions(),
 
 
-                    const SizedBox(height: 90,),
-
                   ],
                 ),
               ),
-
-
-
-
 
 
               logFoodsButton(),
@@ -270,7 +264,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   Widget _buildFoodsPortions(){
 
     return SizedBox(
-      height: 2000,
+      height: 1500,
       child: ListView.builder(
           shrinkWrap: false,
           primary: true,

@@ -373,6 +373,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       };
 
 
+      printWrapped('show_param: ${foodsPortionRemoteBody}');
 
       final response= await request.post(FOODS_PORTION_API, data: foodsPortionRemoteBody);
 

@@ -2890,42 +2890,44 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
           const SizedBox(width: 8,),
 
-          Row(
-            children: [
 
-              SizedBox(
-                width: 50,
-                height: MACRO_HEIGHT,
-                child: TextField(
-                  controller: _proteinPercentageController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(numericRegExp),
-                  ],
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+          SizedBox(
+            height: MACRO_HEIGHT,
+            child: Row(
+              children: [
+
+
+                Expanded(
+                  child: TextField(
+                    controller: _proteinPercentageController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.allow(numericRegExp),
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
                 ),
-              ),
 
-              const SizedBox(width: 8,),
+                const SizedBox(width: 8,),
 
-              const SizedBox(
-                width: 100,
-                child: Text(OF_TOTAL_CAL,
-                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
-              )
-            ],
+                const Expanded(
+                  child: Text(OF_TOTAL_CAL,
+                    style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -2943,41 +2945,41 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
           const SizedBox(width: 8,),
 
-          Row(
-            children: [
-              SizedBox(
-                width: 50,
-                height: MACRO_HEIGHT,
-                child: TextField(
-                  controller: _carbPercentageController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(numericRegExp),
-                  ],
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+          SizedBox(
+            height: MACRO_HEIGHT,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _carbPercentageController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      FilteringTextInputFormatter.allow(numericRegExp),
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   ),
                 ),
-              ),
 
-              const SizedBox(width: 8,),
+                const SizedBox(width: 8,),
 
-              const SizedBox(
-                width: 100,
-                child: Text(OF_TOTAL_CAL,
-                  style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
-              )
-            ],
+                const Expanded(
+                  child: Text(OF_TOTAL_CAL,
+                    style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -2995,14 +2997,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
           const SizedBox(height: 8,),
           SizedBox(
-            // width: 100,
             height: MACRO_HEIGHT,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                SizedBox(
-                  width: 50,
+                Expanded(
                   child: TextField(
                     controller: _fatPercentageController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
@@ -3027,8 +3027,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                 const SizedBox(width: 8,),
 
-                const SizedBox(
-                  width: 100,
+                const Expanded(
                   child: Text(OF_TOTAL_CAL,
                   style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold, fontSize: 8),),
                 )
