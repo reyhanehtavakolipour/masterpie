@@ -21,6 +21,7 @@ class SuggestPortionsBloc extends Bloc<SuggestFoodsPortionEvent, SuggestFoodsPor
       final useCase= serviceLocator<SuggestFoodsPortionsUseCase>();
       var result = await useCase.suggestFoodsPortions(
         event.foods,
+        event.isMainDishList,
         event.servingsRange,
         event.macroGoalsRange,
         event.restriction,

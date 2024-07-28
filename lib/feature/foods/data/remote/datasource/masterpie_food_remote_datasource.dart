@@ -41,7 +41,7 @@ abstract class MasterPieFoodRemoteDataSource{
 
 
 
-  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<bool> isMainDishList, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
   Future<Either<Failure, List<FoodRemote>>> logFoods(List<FoodRemote> foods, String date, String userId);

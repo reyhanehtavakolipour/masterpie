@@ -16,13 +16,14 @@ class SuggestFoodsPortionsUseCase{
 
   Future<Either<Failure, WizardResponseModel>> suggestFoodsPortions(
       List<Food> foods,
+      List<bool> isMainDishList,
       List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange,
       List<String> restriction,
       String macroGoalType,
       List<double> macroPercentage
       ) async{
-      final suggestedFoodsResponseRemote = await repo.suggestFoodsPortionsFromRemote(foods, servingRanges, macroGoalsRange, restriction, macroGoalType, macroPercentage);
+      final suggestedFoodsResponseRemote = await repo.suggestFoodsPortionsFromRemote(foods, isMainDishList, servingRanges, macroGoalsRange, restriction, macroGoalType, macroPercentage);
       if(suggestedFoodsResponseRemote.isRight()){
           return Right(suggestedFoodsResponseRemote.asRight());
       }

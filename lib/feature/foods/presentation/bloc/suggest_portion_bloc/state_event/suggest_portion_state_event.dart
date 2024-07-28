@@ -18,6 +18,7 @@ abstract class SuggestFoodsPortionEvent with _$SuggestFoodsPortionEvent {
 
   const factory SuggestFoodsPortionEvent.onSuggestFoodsPortion(
       List<Food> foods,
+      List<bool> isMainDishList,
       List<List<double>> servingsRange,
       List<List<double>> macroGoalsRange,
       List<String> restriction,

@@ -133,6 +133,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   bool _addedFoodsVisible= true;
 
+  bool _isAutoGenerateForOneMeal= false;
 
   late TextEditingController _proteinPercentageController;
   late TextEditingController _carbPercentageController;
@@ -227,12 +228,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   void _autoGenerateFoodsForDay(){
+    _isAutoGenerateForOneMeal= false;
     _autoGenerateFoodsBloc.add(
          AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(_mainDishTypes, _sideDishTypes)
     );
   }
 
   void _autoGenerateFood(String type, int index, bool isMainDish){
+    _isAutoGenerateForOneMeal= true;
     _autoGenerateFoodsBloc.add(
        AutoGenerateFoodsEvent.onAutoGenerateFood(type, index, isMainDish)
     );
@@ -1522,6 +1525,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                               builder: (context) {
                                 return WaitPopup(
                                   message: popupMsg,
+                                  isForOneMeal: _isAutoGenerateForOneMeal,
                                 );
                               },
                             );
@@ -2857,9 +2861,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
             logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
 
+            List<bool> isMainDishList= [];
+            _mainDishTypes.forEach((element) {
+              isMainDishList.add(true);
+            });
+            _sideDishTypes.forEach((element) {
+              isMainDishList.add(false);
+            });
+
             _suggestPortionsBloc.add(
                 SuggestFoodsPortionEvent.onSuggestFoodsPortion(
                     _requestWizardArgumentModel.foods,
+                    isMainDishList,
                     servings,
                     _requestWizardArgumentModel.macroGoalRanges,
                     _requestWizardArgumentModel.restriction,

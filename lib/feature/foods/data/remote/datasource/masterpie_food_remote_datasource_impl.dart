@@ -279,7 +279,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   }
 
   @override
-  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseRemoteModel>> suggestFoodsPortions(List<FoodRemote> foods, List<bool> isMainDishList, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
     try{
 
@@ -349,7 +349,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           "foodname": food.name,
           "macro": foodMacro,
           "minServing": servingRanges[i][0],
-          "maxServing": servingRanges[i][1]
+          "maxServing": servingRanges[i][1],
+          'isMainDish': isMainDishList[i]
         };
         foodsBodyValue.add(foodMap);
       }

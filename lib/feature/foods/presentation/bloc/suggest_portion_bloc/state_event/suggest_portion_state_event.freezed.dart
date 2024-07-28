@@ -21,6 +21,7 @@ mixin _$SuggestFoodsPortionEvent {
     required TResult Function() onReset,
     required TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -34,6 +35,7 @@ mixin _$SuggestFoodsPortionEvent {
     TResult? Function()? onReset,
     TResult? Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -47,6 +49,7 @@ mixin _$SuggestFoodsPortionEvent {
     TResult Function()? onReset,
     TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -137,6 +140,7 @@ class _$ResetImpl implements Reset {
     required TResult Function() onReset,
     required TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -153,6 +157,7 @@ class _$ResetImpl implements Reset {
     TResult? Function()? onReset,
     TResult? Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -169,6 +174,7 @@ class _$ResetImpl implements Reset {
     TResult Function()? onReset,
     TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -227,6 +233,7 @@ abstract class _$$SuggestPortionsEventImplCopyWith<$Res> {
   @useResult
   $Res call(
       {List<Food> foods,
+      List<bool> isMainDishList,
       List<List<double>> servingsRange,
       List<List<double>> macroGoalsRange,
       List<String> restriction,
@@ -247,6 +254,7 @@ class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? foods = null,
+    Object? isMainDishList = null,
     Object? servingsRange = null,
     Object? macroGoalsRange = null,
     Object? restriction = null,
@@ -258,6 +266,10 @@ class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
           ? _value._foods
           : foods // ignore: cast_nullable_to_non_nullable
               as List<Food>,
+      null == isMainDishList
+          ? _value._isMainDishList
+          : isMainDishList // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
       null == servingsRange
           ? _value._servingsRange
           : servingsRange // ignore: cast_nullable_to_non_nullable
@@ -287,12 +299,14 @@ class __$$SuggestPortionsEventImplCopyWithImpl<$Res>
 class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
   const _$SuggestPortionsEventImpl(
       final List<Food> foods,
+      final List<bool> isMainDishList,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
       final List<String> restriction,
       this.macroGoalType,
       final List<double> macroPercentage)
       : _foods = foods,
+        _isMainDishList = isMainDishList,
         _servingsRange = servingsRange,
         _macroGoalsRange = macroGoalsRange,
         _restriction = restriction,
@@ -304,6 +318,14 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
     if (_foods is EqualUnmodifiableListView) return _foods;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_foods);
+  }
+
+  final List<bool> _isMainDishList;
+  @override
+  List<bool> get isMainDishList {
+    if (_isMainDishList is EqualUnmodifiableListView) return _isMainDishList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_isMainDishList);
   }
 
   final List<List<double>> _servingsRange;
@@ -342,7 +364,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
 
   @override
   String toString() {
-    return 'SuggestFoodsPortionEvent.onSuggestFoodsPortion(foods: $foods, servingsRange: $servingsRange, macroGoalsRange: $macroGoalsRange, restriction: $restriction, macroGoalType: $macroGoalType, macroPercentage: $macroPercentage)';
+    return 'SuggestFoodsPortionEvent.onSuggestFoodsPortion(foods: $foods, isMainDishList: $isMainDishList, servingsRange: $servingsRange, macroGoalsRange: $macroGoalsRange, restriction: $restriction, macroGoalType: $macroGoalType, macroPercentage: $macroPercentage)';
   }
 
   @override
@@ -351,6 +373,8 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
         (other.runtimeType == runtimeType &&
             other is _$SuggestPortionsEventImpl &&
             const DeepCollectionEquality().equals(other._foods, _foods) &&
+            const DeepCollectionEquality()
+                .equals(other._isMainDishList, _isMainDishList) &&
             const DeepCollectionEquality()
                 .equals(other._servingsRange, _servingsRange) &&
             const DeepCollectionEquality()
@@ -367,6 +391,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_foods),
+      const DeepCollectionEquality().hash(_isMainDishList),
       const DeepCollectionEquality().hash(_servingsRange),
       const DeepCollectionEquality().hash(_macroGoalsRange),
       const DeepCollectionEquality().hash(_restriction),
@@ -387,6 +412,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
     required TResult Function() onReset,
     required TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -394,8 +420,8 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
             List<double> macroPercentage)
         onSuggestFoodsPortion,
   }) {
-    return onSuggestFoodsPortion(foods, servingsRange, macroGoalsRange,
-        restriction, macroGoalType, macroPercentage);
+    return onSuggestFoodsPortion(foods, isMainDishList, servingsRange,
+        macroGoalsRange, restriction, macroGoalType, macroPercentage);
   }
 
   @override
@@ -404,6 +430,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
     TResult? Function()? onReset,
     TResult? Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -411,8 +438,8 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
             List<double> macroPercentage)?
         onSuggestFoodsPortion,
   }) {
-    return onSuggestFoodsPortion?.call(foods, servingsRange, macroGoalsRange,
-        restriction, macroGoalType, macroPercentage);
+    return onSuggestFoodsPortion?.call(foods, isMainDishList, servingsRange,
+        macroGoalsRange, restriction, macroGoalType, macroPercentage);
   }
 
   @override
@@ -421,6 +448,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
     TResult Function()? onReset,
     TResult Function(
             List<Food> foods,
+            List<bool> isMainDishList,
             List<List<double>> servingsRange,
             List<List<double>> macroGoalsRange,
             List<String> restriction,
@@ -430,8 +458,8 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
     required TResult orElse(),
   }) {
     if (onSuggestFoodsPortion != null) {
-      return onSuggestFoodsPortion(foods, servingsRange, macroGoalsRange,
-          restriction, macroGoalType, macroPercentage);
+      return onSuggestFoodsPortion(foods, isMainDishList, servingsRange,
+          macroGoalsRange, restriction, macroGoalType, macroPercentage);
     }
     return orElse();
   }
@@ -471,6 +499,7 @@ class _$SuggestPortionsEventImpl implements SuggestPortionsEvent {
 abstract class SuggestPortionsEvent implements SuggestFoodsPortionEvent {
   const factory SuggestPortionsEvent(
       final List<Food> foods,
+      final List<bool> isMainDishList,
       final List<List<double>> servingsRange,
       final List<List<double>> macroGoalsRange,
       final List<String> restriction,
@@ -478,6 +507,7 @@ abstract class SuggestPortionsEvent implements SuggestFoodsPortionEvent {
       final List<double> macroPercentage) = _$SuggestPortionsEventImpl;
 
   List<Food> get foods;
+  List<bool> get isMainDishList;
   List<List<double>> get servingsRange;
   List<List<double>> get macroGoalsRange;
   List<String> get restriction;

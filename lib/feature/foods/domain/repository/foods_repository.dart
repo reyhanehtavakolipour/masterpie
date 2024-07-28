@@ -33,7 +33,7 @@ abstract class FoodsRepository{
   Future<Either<Failure, List<Food>>> getMyCookBookFoodsFromRemote(String query);
 
 
-  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<bool> isMainDishList, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage);
 
 

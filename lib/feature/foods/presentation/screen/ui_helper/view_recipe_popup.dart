@@ -85,72 +85,74 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: CATEGORY_COLOR,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: CATEGORY_COLOR,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              child: const Text(
+                RECIPE_LABEL,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: DARK_PRIMARY_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: const Text(
-              RECIPE_LABEL,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: DARK_PRIMARY_COLOR,
-                fontWeight: FontWeight.bold,
+
+
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    const SizedBox(height: 8,),
+
+                    /// food name
+                    Text(widget.food.name, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+
+
+                    const SizedBox(height: 16,),
+
+                    Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                    const SizedBox(height: 4,),
+
+
+                    Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+
+                    const SizedBox(height: 16,),
+
+                    const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+
+                    const SizedBox(height: 4,),
+
+
+                    Text(widget.food.recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
+
+
+
+                    const SizedBox(height: 8,),
+
+                  ],
+                ),
               ),
-            ),
-          ),
-
-
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  const SizedBox(height: 8,),
-
-                  /// food name
-                  Text(widget.food.name, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-
-
-                  const SizedBox(height: 16,),
-
-                  Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                  const SizedBox(height: 4,),
-
-
-                  Text(_ingredients, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-
-
-                  const SizedBox(height: 16,),
-
-                  const Text('$RECIPE_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
-
-                  const SizedBox(height: 4,),
-
-
-                  Text(widget.food.recipe, style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.normal),),
-
-
-
-                  const SizedBox(height: 8,),
-
-                ],
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -395,12 +395,12 @@ class FoodsRepositoryImpl extends FoodsRepository{
   }
 
   @override
-  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<List<double>> servingRanges,
+  Future<Either<Failure, WizardResponseModel>> suggestFoodsPortionsFromRemote(List<Food> foods, List<bool> isMainDishList, List<List<double>> servingRanges,
       List<List<double>> macroGoalsRange, List<String> restriction, String macroGoalType, List<double> macroPercentage) async{
 
     String userId = await userHiveDataSource.getString(KEY_USER_ID);
     if(userId.isEmpty){
-      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), isMainDishList, servingRanges,
           macroGoalsRange, restriction, macroGoalType, macroPercentage);
       if(suggestedFoodsPortionResponse.isRight()){
         return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
@@ -414,7 +414,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
     if(userPlanResponse.isRight()){
       if(userPlanResponse.asRight().subscriptionPlan!.plan == FREE_LABEL){
         if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
-          final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+          final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), isMainDishList, servingRanges,
               macroGoalsRange, restriction, macroGoalType, macroPercentage);
           if(suggestedFoodsPortionResponse.isRight()){
             userRepo.updateFoodsPortionRequestsLeftInRemote();
@@ -426,7 +426,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
         }
       }
       if(userPlanResponse.asRight().foodPortionRequestsLeft > 0){
-        final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+        final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), isMainDishList, servingRanges,
             macroGoalsRange, restriction, macroGoalType, macroPercentage);
         if(suggestedFoodsPortionResponse.isRight()){
           userRepo.updateFoodsPortionRequestsLeftInRemote();
@@ -439,7 +439,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
     }
     //let non-users use macro diet wizard for a limited time
     if(userPlanResponse.asLeft().message.contains('invalid input syntax for type uuid')){
-      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), servingRanges,
+      final suggestedFoodsPortionResponse = await masterPieFoodRemoteDataSource.suggestFoodsPortions(mapper.toFoodsRemote(foods), isMainDishList, servingRanges,
           macroGoalsRange, restriction, macroGoalType, macroPercentage);
       if(suggestedFoodsPortionResponse.isRight()){
         return Right(mapper.fromWizardResponseRemote(suggestedFoodsPortionResponse.asRight()));
