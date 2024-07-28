@@ -30,4 +30,7 @@ abstract class UserLocalDataSource{
 
   Future<Either<Failure, Success>> deleteAllTables();
 
+  Future<Either<Failure, Success>> deleteProfileTable();
+
+
 }

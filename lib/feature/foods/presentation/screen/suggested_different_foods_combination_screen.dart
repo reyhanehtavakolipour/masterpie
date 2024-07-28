@@ -426,7 +426,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 Expanded(
                   child: Container(
                     width: double.infinity,
-                    height: 120,
+                    height: 140,
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: DARK_PRIMARY_COLOR,
@@ -466,7 +466,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 Expanded(
                   child: Container(
                       width: double.infinity,
-                      height: 120,
+                      height: 140,
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: DARK_PRIMARY_COLOR,
@@ -509,7 +509,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 Expanded(
                   child: Container(
                       width: double.infinity,
-                      height: 120,
+                      height: 140,
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: DARK_PRIMARY_COLOR,

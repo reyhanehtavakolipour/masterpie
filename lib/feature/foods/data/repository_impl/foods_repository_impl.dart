@@ -779,5 +779,23 @@ class FoodsRepositoryImpl extends FoodsRepository{
     return Left(foodsResponse.asLeft());
   }
 
+  @override
+  Future<Either<Failure, Success>> deleteCookBookTableInLocal() async{
+    await foodLocalDataSource.deleteCookBookTable();
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> deleteFavoriteFoodsTableInLocal() async{
+    await foodLocalDataSource.deleteFavoriteFoodsTable();
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> deleteLogFoodsTableInLocal() async{
+    await foodLocalDataSource.deleteLogFoodsTable();
+    return const Right(Success());
+  }
+
 
 }

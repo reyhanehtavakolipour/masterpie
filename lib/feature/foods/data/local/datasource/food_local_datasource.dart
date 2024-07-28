@@ -82,4 +82,10 @@ abstract class FoodLocalDataSource{
 
   Future<Either<Failure, Success>> deleteLog(String date);
 
+  Future<Either<Failure, Success>> deleteLogFoodsTable();
+
+  Future<Either<Failure, Success>> deleteCookBookTable();
+
+  Future<Either<Failure, Success>> deleteFavoriteFoodsTable();
+
 }

@@ -199,5 +199,16 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
     return const Right(Success());
   }
 
+  @override
+  Future<Either<Failure, Success>> deleteProfileTable() async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db?.delete(TABLE_PROFILE);
+    }on DatabaseException catch (e) {
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
 
 }

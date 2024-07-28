@@ -605,4 +605,38 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
   }
 
 
+  @override
+  Future<Either<Failure, Success>> deleteCookBookTable() async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db?.delete(TABLE_MY_COOKBOOK);
+    }on DatabaseException catch (e) {
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> deleteFavoriteFoodsTable() async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db?.delete(TABLE_MY_FOOD);
+    }on DatabaseException catch (e) {
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> deleteLogFoodsTable() async{
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db?.delete(TABLE_LOGGED_FOODS);
+    }on DatabaseException catch (e) {
+    return Left(ExceptionFailure(e));
+    }
+    return const Right(Success());
+  }
+
+
 }

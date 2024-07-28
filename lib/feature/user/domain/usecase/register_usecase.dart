@@ -35,6 +35,7 @@ class RegisterUseCase{
         final profileResponse= await userRepo.getProfileFromLocal();
         Profile profile= profileResponse.isRight() ? profileResponse.asRight() : Profile();
         profile= profile.copyWith(id: loginResponseRemote.asRight(), email: email);
+        await userRepo.deleteProfileTableInLocal();
         await userRepo.insertUserProfileInLocal(profile);
         await userRepo.upsertProfileInRemote(profile);
 
@@ -44,6 +45,7 @@ class RegisterUseCase{
         List<Food> updatedFoods = foods.map((food) {
           return food.copyWith(id: generateRandomId());
         }).toList();
+        await repo.deleteFavoriteFoodsTableInLocal();
         await repo.saveMyFoodsToLocalDb(updatedFoods);
         await repo.saveMyFoodsToRemote(updatedFoods);
 
@@ -54,6 +56,7 @@ class RegisterUseCase{
         List<Food> updatedCookBookFoods = cookBookFoods.map((food) {
           return food.copyWith(id: generateRandomId());
         }).toList();
+        await repo.deleteCookBookTableInLocal();
         await repo.saveMyCookBookFoodsToLocalDb(updatedCookBookFoods);
         await repo.saveFoodsToMyCookBookRemote(updatedCookBookFoods);
 
@@ -64,7 +67,8 @@ class RegisterUseCase{
         List<Food> updatedLoggedFoods = loggedFoods.map((food) {
           return food.copyWith(id: generateRandomId());
         }).toList();
-        await repo.saveLoggedFoodsToLocalDb(updatedLoggedFoods, DateFormat('yyyy-MM-dd').format(DateTime.now()));
+        await repo.deleteLogFoodsTableInLocal();
+        // await repo.saveLoggedFoodsToLocalDb(updatedLoggedFoods, DateFormat('yyyy-MM-dd').format(DateTime.now()));
         await repo.logFoodsInRemote(updatedLoggedFoods);
 
 

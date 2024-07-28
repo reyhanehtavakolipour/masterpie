@@ -160,4 +160,12 @@ abstract class FoodsRepository{
   Future<Either<Failure, FatSecretFoodsInfo>> getFatSecretFoodsInfoFromRemote();
 
 
+  Future<Either<Failure, Success>> deleteLogFoodsTableInLocal();
+
+  Future<Either<Failure, Success>> deleteCookBookTableInLocal();
+
+  Future<Either<Failure, Success>> deleteFavoriteFoodsTableInLocal();
+
+
+
 }

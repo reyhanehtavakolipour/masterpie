@@ -112,5 +112,8 @@ abstract class UserRepository{
 
   Future<Either<Failure, Success>> logoutInLocal();
 
+  Future<Either<Failure, Success>> deleteProfileTableInLocal();
+
+
 
 }
