@@ -1,8 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
-import 'package:masterpie/util/core/helper/helper_get_value.dart';
-import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../../../../util/core/constant/sqflite_constants.dart';
 import '../../../../../util/core/di/service_locator.dart';
 import '../../../../../util/core/helper/sqflite/sqflite_db_helper.dart';
@@ -18,14 +17,11 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
   Future<Either<Failure, Success>> upsertGuestProfile(ProfileLocal profileLocal) async{
     final db = await serviceLocator<DatabaseHelper>().db;
     try{
-      final result = await db?.query(
+      final result = await db.query(
         TABLE_PROFILE,
       );
 
-      if (result == null){
-        // If the profile doesn't exist, insert it
-        await db?.insert(TABLE_PROFILE, profileLocal.toJson());
-      }else if (result.isEmpty) {
+      if (result.isEmpty) {
         // If the profile doesn't exist, insert it
         await db?.insert(TABLE_PROFILE, profileLocal.toJson());
       }
@@ -88,30 +84,27 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
   @override
   Future<Either<Failure, ProfileLocal>> getProfile() async{
     final db = await serviceLocator<DatabaseHelper>().db;
-    ProfileLocal profile;
     try{
-      final list = await db?.query(
+      final list = await db.query(
         TABLE_PROFILE,
       );
-
-      if(list == null){
-        upsertGuestProfile(emptyProfile());
-        return Right(emptyProfile());
-      }
-
       if(list.isEmpty){
-        upsertGuestProfile(emptyProfile());
-        return Right(emptyProfile());
+        await upsertGuestProfile(emptyProfile());
+        final newList = await db.query(
+          TABLE_PROFILE,
+        );
+        if(newList.isNotEmpty){
+          return Right(ProfileLocal.fromJson(newList[0]));
+        }
+        return const Left(FailureResponse('couldnt get db list'));
       }
 
-      profile = ProfileLocal.fromJson(list[0]);
-
+      return Right(ProfileLocal.fromJson(list[0]));
     }on DatabaseException catch (e) {
       return Left(ExceptionFailure(e));
     }catch(e){
       return Left(ExceptionFailure(e));
     }
-    return Right(profile);
   }
 
 

@@ -191,6 +191,7 @@ const REGISTER_WITH_GOOGLE = 'Register With Google';
 const SIGN_IN_WITH_GOOGLE = 'Sign In With Google';
 const OR_LABEL = 'OR';
 const EMAIL_LABEL = 'Email';
+const EERROR_ADD_ONE_DISH = 'Please add at least one main dish or side dish';
 const FORGET_PASS_EMAIL_SENT_MSG = 'An email has been sent to you with a link. Kindly click on it to proceed with changing your password.';
 const REQUEST_RESET_PASSWORD_LABEL = 'Submit Reset Password Request';
 const PASSWORD_LABEL = 'Password';
@@ -404,7 +405,7 @@ const WAIT_LABEL= 'Wait';
 const STEP_ONE= 'STEP\nONE';
 const STEP_TWO= 'STEP\nTWO';
 const GENERATE_MEAL_PLAN_ONBOARD= 'Welcome To MasterPie.\n\nWait a moment while we generate your personalized meal options based on your preferences.\n\nPlease don\'t close the popup.Thank you for your patience!';
-const GENERATE_MEAL_PLAN= 'Wait a moment while we generate your personalized meal options based on your preferences.\n\nPlease do\'t close the popup.Thank you for your patience!';
+const GENERATE_MEAL_PLAN= 'Wait a moment while we generate your personalized meal options based on your preferences.\n\nPlease don\'t close the popup.Thank you for your patience!';
 const TUTORIAL_STEP_1_TITLE= 'How does the Macro Diet Wizard help you lose weight?';
 const TUTORIAL_STEP_1_DESC= 'This feature helps you lose weight by allowing you to choose from foods you love and that are readily available to you, including ready-to-eat options from the supermarket.'
     'In Masterpie, we don\'t require you to eat recipes that you can\'t prepare simply because you\'re too busy or you do\'t like cooking.We aim to support people who struggle to follow traditional diet apps. Let\'s get started.';

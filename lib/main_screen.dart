@@ -222,16 +222,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     _requestWizardArgumentModel= RequestWizardArgumentModel();
 
     checkIfFirstTimeAppOpened();
-    requestProfile();
-
   }
 
 
   void _autoGenerateFoodsForDay(){
-    _isAutoGenerateForOneMeal= false;
-    _autoGenerateFoodsBloc.add(
-         AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(_mainDishTypes, _sideDishTypes)
-    );
+    if(_mainDishTypes.isNotEmpty || _sideDishTypes.isNotEmpty){
+      _isAutoGenerateForOneMeal= false;
+      _autoGenerateFoodsBloc.add(
+          AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(_mainDishTypes, _sideDishTypes)
+      );
+    }else{
+      showErrorToast(context, EERROR_ADD_ONE_DISH);
+    }
   }
 
   void _autoGenerateFood(String type, int index, bool isMainDish){
@@ -266,12 +268,17 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
     if(firstTime == 0){
       userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 1);
+      userHiveDataSource.putString(KEY_EMAIL, '');
+      userHiveDataSource.putString(KEY_PASSWORD, '');
+      userHiveDataSource.putString(KEY_USER_ID, '');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const LandingScreen(),
         ),
       );
+    }else{
+      requestProfile();
     }
   }
 
@@ -1522,7 +1529,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                             }
                              showDialog(
                               context: context,
-                              builder: (context) {
+                               barrierDismissible: false,
+                               builder: (context) {
                                 return WaitPopup(
                                   message: popupMsg,
                                   isForOneMeal: _isAutoGenerateForOneMeal,
@@ -1695,6 +1703,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   void _addEmptyFoodsInWizard(Profile profile){
     setState(() {
+      _mainDishTypes= [];
+      _sideDishTypes= [];
+      _mainDishFoods= [];
+      _sideDishFoods= [];
+
       profile.mainDishTypes.forEach((element) {
         _mainDishFoods.add(Food(name: ''));
         _mainDishTypes.add(element);

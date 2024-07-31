@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "org.jetbrains.kotlin.android" version "1.9.24" apply false
 }
 
 apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
@@ -36,13 +37,12 @@ android {
     ndkVersion "25.1.8937393"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '1.8'
     }
 
     sourceSets {
@@ -72,9 +72,8 @@ android {
         release {
             signingConfig signingConfigs.release
 
-            shrinkResources false
-            minifyEnabled false
-            proguardFiles
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile(
                     'proguard-android-optimize.txt'),
                     'proguard-rules.pro'
@@ -97,5 +96,6 @@ dependencies {
     implementation "com.android.billingclient:billing-ktx:$billing_version"
 
 }
+
 
 

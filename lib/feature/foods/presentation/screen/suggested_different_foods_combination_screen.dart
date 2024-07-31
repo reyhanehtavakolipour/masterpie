@@ -366,9 +366,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                   ),
 
                     Visibility(
-                      visible: food.foodType == FoodType.groceryProduct,
+                      visible: food.foodType == FoodType.groceryProduct && food.units.isNotEmpty,
                       child: Text(
-                        'One Serving = ${food.foodType == FoodType.groceryProduct ? food.units[0] : ''}',
+                        'One Serving = ${food.foodType == FoodType.groceryProduct && food.units.isNotEmpty ? food.units[0] : ''}',
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
                       ),
                     ),

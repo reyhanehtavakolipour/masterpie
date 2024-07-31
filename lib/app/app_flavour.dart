@@ -14,6 +14,8 @@ import '../util/core/constant/hive_constants.dart';
 import '../util/core/di/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../util/core/helper/sqflite/sqflite_db_helper.dart';
+
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
@@ -27,6 +29,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
           await Hive.initFlutter();
           await initSupabase();
           await initHive();
+
+          //init sqflite
+          DatabaseHelper dbHelper = DatabaseHelper();
+          await dbHelper.db;
 
 
           await Firebase.initializeApp(

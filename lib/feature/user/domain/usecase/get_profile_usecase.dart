@@ -28,19 +28,16 @@ class GetProfileUseCase{
     final idResponse = await repo.getUserIdFromHive();
 
     if(idResponse.isLeft()){
-      return const Left(ExceptionFailure('user not found'));
+      return await getLocalResponseForGuestUser();
     }
 
-    if(idResponse.asRight().isEmpty){
-      return getLocalResponseForGuestUser();
+    if(idResponse.asRight().isEmpty || emailResponse.isLeft()){
+      return await getLocalResponseForGuestUser();
     }
 
-    if(emailResponse.isLeft()){
-      return const Left(ExceptionFailure('email not found'));
-    }
 
     if(emailResponse.asRight().isEmpty){
-      return const Left(ExceptionFailure('email not found'));
+      return await getLocalResponseForGuestUser();
     }
 
     final profileResponse = await repo.getProfileFromRemote(emailResponse.asRight());

@@ -150,7 +150,7 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                             style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
                             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                             decoration: const InputDecoration(
-                              labelText: CALORIE_LABEL,
+                              labelText: '$CALORIE_LABEL(cal)',
                               border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
                               fillColor: Colors.white,
                             ),
@@ -169,7 +169,7 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                             style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
                             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                             decoration: const InputDecoration(
-                              labelText: PROTEIN_LABEL,
+                              labelText: '$PROTEIN_LABEL(g)',
                               border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
                               fillColor: Colors.white,
                             ),
@@ -197,7 +197,7 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                             controller: _carbController,
                             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                             decoration: const InputDecoration(
-                              labelText: CARB_LABEL,
+                              labelText: '$CARB_LABEL(g)',
                               border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
                               fillColor: Colors.white,
                             ),
@@ -217,7 +217,7 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                           style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                           decoration: const InputDecoration(
-                            labelText: FAT_LABEL,
+                            labelText: '$FAT_LABEL(g)',
                             border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
                             fillColor: Colors.white,
                           ),
@@ -241,7 +241,7 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                         showErrorToast(context, FILL_ALL_ERROR);
                       }else{
                         widget.onAddMealBtnClicked(_mealNameController.text,
-                            [_calorieController.text, _proteinController.text, _calorieController.text, _fatController.text], widget.type, widget.index);
+                            [_calorieController.text, _proteinController.text, _carbController.text, _fatController.text], widget.type, widget.index);
                         Navigator.pop(context);
                       }
                     },
