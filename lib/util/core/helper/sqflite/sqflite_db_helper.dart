@@ -43,7 +43,7 @@ class DatabaseHelper {
 
 
     var databasesPath = await getDatabasesPath();
-    String newPath = join(databasesPath, 'masterpie_db.db');
+    String newPath = join(databasesPath, 'masterpie_appdb.db');
 
     return await openDatabase(
       newPath,
