@@ -350,7 +350,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           "macro": foodMacro,
           "minServing": servingRanges[i][0],
           "maxServing": servingRanges[i][1],
-          'isMainDish': isMainDishList[i]
+          'isMainDish': isMainDishList[i],
+          'isFoodAddedbyUser' : true
         };
         foodsBodyValue.add(foodMap);
       }
@@ -380,7 +381,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
       if(response.statusCode == SUCCESS_API_CODE){
 
-        FoodsPortionRemoteResult foodsPortionRemoteResult = FoodsPortionRemoteResult.fromJson(response.data);
+
+        FoodsPortionRemoteResult foodsPortionRemoteResult = FoodsPortionRemoteResult.fromJson(response.data, foods);
 
         List<SuggestedFoodsPortionRemote> foodsPortions= [];
 
@@ -389,16 +391,18 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           final recommendation= foodsPortionRemoteResult.topRecommendations[i];
 
           List<FoodRemote> foodsRemote= [];
-          for (int j = 0; j < foods.length; j++){
-            FoodRemote food= foods[j];
+          for (int j = 0; j < recommendation.newFoods.length; j++){
+            FoodRemote food= recommendation.newFoods[j];
             food= food.copyWith(count: recommendation.portion[j]);
             foodsRemote.add(food);
           }
 
+
           SuggestedFoodsPortionRemote suggestedFoodsPortionRemote = SuggestedFoodsPortionRemote(
             foods: foodsRemote,
             accuracy: recommendation.accuracy.toInt(),
-            totalMacro: recommendation.macro
+            totalMacro: recommendation.macro,
+            foodsIndexesNotAddedByUser: recommendation.foodsIndexesNotAddedBuUser
           );
           foodsPortions.add(suggestedFoodsPortionRemote);
         }

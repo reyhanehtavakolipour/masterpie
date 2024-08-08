@@ -260,6 +260,50 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
+  Widget _newFoodInfo(int index) {
+
+    bool isNewFood = false;
+
+    if(widget.wizardResponse.foodsPortions[_currentPage].foodsIndexesNotAddedByUser.isNotEmpty){
+      if(widget.wizardResponse.foodsPortions[_currentPage].foodsIndexesNotAddedByUser.contains(index)){
+        isNewFood= true;
+      }
+    }
+
+
+    return Visibility(
+      visible: isNewFood,
+      child: GestureDetector(
+        onTap: (){
+          showInfoDialog(context, NEW_FOOD_ADDED_IN_WIZRD_MSG);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            color: Colors.lightGreen,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: const Row(
+            children: [
+              Text(
+                NEW_LABEL,
+                style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+              ),
+              SizedBox(width: 1.0),
+              Icon(
+                Icons.help_outline,
+                color: DARK_PRIMARY_COLOR,
+                size: 10,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 
   Widget _buildFoodsPortions(){
 
@@ -345,10 +389,17 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           ),
                         ),
 
+
+                        const SizedBox(width: 2,),
+
+
+                        _newFoodInfo(index)
+
                       ],
                     ),
 
                     const SizedBox(height: 8,),
+
 
 
                     Text(

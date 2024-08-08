@@ -10,7 +10,8 @@ class SuggestedFoodsPortionRemote with _$SuggestedFoodsPortionRemote{
   factory SuggestedFoodsPortionRemote({
     @Default([]) List<FoodRemote> foods,
     @Default([]) List<double> totalMacro,
-    @Default(0) int accuracy
+    @Default(0) int accuracy,
+    @Default([]) List<int> foodsIndexesNotAddedByUser,
   })= _SuggestedFoodsPortionRemote;
 
 }

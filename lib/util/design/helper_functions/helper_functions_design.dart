@@ -140,6 +140,18 @@ bool isValidPassword(String password) {
 
 
 
+void showInfoDialog(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(INFO_LABLE, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),),
+        content: Text(message),
+      );
+    },
+  );
+}
+
 Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) async {
   return showDialog<void>(
     context: context,

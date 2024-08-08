@@ -19,6 +19,8 @@ mixin _$SuggestedFoodsPortion {
   List<Food> get foods => throw _privateConstructorUsedError;
   List<double> get totalMacro => throw _privateConstructorUsedError;
   int get accuracy => throw _privateConstructorUsedError;
+  List<int> get foodsIndexesNotAddedByUser =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SuggestedFoodsPortionCopyWith<SuggestedFoodsPortion> get copyWith =>
@@ -31,7 +33,11 @@ abstract class $SuggestedFoodsPortionCopyWith<$Res> {
           $Res Function(SuggestedFoodsPortion) then) =
       _$SuggestedFoodsPortionCopyWithImpl<$Res, SuggestedFoodsPortion>;
   @useResult
-  $Res call({List<Food> foods, List<double> totalMacro, int accuracy});
+  $Res call(
+      {List<Food> foods,
+      List<double> totalMacro,
+      int accuracy,
+      List<int> foodsIndexesNotAddedByUser});
 }
 
 /// @nodoc
@@ -51,6 +57,7 @@ class _$SuggestedFoodsPortionCopyWithImpl<$Res,
     Object? foods = null,
     Object? totalMacro = null,
     Object? accuracy = null,
+    Object? foodsIndexesNotAddedByUser = null,
   }) {
     return _then(_value.copyWith(
       foods: null == foods
@@ -65,6 +72,10 @@ class _$SuggestedFoodsPortionCopyWithImpl<$Res,
           ? _value.accuracy
           : accuracy // ignore: cast_nullable_to_non_nullable
               as int,
+      foodsIndexesNotAddedByUser: null == foodsIndexesNotAddedByUser
+          ? _value.foodsIndexesNotAddedByUser
+          : foodsIndexesNotAddedByUser // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 }
@@ -78,7 +89,11 @@ abstract class _$$SuggestedFoodsPortionImplCopyWith<$Res>
       __$$SuggestedFoodsPortionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Food> foods, List<double> totalMacro, int accuracy});
+  $Res call(
+      {List<Food> foods,
+      List<double> totalMacro,
+      int accuracy,
+      List<int> foodsIndexesNotAddedByUser});
 }
 
 /// @nodoc
@@ -96,6 +111,7 @@ class __$$SuggestedFoodsPortionImplCopyWithImpl<$Res>
     Object? foods = null,
     Object? totalMacro = null,
     Object? accuracy = null,
+    Object? foodsIndexesNotAddedByUser = null,
   }) {
     return _then(_$SuggestedFoodsPortionImpl(
       foods: null == foods
@@ -110,6 +126,10 @@ class __$$SuggestedFoodsPortionImplCopyWithImpl<$Res>
           ? _value.accuracy
           : accuracy // ignore: cast_nullable_to_non_nullable
               as int,
+      foodsIndexesNotAddedByUser: null == foodsIndexesNotAddedByUser
+          ? _value._foodsIndexesNotAddedByUser
+          : foodsIndexesNotAddedByUser // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
@@ -120,9 +140,11 @@ class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
   _$SuggestedFoodsPortionImpl(
       {final List<Food> foods = const [],
       final List<double> totalMacro = const [],
-      this.accuracy = 0})
+      this.accuracy = 0,
+      final List<int> foodsIndexesNotAddedByUser = const []})
       : _foods = foods,
-        _totalMacro = totalMacro;
+        _totalMacro = totalMacro,
+        _foodsIndexesNotAddedByUser = foodsIndexesNotAddedByUser;
 
   final List<Food> _foods;
   @override
@@ -145,10 +167,19 @@ class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
   @override
   @JsonKey()
   final int accuracy;
+  final List<int> _foodsIndexesNotAddedByUser;
+  @override
+  @JsonKey()
+  List<int> get foodsIndexesNotAddedByUser {
+    if (_foodsIndexesNotAddedByUser is EqualUnmodifiableListView)
+      return _foodsIndexesNotAddedByUser;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_foodsIndexesNotAddedByUser);
+  }
 
   @override
   String toString() {
-    return 'SuggestedFoodsPortion(foods: $foods, totalMacro: $totalMacro, accuracy: $accuracy)';
+    return 'SuggestedFoodsPortion(foods: $foods, totalMacro: $totalMacro, accuracy: $accuracy, foodsIndexesNotAddedByUser: $foodsIndexesNotAddedByUser)';
   }
 
   @override
@@ -160,7 +191,10 @@ class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
             const DeepCollectionEquality()
                 .equals(other._totalMacro, _totalMacro) &&
             (identical(other.accuracy, accuracy) ||
-                other.accuracy == accuracy));
+                other.accuracy == accuracy) &&
+            const DeepCollectionEquality().equals(
+                other._foodsIndexesNotAddedByUser,
+                _foodsIndexesNotAddedByUser));
   }
 
   @override
@@ -168,7 +202,8 @@ class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
       runtimeType,
       const DeepCollectionEquality().hash(_foods),
       const DeepCollectionEquality().hash(_totalMacro),
-      accuracy);
+      accuracy,
+      const DeepCollectionEquality().hash(_foodsIndexesNotAddedByUser));
 
   @JsonKey(ignore: true)
   @override
@@ -180,9 +215,11 @@ class _$SuggestedFoodsPortionImpl implements _SuggestedFoodsPortion {
 
 abstract class _SuggestedFoodsPortion implements SuggestedFoodsPortion {
   factory _SuggestedFoodsPortion(
-      {final List<Food> foods,
-      final List<double> totalMacro,
-      final int accuracy}) = _$SuggestedFoodsPortionImpl;
+          {final List<Food> foods,
+          final List<double> totalMacro,
+          final int accuracy,
+          final List<int> foodsIndexesNotAddedByUser}) =
+      _$SuggestedFoodsPortionImpl;
 
   @override
   List<Food> get foods;
@@ -190,6 +227,8 @@ abstract class _SuggestedFoodsPortion implements SuggestedFoodsPortion {
   List<double> get totalMacro;
   @override
   int get accuracy;
+  @override
+  List<int> get foodsIndexesNotAddedByUser;
   @override
   @JsonKey(ignore: true)
   _$$SuggestedFoodsPortionImplCopyWith<_$SuggestedFoodsPortionImpl>

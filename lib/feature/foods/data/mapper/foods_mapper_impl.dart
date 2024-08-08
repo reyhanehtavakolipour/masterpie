@@ -627,6 +627,7 @@ class FoodsMapperImpl extends FoodsMapper{
               foods: fromFoodsRemote(suggestedFoods.foods),
               accuracy: suggestedFoods.accuracy,
               totalMacro: suggestedFoods.totalMacro,
+            foodsIndexesNotAddedByUser: suggestedFoods.foodsIndexesNotAddedByUser
           )
       ).toList(),
       messages: wizardResponseRemoteModel.messages,

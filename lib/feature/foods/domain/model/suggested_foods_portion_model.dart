@@ -15,7 +15,8 @@ class SuggestedFoodsPortion with _$SuggestedFoodsPortion{
   factory SuggestedFoodsPortion({
     @Default([]) List<Food> foods,
     @Default([]) List<double> totalMacro,
-    @Default(0) int accuracy
+    @Default(0) int accuracy,
+    @Default([]) List<int> foodsIndexesNotAddedByUser,
   })= _SuggestedFoodsPortion;
 
 }
