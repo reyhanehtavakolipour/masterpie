@@ -72,8 +72,7 @@ class TopRecommendation {
                 carb: [((foodsResponse[i]['macro'] as List<dynamic>)[2]).toString()],
                 fat: [((foodsResponse[i]['macro'] as List<dynamic>)[3]).toString()],
                 foodTypeRemote: FoodTypeRemote.groceryProduct,
-                //todo remove hard code and get unit from backend
-                units: ['1 cup']
+                units: [foodsResponse[i]['unit'].toString()]
               )
           );
         }

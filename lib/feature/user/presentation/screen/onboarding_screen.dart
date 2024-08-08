@@ -15,6 +15,8 @@ import 'package:masterpie/util/core/helper/helper.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
@@ -22,6 +24,13 @@ import '../../../../util/design/toast/app_toast.dart';
 import '../../../foods/presentation/screen/recie_types_popup.dart';
 import '../../domain/model/profile_model.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
+
+
+const String instagram= 'Instagram';
+const String reddit= 'Reddit';
+const String friend_recom= 'Friend\'s Recommendation';
+const String web_search= 'Web Search';
+const String other_label= 'Other';
 
 
 class OnBoardingScreen extends StatefulWidget {
@@ -78,6 +87,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   List<String> _allergens= [];
 
 
+  int _stepsCount= 7;
+
   // form
   final _weightController = TextEditingController();
 
@@ -86,6 +97,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final _heightController = TextEditingController();
 
   final _goalWeightController = TextEditingController();
+
+
+  final _otherController = TextEditingController();
+
 
   late UpdateProfileBloc _updateProfileBloc;
   late GetProfileBloc _getProfileBloc;
@@ -96,6 +111,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   String _activitySelected = SEDENTARY_LABEL;
   String _genderSelected = FEMALE_LABEL;
 
+
+
+  String _knowFrom= '';
 
 
   @override
@@ -169,6 +187,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   Visibility(
                       visible: widget.isOnBoard,
                       child: _fillForm()
+                  ),
+
+
+                  /// step 7
+                  Visibility(
+                      visible: widget.isOnBoard,
+                      child: _knowUsFromWhere()
                   )
 
                 ],
@@ -449,10 +474,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               height: 30,
               child: Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                     child: Text(
-                      '2/6',
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      '2/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -573,10 +598,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               height: 30,
               child: Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                     child: Text(
-                      '5/6',
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      '5/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -729,10 +754,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             height: 30,
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    '6/6',
-                    style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    '6/$_stepsCount',
+                    style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
 
@@ -858,7 +883,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           const SizedBox(height: 16,),
 
 
-          /// done & previous button
+
+          /// next & previous button
           Row(
             children: [
               Expanded(
@@ -889,6 +915,299 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
+
+                    if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
+                        _ageController.text.isEmpty || _heightController.text.isEmpty){
+                      showErrorToast(context, FILL_ALL_ERROR);
+                      return;
+                    }
+
+                    _goToPage(6);
+                  },
+                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+
+
+  Widget _knowUsFromWhere(){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            margin: const EdgeInsets.only(top: 48),
+            height: 30,
+            child: Row(
+              children: [
+                 Expanded(
+                  child: Text(
+                    '7/$_stepsCount',
+                    style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                skipBtn()
+
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24,),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+
+
+                  const SizedBox(height: 18,),
+
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: LIGHT_GREY_COLOR,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: const Text(
+                      HOW_KNOW_US,
+                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+
+                  const SizedBox(height: 32,),
+
+
+
+                  Row(
+                    children: [
+
+                      Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(_knowFrom == instagram){
+                                  _knowFrom= '';
+                                }else{
+                                  _knowFrom= instagram;
+                                }
+                                _otherController.text = '';
+                              });
+                            },
+                            child: Container(
+                              height: 80,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: _knowFrom == instagram ? MASTERPIE_YELLOW_COLOR : Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: DARK_PRIMARY_COLOR,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  instagram,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
+
+                      const SizedBox(width: 18,),
+
+                      Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(_knowFrom == reddit){
+                                  _knowFrom= '';
+                                }else{
+                                  _knowFrom= reddit;
+                                }
+                                _otherController.text = '';
+                              });
+                            },
+                            child: Container(
+                              height: 80,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: _knowFrom == reddit ? MASTERPIE_YELLOW_COLOR : Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: DARK_PRIMARY_COLOR,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  reddit,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
+
+                    ],
+                  ),
+
+
+                  const SizedBox(height: 16,),
+
+
+                  Row(
+                    children: [
+
+                      Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(_knowFrom == web_search){
+                                  _knowFrom= '';
+                                }else{
+                                  _knowFrom= web_search;
+                                }
+                                _otherController.text = '';
+                              });
+                            },
+                            child: Container(
+                              height: 80,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: _knowFrom == web_search ? MASTERPIE_YELLOW_COLOR : Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: DARK_PRIMARY_COLOR,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  web_search,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
+
+                      const SizedBox(width: 18,),
+
+                      Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(_knowFrom == friend_recom){
+                                  _knowFrom= '';
+                                }else{
+                                  _knowFrom= friend_recom;
+                                }
+                                _otherController.text = '';
+                              });
+                            },
+                            child: Container(
+                              height: 80,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: _knowFrom == friend_recom ? MASTERPIE_YELLOW_COLOR : Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: DARK_PRIMARY_COLOR,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  friend_recom,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
+
+                    ],
+                  ),
+
+
+
+                  const SizedBox(height: 18,),
+
+
+                  SizedBox(
+                    height: 48,
+                    child: TextFormField(
+                      cursorColor: DARK_PRIMARY_COLOR,
+                      controller: _otherController,
+                      enabled: _knowFrom.isEmpty,
+                      decoration: const InputDecoration(
+                        labelText: OTHER_WRITE_SOURCE,
+                        border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ),
+
+
+                ],
+              ),
+            ),
+          ),
+
+
+          const SizedBox(height: 16,),
+
+
+          /// done & previous button
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: MASTERPIE_YELLOW_COLOR
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      _goToPage(5);
+                    });
+                  },
+                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
+                ),
+              ),
+
+              const SizedBox(width: 8,),
+
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                      ),
+                      backgroundColor: DARK_PRIMARY_COLOR
+                  ),
+                  onPressed: (){
                     _saveUserInputsInOnboard();
                   },
                   child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
@@ -902,13 +1221,64 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
 
-  void _saveUserInputsInOnboard(){
 
-    if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
-        _ageController.text.isEmpty || _heightController.text.isEmpty){
-      showErrorToast(context, FILL_ALL_ERROR);
-      return;
+
+  void saveUserSourceToSupabase() async{
+
+    final supabase = Supabase.instance.client;
+
+    if(_knowFrom == instagram || _knowFrom == reddit || _knowFrom == web_search || _knowFrom == friend_recom){
+
+      final sourceResponse = await supabase
+          .from(USER_SOURCE_TABLE)
+          .select<List<dynamic>>()
+          .eq('id', 1);
+
+
+      if(sourceResponse.isNotEmpty){
+
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['id'] = 1;
+
+
+        if(_knowFrom == instagram){
+          final instaCount= sourceResponse[0]['instagram'].toString();
+          data['instagram'] = int.parse(instaCount) + 1;
+        }else if(_knowFrom == reddit){
+          final redditCount= sourceResponse[0]['reddit'].toString();
+          data['reddit'] = int.parse(redditCount) + 1;
+        }else if(_knowFrom == web_search){
+          final webCount= sourceResponse[0]['web'].toString();
+          data['web'] = int.parse(webCount) + 1;
+        }else if(_knowFrom == friend_recom){
+          final friendCount= sourceResponse[0]['friend'].toString();
+          data['friend'] = int.parse(friendCount) + 1;
+        }
+
+        await supabase.from(USER_SOURCE_TABLE).update(data).eq('id', 1);
+
+      }
+    }else if(_otherController.text.isNotEmpty){
+      //other
+      final Map<String, dynamic> data = <String, dynamic>{};
+      data['other'] = _otherController.text;
+
+      await supabase.from(USER_SOURCE_TABLE).insert(data);
+
     }
+
+    try{
+
+    }on PostgrestException catch (error) {
+    } catch (error) {
+    }
+  }
+
+
+  void _saveUserInputsInOnboard() {
+
+    saveUserSourceToSupabase();
+
 
     String weightChangeWeekly= _weightSelectedUnit == LB_LABEL ? LB_1_LABEL : GRAM_250_LABEL;
 
@@ -1129,10 +1499,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               height: 30,
               child: Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                     child: Text(
-                      '3/6',
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      '3/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -1318,10 +1688,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               height: 30,
               child: Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                     child: Text(
-                      '4/6',
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                      '4/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -1704,10 +2074,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               height: 30,
               child: Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                       child: Text(
-                        '1/6',
-                        style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                        '1/$_stepsCount',
+                        style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                       ),
                   ),
 
