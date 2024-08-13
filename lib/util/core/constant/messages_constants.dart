@@ -46,7 +46,7 @@ const SUGGEST_FOOD_LABEL = 'Recommend Recipe';
 const ERROR_INVALID_PURCHASE = 'Invalid Purchase';
 const SUBMIT_LOG_FOODS_LABEL = 'Submit Logged Foods';
 const LOG_FOODS_LABEL = 'Log Foods';
-const FOODS_COMBINATIONS_LABEL = 'Foods Combinations';
+const FOODS_COMBINATIONS_LABEL = 'Meal Plan';
 const ADDED_FOODS = 'ADDED FOODS';
 const FOOD_ADDED_COOKBOOK_SUCCESS = 'Food added to your cookbook successfully';
 const ADD_TO_MY_FAVORTITE = 'Add To My Favorites';
@@ -302,7 +302,7 @@ const ERROR_RESTRICTION_PROTEIN = 'Please enter the protein range first';
 const ERROR_RESTRICTION_CARB = 'Please enter the carb range first';
 const ERROR_RESTRICTION_FAT = 'Please enter the fat range first';
 const OPTIONAL_LABEL = 'Optional';
-const NEW_LABEL = 'NEW';
+const NEW_LABEL = 'Recommended';
 const NEW_FAVORITES_LEFT= 'New favorites';
 const NEW_COOKBOOK_LEFT= 'New Food in CookBook';
 const FOOD_PORTION_LEFT= 'Macro Diet Wizard';
@@ -418,7 +418,7 @@ const TUTORIAL_STEP_2_DESC= 'To start using "Macro Diet Wizard," first set your 
 const TUTORIAL_STEP_3_TITLE= 'Add Foods';
 const TUTORIAL_STEP_3_DESC= 'Next, add all the foods you love to eat during the day to meet the macro goals you set in the previous step. You can add them manually or find them in our database. Alternatively, you can click on "Auto Generate," and we\'ll automatically add some foods based on your preferences.';
 const TUTORIAL_STEP_4_TITLE= 'Calculate Foods Portion';
-const TUTORIAL_STEP_4_DESC= 'Finally, after setting your macro goals and adding your foods, tap on the "Calculate Portions" button. We\'ll then generate your meal plan with precise portions customized to help you achieve your goal using the foods you enjoy, all while supporting weight loss.';
+const TUTORIAL_STEP_4_DESC= 'Tap on the "Calculate Portions" button if you are happy with added foods. We\'ll then generate your meal plan with precise portions customized to help you achieve your goal using the foods you enjoy, all while supporting weight loss.';
 
 
 

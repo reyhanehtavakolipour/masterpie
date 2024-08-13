@@ -2123,7 +2123,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       children: <Widget>[
                          TextField(
                            controller: _mainDishTimesController,
-                          decoration: const InputDecoration(
+                           inputFormatters: <TextInputFormatter>[
+                             FilteringTextInputFormatter.digitsOnly
+                           ],
+                           keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                           decoration: const InputDecoration(
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),
@@ -2132,7 +2136,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                             ),
                           ),
-                          keyboardType: TextInputType.number,
                         ),
                         const SizedBox(height: 4),
                         GestureDetector(
@@ -2223,7 +2226,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                             ),
                           ),
-                          keyboardType: TextInputType.number,
+                           inputFormatters: <TextInputFormatter>[
+                             FilteringTextInputFormatter.digitsOnly
+                           ],
+                           keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                         ),
                         const SizedBox(height: 4),
                         GestureDetector(

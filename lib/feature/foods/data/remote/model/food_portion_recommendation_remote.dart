@@ -2,6 +2,7 @@
 
 import 'package:masterpie/feature/foods/data/remote/model/food_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 
 class FoodsPortionRemoteResult {
   final List<TopRecommendation> topRecommendations;
@@ -43,6 +44,7 @@ class TopRecommendation {
 
 
     List<dynamic> macroList = json['portion'];
+    print('dfgds: $macroList');
     List<double> convertedPortion = macroList.map((item) {
       if (item is int) {
         return item.toDouble();
@@ -79,6 +81,8 @@ class TopRecommendation {
       }
     }
 
+
+    printWrapped('dfgds1: $allFoods');
 
 
     return TopRecommendation(

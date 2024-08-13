@@ -228,6 +228,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   void _autoGenerateFoodsForDay(){
     if(_mainDishTypes.isNotEmpty || _sideDishTypes.isNotEmpty){
       _isAutoGenerateForOneMeal= false;
+      logEvent(AUTO_GENERATE_DAY_BTN_CLICKED, null);
       _autoGenerateFoodsBloc.add(
           AutoGenerateFoodsEvent.onAutoGenerateFoodsForDay(_mainDishTypes, _sideDishTypes)
       );
@@ -253,11 +254,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
-  void _showTutorial(){
+  void _showTutorial(bool isFirstTime){
     Future.delayed(Duration.zero,(){
       setState(() {
-        ShowCaseWidget.of(context)
-            .startShowCase([_tutorialOne, _tutorialTwo, _tutorialThree, _tutorialFour]);
+        if(isFirstTime){
+          ShowCaseWidget.of(context)
+              .startShowCase([ _tutorialFour]);
+        }else{
+          ShowCaseWidget.of(context)
+              .startShowCase([_tutorialOne, _tutorialTwo, _tutorialThree, _tutorialFour]);
+        }
       });
     });
   }
@@ -713,7 +719,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
                 child: GestureDetector(
                     onTap: (){
-                      _showTutorial();
+                      _showTutorial(false);
                     },
                     child: const Icon(Icons.info_outline, color: Colors.white,)
                 ),
@@ -1695,7 +1701,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
   void ready(bool ready){
-    _showTutorial();
+    _showTutorial(true);
   }
 
 

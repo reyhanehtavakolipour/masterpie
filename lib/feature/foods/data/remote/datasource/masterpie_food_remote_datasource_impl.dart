@@ -338,11 +338,11 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
 
 
-        List<double> foodMacro= [];
-        foodMacro.add(calorie);
-        foodMacro.add(protein);
-        foodMacro.add(carb);
-        foodMacro.add(fat);
+        List<int> foodMacro= [];
+        foodMacro.add(calorie.toInt());
+        foodMacro.add(protein.toInt());
+        foodMacro.add(carb.toInt());
+        foodMacro.add(fat.toInt());
 
 
         Map<String, dynamic> foodMap = {

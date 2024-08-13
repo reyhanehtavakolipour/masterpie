@@ -27,6 +27,7 @@ const MACRO_DIET_GROCERY_VIEWED= 'macro_diet_grocery_viewed';
 const MACRO_DIET_RECIPE_VIEWED= 'macro_diet_recipe_viewed';
 const MACRO_DIET_MANUAL_VIEWED= 'macro_diet_manual_viewed';
 const MACRO_DIET_CALCULATE_BTN_CLICKED= 'macro_diet_calculate_btn_clicked';
+const AUTO_GENERATE_DAY_BTN_CLICKED= 'auto_generate_day_btn_clicked';
 const MACRO_DIET_LOG_BTN_CLICKED= 'macro_diet_log_btn_clicked';
 const IS_USER= 'isUser';
 const VIDEO_CLICKED= 'video_clicked';
