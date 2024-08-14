@@ -1,6 +1,9 @@
 
 
 
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +87,20 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
+
+
+Future<String?> getDeviceUUID() async {
+  var deviceInfo = DeviceInfoPlugin();
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    return androidInfo.id;  // UUID for Android
+  } else if (Platform.isIOS) {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    return iosInfo.identifierForVendor;  // UUID for iOS
+  }
+  return null;
+}
+
 
 
 final RegExp numericRegExp = RegExp(r'^\d+\.?\d{0,2}');

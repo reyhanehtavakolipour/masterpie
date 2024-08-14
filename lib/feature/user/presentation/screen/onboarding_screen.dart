@@ -1267,11 +1267,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     }
 
-    try{
-
-    }on PostgrestException catch (error) {
-    } catch (error) {
-    }
+    // try{
+    //
+    // }on PostgrestException catch (error) {
+    // } catch (error) {
+    // }
   }
 
 
@@ -1436,10 +1436,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         cursorColor: DARK_PRIMARY_COLOR,
         controller: controller,
         enabled: isEditable,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-        ],        decoration: InputDecoration(
+        ],
+        keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+        decoration: InputDecoration(
           labelText: hintText,
           border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
           fillColor: Colors.white,

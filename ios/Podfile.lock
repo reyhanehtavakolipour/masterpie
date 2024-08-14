@@ -7,6 +7,8 @@ PODS:
   - AppAuth/Core (1.7.5)
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
+  - device_info_plus (0.0.1):
+    - Flutter
   - Firebase/Analytics (10.22.0):
     - Firebase/Core
   - Firebase/Core (10.22.0):
@@ -178,6 +180,7 @@ PODS:
 
 DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
@@ -219,6 +222,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   app_links:
     :path: ".symlinks/plugins/app_links/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -255,6 +260,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_links: 5ef33d0d295a89d9d16bb81b0e3b0d5f70d6c875
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
+  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
   firebase_analytics: b9ce200bfc2c54629076bb22d6a510f31c296ab8
   firebase_core: 100945864b4aedce3cfef0c62ab864858bf013cf

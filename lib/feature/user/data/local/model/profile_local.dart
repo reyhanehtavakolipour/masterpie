@@ -155,7 +155,7 @@ ProfileLocal emptyProfile(){
       favoriteSubCategories: [],
       hateSubCategories: [],
       mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
-      sideDishTypes: ['Dessert', 'Beverage'],
+      sideDishTypes: ['Dessert', 'Snack'],
       allergens: []
   );
 }
