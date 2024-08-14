@@ -16,6 +16,7 @@ import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/gene
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model_converter.dart';
 import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
@@ -54,6 +55,10 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
   String _ingredients= '';
   String _foodName= '';
   String _recipe= '';
+
+
+  String _prepTime= '';
+
 
   late TextEditingController _foodCountController;
 
@@ -160,6 +165,16 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
 
                         Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
+
+                        Visibility(
+                            visible: _prepTime.isNotEmpty,
+                            child: const SizedBox(height: 16,)
+                        ),
+
+                        Visibility(
+                          visible: _prepTime.isNotEmpty,
+                            child: Text('$_prepTime $PREP_TIME_LABEL', style: const TextStyle(fontSize: 16, color: Colors.lightGreen, fontWeight: FontWeight.bold),)
+                        ),
 
 
                         Column(
@@ -302,9 +317,11 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
 
 
   void fillUi(GenericFood genericFood){
-
     setState(() {
       if(genericFood.ingredients.length == genericFood.calorie.length){
+
+        _prepTime= genericFood.prepTime;
+
         double calorie = 0;
         for (int i = 0; i < genericFood.calorie.length; i++) {
           if (i < genericFood.servingIngredientsCount.length) {
@@ -362,10 +379,13 @@ class _ViewRecipeMacroWizardScreenState extends State<ViewRecipeMacroWizardScree
 
       }else{
 
+        _prepTime= genericFood.prepTime;
+
         String ingredients = '';
         for (int i = 0; i < genericFood.ingredients.length; i++) {
           ingredients = '$ingredients- ${genericFood.ingredients[i]}\n';
         }
+
 
         _foodName = genericFood.name;
         _totalCalorie = genericFood.calorie[0][0];

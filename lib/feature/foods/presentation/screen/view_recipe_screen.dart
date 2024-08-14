@@ -52,6 +52,10 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
   String _foodName= '';
   String _recipe= '';
 
+
+  String _prepTime= '';
+
+
   late TextEditingController _foodCountController;
 
   GenericFood newFood = GenericFood();
@@ -157,6 +161,15 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
                         Text(_foodName, style: const TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
 
 
+                        Visibility(
+                            visible: _prepTime.isNotEmpty,
+                            child: const SizedBox(height: 16,)
+                        ),
+
+                        Visibility(
+                            visible: _prepTime.isNotEmpty,
+                            child: Text('$_prepTime $PREP_TIME_LABEL', style: const TextStyle(fontSize: 16, color: Colors.lightGreen, fontWeight: FontWeight.bold),)
+                        ),
 
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,6 +388,8 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
 
       if(genericFood.ingredients.length == genericFood.calorie.length){
 
+        _prepTime= genericFood.prepTime;
+
         double calorie = 0;
         for (int i = 0; i < genericFood.calorie.length; i++) {
           if (i < genericFood.servingIngredientsCount.length) {
@@ -429,6 +444,8 @@ class _ViewRecipeScreenState extends State<ViewRecipeScreen> {
         _recipe = genericFood.recipe;
         _ingredients = ingredients;
       }else{
+
+        _prepTime= genericFood.prepTime;
 
         String ingredients = '';
         for (int i = 0; i < genericFood.ingredients.length; i++) {

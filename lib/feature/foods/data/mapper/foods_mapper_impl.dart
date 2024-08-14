@@ -829,7 +829,7 @@ class FoodsMapperImpl extends FoodsMapper{
         fat: productRemote.fat,
         diets: [],
         allergies: [],
-        prepTime: '',
+        prepTime: productRemote.prepTime,
         servingAmount: productRemote.servingAmount,
         unit: productRemote.unit,
         createdFromFatSecretRecipes: productRemote.createdFromFatSecretRecipes
