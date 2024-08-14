@@ -31,6 +31,7 @@ class FoodRemote with _$FoodRemote{
     @Default([]) List<String> fat,
     @Default([]) List<String> diets,
     @Default([]) List<String> allergies,
+    @Default('') String prepTime,
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,
     @Default(1) int createdFromFatSecretRecipes

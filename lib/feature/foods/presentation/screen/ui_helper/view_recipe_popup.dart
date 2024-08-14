@@ -51,7 +51,6 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
       }
     }
 
-
   }
 
 
@@ -125,6 +124,13 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
 
 
                     const SizedBox(height: 16,),
+
+                    Text('${widget.food.prepTime} $PREP_TIME_LABEL', style: const TextStyle(fontSize: 16, color: Colors.lightGreen, fontWeight: FontWeight.bold),),
+
+
+                    const SizedBox(height: 28,),
+
+
 
                     Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 

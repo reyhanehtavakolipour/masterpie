@@ -38,6 +38,7 @@ mixin _$FoodRemote {
   List<String> get fat => throw _privateConstructorUsedError;
   List<String> get diets => throw _privateConstructorUsedError;
   List<String> get allergies => throw _privateConstructorUsedError;
+  String get prepTime => throw _privateConstructorUsedError;
 
   /// how many of the food(either meal or grocery)?
   double get count => throw _privateConstructorUsedError;
@@ -75,6 +76,7 @@ abstract class $FoodRemoteCopyWith<$Res> {
       List<String> fat,
       List<String> diets,
       List<String> allergies,
+      String prepTime,
       double count,
       int createdFromFatSecretRecipes});
 }
@@ -112,6 +114,7 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
     Object? fat = null,
     Object? diets = null,
     Object? allergies = null,
+    Object? prepTime = null,
     Object? count = null,
     Object? createdFromFatSecretRecipes = null,
   }) {
@@ -196,6 +199,10 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
           ? _value.allergies
           : allergies // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      prepTime: null == prepTime
+          ? _value.prepTime
+          : prepTime // ignore: cast_nullable_to_non_nullable
+              as String,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
@@ -237,6 +244,7 @@ abstract class _$$FoodRemoteImplCopyWith<$Res>
       List<String> fat,
       List<String> diets,
       List<String> allergies,
+      String prepTime,
       double count,
       int createdFromFatSecretRecipes});
 }
@@ -272,6 +280,7 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
     Object? fat = null,
     Object? diets = null,
     Object? allergies = null,
+    Object? prepTime = null,
     Object? count = null,
     Object? createdFromFatSecretRecipes = null,
   }) {
@@ -356,6 +365,10 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
           ? _value._allergies
           : allergies // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      prepTime: null == prepTime
+          ? _value.prepTime
+          : prepTime // ignore: cast_nullable_to_non_nullable
+              as String,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
@@ -392,6 +405,7 @@ class _$FoodRemoteImpl implements _FoodRemote {
       final List<String> fat = const [],
       final List<String> diets = const [],
       final List<String> allergies = const [],
+      this.prepTime = '',
       this.count = 0.0,
       this.createdFromFatSecretRecipes = 1})
       : _ingredients = ingredients,
@@ -520,6 +534,10 @@ class _$FoodRemoteImpl implements _FoodRemote {
     return EqualUnmodifiableListView(_allergies);
   }
 
+  @override
+  @JsonKey()
+  final String prepTime;
+
   /// how many of the food(either meal or grocery)?
   @override
   @JsonKey()
@@ -530,7 +548,7 @@ class _$FoodRemoteImpl implements _FoodRemote {
 
   @override
   String toString() {
-    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, count: $count, createdFromFatSecretRecipes: $createdFromFatSecretRecipes)';
+    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, prepTime: $prepTime, count: $count, createdFromFatSecretRecipes: $createdFromFatSecretRecipes)';
   }
 
   @override
@@ -566,6 +584,8 @@ class _$FoodRemoteImpl implements _FoodRemote {
             const DeepCollectionEquality().equals(other._diets, _diets) &&
             const DeepCollectionEquality()
                 .equals(other._allergies, _allergies) &&
+            (identical(other.prepTime, prepTime) ||
+                other.prepTime == prepTime) &&
             (identical(other.count, count) || other.count == count) &&
             (identical(other.createdFromFatSecretRecipes,
                     createdFromFatSecretRecipes) ||
@@ -596,6 +616,7 @@ class _$FoodRemoteImpl implements _FoodRemote {
         const DeepCollectionEquality().hash(_fat),
         const DeepCollectionEquality().hash(_diets),
         const DeepCollectionEquality().hash(_allergies),
+        prepTime,
         count,
         createdFromFatSecretRecipes
       ]);
@@ -629,6 +650,7 @@ abstract class _FoodRemote implements FoodRemote {
       final List<String> fat,
       final List<String> diets,
       final List<String> allergies,
+      final String prepTime,
       final double count,
       final int createdFromFatSecretRecipes}) = _$FoodRemoteImpl;
 
@@ -672,6 +694,8 @@ abstract class _FoodRemote implements FoodRemote {
   List<String> get diets;
   @override
   List<String> get allergies;
+  @override
+  String get prepTime;
   @override
 
   /// how many of the food(either meal or grocery)?

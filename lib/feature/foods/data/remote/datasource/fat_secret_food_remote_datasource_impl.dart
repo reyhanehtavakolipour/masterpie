@@ -262,6 +262,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
           GenericFoodRemote(
               id: recipeId,
               name: recipeDetailResponse.data['recipe']['recipe_name'],
+              prepTime: '${recipeDetailResponse.data['recipe']['preparation_time_min']} minutes',
               foodType: FoodTypeRemote.meal,
               calorie: [[calorie]],
               protein: [[protein]],

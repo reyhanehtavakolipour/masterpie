@@ -157,6 +157,7 @@ FoodRemote fromGenericRecipeRemote(GenericFoodRemote food){
       servingAmount: food.servingAmount[0],
       unit: food.unit[0],
       recipe: food.recipe,
+      prepTime: food.prepTime,
       servingIngredientsCount: servingIngredientsCount,
       createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
   );

@@ -36,6 +36,8 @@ class Food with _$Food{
     @Default([]) List<String> diets,
     @Default([]) List<String> allergies,
     @Default([]) List<String> servingIngredientsCount,
+    @Default('') String prepTime,
+
 
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,
