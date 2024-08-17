@@ -24,7 +24,7 @@ class Profile with _$Profile{
     @Default(false) bool updateProfileShown,
     @Default([]) List<String> favoriteCategories,
     @Default([]) List<String> hateCategories,
-    @Default([]) List<String> favoriteSubCategories,
+    @Default('') String diet,
     @Default([]) List<String> hateSubCategories,
     @Default([]) List<String> mainDishTypes,
     @Default([]) List<String> sideDishTypes,

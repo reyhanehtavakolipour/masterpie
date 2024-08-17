@@ -20,7 +20,7 @@ class ProfileLocal{
   String weightChangeWeekly;
   List<String> favoriteCategories;
   List<String> hateCategories;
-  List<String> favoriteSubCategories;
+  String diet;
   List<String> hateSubCategories;
   List<String> allergens;
   List<String> mainDishTypes;
@@ -45,7 +45,7 @@ class ProfileLocal{
     required this.weightChangeWeekly,
     required this.favoriteCategories,
     required this.hateCategories,
-    required this.favoriteSubCategories,
+    required this.diet,
     required this.hateSubCategories,
     required this.allergens,
     required this.mainDishTypes,
@@ -73,7 +73,7 @@ class ProfileLocal{
       sideDishTypes: (parsedJson['sideDishTypes'] as String).split(';'),
       favoriteCategories: (parsedJson['favoriteCategories'] as String).split(';'),
       hateCategories: (parsedJson['hateCategories'] as String).split(';'),
-      favoriteSubCategories: (parsedJson['favoriteSubCategories'] as String).split(';'),
+      diet: parsedJson['diet'],
       hateSubCategories: (parsedJson['hateSubCategories'] as String).split(';'),
       allergens: (parsedJson['allergens'] as String).split(';'),
     );
@@ -99,7 +99,7 @@ class ProfileLocal{
     data['sideDishTypes'] = sideDishTypes.join(';');
     data['favoriteCategories'] = favoriteCategories.join(';');
     data['hateCategories'] = hateCategories.join(';');
-    data['favoriteSubCategories'] = favoriteSubCategories.join(';');
+    data['diet'] = diet;
     data['hateSubCategories'] = hateSubCategories.join(';');
     data['allergens'] = allergens.join(';');
 
@@ -123,7 +123,7 @@ class ProfileLocal{
         'weightChangeWeekly: $weightChangeWeekly,'
         'favoriteCategories: $favoriteCategories,'
         'hateCategories: $hateCategories,'
-        'favoriteSubCategories: $favoriteSubCategories,'
+        'diet: $diet,'
         'hateSubCategories: $hateSubCategories,'
         'mainDishTypes: $mainDishTypes,'
         'sideDishTypes: $sideDishTypes,'
@@ -152,7 +152,7 @@ ProfileLocal emptyProfile(){
       weightChangeWeekly: LB_1_LABEL,
       favoriteCategories: [],
       hateCategories: [],
-      favoriteSubCategories: [],
+      diet: CLASSIC_LABEL,
       hateSubCategories: [],
       mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
       sideDishTypes: ['Dessert', 'Snack'],

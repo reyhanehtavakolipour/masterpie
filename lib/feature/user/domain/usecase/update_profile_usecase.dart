@@ -21,7 +21,7 @@ class UpdateProfileUseCase{
 
   Future<Either<Failure, Success>> updateProfile(String email, String fName, String lName, String gender, String weight, String height, String weightUnit, String heightUnit,
       String goalWeight, String age, String activityLevel, String weightChangeWeekly,   List<String> mainDishTypes, List<String> sideDishTypes,
-      List<String> favoriteCategories, List<String> hateCategories, List<String> allergens, List<String> dailyMacroGoal) async{
+      String diet, List<String> hateCategories, List<String> allergens, List<String> dailyMacroGoal) async{
 
     Profile profile = Profile(
       gender: gender,
@@ -40,7 +40,7 @@ class UpdateProfileUseCase{
       updateProfileShown: true,
       mainDishTypes: mainDishTypes,
       sideDishTypes: sideDishTypes,
-      favoriteCategories: favoriteCategories,
+      diet: diet,
       hateCategories: hateCategories,
       allergens: allergens
     );
@@ -48,12 +48,10 @@ class UpdateProfileUseCase{
 
 
     // get sub categories
-    final favoriteSubCatResponse= await foodsRepo.getSubcategoriesFromRemote(favoriteCategories);
     final hateSubCatResponse= await foodsRepo.getSubcategoriesFromRemote(hateCategories);
 
 
     profile= profile.copyWith(
-      favoriteSubCategories: favoriteSubCatResponse.isRight() ? favoriteSubCatResponse.asRight() : [],
       hateSubCategories: hateSubCatResponse.isRight() ? hateSubCatResponse.asRight() : [],
     );
 

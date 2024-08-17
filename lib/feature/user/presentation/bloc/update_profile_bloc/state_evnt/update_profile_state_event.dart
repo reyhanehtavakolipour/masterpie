@@ -21,7 +21,7 @@ abstract class UpdateProfileEvent with _$UpdateProfileEvent {
       String weightChangeWeekly,
       List<String> mainDishTypes,
       List<String> sideDishTypes,
-      List<String> favoriteCategories,
+      String diet,
       List<String> hateCategories,
       List<String> allergens,
       List<String> dailyMacroGoal

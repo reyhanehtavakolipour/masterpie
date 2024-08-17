@@ -33,7 +33,7 @@ mixin _$Profile {
   bool get updateProfileShown => throw _privateConstructorUsedError;
   List<String> get favoriteCategories => throw _privateConstructorUsedError;
   List<String> get hateCategories => throw _privateConstructorUsedError;
-  List<String> get favoriteSubCategories => throw _privateConstructorUsedError;
+  String get diet => throw _privateConstructorUsedError;
   List<String> get hateSubCategories => throw _privateConstructorUsedError;
   List<String> get mainDishTypes => throw _privateConstructorUsedError;
   List<String> get sideDishTypes => throw _privateConstructorUsedError;
@@ -66,7 +66,7 @@ abstract class $ProfileCopyWith<$Res> {
       bool updateProfileShown,
       List<String> favoriteCategories,
       List<String> hateCategories,
-      List<String> favoriteSubCategories,
+      String diet,
       List<String> hateSubCategories,
       List<String> mainDishTypes,
       List<String> sideDishTypes,
@@ -103,7 +103,7 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? updateProfileShown = null,
     Object? favoriteCategories = null,
     Object? hateCategories = null,
-    Object? favoriteSubCategories = null,
+    Object? diet = null,
     Object? hateSubCategories = null,
     Object? mainDishTypes = null,
     Object? sideDishTypes = null,
@@ -178,10 +178,10 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.hateCategories
           : hateCategories // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      favoriteSubCategories: null == favoriteSubCategories
-          ? _value.favoriteSubCategories
-          : favoriteSubCategories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      diet: null == diet
+          ? _value.diet
+          : diet // ignore: cast_nullable_to_non_nullable
+              as String,
       hateSubCategories: null == hateSubCategories
           ? _value.hateSubCategories
           : hateSubCategories // ignore: cast_nullable_to_non_nullable
@@ -227,7 +227,7 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       bool updateProfileShown,
       List<String> favoriteCategories,
       List<String> hateCategories,
-      List<String> favoriteSubCategories,
+      String diet,
       List<String> hateSubCategories,
       List<String> mainDishTypes,
       List<String> sideDishTypes,
@@ -262,7 +262,7 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? updateProfileShown = null,
     Object? favoriteCategories = null,
     Object? hateCategories = null,
-    Object? favoriteSubCategories = null,
+    Object? diet = null,
     Object? hateSubCategories = null,
     Object? mainDishTypes = null,
     Object? sideDishTypes = null,
@@ -337,10 +337,10 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value._hateCategories
           : hateCategories // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      favoriteSubCategories: null == favoriteSubCategories
-          ? _value._favoriteSubCategories
-          : favoriteSubCategories // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      diet: null == diet
+          ? _value.diet
+          : diet // ignore: cast_nullable_to_non_nullable
+              as String,
       hateSubCategories: null == hateSubCategories
           ? _value._hateSubCategories
           : hateSubCategories // ignore: cast_nullable_to_non_nullable
@@ -382,7 +382,7 @@ class _$ProfileImpl implements _Profile {
       this.updateProfileShown = false,
       final List<String> favoriteCategories = const [],
       final List<String> hateCategories = const [],
-      final List<String> favoriteSubCategories = const [],
+      this.diet = '',
       final List<String> hateSubCategories = const [],
       final List<String> mainDishTypes = const [],
       final List<String> sideDishTypes = const [],
@@ -390,7 +390,6 @@ class _$ProfileImpl implements _Profile {
       : _dailyMacroGoal = dailyMacroGoal,
         _favoriteCategories = favoriteCategories,
         _hateCategories = hateCategories,
-        _favoriteSubCategories = favoriteSubCategories,
         _hateSubCategories = hateSubCategories,
         _mainDishTypes = mainDishTypes,
         _sideDishTypes = sideDishTypes,
@@ -466,16 +465,9 @@ class _$ProfileImpl implements _Profile {
     return EqualUnmodifiableListView(_hateCategories);
   }
 
-  final List<String> _favoriteSubCategories;
   @override
   @JsonKey()
-  List<String> get favoriteSubCategories {
-    if (_favoriteSubCategories is EqualUnmodifiableListView)
-      return _favoriteSubCategories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_favoriteSubCategories);
-  }
-
+  final String diet;
   final List<String> _hateSubCategories;
   @override
   @JsonKey()
@@ -515,7 +507,7 @@ class _$ProfileImpl implements _Profile {
 
   @override
   String toString() {
-    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, favoriteSubCategories: $favoriteSubCategories, hateSubCategories: $hateSubCategories, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, allergens: $allergens)';
+    return 'Profile(email: $email, id: $id, firstName: $firstName, lastName: $lastName, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, gender: $gender, dailyMacroGoal: $dailyMacroGoal, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, updateProfileShown: $updateProfileShown, favoriteCategories: $favoriteCategories, hateCategories: $hateCategories, diet: $diet, hateSubCategories: $hateSubCategories, mainDishTypes: $mainDishTypes, sideDishTypes: $sideDishTypes, allergens: $allergens)';
   }
 
   @override
@@ -551,8 +543,7 @@ class _$ProfileImpl implements _Profile {
                 .equals(other._favoriteCategories, _favoriteCategories) &&
             const DeepCollectionEquality()
                 .equals(other._hateCategories, _hateCategories) &&
-            const DeepCollectionEquality()
-                .equals(other._favoriteSubCategories, _favoriteSubCategories) &&
+            (identical(other.diet, diet) || other.diet == diet) &&
             const DeepCollectionEquality()
                 .equals(other._hateSubCategories, _hateSubCategories) &&
             const DeepCollectionEquality()
@@ -583,7 +574,7 @@ class _$ProfileImpl implements _Profile {
         updateProfileShown,
         const DeepCollectionEquality().hash(_favoriteCategories),
         const DeepCollectionEquality().hash(_hateCategories),
-        const DeepCollectionEquality().hash(_favoriteSubCategories),
+        diet,
         const DeepCollectionEquality().hash(_hateSubCategories),
         const DeepCollectionEquality().hash(_mainDishTypes),
         const DeepCollectionEquality().hash(_sideDishTypes),
@@ -616,7 +607,7 @@ abstract class _Profile implements Profile {
       final bool updateProfileShown,
       final List<String> favoriteCategories,
       final List<String> hateCategories,
-      final List<String> favoriteSubCategories,
+      final String diet,
       final List<String> hateSubCategories,
       final List<String> mainDishTypes,
       final List<String> sideDishTypes,
@@ -657,7 +648,7 @@ abstract class _Profile implements Profile {
   @override
   List<String> get hateCategories;
   @override
-  List<String> get favoriteSubCategories;
+  String get diet;
   @override
   List<String> get hateSubCategories;
   @override

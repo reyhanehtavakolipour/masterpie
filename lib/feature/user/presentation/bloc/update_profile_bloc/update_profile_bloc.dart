@@ -21,7 +21,7 @@ class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
           final useCase= serviceLocator<UpdateProfileUseCase>();
           var result = await useCase.updateProfile(event.email, event.fName, event.lName, event.gender, event.weight,
               event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel, event.weightChangeWeekly,
-              event.mainDishTypes, event.sideDishTypes, event.favoriteCategories, event.hateCategories, event.allergens, event.dailyMacroGoal);
+              event.mainDishTypes, event.sideDishTypes, event.diet, event.hateCategories, event.allergens, event.dailyMacroGoal);
           result.fold(
                 (failure) {
                   emit(UpdateProfileState.error(failure.message));

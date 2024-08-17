@@ -532,7 +532,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         Map<String, dynamic> autoGenerateFoodParams = {
           'favoriteCategories': [''],
           'hateCategories': [''],
-          'favoriteSubCategories': profileRemote.favoriteSubCategories.isEmpty ? [''] : profileRemote.favoriteSubCategories,
+          'diet': profileRemote.diet,
           'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
           'DishTypes': type == 'Dinner' ? 'Lunch' : type,
           'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,
@@ -579,7 +579,7 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
       Map<String, dynamic> autoGenerateFoodParams = {
         'favoriteCategories': [''],
         'hateCategories': [''],
-        'favoriteSubCategories': profileRemote.favoriteSubCategories.isEmpty ? [''] : profileRemote.favoriteSubCategories,
+        'diet': profileRemote.diet,
         'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
         'DishTypes': type == 'Dinner' ? 'Lunch' : type,
         'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,

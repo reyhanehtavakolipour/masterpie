@@ -2925,11 +2925,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           .eq('device_id', uuId);
 
 
+      final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+      String email = await userHiveDataSource.getString(KEY_EMAIL) ?? '';
+
+
       if(userResponse.isEmpty){
-
-        final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-        String email = await userHiveDataSource.getString(KEY_EMAIL) ?? '';
-
 
         final Map<String, dynamic> data = <String, dynamic>{};
         data['device_id'] = uuId;
@@ -2944,6 +2944,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         final Map<String, dynamic> data = <String, dynamic>{};
         final previousCount= int.parse(userResponse[0]['wizard'].toString());
         data['wizard'] = previousCount + 1;
+        data['email'] = email;
 
 
         await supabase.from(GUEST_USAGE_TABLE).update(data).eq('device_id', uuId);
@@ -2968,12 +2969,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           .select<List<dynamic>>()
           .eq('device_id', uuId);
 
+      final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+      String email = await userHiveDataSource.getString(KEY_EMAIL) ?? '';
 
       if(userResponse.isEmpty){
-
-        final userHiveDataSource = serviceLocator<UserHiveDataSource>();
-        String email = await userHiveDataSource.getString(KEY_EMAIL) ?? '';
-
 
         final Map<String, dynamic> data = <String, dynamic>{};
         data['device_id'] = uuId;
@@ -2988,6 +2987,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         final Map<String, dynamic> data = <String, dynamic>{};
         final previousCount= int.parse(userResponse[0]['auto_generate_daily'].toString());
         data['auto_generate_daily'] = previousCount + 1;
+        data['email'] = email;
 
 
         await supabase.from(GUEST_USAGE_TABLE).update(data).eq('device_id', uuId);

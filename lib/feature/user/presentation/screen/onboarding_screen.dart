@@ -22,6 +22,7 @@ import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
 import '../../../foods/presentation/screen/recie_types_popup.dart';
+import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../domain/model/profile_model.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
 
@@ -31,6 +32,11 @@ const String reddit= 'Reddit';
 const String friend_recom= 'Friend\'s Recommendation';
 const String web_search= 'Web Search';
 const String other_label= 'Other';
+
+
+final dietOptions= ['$CLASSIC_LABEL (30% $PROTEIN_LABEL, 30% $CARB_LABEL, 40% $FAT_LABEL)',
+  '$KETO_LABEL (25% $PROTEIN_LABEL, 5% $CARB_LABEL, 70% $FAT_LABEL)', VEGETERIAN_LABEL];
+
 
 
 class OnBoardingScreen extends StatefulWidget {
@@ -44,6 +50,8 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
+
+
 
   final PageController _pageController = PageController(initialPage: 0);
 
@@ -76,8 +84,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   List<String> _sideDishesType= [];
 
 
-  //favorite categories
-  List<String> _favoriteCategories=[];
+  //diet
+  String _diet= dietOptions[0];
 
 
   //hate categories
@@ -177,7 +185,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
                   /// step4
-                  _selectFavoriteCategories(),
+                  _selectDiet(),
 
 
                   /// step 5
@@ -326,7 +334,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       _selectedSideDishChoice= profile.sideDishTypes.length;
       _mainDishesType= profile.mainDishTypes;
       _sideDishesType= profile.sideDishTypes;
-      _favoriteCategories= profile.favoriteCategories;
+
+
+      if(profile.diet.contains(CLASSIC_LABEL)){
+        _diet= dietOptions[0];
+      }else if(profile.diet.contains(KETO_LABEL)){
+        _diet= dietOptions[1];
+      } else if(profile.diet.contains(VEGETERIAN_LABEL)){
+        _diet= dietOptions[2];
+      }
+
       _hateCategories= profile.hateCategories;
       _allergens= profile.allergens;
     });
@@ -1282,6 +1299,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     String weightChangeWeekly= _weightSelectedUnit == LB_LABEL ? LB_1_LABEL : GRAM_250_LABEL;
 
+
+    //diet
+    String diet= CLASSIC_LABEL;
+    if(_diet.contains(CLASSIC_LABEL)){
+      diet= CLASSIC_LABEL;
+    }else if(_diet.contains(KETO_LABEL)){
+      diet= KETO_LABEL;
+    } else if(_diet.contains(VEGETERIAN_LABEL)){
+      diet= VEGETERIAN_LABEL;
+    }
+
     _updateProfileBloc.add(
       UpdateProfileEvent.onUpdateProfile(
         _profile.email,
@@ -1298,7 +1326,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         weightChangeWeekly,
         _mainDishesType,
         _sideDishesType,
-        _favoriteCategories,
+        diet,
         _hateCategories,
         _allergens,
         _profile.dailyMacroGoal
@@ -1600,14 +1628,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   void _saveUserInputsInsideApp(){
 
-    //favorites
-    List<String> favorites= [];
-    _favoriteCategories.forEach((element) {
-      if(element.isNotEmpty){
-        favorites.add(element);
-      }
-    });
-    _favoriteCategories= favorites;
+    //diet
+    String diet= CLASSIC_LABEL;
+    if(_diet.contains(CLASSIC_LABEL)){
+      diet= CLASSIC_LABEL;
+    }else if(_diet.contains(KETO_LABEL)){
+      diet= KETO_LABEL;
+    } else if(_diet.contains(VEGETERIAN_LABEL)){
+      diet= VEGETERIAN_LABEL;
+    }
 
 
     //hates
@@ -1667,7 +1696,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           _profile.weightChangeWeekly,
           _mainDishesType,
           _sideDishesType,
-          _favoriteCategories,
+          diet,
           _hateCategories,
           _allergens,
           _profile.dailyMacroGoal
@@ -1675,7 +1704,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget _selectFavoriteCategories(){
+  Widget _selectDiet(){
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -1728,13 +1757,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                     child: const Text(
-                      SELECT_FAVORITE_CATEGORIES,
+                      SELECT_DIET_MSG,
                       style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
 
-                  _buildFavoriteCategories(),
+                  _buildDiets(),
 
 
                 ],
@@ -1790,22 +1819,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
   Widget _buildHateCategories(){
-
-    //remove favorite categories from the options
-
-    List<String> hateOptions= [];
-    _allCategoryOptions.forEach((element) {
-      if(!_favoriteCategories.contains(element)){
-        hateOptions.add(element);
-      }
-    });
-
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Wrap(
         spacing: 24,
-        children:  hateOptions.map(
+        children:  _allCategoryOptions.map(
               (item) {
             return RawChip(
               backgroundColor: _hateCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
@@ -1887,75 +1905,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
 
-  Widget _buildFavoriteCategories(){
-
-    //remove allergens
-    if(_allergens.contains('Egg') || _allergens.contains('Fish') || _allergens.contains('Nuts')){
-      List<String> categories= [];
-      _allCategoryOptions.forEach((element) {
-        if(element == 'Eggs'){
-          if(!_allergens.contains('Egg')){
-            categories.add(element);
-          }
-        }else if(element == 'Nuts & Seeds'){
-          if(!_allergens.contains('Nuts')){
-            categories.add(element);
-          }
-        }else if(element == 'Fish & Seafood'){
-          if(!_allergens.contains('Fish')){
-            categories.add(element);
-          }
-        }else{
-          categories.add(element);
-        }
-      });
-
-      _allCategoryOptions= categories;
-    }
-
-
+  Widget _buildDiets(){
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Wrap(
-        spacing: 24,
-        children:  _allCategoryOptions.map(
-              (item) {
-            return RawChip(
-              backgroundColor: _favoriteCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
-              onSelected: (bool selected) {
-                setState(() {
-                  if(selected){
-                    if(!_favoriteCategories.contains(item)){
-                      List<String> list= [];
-                      list.addAll(_favoriteCategories);
-                      list.add(item);
-                      _favoriteCategories= list;
-                    }
-                  }else{
-                    _favoriteCategories.remove(item);
-                  }
-                });
-              },
-              deleteIconColor: LIGHT_GREY_COLOR,
-              onDeleted: (){
-                setState(() {
-                  List<String> list= [];
-                  _favoriteCategories.forEach((element) {
-                    if(element != item){
-                      list.add(element);
-                    }
-                  });
-                  _favoriteCategories= list;
-                });
-              },
-              label: Text(item, style: TextStyle(color: _favoriteCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
-            );
-          },
-        ).toList(),
+      child: CustomRadioListTile(
+        options: dietOptions,
+        onSelectedOptionChanged: _updateDietUi,
+        selectedOption: _diet,
+        orientation: VERTICAL_ORIENTATION,
+        isEditable: true,
       ),
     );
   }
 
+
+  void _updateDietUi(String diet){
+    setState(() {
+      _diet= diet;
+    });
+  }
 
   Widget _buildMainDishesTypes(){
     return ListView.builder(
