@@ -43,6 +43,7 @@ abstract class UpdateProfileEvent with _$UpdateProfileEvent {
       String goalWeight,
       String age,
       String activityLevel,
+      String diet,
       String weightChangeWeekly
       ) = CalculateDailyMacroGoal;
 
@@ -69,6 +70,7 @@ abstract class UpdateProfileEvent with _$UpdateProfileEvent {
       String protein,
       String carb,
       String fat,
+      String diet
       ) = UpdateMacroGoalsAndInputs;
 
   const factory UpdateProfileEvent.onReset() = Reset;

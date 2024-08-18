@@ -66,7 +66,7 @@ class UpdateProfileUseCase{
         return Left(getFailure(upsertProfileResponse.asLeft()));
       }
 
-      profile= profile.copyWith(dailyMacroGoal: upsertProfileResponse.asRight().dailyMacroGoal);
+      profile= profile.copyWith(dailyMacroGoal: upsertProfileResponse.asRight().dailyMacroGoal, diet: diet);
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
     }else{
@@ -80,7 +80,7 @@ class UpdateProfileUseCase{
         macro= emptyProfile().dailyMacroGoal;
       }
 
-      profile= profile.copyWith(dailyMacroGoal: macro);
+      profile= profile.copyWith(dailyMacroGoal: macro, diet: diet);
 
       await repo.updateProfileInLocal(profile);
       return const Right(Success());
@@ -92,7 +92,7 @@ class UpdateProfileUseCase{
 
   Future<Either<Failure, Success>> updateMacroGoalsAndInputs(String gender,
       String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age,
-      String activityLevel, String weightChangeWeekly, String calorie, String protein, String carb, String fat) async{
+      String activityLevel, String weightChangeWeekly, String calorie, String protein, String carb, String fat, String diet) async{
 
 
     Profile profile = Profile(
@@ -103,6 +103,7 @@ class UpdateProfileUseCase{
         heightUnit: heightUnit,
         goalWeight: goalWeight,
         age: age,
+        diet: diet,
         activityLevel: activityLevel,
         weightChangeWeekly: weightChangeWeekly,
         dailyMacroGoal: [calorie, protein, carb, fat]
@@ -146,7 +147,8 @@ class UpdateProfileUseCase{
 
 
   Future<Either<Failure, List<String>>> calculateDailyMacroGoal(String gender,
-      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age, String activityLevel, String weightChangeWeekly) async{
+      String weight, String height, String weightUnit, String heightUnit, String goalWeight, String age, String activityLevel,
+      String diet, String weightChangeWeekly) async{
 
     Profile profile = Profile(
         gender: gender,
@@ -157,6 +159,7 @@ class UpdateProfileUseCase{
         goalWeight: goalWeight,
         age: age,
         activityLevel: activityLevel,
+        diet: diet,
         weightChangeWeekly: weightChangeWeekly
     );
 

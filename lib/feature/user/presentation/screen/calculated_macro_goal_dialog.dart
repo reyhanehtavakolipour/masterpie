@@ -37,10 +37,12 @@ class CalculatedMacroGoalDialog extends StatefulWidget {
 
   final bool isEditable;
 
+  final String diet;
+
 
   const CalculatedMacroGoalDialog({super.key, required this.calorie, required this.protein, required this.carb, required this.fat,
     required this.gender, required this.weight, required this.weightUnit, required this.height, required this.heightUnit, required this.age,
-    required this.activityLevel, required this.goalWeight, required this.weightChangeWeekly, required this.onMacroGoalSaved, required this.isEditable});
+    required this.activityLevel, required this.goalWeight, required this.weightChangeWeekly, required this.onMacroGoalSaved, required this.isEditable, required this.diet});
 
   @override
   State<CalculatedMacroGoalDialog> createState() => _CalculatedMacroGoalDialogState();
@@ -86,7 +88,8 @@ class _CalculatedMacroGoalDialogState extends State<CalculatedMacroGoalDialog> {
               _calorieController.text,
               _proteinController.text,
               _carbController.text,
-              _fatController.text
+              _fatController.text,
+              widget.diet
           )
       );
   }

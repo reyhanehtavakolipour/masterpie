@@ -49,6 +49,7 @@ mixin _$UpdateProfileEvent {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -67,7 +68,8 @@ mixin _$UpdateProfileEvent {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) =>
@@ -104,6 +106,7 @@ mixin _$UpdateProfileEvent {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -121,7 +124,8 @@ mixin _$UpdateProfileEvent {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) =>
@@ -158,6 +162,7 @@ mixin _$UpdateProfileEvent {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -175,7 +180,8 @@ mixin _$UpdateProfileEvent {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -567,6 +573,7 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -585,7 +592,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
@@ -643,6 +651,7 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -660,7 +669,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
@@ -718,6 +728,7 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -735,7 +746,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -963,6 +975,7 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -981,7 +994,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
@@ -1021,6 +1035,7 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -1038,7 +1053,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
@@ -1078,6 +1094,7 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -1095,7 +1112,8 @@ class _$UpdateUserInfoImpl implements UpdateUserInfo {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -1182,6 +1200,7 @@ abstract class _$$CalculateDailyMacroGoalImplCopyWith<$Res> {
       String goalWeight,
       String age,
       String activityLevel,
+      String diet,
       String weightChangeWeekly});
 }
 
@@ -1206,6 +1225,7 @@ class __$$CalculateDailyMacroGoalImplCopyWithImpl<$Res>
     Object? goalWeight = null,
     Object? age = null,
     Object? activityLevel = null,
+    Object? diet = null,
     Object? weightChangeWeekly = null,
   }) {
     return _then(_$CalculateDailyMacroGoalImpl(
@@ -1241,6 +1261,10 @@ class __$$CalculateDailyMacroGoalImplCopyWithImpl<$Res>
           ? _value.activityLevel
           : activityLevel // ignore: cast_nullable_to_non_nullable
               as String,
+      null == diet
+          ? _value.diet
+          : diet // ignore: cast_nullable_to_non_nullable
+              as String,
       null == weightChangeWeekly
           ? _value.weightChangeWeekly
           : weightChangeWeekly // ignore: cast_nullable_to_non_nullable
@@ -1261,6 +1285,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
       this.goalWeight,
       this.age,
       this.activityLevel,
+      this.diet,
       this.weightChangeWeekly);
 
   @override
@@ -1280,11 +1305,13 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
   @override
   final String activityLevel;
   @override
+  final String diet;
+  @override
   final String weightChangeWeekly;
 
   @override
   String toString() {
-    return 'UpdateProfileEvent.onCalculateDailyMacroGoal(gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly)';
+    return 'UpdateProfileEvent.onCalculateDailyMacroGoal(gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, diet: $diet, weightChangeWeekly: $weightChangeWeekly)';
   }
 
   @override
@@ -1304,6 +1331,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             (identical(other.age, age) || other.age == age) &&
             (identical(other.activityLevel, activityLevel) ||
                 other.activityLevel == activityLevel) &&
+            (identical(other.diet, diet) || other.diet == diet) &&
             (identical(other.weightChangeWeekly, weightChangeWeekly) ||
                 other.weightChangeWeekly == weightChangeWeekly));
   }
@@ -1319,6 +1347,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
       goalWeight,
       age,
       activityLevel,
+      diet,
       weightChangeWeekly);
 
   @JsonKey(ignore: true)
@@ -1362,6 +1391,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -1380,12 +1410,13 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
     return onCalculateDailyMacroGoal(gender, weight, height, weightUnit,
-        heightUnit, goalWeight, age, activityLevel, weightChangeWeekly);
+        heightUnit, goalWeight, age, activityLevel, diet, weightChangeWeekly);
   }
 
   @override
@@ -1421,6 +1452,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -1438,12 +1470,13 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
     return onCalculateDailyMacroGoal?.call(gender, weight, height, weightUnit,
-        heightUnit, goalWeight, age, activityLevel, weightChangeWeekly);
+        heightUnit, goalWeight, age, activityLevel, diet, weightChangeWeekly);
   }
 
   @override
@@ -1479,6 +1512,7 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -1496,14 +1530,15 @@ class _$CalculateDailyMacroGoalImpl implements CalculateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
   }) {
     if (onCalculateDailyMacroGoal != null) {
       return onCalculateDailyMacroGoal(gender, weight, height, weightUnit,
-          heightUnit, goalWeight, age, activityLevel, weightChangeWeekly);
+          heightUnit, goalWeight, age, activityLevel, diet, weightChangeWeekly);
     }
     return orElse();
   }
@@ -1567,6 +1602,7 @@ abstract class CalculateDailyMacroGoal implements UpdateProfileEvent {
       final String goalWeight,
       final String age,
       final String activityLevel,
+      final String diet,
       final String weightChangeWeekly) = _$CalculateDailyMacroGoalImpl;
 
   String get gender;
@@ -1577,6 +1613,7 @@ abstract class CalculateDailyMacroGoal implements UpdateProfileEvent {
   String get goalWeight;
   String get age;
   String get activityLevel;
+  String get diet;
   String get weightChangeWeekly;
   @JsonKey(ignore: true)
   _$$CalculateDailyMacroGoalImplCopyWith<_$CalculateDailyMacroGoalImpl>
@@ -1705,6 +1742,7 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -1723,7 +1761,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
@@ -1763,6 +1802,7 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -1780,7 +1820,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
@@ -1820,6 +1861,7 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -1837,7 +1879,8 @@ class _$UpdateDailyMacroGoalImpl implements UpdateDailyMacroGoal {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -1930,7 +1973,8 @@ abstract class _$$UpdateMacroGoalsAndInputsImplCopyWith<$Res> {
       String calorie,
       String protein,
       String carb,
-      String fat});
+      String fat,
+      String diet});
 }
 
 /// @nodoc
@@ -1959,6 +2003,7 @@ class __$$UpdateMacroGoalsAndInputsImplCopyWithImpl<$Res>
     Object? protein = null,
     Object? carb = null,
     Object? fat = null,
+    Object? diet = null,
   }) {
     return _then(_$UpdateMacroGoalsAndInputsImpl(
       null == gender
@@ -2013,6 +2058,10 @@ class __$$UpdateMacroGoalsAndInputsImplCopyWithImpl<$Res>
           ? _value.fat
           : fat // ignore: cast_nullable_to_non_nullable
               as String,
+      null == diet
+          ? _value.diet
+          : diet // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -2033,7 +2082,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
       this.calorie,
       this.protein,
       this.carb,
-      this.fat);
+      this.fat,
+      this.diet);
 
   @override
   final String gender;
@@ -2061,10 +2111,12 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
   final String carb;
   @override
   final String fat;
+  @override
+  final String diet;
 
   @override
   String toString() {
-    return 'UpdateProfileEvent.onUpdateMacroGoalsAndInputs(gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat)';
+    return 'UpdateProfileEvent.onUpdateMacroGoalsAndInputs(gender: $gender, weight: $weight, height: $height, weightUnit: $weightUnit, heightUnit: $heightUnit, goalWeight: $goalWeight, age: $age, activityLevel: $activityLevel, weightChangeWeekly: $weightChangeWeekly, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diet: $diet)';
   }
 
   @override
@@ -2089,7 +2141,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             (identical(other.calorie, calorie) || other.calorie == calorie) &&
             (identical(other.protein, protein) || other.protein == protein) &&
             (identical(other.carb, carb) || other.carb == carb) &&
-            (identical(other.fat, fat) || other.fat == fat));
+            (identical(other.fat, fat) || other.fat == fat) &&
+            (identical(other.diet, diet) || other.diet == diet));
   }
 
   @override
@@ -2107,7 +2160,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
       calorie,
       protein,
       carb,
-      fat);
+      fat,
+      diet);
 
   @JsonKey(ignore: true)
   @override
@@ -2150,6 +2204,7 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -2168,7 +2223,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
@@ -2185,7 +2241,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
         calorie,
         protein,
         carb,
-        fat);
+        fat,
+        diet);
   }
 
   @override
@@ -2221,6 +2278,7 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -2238,7 +2296,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
@@ -2255,7 +2314,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
         calorie,
         protein,
         carb,
-        fat);
+        fat,
+        diet);
   }
 
   @override
@@ -2291,6 +2351,7 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -2308,7 +2369,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),
@@ -2327,7 +2389,8 @@ class _$UpdateMacroGoalsAndInputsImpl implements UpdateMacroGoalsAndInputs {
           calorie,
           protein,
           carb,
-          fat);
+          fat,
+          diet);
     }
     return orElse();
   }
@@ -2395,7 +2458,8 @@ abstract class UpdateMacroGoalsAndInputs implements UpdateProfileEvent {
       final String calorie,
       final String protein,
       final String carb,
-      final String fat) = _$UpdateMacroGoalsAndInputsImpl;
+      final String fat,
+      final String diet) = _$UpdateMacroGoalsAndInputsImpl;
 
   String get gender;
   String get weight;
@@ -2410,6 +2474,7 @@ abstract class UpdateMacroGoalsAndInputs implements UpdateProfileEvent {
   String get protein;
   String get carb;
   String get fat;
+  String get diet;
   @JsonKey(ignore: true)
   _$$UpdateMacroGoalsAndInputsImplCopyWith<_$UpdateMacroGoalsAndInputsImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -2484,6 +2549,7 @@ class _$ResetImpl implements Reset {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)
         onCalculateDailyMacroGoal,
     required TResult Function(
@@ -2502,7 +2568,8 @@ class _$ResetImpl implements Reset {
             String calorie,
             String protein,
             String carb,
-            String fat)
+            String fat,
+            String diet)
         onUpdateMacroGoalsAndInputs,
     required TResult Function() onReset,
   }) {
@@ -2542,6 +2609,7 @@ class _$ResetImpl implements Reset {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult? Function(String calorie, String protein, String carb, String fat)?
@@ -2559,7 +2627,8 @@ class _$ResetImpl implements Reset {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult? Function()? onReset,
   }) {
@@ -2599,6 +2668,7 @@ class _$ResetImpl implements Reset {
             String goalWeight,
             String age,
             String activityLevel,
+            String diet,
             String weightChangeWeekly)?
         onCalculateDailyMacroGoal,
     TResult Function(String calorie, String protein, String carb, String fat)?
@@ -2616,7 +2686,8 @@ class _$ResetImpl implements Reset {
             String calorie,
             String protein,
             String carb,
-            String fat)?
+            String fat,
+            String diet)?
         onUpdateMacroGoalsAndInputs,
     TResult Function()? onReset,
     required TResult orElse(),

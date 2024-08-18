@@ -61,7 +61,7 @@ class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
           emit(const UpdateProfileState.loading());
           final useCase= serviceLocator<UpdateProfileUseCase>();
           var result = await useCase.calculateDailyMacroGoal(event.gender, event.weight,
-              event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel, event.weightChangeWeekly);
+              event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel, event.diet, event.weightChangeWeekly);
           result.fold(
                 (failure) {
               emit(UpdateProfileState.error(failure.message));
@@ -81,7 +81,7 @@ class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
           final useCase= serviceLocator<UpdateProfileUseCase>();
           var result = await useCase.updateMacroGoalsAndInputs(event.gender, event.weight,
               event.height, event.weightUnit, event.heightUnit, event.goalWeight, event.age, event.activityLevel,
-            event.weightChangeWeekly, event.calorie, event.protein, event.carb, event.fat);
+            event.weightChangeWeekly, event.calorie, event.protein, event.carb, event.fat, event.diet);
           result.fold(
                 (failure) {
               emit(UpdateProfileState.error(failure.message));

@@ -1,6 +1,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../../../util/core/constant/sqflite_constants.dart';
 import '../../../../../util/core/di/service_locator.dart';
@@ -164,6 +165,7 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
           WEIGHT_UNIT: profile.weightUnit,
           HEIGHT_UNIT: profile.heightUnit,
           GOAL_WEIGHT: profile.goalWeight,
+          USER_DIET: profile.diet,
           ACTIVITY_LEVEL: profile.activityLevel,
           WEIGHT_CHANGE_WEEKLY: profile.weightChangeWeekly,
         },

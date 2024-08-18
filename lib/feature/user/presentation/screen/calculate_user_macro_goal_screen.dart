@@ -5,12 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/user/presentation/screen/calculated_macro_goal_dialog.dart';
+import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../main_screen.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
+import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../domain/model/profile_model.dart';
 import '../bloc/get_profile_bloc/get_profile_bloc.dart';
 import '../bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
@@ -56,6 +58,8 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
   late GetProfileBloc _getProfileBloc;
   late UpdateProfileBloc _updateProfileBloc;
 
+  String _diet= dietOptions[0];
+
 
   @override
   void initState() {
@@ -65,12 +69,39 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     getProfile();
   }
 
+  void _updateDietUi(String diet){
+    setState(() {
+      _diet= diet;
+    });
+  }
+
+  Widget _buildDiets(){
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: CustomRadioListTile(
+        options: dietOptions,
+        onSelectedOptionChanged: _updateDietUi,
+        selectedOption: _diet,
+        orientation: VERTICAL_ORIENTATION,
+        isEditable: true,
+      ),
+    );
+  }
+
 
   void getProfile(){
     _getProfileBloc.add(const GetProfileEvent.onGetProfile());
   }
 
   void calculateDailyMacro(){
+
+    //diet
+    String diet= CLASSIC_LABEL;
+    if(_diet.contains(KETO_LABEL)){
+      diet= KETO_LABEL;
+    } else if(_diet.contains(VEGETERIAN_LABEL)){
+      diet= VEGETERIAN_LABEL;
+    }
 
     _updateProfileBloc.add(
         UpdateProfileEvent.onCalculateDailyMacroGoal(
@@ -82,35 +113,56 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
             _goalWeightController.text,
             _ageController.text,
             _activitySelected,
+            diet,
             _weightChangeWeekly
         )
     );
   }
 
   void showMacroGoalsPopup(BuildContext context, List<String> dailyMacros, bool isEditable) {
+
+    //diet
+    String diet= CLASSIC_LABEL;
+    if(_diet.contains(KETO_LABEL)){
+      diet= KETO_LABEL;
+    } else if(_diet.contains(VEGETERIAN_LABEL)){
+      diet= VEGETERIAN_LABEL;
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return CalculatedMacroGoalDialog(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
             weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
             age: _ageController.text, goalWeight: _goalWeightController.text,
-            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable,);
+            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable, diet: diet,);
       },
     );
   }
 
 
   void showManualMacroPopup(BuildContext context, List<String> dailyMacros, bool isEditable) {
+
+    //diet
+    String diet= CLASSIC_LABEL;
+    if(_diet.contains(KETO_LABEL)){
+      diet= KETO_LABEL;
+    } else if(_diet.contains(VEGETERIAN_LABEL)){
+      diet= VEGETERIAN_LABEL;
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return CalculatedMacroGoalsPopup(calorie: dailyMacros[0], protein: dailyMacros[1], gender: _genderSelected, weight: _weightController.text, height: _heightController.text,
             weightUnit: _weightSelectedUnit, heightUnit: _heightSelectedUnit, activityLevel: _activitySelected, weightChangeWeekly: _weightChangeWeekly,
             age: _ageController.text, goalWeight: _goalWeightController.text,
-            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable);
+            carb: dailyMacros[2], fat: dailyMacros[3], onMacroGoalSaved: onUpdatedGoalMacros, isEditable: isEditable, diet: diet,);
       },
     );
   }
+
+
 
 
   void onUpdatedGoalMacros(bool saved, List<String> macros) {
@@ -134,7 +186,21 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                 backgroundColor: PRIMARY_COLOR,
                 leading: InkWell(
                   onTap: () {
-                    Navigator.pop(context, _dailyMacroGoal);
+                    List<String> goals= [];
+                    _dailyMacroGoal.forEach((element) {
+                      goals.add(element);
+                    });
+
+                    //diet
+                    String diet= CLASSIC_LABEL;
+                    if(_diet.contains(KETO_LABEL)){
+                      diet= KETO_LABEL;
+                    } else if(_diet.contains(VEGETERIAN_LABEL)){
+                      diet= VEGETERIAN_LABEL;
+                    }
+
+                    goals.add(diet);
+                    Navigator.pop(context, goals);
                   },
                   child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
                 ),
@@ -252,6 +318,17 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                         ),
                         const SizedBox(height: 4.0),
                         buildLoseWeightAmountPerDayDropdown(),
+
+                        const SizedBox(height: 24.0),
+
+
+                        /// diet
+                        const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(DIET_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                        ),
+
+                        _buildDiets(),
 
                         const SizedBox(height: 32.0),
 
@@ -377,6 +454,16 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   void fulfillWidgets(Profile profile){
     setState(() {
+
+      //diet
+      if(profile.diet.contains(CLASSIC_LABEL)){
+        _diet= dietOptions[0];
+      }else if(profile.diet.contains(KETO_LABEL)){
+        _diet= dietOptions[1];
+      } else if(profile.diet.contains(VEGETERIAN_LABEL)){
+        _diet= dietOptions[2];
+      }
+
       _weightController.text = profile.weight;
       _heightController.text = profile.height;
       _goalWeightController.text = profile.goalWeight;
