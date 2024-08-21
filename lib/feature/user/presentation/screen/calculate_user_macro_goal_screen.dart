@@ -332,31 +332,25 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
                         const SizedBox(height: 32.0),
 
-                        /// calculate button
-                        buildCalculateButton(),
 
-
-                        const SizedBox(height: 16.0),
-
-
-
-                        const Center(
-                          child: Text(
-                            OR_LABEL,
-                            style: TextStyle(
-                                fontSize: 13.0,
-                                color: DARK_PRIMARY_COLOR,
-                                fontWeight: FontWeight.bold
+                        Row(
+                          children: [
+                            Expanded(
+                                child:  /// calculate button
+                                buildCalculateButton(),
                             ),
-                          ),
+
+                            const SizedBox(width: 4.0),
+
+                            Expanded(
+                                child:  /// set macros manually button
+                                buildSetMacrosManuallyButton(),
+                            ),
+                          ],
                         ),
 
 
-                        const SizedBox(height: 16.0),
-
-
-                        /// set macros manually button
-                        buildSetMacrosManuallyButton(),
+                        const SizedBox(height: 64.0),
 
 
                       ],
@@ -431,7 +425,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   Widget buildSetMacrosManuallyButton(){
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.only(right: 16),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: (){
@@ -481,7 +475,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   Widget buildCalculateButton(){
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.only(left: 16),
       child: ElevatedButton(
         onPressed: (){
           if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||

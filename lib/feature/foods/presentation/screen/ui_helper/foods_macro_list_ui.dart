@@ -175,6 +175,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                                   widget.onSideDishClicked(CREATE_MANUAL_LABEL, typeIndex);
                                 }
                               },
+
                               child: Container(
                                 height: 100,
                                 decoration: BoxDecoration(

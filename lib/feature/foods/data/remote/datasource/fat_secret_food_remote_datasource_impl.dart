@@ -423,16 +423,16 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
           /// allergens
           List<String> allergens= [];
-          allergens.add('Milk');
-          allergens.add('Lactose');
+          // allergens.add('Milk');
+          // allergens.add('Lactose');
           allergens.add('Egg');
           allergens.add('Fish');
-          allergens.add('Gluten');
+          // allergens.add('Gluten');
           allergens.add('Nuts');
-          allergens.add('Peanuts');
+          // allergens.add('Peanuts');
           allergens.add('Shellfish');
           allergens.add('Soy');
-          allergens.add('Sesame');
+          // allergens.add('Sesame');
 
           return Right(
               FatSecretFoodsInfoRemote(
