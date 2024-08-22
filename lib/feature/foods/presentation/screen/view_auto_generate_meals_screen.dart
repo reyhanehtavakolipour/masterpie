@@ -328,30 +328,30 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
    }
 
    void _onSearchRecipeWizardClicked(String type, int index){
-     final model= GenericFoodDetailForMacroWizardArgumentModel(
-         type: type,
-         index: index,
-         food: null
-     );
-     Navigator.push(
-       context,
-       MaterialPageRoute(
-         builder: (context) => SearchRecipeMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: model),
-       ),
-     ).then((result) {
-       if(result != null){
-         final foodDetail= result as FoodDetailForMacroWizardArgumentModel;
-         if(foodDetail.food != null){
-           setState(() {
-             if(type == MAIN_DISH_LABEL){
-               _mainDishFoods[index]= foodDetail.food!;
-             }else{
-               _sideDishFoods[index]= foodDetail.food!;
-             }
-           });
-         }
-       }
-     });
+     // final model= GenericFoodDetailForMacroWizardArgumentModel(
+     //     type: type,
+     //     index: index,
+     //     food: null
+     // );
+     // Navigator.push(
+     //   context,
+     //   MaterialPageRoute(
+     //     builder: (context) => SearchRecipeMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: model),
+     //   ),
+     // ).then((result) {
+     //   if(result != null){
+     //     final foodDetail= result as FoodDetailForMacroWizardArgumentModel;
+     //     if(foodDetail.food != null){
+     //       setState(() {
+     //         if(type == MAIN_DISH_LABEL){
+     //           _mainDishFoods[index]= foodDetail.food!;
+     //         }else{
+     //           _sideDishFoods[index]= foodDetail.food!;
+     //         }
+     //       });
+     //     }
+     //   }
+     // });
    }
 
    void _onSearchGroceryWizardClicked(String type, int index){
@@ -670,6 +670,79 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
           ),
           onPressed: () {
 
+
+            List<List<double>> macroGoalsRange= [];
+            double minCalorie= 9/10 * widget.macroGoals[0];
+            double minProtein= 9/10 * widget.macroGoals[1];
+            double minCarb= 9/10 * widget.macroGoals[2];
+            double minFat= 9/10 * widget.macroGoals[3];
+
+            double maxCalorie= 11/10 * widget.macroGoals[0];
+            double maxProtein= 11/10 * widget.macroGoals[1];
+            double maxCarb= 11/10 * widget.macroGoals[2];
+            double maxFat= 11/10 * widget.macroGoals[3];
+
+
+            macroGoalsRange.add([minCalorie, maxCalorie]);
+            macroGoalsRange.add([minProtein, maxProtein]);
+            macroGoalsRange.add([minCarb, maxCarb]);
+            macroGoalsRange.add([minFat, maxFat]);
+
+
+
+
+            if(_mainDishFoods.isEmpty && _sideDishFoods.isEmpty){
+              showErrorToast(context, ERROR_ADD_FOOD);
+              return;
+            }
+
+
+            List<List<double>> servings = [];
+            _mainDishFoods.forEach((element) {
+              List<double> list = [];
+              list.add(0.5);
+              list.add(2.0);
+              servings.add(list);
+            });
+            _sideDishFoods.forEach((element) {
+              List<double> list = [];
+              list.add(0.5);
+              list.add(2.0);
+              servings.add(list);
+            });
+
+            logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
+
+            List<bool> isMainDishList= [];
+            _mainDishTypes.forEach((element) {
+              if(element != 'Breakfast'){
+                isMainDishList.add(true);
+              }else{
+                isMainDishList.add(false);
+              }
+            });
+            _sideDishTypes.forEach((element) {
+              isMainDishList.add(false);
+            });
+
+            List<Food> foods= [];
+            foods.addAll(_mainDishFoods.where((element) => element.name.isNotEmpty));
+            foods.addAll(_sideDishFoods.where((element) => element.name.isNotEmpty));
+
+
+            _trackMacroWizard();
+
+            _suggestPortionsBloc.add(
+                SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                    foods,
+                    isMainDishList,
+                    servings,
+                    macroGoalsRange,
+                    [],
+                    BY_AMOUNT_LABEL,
+                    []
+                )
+            );
           },
 
           child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
@@ -678,8 +751,55 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
     );
   }
 
+  void _trackMacroWizard() async{
+    try{
+      final supabase = Supabase.instance.client;
 
-   Widget _confirmButton(){
+      String uuId= await getDeviceUUID() ?? '';
+
+      final userResponse = await supabase
+          .from(GUEST_USAGE_TABLE)
+          .select<List<dynamic>>()
+          .eq('device_id', uuId);
+
+
+      final userHiveDataSource = serviceLocator<UserHiveDataSource>();
+      String email = await userHiveDataSource.getString(KEY_EMAIL) ?? '';
+
+
+      if(userResponse.isEmpty){
+
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['device_id'] = uuId;
+        data['email'] = email;
+        data['auto_generate_daily'] = 0;
+        data['wizard'] = 1;
+
+
+        await supabase.from(GUEST_USAGE_TABLE).insert(data);
+
+      }else{
+        final Map<String, dynamic> data = <String, dynamic>{};
+        final previousCount= int.parse(userResponse[0]['wizard'].toString());
+        data['wizard'] = previousCount + 1;
+        data['email'] = email;
+
+
+        await supabase.from(GUEST_USAGE_TABLE).update(data).eq('device_id', uuId);
+
+      }
+
+
+    }on PostgrestException catch (error) {
+    } catch (error) {
+    }
+  }
+
+
+
+
+
+  Widget _confirmButton(){
      return Visibility(
        visible: !widget.isView,
        child: Container(

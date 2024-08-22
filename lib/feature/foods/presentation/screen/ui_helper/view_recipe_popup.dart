@@ -36,19 +36,10 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
     super.initState();
 
     //ingredients
-    if(widget.food.ingredients.length == widget.food.calorie.length){
-      for (int i = 0; i < widget.food.ingredients.length; i++) {
-        if (i < widget.food.servingIngredientsCount.length) {
-          String ingredient = '- ${double.parse(widget.food.servingIngredientsCount[i].isEmpty ? '0' : widget.food.servingIngredientsCount[i][0])} x'
-              ' (${widget.food.units[i][0]}) '
-              '${widget.food.ingredients[i]},\n';
-          _ingredients = _ingredients + ingredient;
-        }
-      }
-    }else{
-      for (int i = 0; i < widget.food.ingredients.length; i++) {
-        _ingredients = '$_ingredients- ${widget.food.ingredients[i]}\n';
-      }
+    for (int i = 0; i < widget.food.ingredients.length; i++) {
+      String ingredient = '- ${(fractionToDouble(widget.food.servingAmounts[i]) * widget.food.count).toInt()} '
+          '${widget.food.ingredients[i]},\n';
+      _ingredients = _ingredients + ingredient;
     }
 
   }
@@ -125,14 +116,8 @@ class _ViewRecipePopupState extends State<ViewRecipePopup> {
 
                     const SizedBox(height: 16,),
 
-                    Text('${widget.food.prepTime} $PREP_TIME_LABEL', style: const TextStyle(fontSize: 16, color: Colors.lightGreen, fontWeight: FontWeight.bold),),
 
-
-                    const SizedBox(height: 28,),
-
-
-
-                    Text('$INGREDIENTS_LABEL for $servingNumber serving:', style: const TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
+                    const Text('$INGREDIENTS_LABEL:', style: TextStyle(fontSize: 16, color: Colors.orange, fontWeight: FontWeight.bold),),
 
                     const SizedBox(height: 4,),
 

@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraction/fraction.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/view_recipe_popup.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/color/app_colors.dart';
@@ -146,6 +148,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         theme: ThemeData(fontFamily: MONTSERRAT_FONT),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          backgroundColor: LIGHT_GREY_COLOR,
           appBar: AppBar(
             title: const Text(FOODS_COMBINATIONS_LABEL, style: TextStyle(color: Colors.white)),
             backgroundColor: PRIMARY_COLOR,
@@ -326,42 +329,59 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             double carb= 0;
             double fat= 0;
 
-            if(food.foodType ==FoodType.groceryProduct){
-              calorie= double.parse(food.calorie[0]);
-              protein= double.parse(food.protein[0]);
-              carb= double.parse(food.carb[0]);
-              fat= double.parse(food.fat[0]);
+
+            if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
+              // meal created from scratch
+              for(int i = 0; i < food.servingIngredientsCount.length; i++){
+                calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
+                carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
+                fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
+              }
             }else{
-              if(food.ingredients.length == food.calorie.length){
-                for(int i = 0; i < food.servingIngredientsCount.length; i++){
-                  calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
-                  protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
-                  carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
-                  fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
-                }
-              }else{
-                calorie= calorie + double.parse(food.calorie[0]);
-                protein= protein + double.parse(food.protein[0]);
-                carb= carb + double.parse(food.carb[0]);
-                fat= fat + double.parse(food.fat[0]);
+              //other
+              calorie= double.parse(food.calorie[0]) * food.count;
+              protein= double.parse(food.protein[0]) * food.count;
+              carb= double.parse(food.carb[0]) * food.count;
+              fat= double.parse(food.fat[0]) * food.count;
+            }
+
+
+
+
+            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat';
+
+
+            //ingredients
+            String ingredients= '';
+            if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
+              // meal created from scratch
+              for (int i = 0; i < food.ingredients.length; i++) {
+                String ingredient = '- ${convertDoubleToFraction(double.parse(food.servingIngredientsCount[i]) * food.count * getServingAmount(food.units[i]))} '
+                    '${getServingUnit(food.units[i])} ${food.ingredients[i]},\n';
+                ingredients = ingredients + ingredient;
+              }
+            }else{
+              //other
+              for (int i = 0; i < food.ingredients.length; i++) {
+                String ingredient = '- ${convertDoubleToFraction(fractionToDouble(food.servingAmounts[i]) * food.count)} '
+                    '${food.ingredients[i]},\n';
+                ingredients = ingredients + ingredient;
               }
             }
 
-            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat per serving';
-
 
             return InkWell(
-              onTap: (){
-                if(food.foodType == FoodType.meal){
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ViewRecipePopup(food: food,);
-                    },
-                  );
-                }
-              },
               child: Container(
+                margin: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+                decoration: BoxDecoration(
+                  color: WIZARD_BG_COLOR,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: LIGHT_GREY_COLOR,
+                    width: 1,
+                  ),
+                ),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,12 +402,26 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                             child: const SizedBox(width: 16,)
                         ),
 
-                        Flexible(
-                          child: Text(
-                            '${convertDoubleToFraction(food.count)} serving ${food.name}',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                        Visibility(
+                          visible: food.foodType == FoodType.meal,
+                          child: Flexible(
+                            child: Text(
+                              food.name,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                            ),
                           ),
                         ),
+
+                        Visibility(
+                          visible: food.foodType == FoodType.groceryProduct,
+                          child: Flexible(
+                            child: Text(
+                              '${convertDoubleToFraction(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]))} ${getServingUnit(food.units.isEmpty ? '': food.units[0])} ${food.name}',
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                            ),
+                          ),
+                        ),
+
 
 
                         const SizedBox(width: 2,),
@@ -408,30 +442,42 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     ),
 
 
+
+                    const SizedBox(height: 8,),
+
+
+                    /// ingredients
                     Visibility(
                     visible: food.foodType == FoodType.meal,
-                    child: const Text(
-                      SEE_RECIPE_LABEL,
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+                    child: Text(
+                      ingredients,
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
                     ),
                   ),
 
-                    Visibility(
-                      visible: food.foodType == FoodType.groceryProduct && food.units.isNotEmpty,
-                      child: Text(
-                        'One Serving = ${food.foodType == FoodType.groceryProduct && food.units.isNotEmpty ? food.units[0] : ''}',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+
+
+                     Visibility(
+                      visible: food.foodType == FoodType.meal,
+                      child: const Text(
+                      '$INSTRUCTION_LABLE:',
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
                       ),
                     ),
-      
+
+
+                    Visibility(
+                      visible: food.foodType == FoodType.meal,
+                      child: Text(
+                        food.recipe,
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
+                      ),
+                    ),
+
+
+
                     const SizedBox(height: 16,),
 
-      
-                    Container(
-                      width: double.infinity,
-                      height: 1,
-                      color: LIGHT_GREY_COLOR,
-                    ),
       
                   ],
                 ),

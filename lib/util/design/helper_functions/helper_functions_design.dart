@@ -363,6 +363,52 @@ void showRegisterDialog(BuildContext context, String from) {
   );
 }
 
+double fractionToDouble(String fraction) {
+  // Split the string by '/' and convert each part to a double
+  List<String> parts = fraction.split('/');
+
+  // Ensure there are two parts and both are valid numbers
+  if (parts.length == 2) {
+    double numerator = double.tryParse(parts[0]) ?? 0;
+    double denominator = double.tryParse(parts[1]) ?? 1; // avoid dividing by 0
+
+    // Return the result of the division
+    return numerator / denominator;
+  } else {
+    // Handle the case where the string isn't a fraction
+    return double.tryParse(fraction) ?? 0;
+  }
+}
+
+// Function to extract the serving amount as a double
+double getServingAmount(String fullString) {
+  // Extract the first part of the string (amount)
+  final amountStr = fullString.split(' ').first;
+
+  // Check if the amount is a fraction
+  if (amountStr.contains('/')) {
+    try {
+      // Convert fraction to double using the fraction package
+      final fractionAmount = Fraction.fromString(amountStr);
+      return fractionAmount.toDouble();
+    } catch (e) {
+      // Handle parsing error
+      return 0.0;
+    }
+  }
+
+  // If it's not a fraction, try to parse it as a double
+  final amount = double.tryParse(amountStr);
+  return amount ?? 0.0; // Return 0.0 if parsing fails
+}
+
+// Function to extract the serving unit (everything after the amount)
+String getServingUnit(String fullString) {
+  // Extract the remaining part of the string (unit)
+  final unit = fullString.split(' ').skip(1).join(' ');
+  return unit;
+}
+
 String convertDoubleToFraction(double number) {
   // Convert the double to a Fraction
   final fraction = Fraction.fromDouble(number);

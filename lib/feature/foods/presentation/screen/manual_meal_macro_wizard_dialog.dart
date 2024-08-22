@@ -273,14 +273,14 @@ class _ManualMealMacroForWizardDialogState extends State<ManualMealMacroForWizar
                       contentPadding: EdgeInsets.symmetric(horizontal: 1.0),
                     ),
                     focusColor: PRIMARY_COLOR,
-                    items: [ADVANCED_LABEL, SEARCH_RECIPE_LABEL, SEARCH_GROCERY_LABEL, CREATE_MANUAL_FROM_SCRATCH].map((String item) {
+                    items: [ADVANCED_LABEL, MY_COOKBOOK_LABEL, SEARCH_GROCERY_LABEL, CREATE_MANUAL_FROM_SCRATCH].map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
                         child: Text(item, style: const TextStyle(color: Colors.grey, fontSize: 12), textAlign: TextAlign.end,),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
-                      if(newValue == SEARCH_RECIPE_LABEL){
+                      if(newValue == MY_COOKBOOK_LABEL){
                         Navigator.pop(context);
                         widget.onSearchRecipeClicked(widget.type, widget.index);
                       }else if(newValue == SEARCH_GROCERY_LABEL){

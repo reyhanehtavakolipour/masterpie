@@ -264,6 +264,7 @@ const YOUR_MACRO_GOAL_LABEL  = 'SET YOUR MACRO GOAL';
 const LOGOUT_LABEL  = 'Logout';
 const LOGOUT_LABLE  = 'Logout';
 const INFO_LABLE  = 'Info';
+const INSTRUCTION_LABLE  = 'Instruction';
 const NEW_FOOD_ADDED_IN_WIZRD_MSG  = 'We included this food to help you get closer to your macro goal.';
 const INFO_PRIVATE_EMAIL  = 'We request your email solely for login purposes. Your email address remains private and is not shared publicly. Additionally, we do not utilize your email address for advertising endeavors.';
 const LOGOUT_QUESTION_MSG = 'Are you sure you want to logout?';
