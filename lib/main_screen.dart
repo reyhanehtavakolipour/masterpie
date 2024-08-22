@@ -18,6 +18,7 @@ import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 import 'feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
+import 'feature/user/domain/model/profile_model.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
 import 'feature/user/presentation/bloc/logout_bloc/logout_bloc.dart';
@@ -61,6 +62,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   late GetProfileBloc _getProfileBloc;
   late LogoutBloc _logoutBloc;
+
+  List<int> _macroGoal= [];
+
+  List<String> _sideDishTypes= [];
+
+  List<String> _mainDishTypes= [];
+
+
 
   @override
   void initState() {
@@ -225,7 +234,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
                           /// question
-                          Text(
+                          const Text(
                               MEAL_PLAN_QUESTION,
                             style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -363,7 +372,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     _getProfileBloc.add(const GetProfileEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       _userLoggedIn= state.profile.id.isEmpty ? false : true;
-                      _setPlanOption();
+                      _setUserInfo(state.profile);
                     });
                   }else if(state is GetProfileErrorState){
                     _getProfileBloc.add(const GetProfileEvent.onReset());
@@ -387,10 +396,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
 
-  void _setPlanOption() async {
+  void _setUserInfo(Profile profile) async {
     String selectedOption = await userHiveDataSource.getString(KEY_SELECTED_MEAL_PLAN_OPTION);
     setState(() {
       _selectedMealPlanOption = selectedOption;
+      _sideDishTypes= profile.sideDishTypes;
+      _mainDishTypes= profile.mainDishTypes;
+      _macroGoal= [int.parse(profile.dailyMacroGoal[0]),
+        int.parse(profile.dailyMacroGoal[1]),
+        int.parse(profile.dailyMacroGoal[2]),
+        int.parse(profile.dailyMacroGoal[3]),];
     });
   }
 
@@ -507,7 +522,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ViewAutoGenerateMealsScreen(),
+                builder: (context) => ViewAutoGenerateMealsScreen(shouldGenerateFoods: true, isView: true, macroGoals: _macroGoal, mainDishTypes: _mainDishTypes,
+                  sideDishTypes: _sideDishTypes,),
               ),
             );
           }else{

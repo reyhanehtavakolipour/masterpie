@@ -25,9 +25,10 @@ class FoodsMacroListUi extends StatefulWidget {
   final Function(String source, int index) onMainDishClicked;
   final Function(String source, int index) onSideDishClicked;
 
+  final bool isView;
 
-  FoodsMacroListUi({super.key, required this.mainDishesFoods, required this.sideDishesFoods, required this.mainDishesTypes, required this.sideDishesTypes,
-    required this.onRemoveDishClicked, required this.onRemoveFoodClicked, required this.onMainDishClicked, required this.onSideDishClicked});
+  FoodsMacroListUi({super.key, required this.isView, required this.mainDishesFoods, required this.sideDishesFoods, required this.mainDishesTypes, required this.sideDishesTypes,
+    required this.onRemoveDishClicked,  required this.onRemoveFoodClicked,  required this.onMainDishClicked,  required this.onSideDishClicked});
 
   @override
   State<FoodsMacroListUi> createState() => _FoodsMacroListUiState();
@@ -73,6 +74,9 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
           String title= '';
 
           title= _types[index];
+
+          String ingredients= cleanIngredients(_foods[index].ingredients).join(', ');
+
 
           Color titleColor= GREEN_COLOR;
           if(index < widget.mainDishesFoods.length){
@@ -140,14 +144,17 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
                     Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 14),),
 
-                    GestureDetector(
-                      onTap: (){
-                        removeDishClickListener(index);
-                      },
-                      child: const Icon(
-                        Icons.close,
-                        color: RED_ERROR_COLOR,
-                        size: 20,
+                    Visibility(
+                      visible: !widget.isView,
+                      child: GestureDetector(
+                        onTap: (){
+                          removeDishClickListener(index);
+                        },
+                        child: const Icon(
+                          Icons.close,
+                          color: RED_ERROR_COLOR,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ],
@@ -157,7 +164,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
 
                 Visibility(
-                  visible: foodName.isEmpty,
+                  visible: foodName.isEmpty && !widget.isView,
                     child:
                     Row(
                         children: [
@@ -170,9 +177,9 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                             child: GestureDetector(
                               onTap: (){
                                 if(index < widget.mainDishesFoods.length){
-                                  widget.onMainDishClicked(CREATE_MANUAL_LABEL, typeIndex);
+                                  widget.onMainDishClicked!(CREATE_MANUAL_LABEL, typeIndex);
                                 }else{
-                                  widget.onSideDishClicked(CREATE_MANUAL_LABEL, typeIndex);
+                                  widget.onSideDishClicked!(CREATE_MANUAL_LABEL, typeIndex);
                                 }
                               },
 
@@ -211,9 +218,9 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                             child: GestureDetector(
                               onTap: (){
                                 if(index < widget.mainDishesFoods.length){
-                                  widget.onMainDishClicked(AUTO_GENERATE_LABEL, typeIndex);
+                                  widget.onMainDishClicked!(AUTO_GENERATE_LABEL, typeIndex);
                                 }else{
-                                  widget.onSideDishClicked(AUTO_GENERATE_LABEL, typeIndex);
+                                  widget.onSideDishClicked!(AUTO_GENERATE_LABEL, typeIndex);
                                 }
                               },
                               child: Container(
@@ -255,18 +262,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
                 Visibility(
                   visible: foodName.isNotEmpty,
-                  child: GestureDetector(
-                    onTap: (){
-                      if(_foods[index].foodType == FoodType.meal){
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ViewRecipePopup(food: _foods[index],);
-                          },
-                        );
-                      }
-                    },
-                    child: Container(
+                  child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                       margin: const EdgeInsets.only(top: 4,),
                       decoration: BoxDecoration(
@@ -289,14 +285,17 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                               Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
 
 
-                              GestureDetector(
-                                onTap: (){
-                                  removeFoodClickListener(index);
-                                },
-                                child: const Icon(
-                                  Icons.remove_circle,
-                                  color: RED_ERROR_COLOR,
-                                  size: 25,
+                              Visibility(
+                                visible: !widget.isView,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    removeFoodClickListener(index);
+                                  },
+                                  child: const Icon(
+                                    Icons.remove_circle,
+                                    color: RED_ERROR_COLOR,
+                                    size: 25,
+                                  ),
                                 ),
                               ),
 
@@ -308,17 +307,18 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                             style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
                           ),
 
+
+
                           Visibility(
                             visible: _foods[index].foodType == FoodType.meal,
-                            child: const Text(
-                              SEE_RECIPE_LABEL,
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+                            child: Text(
+                              ingredients,
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
                             ),
                           ),
 
                         ],
                       )
-                    ),
                   ),
                 ),
               ],
@@ -332,10 +332,10 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   void removeDishClickListener(int index){
     setState(() {
       if(index < widget.mainDishesFoods.length){
-        widget.onRemoveDishClicked(index, MAIN_DISH_LABEL);
+        widget.onRemoveDishClicked!(index, MAIN_DISH_LABEL);
       }else{
         int removeIndex= index - widget.mainDishesFoods.length;
-        widget.onRemoveDishClicked(removeIndex, SIDE_DISH_LABEL);
+        widget.onRemoveDishClicked!(removeIndex, SIDE_DISH_LABEL);
       }
     });
   }
@@ -343,10 +343,10 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   void removeFoodClickListener(int index){
     setState(() {
       if(index < widget.mainDishesFoods.length){
-        widget.onRemoveFoodClicked(index, MAIN_DISH_LABEL);
+        widget.onRemoveFoodClicked!(index, MAIN_DISH_LABEL);
       }else{
         int removeIndex= index - widget.mainDishesFoods.length;
-        widget.onRemoveFoodClicked(removeIndex, SIDE_DISH_LABEL);
+        widget.onRemoveFoodClicked!(removeIndex, SIDE_DISH_LABEL);
       }
     });
   }

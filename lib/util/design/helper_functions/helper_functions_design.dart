@@ -215,6 +215,15 @@ Future<void> showUpgradePopupForFreeUsers(BuildContext context, String message) 
 }
 
 
+
+List<String> cleanIngredients(List<String> ingredients) {
+  return ingredients.map((ingredient) {
+    return ingredient.replaceAll(RegExp(r'^\S+\s+'), '');
+  }).where((ingredient) {
+    return ingredient.toLowerCase() != 'salt' && ingredient.toLowerCase() != 'pepper';
+  }).toList();
+}
+
 Future<void> showOVerLimitPaidUsers(BuildContext context, String message) async {
   return showDialog<void>(
     context: context,
