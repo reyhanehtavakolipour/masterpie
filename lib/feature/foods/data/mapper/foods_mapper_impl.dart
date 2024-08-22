@@ -85,6 +85,7 @@ class FoodsMapperImpl extends FoodsMapper{
           allergies: mealRemote.allergies,
           servingAmount: mealRemote.servingAmount,
             unit: mealRemote.unit,
+            servingAmounts: mealRemote.servingAmounts,
             createdFromFatSecretRecipes: mealRemote.createdFromFatSecretRecipes
         )
     ).toList();
@@ -174,6 +175,7 @@ class FoodsMapperImpl extends FoodsMapper{
       servingAmount: mealRemote.servingAmount,
         unit: mealRemote.unit,
         prepTime: mealRemote.prepTime,
+        servingAmounts: mealRemote.servingAmounts,
         createdFromFatSecretRecipes: mealRemote.createdFromFatSecretRecipes
     );
   }
@@ -201,7 +203,8 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit, servingAmounts: [],
+      unit: food.unit,
+        servingAmounts: food.servingAmounts,
         createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
     );
   }
@@ -228,6 +231,7 @@ class FoodsMapperImpl extends FoodsMapper{
         allergies: foodLocal.allergies,
         servingAmount: foodLocal.servingAmount,
         unit: foodLocal.unit,
+        servingAmounts: foodLocal.servingAmounts,
         createdFromFatSecretRecipes: foodLocal.createdFromFatSecretRecipes
     );
   }
@@ -255,7 +259,8 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit, servingAmounts: [],
+      unit: food.unit,
+        servingAmounts: food.servingAmounts,
         createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
     );
   }
@@ -312,6 +317,7 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,
+            servingAmounts: food.servingAmounts,
             unit: food.unit,
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
@@ -426,8 +432,9 @@ class FoodsMapperImpl extends FoodsMapper{
           fat: food.fat,
           diets: food.diets,
           allergies: food.allergies,
-          servingAmount: food.servingAmount,
-          unit: food.unit, servingAmounts: [],
+            servingAmounts: food.servingAmounts,
+            servingAmount: food.servingAmount,
+          unit: food.unit,
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
     ).toList();
@@ -483,6 +490,7 @@ class FoodsMapperImpl extends FoodsMapper{
         allergies: food.allergies,
         servingAmount: food.servingAmount,
       unit: food.unit,
+        servingAmounts: food.servingAmounts,
         createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
     );
   }
@@ -565,7 +573,8 @@ class FoodsMapperImpl extends FoodsMapper{
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,
-          unit: food.unit, servingAmounts: [],
+          unit: food.unit,
+          servingAmounts: food.servingAmounts,
         )
     ).toList();
   }
@@ -593,6 +602,7 @@ class FoodsMapperImpl extends FoodsMapper{
         allergies: food.allergies,
         servingAmount: food.servingAmount,
         unit: food.unit,
+        servingAmounts: food.servingAmounts,
         prepTime: food.prepTime,
         createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
     );
@@ -620,7 +630,8 @@ class FoodsMapperImpl extends FoodsMapper{
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
-      unit: food.unit, servingAmounts: [],
+      unit: food.unit,
+        servingAmounts: food.servingAmounts,
         createdFromFatSecretRecipes: 0
     );
   }
@@ -666,6 +677,7 @@ class FoodsMapperImpl extends FoodsMapper{
             unit: food.unit,
             count: food.count,
             prepTime: food.prepTime,
+            servingAmounts: food.servingAmounts,
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
     ).toList();
@@ -697,6 +709,7 @@ class FoodsMapperImpl extends FoodsMapper{
           unit: food.unit,
             count: food.count,
             prepTime: food.prepTime,
+            servingAmounts: food.servingAmounts,
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
     ).toList();
@@ -726,7 +739,8 @@ class FoodsMapperImpl extends FoodsMapper{
             allergies: food.allergies,
             servingAmount: food.servingAmount,
             unit: food.unit,
-          count: double.parse(food.count),
+            servingAmounts: food.servingAmounts,
+            count: double.parse(food.count),
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
     ).toList();
@@ -758,8 +772,9 @@ class FoodsMapperImpl extends FoodsMapper{
           allergies: food.allergies,
           servingAmount: food.servingAmount,
           unit: food.unit,
-          count: food.count.toString(), servingAmounts: [],
-            createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
+          count: food.count.toString(),
+          servingAmounts: food.servingAmounts,
+          createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
     ).toList();
   }

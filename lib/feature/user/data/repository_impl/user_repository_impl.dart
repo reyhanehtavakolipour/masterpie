@@ -124,7 +124,6 @@ class UserRepositoryImpl extends UserRepository{
       return Left(saveProfileResponse.asLeft());
     }
 
-
     final saveProfileResponse = await userLocalDataSource.updateUserProfile(mapper.toProfileLocal(profile.copyWith(id: userId.asRight())));
     if(saveProfileResponse.isRight()){
       return const Right(Success());

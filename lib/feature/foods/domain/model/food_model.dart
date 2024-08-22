@@ -24,6 +24,7 @@ class Food with _$Food{
     @Default([]) List<String> carb,
     @Default([]) List<String> fat,
     @Default([]) List<String> units,
+    @Default([]) List<String> servingAmounts,
 
 
     ///only for meals

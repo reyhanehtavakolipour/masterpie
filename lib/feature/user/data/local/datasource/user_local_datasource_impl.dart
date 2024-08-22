@@ -66,7 +66,6 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
 
     final db = await serviceLocator<DatabaseHelper>().db;
     try{
-
       await db?.update(
         TABLE_PROFILE,
         profileLocal.toJson(),
@@ -99,6 +98,7 @@ class UserLocalDataSourceImpl extends UserLocalDataSource{
         }
         return const Left(FailureResponse('couldnt get db list'));
       }
+
 
       return Right(ProfileLocal.fromJson(list[0]));
     }on DatabaseException catch (e) {

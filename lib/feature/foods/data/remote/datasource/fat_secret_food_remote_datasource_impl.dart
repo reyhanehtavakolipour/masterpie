@@ -519,6 +519,57 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
   Future<Either<Failure, List<FoodRemote>>> autoGenerateFoods(ProfileRemote profileRemote, List<String> mainDishType, List<String> sideDishTypes) async{
     try{
 
+      // final NetworkRequest request = await NetworkRequest.create();
+      //
+      // List<String> types= [];
+      // types.addAll(mainDishType);
+      // types.addAll(sideDishTypes);
+      //
+      // List<FoodRemote> foods= [];
+      //
+      // await Future.forEach(types, (type) async{
+      //
+      //   Map<String, dynamic> autoGenerateFoodParams = {
+      //     'favoriteCategories': [''],
+      //     'hateCategories': [''],
+      //     'diet': profileRemote.diet,
+      //     'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
+      //     'DishTypes': type == 'Dinner' ? 'Lunch' : type,
+      //     'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,
+      //     'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
+      //     'numMainDish' : mainDishType.length,
+      //     'numSideDish': sideDishTypes.length,
+      //     'macroGoal': profileRemote.dailyMacroGoal
+      //   };
+      //
+      //
+      //   print('auto_generate_params: $autoGenerateFoodParams');
+      //
+      //   final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
+      //
+      //   final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
+      //
+      //   if(recipeResponse.statusCode == SUCCESS_API_CODE){
+      //     Map<String, dynamic> data= recipeResponse.data;
+      //     String recipeId= data['recipe_id'];
+      //     final recipeDetailResponse= await getRecipe(recipeId);
+      //     if(recipeDetailResponse.isRight()){
+      //       final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
+      //       foods.add(generatedFood);
+      //     }else{
+      //       foods.add(FoodRemote());
+      //     }
+      //   }else{
+      //     print('show_error: ${recipeResponse.statusMessage}');
+      //     foods.add(FoodRemote());
+      //   }
+      // });
+      // return Right(foods);
+
+
+
+
+      /// supabase table
       final NetworkRequest request = await NetworkRequest.create();
 
       List<String> types= [];
@@ -529,43 +580,56 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
       await Future.forEach(types, (type) async{
 
+        List<String> hateSubCategories= List.empty(growable: true);
+        if(profileRemote.hateSubCategories.isNotEmpty){
+          if(profileRemote.hateSubCategories[0].isNotEmpty){
+            hateSubCategories= profileRemote.hateSubCategories;
+          }
+        }
+
         Map<String, dynamic> autoGenerateFoodParams = {
-          'favoriteCategories': [''],
-          'hateCategories': [''],
-          'diet': profileRemote.diet,
-          'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
-          'DishTypes': type == 'Dinner' ? 'Lunch' : type,
-          'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,
+          'diet': [profileRemote.diet],
+          "hateSubCategories": hateSubCategories,
+          'DishTypes': [type == 'Dinner' ? 'Lunch' : type],
+          'isMainDish': type == 'Dinner' || type == 'Lunch' ? true : false,
           'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
           'numMainDish' : mainDishType.length,
           'numSideDish': sideDishTypes.length,
           'macroGoal': profileRemote.dailyMacroGoal
         };
 
-
         print('auto_generate_params: $autoGenerateFoodParams');
 
-        final macroGoalApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
 
-        final recipeResponse= await request.post(macroGoalApi, data: autoGenerateFoodParams);
+        final simpleMealsApi= await FlutterConfig.get(AUTO_GENERATE_FOOD_URL);
+
+        final recipeResponse= await request.post(simpleMealsApi, data: autoGenerateFoodParams);
 
         if(recipeResponse.statusCode == SUCCESS_API_CODE){
           Map<String, dynamic> data= recipeResponse.data;
-          String recipeId= data['recipe_id'];
-          final recipeDetailResponse= await getRecipe(recipeId);
-          if(recipeDetailResponse.isRight()){
-            final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
-            foods.add(generatedFood);
-          }else{
-            foods.add(FoodRemote());
-          }
+          String instructionText = (data['instruction'] as List<dynamic>).map((item) => '- $item').join('\n');
+          foods.add(
+            FoodRemote(
+              id: data['id'].toString(),
+              name: data['name'],
+              ingredients: (data['ingredients'] as List<dynamic>).map((item) => item.toString()).toList(),
+              calorie: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[0].toString()],
+              protein: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[1].toString()],
+              carb: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[2].toString()],
+              fat: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[3].toString()],
+              foodTypeRemote: FoodTypeRemote.meal,
+              recipe: instructionText,
+              servingAmounts: (data['serving_amounts'] as List<dynamic>).map((item) => item.toString()).toList()
+            )
+          );
         }else{
-          print('show_error: ${recipeResponse.statusMessage}');
           foods.add(FoodRemote());
         }
       });
       return Right(foods);
+
     }catch(error){
+      print('show_error: $error');
       return Left(ExceptionFailure(error));
     }
   }
@@ -576,13 +640,32 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
 
       final NetworkRequest request = await NetworkRequest.create();
 
+      /// fat secret
+      // Map<String, dynamic> autoGenerateFoodParams = {
+      //   'favoriteCategories': [''],
+      //   'hateCategories': [''],
+      //   'diet': profileRemote.diet,
+      //   'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
+      //   'DishTypes': type == 'Dinner' ? 'Lunch' : type,
+      //   'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,
+      //   'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
+      //   'numMainDish' : profileRemote.mainDishTypes.length,
+      //   'numSideDish': profileRemote.sideDishTypes.length,
+      //   'macroGoal': profileRemote.dailyMacroGoal
+      // };
+
+      List<String> hateSubCategories= List.empty(growable: true);
+      if(profileRemote.hateSubCategories.isNotEmpty){
+        if(profileRemote.hateSubCategories[0].isNotEmpty){
+          hateSubCategories= profileRemote.hateSubCategories;
+        }
+      }
+
       Map<String, dynamic> autoGenerateFoodParams = {
-        'favoriteCategories': [''],
-        'hateCategories': [''],
-        'diet': profileRemote.diet,
-        'hateSubCategories': profileRemote.hateSubCategories.isEmpty ? [''] : profileRemote.hateSubCategories,
-        'DishTypes': type == 'Dinner' ? 'Lunch' : type,
-        'isMainDish': type == 'Dinner' || type == 'Lunch' || type == 'Breakfast' ? true : false,
+        'diet': [profileRemote.diet],
+        "hateSubCategories": hateSubCategories,
+        'DishTypes': [type == 'Dinner' ? 'Lunch' : type],
+        'isMainDish': type == 'Dinner' || type == 'Lunch' ? true : false,
         'allergens': profileRemote.allergens.isEmpty ? [''] : profileRemote.allergens,
         'numMainDish' : profileRemote.mainDishTypes.length,
         'numSideDish': profileRemote.sideDishTypes.length,
@@ -603,15 +686,33 @@ class FatSecretFoodRemoteDataSourceImpl extends FatSecretRemoteDataSource{
         Map<String, dynamic> data= recipeResponse.data;
 
 
-        String recipeId= data['recipe_id'];
+        /// fat secret
+        // String recipeId= data['recipe_id'];
+        //
+        // final recipeDetailResponse= await getRecipe(recipeId);
+        // if(recipeDetailResponse.isRight()){
+        //   final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
+        //   return Right(generatedFood);
+        //
+        // }
+        // return Left(RemoteFailure(recipeDetailResponse.asLeft().errorCode, recipeDetailResponse.asLeft().message ?? ''));
 
-        final recipeDetailResponse= await getRecipe(recipeId);
-        if(recipeDetailResponse.isRight()){
-          final generatedFood= fromGenericRecipeRemote(recipeDetailResponse.asRight());
-          return Right(generatedFood);
+        String instructionText = (data['instruction'] as List<dynamic>).map((item) => '- $item').join('\n');
+        return Right(
+            FoodRemote(
+                id: data['id'].toString(),
+                name: data['name'],
+                ingredients: (data['ingredients'] as List<dynamic>).map((item) => item.toString()).toList(),
+                calorie: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[0].toString()],
+                protein: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[1].toString()],
+                carb: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[2].toString()],
+                fat: [(data['macro'] as List<dynamic>).map((item) => item.toString()).toList()[3].toString()],
+                foodTypeRemote: FoodTypeRemote.meal,
+                recipe: instructionText,
+                servingAmounts: (data['serving_amounts'] as List<dynamic>).map((item) => item.toString()).toList()
+            )
+        );
 
-        }
-        return Left(RemoteFailure(recipeDetailResponse.asLeft().errorCode, recipeDetailResponse.asLeft().message ?? ''));
       }else{
         print('show_error: ${recipeResponse.statusMessage}');
         return Left(RemoteFailure(recipeResponse.statusCode, recipeResponse.statusMessage ?? ''));
