@@ -31,7 +31,7 @@ class _SelectContainerPopupState extends State<WaitPopup> {
       title: const Text(WAIT_LABEL, style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
       content: SizedBox(
         width: double.maxFinite,
-        height: 400,
+        height: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,7 +39,7 @@ class _SelectContainerPopupState extends State<WaitPopup> {
 
             Padding(
                 padding: const EdgeInsets.all(4),
-                child: Image.asset(widget.message == GENERATE_MEAL_PLAN ? SAND_CLOCK_PATH : WELCOME_PATH, width: 100, height: 100,)
+                child: Image.asset(widget.message == GENERATE_MEAL_PLAN ? SAND_CLOCK_PATH : WELCOME_PATH, width: 60, height: 60,)
             ),
 
 

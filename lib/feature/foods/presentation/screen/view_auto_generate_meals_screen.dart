@@ -4,8 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/presentation/screen/search_grocery_macro_wizard_screen.dart';
+import 'package:masterpie/feature/foods/presentation/screen/search_recipe_macro_wizard_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/suggested_different_foods_combination_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/foods_macro_list_ui.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/food_detail_macro_wizard_argument_model.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/model/generic_food_detail_macro_wizard_argument_model.dart';
 import 'package:masterpie/feature/foods/presentation/screen/ui_helper/wait_popup.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -14,6 +18,7 @@ import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
+import '../../../../util/core/helper/request_api.dart';
 import '../../../../util/design/color/app_colors.dart';
 import '../../../../util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/design/size/app_widget_size.dart';
@@ -26,6 +31,8 @@ import '../bloc/auto_generate_bloc/auto_generate_foods_bloc.dart';
 import '../bloc/auto_generate_bloc/state_event/auto_generate_foods_state_event.dart';
 import '../bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
 import '../bloc/suggest_portion_bloc/suggest_portion_bloc.dart';
+import 'manual_food_macro_wizard_screen.dart';
+import 'manual_meal_macro_wizard_dialog.dart';
 
 class ViewAutoGenerateMealsScreen extends StatefulWidget {
 
@@ -44,7 +51,6 @@ class ViewAutoGenerateMealsScreen extends StatefulWidget {
   final List<Food>? sideDishFoods;
 
 
-
   const ViewAutoGenerateMealsScreen({super.key, required this.shouldGenerateFoods, required this.isView, required this.mainDishTypes, required this.sideDishTypes,
     required this.macroGoals, this.mainDishFoods, this.sideDishFoods});
 
@@ -55,8 +61,7 @@ class ViewAutoGenerateMealsScreen extends StatefulWidget {
 
 class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScreen> {
 
-
-   List<Food> _mainDishFoods= [];
+  List<Food> _mainDishFoods= [];
 
    List<Food> _sideDishFoods= [];
 
@@ -75,7 +80,10 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
     _autoGenerateFoodsBloc = context.read<AutoGenerateFoodsBloc>();
     _suggestPortionsBloc = context.read<SuggestPortionsBloc>();
 
+
     if(widget.shouldGenerateFoods){
+      _mainDishTypes= widget.mainDishTypes;
+      _sideDishTypes= widget.sideDishTypes;
       _autoGenerateFoodsForDay();
     }else{
       setState(() {
@@ -139,6 +147,8 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
                            child: SingleChildScrollView(
                              child: Column(
                                children: [
+
+                                 addFoodOptions(),
 
                                  _buildWizardFoods()
 
@@ -288,8 +298,8 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
           children: [
             const SizedBox(height: 4,),
             FoodsMacroListUi(isView: widget.isView, mainDishesFoods: _mainDishFoods, sideDishesFoods: _sideDishFoods,
-              mainDishesTypes: widget.mainDishTypes, sideDishesTypes: widget.sideDishTypes,
-              onRemoveDishClicked: updateUiAfterDishRemoved, onRemoveFoodClicked: updateUiAfterFoodRemoved,
+              mainDishesTypes: _mainDishTypes, sideDishesTypes: _sideDishTypes,
+              onRemoveDishClicked: updateUiAfterDishRemoved, onRemoveFoodClicked: updateUiAfterDishRemoved,
               onMainDishClicked: _onMinDishClicked, onSideDishClicked: _onSideDishClicked,)
           ],
         ),
@@ -297,104 +307,299 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
   }
 
    void _onSideDishClicked(String source, int index){
-     // if(source == CREATE_MANUAL_LABEL){
-     //   showDialog(
-     //     context: context,
-     //     builder: (BuildContext context) {
-     //       return ManualMealMacroForWizardDialog(type: SIDE_DISH_LABEL, onAddMealBtnClicked: _addMealMacroManuallyToWizard,
-     //         index: index, onCreateManualClickedClicked: _onCreateManualFromScratchWizardClicked,
-     //         onSearchGroceryClicked: _onSearchGroceryWizardClicked, onSearchRecipeClicked:_onSearchRecipeWizardClicked,);
-     //     },
-     //   );
-     // }else if(source == AUTO_GENERATE_LABEL){
-     //   _autoGenerateFood(_sideDishTypes[index], index, false);
-     // }
+     if(source == CREATE_MANUAL_LABEL){
+       showDialog(
+         context: context,
+         builder: (BuildContext context) {
+           return ManualMealMacroForWizardDialog(type: SIDE_DISH_LABEL, onAddMealBtnClicked: _addMealMacroManuallyToWizard,
+             index: index, onCreateManualClickedClicked: _onCreateManualFromScratchWizardClicked,
+             onSearchGroceryClicked: _onSearchGroceryWizardClicked, onSearchRecipeClicked:_onSearchRecipeWizardClicked,);
+         },
+       );
+     }else if(source == AUTO_GENERATE_LABEL){
+       _autoGenerateFood(_sideDishTypes[index], index, false);
+     }
+   }
+
+   void _autoGenerateFood(String type, int index, bool isMainDish){
+     _autoGenerateFoodsBloc.add(
+         AutoGenerateFoodsEvent.onAutoGenerateFood(type, index, isMainDish)
+     );
+   }
+
+   void _onSearchRecipeWizardClicked(String type, int index){
+     final model= GenericFoodDetailForMacroWizardArgumentModel(
+         type: type,
+         index: index,
+         food: null
+     );
+     Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) => SearchRecipeMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: model),
+       ),
+     ).then((result) {
+       if(result != null){
+         final foodDetail= result as FoodDetailForMacroWizardArgumentModel;
+         if(foodDetail.food != null){
+           setState(() {
+             if(type == MAIN_DISH_LABEL){
+               _mainDishFoods[index]= foodDetail.food!;
+             }else{
+               _sideDishFoods[index]= foodDetail.food!;
+             }
+           });
+         }
+       }
+     });
+   }
+
+   void _onSearchGroceryWizardClicked(String type, int index){
+     final model= GenericFoodDetailForMacroWizardArgumentModel(
+         type: type,
+         index: index,
+         food: null
+     );
+
+     Navigator.push(
+       context,
+       MaterialPageRoute(builder: (context) => SearchGroceryMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: model)),
+     ).then((result) {
+       if(result != null){
+         final foodDetail= result as FoodDetailForMacroWizardArgumentModel;
+         if(foodDetail.food != null){
+           setState(() {
+             if(type == MAIN_DISH_LABEL){
+               _mainDishFoods[index]= foodDetail.food!;
+             }else{
+               _sideDishFoods[index]= foodDetail.food!;
+             }
+           });
+         }
+       }
+     });
+   }
+
+   void _onCreateManualFromScratchWizardClicked(String type, int index){
+     final model= GenericFoodDetailForMacroWizardArgumentModel(
+         type: type,
+         index: index,
+         food: null
+     );
+
+
+     Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) => ManualFoodMacroWizardScreen(genericFoodDetailForMacroWizardArgumentModel: model),
+       ),
+     ).then((result) {
+       if(result != null){
+         final foodDetail= result as FoodDetailForMacroWizardArgumentModel;
+         if(foodDetail.food != null){
+           setState(() {
+             if(type == MAIN_DISH_LABEL){
+               _mainDishFoods[index]= foodDetail.food!;
+             }else{
+               _sideDishFoods[index]= foodDetail.food!;
+             }
+           });
+         }
+       }
+     });
+   }
+
+   void _addMealMacroManuallyToWizard(String mealName, List<String> macro, String type, int index){
+     setState(() {
+       if(type == MAIN_DISH_LABEL){
+         _mainDishFoods[index]= Food(id: generateRandomId(), name: mealName, calorie: [macro[0]], protein: [macro[1]], carb: [macro[2]], fat: [macro[3]]);
+       }else{
+         _sideDishFoods[index]= Food(id: generateRandomId(), name: mealName, calorie: [macro[0]], protein: [macro[1]], carb: [macro[2]], fat: [macro[3]]);
+       }
+     });
    }
 
    void _onMinDishClicked(String source, int index){
-     // if(source == CREATE_MANUAL_LABEL){
-     //   showDialog(
-     //     context: context,
-     //     builder: (BuildContext context) {
-     //       return ManualMealMacroForWizardDialog(type: MAIN_DISH_LABEL, onAddMealBtnClicked: _addMealMacroManuallyToWizard,
-     //         index: index, onCreateManualClickedClicked: _onCreateManualFromScratchWizardClicked,
-     //         onSearchGroceryClicked: _onSearchGroceryWizardClicked, onSearchRecipeClicked:_onSearchRecipeWizardClicked,);
-     //     },
-     //   );
-     // }else if(source == AUTO_GENERATE_LABEL){
-     //   _autoGenerateFood(_mainDishTypes[index], index, true);
-     // }
+     if(source == CREATE_MANUAL_LABEL){
+       showDialog(
+         context: context,
+         builder: (BuildContext context) {
+           return ManualMealMacroForWizardDialog(type: MAIN_DISH_LABEL, onAddMealBtnClicked: _addMealMacroManuallyToWizard,
+             index: index, onCreateManualClickedClicked: _onCreateManualFromScratchWizardClicked,
+             onSearchGroceryClicked: _onSearchGroceryWizardClicked, onSearchRecipeClicked:_onSearchRecipeWizardClicked,);
+         },
+       );
+     }else if(source == AUTO_GENERATE_LABEL){
+       _autoGenerateFood(_mainDishTypes[index], index, true);
+     }
    }
 
    void updateUiAfterDishRemoved(int index, String type){
-     // setState(() {
-     //   if(type == MAIN_DISH_LABEL){
-     //     List<Food> foods= [];
-     //     List<String> types= [];
-     //
-     //
-     //     for(int i = 0; i < _mainDishTypes.length; i++){
-     //       if( index != i){
-     //         foods.add(_mainDishFoods[i]);
-     //         types.add(_mainDishTypes[i]);
-     //       }
-     //     }
-     //     _mainDishTypes= types;
-     //     _mainDishFoods= foods;
-     //   }else{
-     //     List<Food> foods= [];
-     //     List<String> types= [];
-     //
-     //
-     //     for(int i = 0; i < _sideDishTypes.length; i++){
-     //       if( index != i){
-     //         foods.add(_sideDishFoods[i]);
-     //         types.add(_sideDishTypes[i]);
-     //       }
-     //     }
-     //     _sideDishTypes= types;
-     //     _sideDishFoods= foods;
-     //   }
-     // });
+     setState(() {
+       if(type == MAIN_DISH_LABEL){
+         List<Food> foods= [];
+         List<String> types= [];
+
+
+         for(int i = 0; i < _mainDishTypes.length; i++){
+           if( index != i){
+             foods.add(_mainDishFoods[i]);
+             types.add(_mainDishTypes[i]);
+           }
+         }
+         _mainDishTypes= types;
+         _mainDishFoods= foods;
+       }else{
+         List<Food> foods= [];
+         List<String> types= [];
+
+
+         for(int i = 0; i < _sideDishTypes.length; i++){
+           if( index != i){
+             foods.add(_sideDishFoods[i]);
+             types.add(_sideDishTypes[i]);
+           }
+         }
+         _sideDishTypes= types;
+         _sideDishFoods= foods;
+       }
+     });
    }
 
    void updateUiAfterFoodRemoved(int index, String type){
-     // setState(() {
-     //   if(type == MAIN_DISH_LABEL){
-     //     List<Food> foods= [];
-     //     List<String> types= [];
-     //
-     //
-     //     for(int i = 0; i < _mainDishTypes.length; i++){
-     //       if( index != i){
-     //         foods.add(_mainDishFoods[i]);
-     //         types.add(_mainDishTypes[i]);
-     //       }else{
-     //         foods.add(Food(name: ''));
-     //         types.add(_mainDishTypes[i]);
-     //       }
-     //     }
-     //     _mainDishTypes= types;
-     //     _mainDishFoods= foods;
-     //   }else{
-     //     List<Food> foods= [];
-     //     List<String> types= [];
-     //
-     //
-     //     for(int i = 0; i < _sideDishTypes.length; i++){
-     //       if( index != i){
-     //         foods.add(_sideDishFoods[i]);
-     //         types.add(_sideDishTypes[i]);
-     //       }else{
-     //         foods.add(Food(name: ''));
-     //         types.add(_sideDishTypes[i]);
-     //       }
-     //     }
-     //     _sideDishTypes= types;
-     //     _sideDishFoods= foods;
-     //   }
-     // });
+     setState(() {
+       if(type == MAIN_DISH_LABEL){
+         List<Food> foods= [];
+         List<String> types= [];
+
+
+         for(int i = 0; i < _mainDishTypes.length; i++){
+           if( index != i){
+             foods.add(_mainDishFoods[i]);
+             types.add(_mainDishTypes[i]);
+           }else{
+             foods.add(Food(name: ''));
+             types.add(_mainDishTypes[i]);
+           }
+         }
+         _mainDishTypes= types;
+         _mainDishFoods= foods;
+       }else{
+         List<Food> foods= [];
+         List<String> types= [];
+
+
+         for(int i = 0; i < _sideDishTypes.length; i++){
+           if( index != i){
+             foods.add(_sideDishFoods[i]);
+             types.add(_sideDishTypes[i]);
+           }else{
+             foods.add(Food(name: ''));
+             types.add(_sideDishTypes[i]);
+           }
+         }
+         _sideDishTypes= types;
+         _sideDishFoods= foods;
+       }
+     });
    }
+
+  Widget addFoodOptions(){
+    return Visibility(
+      visible: !widget.isView,
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+
+            const SizedBox(width: 8,),
+
+            /// add new main dish
+            Expanded(child: dishTypesDropDown(ADD_MAIN_DISH_WIZARD)),
+
+            const SizedBox(width: 12,),
+
+            /// add new side dish
+            Expanded(child: dishTypesDropDown(ADD_SIDE_DISH_WIZARD)),
+
+
+          ]
+      ),
+    );
+  }
+
+
+
+  Widget dishTypesDropDown(String title){
+
+    List<String> items= [];
+    items.add(title);
+    if(title == ADD_MAIN_DISH_WIZARD){
+      items.addAll(fatSecretMainDishTypes);
+    }else{
+      items.addAll(fatSecretSideDishTypes);
+    }
+
+    return  SizedBox(
+      height: 40,
+      child: DropdownButtonFormField<String?>(
+        value: title,
+        icon: Container(),
+        isDense: true,
+        isExpanded: false,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 1.0),
+        ),
+        focusColor: PRIMARY_COLOR,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Container(
+              height: 30,
+              width: 160,
+              decoration: BoxDecoration(
+                color: MASTERPIE_YELLOW_COLOR,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(child: Text(item, style: const TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+            ),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            if(title == ADD_MAIN_DISH_WIZARD && newValue != ADD_MAIN_DISH_WIZARD){
+
+              List<String> newDishType= [];
+              newDishType.addAll(_mainDishTypes);
+              newDishType.add(newValue.toString());
+              _mainDishTypes= newDishType;
+
+              List<Food> newDishFoods= [];
+              newDishFoods.addAll(_mainDishFoods);
+              newDishFoods.add(Food(name: ''));
+              _mainDishFoods= newDishFoods;
+
+              showSuccessToast(context, DISH_ADDED_TO_WIZARD_MSG);
+            }else if(title == ADD_SIDE_DISH_WIZARD && newValue != ADD_SIDE_DISH_WIZARD){
+
+              List<String> newDishType= [];
+              newDishType.addAll(_sideDishTypes);
+              newDishType.add(newValue.toString());
+              _sideDishTypes= newDishType;
+
+              List<Food> newDishFoods= [];
+              newDishFoods.addAll(_sideDishFoods);
+              newDishFoods.add(Food(name: ''));
+              _sideDishFoods= newDishFoods;
+              showSuccessToast(context, DISH_ADDED_TO_WIZARD_MSG);
+            }
+          });
+        },
+
+      ),
+    );
+  }
+
 
 
   void _autoGenerateFoodsForDay(){
@@ -489,11 +694,31 @@ class _ViewAutoGenerateMealsScreenState extends State<ViewAutoGenerateMealsScree
                backgroundColor: DARK_PRIMARY_COLOR
            ),
            onPressed: () {
+
+             List<Food> newMainFoods= [];
+             List<String> newMainTypes= [];
+             for(int i = 0; i < _mainDishFoods.length; i++){
+               if(_mainDishFoods[i].name.isNotEmpty){
+                 newMainFoods.add(_mainDishFoods[i]);
+                 newMainTypes.add(_mainDishTypes[i]);
+               }
+             }
+
+
+             List<Food> newSideFoods= [];
+             List<String> newSideTypes= [];
+             for(int i = 0; i < _sideDishFoods.length; i++){
+               if(_sideDishFoods[i].name.isNotEmpty){
+                 newSideFoods.add(_sideDishFoods[i]);
+                 newSideTypes.add(_sideDishTypes[i]);
+               }
+             }
+
              Navigator.pushReplacement(
                context,
                MaterialPageRoute(
-                 builder: (context) =>  ViewAutoGenerateMealsScreen(shouldGenerateFoods: false, isView: true, mainDishTypes: _mainDishTypes,
-                     sideDishTypes: _sideDishTypes, macroGoals: widget.macroGoals, mainDishFoods: _mainDishFoods, sideDishFoods: _sideDishFoods,),
+                 builder: (context) =>  ViewAutoGenerateMealsScreen(shouldGenerateFoods: false, isView: true, mainDishTypes: newMainTypes,
+                     sideDishTypes: newSideTypes, macroGoals: widget.macroGoals, mainDishFoods: newMainFoods, sideDishFoods: newSideFoods,),
                ),
              );
            },

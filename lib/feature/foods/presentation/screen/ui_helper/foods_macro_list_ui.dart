@@ -37,10 +37,6 @@ class FoodsMacroListUi extends StatefulWidget {
 class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
 
-  late TextEditingController _minServingController;
-  late TextEditingController _maxServingController;
-
-
   List<Food> _foods= [];
   List<String> _types= [];
 
@@ -49,8 +45,6 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   @override
   void initState() {
     super.initState();
-    _minServingController= TextEditingController(text: WIZARD_MIN_SERVING);
-    _maxServingController= TextEditingController(text: WIZARD_MAX_SERVING);
   }
 
 
@@ -343,96 +337,12 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   void removeFoodClickListener(int index){
     setState(() {
       if(index < widget.mainDishesFoods.length){
-        widget.onRemoveFoodClicked!(index, MAIN_DISH_LABEL);
+        widget.onRemoveDishClicked!(index, MAIN_DISH_LABEL);
       }else{
         int removeIndex= index - widget.mainDishesFoods.length;
-        widget.onRemoveFoodClicked!(removeIndex, SIDE_DISH_LABEL);
+        widget.onRemoveDishClicked!(removeIndex, SIDE_DISH_LABEL);
       }
     });
   }
-
-
-  Widget foodServingRange(int index){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('$SERVINGS_RANGE:', style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-
-        const SizedBox(height: 16,),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ///min
-            const Text(MIN_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: SizedBox(
-                  width: 60,
-                  height: MACRO_HEIGHT,
-                  child: TextField(
-                    controller: _minServingController,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    ],
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    ),
-                  ),
-                )
-            ),
-
-
-            const SizedBox(width: 8,),
-
-            ///max
-            const Text(MAX_LABEL, style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 16),),
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: SizedBox(
-                  width: 60,
-                  height: MACRO_HEIGHT,
-                  child: TextField(
-                    controller: _maxServingController,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    ],
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: PRIMARY_COLOR, width: 2),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    ),
-                  ),
-                )
-            ),
-
-          ],
-        )
-      ],
-    );
-  }
-
 
 }
