@@ -95,7 +95,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   List<String> _allergens= [];
 
 
-  int _stepsCount= 7;
+  int _stepsCount= 2;
 
   // form
   final _weightController = TextEditingController();
@@ -173,23 +173,23 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   });
                 },
                 children: [
-
-                  ///step 1
-                  _numberOfMealsDuringDays(),
-
-                  /// step2
-                  _selectRecipesType(),
-
-                  /// step 3
-                  _selectAllergens(),
-
-
-                  /// step4
-                  _selectDiet(),
-
-
-                  /// step 5
-                  _selectHateCategories(),
+                  //
+                  // ///step 1
+                  // _numberOfMealsDuringDays(),
+                  //
+                  // /// step2
+                  // _selectRecipesType(),
+                  //
+                  // /// step 3
+                  // _selectAllergens(),
+                  //
+                  //
+                  // /// step4
+                  // _selectDiet(),
+                  //
+                  //
+                  // /// step 5
+                  // _selectHateCategories(),
 
                   /// step6
                   Visibility(
@@ -773,7 +773,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    '6/$_stepsCount',
+                    '1/$_stepsCount',
                     style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -967,7 +967,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                  Expanded(
                   child: Text(
-                    '7/$_stepsCount',
+                    '2/$_stepsCount',
                     style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
                   ),
                 ),

@@ -2,33 +2,56 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/view_recipe_popup.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
-import '../../../../../main_screen.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 import '../../../../../util/design/color/app_colors.dart';
 import '../../../../../util/design/size/app_widget_size.dart';
-import '../../../../../util/design/text/app_assets.dart';
 import '../../../domain/model/food_model.dart';
-import '../../../domain/model/food_type.dart';
-import '../../../domain/model/food_unit.dart';
-import 'debouncer.dart';
+import 'model/dishes_ingredients_model.dart';
+
 
 class FoodsMacroListUi extends StatefulWidget {
 
   final Function(int index, String type) onRemoveDishClicked;
-  final Function(int index, String type) onRemoveFoodClicked;
   final List<Food> mainDishesFoods;
   final List<Food> sideDishesFoods;
   final List<String> mainDishesTypes;
   final List<String> sideDishesTypes;
-  final Function(String source, int index) onMainDishClicked;
-  final Function(String source, int index) onSideDishClicked;
 
-  final bool isView;
+  List<TextEditingController> ingredientsController= [];
 
-  FoodsMacroListUi({super.key, required this.isView, required this.mainDishesFoods, required this.sideDishesFoods, required this.mainDishesTypes, required this.sideDishesTypes,
-    required this.onRemoveDishClicked,  required this.onRemoveFoodClicked,  required this.onMainDishClicked,  required this.onSideDishClicked});
+  DishesIngredientsModel getDishesIngredientsModel(){
+    List<List<String>> dishesIngredients= [];
+    List<String> newMainDishTypes= [];
+    List<String> newSideDishTypes= [];
+    List<Food> newMainDishFoods= [];
+    List<Food> newSideDishFoods= [];
+    for(int i = 0; i < ingredientsController.length; i++){
+      if(ingredientsController[i].text.isNotEmpty){
+        dishesIngredients.add([ingredientsController[i].text]);
+
+        if(i < mainDishesFoods.length){
+          newMainDishFoods.add(mainDishesFoods[i]);
+          newMainDishTypes.add(mainDishesTypes[i]);
+        }else{
+          newSideDishFoods.add(sideDishesFoods[i]);
+          newSideDishTypes.add(sideDishesTypes[i]);
+        }
+      }
+    }
+
+    return DishesIngredientsModel(
+      dishIngredients: dishesIngredients,
+      newMainDishesFoods: newMainDishFoods,
+      newSideDishesFoods: newSideDishFoods,
+      newMainDishTypes: newMainDishTypes,
+      newSideDishTypes: newSideDishTypes
+    );
+  }
+
+
+  FoodsMacroListUi({super.key, required this.mainDishesFoods, required this.sideDishesFoods, required this.mainDishesTypes, required this.sideDishesTypes,
+    required this.onRemoveDishClicked});
 
   @override
   State<FoodsMacroListUi> createState() => _FoodsMacroListUiState();
@@ -39,7 +62,6 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
   List<Food> _foods= [];
   List<String> _types= [];
-
 
 
   @override
@@ -56,6 +78,11 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
     _types.addAll(widget.sideDishesTypes);
     _foods.addAll(widget.mainDishesFoods);
     _foods.addAll(widget.sideDishesFoods);
+
+    widget.ingredientsController= [];
+    _foods.forEach((element) {
+      widget.ingredientsController.add(TextEditingController());
+    });
 
     return ListView.builder(
         scrollDirection: Axis.vertical,
@@ -88,39 +115,6 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
           }
 
 
-
-          String macroDetails= '';
-          if(_foods[index].name.isNotEmpty){
-            double calorie= 0;
-            double protein= 0;
-            double carb= 0;
-            double fat= 0;
-            final food= _foods[index];
-
-            if(food.foodType ==FoodType.groceryProduct){
-              calorie= double.parse(food.calorie[0]);
-              protein= double.parse(food.protein[0]);
-              carb= double.parse(food.carb[0]);
-              fat= double.parse(food.fat[0]);
-            }else{
-              if(food.ingredients.length == food.calorie.length){
-                for(int i = 0; i < food.servingIngredientsCount.length; i++){
-                  calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]));
-                  protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]));
-                  carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]));
-                  fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]));
-                }
-              }else{
-                calorie= calorie + double.parse(food.calorie[0]);
-                protein= protein + double.parse(food.protein[0]);
-                carb= carb + double.parse(food.carb[0]);
-                fat= fat + double.parse(food.fat[0]);
-              }
-            }
-
-            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat per serving';
-          }
-
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             margin: const EdgeInsets.only(top: 8,),
@@ -138,17 +132,14 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
 
                     Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 14),),
 
-                    Visibility(
-                      visible: !widget.isView,
-                      child: GestureDetector(
-                        onTap: (){
-                          removeDishClickListener(index);
-                        },
-                        child: const Icon(
-                          Icons.close,
-                          color: RED_ERROR_COLOR,
-                          size: 20,
-                        ),
+                    GestureDetector(
+                      onTap: (){
+                        removeDishClickListener(index);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: RED_ERROR_COLOR,
+                        size: 20,
                       ),
                     ),
                   ],
@@ -157,164 +148,41 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 const SizedBox(height: 8,),
 
 
-                Visibility(
-                  visible: foodName.isEmpty && !widget.isView,
-                    child:
-                    Row(
-                        children: [
-
-                          const SizedBox(width: 4,),
+                const Text(LIST_INGREDIENTS_TITLE, style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),),
 
 
-                          /// create manual
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                if(index < widget.mainDishesFoods.length){
-                                  widget.onMainDishClicked!(CREATE_MANUAL_LABEL, typeIndex);
-                                }else{
-                                  widget.onSideDishClicked!(CREATE_MANUAL_LABEL, typeIndex);
-                                }
-                              },
-
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: LIGHT_GREY_COLOR,
-                                    width: 2,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20), // Radius value
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-
-                                    Image.asset(HOW_MUCH_EAT_PATH, color: DARK_GREY_COLOR, width: 20, height: 20,),
-
-                                    const SizedBox(height: 6,),
-
-                                    const Text(CREATE_MANUAL_LABEL, style: TextStyle( color: DARK_GREY_COLOR, fontSize: 12), textAlign: TextAlign.center,),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(width: 6,),
-
-                          /// auto generate
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                if(index < widget.mainDishesFoods.length){
-                                  widget.onMainDishClicked!(AUTO_GENERATE_LABEL, typeIndex);
-                                }else{
-                                  widget.onSideDishClicked!(AUTO_GENERATE_LABEL, typeIndex);
-                                }
-                              },
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: LIGHT_GREY_COLOR,
-                                    width: 2,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20), // Radius value
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-
-                                    Image.asset(AUTO_PATH, color: DARK_GREY_COLOR, width: 20, height: 20,),
-
-                                    const SizedBox(height: 6,),
-
-                                    const Text(AUTO_GENERATE_LABEL, style: TextStyle( color: DARK_GREY_COLOR, fontSize: 12), textAlign: TextAlign.center,),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(width: 6,),
-
-                        ]
-                    ),
+                const SizedBox(height: 8,),
 
 
-                ),
-
-
-                Visibility(
-                  visible: foodName.isNotEmpty,
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 4,),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: LIGHT_GREY_COLOR,
-                          width: 2,
-                        ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(20), // Radius value
-                        ),
+                /// all ingredients
+                SizedBox(
+                  height: 100,
+                  child: TextField(
+                    controller: widget.ingredientsController[index],
+                    textInputAction: TextInputAction.done,
+                    maxLines: null,
+                    expands: true,
+                    textAlign: TextAlign.start,
+                    textAlignVertical: TextAlignVertical.top,
+                    decoration: const InputDecoration(
+                      hintText: 'egg, avocado,...',
+                      hintStyle: TextStyle(fontSize: 12),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              Flexible(child: Text(foodName, style: const TextStyle(fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR, fontSize: 14),)),
-
-
-                              Visibility(
-                                visible: !widget.isView,
-                                child: GestureDetector(
-                                  onTap: (){
-                                    removeFoodClickListener(index);
-                                  },
-                                  child: const Icon(
-                                    Icons.remove_circle,
-                                    color: RED_ERROR_COLOR,
-                                    size: 25,
-                                  ),
-                                ),
-                              ),
-
-                            ],
-                          ),
-
-                          Text(
-                            macroDetails,
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
-                          ),
-
-
-
-                          Visibility(
-                            visible: _foods[index].foodType == FoodType.meal,
-                            child: Text(
-                              ingredients,
-                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
-                            ),
-                          ),
-
-                        ],
-                      )
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    ),
+                    style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13),
                   ),
                 ),
+
+
               ],
             )
           );
@@ -326,23 +194,13 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
   void removeDishClickListener(int index){
     setState(() {
       if(index < widget.mainDishesFoods.length){
-        widget.onRemoveDishClicked!(index, MAIN_DISH_LABEL);
+        widget.onRemoveDishClicked(index, MAIN_DISH_LABEL);
       }else{
         int removeIndex= index - widget.mainDishesFoods.length;
-        widget.onRemoveDishClicked!(removeIndex, SIDE_DISH_LABEL);
+        widget.onRemoveDishClicked(removeIndex, SIDE_DISH_LABEL);
       }
     });
   }
 
-  void removeFoodClickListener(int index){
-    setState(() {
-      if(index < widget.mainDishesFoods.length){
-        widget.onRemoveDishClicked!(index, MAIN_DISH_LABEL);
-      }else{
-        int removeIndex= index - widget.mainDishesFoods.length;
-        widget.onRemoveDishClicked!(removeIndex, SIDE_DISH_LABEL);
-      }
-    });
-  }
 
 }

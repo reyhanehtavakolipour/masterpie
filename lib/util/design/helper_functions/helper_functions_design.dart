@@ -62,9 +62,11 @@ const VIEW_RECIPE_REQUEST= 'view_recipe_request';
 const CALCUALTE_MACRO_GOAL_REQUEST= 'calculate_macro_goal_request';
 
 
-List<String> fatSecretMainDishTypes= ['Breakfast', 'Lunch', 'Dinner'];
-List<String> fatSecretSideDishTypes= ['Appetizer', 'Beverage', 'Dessert', 'Snack', 'Soup'];
+// List<String> fatSecretMainDishTypes= ['Breakfast', 'Lunch', 'Dinner'];
+// List<String> fatSecretSideDishTypes= ['Appetizer', 'Beverage', 'Dessert', 'Snack', 'Soup'];
 
+List<String> fatSecretMainDishTypes= ['Breakfast', 'Lunch', 'Dinner'];
+List<String> fatSecretSideDishTypes= ['Appetizer', 'Beverage', 'Dessert', 'Snack'];
 
 
 
