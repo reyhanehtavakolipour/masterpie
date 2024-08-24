@@ -34,8 +34,8 @@ class FoodsMacroListUi extends StatefulWidget {
           newMainDishFoods.add(mainDishesFoods[i]);
           newMainDishTypes.add(mainDishesTypes[i]);
         }else{
-          newSideDishFoods.add(sideDishesFoods[i]);
-          newSideDishTypes.add(sideDishesTypes[i]);
+          newSideDishFoods.add(sideDishesFoods[i- mainDishesFoods.length]);
+          newSideDishTypes.add(sideDishesTypes[i- mainDishesFoods.length]);
         }
       }
     }
@@ -93,6 +93,10 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
           String foodName = _foods[index].name;
 
           String title= '';
+
+          if(_types.length <= index){
+            return Container();
+          }
 
           title= _types[index];
 

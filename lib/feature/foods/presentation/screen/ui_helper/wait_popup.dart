@@ -55,14 +55,14 @@ class _SelectContainerPopupState extends State<WaitPopup> {
             const SizedBox(height: 24,),
 
 
-            LinearPercentIndicator(
-              animation: true,
-              lineHeight: 20.0,
-              animationDuration: widget.isForOneMeal ? 2500 : 12000,
-              percent: 0.8,
-              barRadius: const Radius.circular(8),
-              progressColor: MASTERPIE_YELLOW_COLOR,
-            ),
+            // LinearPercentIndicator(
+            //   animation: true,
+            //   lineHeight: 20.0,
+            //   animationDuration: widget.isForOneMeal ? 2500 : 12000,
+            //   percent: 0.8,
+            //   barRadius: const Radius.circular(8),
+            //   progressColor: MASTERPIE_YELLOW_COLOR,
+            // ),
 
           ],
         ),

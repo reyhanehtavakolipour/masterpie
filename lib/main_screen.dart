@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/view_auto_generate_meals_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
@@ -320,24 +321,25 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
 
             BlocConsumer<SuggestPortionsBloc, SuggestFoodsPortionState>(
-                builder: (context, state) {
+                builder: (mcontext, state) {
                   if (state is SuggestFoodsPortionLoadingState) {
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                    Future.delayed(Duration.zero,(){
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return WaitPopup(
-                            message: GENERATE_MEAL_PLAN,
-                            isForOneMeal: false,
-                          );
-                        },
-                      );
-                    });
+                    // Future.delayed(Duration.zero,(){
+                    //   showDialog(
+                    //     context: context,
+                    //     barrierDismissible: false,
+                    //     builder: (context) {
+                    //       return WaitPopup(
+                    //         message: GENERATE_MEAL_PLAN,
+                    //         isForOneMeal: false,
+                    //       );
+                    //     },
+                    //   );
+                    // });
                   }else if(state is SuggestFoodsPortionLoadedState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                     Future.delayed(Duration.zero,(){
+                      Navigator.pop(context);
                       final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal);
                       Navigator.push(
                         context,
@@ -349,6 +351,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   }else if(state is SuggestFoodsPortionErrorState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                     Future.delayed(Duration.zero,(){
+                      Navigator.pop(context);
                       if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
                         return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
                       }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
@@ -418,7 +421,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   void _generateMealPlan(List<String> dishIngredients, List<Food> newMainDishesFoods,
       List<Food> newSideDishesFoods, List<String> newMainDishTypes, List<String> newSideDishTypes){
-    print('dfgds: ${dishIngredients}');
 
 
     Future.delayed(Duration.zero,(){
@@ -504,7 +506,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       MaterialPageRoute(
         builder: (context) => const CalculateUserMacroGoalScreen(),
       ),
-    );
+    ).then((result) {
+      if(result != null){
+        List<String> macro= result as List<String>;
+        _macroGoal= [int.parse(macro[0]), int.parse(macro[1]), int.parse(macro[2]), int.parse(macro[3])];
+      }
+    });
   }
 
 
@@ -563,48 +570,97 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     try{
 
-      String promptMessage= 'Provide the calories,protein,carbohydrates,fat, recommended amount and unit for the ingredients: ${foodsIngredients[0]}.'
-          'For ingredients like an egg, use \'1\' as the amount and use \'medium\' as the unit. For ingredients like rice, use \'1\' as the amount and use \'cup\' as the unit. Ensure that no extra words are added to the response.';
-      print('show_prompt: $promptMessage');
+      List<Food> foods= [];
 
-      final systemMessage = OpenAIChatCompletionChoiceMessageModel(
-        content: [
-          OpenAIChatCompletionChoiceMessageContentItemModel.text(
-            "return any message you are given as JSON object with this format: "
-                "{\"ingredients\": [{\"name\": \"egg\",\"amount\": 1,\"unit\": \"medium\",\"calories\": 68,\"protein\": 6.3,\"carbohydrates\": 0.6,\"fat\": 4.8}]}",
-          ),
-        ],
-        role: OpenAIChatMessageRole.assistant,
-      );
+      int mealIndex= 1;
+      await Future.forEach(foodsIngredients, (element) async {
 
-      final userMessage = OpenAIChatCompletionChoiceMessageModel(
-        content: [
-          OpenAIChatCompletionChoiceMessageContentItemModel.text(
-            promptMessage,
-          ),
-        ],
-        role: OpenAIChatMessageRole.user,
-      );
+        String promptMessage= 'Provide the calories,protein,carbohydrates,fat, recommended amount and unit of 1 serving in a relevant unit for the ingredients: $element.'
+            'For ingredients like an egg, use \'1\' as the amount and use \'medium\' as the unit. For ingredients like rice, use \'1\' as the amount and use \'cup\' as the unit.'
+            'Ensure that no extra words are added to the response.';
+        print('show_prompt: $promptMessage');
 
-      final requestMessages = [systemMessage, userMessage,];
-      OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-        model: "gpt-3.5-turbo-1106",
-        responseFormat: {"type": "json_object"},
-        // seed: 6,
-        messages: requestMessages,
-        temperature: 1.2,
-        maxTokens: 1024,
-        // toolChoice: "auto",
-      );
+        final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+          content: [
+            OpenAIChatCompletionChoiceMessageContentItemModel.text(
+              "return any message you are given as JSON object with this format: "
+                  "{\"ingredients\": [{\"name\": \"egg\",\"amount\": 1,\"unit\": \"medium\",\"calories\": 68,\"protein\": 6.3,\"carbohydrates\": 0.6,\"fat\": 4.8}]}",
+            ),
+          ],
+          role: OpenAIChatMessageRole.assistant,
+        );
 
-      printWrapped('MEALS_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
+        final userMessage = OpenAIChatCompletionChoiceMessageModel(
+          content: [
+            OpenAIChatCompletionChoiceMessageContentItemModel.text(
+              promptMessage,
+            ),
+          ],
+          role: OpenAIChatMessageRole.user,
+        );
 
+        final requestMessages = [systemMessage, userMessage,];
+        OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
+          model: "gpt-3.5-turbo-1106",
+          responseFormat: {"type": "json_object"},
+          // seed: 6,
+          messages: requestMessages,
+          temperature: 1.2,
+          maxTokens: 1024,
+          // toolChoice: "auto",
+        );
+
+        printWrapped('MEALS_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
+        Map<String, dynamic> jsonMap = json.decode(chatCompletion.choices.first.message.content?.first.text ?? '');
+
+
+        List<String> ingredients= [];
+        List<String> calorie= [];
+        List<String> protein= [];
+        List<String> carb= [];
+        List<String> fat= [];
+        List<String> units= [];
+        List<String> servingAmounts= [];
+        List<String> servingIngredientsCount= [];
+
+
+        (jsonMap['ingredients'] as List<dynamic>).map((ingredient) {
+          ingredients.add(ingredient['name'].toString());
+          calorie.add(ingredient['calories'].toString());
+          protein.add(ingredient['protein'].toString());
+          carb.add(ingredient['carbohydrates'].toString());
+          fat.add(ingredient['fat'].toString());
+          units.add(ingredient['unit'].toString());
+          servingAmounts.add(ingredient['amount'].toString());
+          servingIngredientsCount.add('1.0');
+        }
+        ).toList();
+
+        Food food= Food(
+          name: 'Meal$mealIndex',
+          ingredients: ingredients,
+          calorie: calorie,
+          protein: protein,
+          carb: carb,
+          fat: fat,
+          foodType: FoodType.meal,
+          units: units,
+          servingAmounts: servingAmounts,
+          servingIngredientsCount: servingIngredientsCount
+        );
+
+        foods.add(food);
+
+        mealIndex= mealIndex + 1;
+
+      });
+
+      return foods;
 
     }catch(e){
       print('gpt_error: $e');
       return [];
     }
-    return [];
   }
 
 
@@ -624,87 +680,103 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         ),
         onPressed: () async {
 
+          //show wait popup
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return WaitPopup(
+                message: GENERATE_MEAL_PLAN,
+                isForOneMeal: false,
+              );
+            },
+          );
+
+
+
           final dishesIngredientsModel= _foodsMacroListUi.getDishesIngredientsModel();
 
           if(dishesIngredientsModel.dishIngredients.isEmpty){
+            Navigator.pop(context);
             showErrorToast(context, ERROR_ADD_FOOD);
             return;
           }
 
 
           final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients);
-          print('dfgpsd: ${foodsWithMacro}');
+          printWrapped('FOODS_DETAIL: $foodsWithMacro');
+
+
+          if(foodsWithMacro.isEmpty){
+            //cancel wait popup
+            Navigator.pop(context);
+            showErrorToast(context, 'Something went wrong. try again!');
+            return;
+          }
+
+           List<List<double>> macroGoalsRange= [];
+          double minCalorie= 9/10 * _macroGoal[0];
+          double minProtein= 9/10 * _macroGoal[1];
+          double minCarb= 9/10 * _macroGoal[2];
+          double minFat= 9/10 * _macroGoal[3];
+
+          double maxCalorie= 11/10 * _macroGoal[0];
+          double maxProtein= 11/10 * _macroGoal[1];
+          double maxCarb= 11/10 * _macroGoal[2];
+          double maxFat= 11/10 * _macroGoal[3];
+
+
+          macroGoalsRange.add([minCalorie, maxCalorie]);
+          macroGoalsRange.add([minProtein, maxProtein]);
+          macroGoalsRange.add([minCarb, maxCarb]);
+          macroGoalsRange.add([minFat, maxFat]);
 
 
 
+          List<List<double>> servings = [];
+            dishesIngredientsModel.newMainDishesFoods.forEach((element) {
+            List<double> list = [];
+            list.add(0.5);
+            list.add(2.0);
+            servings.add(list);
+          });
+            dishesIngredientsModel.newSideDishesFoods.forEach((element) {
+            List<double> list = [];
+            list.add(0.5);
+            list.add(2.0);
+            servings.add(list);
+          });
 
+          logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
 
-          //
-          //
-          //  List<List<double>> macroGoalsRange= [];
-          // double minCalorie= 9/10 * _macroGoal[0];
-          // double minProtein= 9/10 * _macroGoal[1];
-          // double minCarb= 9/10 * _macroGoal[2];
-          // double minFat= 9/10 * _macroGoal[3];
-          //
-          // double maxCalorie= 11/10 * _macroGoal[0];
-          // double maxProtein= 11/10 * _macroGoal[1];
-          // double maxCarb= 11/10 * _macroGoal[2];
-          // double maxFat= 11/10 * _macroGoal[3];
-          //
-          //
-          // macroGoalsRange.add([minCalorie, maxCalorie]);
-          // macroGoalsRange.add([minProtein, maxProtein]);
-          // macroGoalsRange.add([minCarb, maxCarb]);
-          // macroGoalsRange.add([minFat, maxFat]);
-          //
-          //
-          //
-          // List<List<double>> servings = [];
-          //   dishesIngredientsModel.newMainDishesFoods.forEach((element) {
-          //   List<double> list = [];
-          //   list.add(0.5);
-          //   list.add(2.0);
-          //   servings.add(list);
-          // });
-          //   dishesIngredientsModel.newSideDishesFoods.forEach((element) {
-          //   List<double> list = [];
-          //   list.add(0.5);
-          //   list.add(2.0);
-          //   servings.add(list);
-          // });
-          //
-          // logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
-          //
-          // List<bool> isMainDishList= [];
-          //   dishesIngredientsModel.newMainDishTypes.forEach((element) {
-          //   if(element != 'Breakfast'){
-          //     isMainDishList.add(true);
-          //   }else{
-          //     isMainDishList.add(false);
-          //   }
-          // });
-          //   dishesIngredientsModel.newSideDishTypes.forEach((element) {
-          //   isMainDishList.add(false);
-          // });
-          //
-          // List<Food> foods= [];
-          // foods.addAll(dishesIngredientsModel.newMainDishesFoods);
-          // foods.addAll(dishesIngredientsModel.newSideDishesFoods);
-          //
-          // _trackMacroWizard();
-          //
-          // _suggestPortionsBloc.add(
-          //     SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-          //         foods,
-          //         isMainDishList,
-          //         servings,
-          //         macroGoalsRange,
-          //         [],
-          //         BY_AMOUNT_LABEL,
-          //         []
-          //     )
-          // );
+          List<bool> isMainDishList= [];
+            dishesIngredientsModel.newMainDishTypes.forEach((element) {
+            if(element != 'Breakfast'){
+              isMainDishList.add(true);
+            }else{
+              isMainDishList.add(false);
+            }
+          });
+            dishesIngredientsModel.newSideDishTypes.forEach((element) {
+            isMainDishList.add(false);
+          });
+
+          List<Food> foods= [];
+          foods.addAll(foodsWithMacro);
+
+          _trackMacroWizard();
+
+          _suggestPortionsBloc.add(
+              SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                  foods,
+                  isMainDishList,
+                  servings,
+                  macroGoalsRange,
+                  [],
+                  BY_AMOUNT_LABEL,
+                  []
+              )
+          );
 
         },
 

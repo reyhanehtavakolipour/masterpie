@@ -311,7 +311,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   Widget _buildFoodsPortions(){
 
     return SizedBox(
-      height: 1500,
+      height: 1200,
       child: ListView.builder(
           shrinkWrap: false,
           primary: true,
@@ -354,21 +354,21 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
             //ingredients
             String ingredients= '';
-            if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
-              // meal created from scratch
-              for (int i = 0; i < food.ingredients.length; i++) {
-                String ingredient = '- ${convertDoubleToFraction(double.parse(food.servingIngredientsCount[i]) * food.count * getServingAmount(food.units[i]))} '
-                    '${getServingUnit(food.units[i])} ${food.ingredients[i]},\n';
-                ingredients = ingredients + ingredient;
-              }
-            }else{
+            // if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
+            //   // meal created from scratch
+            //   for (int i = 0; i < food.ingredients.length; i++) {
+            //     String ingredient = '- ${convertDoubleToFraction(double.parse(food.servingIngredientsCount[i]) * food.count * getServingAmount(food.units[i]))} '
+            //         '${getServingUnit(food.units[i])} ${food.ingredients[i]},\n';
+            //     ingredients = ingredients + ingredient;
+            //   }
+            // }else{
               //other
               for (int i = 0; i < food.ingredients.length; i++) {
-                String ingredient = '- ${convertDoubleToFraction(fractionToDouble(food.servingAmounts[i]) * food.count)} '
+                String ingredient = '- ${convertDoubleToFraction(fractionToDouble(food.servingAmounts[i]) * food.count)} ${food.units[i]} '
                     '${food.ingredients[i]},\n';
                 ingredients = ingredients + ingredient;
               }
-            }
+            // }
 
 
             return InkWell(
@@ -386,10 +386,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-      
+
                     const SizedBox(height: 16,),
-      
-      
+
+
                     Row(
                       children: [
 
@@ -457,28 +457,28 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
-                     Visibility(
-                      visible: food.foodType == FoodType.meal,
-                      child: const Text(
-                      '$INSTRUCTION_LABLE:',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
-                      ),
-                    ),
+                    //  Visibility(
+                    //   visible: food.foodType == FoodType.meal,
+                    //   child: const Text(
+                    //   '$INSTRUCTION_LABLE:',
+                    //   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
+                    //   ),
+                    // ),
+                    //
+                    //
+                    // Visibility(
+                    //   visible: food.foodType == FoodType.meal,
+                    //   child: Text(
+                    //     food.recipe,
+                    //     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
+                    //   ),
+                    // ),
+                    //
 
 
-                    Visibility(
-                      visible: food.foodType == FoodType.meal,
-                      child: Text(
-                        food.recipe,
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
-                      ),
-                    ),
+                    const SizedBox(height: 8,),
 
 
-
-                    const SizedBox(height: 16,),
-
-      
                   ],
                 ),
               ),
