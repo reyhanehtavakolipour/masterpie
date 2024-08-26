@@ -252,6 +252,7 @@ const LB_2_LABEL = '2 lb';
 const WEEKLY_WEIGHT_CHANGE_LABEL = 'Weekly weight change';
 const CALCULATE_LABEL = 'Calculate';
 const SAVE_MACRO_AND_INPUTS_LABEL = 'Save macros';
+const SAVE_MEAL_PLAN = 'Save Meal Plan';
 const MIN_LABEL = 'min';
 const MAX_LABEL = 'max';
 const MACRO_SAVED_SUCCESS_MSG = 'Macros updated successfully';

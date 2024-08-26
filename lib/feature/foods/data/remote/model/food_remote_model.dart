@@ -33,8 +33,10 @@ class FoodRemote with _$FoodRemote{
     @Default([]) List<String> diets,
     @Default([]) List<String> allergies,
     @Default('') String prepTime,
+    @Default('') String dishType,
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,
+    @Default(false) bool isAddedByUser,
     @Default(1) int createdFromFatSecretRecipes
   })= _FoodRemote;
 

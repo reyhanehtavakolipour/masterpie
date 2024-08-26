@@ -25,6 +25,8 @@ import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.d
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 
+
+
 class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
 
@@ -55,6 +57,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
   bool _messageExpanded= false;
 
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +70,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
 
   }
+
+
+
 
 
   void calculateFoodsCombinationsMacros(){
@@ -171,6 +177,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                   children: [
 
 
+
                     _helperMessage(),
 
 
@@ -187,7 +194,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               ),
 
 
-              logFoodsButton(),
+              // savePlanBtn(),
 
               BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
                   builder: (mcontext, state) {
@@ -263,19 +270,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
-  Widget _newFoodInfo(int index) {
-
-    bool isNewFood = false;
-
-    if(widget.wizardResponse.foodsPortions[_currentPage].foodsIndexesNotAddedByUser.isNotEmpty){
-      if(widget.wizardResponse.foodsPortions[_currentPage].foodsIndexesNotAddedByUser.contains(index)){
-        isNewFood= true;
-      }
-    }
-
-
+  Widget _newFoodInfo(Food food) {
     return Visibility(
-      visible: isNewFood,
+      visible: food.isAddedByUser == false,
       child: GestureDetector(
         onTap: (){
           showInfoDialog(context, NEW_FOOD_ADDED_IN_WIZRD_MSG);
@@ -310,182 +307,184 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
   Widget _buildFoodsPortions(){
 
-    return SizedBox(
-      height: 1200,
-      child: ListView.builder(
-          shrinkWrap: false,
-          primary: true,
-          scrollDirection: Axis.vertical,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          itemCount: _suggestedFoodsPortions[_currentPage].foods.length,
-          itemBuilder: (context, index){
+    List<List<Food>> newFoods = [];
 
-            Food food = _suggestedFoodsPortions[_currentPage].foods[index];
+    List<Food> foods = _suggestedFoodsPortions[_currentPage].foods;
 
-            String macroDetails= '';
-            double calorie= 0;
-            double protein= 0;
-            double carb= 0;
-            double fat= 0;
+    List<Food> breakfastFoods = foods.where((food) => food.dishType == "Breakfast").toList();
+    if (breakfastFoods.isNotEmpty) newFoods.add(breakfastFoods);
 
+    List<Food> lunchFoods = foods.where((food) => food.dishType == "Lunch").toList();
+    if (lunchFoods.isNotEmpty) newFoods.add(lunchFoods);
 
-            if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
-              // meal created from scratch
-              for(int i = 0; i < food.servingIngredientsCount.length; i++){
-                calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
-                protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
-                carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
-                fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i])  * food.count);
-              }
-            }else{
-              //other
-              calorie= double.parse(food.calorie[0]) * food.count;
-              protein= double.parse(food.protein[0]) * food.count;
-              carb= double.parse(food.carb[0]) * food.count;
-              fat= double.parse(food.fat[0]) * food.count;
-            }
+    List<Food> dinnerFoods = foods.where((food) => food.dishType == "Dinner").toList();
+    if (dinnerFoods.isNotEmpty) newFoods.add(dinnerFoods);
+
+    List<Food> snackFoods = foods.where((food) => food.dishType == "Snack").toList();
+    if (snackFoods.isNotEmpty) newFoods.add(snackFoods);
 
 
 
+    return ListView.builder(
+      shrinkWrap: true, // Ensure the list takes up only the necessary space
+      physics: const NeverScrollableScrollPhysics(), // Disable parent scrolling
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      itemCount: newFoods.length,
+      itemBuilder: (context, index) {
 
-            macroDetails= '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat';
-
-
-            //ingredients
-            String ingredients= '';
-            // if(food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length){
-            //   // meal created from scratch
-            //   for (int i = 0; i < food.ingredients.length; i++) {
-            //     String ingredient = '- ${convertDoubleToFraction(double.parse(food.servingIngredientsCount[i]) * food.count * getServingAmount(food.units[i]))} '
-            //         '${getServingUnit(food.units[i])} ${food.ingredients[i]},\n';
-            //     ingredients = ingredients + ingredient;
-            //   }
-            // }else{
-              //other
-              for (int i = 0; i < food.ingredients.length; i++) {
-                String ingredient = '- ${convertDoubleToFraction(fractionToDouble(food.servingAmounts[i]) * food.count)} ${food.units[i]} '
-                    '${food.ingredients[i]},\n';
-                ingredients = ingredients + ingredient;
-              }
-            // }
-
-
-            return InkWell(
-              child: Container(
-                margin: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
-                decoration: BoxDecoration(
-                  color: WIZARD_BG_COLOR,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: LIGHT_GREY_COLOR,
-                    width: 1,
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    const SizedBox(height: 16,),
-
-
-                    Row(
-                      children: [
-
-                        Image.asset(food.foodType == FoodType.meal ? HOW_MUCH_EAT_PATH : GROCERY_PATH, width: 25, height: 25,),
-
-                        const SizedBox(width: 8,),
-
-                        Visibility(
-                            visible: food.foodType != FoodType.meal && food.ingredients.length == food.calorie.length,
-                            child: const SizedBox(width: 16,)
-                        ),
-
-                        Visibility(
-                          visible: food.foodType == FoodType.meal,
-                          child: Flexible(
-                            child: Text(
-                              food.name,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
-                            ),
-                          ),
-                        ),
-
-                        Visibility(
-                          visible: food.foodType == FoodType.groceryProduct,
-                          child: Flexible(
-                            child: Text(
-                              '${convertDoubleToFraction(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]))} ${getServingUnit(food.units.isEmpty ? '': food.units[0])} ${food.name}',
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
-                            ),
-                          ),
-                        ),
-
-
-
-                        const SizedBox(width: 2,),
-
-
-                        _newFoodInfo(index)
-
-                      ],
-                    ),
-
-                    const SizedBox(height: 8,),
-
-
-
-                    Text(
-                      macroDetails,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
-                    ),
-
-
-
-                    const SizedBox(height: 8,),
-
-
-                    /// ingredients
-                    Visibility(
-                    visible: food.foodType == FoodType.meal,
-                    child: Text(
-                      ingredients,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
-                    ),
-                  ),
-
-
-
-                    //  Visibility(
-                    //   visible: food.foodType == FoodType.meal,
-                    //   child: const Text(
-                    //   '$INSTRUCTION_LABLE:',
-                    //   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
-                    //   ),
-                    // ),
-                    //
-                    //
-                    // Visibility(
-                    //   visible: food.foodType == FoodType.meal,
-                    //   child: Text(
-                    //     food.recipe,
-                    //     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: DARK_GREY_COLOR),
-                    //   ),
-                    // ),
-                    //
-
-
-                    const SizedBox(height: 8,),
-
-
-                  ],
-                ),
+        return InkWell(
+          child: Container(
+            margin: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+            decoration: BoxDecoration(
+              color: WIZARD_BG_COLOR,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: LIGHT_GREY_COLOR,
+                width: 1,
               ),
-            );
-          }
-      ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: const BoxDecoration(
+                    color: MASTERPIE_YELLOW_COLOR, // Background color
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),  // Set the radius for top left corner
+                      topRight: Radius.circular(10.0), // Set the radius for top right corner
+                    ),
+                  ),
+                  child: Text(
+                    newFoods[index][0].dishType,
+                    style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                  ),
+                ),
+
+
+                const SizedBox(height: 8),
+
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: newFoods[index].length,
+                    itemBuilder: (context, innerIndex) {
+
+
+                      Food food = newFoods[index][innerIndex];
+
+                      String macroDetails = '';
+                      double calorie = 0, protein = 0, carb = 0, fat = 0;
+
+                      // Calculating macronutrients based on food type
+                      if (food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length) {
+                        for (int i = 0; i < food.servingIngredientsCount.length; i++) {
+                          calorie += (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                          protein += (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                          carb += (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                          fat += (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                        }
+                      } else{
+                        if(double.parse(food.calorie[0]) < 6){
+                          calorie= 0;
+                          protein= 0;
+                          carb= 0;
+                          fat= 0;
+                        }else{
+                          calorie = double.parse(food.calorie[0]) * food.count;
+                          protein = double.parse(food.protein[0]) * food.count;
+                          carb = double.parse(food.carb[0]) * food.count;
+                          fat = double.parse(food.fat[0]) * food.count;
+                        }
+                      }
+
+                      macroDetails = '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat';
+
+                      String ingredients = '';
+                      if (food.foodType == FoodType.meal) {
+                        for (int i = 0; i < food.ingredients.length; i++) {
+                          String ingredient= '';
+                          if(double.parse(food.calorie[i]) < 6){
+                            ingredient= '- ${food.ingredients[i]},\n';
+                          }else{
+                            ingredient = '- ${convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i]))} '
+                                '${food.units[i]} ${food.ingredients[i]},\n';
+                          }
+                          ingredients += ingredient;
+                        }
+                      }
+
+
+
+                      String groceryName = '';
+                      if(food.foodType == FoodType.groceryProduct){
+                        if(double.parse(food.calorie[0]) < 6){
+                          groceryName= food.name;
+                        }else{
+                          groceryName= '${convertDoubleToFraction(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]))}'
+                              ' ${getServingUnit(food.units.isEmpty ? '' : food.units[0])} ${food.name}';
+                        }
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const SizedBox(height: 8),
+
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(food.foodType == FoodType.meal ? HOW_MUCH_EAT_PATH : GROCERY_PATH, width: 25, height: 25),
+                              const SizedBox(width: 8),
+                              if (food.foodType == FoodType.meal)
+                                Flexible(
+                                  child: Text(
+                                    food.name,
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ),
+                              if (food.foodType == FoodType.groceryProduct)
+                                Flexible(
+                                  child: Text(
+                                    groceryName,
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                  ),
+                                ),
+                              const SizedBox(width: 2),
+                              _newFoodInfo(food)
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            macroDetails,
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey),
+                          ),
+                          const SizedBox(height: 8),
+                          if (food.foodType == FoodType.meal)
+                            Text(
+                              ingredients,
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+                            ),
+                          // const SizedBox(height: 8),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
+
+              ],
+            ),
+          ),
+        );
+      },
     );
+
   }
 
 
@@ -753,8 +752,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   }
 
 
-
-  Widget logFoodsButton(){
+  Widget savePlanBtn(){
     return Positioned(
       bottom: 36,
       left: 16,
@@ -763,9 +761,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         width: double.infinity,
         child: ElevatedButton(
             onPressed: () {
-              _selectedCombinationFoods = _suggestedFoodsPortions[_currentPage].foods;
-              logEvent(MACRO_DIET_LOG_BTN_CLICKED, null);
-              requestLoggedFoods();
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -774,7 +769,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 backgroundColor: MASTERPIE_YELLOW_COLOR,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
             ),
-            child: const Text(LOG_FOODS_LABEL,
+            child: const Text(SAVE_MEAL_PLAN,
               style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
             )
         ),

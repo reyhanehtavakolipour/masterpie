@@ -40,9 +40,11 @@ mixin _$FoodRemote {
   List<String> get diets => throw _privateConstructorUsedError;
   List<String> get allergies => throw _privateConstructorUsedError;
   String get prepTime => throw _privateConstructorUsedError;
+  String get dishType => throw _privateConstructorUsedError;
 
   /// how many of the food(either meal or grocery)?
   double get count => throw _privateConstructorUsedError;
+  bool get isAddedByUser => throw _privateConstructorUsedError;
   int get createdFromFatSecretRecipes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -79,7 +81,9 @@ abstract class $FoodRemoteCopyWith<$Res> {
       List<String> diets,
       List<String> allergies,
       String prepTime,
+      String dishType,
       double count,
+      bool isAddedByUser,
       int createdFromFatSecretRecipes});
 }
 
@@ -118,7 +122,9 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
     Object? diets = null,
     Object? allergies = null,
     Object? prepTime = null,
+    Object? dishType = null,
     Object? count = null,
+    Object? isAddedByUser = null,
     Object? createdFromFatSecretRecipes = null,
   }) {
     return _then(_value.copyWith(
@@ -210,10 +216,18 @@ class _$FoodRemoteCopyWithImpl<$Res, $Val extends FoodRemote>
           ? _value.prepTime
           : prepTime // ignore: cast_nullable_to_non_nullable
               as String,
+      dishType: null == dishType
+          ? _value.dishType
+          : dishType // ignore: cast_nullable_to_non_nullable
+              as String,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as double,
+      isAddedByUser: null == isAddedByUser
+          ? _value.isAddedByUser
+          : isAddedByUser // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdFromFatSecretRecipes: null == createdFromFatSecretRecipes
           ? _value.createdFromFatSecretRecipes
           : createdFromFatSecretRecipes // ignore: cast_nullable_to_non_nullable
@@ -253,7 +267,9 @@ abstract class _$$FoodRemoteImplCopyWith<$Res>
       List<String> diets,
       List<String> allergies,
       String prepTime,
+      String dishType,
       double count,
+      bool isAddedByUser,
       int createdFromFatSecretRecipes});
 }
 
@@ -290,7 +306,9 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
     Object? diets = null,
     Object? allergies = null,
     Object? prepTime = null,
+    Object? dishType = null,
     Object? count = null,
+    Object? isAddedByUser = null,
     Object? createdFromFatSecretRecipes = null,
   }) {
     return _then(_$FoodRemoteImpl(
@@ -382,10 +400,18 @@ class __$$FoodRemoteImplCopyWithImpl<$Res>
           ? _value.prepTime
           : prepTime // ignore: cast_nullable_to_non_nullable
               as String,
+      dishType: null == dishType
+          ? _value.dishType
+          : dishType // ignore: cast_nullable_to_non_nullable
+              as String,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as double,
+      isAddedByUser: null == isAddedByUser
+          ? _value.isAddedByUser
+          : isAddedByUser // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdFromFatSecretRecipes: null == createdFromFatSecretRecipes
           ? _value.createdFromFatSecretRecipes
           : createdFromFatSecretRecipes // ignore: cast_nullable_to_non_nullable
@@ -420,7 +446,9 @@ class _$FoodRemoteImpl implements _FoodRemote {
       final List<String> diets = const [],
       final List<String> allergies = const [],
       this.prepTime = '',
+      this.dishType = '',
       this.count = 0.0,
+      this.isAddedByUser = false,
       this.createdFromFatSecretRecipes = 1})
       : _ingredients = ingredients,
         _servingIngredientsCount = servingIngredientsCount,
@@ -561,6 +589,9 @@ class _$FoodRemoteImpl implements _FoodRemote {
   @override
   @JsonKey()
   final String prepTime;
+  @override
+  @JsonKey()
+  final String dishType;
 
   /// how many of the food(either meal or grocery)?
   @override
@@ -568,11 +599,14 @@ class _$FoodRemoteImpl implements _FoodRemote {
   final double count;
   @override
   @JsonKey()
+  final bool isAddedByUser;
+  @override
+  @JsonKey()
   final int createdFromFatSecretRecipes;
 
   @override
   String toString() {
-    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, servingAmounts: $servingAmounts, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, prepTime: $prepTime, count: $count, createdFromFatSecretRecipes: $createdFromFatSecretRecipes)';
+    return 'FoodRemote(id: $id, foodTypeRemote: $foodTypeRemote, name: $name, barcode: $barcode, brandName: $brandName, description: $description, nationality: $nationality, image: $image, servingAmount: $servingAmount, unit: $unit, ingredients: $ingredients, servingIngredientsCount: $servingIngredientsCount, recipe: $recipe, units: $units, servingAmounts: $servingAmounts, calorie: $calorie, protein: $protein, carb: $carb, fat: $fat, diets: $diets, allergies: $allergies, prepTime: $prepTime, dishType: $dishType, count: $count, isAddedByUser: $isAddedByUser, createdFromFatSecretRecipes: $createdFromFatSecretRecipes)';
   }
 
   @override
@@ -612,7 +646,11 @@ class _$FoodRemoteImpl implements _FoodRemote {
                 .equals(other._allergies, _allergies) &&
             (identical(other.prepTime, prepTime) ||
                 other.prepTime == prepTime) &&
+            (identical(other.dishType, dishType) ||
+                other.dishType == dishType) &&
             (identical(other.count, count) || other.count == count) &&
+            (identical(other.isAddedByUser, isAddedByUser) ||
+                other.isAddedByUser == isAddedByUser) &&
             (identical(other.createdFromFatSecretRecipes,
                     createdFromFatSecretRecipes) ||
                 other.createdFromFatSecretRecipes ==
@@ -644,7 +682,9 @@ class _$FoodRemoteImpl implements _FoodRemote {
         const DeepCollectionEquality().hash(_diets),
         const DeepCollectionEquality().hash(_allergies),
         prepTime,
+        dishType,
         count,
+        isAddedByUser,
         createdFromFatSecretRecipes
       ]);
 
@@ -679,7 +719,9 @@ abstract class _FoodRemote implements FoodRemote {
       final List<String> diets,
       final List<String> allergies,
       final String prepTime,
+      final String dishType,
       final double count,
+      final bool isAddedByUser,
       final int createdFromFatSecretRecipes}) = _$FoodRemoteImpl;
 
   @override // food id
@@ -727,9 +769,13 @@ abstract class _FoodRemote implements FoodRemote {
   @override
   String get prepTime;
   @override
+  String get dishType;
+  @override
 
   /// how many of the food(either meal or grocery)?
   double get count;
+  @override
+  bool get isAddedByUser;
   @override
   int get createdFromFatSecretRecipes;
   @override

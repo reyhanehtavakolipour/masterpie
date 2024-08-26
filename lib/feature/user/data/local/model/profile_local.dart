@@ -155,7 +155,7 @@ ProfileLocal emptyProfile(){
       diet: CLASSIC_LABEL,
       hateSubCategories: [],
       mainDishTypes: ['Breakfast', 'Lunch', 'Dinner'],
-      sideDishTypes: ['Dessert', 'Snack'],
+      sideDishTypes: ['Snack'],
       allergens: []
   );
 }

@@ -39,6 +39,8 @@ class Food with _$Food{
     @Default([]) List<String> servingIngredientsCount,
     @Default('') String prepTime,
 
+    @Default('') String dishType,
+    @Default(false) bool isAddedByUser,
 
     /// how many of the food(either meal or grocery)?
     @Default(0.0) double count,

@@ -130,24 +130,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 14),),
-
-                    GestureDetector(
-                      onTap: (){
-                        removeDishClickListener(index);
-                      },
-                      child: const Icon(
-                        Icons.close,
-                        color: RED_ERROR_COLOR,
-                        size: 20,
-                      ),
-                    ),
-                  ],
-                ),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 14),),
 
                 const SizedBox(height: 8,),
 

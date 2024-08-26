@@ -44,7 +44,6 @@ class TopRecommendation {
 
 
     List<dynamic> macroList = json['portion'];
-    print('dfgds: $macroList');
     List<double> convertedPortion = macroList.map((item) {
       if (item is int) {
         return item.toDouble();
@@ -69,7 +68,8 @@ class TopRecommendation {
           allFoods.add(
               FoodRemote(
                 name: foodsResponse[i]['foodname'],
-                calorie: [((foodsResponse[i]['macro'] as List<dynamic>)[0]).toString()],
+                  dishType: foodsResponse[i]['DishType'].toString(),
+                  calorie: [((foodsResponse[i]['macro'] as List<dynamic>)[0]).toString()],
                 protein: [((foodsResponse[i]['macro'] as List<dynamic>)[1]).toString()],
                 carb: [((foodsResponse[i]['macro'] as List<dynamic>)[2]).toString()],
                 fat: [((foodsResponse[i]['macro'] as List<dynamic>)[3]).toString()],
@@ -80,9 +80,6 @@ class TopRecommendation {
         }
       }
     }
-
-
-    printWrapped('dfgds1: $allFoods');
 
 
     return TopRecommendation(

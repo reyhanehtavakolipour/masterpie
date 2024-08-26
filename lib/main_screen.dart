@@ -239,9 +239,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       child: Column(
                         children: [
 
-                          addFoodOptions(),
-
-
                           _buildWizardFoods(),
 
 
@@ -324,23 +321,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 builder: (mcontext, state) {
                   if (state is SuggestFoodsPortionLoadingState) {
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
-                    // Future.delayed(Duration.zero,(){
-                    //   showDialog(
-                    //     context: context,
-                    //     barrierDismissible: false,
-                    //     builder: (context) {
-                    //       return WaitPopup(
-                    //         message: GENERATE_MEAL_PLAN,
-                    //         isForOneMeal: false,
-                    //       );
-                    //     },
-                    //   );
-                    // });
                   }else if(state is SuggestFoodsPortionLoadedState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       Navigator.pop(context);
-                      final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal);
+                      final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal,);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -561,30 +546,25 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
-
-
-
-  Future<List<Food>> requestFoodsIngredientsMacroFromChatGPT(List<List<String>> foodsIngredients) async{
-    final openAIKey= await FlutterConfig.get(OPENAI_API_KEY);
+  Future<List<Food>> requestFoodsIngredientsMacroFromChatGPT(List<List<String>> foodsIngredients, List<String> dishTypes) async {
+    final openAIKey = await FlutterConfig.get(OPENAI_API_KEY);
     OpenAI.apiKey = openAIKey;
 
-    try{
+    try {
+      List<Food> foods = [];
 
-      List<Food> foods= [];
+      for (int index = 0; index < foodsIngredients.length; index++) {
+        List<String> element = foodsIngredients[index];
 
-      int mealIndex= 1;
-      await Future.forEach(foodsIngredients, (element) async {
-
-        String promptMessage= 'Provide the calories,protein,carbohydrates,fat, recommended amount and unit of 1 serving in a relevant unit for the ingredients: $element.'
-            'For ingredients like an egg, use \'1\' as the amount and use \'medium\' as the unit. For ingredients like rice, use \'1\' as the amount and use \'cup\' as the unit.'
-            'Ensure that no extra words are added to the response.';
+        String promptMessage = 'give me 2 lists of strings which the first one is the list of groceries and the second one is meals.'
+            'answer in json format without any extra word. this is my list: $element';
         print('show_prompt: $promptMessage');
 
         final systemMessage = OpenAIChatCompletionChoiceMessageModel(
           content: [
             OpenAIChatCompletionChoiceMessageContentItemModel.text(
               "return any message you are given as JSON object with this format: "
-                  "{\"ingredients\": [{\"name\": \"egg\",\"amount\": 1,\"unit\": \"medium\",\"calories\": 68,\"protein\": 6.3,\"carbohydrates\": 0.6,\"fat\": 4.8}]}",
+                  "{\"groceries\": [\"avocado\", \"carrot\"],\"meals\": [\"omelette\", \"chicken sandwich\"]}",
             ),
           ],
           role: OpenAIChatMessageRole.assistant,
@@ -599,71 +579,190 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           role: OpenAIChatMessageRole.user,
         );
 
-        final requestMessages = [systemMessage, userMessage,];
+        final requestMessages = [systemMessage, userMessage];
         OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-          model: "gpt-3.5-turbo-1106",
+          model: "gpt-4o",
           responseFormat: {"type": "json_object"},
-          // seed: 6,
           messages: requestMessages,
-          temperature: 1.2,
+          temperature: 0.1,
           maxTokens: 1024,
-          // toolChoice: "auto",
         );
 
-        printWrapped('MEALS_OPENAI_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
+        printWrapped('DISH_TYPE_RESPONSE: ${chatCompletion.choices.first.message.content?.first.text}');
         Map<String, dynamic> jsonMap = json.decode(chatCompletion.choices.first.message.content?.first.text ?? '');
 
+        final ingredientsNameList = jsonMap['groceries'] as List<dynamic>;
+        final mealsNameList = jsonMap['meals'] as List<dynamic>;
 
-        List<String> ingredients= [];
-        List<String> calorie= [];
-        List<String> protein= [];
-        List<String> carb= [];
-        List<String> fat= [];
-        List<String> units= [];
-        List<String> servingAmounts= [];
-        List<String> servingIngredientsCount= [];
+        if (mealsNameList.isNotEmpty) {
+          String mealPromptMessage = 'Provide the ingredient name, amount, unit, calories, protein, carbs, and fat for each ingredient in one serving of'
+              ' the following recipes in the default serving unit: $mealsNameList. Put all the recipes in a JSON array called foods.'
+              'When there are more than 1 recipe, list them separately. Exclude salt and pepper. Do not use gram as unit of each ingredient;instead use unit people understand.Return the response in JSON format with no additional text.';
+          print('show_prompt: $mealPromptMessage');
 
+          final mealSystemMessage = OpenAIChatCompletionChoiceMessageModel(
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "return any message you are given as JSON object with this format: "
+                    "{\"foods\": [{\"name\": \"pasta alfredo\",\"ingredients\": [{\"name\": \"Fettuccine Pasta\",\"amount\": 85,\"unit\": \"grams\",\"calories\": 280,\"protein\": 10,\"carbohydrates\": 54,\"fat\": 2},{\"name\": \"Heavy Cream\",\"amount\": 60,\"unit\": \"milliliters\",\"calories\": 200,\"protein\": 1.5,\"carbohydrates\": 2,\"fat\": 20},{\"name\": \"Parmesan Cheese\",\"amount\": 30,\"unit\": \"grams\",\"calories\": 120,\"protein\": 11,\"carbohydrates\": 1,\"fat\": 8},{\"name\": \"Butter\",\"amount\": 1,\"unit\": \"tablespoon\",\"calories\": 100,\"protein\": 0.1,\"carbohydrates\": 0,\"fat\": 11}]]}",
+              ),
+            ],
+            role: OpenAIChatMessageRole.assistant,
+          );
 
-        (jsonMap['ingredients'] as List<dynamic>).map((ingredient) {
-          ingredients.add(ingredient['name'].toString());
-          calorie.add(ingredient['calories'].toString());
-          protein.add(ingredient['protein'].toString());
-          carb.add(ingredient['carbohydrates'].toString());
-          fat.add(ingredient['fat'].toString());
-          units.add(ingredient['unit'].toString());
-          servingAmounts.add(ingredient['amount'].toString());
-          servingIngredientsCount.add('1.0');
+          final mealUserMessage = OpenAIChatCompletionChoiceMessageModel(
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                mealPromptMessage,
+              ),
+            ],
+            role: OpenAIChatMessageRole.user,
+          );
+
+          final mealRequestMessages = [mealSystemMessage, mealUserMessage];
+          OpenAIChatCompletionModel mealChatCompletion = await OpenAI.instance.chat.create(
+            model: "gpt-4o",
+            responseFormat: {"type": "json_object"},
+            messages: mealRequestMessages,
+            temperature: 0.1,
+            maxTokens: 1024,
+          );
+
+          printWrapped('MEALS_RESPONSE: ${mealChatCompletion.choices.first.message.content?.first.text}');
+          Map<String, dynamic> mealJsonMap = json.decode(mealChatCompletion.choices.first.message.content?.first.text ?? '');
+
+          (mealJsonMap['foods'] as List<dynamic>).forEach((food) {
+            List<String> ingredients = [];
+            List<String> calorie = [];
+            List<String> protein = [];
+            List<String> carb = [];
+            List<String> fat = [];
+            List<String> servingAmounts = [];
+            List<String> units = [];
+            List<String> servingIngredientsCount = [];
+
+            (food['ingredients'] as List<dynamic>).forEach((ingredient) {
+              ingredients.add(ingredient['name'].toString());
+
+              String ingCalorie= '0.0';
+              String ingProtein= '0.0';
+              String ingCarb= '0.0';
+              String ingFat= '0.0';
+
+              if(ingredient['calories'] != null){
+                if(double.parse(ingredient['calories'].toString()) > 5){
+                  ingCalorie= ingredient['calories'].toString();
+                  ingProtein= ingredient['protein'].toString();
+                  ingCarb= ingredient['carbohydrates'].toString();
+                  ingFat= ingredient['fat'].toString();
+                }
+              }
+
+              calorie.add(ingCalorie);
+              protein.add(ingProtein);
+              carb.add(ingCarb);
+              fat.add(ingFat);
+
+              servingAmounts.add(ingredient['amount'].toString());
+              units.add(ingredient['unit'].toString());
+              servingIngredientsCount.add('1.0');
+            });
+
+            Food meal = Food(
+              name: food['name'].toString(),
+              ingredients: ingredients,
+              calorie: calorie,
+              protein: protein,
+              carb: carb,
+              fat: fat,
+              units: units,
+              servingAmounts: servingAmounts,
+              servingIngredientsCount: servingIngredientsCount,
+              dishType: dishTypes[index],
+              foodType: FoodType.meal,
+              isAddedByUser: true
+            );
+
+            foods.add(meal);
+          });
         }
-        ).toList();
 
-        Food food= Food(
-          name: 'Meal$mealIndex',
-          ingredients: ingredients,
-          calorie: calorie,
-          protein: protein,
-          carb: carb,
-          fat: fat,
-          foodType: FoodType.meal,
-          units: units,
-          servingAmounts: servingAmounts,
-          servingIngredientsCount: servingIngredientsCount
-        );
+        if (ingredientsNameList.isNotEmpty) {
+          String ingredientPromptMessage = 'You are an assistant that provides the calories, protein, carbohydrates, fat, amount and unit in a default serving unit for $ingredientsNameList in JSON format.';
+          print('show_prompt: $ingredientPromptMessage');
 
-        foods.add(food);
+          final ingredientSystemMessage = OpenAIChatCompletionChoiceMessageModel(
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                "return any message you are given as JSON object with this format: "
+                    "{\"ingredients\": [{\"name\": \"greek yogurt\",\"amount\": 1,\"unit\": \"cup\",\"calories\": 338,\"protein\": 20,\"carbohydrates\": 8,\"fat\": 24}]}",
+              ),
+            ],
+            role: OpenAIChatMessageRole.assistant,
+          );
 
-        mealIndex= mealIndex + 1;
+          final ingredientUserMessage = OpenAIChatCompletionChoiceMessageModel(
+            content: [
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(
+                ingredientPromptMessage,
+              ),
+            ],
+            role: OpenAIChatMessageRole.user,
+          );
 
-      });
+          final ingredientRequestMessages = [ingredientSystemMessage, ingredientUserMessage];
+          OpenAIChatCompletionModel ingredientChatCompletion = await OpenAI.instance.chat.create(
+            model: "gpt-4o",
+            responseFormat: {"type": "json_object"},
+            messages: ingredientRequestMessages,
+            temperature: 0.1,
+            maxTokens: 1024,
+          );
+
+          printWrapped('INGREDIENTS_RESPONSE: ${ingredientChatCompletion.choices.first.message.content?.first.text}');
+          Map<String, dynamic> ingredientJsonMap = json.decode(ingredientChatCompletion.choices.first.message.content?.first.text ?? '');
+
+          (ingredientJsonMap['ingredients'] as List<dynamic>).forEach((ingredient) {
+
+
+            String ingCalorie= '0.0';
+            String ingProtein= '0.0';
+            String ingCarb= '0.0';
+            String ingFat= '0.0';
+            if(ingredient['calories'] != null){
+              if(num.parse(ingredient['calories'].toString()) > 5){
+                ingCalorie= ingredient['calories'].toString();
+                ingProtein= ingredient['protein'].toString();
+                ingCarb= ingredient['carbohydrates'].toString();
+                ingFat= ingredient['fat'].toString();
+              }
+            }
+
+            Food food = Food(
+              name: ingredient['name'].toString(),
+              calorie: [ingCalorie],
+              protein: [ingProtein],
+              carb: [ingCarb],
+              fat: [ingFat],
+              foodType: FoodType.groceryProduct,
+              units: ['${ingredient['amount'].toString()} ${ingredient['unit'].toString()}'],
+              dishType: dishTypes[index],
+              servingAmounts: [ingredient['amount'].toString()],
+              isAddedByUser: true
+            );
+
+            foods.add(food);
+          });
+        }
+      }
 
       return foods;
 
-    }catch(e){
+    } catch (e) {
       print('gpt_error: $e');
       return [];
     }
   }
-
-
 
 
 
@@ -703,7 +802,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           }
 
 
-          final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients);
+          List<String> dishTypes= [];
+          dishesIngredientsModel.newMainDishTypes.forEach((element) {
+            dishTypes.add(element);
+          });
+          dishesIngredientsModel.newSideDishTypes.forEach((element) {
+            dishTypes.add(element);
+          });
+
+          final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients, dishTypes);
           printWrapped('FOODS_DETAIL: $foodsWithMacro');
 
 
@@ -732,45 +839,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           macroGoalsRange.add([minFat, maxFat]);
 
 
-
-          List<List<double>> servings = [];
-            dishesIngredientsModel.newMainDishesFoods.forEach((element) {
-            List<double> list = [];
-            list.add(0.5);
-            list.add(2.0);
-            servings.add(list);
-          });
-            dishesIngredientsModel.newSideDishesFoods.forEach((element) {
-            List<double> list = [];
-            list.add(0.5);
-            list.add(2.0);
-            servings.add(list);
-          });
-
           logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
-
-          List<bool> isMainDishList= [];
-            dishesIngredientsModel.newMainDishTypes.forEach((element) {
-            if(element != 'Breakfast'){
-              isMainDishList.add(true);
-            }else{
-              isMainDishList.add(false);
-            }
-          });
-            dishesIngredientsModel.newSideDishTypes.forEach((element) {
-            isMainDishList.add(false);
-          });
-
-          List<Food> foods= [];
-          foods.addAll(foodsWithMacro);
 
           _trackMacroWizard();
 
           _suggestPortionsBloc.add(
               SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                  foods,
-                  isMainDishList,
-                  servings,
+                  foodsWithMacro,
+                  [],
+                  [],
                   macroGoalsRange,
                   [],
                   BY_AMOUNT_LABEL,

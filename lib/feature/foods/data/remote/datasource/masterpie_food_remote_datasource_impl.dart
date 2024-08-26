@@ -298,6 +298,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
 
         if(food.foodTypeRemote == FoodTypeRemote.groceryProduct){
+
           food.calorie.forEach((cal) {
             calorie= calorie + double.parse(cal);
           });
@@ -348,9 +349,10 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
         Map<String, dynamic> foodMap = {
           "foodname": food.name,
           "macro": foodMacro,
-          "minServing": servingRanges[i][0],
-          "maxServing": servingRanges[i][1],
-          'isMainDish': isMainDishList[i],
+          "minServing": 1.0,
+          "maxServing": 2.0,
+          'isMainDish': [''],
+          'DishType': food.dishType,
           'isFoodAddedbyUser' : true
         };
         foodsBodyValue.add(foodMap);
@@ -381,7 +383,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
       if(response.statusCode == SUCCESS_API_CODE){
 
-
         FoodsPortionRemoteResult foodsPortionRemoteResult = FoodsPortionRemoteResult.fromJson(response.data, foods);
 
         List<SuggestedFoodsPortionRemote> foodsPortions= [];
@@ -396,7 +397,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
             food= food.copyWith(count: recommendation.portion[j]);
             foodsRemote.add(food);
           }
-
 
           SuggestedFoodsPortionRemote suggestedFoodsPortionRemote = SuggestedFoodsPortionRemote(
             foods: foodsRemote,
@@ -416,6 +416,7 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       }
       return  Left(RemoteFailure(response.statusCode, response.data['message']));
     }catch(e){
+      print('show_Err: $e');
       return Left(ExceptionFailure(e));
     }
   }
