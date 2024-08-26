@@ -141,6 +141,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                 const SizedBox(height: 8,),
 
 
+
                 /// all ingredients
                 SizedBox(
                   height: 100,
@@ -152,7 +153,7 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.top,
                     decoration: const InputDecoration(
-                      hintText: 'egg, avocado,...',
+                      hintText: 'omelette, avocado,...',
                       hintStyle: TextStyle(fontSize: 12),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
