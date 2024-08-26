@@ -1,7 +1,7 @@
 name: masterpie
 description: "a diet application"
 
-version: 3.3.1+48
+version: 3.1.1+50
 
 
 publish_to: 'none'

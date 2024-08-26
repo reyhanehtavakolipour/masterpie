@@ -456,8 +456,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   void checkIfFirstTimeAppOpened() async{
     int firstTime = await userHiveDataSource.getInt(FIRST_TIME_OPEN_APP);
-    if(firstTime == 0){
-      userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 1);
+    if(firstTime == 0 || firstTime == 1){
+      userHiveDataSource.putInt(FIRST_TIME_OPEN_APP, 2);
       userHiveDataSource.putString(KEY_EMAIL, '');
       userHiveDataSource.putString(KEY_PASSWORD, '');
       userHiveDataSource.putString(KEY_USER_ID, '');
