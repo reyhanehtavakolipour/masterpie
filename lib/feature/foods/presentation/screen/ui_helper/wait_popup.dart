@@ -11,7 +11,10 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../../../../util/core/constant/messages_constants.dart';
 
 
+
 class WaitPopup extends StatefulWidget {
+
+  static bool isPopupOpen= false;
 
   final String message;
 
@@ -28,7 +31,23 @@ class _SelectContainerPopupState extends State<WaitPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(WAIT_LABEL, style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+        children: [
+          const Text(WAIT_LABEL, style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.w600),),
+
+          GestureDetector(
+              onTap: (){
+                if(WaitPopup.isPopupOpen){
+                  WaitPopup.isPopupOpen= false;
+                  Navigator.pop(context);
+                }
+              },
+              child: const Icon(Icons.close, color: RED_ERROR_COLOR,)
+          ),
+        ],
+      ),
       content: SizedBox(
         width: double.maxFinite,
         height: 200,

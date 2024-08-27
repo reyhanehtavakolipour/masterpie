@@ -327,7 +327,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   }else if(state is SuggestFoodsPortionLoadedState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                     Future.delayed(Duration.zero,(){
-                      Navigator.pop(context);
+                      if(WaitPopup.isPopupOpen){
+                        WaitPopup.isPopupOpen= false;
+                        Navigator.pop(context);
+                      }
                       final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal,);
                       Navigator.push(
                         context,
@@ -339,7 +342,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   }else if(state is SuggestFoodsPortionErrorState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
                     Future.delayed(Duration.zero,(){
-                      Navigator.pop(context);
+                      if(WaitPopup.isPopupOpen){
+                        WaitPopup.isPopupOpen= false;
+                        Navigator.pop(context);
+                      }
                       if(state.message == ERROR_FREE_USER_FOODS_PORTION_NOT_ALLOWED){
                         return showUpgradePopupForFreeUsers(context, UPGRADE_MSG_FOODS_PORTION);
                       }else if(state.message == ERROR_PAID_USER_SUGGEST_FOOD_OVER_LIMIT){
@@ -377,6 +383,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       _mainDishTypes.forEach((element) {
         _mainDishFoods.add(Food(name: ''));
       });
+
 
       _macroGoal= [int.parse(profile.dailyMacroGoal[0]),
         int.parse(profile.dailyMacroGoal[1]),
@@ -782,81 +789,97 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         ),
         onPressed: () async {
 
-          //show wait popup
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return WaitPopup(
-                message: GENERATE_MEAL_PLAN,
-                isForOneMeal: false,
-              );
-            },
-          );
+          try{
+            //show wait popup
+            WaitPopup.isPopupOpen= true;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return WaitPopup(
+                  message: GENERATE_MEAL_PLAN,
+                  isForOneMeal: false,
+                );
+              },
+            );
 
 
 
-          final dishesIngredientsModel= _foodsMacroListUi.getDishesIngredientsModel();
+            final dishesIngredientsModel= _foodsMacroListUi.getDishesIngredientsModel();
 
-          if(dishesIngredientsModel.dishIngredients.isEmpty){
-            Navigator.pop(context);
-            showErrorToast(context, ERROR_ADD_FOOD);
-            return;
+            if(dishesIngredientsModel.dishIngredients.isEmpty){
+              if(WaitPopup.isPopupOpen){
+                WaitPopup.isPopupOpen= false;
+                Navigator.pop(context);
+              }
+              showErrorToast(context, ERROR_ADD_FOOD);
+              return;
+            }
+
+
+            List<String> dishTypes= [];
+            dishesIngredientsModel.newMainDishTypes.forEach((element) {
+              dishTypes.add(element);
+            });
+            dishesIngredientsModel.newSideDishTypes.forEach((element) {
+              dishTypes.add(element);
+            });
+
+            final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients, dishTypes);
+            printWrapped('FOODS_DETAIL: $foodsWithMacro');
+
+
+            if(foodsWithMacro.isEmpty){
+              //cancel wait popup
+              if(WaitPopup.isPopupOpen){
+                WaitPopup.isPopupOpen= false;
+                Navigator.pop(context);
+              }
+              showErrorToast(context, ERROR_TRY_AGAIN);
+              return;
+            }
+
+            List<List<double>> macroGoalsRange= [];
+            double minCalorie= 9/10 * _macroGoal[0];
+            double minProtein= 9/10 * _macroGoal[1];
+            double minCarb= 9/10 * _macroGoal[2];
+            double minFat= 9/10 * _macroGoal[3];
+
+            double maxCalorie= 11/10 * _macroGoal[0];
+            double maxProtein= 11/10 * _macroGoal[1];
+            double maxCarb= 11/10 * _macroGoal[2];
+            double maxFat= 11/10 * _macroGoal[3];
+
+
+            macroGoalsRange.add([minCalorie, maxCalorie]);
+            macroGoalsRange.add([minProtein, maxProtein]);
+            macroGoalsRange.add([minCarb, maxCarb]);
+            macroGoalsRange.add([minFat, maxFat]);
+
+
+            logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
+
+            _trackMacroWizard();
+
+            _suggestPortionsBloc.add(
+                SuggestFoodsPortionEvent.onSuggestFoodsPortion(
+                    foodsWithMacro,
+                    [],
+                    [],
+                    macroGoalsRange,
+                    [],
+                    BY_AMOUNT_LABEL,
+                    []
+                )
+            );
+
+          }catch(e){
+            if(WaitPopup.isPopupOpen){
+              WaitPopup.isPopupOpen= false;
+              Navigator.pop(context);
+            }
+            showErrorToast(context, ERROR_TRY_AGAIN);
           }
-
-
-          List<String> dishTypes= [];
-          dishesIngredientsModel.newMainDishTypes.forEach((element) {
-            dishTypes.add(element);
-          });
-          dishesIngredientsModel.newSideDishTypes.forEach((element) {
-            dishTypes.add(element);
-          });
-
-          final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients, dishTypes);
-          printWrapped('FOODS_DETAIL: $foodsWithMacro');
-
-
-          if(foodsWithMacro.isEmpty){
-            //cancel wait popup
-            Navigator.pop(context);
-            showErrorToast(context, 'Something went wrong. try again!');
-            return;
-          }
-
-           List<List<double>> macroGoalsRange= [];
-          double minCalorie= 9/10 * _macroGoal[0];
-          double minProtein= 9/10 * _macroGoal[1];
-          double minCarb= 9/10 * _macroGoal[2];
-          double minFat= 9/10 * _macroGoal[3];
-
-          double maxCalorie= 11/10 * _macroGoal[0];
-          double maxProtein= 11/10 * _macroGoal[1];
-          double maxCarb= 11/10 * _macroGoal[2];
-          double maxFat= 11/10 * _macroGoal[3];
-
-
-          macroGoalsRange.add([minCalorie, maxCalorie]);
-          macroGoalsRange.add([minProtein, maxProtein]);
-          macroGoalsRange.add([minCarb, maxCarb]);
-          macroGoalsRange.add([minFat, maxFat]);
-
-
-          logEvent(MACRO_DIET_CALCULATE_BTN_CLICKED, null);
-
-          _trackMacroWizard();
-
-          _suggestPortionsBloc.add(
-              SuggestFoodsPortionEvent.onSuggestFoodsPortion(
-                  foodsWithMacro,
-                  [],
-                  [],
-                  macroGoalsRange,
-                  [],
-                  BY_AMOUNT_LABEL,
-                  []
-              )
-          );
 
         },
 

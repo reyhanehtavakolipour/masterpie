@@ -1,7 +1,7 @@
 
 import '../../../feature/foods/presentation/screen/request_macro_wizard_step1_screen.dart';
 
-const ERROR_TRY_AGAIN = 'Try again later';
+const ERROR_TRY_AGAIN = 'Something went wrong. try again!';
 const ERROR_LABEL = 'Error!';
 const ERROR_EXCEPTION = 'exception happened';
 const ERROR_400 = 'bad request';
