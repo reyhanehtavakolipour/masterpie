@@ -351,7 +351,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
           "macro": foodMacro,
           "minServing": 1.0,
           "maxServing": 2.0,
-          'isMainDish': [''],
           'DishType': food.dishType,
           'isFoodAddedbyUser' : true
         };

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
@@ -26,6 +27,7 @@ import 'package:masterpie/util/design/helper_functions/helper_functions_design.d
 import 'package:masterpie/util/design/size/app_widget_size.dart';
 import 'package:masterpie/util/design/text/app_assets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'feature/foods/data/repository_impl/foods_repository_impl.dart';
 import 'feature/foods/domain/model/food_model.dart';
 import 'feature/foods/presentation/bloc/suggest_portion_bloc/state_event/suggest_portion_state_event.dart';
@@ -93,6 +95,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   late FoodsMacroListUi _foodsMacroListUi;
 
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -862,6 +865,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     );
   }
 
+
+  Future<String> getDeviceUUID() async {
+    // Check if UUID already exists in secure storage
+    String? uuid = await storage.read(key: 'deviceUUID');
+
+    if (uuid == null) {
+      // Generate a new UUID if none exists
+      uuid = Uuid().v4(); // You can use the uuid package for this
+
+      // Store the new UUID securely
+      await storage.write(key: 'deviceUUID', value: uuid);
+    }
+
+    return uuid;
+  }
 
   void _trackMacroWizard() async{
     try{

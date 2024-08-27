@@ -34,7 +34,7 @@ class DatabaseHelper {
 
     //delete old db
     var docdir = await getApplicationDocumentsDirectory();
-    String path = join(docdir.path, 'masterpie_appdb.db');
+    String path = join(docdir.path, 'masterpie_appdb1.db');
     bool dbExists = await databaseExists(path);
     if (dbExists) {
       await deleteDatabase(path);
@@ -43,7 +43,7 @@ class DatabaseHelper {
 
 
     var databasesPath = await getDatabasesPath();
-    String newPath = join(databasesPath, 'masterpie_appdb1.db');
+    String newPath = join(databasesPath, 'masterpie_appdb2.db');
 
     return await openDatabase(
       newPath,
