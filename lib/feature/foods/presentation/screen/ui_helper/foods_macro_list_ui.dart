@@ -31,6 +31,7 @@ class FoodsMacroListUi extends StatefulWidget {
         dishesIngredients.add([ingredientsController[i].text]);
 
         if(i < mainDishesFoods.length){
+
           newMainDishFoods.add(mainDishesFoods[i]);
           newMainDishTypes.add(mainDishesTypes[i]);
         }else{
@@ -104,6 +105,18 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
           String ingredients= cleanIngredients(_foods[index].ingredients).join(', ');
 
 
+          String hint= 'avocado, egg,...';
+          if(index == 0){
+            hint= 'avocado, egg,...';
+          }else if(index == 1){
+            hint= 'chicken, rice,...';
+          }else if(index == 2){
+            hint= 'salmon, salad,...';
+          }else if(index == 3){
+            hint= 'milkshake,...';
+          }
+
+
           Color titleColor= GREEN_COLOR;
           if(index < widget.mainDishesFoods.length){
             titleColor= GREEN_COLOR;
@@ -153,19 +166,19 @@ class _FoodsMacroListUiState extends State<FoodsMacroListUi> {
                     expands: true,
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.top,
-                    decoration: const InputDecoration(
-                      hintText: 'omelette, avocado,...',
-                      hintStyle: TextStyle(fontSize: 12),
-                      border: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      hintText: hint,
+                      hintStyle: const TextStyle(fontSize: 12),
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     ),
                     style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 13),
                   ),

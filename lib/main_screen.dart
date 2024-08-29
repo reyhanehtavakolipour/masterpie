@@ -72,6 +72,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   bool isFromOnboard= false;
 
+  bool _isMacorGoalShownAfterOnBoard= false;
+
   bool _userLoggedIn= false;
 
   final userHiveDataSource = serviceLocator<UserHiveDataSource>();
@@ -96,6 +98,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   late FoodsMacroListUi _foodsMacroListUi;
 
   final storage = FlutterSecureStorage();
+
+  Profile _profile= Profile();
 
   @override
   void initState() {
@@ -303,7 +307,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     _getProfileBloc.add(const GetProfileEvent.onReset());
                     Future.delayed(Duration.zero,(){
                       _userLoggedIn= state.profile.id.isEmpty ? false : true;
+                      _profile= state.profile;
                       _setUserInfo(state.profile);
+
+                      if(isFromOnboard && !_isMacorGoalShownAfterOnBoard){
+                        _isMacorGoalShownAfterOnBoard= true;
+                        showMacroGoalsPopup(_profile.dailyMacroGoal);
+                      }
+
                     });
                   }else if(state is GetProfileErrorState){
                     _getProfileBloc.add(const GetProfileEvent.onReset());
@@ -368,10 +379,188 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
+  Future<void>  showMacroGoalsPopup(List<String> dailyMacros) async{
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext mcontext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: CATEGORY_COLOR,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: const Text(
+                  MACRO_GOAL_LABEL,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: DARK_PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+
+
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+
+                    /// calorie and protein
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: TextFormField(
+                                cursorColor: DARK_PRIMARY_COLOR,
+                                controller: TextEditingController(text: dailyMacros[0]),
+                                enabled: false,
+                                style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                decoration: const InputDecoration(
+                                  labelText: CALORIE_LABEL,
+                                  border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            )
+                        ),
+
+                        const SizedBox(width: 16.0),
+
+                        Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: TextFormField(
+                                cursorColor: DARK_PRIMARY_COLOR,
+                                controller: TextEditingController(text: dailyMacros[1]),
+                                enabled: false,
+                                style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                decoration: const InputDecoration(
+                                  labelText: PROTEIN_LABEL,
+                                  border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            )
+                        ),
+                      ],
+                    ),
+
+
+                    const SizedBox(height: 16.0),
+
+
+                    /// carb and fat
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                            child: SizedBox(
+
+                              height: 48,
+                              child: TextFormField(
+                                cursorColor: DARK_PRIMARY_COLOR,
+                                enabled: false,
+                                style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
+                                controller: TextEditingController(text: dailyMacros[2]),
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                decoration: const InputDecoration(
+                                  labelText: CARB_LABEL,
+                                  border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            )
+                        ),
+
+                        const SizedBox(width: 16.0),
+
+
+                        Expanded(
+                          child: SizedBox(
+                            height: 48,
+                            child: TextFormField(
+                              cursorColor: DARK_PRIMARY_COLOR,
+                              controller: TextEditingController(text: dailyMacros[3]),
+                              enabled: false,
+                              style: const TextStyle(fontSize: 15, color: DARK_PRIMARY_COLOR),
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              decoration: const InputDecoration(
+                                labelText: FAT_LABEL,
+                                border:  OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+
+                    const SizedBox(height: 16.0),
+
+
+                    /// done button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async{
+                          Navigator.of(mcontext, rootNavigator: true).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            backgroundColor: DARK_PRIMARY_COLOR
+                        ),
+                        child: const Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text(DONE_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                        ),
+                      ),
+                    ),
+
+
+                    const SizedBox(height: 8,),
+
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   void _setUserInfo(Profile profile) async {
     String selectedOption = await userHiveDataSource.getString(KEY_SELECTED_MEAL_PLAN_OPTION);
     setState(() {
+
+      _mainDishTypes= [];
+      _sideDishTypes= [];
+      _mainDishFoods= [];
+      _mainDishFoods= [];
+
       _selectedMealPlanOption = selectedOption;
       _sideDishTypes= profile.sideDishTypes;
       _mainDishTypes= profile.mainDishTypes;
@@ -506,6 +695,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         List<String> macro= result as List<String>;
         _macroGoal= [int.parse(macro[0]), int.parse(macro[1]), int.parse(macro[2]), int.parse(macro[3])];
       }
+      _setUserInfo(_profile);
     });
   }
 
@@ -804,7 +994,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             );
 
 
-
             final dishesIngredientsModel= _foodsMacroListUi.getDishesIngredientsModel();
 
             if(dishesIngredientsModel.dishIngredients.isEmpty){
@@ -825,6 +1014,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               dishTypes.add(element);
             });
 
+
             final foodsWithMacro= await requestFoodsIngredientsMacroFromChatGPT(dishesIngredientsModel.dishIngredients, dishTypes);
             printWrapped('FOODS_DETAIL: $foodsWithMacro');
 
@@ -838,6 +1028,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               showErrorToast(context, ERROR_TRY_AGAIN);
               return;
             }
+
 
             List<List<double>> macroGoalsRange= [];
             double minCalorie= 9/10 * _macroGoal[0];
@@ -878,6 +1069,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               WaitPopup.isPopupOpen= false;
               Navigator.pop(context);
             }
+            print('sdfsss: $e');
             showErrorToast(context, ERROR_TRY_AGAIN);
           }
 

@@ -1,3 +1,6 @@
+
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,23 +8,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
-import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/get_fat_secret_foods_info_bloc.dart';
-import 'package:masterpie/feature/foods/presentation/bloc/get_fat_secret_foods_info_bloc/state_event/get_fat_secret_foods_info_state_event.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/get_profile_bloc.dart';
 import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
 import 'package:masterpie/feature/user/presentation/bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import 'package:masterpie/main_screen.dart';
-import 'package:masterpie/util/core/helper/helper.dart';
-import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
-import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/api_constant.dart';
 import '../../../../util/core/constant/messages_constants.dart';
 import '../../../../util/design/size/app_widget_size.dart';
 import '../../../../util/design/text/app_assets.dart';
 import '../../../../util/design/toast/app_toast.dart';
-import '../../../foods/presentation/screen/recie_types_popup.dart';
 import '../../../foods/presentation/screen/ui_helper/custom_radio_button.dart';
 import '../../domain/model/profile_model.dart';
 import '../bloc/update_profile_bloc/update_profile_bloc.dart';
@@ -58,42 +55,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int _currentPage = 0;
 
 
-  late GetFatSecretFoodsInfoBloc _getFatSecretFoodsInfoBloc;
-
   Profile _profile= Profile();
 
-
-  // fatsecret
-  List<String> _fatSecretMainDishesTypes= [];
-  List<String> _fatSecretSideDishesTypes= [];
-  List<String> _allCategoryOptions= [];
-  List<String> _allAllergenOptions= [];
-
-
-
-  //main dishes
-  bool _isCustomNumberMainDishSelected = false;
-  int _selectedMainDishChoice= 3;
-  late TextEditingController _mainDishTimesController;
-  List<String> _mainDishesType= [];
-
-  //side dishes
-  bool _isCustomNumberSideDishSelected = false;
-  int _selectedSideDishChoice= 2;
-  late TextEditingController _sideDishTimesController;
-  List<String> _sideDishesType= [];
 
 
   //diet
   String _diet= dietOptions[0];
-
-
-  //hate categories
-  List<String> _hateCategories=[];
-
-  //allergens
-  List<String> _allergens= [];
-
 
   int _stepsCount= 2;
 
@@ -127,34 +94,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
-    _getFatSecretFoodsInfoBloc = context.read<GetFatSecretFoodsInfoBloc>();
-    _mainDishTimesController= TextEditingController(text: '3');
-    _sideDishTimesController= TextEditingController(text: '2');
     _updateProfileBloc = context.read<UpdateProfileBloc>();
     _getProfileBloc = context.read<GetProfileBloc>();
     getProfile();
-    _setEditTextsListener();
   }
 
 
   void getProfile(){
     _getProfileBloc.add(
-      const GetProfileEvent.onGetProfile()
+        const GetProfileEvent.onGetProfile()
     );
   }
 
-  void _setEditTextsListener(){
-    _mainDishTimesController.addListener(() {
-      if(_mainDishTimesController.text.isNotEmpty){
-        _updateMainDishType('');
-      }
-    });
-    _sideDishTimesController.addListener(() {
-      if(_sideDishTimesController.text.isNotEmpty){
-        _updateSideDishType('');
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,36 +124,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   });
                 },
                 children: [
-                  //
-                  // ///step 1
-                  // _numberOfMealsDuringDays(),
-                  //
-                  // /// step2
-                  // _selectRecipesType(),
-                  //
-                  // /// step 3
-                  // _selectAllergens(),
-                  //
-                  //
-                  // /// step4
-                  // _selectDiet(),
-                  //
-                  //
-                  // /// step 5
-                  // _selectHateCategories(),
 
-                  /// step6
+                  /// step 1
+                  Visibility(
+                      visible: widget.isOnBoard,
+                      child: _knowUsFromWhere()
+                  ),
+
+                  /// step2
                   Visibility(
                       visible: widget.isOnBoard,
                       child: _fillForm()
                   ),
-
-
-                  /// step 7
-                  Visibility(
-                      visible: widget.isOnBoard,
-                      child: _knowUsFromWhere()
-                  )
 
                 ],
               ),
@@ -241,13 +174,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     Future.delayed(Duration.zero,(){
                       _profile= state.profile;
                       _getProfileBloc.add(const GetProfileEvent.onReset());
-                      fillUiWithProfile(state.profile);
-                      _requestFatSecretFoodsInfo();
                     });
                   }else if(state is GetProfileErrorState){
                     _getProfileBloc.add(const GetProfileEvent.onReset());
                     Future.delayed(Duration.zero,(){
-                      _requestFatSecretFoodsInfo();
                       return showErrorToast(context, state.message);
                     });
                   }else{
@@ -258,33 +188,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
                 }
             ),
-
-            BlocConsumer<GetFatSecretFoodsInfoBloc, GetFatSecretFoodsInfoState>(
-                builder: (mcontext, state) {
-                  if(state is FatSecretFoodInfoLoadedState){
-                    Future.delayed(Duration.zero,(){
-                      _getFatSecretFoodsInfoBloc.add(const GetFatSecretFoodsInfoEvent.onReset());
-                      _fatSecretMainDishesTypes= state.fatSecretFoodsInfo.recipeTypes;
-                      _fatSecretSideDishesTypes= state.fatSecretFoodsInfo.recipeTypes;
-                      _allCategoryOptions= state.fatSecretFoodsInfo.categories;
-                      _allAllergenOptions= state.fatSecretFoodsInfo.allergens;
-                      _convertFatSecretDataToUiData();
-                      _updateMainDishType('');
-                      _updateSideDishType('');
-                    });
-                    return Container();
-                  }else if(state is FatSecretFoodInfoErrorState){
-                    Future.delayed(Duration.zero,(){
-                      return showErrorToast(context, state.message);
-                    });
-                  }
-                  return Container();
-                },
-                listener: (context, state){
-
-                }
-            ),
-
 
             BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
                 builder: (mcontext, state) {
@@ -301,7 +204,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                         _goToMainScreen();
                       });
-
                     });
                   }else if(state is UpdateProfileErrorState){
                     _updateProfileBloc.add(const UpdateProfileEvent.onReset());
@@ -326,85 +228,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
 
-  void fillUiWithProfile(Profile profile){
-    setState(() {
-      _mainDishTimesController.text= profile.mainDishTypes.length.toString();
-      _sideDishTimesController.text= profile.sideDishTypes.length.toString();
-      _selectedMainDishChoice= profile.mainDishTypes.length;
-      _selectedSideDishChoice= profile.sideDishTypes.length;
-      _mainDishesType= profile.mainDishTypes;
-      _sideDishesType= profile.sideDishTypes;
-
-
-      if(profile.diet.contains(CLASSIC_LABEL)){
-        _diet= dietOptions[0];
-      }else if(profile.diet.contains(KETO_LABEL)){
-        _diet= dietOptions[1];
-      } else if(profile.diet.contains(VEGETERIAN_LABEL)){
-        _diet= dietOptions[2];
-      }
-
-      _hateCategories= profile.hateCategories;
-      _allergens= profile.allergens;
-    });
-  }
-
-
-  void _convertFatSecretDataToUiData(){
-
-    //organize main dishes types
-    List<String> mainDishTypes= [];
-    mainDishTypes.add('Breakfast');
-    mainDishTypes.add('Lunch');
-    mainDishTypes.add('Dinner');
-    _fatSecretMainDishesTypes= sortAlphabetically(mainDishTypes);
-
-
-    //organize side dishes types
-    List<String> sideDishTypes= [];
-    _fatSecretSideDishesTypes.forEach((element) {
-      if(element != 'Breakfast'  && element != 'Lunch' &&
-          element != 'Baked' && element != 'Sauce and Condiment' &&
-          element != 'Side Dish' && element != 'Main Dish' && element != 'Other'){
-        sideDishTypes.add(element);
-      }
-    });
-    _fatSecretSideDishesTypes= sideDishTypes;
-
-
-
-    //remove useless categories
-    List<String> categories= [];
-    _allCategoryOptions.forEach((element) {
-      if(element != 'Beverages' &&  element != 'Fast Food' &&
-          element != 'Fruit' &&  element != 'Other' &&
-          element != 'Salads' &&  element != 'Sauces Spices & Spreads' &&
-          element != 'Snack' &&  element != 'Vegetables'
-      ){
-        categories.add(element);
-      }
-    });
-    _allCategoryOptions= categories;
-
-
-
-    //remove useless allergen
-    List<String> allergens= [];
-    _allAllergenOptions.forEach((element) {
-      if(element != 'Peanuts' && element != 'Milk'){
-        allergens.add(element);
-      }
-    });
-    _allAllergenOptions= allergens;
-
-  }
-
-
-  void _requestFatSecretFoodsInfo(){
-    _getFatSecretFoodsInfoBloc.add(
-        const GetFatSecretFoodsInfoEvent.onGetFatSecretFoodsInfo()
-    );
-  }
 
   void _goToPage(int page) {
     _pageController.animateToPage(
@@ -414,349 +237,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  void _updateMainDishType(String type){
-    setState(() {
-
-      int mainDishTimes= 3;
-      bool isValid= isValidInteger(_mainDishTimesController.text);
-      if(isValid){
-        mainDishTimes= int.parse(_mainDishTimesController.text);
-      }
-
-      if( mainDishTimes <= _mainDishesType.length){
-        List<String> newList= [];
-        for (int i = 1; i <= mainDishTimes; i++) {
-          if(i <=  mainDishTimes){
-            newList.add(_mainDishesType[i-1]);
-          }
-        }
-        _mainDishesType= newList;
-      }else{
-        List<String> newList= [];
-        for (int i = 1; i <= mainDishTimes; i++) {
-          if(i <= _mainDishesType.length){
-            newList.add(_mainDishesType[i-1]);
-          }else{
-            newList.add('');
-          }
-        }
-        _mainDishesType= newList;
-      }
-    });
-  }
-
-
-  void _updateSideDishType(String type){
-    setState(() {
-
-      int sideDishTimes= 3;
-      bool isValid= isValidInteger(_sideDishTimesController.text);
-      if(isValid){
-        sideDishTimes= int.parse(_sideDishTimesController.text);
-      }
-
-      if(sideDishTimes <= _sideDishesType.length){
-        List<String> newList= [];
-        for (int i = 1; i <= sideDishTimes; i++) {
-          if(i <=  sideDishTimes){
-            newList.add(_sideDishesType[i-1]);
-          }
-        }
-        _sideDishesType= newList;
-      }else{
-        List<String> newList= [];
-        for (int i = 1; i <= sideDishTimes; i++) {
-          if(i <= _sideDishesType.length){
-            newList.add(_sideDishesType[i-1]);
-          }else{
-            newList.add('');
-          }
-        }
-        _sideDishesType= newList;
-      }
-    });
-  }
-
-  Widget _selectRecipesType(){
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Container(
-              margin: const EdgeInsets.only(top: 48),
-              height: 30,
-              child: Row(
-                children: [
-                   Expanded(
-                    child: Text(
-                      '2/$_stepsCount',
-                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  skipBtn()
-
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24,),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      SELECT_RECIPE_TYPE,
-                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16,),
-
-
-                  const Text(
-                    MAIN_DISH_LABEL,
-                    style: TextStyle(fontSize: 14, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
-                  ),
-
-
-                  _buildMainDishesTypes(),
-
-                  const SizedBox(height: 32,),
-
-
-                  const Text(
-                    SIDE_DISH_LABEL,
-                    style: TextStyle(fontSize: 14, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.start,
-                  ),
-
-
-                  _buildSideDishesTypes(),
-
-                ],
-              ),
-            ),
-          ),
-
-
-          const SizedBox(height: 16,),
-
-          /// next & previous button
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: MASTERPIE_YELLOW_COLOR
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      _goToPage(0);
-                    });
-                  },
-                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                ),
-              ),
-
-              const SizedBox(width: 8,),
-
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: (){
-                    _goToPage(2);
-                  },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _selectHateCategories(){
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Container(
-              margin: const EdgeInsets.only(top: 48),
-              height: 30,
-              child: Row(
-                children: [
-                   Expanded(
-                    child: Text(
-                      '5/$_stepsCount',
-                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  skipBtn()
-
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24,),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Center(child: Image.asset(HATE_RECIPE_PATH, width: 200, height: 200,))
-                  ),
-
-                  const SizedBox(height: 16,),
-
-
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      SELECT_HATE_CATEGORIES,
-                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-
-
-                  _buildHateCategories()
-
-                ],
-              ),
-            ),
-          ),
-
-
-          const SizedBox(height: 16,),
-
-
-          /// next & previous button
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
-                        backgroundColor: MASTERPIE_YELLOW_COLOR
-                    ),
-                    onPressed: (){
-                      setState(() {
-                        _goToPage(3);
-                      });
-                    },
-                    child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                  ),
-                ),
-
-                const SizedBox(width: 8,),
-
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
-                        backgroundColor: DARK_PRIMARY_COLOR
-                    ),
-                    onPressed: (){
-                      _goToPage(5);
-                    },
-                    child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          /// done & previous button
-          Visibility(
-              visible: !widget.isOnBoard,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape:  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                          ),
-                          backgroundColor: MASTERPIE_YELLOW_COLOR
-                      ),
-                      onPressed: (){
-                        setState(() {
-                          _goToPage(3);
-                        });
-                      },
-                      child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                    ),
-                  ),
-
-                  const SizedBox(width: 8,),
-
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape:  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                          ),
-                          backgroundColor: DARK_PRIMARY_COLOR
-                      ),
-                      onPressed: (){
-                        _saveUserInputsInsideApp();
-                      },
-                      child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                    ),
-                  ),
-                ],
-              )
-          ),
-        ],
-      ),
-    );
-  }
 
 
   Widget _fillForm(){
@@ -766,23 +246,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '1/$_stepsCount',
-                    style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                  ),
-                ),
-
-                skipBtn()
-
-              ],
-            ),
-          ),
 
           const SizedBox(height: 24,),
 
@@ -792,11 +255,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
 
+                  Container(
+                    margin: const EdgeInsets.only(top: 48),
+                    height: 30,
+                    child: Text(
+                      '2/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+
+
                   Padding(
                       padding: const EdgeInsets.all(4),
                       child: Center(child: Image.asset(FORM_PATH, width: 200, height: 200,))
                   ),
-
 
 
                   const SizedBox(height: 48,),
@@ -900,8 +372,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           const SizedBox(height: 16,),
 
 
-
-          /// next & previous button
+          /// done & previous button
           Row(
             children: [
               Expanded(
@@ -914,7 +385,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                   onPressed: (){
                     setState(() {
-                      _goToPage(4);
+                      _goToPage(0);
                     });
                   },
                   child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
@@ -932,16 +403,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       backgroundColor: DARK_PRIMARY_COLOR
                   ),
                   onPressed: (){
-
                     if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
                         _ageController.text.isEmpty || _heightController.text.isEmpty){
                       showErrorToast(context, FILL_ALL_ERROR);
                       return;
                     }
 
-                    _goToPage(6);
+                    _saveUserInputsInOnboard();
                   },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+                  child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
                 ),
               ),
             ],
@@ -951,32 +421,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-
-
   Widget _knowUsFromWhere(){
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Container(
-            margin: const EdgeInsets.only(top: 48),
-            height: 30,
-            child: Row(
-              children: [
-                 Expanded(
-                  child: Text(
-                    '2/$_stepsCount',
-                    style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                  ),
-                ),
-
-                skipBtn()
-
-              ],
-            ),
-          ),
 
           const SizedBox(height: 24,),
 
@@ -986,6 +436,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
 
+
+                  Container(
+                    margin: const EdgeInsets.only(top: 48),
+                    height: 30,
+                    child: Text(
+                      '1/$_stepsCount',
+                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                    ),
+                  ),
 
                   const SizedBox(height: 18,),
 
@@ -1194,44 +653,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           const SizedBox(height: 16,),
 
 
-          /// done & previous button
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: MASTERPIE_YELLOW_COLOR
+          /// next button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape:  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(BORDER_RADIUS),
                   ),
-                  onPressed: (){
-                    setState(() {
-                      _goToPage(5);
-                    });
-                  },
-                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                ),
+                  backgroundColor: DARK_PRIMARY_COLOR
               ),
-
-              const SizedBox(width: 8,),
-
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: (){
-                    _saveUserInputsInOnboard();
-                  },
-                  child: const Text(DONE_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                ),
-              ),
-            ],
-          )
+              onPressed: (){
+                _goToPage(1);
+              },
+              child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
+            ),
+          ),
         ],
       ),
     );
@@ -1239,62 +676,57 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
 
 
-
   void saveUserSourceToSupabase() async{
+    try{
 
-    final supabase = Supabase.instance.client;
+      final supabase = Supabase.instance.client;
 
-    if(_knowFrom == instagram || _knowFrom == reddit || _knowFrom == web_search || _knowFrom == friend_recom){
+      if(_knowFrom == instagram || _knowFrom == reddit || _knowFrom == web_search || _knowFrom == friend_recom){
 
-      final sourceResponse = await supabase
-          .from(USER_SOURCE_TABLE)
-          .select<List<dynamic>>()
-          .eq('id', 1);
-
-
-      if(sourceResponse.isNotEmpty){
-
-        final Map<String, dynamic> data = <String, dynamic>{};
-        data['id'] = 1;
+        final sourceResponse = await supabase
+            .from(USER_SOURCE_TABLE)
+            .select<List<dynamic>>()
+            .eq('id', 1);
 
 
-        if(_knowFrom == instagram){
-          final instaCount= sourceResponse[0]['instagram'].toString();
-          data['instagram'] = int.parse(instaCount) + 1;
-        }else if(_knowFrom == reddit){
-          final redditCount= sourceResponse[0]['reddit'].toString();
-          data['reddit'] = int.parse(redditCount) + 1;
-        }else if(_knowFrom == web_search){
-          final webCount= sourceResponse[0]['web'].toString();
-          data['web'] = int.parse(webCount) + 1;
-        }else if(_knowFrom == friend_recom){
-          final friendCount= sourceResponse[0]['friend'].toString();
-          data['friend'] = int.parse(friendCount) + 1;
+        if(sourceResponse.isNotEmpty){
+
+          final Map<String, dynamic> data = <String, dynamic>{};
+          data['id'] = 1;
+
+
+          if(_knowFrom == instagram){
+            final instaCount= sourceResponse[0]['instagram'].toString();
+            data['instagram'] = int.parse(instaCount) + 1;
+          }else if(_knowFrom == reddit){
+            final redditCount= sourceResponse[0]['reddit'].toString();
+            data['reddit'] = int.parse(redditCount) + 1;
+          }else if(_knowFrom == web_search){
+            final webCount= sourceResponse[0]['web'].toString();
+            data['web'] = int.parse(webCount) + 1;
+          }else if(_knowFrom == friend_recom){
+            final friendCount= sourceResponse[0]['friend'].toString();
+            data['friend'] = int.parse(friendCount) + 1;
+          }
+
+          await supabase.from(USER_SOURCE_TABLE).update(data).eq('id', 1);
+
         }
+      }else if(_otherController.text.isNotEmpty){
+        //other
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['other'] = _otherController.text;
 
-        await supabase.from(USER_SOURCE_TABLE).update(data).eq('id', 1);
+        await supabase.from(USER_SOURCE_TABLE).insert(data);
 
       }
-    }else if(_otherController.text.isNotEmpty){
-      //other
-      final Map<String, dynamic> data = <String, dynamic>{};
-      data['other'] = _otherController.text;
-
-      await supabase.from(USER_SOURCE_TABLE).insert(data);
-
+    }on PostgrestException catch (error) {
+    } catch (error) {
     }
-
-    // try{
-    //
-    // }on PostgrestException catch (error) {
-    // } catch (error) {
-    // }
   }
 
 
   void _saveUserInputsInOnboard() {
-
-    saveUserSourceToSupabase();
 
 
     String weightChangeWeekly= _weightSelectedUnit == LB_LABEL ? LB_1_LABEL : GRAM_250_LABEL;
@@ -1311,26 +743,26 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     }
 
     _updateProfileBloc.add(
-      UpdateProfileEvent.onUpdateProfile(
-        _profile.email,
-        _profile.firstName,
-        _profile.lastName,
-        _genderSelected,
-        _weightController.text,
-        _heightController.text,
-        _weightSelectedUnit,
-        _heightSelectedUnit,
-        _goalWeightController.text,
-        _ageController.text,
-        _activitySelected,
-        weightChangeWeekly,
-        _mainDishesType,
-        _sideDishesType,
-        diet,
-        _hateCategories,
-        _allergens,
-        _profile.dailyMacroGoal
-      )
+        UpdateProfileEvent.onUpdateProfile(
+            _profile.email,
+            _profile.firstName,
+            _profile.lastName,
+            _genderSelected,
+            _weightController.text,
+            _heightController.text,
+            _weightSelectedUnit,
+            _heightSelectedUnit,
+            _goalWeightController.text,
+            _ageController.text,
+            _activitySelected,
+            weightChangeWeekly,
+            ['Breakfast', 'Lunch', 'Dinner'],
+            ['Snack'],
+            diet,
+            [],
+            [],
+            _profile.dailyMacroGoal
+        )
     );
   }
 
@@ -1514,396 +946,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget _selectAllergens(){
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Container(
-              margin: const EdgeInsets.only(top: 48),
-              height: 30,
-              child: Row(
-                children: [
-                   Expanded(
-                    child: Text(
-                      '3/$_stepsCount',
-                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  skipBtn()
-
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24,),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-
-                  Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Center(child: Image.asset(ALLERGEN_PATH, width: 200, height: 200,))
-                  ),
-
-                  const SizedBox(height: 16,),
-
-
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      SELECT_ALLERGENS,
-                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-
-                  _buildAllergens(),
-
-                ],
-              ),
-            ),
-          ),
-
-
-          const SizedBox(height: 16,),
-
-          /// next & previous button
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: MASTERPIE_YELLOW_COLOR
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      _goToPage(1);
-                    });
-                  },
-                  child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                ),
-              ),
-
-              const SizedBox(width: 8,),
-
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: (){
-                    _goToPage(3);
-                  },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-
-  void _saveUserInputsInsideApp(){
-
-    //diet
-    String diet= CLASSIC_LABEL;
-    if(_diet.contains(CLASSIC_LABEL)){
-      diet= CLASSIC_LABEL;
-    }else if(_diet.contains(KETO_LABEL)){
-      diet= KETO_LABEL;
-    } else if(_diet.contains(VEGETERIAN_LABEL)){
-      diet= VEGETERIAN_LABEL;
-    }
-
-
-    //hates
-    List<String> hates= [];
-    _hateCategories.forEach((element) {
-      if(element.isNotEmpty){
-        hates.add(element);
-      }
-    });
-    _hateCategories= hates;
-
-
-    //main dish types
-    List<String> mainDishTypes= [];
-    _mainDishesType.forEach((element) {
-      if(element.isNotEmpty){
-        mainDishTypes.add(element);
-      }
-    });
-    _mainDishesType= mainDishTypes;
-
-
-    //sideDishTypes
-    List<String> sideDishTypes= [];
-    _sideDishesType.forEach((element) {
-      if(element.isNotEmpty){
-        sideDishTypes.add(element);
-      }
-    });
-    _sideDishesType= sideDishTypes;
-
-
-
-    //allergens
-    List<String> allergens= [];
-    _allergens.forEach((element) {
-      if(element.isNotEmpty){
-        allergens.add(element);
-      }
-    });
-    _allergens= allergens;
-
-
-    _updateProfileBloc.add(
-        UpdateProfileEvent.onUpdateProfile(
-          _profile.email,
-          _profile.firstName,
-          _profile.lastName,
-          _profile.gender,
-          _profile.weight,
-          _profile.height,
-          _profile.weightUnit,
-          _profile.heightUnit,
-          _profile.goalWeight,
-          _profile.age,
-          _profile.activityLevel,
-          _profile.weightChangeWeekly,
-          _mainDishesType,
-          _sideDishesType,
-          diet,
-          _hateCategories,
-          _allergens,
-          _profile.dailyMacroGoal
-        )
-    );
-  }
-
-  Widget _selectDiet(){
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Container(
-              margin: const EdgeInsets.only(top: 48),
-              height: 30,
-              child: Row(
-                children: [
-                   Expanded(
-                    child: Text(
-                      '4/$_stepsCount',
-                      style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                  skipBtn()
-
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24,),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: <Widget>[
-
-                  Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Center(child: Image.asset(FAVORITE_RECIPE_PATH, width: 200, height: 200,))
-                  ),
-
-                  const SizedBox(height: 16,),
-
-
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      SELECT_DIET_MSG,
-                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-
-                  _buildDiets(),
-
-
-                ],
-              ),
-            ),
-          ),
-
-
-          const SizedBox(height: 16,),
-
-          /// next & previous button
-          Row(
-            children: [
-              Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                        ),
-                        backgroundColor: MASTERPIE_YELLOW_COLOR
-                    ),
-                    onPressed: (){
-                      setState(() {
-                        _goToPage(2);
-                      });
-                    },
-                    child: const Text(PREVIOUS_LABEL, style: TextStyle( color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),),
-                  ),
-              ),
-
-              const SizedBox(width: 8,),
-
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                      ),
-                      backgroundColor: DARK_PRIMARY_COLOR
-                  ),
-                  onPressed: (){
-                    _goToPage(4);
-                  },
-                  child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-
-  Widget _buildHateCategories(){
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Wrap(
-        spacing: 24,
-        children:  _allCategoryOptions.map(
-              (item) {
-            return RawChip(
-              backgroundColor: _hateCategories.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
-              onSelected: (bool selected) {
-                setState(() {
-                  if(selected){
-                    if(!_hateCategories.contains(item)){
-                      List<String> list= [];
-                      list.addAll(_hateCategories);
-                      list.add(item);
-                      _hateCategories= list;
-                    }
-                  }else{
-                    _hateCategories.remove(item);
-                  }
-                });
-              },
-              deleteIconColor: LIGHT_GREY_COLOR,
-              onDeleted: (){
-                setState(() {
-                  List<String> list= [];
-                  _hateCategories.forEach((element) {
-                    if(element != item){
-                      list.add(element);
-                    }
-                  });
-                  _hateCategories= list;
-                });
-              },
-              label: Text(item, style: TextStyle(color: _hateCategories.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
-            );
-          },
-        ).toList(),
-      ),
-    );
-  }
-
-  Widget _buildAllergens(){
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Wrap(
-        spacing: 24,
-        children:  _allAllergenOptions.map(
-              (item) {
-            return RawChip(
-              backgroundColor: _allergens.contains(item) ? DARK_PRIMARY_COLOR : LIGHT_GREY_COLOR,
-              onSelected: (bool selected) {
-                setState(() {
-                  if(selected){
-                    if(!_allergens.contains(item)){
-                      List<String> list= [];
-                      list.addAll(_allergens);
-                      list.add(item);
-                      _allergens= list;
-                    }
-                  }else{
-                    _allergens.remove(item);
-                  }
-                });
-              },
-              deleteIconColor: LIGHT_GREY_COLOR,
-              onDeleted: (){
-                setState(() {
-                  List<String> list= [];
-                  _allergens.forEach((element) {
-                    if(element != item){
-                      list.add(element);
-                    }
-                  });
-                  _allergens= list;
-                });
-              },
-              label: Text(item, style: TextStyle(color: _allergens.contains(item) ? Colors.white : DARK_PRIMARY_COLOR),),
-            );
-          },
-        ).toList(),
-      ),
-    );
-  }
-
 
   Widget _buildDiets(){
     return Padding(
@@ -1925,436 +967,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     });
   }
 
-  Widget _buildMainDishesTypes(){
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: _mainDishesType.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: (){
-            _showAllRecipeTypesForMainDishes(index);
-          },
-          child: Container(
-            margin: const EdgeInsets.all(4.0),
-            decoration: BoxDecoration(
-              color: _mainDishesType[index].isEmpty ? LIGHT_GREY_COLOR : Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Colors.grey, // Border color
-                width: 1, // Border width
-              ),
-            ),
-            height: 70.0,
-            child: Center(
-              child: _mainDishesType[index].isEmpty ? Text(
-                'NUMBER ${index+1} MAIN DISH',
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ) : Text(
-                _mainDishesType[index],
-                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
-              ) ,
-            ),
-          ),
-        );
-      },
-    );
-  }
 
-  Widget _buildSideDishesTypes(){
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: _sideDishesType.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: (){
-            _showAllRecipeTypesForSideDishes(index);
-          },
-          child: Container(
-            margin: const EdgeInsets.all(4.0),
-            decoration: BoxDecoration(
-              color: _sideDishesType[index].isEmpty ? LIGHT_GREY_COLOR : Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: _sideDishesType[index].isEmpty ? Colors.grey : DARK_PRIMARY_COLOR, // Border color
-                width: 1,          // Border width
-              ),
-            ),
-            height: 70.0,
-            child: Center(
-              child: _sideDishesType[index].isEmpty ? Text(
-                'NUMBER ${index+1} SIDE DISH',
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ) : Text(
-                _sideDishesType[index],
-                style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
-              ) ,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
-  void _showAllRecipeTypesForSideDishes(int index) async{
-    int selectedIndex = await showDialog(
-      context: context,
-      builder: (context) {
-        return RecipeTypesPopup(
-          types: _fatSecretSideDishesTypes,
-        );
-      },
-    );
-    setState(() {
-      _sideDishesType[index] = _fatSecretSideDishesTypes[selectedIndex];
-    });
-  }
-
-
-  void _showAllRecipeTypesForMainDishes(int index) async{
-    int selectedIndex = await showDialog(
-      context: context,
-      builder: (context) {
-        return RecipeTypesPopup(
-          types: _fatSecretMainDishesTypes,
-        );
-      },
-    );
-
-    setState(() {
-      _mainDishesType[index] = _fatSecretMainDishesTypes[selectedIndex];
-    });
-  }
-
-  Widget _numberOfMealsDuringDays(){
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-
-          Visibility(
-            visible: widget.isOnBoard,
-            child: Container(
-              margin: const EdgeInsets.only(top: 48),
-              height: 30,
-              child: Row(
-                children: [
-                   Expanded(
-                      child: Text(
-                        '1/$_stepsCount',
-                        style: const TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      ),
-                  ),
-
-                skipBtn()
-
-                ],
-              ),
-            ),
-          ),
-
-
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-
-                  Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Center(child: Image.asset(FEQUENT_EATING_PATH, width: 200, height: 200,))
-                  ),
-
-                  const SizedBox(height: 32,),
-
-                  ///main dish
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      EATING_MAIN_DISH_FREQUENCY,
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (_isCustomNumberMainDishSelected)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                         TextField(
-                           controller: _mainDishTimesController,
-                           inputFormatters: <TextInputFormatter>[
-                             FilteringTextInputFormatter.digitsOnly
-                           ],
-                           keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                           decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            // Border color when the field is focused
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isCustomNumberMainDishSelected = false;
-                            });
-                          },
-                          child: const Text(
-                            SELECT_ANSWER,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              decoration: TextDecoration.underline,
-                              color: DARK_PRIMARY_COLOR,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _buildNumberOfMainDishChoiceChip(1),
-                            _buildNumberOfMainDishChoiceChip(2),
-                          ],
-                        ),
-                        // const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _buildNumberOfMainDishChoiceChip(3),
-                            _buildNumberOfMainDishChoiceChip(4),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isCustomNumberMainDishSelected = true;
-                            });
-                          },
-                          child: const Text(
-                            ENTER_MANUALLY,
-                            style: TextStyle(
-                              fontSize: 12,
-                              decoration: TextDecoration.underline,
-                              color: DARK_PRIMARY_COLOR,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-
-                  const SizedBox(height: 48,),
-
-                  ///side dish
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: LIGHT_GREY_COLOR,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: const Text(
-                      EATING_SIDE_DISH_FREQUENCY,
-                      style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (_isCustomNumberSideDishSelected)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                         TextField(
-                          controller: _sideDishTimesController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            // Border color when the field is focused
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
-                            ),
-                          ),
-                           inputFormatters: <TextInputFormatter>[
-                             FilteringTextInputFormatter.digitsOnly
-                           ],
-                           keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                        ),
-                        const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isCustomNumberSideDishSelected = false;
-                            });
-                          },
-                          child: const Text(
-                            SELECT_ANSWER,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              decoration: TextDecoration.underline,
-                              color: DARK_PRIMARY_COLOR,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _buildNumberOfSideDishChoiceChip(1),
-                            _buildNumberOfSideDishChoiceChip(2),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _buildNumberOfSideDishChoiceChip(3),
-                            _buildNumberOfSideDishChoiceChip(4),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isCustomNumberSideDishSelected = true;
-                            });
-                          },
-                          child: const Text(
-                            ENTER_MANUALLY,
-                            style: TextStyle(
-                              fontSize: 12,
-                              decoration: TextDecoration.underline,
-                              color: DARK_PRIMARY_COLOR,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ),
-
-
-          const SizedBox(height: 16,),
-
-          /// next button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape:  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
-                    ),
-                    backgroundColor: DARK_PRIMARY_COLOR
-                ),
-                onPressed: (){
-                  _goToPage(1);
-                },
-                child: const Text(NEXT_LABEL, style: TextStyle( color: Colors.white, fontWeight: FontWeight.bold),),
-
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNumberOfMainDishChoiceChip(int value) {
-    return ChoiceChip(
-      label: SizedBox(width: 70, child: Text(value.toString(), style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14), textAlign: TextAlign.center,),),
-      selected: _selectedMainDishChoice == value,
-      selectedColor: MASTERPIE_YELLOW_COLOR,
-      showCheckmark: false,
-      onSelected: (bool? selected) {
-        setState(() {
-
-          if(selected != null){
-            _selectedMainDishChoice = selected ? value : 3;
-          }else{
-            _selectedMainDishChoice= 3;
-          }
-
-          _mainDishTimesController.text= _selectedMainDishChoice.toString();
-          _updateMainDishType('');
-        });
-      },
-    );
-  }
-
-
-  Widget _buildNumberOfSideDishChoiceChip(int value) {
-    return ChoiceChip(
-      label: SizedBox(width: 70, child: Text(value.toString(), style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14), textAlign: TextAlign.center,),),
-      selected: _selectedSideDishChoice == value,
-      selectedColor: MASTERPIE_YELLOW_COLOR,
-      showCheckmark: false,
-      onSelected: (bool? selected) {
-        setState(() {
-          if(selected != null){
-            _selectedSideDishChoice = selected ? value : 2;
-          }else{
-            _selectedSideDishChoice= 3;
-          }
-
-          _sideDishTimesController.text= _selectedSideDishChoice.toString();
-          _updateSideDishType('');
-        });
-      },
-    );
-  }
-
-
-  void _goToMainScreen(){
+  void _goToMainScreen() async{
+    saveUserSourceToSupabase();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => MainScreen(isFromOnboard: widget.isOnBoard),
+        builder: (context) => const MainScreen(isFromOnboard: true),
       ),
     );
   }
 
- Widget skipBtn(){
-   return Expanded(
-     child: Visibility(
-       visible: false,
-       child: GestureDetector(
-         onTap: (){
-           _goToMainScreen();
-         },
-         child: const Text(
-           SKIP_LABEL,
-           style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-           textAlign: TextAlign.end,
-         ),
-       ),
-     ),
-   );
- }
 
 }
+
