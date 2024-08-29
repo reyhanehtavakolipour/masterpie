@@ -12,6 +12,7 @@ import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/get_pr
 import 'package:masterpie/feature/user/presentation/bloc/get_profile_bloc/state_event/get_profile_state_event.dart';
 import 'package:masterpie/feature/user/presentation/bloc/update_profile_bloc/state_evnt/update_profile_state_event.dart';
 import 'package:masterpie/main_screen.dart';
+import 'package:masterpie/util/core/constant/sqflite_constants.dart';
 import 'package:masterpie/util/design/color/app_colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../util/core/constant/api_constant.dart';
@@ -31,8 +32,8 @@ const String web_search= 'Web Search';
 const String other_label= 'Other';
 
 
-final dietOptions= ['$CLASSIC_LABEL (30% $PROTEIN_LABEL, 30% $CARB_LABEL, 40% $FAT_LABEL)',
-  '$KETO_LABEL (25% $PROTEIN_LABEL, 5% $CARB_LABEL, 70% $FAT_LABEL)', '$VEGETERIAN_LABEL  (30% $PROTEIN_LABEL, 30% $CARB_LABEL, 40% $FAT_LABEL)'];
+final dietOptions= ['$CLASSIC_LABEL (30% $PROTEIN_LABEL, 30% $FAT_LABEL, 40% $CARB)',
+  '$KETO_LABEL (25% $PROTEIN_LABEL, 5% $CARB_LABEL, 70% $FAT_LABEL)'];
 
 
 
