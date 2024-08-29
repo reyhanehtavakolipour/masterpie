@@ -308,7 +308,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     Future.delayed(Duration.zero,(){
                       _userLoggedIn= state.profile.id.isEmpty ? false : true;
                       _profile= state.profile;
-                      _setUserInfo(state.profile);
+                      _setUserInfo(state.profile, true);
 
                       if(isFromOnboard && !_isMacorGoalShownAfterOnBoard){
                         _isMacorGoalShownAfterOnBoard= true;
@@ -552,7 +552,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
 
 
-  void _setUserInfo(Profile profile) async {
+  void _setUserInfo(Profile profile, bool shouldSetMacroFromProfile) async {
     String selectedOption = await userHiveDataSource.getString(KEY_SELECTED_MEAL_PLAN_OPTION);
     setState(() {
 
@@ -574,10 +574,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       });
 
 
-      _macroGoal= [int.parse(profile.dailyMacroGoal[0]),
-        int.parse(profile.dailyMacroGoal[1]),
-        int.parse(profile.dailyMacroGoal[2]),
-        int.parse(profile.dailyMacroGoal[3]),];
+      if(shouldSetMacroFromProfile){
+        _macroGoal= [int.parse(profile.dailyMacroGoal[0]),
+          int.parse(profile.dailyMacroGoal[1]),
+          int.parse(profile.dailyMacroGoal[2]),
+          int.parse(profile.dailyMacroGoal[3]),];
+      }
 
 
       _foodsMacroListUi= FoodsMacroListUi(mainDishesFoods: _mainDishFoods, sideDishesFoods: _sideDishFoods,
@@ -695,7 +697,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         List<String> macro= result as List<String>;
         _macroGoal= [int.parse(macro[0]), int.parse(macro[1]), int.parse(macro[2]), int.parse(macro[3])];
       }
-      _setUserInfo(_profile);
+      _setUserInfo(_profile, false);
     });
   }
 

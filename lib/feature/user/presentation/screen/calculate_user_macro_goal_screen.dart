@@ -105,6 +105,8 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                       diet= VEGETERIAN_LABEL;
                     }
 
+                    print('fdhfds: ${goals}');
+
                     goals.add(diet);
                     Navigator.pop(context, goals);
                   },
