@@ -341,14 +341,15 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       if(WaitPopup.isPopupOpen){
                         WaitPopup.isPopupOpen= false;
                         Navigator.pop(context);
+
+                        final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal,);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
+                          ),
+                        );
                       }
-                      final wizardModel= state.wizardResponseModel.copyWith(macroGoal: _macroGoal,);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
-                        ),
-                      );
                     });
                   }else if(state is SuggestFoodsPortionErrorState){
                     _suggestPortionsBloc.add(const SuggestFoodsPortionEvent.onReset());
@@ -1071,7 +1072,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               WaitPopup.isPopupOpen= false;
               Navigator.pop(context);
             }
-            print('sdfsss: $e');
             showErrorToast(context, ERROR_TRY_AGAIN);
           }
 
