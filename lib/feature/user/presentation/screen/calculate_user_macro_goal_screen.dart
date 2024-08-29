@@ -693,6 +693,8 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async{
+                          // FocusScope.of(context).unfocus();
+                          SystemChannels.textInput.invokeMethod('TextInput.hide');
                           saveManualMacros();
                         },
                         style: ElevatedButton.styleFrom(
