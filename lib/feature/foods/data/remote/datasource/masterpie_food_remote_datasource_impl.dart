@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:masterpie/feature/foods/data/remote/model/food_json_converter.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+import 'package:masterpie/feature/foods/data/remote/model/meal_plan_remote_model.dart';
 import 'package:masterpie/feature/user/data/remote/model/profile_remote.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -1301,6 +1302,21 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
     } catch (error) {
       return Left(ExceptionFailure(error));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<MealPlanRemote>>> getMealPlans(String userId) async{
+    return Right([]);
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlan(MealPlanRemote mealPlanRemote, String userId) async{
+    return Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlans(List<MealPlanRemote> mealPlans, String userId) async{
+    return Right(Success());
   }
 
 }

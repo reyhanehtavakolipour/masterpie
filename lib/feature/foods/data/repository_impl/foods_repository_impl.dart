@@ -2,8 +2,10 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/data/remote/model/meal_plan_remote_model.dart';
 import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/domain/model/meal_plan_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
 import 'package:masterpie/feature/user/data/mapper/user_mapper.dart';
@@ -796,6 +798,66 @@ class FoodsRepositoryImpl extends FoodsRepository{
     await foodLocalDataSource.deleteLogFoodsTable();
     return const Right(Success());
   }
+
+  @override
+  Future<Either<Failure, List<MealPlan>>> getMealPlansFromLocal() async{
+    final mealPlansResponse = await foodLocalDataSource.getMealPlans();
+    if(mealPlansResponse.isRight()){
+      return Right(mapper.fromMealPlansLocal(mealPlansResponse.asRight()));
+    }
+    return Left(mealPlansResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, List<MealPlan>>> getMealPlansFromRemote() async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final mealPlansResponse = await masterPieFoodRemoteDataSource.getMealPlans(userId);
+    if(mealPlansResponse.isRight()){
+      return Right(mapper.fromMealPlansRemote(mealPlansResponse.asRight()));
+    }
+    return Left(mealPlansResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlanToLocal(MealPlan mealPlan) async{
+    final saveMealsResponse= await foodLocalDataSource.saveMealPlan(mapper.toMealPlanLocal(mealPlan));
+    if(saveMealsResponse.isRight()){
+      return Right(saveMealsResponse.asRight());
+    }
+    return Left(saveMealsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlanToRemote(MealPlan mealPlan) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    final saveMealsResponse= await masterPieFoodRemoteDataSource.saveMealPlan(mapper.toMealPlanRemote(mealPlan), userId);
+    if(saveMealsResponse.isRight()){
+      return Right(saveMealsResponse.asRight());
+    }
+    return Left(saveMealsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlansToLocal(List<MealPlan> mealPlans) async{
+    final saveMealsResponse= await foodLocalDataSource.saveMealPlans(mapper.toMealPlansLocal(mealPlans));
+    if(saveMealsResponse.isRight()){
+      return Right(saveMealsResponse.asRight());
+    }
+    return Left(saveMealsResponse.asLeft());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlansToRemote(List<MealPlan> mealPlans) async{
+    String userId = await userHiveDataSource.getString(KEY_USER_ID);
+    List<MealPlanRemote> myMealPlans= mapper.toMealPlansRemote(mealPlans);
+    final saveFoodsResponse = await masterPieFoodRemoteDataSource.saveMealPlans(myMealPlans, userId);
+    if(saveFoodsResponse.isRight()){
+      return const Right(Success());
+    }
+    return Left(saveFoodsResponse.asLeft());
+  }
+
+
 
 
 }

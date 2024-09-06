@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/auto_generate_bloc/auto_generate_foods_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/bloc/meal_plan_bloc/meal_plan_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masterpie/feature/foods/presentation/bloc/add_or_update_my_cook_book_bloc/add_or_update_my_cook_book_bloc.dart';
@@ -167,6 +168,7 @@ class App extends StatelessWidget {
           BlocProvider(create: (_) => GetRecipeBloc()),
           BlocProvider(create: (_) => GetFatSecretFoodsInfoBloc()),
           BlocProvider(create: (_) => AutoGenerateFoodsBloc()),
+          BlocProvider(create: (_) => MealPlanBloc()),
         ],
         child: const MaterialApp(
           debugShowCheckedModeBanner: false,

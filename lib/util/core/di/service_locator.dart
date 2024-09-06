@@ -7,6 +7,7 @@ import 'package:masterpie/feature/foods/domain/usecase/add_to_my_cook_book_useca
 import 'package:masterpie/feature/foods/domain/usecase/auto_generate_foods_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/get_fat_secret_foods_info_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/get_my_cook_book_foods_usecase.dart';
+import 'package:masterpie/feature/foods/domain/usecase/meal_plan_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/remove_from_my_cook_book_usecase.dart';
 import 'package:masterpie/feature/foods/domain/usecase/search_recipe_usecase.dart';
 import 'package:masterpie/feature/user/data/local/datasource/user_hive_keyvalue_datasource.dart';
@@ -137,6 +138,8 @@ Future<void> setUpServiceLocator() async{
   serviceLocator.registerFactory<GetFatSecretFoodsInfoUseCase>(() => GetFatSecretFoodsInfoUseCase());
 
   serviceLocator.registerFactory<AutoGenerateFoodsUseCase>(() => AutoGenerateFoodsUseCase());
+
+  serviceLocator.registerFactory<MealPlanUseCase>(() => MealPlanUseCase());
 
 
   //repositories

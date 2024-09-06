@@ -207,6 +207,15 @@ class DatabaseHelper {
             ' $FAT TEXT'
             ')');
 
+
+
+        await db.execute('CREATE TABLE IF NOT EXISTS $TABLE_MEAL_PLAN '
+            '($MEAL_PLAN_ID TEXT PRIMARY KEY,'
+            ' $FOODS_LOCAL TEXT,'
+            ' $TOTAL_MACRO_LOCAL TEXT,'
+            ' $NAME TEXT'
+            ')');
+
       },
     );
   }

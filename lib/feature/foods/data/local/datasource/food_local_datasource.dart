@@ -2,6 +2,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/data/local/model/meal_plan_local_model.dart';
 import '../../../../../util/core/response/failure.dart';
 import '../../../../../util/core/response/success.dart';
 import '../model/food_local_model.dart';
@@ -87,5 +88,13 @@ abstract class FoodLocalDataSource{
   Future<Either<Failure, Success>> deleteCookBookTable();
 
   Future<Either<Failure, Success>> deleteFavoriteFoodsTable();
+
+
+  Future<Either<Failure, Success>> saveMealPlan(MealPlanLocal mealPlanLocal);
+
+  Future<Either<Failure, Success>> saveMealPlans(List<MealPlanLocal> mealPlans);
+
+  Future<Either<Failure, List<MealPlanLocal>>> getMealPlans();
+
 
 }

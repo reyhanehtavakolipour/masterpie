@@ -82,72 +82,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
-  void calculateFoodsCombinationsMacros(){
-    for (int i = 0; i < _suggestedFoodsPortions.length; i++){
-      List<Food> foods = _suggestedFoodsPortions[i].foods;
-      List<double> macros = [];
-      double calorie = 0;
-      double protein = 0;
-      double carb = 0;
-      double fat = 0;
-
-      for (int j = 0; j < foods.length; j++){
-        Food food = foods[j];
-        double portion = foods[j].count;
-
-        if(food.foodType == FoodType.groceryProduct){
-          food.calorie.forEach((element) {
-            calorie = calorie + (portion * double.parse(element));
-          });
-
-          food.protein.forEach((element) {
-            protein = protein + (portion * double.parse(element));
-          });
-
-          food.carb.forEach((element) {
-            carb = carb + (portion * double.parse(element));
-          });
-
-          food.fat.forEach((element) {
-            fat = fat + (portion * double.parse(element));
-          });
-        }else{
-          if(food.ingredients.length == food.calorie.length){
-            for(int i = 0; i < food.servingIngredientsCount.length; i++){
-              calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-            }
-          }else{
-            food.calorie.forEach((element) {
-              calorie = calorie + (portion * double.parse(element));
-            });
-
-            food.protein.forEach((element) {
-              protein = protein + (portion * double.parse(element));
-            });
-
-            food.carb.forEach((element) {
-              carb = carb + (portion * double.parse(element));
-            });
-
-            food.fat.forEach((element) {
-              fat = fat + (portion * double.parse(element));
-            });
-          }
-        }
-      }
-
-      macros.add(calorie);
-      macros.add(protein);
-      macros.add(carb);
-      macros.add(fat);
-
-      _combinationMacros.add(macros);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     _suggestedFoodsPortions = widget.wizardResponse.foodsPortions;
@@ -208,12 +142,15 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     _buildFoodsPortions(),
 
 
+                    const SizedBox(height: 90,),
+
+
                   ],
                 ),
               ),
 
 
-              // savePlanBtn(),
+              savePlanBtn(),
 
               BlocConsumer<GetLoggedFoodsBloc, GetLoggedFoodsState>(
                   builder: (mcontext, state) {
@@ -330,6 +267,72 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     );
   }
 
+
+  void calculateFoodsCombinationsMacros(){
+    for (int i = 0; i < _suggestedFoodsPortions.length; i++){
+      List<Food> foods = _suggestedFoodsPortions[i].foods;
+      List<double> macros = [];
+      double calorie = 0;
+      double protein = 0;
+      double carb = 0;
+      double fat = 0;
+
+      for (int j = 0; j < foods.length; j++){
+        Food food = foods[j];
+        double portion = foods[j].count;
+
+        if(food.foodType == FoodType.groceryProduct){
+          food.calorie.forEach((element) {
+            calorie = calorie + (portion * double.parse(element));
+          });
+
+          food.protein.forEach((element) {
+            protein = protein + (portion * double.parse(element));
+          });
+
+          food.carb.forEach((element) {
+            carb = carb + (portion * double.parse(element));
+          });
+
+          food.fat.forEach((element) {
+            fat = fat + (portion * double.parse(element));
+          });
+        }else{
+          if(food.ingredients.length == food.calorie.length){
+            for(int i = 0; i < food.servingIngredientsCount.length; i++){
+              calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+              fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            }
+          }else{
+            food.calorie.forEach((element) {
+              calorie = calorie + (portion * double.parse(element));
+            });
+
+            food.protein.forEach((element) {
+              protein = protein + (portion * double.parse(element));
+            });
+
+            food.carb.forEach((element) {
+              carb = carb + (portion * double.parse(element));
+            });
+
+            food.fat.forEach((element) {
+              fat = fat + (portion * double.parse(element));
+            });
+          }
+        }
+      }
+
+      macros.add(calorie);
+      macros.add(protein);
+      macros.add(carb);
+      macros.add(fat);
+
+      _combinationMacros.add(macros);
+    }
+  }
 
 
   void _cleanData(){
@@ -1152,11 +1155,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
                 ),
-                backgroundColor: MASTERPIE_YELLOW_COLOR,
+                backgroundColor: DARK_PRIMARY_COLOR,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
             ),
             child: const Text(SAVE_MEAL_PLAN,
-              style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
             )
         ),
       ),

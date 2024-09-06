@@ -9,6 +9,7 @@ import '../../../../util/core/response/success.dart';
 import '../../../user/domain/model/profile_model.dart';
 import '../model/fat_secret_foods_info_model.dart';
 import '../model/food_model.dart';
+import '../model/meal_plan_model.dart';
 
 
 
@@ -166,6 +167,18 @@ abstract class FoodsRepository{
 
   Future<Either<Failure, Success>> deleteFavoriteFoodsTableInLocal();
 
+
+  Future<Either<Failure, Success>> saveMealPlanToLocal(MealPlan mealPlan);
+
+  Future<Either<Failure, Success>> saveMealPlanToRemote(MealPlan mealPlan);
+
+  Future<Either<Failure, Success>> saveMealPlansToRemote(List<MealPlan> mealPlans);
+
+  Future<Either<Failure, Success>> saveMealPlansToLocal(List<MealPlan> mealPlans);
+
+  Future<Either<Failure, List<MealPlan>>> getMealPlansFromLocal();
+
+  Future<Either<Failure, List<MealPlan>>> getMealPlansFromRemote();
 
 
 }

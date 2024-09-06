@@ -3,6 +3,7 @@
 
 
 import 'package:dartz/dartz.dart';
+import 'package:masterpie/feature/foods/data/local/model/meal_plan_local_model.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../../../util/core/constant/sqflite_constants.dart';
 import '../../../../../util/core/di/service_locator.dart';
@@ -636,6 +637,21 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
     return Left(ExceptionFailure(e));
     }
     return const Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, List<MealPlanLocal>>> getMealPlans() async{
+    return Right([]);
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlan(MealPlanLocal mealPlanLocal) async{
+    return Right(Success());
+  }
+
+  @override
+  Future<Either<Failure, Success>> saveMealPlans(List<MealPlanLocal> mealPlans) async{
+    return Right(Success());
   }
 
 

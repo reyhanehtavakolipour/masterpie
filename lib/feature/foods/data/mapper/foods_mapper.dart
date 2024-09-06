@@ -7,13 +7,16 @@ import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart'
 
 import '../../domain/model/food_model.dart';
 import '../../domain/model/generic_food_model.dart';
+import '../../domain/model/meal_plan_model.dart';
 import '../../domain/model/suggested_foods_portion_model.dart';
 import '../local/model/food_local_model.dart';
 import '../local/model/international_meal_local_model.dart';
 import '../local/model/logged_foods_local_model.dart';
+import '../local/model/meal_plan_local_model.dart';
 import '../local/model/my_food_local_model.dart';
 import '../remote/model/food_remote_model.dart';
 import '../remote/model/generic_food_remote_model.dart';
+import '../remote/model/meal_plan_remote_model.dart';
 import '../remote/model/suggested_foods_portion_remote_model.dart';
 
 abstract class FoodsMapper{
@@ -86,5 +89,22 @@ abstract class FoodsMapper{
   List<LoggedFoodsLocal> toLoggedFoodsLocal(List<Food> foods, String date, String myId);
 
   FatSecretFoodsInfo fromFatSecretFoodsInfoRemote(FatSecretFoodsInfoRemote fatSecretFoodsInfoRemote);
+
+
+
+  List<FoodLocal> toFoodsLocal(List<Food> foods);
+
+  List<MealPlan> fromMealPlansLocal(List<MealPlanLocal> mealPlansLocal);
+
+  List<MealPlan> fromMealPlansRemote(List<MealPlanRemote> mealPlansRemote);
+
+  List<MealPlanRemote> toMealPlansRemote(List<MealPlan> mealPlans);
+
+  List<MealPlanLocal> toMealPlansLocal(List<MealPlan> mealPlans);
+
+  MealPlanLocal toMealPlanLocal(MealPlan mealPlan);
+
+  MealPlanRemote toMealPlanRemote(MealPlan mealPlan);
+
 
 }

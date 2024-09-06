@@ -9,6 +9,7 @@ import '../../../../../util/core/response/success.dart';
 import '../../../../user/data/remote/model/profile_remote.dart';
 import '../model/food_remote_model.dart';
 import '../model/generic_food_remote_model.dart';
+import '../model/meal_plan_remote_model.dart';
 import '../model/suggested_food_remote_model.dart';
 import '../model/suggested_foods_portion_remote_model.dart';
 
@@ -61,5 +62,10 @@ abstract class MasterPieFoodRemoteDataSource{
   Future<Either<Failure, SuggestedFoodRemote>> getUserSuggestedFoods(String userId);
 
 
+  Future<Either<Failure, Success>> saveMealPlan(MealPlanRemote mealPlanRemote, String userId);
+
+  Future<Either<Failure, Success>> saveMealPlans(List<MealPlanRemote> mealPlans, String userId);
+
+  Future<Either<Failure, List<MealPlanRemote>>> getMealPlans(String userId);
 
 }

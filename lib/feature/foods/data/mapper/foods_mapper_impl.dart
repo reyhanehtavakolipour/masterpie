@@ -1,11 +1,14 @@
 
 
 
+import 'package:masterpie/feature/foods/data/local/model/meal_plan_local_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/fat_secret_foods_info_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/generic_food_remote_model.dart';
+import 'package:masterpie/feature/foods/data/remote/model/meal_plan_remote_model.dart';
 import 'package:masterpie/feature/foods/data/remote/model/wizard_response_remote_model.dart';
 import 'package:masterpie/feature/foods/domain/model/fat_secret_foods_info_model.dart';
 import 'package:masterpie/feature/foods/domain/model/generic_food_model.dart';
+import 'package:masterpie/feature/foods/domain/model/meal_plan_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
 import 'package:masterpie/util/core/helper/request_api.dart';
 
@@ -143,6 +146,7 @@ class FoodsMapperImpl extends FoodsMapper{
             carb: food.carb,
             fat: food.fat,
             diets: [],
+            count: food.count,
             allergies: [],
             servingAmount: 0,
           unit: '', servingAmounts: [],
@@ -200,6 +204,7 @@ class FoodsMapperImpl extends FoodsMapper{
         protein: food.protein,
         carb: food.carb,
         fat: food.fat,
+        count: food.count,
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
@@ -627,6 +632,7 @@ class FoodsMapperImpl extends FoodsMapper{
         protein: food.protein,
         carb: food.carb,
         fat: food.fat,
+        count: food.count,
         diets: food.diets,
         allergies: food.allergies,
         servingAmount: food.servingAmount,
@@ -891,6 +897,99 @@ class FoodsMapperImpl extends FoodsMapper{
       unit: genericRemote.unit,
         createdFromFatSecretRecipes: genericRemote.createdFromFatSecretRecipes
     )
+    ).toList();
+  }
+
+  @override
+  List<MealPlan> fromMealPlansLocal(List<MealPlanLocal> mealPlansLocal) {
+    // TODO: implement fromMealPlansLocal
+    throw UnimplementedError();
+  }
+
+  @override
+  List<MealPlan> fromMealPlansRemote(List<MealPlanRemote> mealPlansRemote) {
+    return mealPlansRemote.map((mealPlan) =>
+        MealPlan(
+            mealPlanId: mealPlan.mealPlanId,
+            foods: fromFoodsRemote(mealPlan.foods),
+            name: mealPlan.name,
+            totalMacro: mealPlan.totalMacro,
+        )
+    ).toList();
+  }
+
+  @override
+  MealPlanLocal toMealPlanLocal(MealPlan mealPlan) {
+    return MealPlanLocal(
+      mealPlanId: mealPlan.mealPlanId,
+      foods: toFoodsLocal(mealPlan.foods),
+      name: mealPlan.name,
+      totalMacro: mealPlan.totalMacro,
+    );
+  }
+
+  @override
+  MealPlanRemote toMealPlanRemote(MealPlan mealPlan) {
+    return MealPlanRemote(
+      mealPlanId: mealPlan.mealPlanId,
+      foods: toFoodsRemote(mealPlan.foods),
+      name: mealPlan.name,
+      totalMacro: mealPlan.totalMacro,
+    );
+  }
+
+  @override
+  List<MealPlanLocal> toMealPlansLocal(List<MealPlan> mealPlans) {
+    return mealPlans.map((mealPlan) =>
+        MealPlanLocal(
+          mealPlanId: mealPlan.mealPlanId,
+          foods: toFoodsLocal(mealPlan.foods),
+          name: mealPlan.name,
+          totalMacro: mealPlan.totalMacro,
+        )
+    ).toList();
+  }
+
+  @override
+  List<MealPlanRemote> toMealPlansRemote(List<MealPlan> mealPlans) {
+    return mealPlans.map((mealPlan) =>
+        MealPlanRemote(
+          mealPlanId: mealPlan.mealPlanId,
+          foods: toFoodsRemote(mealPlan.foods),
+          name: mealPlan.name,
+          totalMacro: mealPlan.totalMacro,
+        )
+    ).toList();
+  }
+
+  @override
+  List<FoodLocal> toFoodsLocal(List<Food> foods) {
+    return foods.map((food) =>
+        FoodLocal(
+            foodTypeLocal: food.foodType == FoodType.groceryProduct ? FoodTypeLocal.groceryProduct : FoodTypeLocal.meal,
+            name: food.name,
+            barcode: food.barcode,
+            brandName: food.brandName,
+            description: food.description,
+            nationality: food.nationality,
+            image: food.image,
+            ingredients: food.ingredients,
+            servingIngredientsCount: food.servingIngredientsCount,
+            units: food.units,
+            recipe: food.recipe,
+            calorie: food.calorie,
+            protein: food.protein,
+            carb: food.carb,
+            fat: food.fat,
+            diets: food.diets,
+            allergies: food.allergies,
+            servingAmount: food.servingAmount,
+            unit: food.unit,
+            count: food.count,
+            servingAmounts: food.servingAmounts,
+            createdFromFatSecretRecipes: food.createdFromFatSecretRecipes,
+            foodId: food.id
+        )
     ).toList();
   }
 
