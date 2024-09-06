@@ -214,7 +214,8 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
         'goalWeight': profile.goalWeight,
         'weightChangeWeekly': weightChangeWeekly,
         'weightUnit': profile.weightUnit,
-        'heightUnit': profile.heightUnit
+        'heightUnit': profile.heightUnit,
+        'diet' : profile.diet
       };
 
 

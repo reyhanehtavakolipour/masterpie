@@ -91,6 +91,36 @@ extension StringExtension on String {
 }
 
 
+double parseMixedNumber(String input) {
+  // Split by space to handle mixed number format like "1 1/4"
+  List<String> parts = input.trim().split(' ');
+
+  // Case 1: Input is an integer or double directly
+  if (parts.length == 1) {
+    return double.tryParse(parts[0]) ?? 0.0;
+  }
+
+  // Case 2: Input is in mixed number format (integer + fraction)
+  if (parts.length == 2) {
+    double integerPart = double.tryParse(parts[0]) ?? 0.0;
+
+    // Check if fraction is valid
+    List<String> fractionParts = parts[1].split('/');
+    if (fractionParts.length == 2) {
+      double numerator = double.tryParse(fractionParts[0]) ?? 0.0;
+      double denominator = double.tryParse(fractionParts[1]) ?? 1.0;
+      double fractionValue = numerator / denominator;
+
+      return integerPart + fractionValue;
+    }
+  }
+
+  // Invalid format, return 0.0
+  return 0.0;
+}
+
+
+
 Future<String?> getDeviceUUID() async {
   var deviceInfo = DeviceInfoPlugin();
   if (Platform.isAndroid) {

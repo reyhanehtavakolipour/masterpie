@@ -26,6 +26,9 @@ import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
 
 
+const double groceryAmountWidgetWidth= 80.0;
+const double mealIngredientAmountWidgetWidth= 60.0;
+
 
 class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
@@ -57,6 +60,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
   bool _messageExpanded= false;
 
+  List<List<Food>> _orderedFoods = [];
+
+  List<List<List<TextEditingController>>> _amountControllers = [];
+
 
   @override
   void initState() {
@@ -69,6 +76,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
 
+    _cleanData();
   }
 
 
@@ -277,27 +285,35 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         onTap: (){
           showInfoDialog(context, NEW_FOOD_ADDED_IN_WIZRD_MSG);
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
-          margin: const EdgeInsets.only(right: 8),
-          decoration: BoxDecoration(
-            color: Colors.lightGreen,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: const Row(
-            children: [
-              Text(
-                NEW_LABEL,
-                style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              width: 150,
+              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
+              margin: const EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                color: LIGHT_GREY_COLOR,
+                borderRadius: BorderRadius.circular(7.0),
               ),
-              SizedBox(width: 1.0),
-              Icon(
-                Icons.help_outline,
-                color: DARK_PRIMARY_COLOR,
-                size: 10,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    NEW_LABEL,
+                    style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(width: 1.0),
+                  Icon(
+                    Icons.help_outline,
+                    color: DARK_PRIMARY_COLOR,
+                    size: 10,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -305,31 +321,208 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
 
-  Widget _buildFoodsPortions(){
+  void _cleanData(){
 
     List<List<Food>> newFoods = [];
+    List<List<List<TextEditingController>>> amountControllers = [];
 
+
+    //breakfast
     List<Food> foods = _suggestedFoodsPortions[_currentPage].foods;
-
+    List<List<TextEditingController>> breakfastAmountControllers = [];
     List<Food> breakfastFoods = foods.where((food) => food.dishType == "Breakfast").toList();
-    if (breakfastFoods.isNotEmpty) newFoods.add(breakfastFoods);
+    if (breakfastFoods.isNotEmpty){
+      newFoods.add(breakfastFoods);
 
+      breakfastFoods.forEach((food) {
+        List<TextEditingController> dishAmountControllers = [];
+
+        if(food.foodType == FoodType.groceryProduct){
+
+          TextEditingController controller = TextEditingController(
+              text: convertDoubleToFraction(
+                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+
+          controller.addListener(() {
+            _recalculateTotalMacros(amountControllers);
+          });
+
+          dishAmountControllers.add(controller);
+
+        }else{
+          for (int i = 0; i < food.ingredients.length; i++) {
+            TextEditingController controller = TextEditingController(
+                text: convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i])));
+
+            controller.addListener(() {
+              _recalculateTotalMacros(amountControllers);
+            });
+
+            dishAmountControllers.add(controller);
+          }
+        }
+
+        breakfastAmountControllers.add(dishAmountControllers);
+
+      });
+
+      amountControllers.add(breakfastAmountControllers);
+    }
+
+
+
+    //lunch
     List<Food> lunchFoods = foods.where((food) => food.dishType == "Lunch").toList();
-    if (lunchFoods.isNotEmpty) newFoods.add(lunchFoods);
+    List<List<TextEditingController>> lunchAmountControllers = [];
+    if (lunchFoods.isNotEmpty){
+      newFoods.add(lunchFoods);
 
+      lunchFoods.forEach((food) {
+        List<TextEditingController> dishAmountControllers = [];
+
+        if(food.foodType == FoodType.groceryProduct){
+
+          TextEditingController controller = TextEditingController(
+              text: convertDoubleToFraction(
+                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+
+          controller.addListener(() {
+            _recalculateTotalMacros(amountControllers);
+          });
+
+          dishAmountControllers.add(controller);
+
+        }else{
+          for (int i = 0; i < food.ingredients.length; i++) {
+            TextEditingController controller = TextEditingController(
+                text: convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i])));
+
+            controller.addListener(() {
+              _recalculateTotalMacros(amountControllers);
+            });
+
+            dishAmountControllers.add(controller);
+          }
+        }
+
+        lunchAmountControllers.add(dishAmountControllers);
+
+      });
+
+      amountControllers.add(lunchAmountControllers);
+
+    }
+
+
+
+    //dinner
     List<Food> dinnerFoods = foods.where((food) => food.dishType == "Dinner").toList();
-    if (dinnerFoods.isNotEmpty) newFoods.add(dinnerFoods);
+    List<List<TextEditingController>> dinnerAmountControllers = [];
+    if (dinnerFoods.isNotEmpty){
+      newFoods.add(dinnerFoods);
 
+      dinnerFoods.forEach((food) {
+        List<TextEditingController> dishAmountControllers = [];
+
+        if(food.foodType == FoodType.groceryProduct){
+
+          TextEditingController controller = TextEditingController(
+              text: convertDoubleToFraction(
+                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+
+          controller.addListener(() {
+            _recalculateTotalMacros(amountControllers);
+          });
+
+          dishAmountControllers.add(controller);
+
+        }else{
+          for (int i = 0; i < food.ingredients.length; i++) {
+            TextEditingController controller = TextEditingController(
+                text: convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i])));
+
+            controller.addListener(() {
+              _recalculateTotalMacros(amountControllers);
+            });
+
+            dishAmountControllers.add(controller);
+          }
+        }
+
+        dinnerAmountControllers.add(dishAmountControllers);
+
+      });
+
+      amountControllers.add(dinnerAmountControllers);
+
+    }
+
+
+
+    //snack
     List<Food> snackFoods = foods.where((food) => food.dishType == "Snack").toList();
-    if (snackFoods.isNotEmpty) newFoods.add(snackFoods);
+    List<List<TextEditingController>> snackAmountControllers = [];
+    if (snackFoods.isNotEmpty){
+      newFoods.add(snackFoods);
+
+      snackFoods.forEach((food) {
+        List<TextEditingController> dishAmountControllers = [];
+
+        if(food.foodType == FoodType.groceryProduct){
+
+          TextEditingController controller = TextEditingController(
+              text: convertDoubleToFraction(
+                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+
+          controller.addListener(() {
+            _recalculateTotalMacros(amountControllers);
+          });
+
+          dishAmountControllers.add(controller);
+
+        }else{
+          for (int i = 0; i < food.ingredients.length; i++) {
+            TextEditingController controller = TextEditingController(
+                text: convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i])));
+
+            controller.addListener(() {
+              _recalculateTotalMacros(amountControllers);
+            });
+
+            dishAmountControllers.add(controller);
+          }
+        }
+
+        snackAmountControllers.add(dishAmountControllers);
+
+      });
+
+      amountControllers.add(snackAmountControllers);
+    }
 
 
+    _orderedFoods= newFoods;
+    _amountControllers= amountControllers;
+  }
+
+
+
+
+  void _recalculateTotalMacros(List<List<List<TextEditingController>>> amountsController){
+    debouncer.run(() {
+      setState(() {
+        _amountControllers= amountsController;
+      });
+    });
+  }
+
+  Widget _buildFoodsPortions(){
 
     return ListView.builder(
       shrinkWrap: true, // Ensure the list takes up only the necessary space
       physics: const NeverScrollableScrollPhysics(), // Disable parent scrolling
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      itemCount: newFoods.length,
+      itemCount: _orderedFoods.length,
       itemBuilder: (context, index) {
 
         return InkWell(
@@ -357,7 +550,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                     ),
                   ),
                   child: Text(
-                    newFoods[index][0].dishType,
+                    _orderedFoods[index][0].dishType,
                     style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
                   ),
                 ),
@@ -371,11 +564,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
-                    itemCount: newFoods[index].length,
+                    itemCount: _orderedFoods[index].length,
                     itemBuilder: (context, innerIndex) {
 
 
-                      Food food = newFoods[index][innerIndex];
+                      Food food = _orderedFoods[index][innerIndex];
 
                       String macroDetails = '';
                       double calorie = 0, protein = 0, carb = 0, fat = 0;
@@ -404,35 +597,14 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                       macroDetails = '${calorie.toInt()}cal, ${protein.toInt()}g protein, ${carb.toInt()}g carb, ${fat.toInt()}g fat';
 
-                      String ingredients = '';
-                      if (food.foodType == FoodType.meal) {
-                        for (int i = 0; i < food.ingredients.length; i++) {
-                          String ingredient= '';
-                          if(double.parse(food.calorie[i]) < 6){
-                            ingredient= '- ${food.ingredients[i]},\n';
-                          }else{
-                            ingredient = '- ${convertDoubleToFraction(food.count * double.parse(food.servingAmounts[i]))} '
-                                '${food.units[i]} ${food.ingredients[i]},\n';
-                          }
-                          ingredients += ingredient;
-                        }
-                      }
-
-
-
-                      String groceryName = '';
-                      if(food.foodType == FoodType.groceryProduct){
-                        if(double.parse(food.calorie[0]) < 6){
-                          groceryName= food.name;
-                        }else{
-                          groceryName= '${convertDoubleToFraction(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]))}'
-                              ' ${getServingUnit(food.units.isEmpty ? '' : food.units[0])} ${food.name}';
-                        }
-                      }
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+                          const SizedBox(height: 8),
+
+                          _newFoodInfo(food),
 
                           const SizedBox(height: 8),
 
@@ -448,15 +620,54 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
                                   ),
                                 ),
-                              if (food.foodType == FoodType.groceryProduct)
+                              if (food.foodType == FoodType.groceryProduct && double.parse(food.calorie[0]) < 6)
                                 Flexible(
                                   child: Text(
-                                    groceryName,
+                                    food.name,
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
                                   ),
                                 ),
-                              const SizedBox(width: 2),
-                              _newFoodInfo(food)
+                              if (food.foodType == FoodType.groceryProduct && double.parse(food.calorie[0]) >= 6)
+                                SizedBox(
+                                  width: 300,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: groceryAmountWidgetWidth,
+                                        height: 35,
+                                        child: TextField(
+                                          controller: _amountControllers[index][innerIndex][0],
+                                          maxLines: 1,
+                                          textInputAction: TextInputAction.done,
+                                          textAlign: TextAlign.center,
+                                          textAlignVertical: TextAlignVertical.top,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                            ),
+                                            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                          ),
+                                          style: const TextStyle(color: DARK_PRIMARY_COLOR),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Flexible(
+                                        child: Text(
+                                          '${getServingUnit(food.units.isEmpty ? '' : food.units[0])} ${food.name}',
+                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -466,10 +677,75 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           ),
                           const SizedBox(height: 8),
                           if (food.foodType == FoodType.meal)
-                            Text(
-                              ingredients,
-                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
-                            ),
+                            ListView.builder(
+                                shrinkWrap: true,
+                                physics: const ClampingScrollPhysics(),
+                                itemCount: _orderedFoods[index][innerIndex].ingredients.length,
+                                itemBuilder: (context, innerInnerIndex){
+
+                                  String ingredient = '';
+                                  if (food.foodType == FoodType.meal) {
+                                    if(double.parse(food.calorie[innerInnerIndex]) < 6){
+                                      ingredient= '${food.ingredients[innerInnerIndex]},';
+                                    }else{
+                                      ingredient = '${food.units[innerInnerIndex]} ${food.ingredients[innerInnerIndex]},';
+                                    }
+                                  }
+
+
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        if(double.parse(food.calorie[innerInnerIndex]) >= 6)
+                                        SizedBox(
+                                          width: mealIngredientAmountWidgetWidth,
+                                          height: 30,
+                                          child: TextField(
+                                            controller: _amountControllers[index][innerIndex][innerInnerIndex],
+                                            maxLines: 1,
+                                            textInputAction: TextInputAction.done,
+                                            textAlign: TextAlign.center,
+                                            textAlignVertical: TextAlignVertical.top,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(color: DARK_PRIMARY_COLOR),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(color: DARK_PRIMARY_COLOR, width: 2),
+                                              ),
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                            ),
+                                            style: const TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 11),
+                                          ),
+                                        ),
+
+
+                                        if(double.parse(food.calorie[innerInnerIndex]) >= 6)
+                                          const SizedBox(width: 8,),
+
+                                        if(double.parse(food.calorie[innerInnerIndex]) < 6)
+                                          const SizedBox(width: 8+ mealIngredientAmountWidgetWidth,),
+
+                                          Flexible(
+                                          child: Text(
+                                            ingredient,
+                                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: MASTERPIE_ORANGE_COLOR),
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                  );
+                                }
+                            )
+
+
                           // const SizedBox(height: 8),
                         ],
                       );
@@ -490,7 +766,73 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
   Widget _totalMacroInfo(){
-    return    Container(
+
+
+    //todo
+    double totalCalorie= 0;
+    double totalProtein= 0;
+    double totalCarb= 0;
+    double totalFat= 0;
+
+
+
+    for(int i = 0; i < _orderedFoods.length; i++){
+      for(int j = 0; j < _orderedFoods[i].length; j++){
+        Food food= _orderedFoods[i][j];
+        print('fdgoid0: ${food}');
+
+        if(food.foodType == FoodType.groceryProduct){
+          final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][0].text.isEmpty ? '0.0' : _amountControllers[i][j][0].text);
+          final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]);
+          final actualCalorie= double.parse(food.calorie[0]);
+          final actualProtein= double.parse(food.protein[0]);
+          final actualCarb= double.parse(food.carb[0]);
+          final actualFat= double.parse(food.fat[0]);
+
+          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount;
+          final newProtein= actualProtein * enteredServingAmount / actualServingAmount;
+          final newCarb= actualCarb * enteredServingAmount / actualServingAmount;
+          final newFat= actualFat * enteredServingAmount / actualServingAmount;
+
+          print('fdgoid1: ${food.name} ,, ${actualCalorie} ,, ${enteredServingAmount} ,, ${actualServingAmount}');
+
+          totalCalorie= totalCalorie + newCalorie;
+          totalProtein= totalProtein+ newProtein;
+          totalCarb= totalCarb + newCarb;
+          totalFat= totalFat + newFat;
+
+        }else{
+
+
+          for(int k = 0; k < food.ingredients.length; k++){
+
+            final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][k].text.isEmpty ? '0.0' : _amountControllers[i][j][k].text);
+            final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[k]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[k]);
+            final actualCalorie= double.parse(food.calorie[k]);
+            final actualProtein= double.parse(food.protein[k]);
+            final actualCarb= double.parse(food.carb[k]);
+            final actualFat= double.parse(food.fat[k]);
+
+
+            final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount;
+            final newProtein= actualProtein * enteredServingAmount / actualServingAmount;
+            final newCarb= actualCarb * enteredServingAmount / actualServingAmount;
+            final newFat= actualFat * enteredServingAmount / actualServingAmount;
+
+            totalCalorie= totalCalorie + newCalorie;
+            totalProtein= totalProtein+ newProtein;
+            totalCarb= totalCarb + newCarb;
+            totalFat= totalFat + newFat;
+
+          }
+        }
+
+      }
+    }
+
+
+
+    return   Container(
       padding: const EdgeInsets.all(24),
       color: DARK_PRIMARY_COLOR,
       child: Center(
@@ -504,7 +846,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  widget.wizardResponse.foodsPortions[_currentPage].totalMacro[0].toInt().toString(),
+                  totalCalorie.toInt().toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold, color: MASTERPIE_YELLOW_COLOR, fontSize: 36),
                 ),
                 Text(
@@ -546,7 +888,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                         const SizedBox(height: 8,),
 
                         Text(
-                          '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[1].toInt()}/${widget.wizardResponse.macroGoal[1]} g',
+                          '${totalProtein.toInt()}/${widget.wizardResponse.macroGoal[1]} g',
                           textAlign: TextAlign.center,
                           style:
                           const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
@@ -586,7 +928,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           const SizedBox(height: 8,),
 
                           Text(
-                            '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[2].toInt()}/${widget.wizardResponse.macroGoal[2]} g',
+                            '${totalCarb.toInt()}/${widget.wizardResponse.macroGoal[2]} g',
                             textAlign: TextAlign.center,
                             style:
                             const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
@@ -629,7 +971,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           const SizedBox(height: 8,),
 
                           Text(
-                            '${widget.wizardResponse.foodsPortions[_currentPage].totalMacro[3].toInt()}/${widget.wizardResponse.macroGoal[3]} g',
+                            '${totalFat.toInt()}/${widget.wizardResponse.macroGoal[3]} g',
                             textAlign: TextAlign.center,
                             style:
                             const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
