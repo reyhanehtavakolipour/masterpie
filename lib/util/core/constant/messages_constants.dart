@@ -125,6 +125,7 @@ const DELETE_CONFIRMATION_QUESTION = 'Are you sure you want to delete this item?
 const MEAL_LABEL = 'Meal';
 const YES_LABEL = 'Yes';
 const NO_LABEL = 'No';
+const RESET_LABEL = 'RESET';
 const RECIPE_LABEL = 'Instruction';
 const SERVINGS_CONSUMED = 'Servings Consumed';
 const INTERNATIONAL_MEALS_LABEL= 'International Meals';
@@ -212,7 +213,7 @@ const INVALID_PASSWORD_ERROR = 'password must be at least 6 characters long.'
     '\n-Contains at least one special character.\n-Contains both uppercase and lowercase letters.';
 const PROFILE_LABEL = 'Profile';
 const RESET_PASS_LABEL = 'Reset Password';
-const RESET_LABEL = 'Reset';
+const SET_LABEL = 'Set';
 const RESET_MACRO_LABEL = 'Reset Macro Goals';
 const ENTER_MACRO_MANUAL_MESSAGE = 'You need to input exactly 3 of the calories, protein, carbs, and fat. The remaining one will be calculated based on the first three.';
 const MACRO_FORMUAL = '(protein(g) x 4) + (carb(g) x 4) + (fat(g) x 9) = calories';

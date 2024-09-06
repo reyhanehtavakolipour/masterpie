@@ -172,6 +172,18 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
             ),
             actions: [
+              GestureDetector(
+                onTap: (){
+                  setState(() {
+                    _cleanData();
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 16),
+                    child: const Text(RESET_LABEL, style: TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.bold),)
+                ),
+              )
+
             ],
           ),
           body: Stack(
@@ -572,13 +584,29 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                       String macroDetails = '';
                       double calorie = 0, protein = 0, carb = 0, fat = 0;
 
+
                       // Calculating macronutrients based on food type
-                      if (food.foodType == FoodType.meal && food.ingredients.length == food.servingIngredientsCount.length) {
-                        for (int i = 0; i < food.servingIngredientsCount.length; i++) {
-                          calorie += (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
-                          protein += (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
-                          carb += (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
-                          fat += (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * food.count);
+                      if (food.foodType == FoodType.meal) {
+                        for(int k = 0; k < food.ingredients.length; k++){
+
+                          final enteredServingAmount= parseMixedNumber(_amountControllers[index][innerIndex][k].text.isEmpty ? '0.0' : _amountControllers[index][innerIndex][k].text);
+                          final actualServingAmount= food.count * double.parse(food.servingAmounts[k]) * double.parse(food.servingIngredientsCount[k]);
+                          final actualCalorie= double.parse(food.calorie[k]);
+                          final actualProtein= double.parse(food.protein[k]);
+                          final actualCarb= double.parse(food.carb[k]);
+                          final actualFat= double.parse(food.fat[k]);
+
+                          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+                          final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+                          final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+                          final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+
+
+                          calorie= calorie + newCalorie;
+                          protein= protein+ newProtein;
+                          carb= carb + newCarb;
+                          fat= fat + newFat;
+
                         }
                       } else{
                         if(double.parse(food.calorie[0]) < 6){
@@ -587,10 +615,24 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           carb= 0;
                           fat= 0;
                         }else{
-                          calorie = double.parse(food.calorie[0]) * food.count;
-                          protein = double.parse(food.protein[0]) * food.count;
-                          carb = double.parse(food.carb[0]) * food.count;
-                          fat = double.parse(food.fat[0]) * food.count;
+
+                          final enteredServingAmount= parseMixedNumber(_amountControllers[index][innerIndex][0].text.isEmpty ? '0.0' : _amountControllers[index][innerIndex][0].text);
+                          final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]);
+                          final actualCalorie= double.parse(food.calorie[0]);
+                          final actualProtein= double.parse(food.protein[0]);
+                          final actualCarb= double.parse(food.carb[0]);
+                          final actualFat= double.parse(food.fat[0]);
+
+                          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+                          final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+                          final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+                          final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+
+
+                          calorie= calorie + newCalorie;
+                          protein= protein+ newProtein;
+                          carb= carb + newCarb;
+                          fat= fat + newFat;
                         }
                       }
 
@@ -774,8 +816,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
   Widget _totalMacroInfo(){
 
-
-    //todo
     double totalCalorie= 0;
     double totalProtein= 0;
     double totalCarb= 0;

@@ -248,7 +248,7 @@ class _CalculatedMacroGoalsPopupState extends State<CalculatedMacroGoalsPopup> {
                       ),
                       child: const Padding(
                           padding: EdgeInsets.all(12),
-                          child: Text(RESET_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                          child: Text(SET_LABEL, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
                       ),
                     ),
                   ),
