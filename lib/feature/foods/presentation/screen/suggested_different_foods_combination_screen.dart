@@ -2,15 +2,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraction/fraction.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
-import 'package:masterpie/feature/foods/presentation/screen/ui_helper/view_recipe_popup.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -640,6 +639,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                         child: TextField(
                                           controller: _amountControllers[index][innerIndex][0],
                                           maxLines: 1,
+                                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9./ ]')),
+                                          ],
                                           textInputAction: TextInputAction.done,
                                           textAlign: TextAlign.center,
                                           textAlignVertical: TextAlignVertical.top,
@@ -706,6 +709,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                           child: TextField(
                                             controller: _amountControllers[index][innerIndex][innerInnerIndex],
                                             maxLines: 1,
+                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9./ ]')),
+                                            ],
                                             textInputAction: TextInputAction.done,
                                             textAlign: TextAlign.center,
                                             textAlignVertical: TextAlignVertical.top,
@@ -775,11 +782,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     double totalFat= 0;
 
 
-
     for(int i = 0; i < _orderedFoods.length; i++){
       for(int j = 0; j < _orderedFoods[i].length; j++){
         Food food= _orderedFoods[i][j];
-        print('fdgoid0: ${food}');
 
         if(food.foodType == FoodType.groceryProduct){
           final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][0].text.isEmpty ? '0.0' : _amountControllers[i][j][0].text);
@@ -789,12 +794,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           final actualCarb= double.parse(food.carb[0]);
           final actualFat= double.parse(food.fat[0]);
 
-          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount;
-          final newProtein= actualProtein * enteredServingAmount / actualServingAmount;
-          final newCarb= actualCarb * enteredServingAmount / actualServingAmount;
-          final newFat= actualFat * enteredServingAmount / actualServingAmount;
+          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+          final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+          final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+          final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
 
-          print('fdgoid1: ${food.name} ,, ${actualCalorie} ,, ${enteredServingAmount} ,, ${actualServingAmount}');
 
           totalCalorie= totalCalorie + newCalorie;
           totalProtein= totalProtein+ newProtein;
@@ -807,17 +811,17 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           for(int k = 0; k < food.ingredients.length; k++){
 
             final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][k].text.isEmpty ? '0.0' : _amountControllers[i][j][k].text);
-            final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[k]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[k]);
+            final actualServingAmount= food.count * double.parse(food.servingAmounts[k]) * double.parse(food.servingIngredientsCount[k]);
             final actualCalorie= double.parse(food.calorie[k]);
             final actualProtein= double.parse(food.protein[k]);
             final actualCarb= double.parse(food.carb[k]);
             final actualFat= double.parse(food.fat[k]);
 
+            final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+            final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+            final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+            final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
 
-            final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount;
-            final newProtein= actualProtein * enteredServingAmount / actualServingAmount;
-            final newCarb= actualCarb * enteredServingAmount / actualServingAmount;
-            final newFat= actualFat * enteredServingAmount / actualServingAmount;
 
             totalCalorie= totalCalorie + newCalorie;
             totalProtein= totalProtein+ newProtein;
