@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
 import 'package:masterpie/feature/foods/domain/model/meal_plan_model.dart';
 import 'package:masterpie/feature/foods/domain/model/wizard_response_model.dart';
-import 'package:masterpie/feature/foods/presentation/bloc/meal_plan_bloc/meal_plan_bloc.dart';
+import 'package:masterpie/feature/foods/presentation/screen/ui_helper/ask_meal_plan_name_dialog.dart';
 import 'package:masterpie/util/core/helper/print.dart';
 import 'package:masterpie/util/design/helper_functions/helper_functions_design.dart';
 import '../../../../util/core/constant/messages_constants.dart';
@@ -25,7 +25,6 @@ import '../bloc/get_logged_foods_bloc/get_logged_foods_bloc.dart';
 import '../bloc/get_logged_foods_bloc/state_event/get_logged_foods_state_event.dart';
 import '../bloc/log_foods_bloc/log_foods_bloc.dart';
 import '../bloc/log_foods_bloc/state_event/log_foods_state_event.dart';
-import '../bloc/meal_plan_bloc/state_event/meal_plan_state_event.dart';
 
 
 const double groceryAmountWidgetWidth= 80.0;
@@ -55,7 +54,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
   late GetLoggedFoodsBloc _getLoggedFoodsBloc;
   late LogFoodsBloc _logFoodsBloc;
 
-  late MealPlanBloc _mealPlanBloc;
 
   //index of current combination
   int _currentPage= 0;
@@ -78,11 +76,9 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
     calculateFoodsCombinationsMacros();
     _getLoggedFoodsBloc = context.read<GetLoggedFoodsBloc>();
     _logFoodsBloc = context.read<LogFoodsBloc>();
-    _mealPlanBloc = context.read<MealPlanBloc>();
 
     _getLoggedFoodsBloc.add(const GetLoggedFoodsEvent.onReset());
     _logFoodsBloc.add(const LogFoodsEvent.onReset());
-    _mealPlanBloc.add(const MealPlanEvent.onReset());
 
     _cleanData();
   }
@@ -379,7 +375,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             food.copyWith(
               count: 1,
               units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-              servingAmounts: [getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]).toString()]
+              servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
             )
           );
 
@@ -397,7 +393,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             dishAmountControllers.add(controller);
 
 
-            amounts.add(getServingAmount(food.units.isEmpty ? '1.0' : food.units[i]).toString());
+            amounts.add((food.count * double.parse(food.servingAmounts[i])).toString());
             units.add(getServingUnit(food.units.isEmpty ? '' : food.units[i]));
 
 
@@ -445,7 +441,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]).toString()]
+                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
               )
           );
 
@@ -463,8 +459,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
             dishAmountControllers.add(controller);
 
-            //todo multiply by food.count for amounts
-            amounts.add(food.units.isEmpty ? '1.0' : food.units[i]);
+            amounts.add((food.count * double.parse(food.servingAmounts[i])).toString());
             units.add(food.units.isEmpty ? '' : food.units[i]);
 
           }
@@ -514,7 +509,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]).toString()]
+                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
               )
           );
 
@@ -532,7 +527,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
             dishAmountControllers.add(controller);
 
-            amounts.add(getServingAmount(food.units.isEmpty ? '1.0' : food.units[i]).toString());
+            amounts.add((food.count * double.parse(food.servingAmounts[i])).toString());
             units.add(getServingUnit(food.units.isEmpty ? '' : food.units[i]));
 
 
@@ -582,7 +577,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]).toString()]
+                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
               )
           );
 
@@ -600,7 +595,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
             dishAmountControllers.add(controller);
 
-            amounts.add(getServingAmount(food.units.isEmpty ? '1.0' : food.units[i]).toString());
+            amounts.add((food.count * double.parse(food.servingAmounts[i])).toString());
             units.add(getServingUnit(food.units.isEmpty ? '' : food.units[i]));
 
           }
@@ -1002,7 +997,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             protein.add(newProtein.toString());
             carb.add(newCarb.toString());
             fat.add(newFat.toString());
-            units.add(getServingUnit(food.units.isEmpty ? '' : food.units[0]));
+            units.add(food.units.isEmpty ? '' : food.units[0]);
 
 
             totalCalorie= totalCalorie + newCalorie;
@@ -1308,19 +1303,14 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             onPressed: () {
 
 
-
               printWrapped('save_plan: $_mealPlan');
 
-
-              // final mealPan= MealPlan(
-              //     foods: foods,
-              //     name: '',
-              //     totalMacro: totalMacro
-              // );
-              // _mealPlanBloc.add(
-              //     MealPlanEvent.onSaveMealPlan(mealPan)
-              // );
-
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AskMealPlanNameDialog(mealPlan: _mealPlan);
+                },
+              );
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
