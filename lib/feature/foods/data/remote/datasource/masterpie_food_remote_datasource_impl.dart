@@ -1330,10 +1330,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       return Right(plans);
 
     }on PostgrestException catch (error) {
-      print('show_err0: $error');
       return Left(ExceptionFailure(error));
     } catch (error) {
-      print('show_err0: $error');
       return Left(ExceptionFailure(error));
     }
 
@@ -1344,7 +1342,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
   Future<Either<Failure, Success>> saveMealPlan(MealPlanRemote mealPlanRemote, String userId) async{
     try{
 
-      print('dfgsssa: $mealPlanRemote');
       final supabase = Supabase.instance.client;
 
       List<MealPlanRemote> plans= [];
@@ -1359,12 +1356,6 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
       await supabase.from(MEAL_PLAN_TABLE).upsert(data);
 
-
-
-
-      // todo remove test
-      final existingPlans2= await getMealPlans(userId);
-      printWrapped('dfgds: ${existingPlans2.asRight()}');
 
       return const Right(Success());
 
@@ -1394,10 +1385,8 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
       return const Right(Success());
 
     }on PostgrestException catch (error) {
-      print('show_err0: $error');
       return Left(ExceptionFailure(error));
     } catch (error) {
-      print('show_err0: $error');
       return Left(ExceptionFailure(error));
     }
 
