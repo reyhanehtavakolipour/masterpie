@@ -4,6 +4,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:intl/intl.dart';
+import 'package:masterpie/feature/foods/domain/model/meal_plan_model.dart';
 import 'package:masterpie/feature/foods/domain/repository/foods_repository.dart';
 import 'package:masterpie/feature/user/data/local/model/profile_local.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
@@ -59,6 +60,16 @@ class RegisterUseCase{
         await repo.deleteCookBookTableInLocal();
         await repo.saveMyCookBookFoodsToLocalDb(updatedCookBookFoods);
         await repo.saveFoodsToMyCookBookRemote(updatedCookBookFoods);
+
+
+        // meal plans
+        final mealPlansResponse= await repo.getMealPlansFromLocal();
+        List<MealPlan> mealPlans= mealPlansResponse.isRight() ? mealPlansResponse.asRight() : [];
+        List<MealPlan> updatedPlans = mealPlans.map((plan) {
+          return plan.copyWith(mealPlanId: generateRandomId());
+        }).toList();
+        await repo.saveMealPlansToLocal(updatedPlans);
+        await repo.saveMealPlansToRemote(updatedPlans);
 
 
         //logged foods

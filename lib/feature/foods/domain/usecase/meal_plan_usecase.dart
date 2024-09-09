@@ -24,7 +24,6 @@ class MealPlanUseCase{
       return const Right(Success());
     }
 
-    await repo.saveMealPlanToLocal(mealPlan);
     await repo.saveMealPlanToRemote(mealPlan);
     return const Right(Success());
   }

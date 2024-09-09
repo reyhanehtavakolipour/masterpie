@@ -61,7 +61,6 @@ class FoodLocal{
     required this.count
 });
 
-
   factory FoodLocal.fromJson(Map<String, dynamic> parsedJson) {
     return FoodLocal(
       foodId: parsedJson['foodId'],

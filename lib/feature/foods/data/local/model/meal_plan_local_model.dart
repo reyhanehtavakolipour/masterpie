@@ -1,6 +1,9 @@
 
 
+import 'dart:convert';
+
 import 'package:masterpie/feature/foods/data/local/model/food_local_model.dart';
+import 'package:masterpie/util/core/helper/request_api.dart';
 
 
 class MealPlanLocal{
@@ -21,27 +24,25 @@ class MealPlanLocal{
   });
 
 
+
   factory MealPlanLocal.fromJson(Map<String, dynamic> parsedJson) {
-    var foodsList = parsedJson['foods'] as List;
-    List<FoodLocal> foods = foodsList.map((food) => FoodLocal.fromJson(food)).toList();
-
-    var totalMacroList = parsedJson['totalMacro'] as List;
-    List<double> totalMacro = totalMacroList.map((macro) => double.parse(macro.toString())).toList();
-
     return MealPlanLocal(
       mealPlanId: parsedJson['mealPlanId'],
-      foods: foods,
-      totalMacro: totalMacro,
-      name: parsedJson['name']
+      foods: (jsonDecode(parsedJson['foods']) as List)
+          .map((foodJson) => FoodLocal.fromJson(foodJson))
+          .toList(),
+      totalMacro: (jsonDecode(parsedJson['totalMacro']) as List<dynamic>)
+          .map((item) => item as double)
+          .toList(),
+      name: parsedJson['name'],
     );
   }
 
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['mealPlanId'] = mealPlanId;
-    data['foods'] = foods;
-    data['totalMacro'] = totalMacro;
+    data['mealPlanId'] = generateRandomId();
+    data['foods'] = jsonEncode(foods.map((food) => food.toJson()).toList());
+    data['totalMacro'] = jsonEncode(totalMacro);
     data['name'] = name;
     return data;
   }

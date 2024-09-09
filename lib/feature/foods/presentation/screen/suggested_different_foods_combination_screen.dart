@@ -1302,7 +1302,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         child: ElevatedButton(
             onPressed: () {
 
-
               printWrapped('save_plan: $_mealPlan');
 
               showDialog(

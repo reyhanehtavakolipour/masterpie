@@ -4,6 +4,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:masterpie/feature/foods/data/local/model/meal_plan_local_model.dart';
+import 'package:masterpie/util/core/helper/helper_get_value.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../../../util/core/constant/sqflite_constants.dart';
 import '../../../../../util/core/di/service_locator.dart';
@@ -641,17 +642,51 @@ class FoodLocalDataSourceImpl extends FoodLocalDataSource{
 
   @override
   Future<Either<Failure, List<MealPlanLocal>>> getMealPlans() async{
-    return Right([]);
+    final db = await serviceLocator<DatabaseHelper>().db;
+    List<MealPlanLocal> plans= [];
+    try{
+      final list = await db.query(TABLE_MEAL_PLAN);
+      list.forEach((element) {
+        final plan = MealPlanLocal.fromJson(element);
+        plans.add(plan);
+      });
+      return Right(plans);
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> saveMealPlan(MealPlanLocal mealPlanLocal) async{
-    return Right(Success());
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+
+      await db.insert(TABLE_MEAL_PLAN , mealPlanLocal.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+      return const Right(Success());
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> saveMealPlans(List<MealPlanLocal> mealPlans) async{
-    return Right(Success());
+    //delete all first
+    final db = await serviceLocator<DatabaseHelper>().db;
+    try{
+      await db.delete(TABLE_MEAL_PLAN);
+
+      Batch? batch = db.batch();
+
+      for (MealPlanLocal mealPlan in mealPlans) {
+        batch.insert(TABLE_MEAL_PLAN, mealPlan.toJson());
+      }
+      await batch.commit(noResult: true);
+
+      return const Right(Success());
+
+    }on DatabaseException catch (e) {
+      return Left(ExceptionFailure(e));
+    }
   }
 
 

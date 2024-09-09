@@ -20,6 +20,7 @@ import '../../../../../util/core/response/success.dart';
 import '../model/food_portion_recommendation_remote.dart';
 import '../model/food_remote_model.dart';
 import '../model/food_type_remote.dart';
+import '../model/meal_plan_json_converter.dart';
 import '../model/suggested_food_remote_model.dart';
 import '../model/suggested_foods_portion_remote_model.dart';
 import '../model/wizard_response_remote_model.dart';
@@ -1306,17 +1307,100 @@ class MasterPieFoodRemoteDataSourceImpl extends MasterPieFoodRemoteDataSource{
 
   @override
   Future<Either<Failure, List<MealPlanRemote>>> getMealPlans(String userId) async{
-    return Right([]);
+    try{
+
+      final supabase = Supabase.instance.client;
+      final data = await supabase
+          .from(MEAL_PLAN_TABLE)
+          .select<List<dynamic>>()
+          .eq('id', userId);
+
+
+      if(data.isEmpty){
+        return const Right([]);
+      }
+
+      if(data[0]['plans'] == null){
+        return const Right([]);
+      }
+
+
+      List<MealPlanRemote> plans= fromMealPlansJson(data[0]['plans'] as List<dynamic>);
+
+      return Right(plans);
+
+    }on PostgrestException catch (error) {
+      print('show_err0: $error');
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      print('show_err0: $error');
+      return Left(ExceptionFailure(error));
+    }
+
   }
+
 
   @override
   Future<Either<Failure, Success>> saveMealPlan(MealPlanRemote mealPlanRemote, String userId) async{
-    return Right(Success());
+    try{
+
+      print('dfgsssa: $mealPlanRemote');
+      final supabase = Supabase.instance.client;
+
+      List<MealPlanRemote> plans= [];
+
+      final existingPlans= await getMealPlans(userId);
+      plans.addAll(existingPlans.asRight());
+      plans.add(mealPlanRemote);
+
+      final Map<String, dynamic> data = <String, dynamic>{};
+      data['id'] = userId;
+      data['plans'] = toMealPlansJson(plans);
+
+      await supabase.from(MEAL_PLAN_TABLE).upsert(data);
+
+
+
+
+      // todo remove test
+      final existingPlans2= await getMealPlans(userId);
+      printWrapped('dfgds: ${existingPlans2.asRight()}');
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      print('show_err: $error');
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      print('show_err: $error');
+      return Left(ExceptionFailure(error));
+    }
+
   }
 
   @override
   Future<Either<Failure, Success>> saveMealPlans(List<MealPlanRemote> mealPlans, String userId) async{
-    return Right(Success());
+    try{
+
+      // this function will be called only after a user registers
+      final supabase = Supabase.instance.client;
+
+      final Map<String, dynamic> data = <String, dynamic>{};
+      data['id'] = userId;
+      data['plans'] = toMealPlansJson(mealPlans);
+
+      await supabase.from(MEAL_PLAN_TABLE).upsert(data);
+
+      return const Right(Success());
+
+    }on PostgrestException catch (error) {
+      print('show_err0: $error');
+      return Left(ExceptionFailure(error));
+    } catch (error) {
+      print('show_err0: $error');
+      return Left(ExceptionFailure(error));
+    }
+
   }
 
 }
