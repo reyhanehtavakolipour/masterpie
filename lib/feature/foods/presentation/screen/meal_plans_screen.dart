@@ -138,7 +138,7 @@ class _MealPlansScreenState extends State<MealPlansScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel, isSavedMealPlan: true,),
+        builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel, isSavedMealPlan: true, planName: mealPlan.name,),
       ),
     );
   }

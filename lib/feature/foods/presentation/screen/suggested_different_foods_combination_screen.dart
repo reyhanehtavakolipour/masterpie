@@ -38,7 +38,9 @@ class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
   final bool isSavedMealPlan;
 
-  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.wizardResponse, required this.isSavedMealPlan});
+  final String? planName;
+
+  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.wizardResponse, required this.isSavedMealPlan, this.planName});
 
 
   @override
@@ -1051,6 +1053,33 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
+            ///plan name
+            Visibility(
+              visible: widget.isSavedMealPlan,
+              child: Container(
+                width: 200.0,
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: MASTERPIE_ORANGE_COLOR,
+                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                ),
+                child: Center(
+                  child: Text(
+                    (widget.planName ?? '').capitalize(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+
+
 
             ///calorie
             Row(

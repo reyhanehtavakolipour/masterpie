@@ -84,7 +84,7 @@ class _MealPlanListUiState extends State<MealPlanListUi> {
 
 
                         /// macro
-                        Text('${mealPlan.totalMacro[0]} cal, ${mealPlan.totalMacro[1]} g protein, ${mealPlan.totalMacro[2]} g carb, ${mealPlan.totalMacro[3]} g fat',
+                        Text('${mealPlan.totalMacro[0].toInt()} cal, ${mealPlan.totalMacro[1].toInt()} g protein, ${mealPlan.totalMacro[2].toInt()} g carb, ${mealPlan.totalMacro[3].toInt()} g fat',
                           style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
