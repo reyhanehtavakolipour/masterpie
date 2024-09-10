@@ -193,6 +193,7 @@ class UserRemoteDataSourceImpl extends UserRemoteDataSource{
   @override
   Future<Either<Failure, List<String>>> calculateDailyMacroGoal(ProfileRemote profile) async {
     try{
+
       final NetworkRequest request = await NetworkRequest.create();
 
       double weightChangeWeekly = 0.0;

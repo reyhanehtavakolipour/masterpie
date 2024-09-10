@@ -768,28 +768,38 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
                           const SizedBox(height: 8),
 
+
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(food.foodType == FoodType.meal ? HOW_MUCH_EAT_PATH : GROCERY_PATH, width: 25, height: 25),
+                              Image.asset(
+                                food.foodType == FoodType.meal ? HOW_MUCH_EAT_PATH : GROCERY_PATH,
+                                width: 25,
+                                height: 25,
+                              ),
                               const SizedBox(width: 8),
                               if (food.foodType == FoodType.meal)
                                 Flexible(
                                   child: Text(
                                     food.name,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: DARK_PRIMARY_COLOR),
                                   ),
                                 ),
                               if (food.foodType == FoodType.groceryProduct && double.parse(food.calorie[0]) < 6)
                                 Flexible(
                                   child: Text(
                                     food.name,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: DARK_PRIMARY_COLOR),
                                   ),
                                 ),
                               if (food.foodType == FoodType.groceryProduct && double.parse(food.calorie[0]) >= 6)
-                                SizedBox(
-                                  width: 300,
+                                Expanded( // Ensure that the entire row content fits within the screen
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -800,10 +810,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                         child: TextField(
                                           controller: _amountControllers[index][innerIndex][0],
                                           maxLines: 1,
-                                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9./ ]')),
-                                          ],
                                           textInputAction: TextInputAction.done,
                                           textAlign: TextAlign.center,
                                           textAlignVertical: TextAlignVertical.top,
@@ -826,7 +832,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                       Flexible(
                                         child: Text(
                                           '${getServingUnit(food.units.isEmpty ? '' : food.units[0])} ${food.name}',
-                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: DARK_PRIMARY_COLOR),
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: DARK_PRIMARY_COLOR),
                                         ),
                                       ),
                                     ],
@@ -834,6 +843,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                 ),
                             ],
                           ),
+
+
+
+
+
                           const SizedBox(height: 8),
                           Text(
                             macroDetails,
@@ -870,10 +884,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                                           child: TextField(
                                             controller: _amountControllers[index][innerIndex][innerInnerIndex],
                                             maxLines: 1,
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9./ ]')),
-                                            ],
                                             textInputAction: TextInputAction.done,
                                             textAlign: TextAlign.center,
                                             textAlignVertical: TextAlignVertical.top,
