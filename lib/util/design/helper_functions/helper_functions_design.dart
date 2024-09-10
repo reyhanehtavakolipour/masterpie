@@ -92,30 +92,35 @@ extension StringExtension on String {
 
 
 double parseMixedNumber(String input) {
-  // Split by space to handle mixed number format like "1 1/4"
-  List<String> parts = input.trim().split(' ');
+  // Trim any extra spaces
+  input = input.trim();
 
-  // Case 1: Input is an integer or double directly
-  if (parts.length == 1) {
-    return double.tryParse(parts[0]) ?? 0.0;
-  }
-
-  // Case 2: Input is in mixed number format (integer + fraction)
-  if (parts.length == 2) {
-    double integerPart = double.tryParse(parts[0]) ?? 0.0;
-
-    // Check if fraction is valid
-    List<String> fractionParts = parts[1].split('/');
-    if (fractionParts.length == 2) {
-      double numerator = double.tryParse(fractionParts[0]) ?? 0.0;
-      double denominator = double.tryParse(fractionParts[1]) ?? 1.0;
-      double fractionValue = numerator / denominator;
-
-      return integerPart + fractionValue;
+  // Check for "integer + fraction" pattern (e.g., "1 1/2")
+  if (input.contains(' ')) {
+    List<String> parts = input.split(' ');
+    if (parts.length == 2) {
+      double integerPart = double.tryParse(parts[0]) ?? 0.0;
+      double fractionPart = parseFraction(parts[1]);
+      return integerPart + fractionPart;
     }
   }
 
-  // Invalid format, return 0.0
+  // Check for fraction pattern (e.g., "1/2")
+  if (input.contains('/')) {
+    return parseFraction(input);
+  }
+
+  // Check for double or integer (e.g., "2.0" or "2")
+  return double.tryParse(input) ?? 0.0;
+}
+
+double parseFraction(String fraction) {
+  List<String> parts = fraction.split('/');
+  if (parts.length == 2) {
+    double numerator = double.tryParse(parts[0]) ?? 0.0;
+    double denominator = double.tryParse(parts[1]) ?? 1.0;
+    return numerator / denominator;
+  }
   return 0.0;
 }
 
@@ -412,34 +417,69 @@ double fractionToDouble(String fraction) {
   }
 }
 
-// Function to extract the serving amount as a double
-double getServingAmount(String fullString) {
-  // Extract the first part of the string (amount)
-  final amountStr = fullString.split(' ').first;
+double convertStringToDouble(String input) {
+  // Remove any whitespace around the input
+  input = input.trim();
 
-  // Check if the amount is a fraction
-  if (amountStr.contains('/')) {
-    try {
-      // Convert fraction to double using the fraction package
-      final fractionAmount = Fraction.fromString(amountStr);
-      return fractionAmount.toDouble();
-    } catch (e) {
-      // Handle parsing error
-      return 0.0;
+  try {
+    // Check if the input contains a fraction ("/")
+    if (input.contains("/")) {
+      // Split the fraction into numerator and denominator
+      List<String> parts = input.split("/");
+      if (parts.length == 2) {
+        // Parse both numerator and denominator as doubles
+        double numerator = double.parse(parts[0].trim());
+        double denominator = double.parse(parts[1].trim());
+
+        // Avoid division by zero
+        if (denominator == 0) {
+          return 0.0;
+        }
+
+        // Return the result of the fraction
+        return numerator / denominator;
+      } else {
+        return 0.0;  // Invalid fraction format
+      }
+    } else {
+      // If input is a double, directly parse it
+      return double.parse(input);
     }
+  } catch (e) {
+    return 0.0;  // In case of any parsing errors
   }
-
-  // If it's not a fraction, try to parse it as a double
-  final amount = double.tryParse(amountStr);
-  return amount ?? 0.0; // Return 0.0 if parsing fails
 }
 
-// Function to extract the serving unit (everything after the amount)
+
+double getServingAmount(bool isSavedMealPlan, String unit, String amount) {
+  if(isSavedMealPlan && amount.isNotEmpty){
+    return convertStringToDouble(amount);
+  }else{
+    final amountStr = unit.split(' ').first;
+    if (amountStr.contains('/')) {
+      try {
+        final fractionAmount = Fraction.fromString(amountStr);
+        return fractionAmount.toDouble();
+      } catch (e) {
+        return 0.0;
+      }
+    }
+    final amount = double.tryParse(amountStr);
+    return amount ?? 0.0;
+  }
+}
+
 String getServingUnit(String fullString) {
+  // Check if the fullString contains any spaces
+  if (!fullString.contains(' ')) {
+    return fullString; // Return the fullString unchanged
+  }
+
   // Extract the remaining part of the string (unit)
   final unit = fullString.split(' ').skip(1).join(' ');
   return unit;
 }
+
 
 String convertDoubleToFraction(double number) {
   // Convert the double to a Fraction

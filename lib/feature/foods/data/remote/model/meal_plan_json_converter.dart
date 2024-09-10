@@ -5,6 +5,7 @@ import 'package:masterpie/feature/foods/data/remote/model/food_type_remote.dart'
 import 'package:masterpie/feature/foods/data/remote/model/meal_plan_remote_model.dart';
 import 'package:masterpie/util/core/helper/request_api.dart';
 
+
 Map<String, dynamic> toMealPlanJson(MealPlanRemote mealPlanRemote) {
   return {
     'id': generateRandomId(),
@@ -19,6 +20,7 @@ Map<String, dynamic> toMealPlanJson(MealPlanRemote mealPlanRemote) {
       'protein': food.protein.map((item) => item.toString()).toList(),
       'carb': food.carb.map((item) => item.toString()).toList(),
       'fat': food.fat.map((item) => item.toString()).toList(),
+      'ingredients': food.ingredients.map((item) => item.toString()).toList(),
       'serving_ing_count': food.servingIngredientsCount.map((item) => item.toString()).toList(),
       'serving_amounts': food.servingAmounts.map((item) => item.toString()).toList(),
       'units': food.units.map((item) => item.toString()).toList(),
@@ -49,6 +51,7 @@ MealPlanRemote fromMealPlanJson(Map<String, dynamic> plan) {
           protein: (food['protein'] as List<dynamic>).map((item) => item.toString()).toList(),
           carb: (food['carb'] as List<dynamic>).map((item) => item.toString()).toList(),
           fat: (food['fat'] as List<dynamic>).map((item) => item.toString()).toList(),
+          ingredients: (food['ingredients'] as List<dynamic>).map((item) => item.toString()).toList(),
           servingIngredientsCount: (food['serving_ing_count'] as List<dynamic>).map((item) => item.toString()).toList(),
           servingAmounts: (food['serving_amounts'] as List<dynamic>).map((item) => item.toString()).toList(),
           units: (food['units'] as List<dynamic>).map((item) => item.toString()).toList(),

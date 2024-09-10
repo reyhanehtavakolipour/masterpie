@@ -82,6 +82,9 @@ abstract class FoodsMapper{
 
   List<Food> fromFoodsRemote(List<FoodRemote> foods);
 
+  List<Food> fromFoodsLocal(List<FoodLocal> foods);
+
+
   List<FoodRemote> toFoodsRemote(List<Food> foods);
 
   List<Food> fromLoggedFoodsLocal(List<LoggedFoodsLocal> foods);

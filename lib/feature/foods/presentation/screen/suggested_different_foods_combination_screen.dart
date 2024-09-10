@@ -36,7 +36,9 @@ class SuggestedDifferentFoodsCombinationScreen extends StatefulWidget {
 
   final WizardResponseModel wizardResponse;
 
-  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.wizardResponse});
+  final bool isSavedMealPlan;
+
+  const SuggestedDifferentFoodsCombinationScreen({super.key, required this.wizardResponse, required this.isSavedMealPlan});
 
 
   @override
@@ -304,11 +306,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           });
         }else{
           if(food.ingredients.length == food.calorie.length){
-            for(int i = 0; i < food.servingIngredientsCount.length; i++){
-              calorie= calorie + (double.parse(food.calorie[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              protein= protein + (double.parse(food.protein[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              carb= carb + (double.parse(food.carb[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
-              fat= fat + (double.parse(food.fat[i]) * num.parse(food.servingIngredientsCount[i]) * portion);
+            for(int i = 0; i < food.ingredients.length; i++){
+              calorie= calorie + (double.parse(food.calorie[i])  * portion);
+              protein= protein + (double.parse(food.protein[i])  * portion);
+              carb= carb + (double.parse(food.carb[i])  * portion);
+              fat= fat + (double.parse(food.fat[i])  * portion);
             }
           }else{
             food.calorie.forEach((element) {
@@ -351,6 +353,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
     //breakfast
     List<Food> foods = _suggestedFoodsPortions[_currentPage].foods;
+
     List<List<TextEditingController>> breakfastAmountControllers = [];
     List<Food> breakfastFoods = foods.where((food) => food.dishType == "Breakfast").toList();
     if (breakfastFoods.isNotEmpty){
@@ -361,9 +364,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
         if(food.foodType == FoodType.groceryProduct){
 
+
+          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts[0]);
+
           TextEditingController controller = TextEditingController(
-              text: convertDoubleToFraction(
-                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+              text: convertDoubleToFraction(food.count * amount));
 
           controller.addListener(() {
             _recalculateTotalMacros(amountControllers);
@@ -375,7 +380,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             food.copyWith(
               count: 1,
               units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-              servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
+              servingAmounts: widget.isSavedMealPlan ? food.servingAmounts : [(food.count * amount).toString()]
             )
           );
 
@@ -427,9 +432,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
         if(food.foodType == FoodType.groceryProduct){
 
+          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts[0]);
+
           TextEditingController controller = TextEditingController(
-              text: convertDoubleToFraction(
-                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+              text: convertDoubleToFraction(food.count * amount));
 
           controller.addListener(() {
             _recalculateTotalMacros(amountControllers);
@@ -441,7 +447,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
+                  servingAmounts: widget.isSavedMealPlan ? food.servingAmounts : [(food.count * amount).toString()]
               )
           );
 
@@ -495,9 +501,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
         if(food.foodType == FoodType.groceryProduct){
 
+          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts[0]);
+
           TextEditingController controller = TextEditingController(
-              text: convertDoubleToFraction(
-                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+              text: convertDoubleToFraction(food.count * amount));
 
           controller.addListener(() {
             _recalculateTotalMacros(amountControllers);
@@ -509,9 +516,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
+                  servingAmounts: widget.isSavedMealPlan ? food.servingAmounts : [(food.count * amount).toString()]
               )
           );
+
 
         }else{
           List<String> units= [];
@@ -563,9 +571,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
         if(food.foodType == FoodType.groceryProduct){
 
+          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts.isEmpty ? '' : food.servingAmounts[0]);
+
           TextEditingController controller = TextEditingController(
-              text: convertDoubleToFraction(
-                  food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])));
+              text: convertDoubleToFraction(food.count * amount));
 
           controller.addListener(() {
             _recalculateTotalMacros(amountControllers);
@@ -577,7 +586,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
               food.copyWith(
                   count: 1,
                   units: [getServingUnit(food.units.isEmpty ? '' : food.units[0])],
-                  servingAmounts: [(food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0])).toString()]
+                  servingAmounts: widget.isSavedMealPlan ? food.servingAmounts : [(food.count * amount).toString()]
               )
           );
 
@@ -697,7 +706,7 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                         for(int k = 0; k < food.ingredients.length; k++){
 
                           final enteredServingAmount= parseMixedNumber(_amountControllers[index][innerIndex][k].text.isEmpty ? '0.0' : _amountControllers[index][innerIndex][k].text);
-                          final actualServingAmount= food.count * double.parse(food.servingAmounts[k]) * double.parse(food.servingIngredientsCount[k]);
+                          final actualServingAmount= food.count * double.parse(food.servingAmounts[k]);
                           final actualCalorie= double.parse(food.calorie[k]);
                           final actualProtein= double.parse(food.protein[k]);
                           final actualCarb= double.parse(food.carb[k]);
@@ -723,8 +732,10 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           fat= 0;
                         }else{
 
+                          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts.isEmpty ? '' : food.servingAmounts[0]);
+
                           final enteredServingAmount= parseMixedNumber(_amountControllers[index][innerIndex][0].text.isEmpty ? '0.0' : _amountControllers[index][innerIndex][0].text);
-                          final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]);
+                          final actualServingAmount= food.count * amount;
                           final actualCalorie= double.parse(food.calorie[0]);
                           final actualProtein= double.parse(food.protein[0]);
                           final actualCarb= double.parse(food.carb[0]);
@@ -734,7 +745,6 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
                           final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
                           final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
                           final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
-
 
                           calorie= calorie + newCalorie;
                           protein= protein+ newProtein;
@@ -937,8 +947,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
         Food food= _orderedFoods[i][j];
 
         if(food.foodType == FoodType.groceryProduct){
+          double amount= getServingAmount(widget.isSavedMealPlan, food.units.isEmpty ? '1.0' : food.units[0], food.servingAmounts.isEmpty ? '' : food.servingAmounts[0]);
+
           final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][0].text.isEmpty ? '0.0' : _amountControllers[i][j][0].text);
-          final actualServingAmount= food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]) == 0.0 ? 1.0 : food.count * getServingAmount(food.units.isEmpty ? '1.0' : food.units[0]);
+          final actualServingAmount= food.count * amount;
+
           final actualCalorie= double.parse(food.calorie[0]);
           final actualProtein= double.parse(food.protein[0]);
           final actualCarb= double.parse(food.carb[0]);
@@ -978,10 +991,11 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           List<String> carb= [];
           List<String> fat= [];
 
+
           for(int k = 0; k < food.ingredients.length; k++){
 
             final enteredServingAmount= parseMixedNumber(_amountControllers[i][j][k].text.isEmpty ? '0.0' : _amountControllers[i][j][k].text);
-            final actualServingAmount= food.count * double.parse(food.servingAmounts[k]) * double.parse(food.servingIngredientsCount[k]);
+            final actualServingAmount= food.count * (double.parse(food.servingAmounts[k]) == 0.0 ? 1.0 : double.parse(food.servingAmounts[k]));
             final actualCalorie= double.parse(food.calorie[k]);
             final actualProtein= double.parse(food.protein[k]);
             final actualCarb= double.parse(food.carb[k]);
@@ -1293,34 +1307,37 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
 
 
   Widget savePlanBtn(){
-    return Positioned(
-      bottom: 36,
-      left: 16,
-      right: 16,
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-            onPressed: () {
+    return Visibility(
+      visible: !widget.isSavedMealPlan,
+      child: Positioned(
+        bottom: 36,
+        left: 16,
+        right: 16,
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+              onPressed: () {
 
-              printWrapped('save_plan: $_mealPlan');
+                printWrapped('save_plan: $_mealPlan');
 
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AskMealPlanNameDialog(mealPlan: _mealPlan);
-                },
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-                ),
-                backgroundColor: DARK_PRIMARY_COLOR,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
-            ),
-            child: const Text(SAVE_MEAL_PLAN,
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
-            )
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AskMealPlanNameDialog(mealPlan: _mealPlan);
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                  ),
+                  backgroundColor: DARK_PRIMARY_COLOR,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3)
+              ),
+              child: const Text(SAVE_MEAL_PLAN,
+                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+              )
+          ),
         ),
       ),
     );

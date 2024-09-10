@@ -80,6 +80,7 @@ const SEARCH_GROCERY_WIZARD = 'Search\nGrocery';
 const SEARCH_RECIPE_WIZARD = 'Search\nRecipe';
 const SEARCH_RECIPES_LABEL = 'Search Recipes';
 const SERVING_LABEL = 'serving';
+const MEAL_PLANS_LABEL = 'Meal Plans';
 const SERVING_AMOUNT_LABEL = 'Serving\namount';
 const SERVINGS_RECIPE_LABEL = 'For how many servings is this recipe intended?';
 const REQUEST_PORTIONS_LABEL  = 'Build My Meal Plan';

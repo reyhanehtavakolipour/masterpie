@@ -59,3 +59,4 @@ const String HATE_CATEGORIES = 'hateCategories';
 const String USER_DIET = 'diet';
 const String HATE_SUBCATEGORIES = 'hateSubCategories';
 const String ALLERGENS = 'allergens';
+const String DISH_TYPE = 'dishType';

@@ -146,6 +146,7 @@ class FoodsMapperImpl extends FoodsMapper{
             carb: food.carb,
             fat: food.fat,
             diets: [],
+            dishType: food.dishType,
             count: food.count,
             allergies: [],
             servingAmount: 0,
@@ -204,6 +205,7 @@ class FoodsMapperImpl extends FoodsMapper{
         protein: food.protein,
         carb: food.carb,
         fat: food.fat,
+        dishType: food.dishType,
         count: food.count,
         diets: food.diets,
         allergies: food.allergies,
@@ -632,6 +634,7 @@ class FoodsMapperImpl extends FoodsMapper{
         protein: food.protein,
         carb: food.carb,
         fat: food.fat,
+        dishType: food.dishType,
         count: food.count,
         diets: food.diets,
         allergies: food.allergies,
@@ -685,6 +688,39 @@ class FoodsMapperImpl extends FoodsMapper{
             count: food.count,
             isAddedByUser: food.isAddedByUser,
             prepTime: food.prepTime,
+            servingAmounts: food.servingAmounts,
+            createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
+        )
+    ).toList();
+  }
+
+  @override
+  List<Food> fromFoodsLocal(List<FoodLocal> foods) {
+    return foods.map((food) =>
+        Food(
+            id: food.foodId,
+            foodType: food.foodTypeLocal == FoodTypeLocal.groceryProduct ? FoodType.groceryProduct : FoodType.meal,
+            name: food.name,
+            barcode: food.barcode,
+            brandName: food.brandName,
+            description: food.description,
+            nationality: food.nationality,
+            image: food.image,
+            ingredients: food.ingredients,
+            servingIngredientsCount: food.servingIngredientsCount,
+            units: food.units,
+            recipe: food.recipe,
+            calorie: food.calorie,
+            protein: food.protein,
+            carb: food.carb,
+            fat: food.fat,
+            diets: food.diets,
+            dishType: food.dishType,
+            allergies: food.allergies,
+            servingAmount: food.servingAmount,
+            unit: food.unit,
+            count: food.count,
+            // isAddedByUser: food.isAddedByUser,
             servingAmounts: food.servingAmounts,
             createdFromFatSecretRecipes: food.createdFromFatSecretRecipes
         )
@@ -902,8 +938,14 @@ class FoodsMapperImpl extends FoodsMapper{
 
   @override
   List<MealPlan> fromMealPlansLocal(List<MealPlanLocal> mealPlansLocal) {
-    // TODO: implement fromMealPlansLocal
-    throw UnimplementedError();
+    return mealPlansLocal.map((mealPlan) =>
+        MealPlan(
+          mealPlanId: mealPlan.mealPlanId,
+          foods: fromFoodsLocal(mealPlan.foods),
+          name: mealPlan.name,
+          totalMacro: mealPlan.totalMacro,
+        )
+    ).toList();
   }
 
   @override
@@ -981,6 +1023,7 @@ class FoodsMapperImpl extends FoodsMapper{
             protein: food.protein,
             carb: food.carb,
             fat: food.fat,
+            dishType: food.dishType,
             diets: food.diets,
             allergies: food.allergies,
             servingAmount: food.servingAmount,

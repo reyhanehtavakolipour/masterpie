@@ -124,6 +124,7 @@ class DatabaseHelper {
             ' $SERVING_AMOUNT INTEGER,'
             ' $DIET TEXT,'
             ' $ALLERGIES TEXT,'
+            ' $DISH_TYPE TEXT,'
             ' $FOOD_UNIT TEXT,'
             ' $CALORIE TEXT,'
             ' $PROTEIN TEXT,'

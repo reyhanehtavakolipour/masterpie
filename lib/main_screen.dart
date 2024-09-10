@@ -14,6 +14,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:masterpie/feature/foods/domain/model/food_type.dart';
+import 'package:masterpie/feature/foods/presentation/screen/meal_plans_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/my_cook_book_screen.dart';
 import 'package:masterpie/feature/foods/presentation/screen/view_auto_generate_meals_screen.dart';
 import 'package:masterpie/feature/user/presentation/screen/onboarding_screen.dart';
@@ -198,6 +199,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   onCalculateMacroClicked();
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.food_bank_rounded),
+                title: const Text(MEAL_PLANS_LABEL, style: TextStyle(fontSize: 14, color: DARK_PRIMARY_COLOR),),
+                onTap: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                  onMealPlansClicked();
+                },
+              ),
               Visibility(
                 // visible: _userLoggedIn,
                 visible: false,
@@ -346,7 +355,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel),
+                            builder: (context) => SuggestedDifferentFoodsCombinationScreen(wizardResponse: wizardModel, isSavedMealPlan: false,),
                           ),
                         );
                       }
@@ -700,6 +709,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       }
       _setUserInfo(_profile, false);
     });
+  }
+
+
+  void onMealPlansClicked(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealPlansScreen(macroGoal: _macroGoal,),
+      ),
+    );
   }
 
 

@@ -13,6 +13,7 @@ import 'package:masterpie/feature/user/domain/model/profile_model.dart';
 import 'package:masterpie/main_screen.dart';
 import 'package:masterpie/util/core/constant/messages_constants.dart';
 import 'package:masterpie/util/core/helper/helper_get_value.dart';
+import 'package:masterpie/util/core/helper/print.dart';
 import '../../../../util/core/constant/hive_constants.dart';
 import '../../../../util/core/di/service_locator.dart';
 import '../../../../util/core/response/failure.dart';
@@ -839,6 +840,7 @@ class FoodsRepositoryImpl extends FoodsRepository{
 
   @override
   Future<Either<Failure, Success>> saveMealPlansToLocal(List<MealPlan> mealPlans) async{
+
     final saveMealsResponse= await foodLocalDataSource.saveMealPlans(mapper.toMealPlansLocal(mealPlans));
     if(saveMealsResponse.isRight()){
       return Right(saveMealsResponse.asRight());
