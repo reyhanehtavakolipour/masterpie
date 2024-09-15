@@ -46,7 +46,7 @@ MealPlanRemote fromMealPlanJson(Map<String, dynamic> plan) {
           id: food['id'],
           name: food['name'],
           foodTypeRemote: food['type'].toString() == 'grocery' ? FoodTypeRemote.groceryProduct : FoodTypeRemote.meal,
-          count: food['count'],
+          count: double.parse(food['count'].toString()),
           calorie: (food['calorie'] as List<dynamic>).map((item) => item.toString()).toList(),
           protein: (food['protein'] as List<dynamic>).map((item) => item.toString()).toList(),
           carb: (food['carb'] as List<dynamic>).map((item) => item.toString()).toList(),

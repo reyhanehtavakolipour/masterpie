@@ -969,10 +969,18 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
           final actualCarb= double.parse(food.carb[0]);
           final actualFat= double.parse(food.fat[0]);
 
-          final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
-          final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
-          final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
-          final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+          double newCalorie= 0.0;
+          double newProtein= 0.0;
+          double newCarb= 0.0;
+          double newFat= 0.0;
+
+
+          if(amount != 0 && food.count != 0){
+            newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+            newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+            newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+             newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+          }
 
 
           mealFoods.add(
@@ -1013,10 +1021,18 @@ class _SuggestedDifferentFoodsCombinationScreenState extends State<SuggestedDiff
             final actualCarb= double.parse(food.carb[k]);
             final actualFat= double.parse(food.fat[k]);
 
-            final newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
-            final newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
-            final newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
-            final newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+
+            double newCalorie= 0.0;
+            double newProtein= 0.0;
+            double newCarb= 0.0;
+            double newFat= 0.0;
+
+            if((double.parse(food.servingAmounts[k]) == 0.0 ? 1.0 : double.parse(food.servingAmounts[k])) != 0 && food.count != 0){
+              newCalorie= actualCalorie * enteredServingAmount / actualServingAmount * food.count;
+              newProtein= actualProtein * enteredServingAmount / actualServingAmount * food.count;
+              newCarb= actualCarb * enteredServingAmount / actualServingAmount * food.count;
+              newFat= actualFat * enteredServingAmount / actualServingAmount * food.count;
+            }
 
             amounts.add(enteredServingAmount.toString());
             calories.add(newCalorie.toString());
