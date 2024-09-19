@@ -60,6 +60,12 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
   String _weightChangeWeekly = LB_1_LABEL;
 
 
+  bool _isViewMode= true;
+
+  bool _isOptionsVisible= false;
+
+  int _optionSelected= 0;
+
   List<String> _dailyMacroGoal = ['2197', '220', '165', '73'];
 
   late GetProfileBloc _getProfileBloc;
@@ -104,9 +110,6 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                     } else if(_diet.contains(VEGETERIAN_LABEL)){
                       diet= VEGETERIAN_LABEL;
                     }
-
-                    print('fdhfds: ${goals}');
-
                     goals.add(diet);
                     Navigator.pop(context, goals);
                   },
@@ -124,178 +127,293 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                       children: [
 
 
-                        /// current macro goal
-                        Container(
-                          width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            decoration: const BoxDecoration(
-                              color: CATEGORY_COLOR,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16.0),
-                                topRight: Radius.circular(16.0),
-                              ),
-                            ),
-                          child: const Text(
-                            YOUR_MACRO_GOAL_LABEL,
-                            style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
-                          ),
-                        ),
 
 
                         Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                            decoration: const BoxDecoration(
-                              color: CATEGORY_COLOR,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16.0),
-                                topRight: Radius.circular(16.0),
-                              ),
-                            ),
-                            child: Text(
-                              '${_dailyMacroGoal[0]} $CALORIE_LABEL, ${_dailyMacroGoal[1]} grams $PROTEIN_LABEL, ${_dailyMacroGoal[2]} grams $CARB_LABEL, ${_dailyMacroGoal[3]} grams $FAT_LABEL',
-                              style: const TextStyle(fontSize: 13, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
-                            ),
-                        ),
-
-
-
-
-
-                        const SizedBox(height: 24.0),
-
-
-                        /// Gender Dropdown
-                        Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: buildGenderDropdown()
-                        ),
-
-
-                        const SizedBox(height: 24.0),
-
-
-
-                        /// Weight and Unit Row
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
+                          color: CATEGORY_COLOR,
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
+                              GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    if(_isViewMode){
+                                      _isViewMode= false;
+                                      _isOptionsVisible= true;
+                                    }else{
+                                      _isViewMode= true;
+                                      _optionSelected= 0;
+                                    }
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    /// current macro goal
+                                    const Text(
+                                      YOUR_MACRO_GOAL_LABEL,
+                                      style: TextStyle(fontSize: 16, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                                    ),
+
+                                    const SizedBox(width: 8,),
+
+                                    Visibility(
+                                      visible: _isViewMode || _isOptionsVisible,
+                                        child: Stack(
+                                          children: [
+                                            const Icon(Icons.edit, color: DARK_PRIMARY_COLOR, size: 24,),
+
+                                            Visibility(
+                                              visible: _isOptionsVisible,
+                                              child: Container(
+                                                width: 200,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black.withOpacity(0.25),
+                                                      offset: const Offset(0, 4),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 1,
+                                                    ),
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                padding: const EdgeInsets.all(32),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+
+                                                    GestureDetector(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          _isOptionsVisible= false;
+                                                          _optionSelected= 1;
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                        CALCULATE_LABEL,
+                                                        style: TextStyle(fontSize: 12, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 8,),
+
+                                                     Container(
+                                                      height: 1,
+                                                      width: double.infinity,
+                                                      color: Colors.grey,
+                                                    ),
+
+                                                    const SizedBox(height: 8,),
+
+                                                    GestureDetector(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          _isOptionsVisible= false;
+                                                          _optionSelected= 2;
+                                                          _isViewMode= true;
+                                                          showManualMacroPopup();
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                        SET_MACRO_MANUALLY_LABEL,
+                                                        style: TextStyle(fontSize: 12, color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(height: 8,),
+
+                                                    Container(
+                                                      height: 1,
+                                                      width: double.infinity,
+                                                      color: Colors.grey,
+                                                    ),
+
+
+                                                    const SizedBox(height: 8,),
+
+
+                                                    GestureDetector(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          _isOptionsVisible= false;
+                                                          _isViewMode= true;
+                                                          _optionSelected= 0;
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                        CLOSE_LABEL,
+                                                        style: TextStyle(fontSize: 10, color: RED_ERROR_COLOR, fontWeight: FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                    ),
+
+                                    Visibility(
+                                        visible: !_isViewMode && !_isOptionsVisible,
+                                        child: const Text(
+                                          CANCEL_EDITING_LABEL,
+                                          style: TextStyle(fontSize: 12, color: RED_ERROR_COLOR, fontWeight: FontWeight.bold),
+                                        ),
+                                    ),
+
+                                  ],
+                                ),
                               ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                  child: buildWeightUnitDropdown()
+
+
+                              const SizedBox(height: 16,),
+
+                              Text(
+                                '${_dailyMacroGoal[0]} $CALORIE_LABEL, ${_dailyMacroGoal[1]} grams $PROTEIN_LABEL, ${_dailyMacroGoal[2]} grams $CARB_LABEL, ${_dailyMacroGoal[3]} grams $FAT_LABEL',
+                                style: const TextStyle(fontSize: 13, color: MASTERPIE_ORANGE_COLOR, fontWeight: FontWeight.bold),
                               ),
+
                             ],
                           ),
                         ),
 
 
 
-                        const SizedBox(height: 24.0),
 
-
-
-                        /// age and goal weight Row
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
+                        Visibility(
+                          visible: !_isViewMode && _optionSelected == 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Expanded(
-                                child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
+
+                              const SizedBox(height: 24.0),
+
+
+                              /// Gender Dropdown
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: buildGenderDropdown()
                               ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                  child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
+
+
+                              const SizedBox(height: 24.0),
+
+
+
+                              /// Weight and Unit Row
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                        child: buildWeightUnitDropdown()
+                                    ),
+                                  ],
+                                ),
                               ),
+
+
+
+                              const SizedBox(height: 24.0),
+
+
+
+                              /// age and goal weight Row
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                        child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+
+                              const SizedBox(height: 24.0),
+
+
+
+                              /// Height and Unit Row
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
+                                    ),
+                                    const SizedBox(width: 32.0),
+                                    Expanded(
+                                        child: buildHeightUnitDropdown()
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+
+
+                              const SizedBox(height: 24.0),
+
+
+
+                              /// activity level
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text(ACTIVITY_LEVEL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                              ),
+                              const SizedBox(height: 4.0),
+                              buildActivityLevelDropdown(),
+
+
+                              const SizedBox(height: 24.0),
+
+
+
+                              /// weekly weight change
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text(WEEKLY_WEIGHT_CHANGE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                              ),
+                              const SizedBox(height: 4.0),
+                              buildLoseWeightAmountPerDayDropdown(),
+
+                              const SizedBox(height: 24.0),
+
+
+                              /// diet
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text(DIET_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
+                              ),
+
+                              _buildDiets(),
+
+                              const SizedBox(height: 32.0),
+
+
+                              /// calculate button
+                              buildCalculateButton(),
+
+                              const SizedBox(height: 64.0),
                             ],
                           ),
                         ),
 
 
-
-                        const SizedBox(height: 24.0),
-
-
-
-                        /// Height and Unit Row
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
-                              ),
-                              const SizedBox(width: 32.0),
-                              Expanded(
-                                  child: buildHeightUnitDropdown()
-                              ),
-                            ],
-                          ),
-                        ),
-
-
-
-
-                        const SizedBox(height: 24.0),
-
-
-
-                        /// activity level
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(ACTIVITY_LEVEL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                        ),
-                        const SizedBox(height: 4.0),
-                        buildActivityLevelDropdown(),
-
-
-                        const SizedBox(height: 24.0),
-
-
-
-                        /// weekly weight change
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(WEEKLY_WEIGHT_CHANGE_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                        ),
-                        const SizedBox(height: 4.0),
-                        buildLoseWeightAmountPerDayDropdown(),
-
-                        const SizedBox(height: 24.0),
-
-
-                        /// diet
-                        const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(DIET_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontWeight: FontWeight.bold),)
-                        ),
-
-                        _buildDiets(),
-
-                        const SizedBox(height: 32.0),
-
-
-                        Row(
-                          children: [
-                            Expanded(
-                                child:  /// calculate button
-                                buildCalculateButton(),
-                            ),
-
-                            const SizedBox(width: 4.0),
-
-                            Expanded(
-                                child:  /// set macros manually button
-                                buildSetMacrosManuallyButton(),
-                            ),
-                          ],
-                        ),
-
-
-                        const SizedBox(height: 64.0),
 
 
                       ],
@@ -350,13 +468,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                           _updateProfileBloc.add(const UpdateProfileEvent.onReset());
                           Future.delayed(Duration.zero,(){
                             showSuccessToast(context, MACRO_SAVED_SUCCESS_MSG);
-                            if(_calorieController.text.isNotEmpty){
-                              int calorie = int.parse(_calorieController.text).toInt();
-                              int protein = (calorie * int.parse(_proteinController.text)/100)~/4;
-                              int carb = (calorie * int.parse(_carbController.text)/100)~/4;
-                              int fat = (calorie * int.parse(_fatController.text)/100)~/9;
-                              onUpdatedGoalMacros(true, [calorie.toString(), protein.toString(), carb.toString(), fat.toString()]);
-                            }
+                              getProfile();
                           });
                         }else if(state is UpdateProfileErrorState){
                           _updateProfileBloc.add(const UpdateProfileEvent.onReset());
@@ -438,6 +550,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     } else if(_diet.contains(VEGETERIAN_LABEL)){
       diet= VEGETERIAN_LABEL;
     }
+
 
     showDialog(
       context: context,
@@ -786,7 +899,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   Widget buildCalculateButton(){
     return Container(
-      margin: const EdgeInsets.only(left: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
         onPressed: (){
           if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
