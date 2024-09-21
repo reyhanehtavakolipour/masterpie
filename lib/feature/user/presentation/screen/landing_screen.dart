@@ -109,14 +109,17 @@ class _LandingScreenState extends State<LandingScreen>{
 
                   const SizedBox(height: 4,),
 
-                  InkWell(
-                    onTap: () => launchURL(FAT_SECRET_ATTRIBUTE),
-                    child: const Text(
-                      FAT_SECRET_LABEL,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10,
-                        decoration: TextDecoration.underline,
+                  Visibility(
+                    visible: false,
+                    child: InkWell(
+                      onTap: () => launchURL(FAT_SECRET_ATTRIBUTE),
+                      child: const Text(
+                        FAT_SECRET_LABEL,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 10,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
                   ),

@@ -26,6 +26,7 @@ const ERROR_FOOD_NAME_ALREADY_EXIST = 'This food name already exists. please ent
 const CALORIE_LABEL = 'Calorie';
 const PROTEIN_LABEL = 'Protein';
 const CARB_LABEL = 'Carb';
+const EDIT_MACRO_GOAL_LABEL = 'Edit Macro Goal';
 const TOTAL_MACRO_LABEL = 'Total Macros';
 const MEAL_NAME = 'Meal Name';
 const TOTAL_MACRO_PER_SERVING_LABEL = 'Total Macros Per Serving';

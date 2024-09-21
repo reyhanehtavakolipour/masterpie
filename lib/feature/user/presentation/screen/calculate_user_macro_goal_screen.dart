@@ -55,7 +55,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
   String _heightSelectedUnit = FT_LABEL;
   String _weightSelectedUnit = LB_LABEL;
-  String _activitySelected = SEDENTARY_LABEL;
+  String _activitySelected = '-';
   String _genderSelected = FEMALE_LABEL;
   String _weightChangeWeekly = LB_1_LABEL;
 
@@ -289,71 +289,82 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
 
-                              const SizedBox(height: 24.0),
-
-
-                              /// Gender Dropdown
-                              Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: buildGenderDropdown()
-                              ),
-
-
-                              const SizedBox(height: 24.0),
+                              const SizedBox(height: 4.0),
 
 
 
-                              /// Weight and Unit Row
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                              Container(
+                                margin: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                decoration:  BoxDecoration(
+                                    borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                    color: LIGHT_GREY_COLOR
+                                ),
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
-                                    ),
-                                    const SizedBox(width: 16.0),
-                                    Expanded(
-                                        child: buildWeightUnitDropdown()
-                                    ),
+                                    /// age
+                                    Expanded(child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController)),
+
+                                    const SizedBox(height: 24.0),
+
+                                    /// Gender Dropdown
+                                    Expanded(child: buildGenderDropdown())
                                   ],
                                 ),
                               ),
 
 
 
-                              const SizedBox(height: 24.0),
-
-
-
-                              /// age and goal weight Row
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Row(
+                              /// Weight and goal weight and weight unit
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                decoration:  BoxDecoration(
+                                  borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                  color: LIGHT_GREY_COLOR
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: buildNumberTextField(hintText: AGE_LABEL, controller: _ageController),
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: buildNumberTextField(hintText: WEIGHT_LABEL, controller: _weightController),
+                                        ),
+                                        const SizedBox(width: 4.0),
+                                        Expanded(
+                                          child:  buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 16.0),
-                                    Expanded(
-                                        child: buildNumberTextField(hintText: GOAL_WEIGHT_LABEL, controller: _goalWeightController)
-                                    ),
+
+                                    const SizedBox(height: 24.0),
+
+
+                                    buildWeightUnitDropdown(),
                                   ],
                                 ),
                               ),
 
-
-
-                              const SizedBox(height: 24.0),
 
 
 
                               /// Height and Unit Row
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                                padding: const EdgeInsets.only(top: 16, bottom: 16, right: 16),
+                                decoration:  BoxDecoration(
+                                    borderRadius: BorderRadius.circular(BORDER_RADIUS),
+                                    color: LIGHT_GREY_COLOR
+                                ),
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      child: buildNumberTextField(hintText: HEIGHT_LABEL, controller: _heightController),
+                                      child: buildHeightTextField(hintText: HEIGHT_LABEL, controller: _heightController),
                                     ),
                                     const SizedBox(width: 32.0),
                                     Expanded(
@@ -362,7 +373,6 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
                                   ],
                                 ),
                               ),
-
 
 
 
@@ -903,7 +913,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
       child: ElevatedButton(
         onPressed: (){
           if(_weightController.text.isEmpty || _goalWeightController.text.isEmpty ||
-              _ageController.text.isEmpty || _heightController.text.isEmpty){
+              _ageController.text.isEmpty || _heightController.text.isEmpty || _activitySelected == '-'){
             showErrorToast(context, FILL_ALL_ERROR);
           }else{
             calculateDailyMacro();
@@ -930,7 +940,8 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
     bool isEditable = true,
     required TextEditingController controller
   }) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       height: 48,
       child: TextFormField(
         cursorColor: DARK_PRIMARY_COLOR,
@@ -942,6 +953,34 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
         ],
         decoration: InputDecoration(
           labelText: hintText,
+          border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
+          fillColor: Colors.white,
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget buildHeightTextField({
+    required String hintText,
+    String? initialValue,
+    bool isEditable = true,
+    required TextEditingController controller
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 48,
+      child: TextFormField(
+        cursorColor: DARK_PRIMARY_COLOR,
+        controller: controller,
+        enabled: isEditable,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(numericRegExp),
+        ],
+        decoration: InputDecoration(
+          labelText: _heightSelectedUnit == FT_LABEL ? 'eg: 5.6' : 'eg: 170',
           border:  const OutlineInputBorder(borderSide: BorderSide(color: DARK_PRIMARY_COLOR),),
           fillColor: Colors.white,
         ),
@@ -1037,6 +1076,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
 
     return Container(
       width: 100,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(BORDER_RADIUS),
         border: Border.all(
@@ -1121,7 +1161,7 @@ class _CalculateUserMacroGoalScreenState extends State<CalculateUserMacroGoalScr
             contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
           ),
           focusColor: PRIMARY_COLOR,
-          items: [SEDENTARY_LABEL, LIGHT_LABEL, MODERATE_LABEL, VERY_ACTIVE_LABEL].map((String item) {
+          items: ['-', SEDENTARY_LABEL, LIGHT_LABEL, MODERATE_LABEL, VERY_ACTIVE_LABEL].map((String item) {
             return DropdownMenuItem<String>(
               value: item,
               child: Text(item),

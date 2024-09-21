@@ -549,6 +549,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     ),
 
 
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(mcontext, rootNavigator: true).pop();
+                        onCalculateMacroClicked();
+                      },
+                        child: const Text(EDIT_MACRO_GOAL_LABEL, style: TextStyle(color: DARK_PRIMARY_COLOR, fontSize: 12),)
+                    ),
+
                     const SizedBox(height: 8,),
 
                   ],
